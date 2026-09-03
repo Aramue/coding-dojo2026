@@ -3,10 +3,19 @@ import type { Exercice } from '../contenu/types'
 import { nomsVariablesRequis } from '../contenu/chargeur'
 import { Executeur } from '../execution/executeur'
 import { categorieErreur } from '../execution/exceptions'
+import type { ResultatExecution } from '../execution/types'
 import { evaluer } from '../validation/evaluer'
 import type { ResultatTest, Test } from '../validation/types'
 import { Editeur } from './Editeur'
 import { PanneauVerdict } from './PanneauVerdict'
+
+const EXECUTION_VIDE: ResultatExecution = {
+  stdout: '',
+  erreur: null,
+  variables: {},
+  dureeMs: 0,
+  timeout: false,
+}
 
 const SEUIL_INDICE = 2 // le deuxième indice se débloque après 2 essais infructueux
 
@@ -45,30 +54,60 @@ export function EcranExercice({
   }, [exercice.id, exercice.depart])
 
   const noms = useMemo(() => nomsVariablesRequis(exercice), [exercice])
-  // Prédicats de type : `Test` est une union discriminée, `.find()` seul ne
+  // Prédicat de type : `Test` est une union discriminée, `.find()` seul ne
   // suffit pas à donner accès aux champs propres à une variante.
   const qcm = exercice.tests.find((t): t is Extract<Test, { type: 'qcm' }> => t.type === 'qcm')
-  const testSortie = exercice.tests.find(
-    (t): t is Extract<Test, { type: 'sortie' }> => t.type === 'sortie',
-  )
-  const entrees = testSortie?.entrees ?? []
 
   async function valider() {
     setEnCours(true)
-    const execution =
-      exercice.type === 'predire'
-        ? { stdout: '', erreur: null, variables: {}, dureeMs: 0, timeout: false }
-        : await executeur.executer({ code, entrees, nomsVariables: noms })
 
-    const evalue = evaluer({ code, tests: exercice.tests, execution, reponseQcm })
+    // Une exécution par test, avec les entrées qui LUI appartiennent : un
+    // exercice comme s1-30/s1-31/s1-34 déclare plusieurs tests 'sortie' avec
+    // des entrées différentes (pour vérifier que la solution généralise, pas
+    // seulement le premier exemple). Réutiliser une seule exécution partagée
+    // comparerait la sortie obtenue avec des entrées A à l'attendu écrit pour
+    // des entrées B. Les exécutions identiques (même jeu d'entrées) sont mises
+    // en cache pour ne pas relancer Pyodide inutilement, et lancées l'une
+    // après l'autre : l'Executeur ne pilote qu'un seul worker à la fois, un
+    // second appel concurrent écraserait le gestionnaire de réponse du
+    // premier et le ferait expirer en silence (voir executeur.ts).
+    const executions: ResultatExecution[] = []
+    if (exercice.type === 'predire') {
+      executions.push(...exercice.tests.map(() => EXECUTION_VIDE))
+    } else {
+      const cache = new Map<string, ResultatExecution>()
+      for (const test of exercice.tests) {
+        // Le test 'variable' relit l'espace de noms d'une exécution sans
+        // entrée (miroir de valider_contenu.py::_passe). 'interdit',
+        // 'contient' et 'qcm' n'inspectent jamais l'exécution : inutile de
+        // solliciter Pyodide pour eux.
+        const entrees = test.type === 'sortie' ? test.entrees : test.type === 'variable' ? [] : null
+        if (entrees === null) {
+          executions.push(EXECUTION_VIDE)
+          continue
+        }
+        const cle = JSON.stringify(entrees)
+        let resultat = cache.get(cle)
+        if (!resultat) {
+          resultat = await executeur.executer({ code, entrees, nomsVariables: noms })
+          cache.set(cle, resultat)
+        }
+        executions.push(resultat)
+      }
+    }
+
+    const evalue = evaluer({ code, tests: exercice.tests, executions, reponseQcm })
     setResultat(evalue)
     setEssais((n) => n + 1)
     setEnCours(false)
+
+    const dureeTotaleMs = executions.reduce((total, e) => total + e.dureeMs, 0)
+    const enErreur = executions.find((e) => e.timeout || e.erreur)
     onTentative(
       evalue,
-      execution.dureeMs,
+      dureeTotaleMs,
       // Filtré par liste blanche : un nom d'exception peut être choisi par l'élève.
-      categorieErreur(execution.timeout ? 'TimeoutError' : execution.erreur?.type),
+      categorieErreur(enErreur?.timeout ? 'TimeoutError' : enErreur?.erreur?.type),
     )
   }
 

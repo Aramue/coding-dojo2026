@@ -11,19 +11,35 @@ const VERT: ResultatTest = Object.freeze({ verdict: 'vert', titre: 'Mission acco
 export function evaluer(params: {
   code: string
   tests: Test[]
-  execution: ResultatExecution
+  /**
+   * Une exécution par test, alignée par index sur `tests`.
+   *
+   * Un test 'sortie' peut déclarer son propre jeu d'entrées (plusieurs
+   * exemples différents pour vérifier que la solution généralise, pas
+   * seulement le premier). Chaque test doit donc être confronté à
+   * l'exécution qui correspond à SES entrées, jamais à une exécution
+   * partagée : sinon un exercice à plusieurs tests 'sortie' (s1-30, s1-31,
+   * s1-34...) compare la sortie obtenue avec des entrées A à l'attendu écrit
+   * pour des entrées B, et une solution correcte est refusée à tort. Miroir
+   * de outils/valider_contenu.py::_passe, qui ré-exécute pour chaque test.
+   */
+  executions: ResultatExecution[]
   reponseQcm?: number
 }): ResultatTest {
-  const { code, tests, execution, reponseQcm } = params
+  const { code, tests, executions, reponseQcm } = params
 
-  // 1. Le programme s'est-il exécuté ?
-  if (execution.timeout) {
-    const m = traduireErreur({ type: 'TimeoutError', message: '', ligne: null })
-    return { verdict: 'rouge', titre: m.titre, detail: `${m.explication} ${m.piste}` }
-  }
-  if (execution.erreur) {
-    const m = traduireErreur(execution.erreur)
-    return { verdict: 'rouge', titre: m.titre, detail: `${m.explication} ${m.piste}` }
+  // 1. Le programme s'est-il exécuté ? On vérifie chaque exécution utilisée,
+  // pas seulement la première : un jeu d'entrées peut planter pendant qu'un
+  // autre réussit.
+  for (const execution of executions) {
+    if (execution.timeout) {
+      const m = traduireErreur({ type: 'TimeoutError', message: '', ligne: null })
+      return { verdict: 'rouge', titre: m.titre, detail: `${m.explication} ${m.piste}` }
+    }
+    if (execution.erreur) {
+      const m = traduireErreur(execution.erreur)
+      return { verdict: 'rouge', titre: m.titre, detail: `${m.explication} ${m.piste}` }
+    }
   }
 
   // 2. Les contraintes de méthode passent avant tout : elles disqualifient la réponse.
@@ -47,8 +63,10 @@ export function evaluer(params: {
   // 3. Les tests de contenu. On s'arrête au premier échec.
   let verdictGlobal: Verdict = 'vert'
   let diffBleu: ResultatTest['diff']
-  for (const test of tests) {
-    const resultat = evaluerUn(test, execution, reponseQcm)
+  for (const [i, test] of tests.entries()) {
+    // executions est alignee 1:1 sur tests par construction (voir la
+    // documentation du parametre) : l'acces direct est donc sûr.
+    const resultat = evaluerUn(test, executions[i]!, reponseQcm)
     if (resultat.verdict === 'rouge') return resultat
     if (resultat.verdict === 'bleu') {
       verdictGlobal = 'bleu'

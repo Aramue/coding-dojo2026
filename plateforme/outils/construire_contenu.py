@@ -68,7 +68,12 @@ def construire(racine: Path, sortie: Path) -> int:
     for seance in (1, 2, 3):
         publiables = [
             {
-                **_convertir_cles(ex.model_dump(exclude={"solution"})),
+                # exclude_none : un champ optionnel absent (valeur_attendue, expert...)
+                # doit rester absent du JSON, pas devenir `null`. Le TypeScript le
+                # declare avec `?:` (attend `undefined`) ; `null` passe le controle
+                # `!== undefined` de evaluer.ts et fait echouer a tort tout test
+                # `variable` qui ne fixe pas valeur_attendue, comme s1-10.
+                **_convertir_cles(ex.model_dump(exclude={"solution"}, exclude_none=True)),
                 "famille": FAMILLES.get(ex.concept, "variables"),
             }
             for ex in exercices

@@ -16,7 +16,7 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'print("Agent Corbeau")',
       tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau' }],
-      execution: execution({ stdout: 'Agent Corbeau\n' }),
+      executions: [execution({ stdout: 'Agent Corbeau\n' })],
     })
     expect(r.verdict).toBe('vert')
   })
@@ -25,7 +25,7 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'print("agent  corbeau")',
       tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau' }],
-      execution: execution({ stdout: 'agent  corbeau\n' }),
+      executions: [execution({ stdout: 'agent  corbeau\n' })],
     })
     expect(r.verdict).toBe('bleu')
     expect(r.diff).toBeDefined()
@@ -36,7 +36,7 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'print("Bonjour")',
       tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau' }],
-      execution: execution({ stdout: 'Bonjour\n' }),
+      executions: [execution({ stdout: 'Bonjour\n' })],
     })
     expect(r.verdict).toBe('rouge')
   })
@@ -45,7 +45,7 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'print("agent corbeau")',
       tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau', exigeExact: true }],
-      execution: execution({ stdout: 'agent corbeau\n' }),
+      executions: [execution({ stdout: 'agent corbeau\n' })],
     })
     expect(r.verdict).toBe('rouge')
   })
@@ -54,9 +54,11 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'print(nom)',
       tests: [{ type: 'sortie', entrees: [], attendu: 'x' }],
-      execution: execution({
-        erreur: { type: 'NameError', message: "name 'nom' is not defined", ligne: 1 },
-      }),
+      executions: [
+        execution({
+          erreur: { type: 'NameError', message: "name 'nom' is not defined", ligne: 1 },
+        }),
+      ],
     })
     expect(r.verdict).toBe('rouge')
     expect(r.titre).toContain('nom')
@@ -66,7 +68,7 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'age = 17',
       tests: [{ type: 'variable', nom: 'age', typeAttendu: 'int' }],
-      execution: execution({ variables: { age: { valeur: '17', type: 'int' } } }),
+      executions: [execution({ variables: { age: { valeur: '17', type: 'int' } } })],
     })
     expect(r.verdict).toBe('vert')
   })
@@ -75,20 +77,21 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'age = "17"',
       tests: [{ type: 'variable', nom: 'age', typeAttendu: 'int' }],
-      execution: execution({ variables: { age: { valeur: "'17'", type: 'str' } } }),
+      executions: [execution({ variables: { age: { valeur: "'17'", type: 'str' } } })],
     })
     expect(r.verdict).toBe('rouge')
     expect(r.detail).toMatch(/guillemets/i)
   })
 
   it('rejette un motif interdit avant tout autre test', () => {
+    const exec = execution({ stdout: 'Agent Corbeau\n' })
     const r = evaluer({
       code: 'print("Agent Corbeau")',
       tests: [
         { type: 'interdit', motif: 'print("Agent' },
         { type: 'sortie', entrees: [], attendu: 'Agent Corbeau' },
       ],
-      execution: execution({ stdout: 'Agent Corbeau\n' }),
+      executions: [exec, exec],
     })
     expect(r.verdict).toBe('rouge')
     expect(r.titre).toMatch(/en dur|directement/i)
@@ -98,25 +101,30 @@ describe('evaluer', () => {
     const r = evaluer({
       code: 'print(1)\nprint(2)',
       tests: [{ type: 'contient', motif: 'for ' }],
-      execution: execution({ stdout: '1\n2\n' }),
+      executions: [execution({ stdout: '1\n2\n' })],
     })
     expect(r.verdict).toBe('rouge')
   })
 
   it('valide un qcm sur la bonne reponse', () => {
     const tests = [{ type: 'qcm' as const, options: ['a', 'b'], bonneReponse: 1 }]
-    expect(evaluer({ code: '', tests, execution: execution(), reponseQcm: 1 }).verdict).toBe('vert')
-    expect(evaluer({ code: '', tests, execution: execution(), reponseQcm: 0 }).verdict).toBe('rouge')
+    expect(
+      evaluer({ code: '', tests, executions: [execution()], reponseQcm: 1 }).verdict,
+    ).toBe('vert')
+    expect(
+      evaluer({ code: '', tests, executions: [execution()], reponseQcm: 0 }).verdict,
+    ).toBe('rouge')
   })
 
   it('n affiche qu un seul echec a la fois', () => {
+    const exec = execution({ variables: {} })
     const r = evaluer({
       code: 'x = 1',
       tests: [
         { type: 'variable', nom: 'a', typeAttendu: 'int' },
         { type: 'variable', nom: 'b', typeAttendu: 'int' },
       ],
-      execution: execution({ variables: {} }),
+      executions: [exec, exec],
     })
     expect(r.titre).toContain('a')
     // Note : `not.toContain('b')` échouerait toujours, car le mot « variable »
@@ -125,17 +133,45 @@ describe('evaluer', () => {
   })
 
   it('rend BLEU global si un test est bleu et les autres verts', () => {
+    const exec = execution({
+      stdout: 'agent corbeau\n',
+      variables: { nom: { valeur: "'Corbeau'", type: 'str' } },
+    })
     const r = evaluer({
       code: 'nom = "Corbeau"\nprint("agent corbeau")',
       tests: [
         { type: 'variable', nom: 'nom', typeAttendu: 'str' },
         { type: 'sortie', entrees: [], attendu: 'Agent Corbeau' },
       ],
-      execution: execution({
-        stdout: 'agent corbeau\n',
-        variables: { nom: { valeur: "'Corbeau'", type: 'str' } },
-      }),
+      executions: [exec, exec],
     })
     expect(r.verdict).toBe('bleu')
+  })
+
+  it('confronte chaque test sortie a SA propre execution, pas a celle du premier', () => {
+    // Reproduit s1-30 : deux tests 'sortie' avec des entrees differentes.
+    // Avant la correction, une seule execution (celle du premier test) etait
+    // partagee : le second test comparait alors sa sortie a un attendu ecrit
+    // pour d'autres entrees, et une solution correcte etait rejetee a tort.
+    const r = evaluer({
+      code: 'missions = int(input("Nombre de missions accomplies : "))\nprint("Apres celle-ci, tu en auras", missions + 1)',
+      tests: [
+        {
+          type: 'sortie',
+          entrees: ['12'],
+          attendu: 'Nombre de missions accomplies : 12\nApres celle-ci, tu en auras 13',
+        },
+        {
+          type: 'sortie',
+          entrees: ['3'],
+          attendu: 'Nombre de missions accomplies : 3\nApres celle-ci, tu en auras 4',
+        },
+      ],
+      executions: [
+        execution({ stdout: 'Nombre de missions accomplies : 12\nApres celle-ci, tu en auras 13\n' }),
+        execution({ stdout: 'Nombre de missions accomplies : 3\nApres celle-ci, tu en auras 4\n' }),
+      ],
+    })
+    expect(r.verdict).toBe('vert')
   })
 })
