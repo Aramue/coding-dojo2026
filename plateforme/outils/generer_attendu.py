@@ -22,6 +22,10 @@ from valider_contenu import _executer
 _yaml = YAML()
 _yaml.preserve_quotes = True
 _yaml.width = 4096
+# Sans cela, ruamel realigne les tirets de TOUTES les listes du fichier a chaque
+# ecriture, meme celles qu'on ne modifie pas. C'est le style d'indentation
+# utilise dans les fichiers d'exercices ecrits a la main.
+_yaml.indent(mapping=2, sequence=4, offset=2)
 
 
 def _en_scalaire(texte: str) -> str | LiteralScalarString:

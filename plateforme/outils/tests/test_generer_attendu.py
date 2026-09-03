@@ -124,3 +124,28 @@ def test_relance_idempotente(tmp_path):
 
     assert remplir_attendus(chemin) == []
     assert chemin.read_bytes() == apres_premier
+
+
+def test_seul_le_champ_attendu_est_reecrit(tmp_path):
+    """Une passe du generateur ne doit rien toucher d'autre que l'attendu.
+
+    Verifier la presence de sous-chaines ne suffit pas : ruamel realigne
+    l'indentation des sequences si elle n'est pas configuree, et le fichier du
+    professeur est reformate sans que rien ne le signale. Ce test l'attrape.
+    """
+    chemin = tmp_path / "s1-03.yaml"
+    chemin.write_text(SOURCE_ANNOTEE, encoding="utf-8")
+
+    remplir_attendus(chemin)
+
+    avant = SOURCE_ANNOTEE.splitlines()
+    apres = chemin.read_text(encoding="utf-8").splitlines()
+
+    # La seule ligne qui doit disparaitre est l'ancien attendu.
+    disparues = [ligne for ligne in avant if ligne not in apres]
+    assert disparues == ["    attendu: A REMPLIR"]
+
+    # Toutes les autres lignes doivent se retrouver a l'identique, indentation comprise.
+    for ligne in avant:
+        if ligne not in disparues:
+            assert ligne in apres, f"ligne perdue ou reindentee : {ligne!r}"
