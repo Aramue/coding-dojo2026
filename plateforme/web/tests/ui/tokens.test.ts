@@ -1,0 +1,49 @@
+import { readFileSync } from 'node:fs'
+import { describe, expect, it } from 'vitest'
+
+const tokens = readFileSync('src/ui/tokens.css', 'utf-8')
+const base = readFileSync('src/ui/base.css', 'utf-8')
+
+function luminance(hex: string): number {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+  const f = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)
+  return 0.2126 * f(c[0]!) + 0.7152 * f(c[1]!) + 0.0722 * f(c[2]!)
+}
+function contraste(a: string, b: string): number {
+  const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p)
+  return (x! + 0.05) / (y! + 0.05)
+}
+const lire = (nom: string) => tokens.match(new RegExp(`${nom}:\\s*(#[0-9A-Fa-f]{6})`))![1]!
+
+describe('charte visuelle', () => {
+  const familles = [
+    ['--var-tint', '--var-ink'],
+    ['--typ-tint', '--typ-ink'],
+    ['--ope-tint', '--ope-ink'],
+    ['--con-tint', '--con-ink'],
+    ['--bou-tint', '--bou-ink'],
+  ] as const
+
+  it.each(familles)('%s / %s atteint AA', (tint, ink) => {
+    expect(contraste(lire(tint), lire(ink))).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it('les libelles sur Dracula atteignent AA', () => {
+    expect(contraste(lire('--d-label'), lire('--d-bg'))).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it('les couleurs semantiques claires tiennent sur les cinq tints', () => {
+    for (const [tint] of familles) {
+      expect(contraste(lire('--ok'), lire(tint))).toBeGreaterThanOrEqual(4.5)
+      expect(contraste(lire('--ko'), lire(tint))).toBeGreaterThanOrEqual(4.5)
+    }
+  })
+
+  it('aucune police externe n est chargee', () => {
+    expect(base).not.toMatch(/fonts\.googleapis|fontshare|cdn\./)
+  })
+
+  it('aucune capitale interlettree dans la feuille de base', () => {
+    expect(base).not.toMatch(/text-transform:\s*uppercase/)
+  })
+})

@@ -1,0 +1,28 @@
+.carte-code {
+  background: var(--d-bg);
+  border-radius: 14px;
+  overflow: hidden;
+  font-family: var(--police-code);
+  font-size: 0.86rem;
+  line-height: 1.75;
+}
+.carte-code__barre {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.95rem;
+  border-bottom: 1px solid rgb(255 255 255 / 6%);
+}
+.carte-code__pastille { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+.carte-code__pastille--rouge { background: var(--tl-red); }
+.carte-code__pastille--jaune { background: var(--tl-yel); }
+.carte-code__pastille--verte { background: var(--tl-grn); }
+/* La legende est en police de texte, comme dans les decks. */
+.carte-code__legende {
+  margin-left: 0.5rem;
+  font-family: var(--police-texte);
+  font-size: 0.86rem;
+  color: var(--d-label);
+}
+.carte-code__corps { padding: 1.05rem 1.15rem; overflow-x: auto; color: var(--d-fg); }
+.carte-code__corps pre { margin: 0; font: inherit; }

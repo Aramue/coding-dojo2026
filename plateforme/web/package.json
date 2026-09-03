@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
-    "pyodide:fetch": "node scripts/fetch-pyodide.mjs"
+    "pyodide:fetch": "node scripts/fetch-pyodide.mjs",
+    "polices:fetch": "node scripts/fetch-polices.mjs"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@types/node": "^26.4.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
     "@vitejs/plugin-react": "^6.1.1",
