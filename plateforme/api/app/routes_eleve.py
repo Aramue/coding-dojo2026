@@ -4,7 +4,7 @@ import re
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Header, HTTPException
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
@@ -13,6 +13,41 @@ from .securite import creer_jeton, lire_jeton
 
 routeur = APIRouter()
 MOTIF_CODE = re.compile(r"^AGENT-[A-Z0-9]{4}$")
+MOTIF_EXERCICE = re.compile(r"^s[123]-[0-9]{2}(-expert)?$")
+
+# Liste blanche des types d'erreur acceptés. Elle double celle du navigateur
+# (web/src/execution/exceptions.ts) — et c'est CELLE-CI qui protège.
+#
+# Le filtrage cote client vit dans le JavaScript du navigateur de l'eleve, donc
+# sur sa machine, sous son controle. Il lui suffit d'ouvrir la console, de
+# recuperer son jeton via /session et de poster directement ici pour faire
+# persister le texte de son choix. ==Verifie en conditions reelles.==
+# Toute defense qui n'existe que cote client n'est pas une defense.
+TYPES_ERREUR = frozenset(
+    {
+        "SyntaxError",
+        "IndentationError",
+        "TabError",
+        "NameError",
+        "UnboundLocalError",
+        "TypeError",
+        "ValueError",
+        "ZeroDivisionError",
+        "ArithmeticError",
+        "OverflowError",
+        "IndexError",
+        "KeyError",
+        "AttributeError",
+        "ImportError",
+        "ModuleNotFoundError",
+        "EOFError",
+        "RecursionError",
+        "AssertionError",
+        "StopIteration",
+        "TimeoutError",
+        "AutreErreur",
+    }
+)
 
 
 class DemandeSession(BaseModel):
@@ -28,10 +63,18 @@ class DemandeTentative(BaseModel):
     # extra="forbid" refuse tout champ non declare, en particulier du code source.
     model_config = ConfigDict(extra="forbid")
 
-    exercice_id: str = Field(max_length=32)
+    # Motif strict : sans lui, ce champ transporte 32 caractères libres.
+    exercice_id: str = Field(pattern=MOTIF_EXERCICE.pattern)
     verdict: Literal["vert", "bleu", "rouge"]
     type_erreur: str | None = Field(default=None, max_length=64)
     duree_ms: int = Field(ge=0, le=600_000)
+
+    @field_validator("type_erreur")
+    @classmethod
+    def type_erreur_connu(cls, valeur: str | None) -> str | None:
+        if valeur is not None and valeur not in TYPES_ERREUR:
+            raise ValueError("type d'erreur inconnu")
+        return valeur
 
 
 def agent_courant(authorization: Annotated[str | None, Header()] = None) -> str:

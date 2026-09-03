@@ -84,6 +84,50 @@ def test_la_route_tentative_refuse_tout_champ_de_code(client, jeton):
     assert reponse.status_code == 422
 
 
+def test_un_type_erreur_inconnu_est_refuse(client, jeton):
+    """Le filtrage du navigateur ne protège rien : l'élève contrôle son navigateur."""
+    reponse = client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={
+            "exercice_id": "s1-01",
+            "verdict": "rouge",
+            "type_erreur": "BYPASS_texte_libre_choisi_par_l_eleve",
+            "duree_ms": 42,
+        },
+    )
+    assert reponse.status_code == 422
+
+
+def test_un_exercice_id_libre_est_refuse(client, jeton):
+    reponse = client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={
+            "exercice_id": "texte_libre_dans_exercice_id",
+            "verdict": "rouge",
+            "type_erreur": None,
+            "duree_ms": 42,
+        },
+    )
+    assert reponse.status_code == 422
+
+
+def test_les_types_erreur_legitimes_passent(client, jeton):
+    for type_erreur in ("NameError", "TimeoutError", "AutreErreur", None):
+        reponse = client.post(
+            "/tentative",
+            headers=entetes(jeton),
+            json={
+                "exercice_id": "s1-01",
+                "verdict": "rouge",
+                "type_erreur": type_erreur,
+                "duree_ms": 42,
+            },
+        )
+        assert reponse.status_code == 200, type_erreur
+
+
 def test_aucun_secret_en_dur_dans_le_code():
     """Un secret publie dans le depot laisse forger un jeton pour n'importe quel agent."""
     from pathlib import Path
