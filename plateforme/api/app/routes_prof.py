@@ -106,7 +106,14 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
             }
         )
 
-    ordre = {"bloque": 0, "inactif": 1, "en_cours": 2, "termine": 3}
+    # Pas de statut "termine" : le determiner supposerait de connaitre le nombre
+    # total d'exercices de la seance, que l'API ne possede pas (le contenu est
+    # construit cote front). Le faire remonter par le client reviendrait a
+    # faire confiance au navigateur de l'eleve pour une donnee qui conditionne
+    # l'affichage professeur — la lecon des rondes de la tache 11. Un statut
+    # annonce mais jamais produit est pire qu'un statut absent : "reussis"
+    # suffit deja a voir qui avance.
+    ordre = {"bloque": 0, "inactif": 1, "en_cours": 2}
     agents.sort(key=lambda a: (ordre[a["statut"]], -a["inactif_depuis_s"]))
     return {"agents": agents}
 

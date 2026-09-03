@@ -16,7 +16,6 @@
  */
 .ligne--bloque,
 .ligne--inactif { border-left-color: var(--ko); background: color-mix(in srgb, var(--ko) 6%, var(--ground)); }
-.ligne--termine { border-left-color: var(--ok); }
 .ligne__agent { font-weight: 500; }
 .ligne__ou, .ligne__quoi { color: var(--ink-soft); }
 /* La forme encode un etat : c'est le seul endroit ou une pastille est justifiee. */
@@ -31,4 +30,3 @@
 .statut--bloque,
 .statut--inactif { background: color-mix(in srgb, var(--ko) 16%, var(--ground)); color: var(--ko); }
 .statut--en_cours { background: var(--ground-2); color: var(--ink-soft); }
-.statut--termine { background: color-mix(in srgb, var(--ok) 16%, var(--ground)); color: var(--ok); }

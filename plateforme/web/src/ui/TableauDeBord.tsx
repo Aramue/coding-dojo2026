@@ -4,7 +4,11 @@ import './TableauDeBord.css'
 type LigneAgent = {
   code_agent: string
   exercice_id: string
-  statut: 'bloque' | 'inactif' | 'en_cours' | 'termine'
+  // Pas de "termine" : le determiner supposerait de connaitre le nombre total
+  // d'exercices de la seance, une donnee que seul le front possede. Le faire
+  // remonter par le client reviendrait a faire confiance a son navigateur —
+  // la lecon des rondes de la tache 11. "reussis" suffit deja a voir qui avance.
+  statut: 'bloque' | 'inactif' | 'en_cours'
   echecs_consecutifs: number
   inactif_depuis_s: number
   dernier_type_erreur: string | null
@@ -15,7 +19,6 @@ const LIBELLES: Record<LigneAgent['statut'], string> = {
   bloque: 'Bloqué',
   inactif: 'Inactif',
   en_cours: 'En cours',
-  termine: 'Terminé',
 }
 
 function minutes(secondes: number): string {
