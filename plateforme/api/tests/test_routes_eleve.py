@@ -82,3 +82,42 @@ def test_la_route_tentative_refuse_tout_champ_de_code(client, jeton):
         },
     )
     assert reponse.status_code == 422
+
+
+def test_aucun_secret_en_dur_dans_le_code():
+    """Un secret publie dans le depot laisse forger un jeton pour n'importe quel agent."""
+    from pathlib import Path
+
+    from app import securite
+
+    source = Path(securite.__file__).read_text(encoding="utf-8")
+    assert "dev-uniquement" not in source
+
+
+def test_un_jeton_forge_avec_un_autre_secret_est_refuse(client):
+    import hashlib
+    import hmac
+
+    faux = hmac.new(
+        b"dev-uniquement-a-remplacer-en-production", b"AGENT-9999", hashlib.sha256
+    ).hexdigest()[:32]
+    reponse = client.get("/parcours", headers={"Authorization": f"Bearer AGENT-9999.{faux}"})
+    assert reponse.status_code == 401
+
+
+def test_une_seconde_session_met_a_jour_vu_le(client):
+    from app.modeles import Agent
+
+    client.post("/session", json={"code_agent": "AGENT-K7M2"})
+    client.post("/session", json={"code_agent": "AGENT-K7M2"})
+
+    # Un seul agent, et vu_le a bouge par rapport a cree_le.
+    from sqlmodel import Session, select
+
+    from app import bdd
+
+    generateur = client.app.dependency_overrides[bdd.obtenir_session]()
+    session: Session = next(generateur)
+    agents = session.exec(select(Agent)).all()
+    assert len(agents) == 1
+    assert agents[0].vu_le >= agents[0].cree_le

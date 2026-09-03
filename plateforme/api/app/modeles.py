@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from sqlmodel import Field, SQLModel
 
 
-def _maintenant() -> datetime:
+def maintenant() -> datetime:
     return datetime.now(timezone.utc)
 
 
@@ -15,8 +15,8 @@ class Agent(SQLModel, table=True):
     """Un eleve, connu uniquement par son code pseudonyme."""
 
     code_agent: str = Field(primary_key=True)
-    cree_le: datetime = Field(default_factory=_maintenant)
-    vu_le: datetime = Field(default_factory=_maintenant)
+    cree_le: datetime = Field(default_factory=maintenant)
+    vu_le: datetime = Field(default_factory=maintenant)
 
 
 class Tentative(SQLModel, table=True):
@@ -28,7 +28,7 @@ class Tentative(SQLModel, table=True):
     verdict: str  # vert | bleu | rouge
     type_erreur: str | None = None  # "TypeError", "NameError", ...
     duree_ms: int = 0
-    horodatage: datetime = Field(default_factory=_maintenant, index=True)
+    horodatage: datetime = Field(default_factory=maintenant, index=True)
 
 
 class Verrou(SQLModel, table=True):

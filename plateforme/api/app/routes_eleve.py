@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
-from .modeles import Agent, Tentative
+from .modeles import Agent, Tentative, maintenant
 from .securite import creer_jeton, lire_jeton
 
 routeur = APIRouter()
@@ -50,7 +50,12 @@ def ouvrir_session(
     agent = session.get(Agent, demande.code_agent)
     if agent is None:
         session.add(Agent(code_agent=demande.code_agent))
-        session.commit()
+    else:
+        # `vu_le` alimente le compteur d'agents connectes du tableau de bord :
+        # sans cette mise a jour, il resterait egal a `cree_le` et mentirait.
+        agent.vu_le = maintenant()
+        session.add(agent)
+    session.commit()
     return ReponseSession(jeton=creer_jeton(demande.code_agent), code_agent=demande.code_agent)
 
 
