@@ -3014,6 +3014,13 @@ export default defineConfig({
 
 ```ts
 import '@testing-library/jest-dom/vitest'
+import { cleanup } from '@testing-library/react'
+import { afterEach } from 'vitest'
+
+// Sans `globals: true`, Testing Library n'installe pas son nettoyage automatique :
+// le DOM d'un test fuite dans le suivant et les requêtes remontent plusieurs
+// éléments. On le déclare explicitement plutôt que d'activer les globales.
+afterEach(cleanup)
 ```
 
 - [ ] **Step 2 : Écrire le test du panneau de verdict**
