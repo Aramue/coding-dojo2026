@@ -1,0 +1,29 @@
+# PROVISOIRE — contenu de demonstration cree en tache 13 pour verifier la
+# construction Docker. Ce n'est PAS du contenu pedagogique valide : il sera
+# remplace par les exercices reels de la tache 14. Ne pas utiliser en classe.
+id: s1-03
+concept: conditions
+seance: 1
+niveau: normal
+type: completer
+titre: Contrôle d'accès au QG
+obligatoire: true
+enonce: Complète le programme pour qu'il affiche Accès autorisé si le code saisi vaut
+  exactement "7321", et Accès refusé sinon.
+depart: 'code = "7321"
+
+
+  # Complete la condition
+
+  '
+indices:
+- Utilise une structure if / else.
+- Compare la variable code au texte attendu avec ==.
+tests:
+- type: sortie
+  entrees: []
+  attendu: Accès autorisé
+- type: contient
+  motif: if
+solution: "code = \"7321\"\n\nif code == \"7321\":\n    print(\"Accès autorisé\")\n\
+  else:\n    print(\"Accès refusé\")\n"

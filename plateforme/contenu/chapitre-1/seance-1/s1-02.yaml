@@ -1,0 +1,40 @@
+# PROVISOIRE — contenu de demonstration cree en tache 13 pour verifier la
+# construction Docker. Ce n'est PAS du contenu pedagogique valide : il sera
+# remplace par les exercices reels de la tache 14. Ne pas utiliser en classe.
+id: s1-02
+concept: print
+seance: 1
+niveau: normal
+type: predire
+titre: Message codé du QG
+obligatoire: true
+enonce: 'Voici un message intercepté au Quartier Général :
+
+
+  indicatif = "QG"
+
+  numero = 7
+
+  print(indicatif + str(numero))
+
+
+  Qu''affiche ce programme à l''écran ?'
+depart: ''
+indices:
+- Python colle les deux morceaux dans l'ordre où ils apparaissent dans print().
+- str(numero) transforme le nombre 7 en texte "7" avant de le coller au texte.
+tests:
+- type: qcm
+  options:
+  - QG7
+  - QG 7
+  - 7QG
+  - QGnumero
+  bonne_reponse: 0
+solution: 'indicatif = "QG"
+
+  numero = 7
+
+  print(indicatif + str(numero))
+
+  '
