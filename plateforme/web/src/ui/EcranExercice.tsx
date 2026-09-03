@@ -16,8 +16,19 @@ export function EcranExercice({
 }: {
   exercice: Exercice
   executeur: Executeur
-  /** Appelée à CHAQUE validation, réussie ou non — d'où le nom. */
-  onTentative: (resultat: ResultatTest, dureeMs: number) => void
+  /**
+   * Appelée à CHAQUE validation, réussie ou non — d'où le nom.
+   *
+   * `typeErreurPython` est le NOM de l'exception (`NameError`, `TypeError`…),
+   * jamais un message. Les messages de verdict contiennent des identifiants
+   * tapés par l'élève : les transmettre ferait sortir du code source de son
+   * navigateur, ce que l'architecture interdit.
+   */
+  onTentative: (
+    resultat: ResultatTest,
+    dureeMs: number,
+    typeErreurPython: string | null,
+  ) => void
 }) {
   const [code, setCode] = useState(exercice.depart)
   const [resultat, setResultat] = useState<ResultatTest | null>(null)
@@ -52,7 +63,11 @@ export function EcranExercice({
     setResultat(evalue)
     setEssais((n) => n + 1)
     setEnCours(false)
-    onTentative(evalue, execution.dureeMs)
+    onTentative(
+      evalue,
+      execution.dureeMs,
+      execution.timeout ? 'TimeoutError' : (execution.erreur?.type ?? null),
+    )
   }
 
   const indicesVisibles = exercice.indices.slice(0, essais >= SEUIL_INDICE ? exercice.indices.length : 1)
