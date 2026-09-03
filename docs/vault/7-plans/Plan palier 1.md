@@ -1169,11 +1169,18 @@ cd plateforme/web
 mkdir -p public/pyodide
 curl -L https://github.com/pyodide/pyodide/releases/download/0.26.4/pyodide-0.26.4.tar.bz2 -o /tmp/pyodide.tar.bz2
 tar -xjf /tmp/pyodide.tar.bz2 -C /tmp
-cp /tmp/pyodide/pyodide.js /tmp/pyodide/pyodide.asm.js /tmp/pyodide/pyodide.asm.wasm \
+cp /tmp/pyodide/pyodide.mjs /tmp/pyodide/pyodide.asm.js /tmp/pyodide/pyodide.asm.wasm \
    /tmp/pyodide/python_stdlib.zip /tmp/pyodide/pyodide-lock.json public/pyodide/
 ```
 
-Vérifier : `ls -la public/pyodide` doit montrer `pyodide.asm.wasm` d'environ 9 Mo.
+Vérifier : `ls -la public/pyodide` doit montrer `pyodide.asm.wasm` d'environ 9 Mo **et** `pyodide.mjs`.
+
+> [!warning] C'est `pyodide.mjs` qu'il faut, pas `pyodide.js`
+> Le worker est créé avec `{ type: 'module' }` : `importScripts()` n'y est pas disponible.
+> Seule la variante ESM se charge par `import()`.
+
+Ajouter `public/pyodide/` au `.gitignore` **sauf** si le dépôt doit rester autonome — ici on
+le versionne, parce que le déploiement UNIGE ne doit dépendre d'aucun réseau externe.
 
 - [ ] **Step 2 : Écrire le worker**
 
@@ -1181,10 +1188,7 @@ Vérifier : `ls -la public/pyodide` doit montrer `pyodide.asm.wasm` d'environ 9 
 
 ```ts
 /// <reference lib="webworker" />
-declare const loadPyodide: (o: { indexURL: string }) => Promise<PyodideLike>
-type PyodideLike = { runPython(code: string): unknown; globals: { get(n: string): unknown } }
-
-importScripts('/pyodide/pyodide.js')
+type PyodideLike = { runPython(code: string): unknown }
 
 /**
  * Harnais Python. Il capture stdout, simule input() à partir d'une liste fournie,
@@ -1236,8 +1240,12 @@ let pyodide: PyodideLike | null = null
 
 async function demarrer(): Promise<PyodideLike> {
   if (!pyodide) {
-    pyodide = await loadPyodide({ indexURL: '/pyodide/' })
-    pyodide.runPython(HARNAIS)
+    // Le worker est de type module : `importScripts` n'y existe pas.
+    // On charge la variante ESM depuis public/, au runtime, sans que Vite la bundle.
+    const module = await import(/* @vite-ignore */ '/pyodide/pyodide.mjs')
+    const instance = (await module.loadPyodide({ indexURL: '/pyodide/' })) as PyodideLike
+    instance.runPython(HARNAIS)
+    pyodide = instance
   }
   return pyodide
 }
