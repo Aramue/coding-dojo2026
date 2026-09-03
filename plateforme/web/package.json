@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "pyodide:fetch": "node scripts/fetch-pyodide.mjs"
   },
   "keywords": [],
   "author": "",
