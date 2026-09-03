@@ -22,7 +22,7 @@ Spécification de référence : [[Spécification chapitre 1]].
 
 ## Global Constraints
 
-- **Langue** : toute chaîne visible par un élève ou un professeur est en **français**. Les identifiants de code sont en français également (`ResultatExecution`, `verdict`, `attendu`) — la cohérence prime sur l'usage anglophone.
+- **Langue** : toute chaîne visible par un élève ou un professeur est en **français**, ==accentué correctement==. Les identifiants de code sont en français également (`ResultatExecution`, `verdict`, `attendu`) — la cohérence prime sur l'usage anglophone. Si une assertion de test empêche d'écrire un mot correctement accentué, ==c'est l'assertion qui est fausse==, jamais le texte montré à l'élève.
 - **Le code de l'élève ne quitte jamais son navigateur.** Aucune route d'API n'accepte de code source. Violer ce point invalide [[ADR-001 Exécution du code dans le navigateur]] et le dossier de sécurité UNIGE.
 - **Aucune donnée personnelle.** La base ne contient que `code_agent`, progression et horodatages. Ni nom, ni prénom, ni adresse.
 - **Aucune ressource externe à l'exécution.** Pyodide, les polices et toutes les dépendances sont servis depuis la machine UNIGE. Aucun `<link>` ni `<script>` vers un CDN dans le HTML livré.
@@ -551,8 +551,9 @@ describe('traduireErreur', () => {
   it('traduit NameError en nommant la variable', () => {
     const m = traduireErreur({ type: 'NameError', message: "name 'nom' is not defined", ligne: 3 })
     expect(m.titre).toContain('nom')
-    expect(m.explication).toMatch(/existe pas/i)
-    expect(m.piste).toMatch(/majuscule|different/i)
+    expect(m.titre).toMatch(/existe pas/i)
+    expect(m.explication).toMatch(/avant de lui avoir donné une valeur/i)
+    expect(m.piste).toMatch(/majuscule|différemment/i)
   })
 
   it('traduit la concatenation texte + nombre', () => {
@@ -586,7 +587,7 @@ describe('traduireErreur', () => {
       message: 'expected an indented block',
       ligne: 6,
     })
-    expect(m.explication).toMatch(/decal/i)
+    expect(m.explication).toMatch(/décalé/i)
   })
 
   it('traduit la division par zero', () => {
@@ -595,7 +596,7 @@ describe('traduireErreur', () => {
       message: 'division by zero',
       ligne: 1,
     })
-    expect(m.explication).toMatch(/zero/i)
+    expect(m.explication).toMatch(/zéro/i)
   })
 
   it('ne donne jamais la ligne de code corrigee', () => {
