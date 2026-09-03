@@ -1505,7 +1505,7 @@ mkdir -p plateforme/outils/tests
 cd plateforme/outils
 python -m venv .venv
 .venv/Scripts/activate    # Windows ; sur Unix : source .venv/bin/activate
-printf 'pydantic>=2.7\nPyYAML>=6.0\npytest>=8.0\n' > requirements.txt
+printf 'pydantic>=2.7\nPyYAML>=6.0\nruamel.yaml>=0.18\npytest>=8.0\n' > requirements.txt
 pip install -r requirements.txt
 ```
 
@@ -2003,11 +2003,22 @@ Deux heures d'outillage qui suppriment la classe d'erreur la plus probable : ==l
 
 **Files:**
 - Create: `plateforme/outils/generer_attendu.py`
+- Modify: `plateforme/outils/requirements.txt` (ajout de `ruamel.yaml`)
 - Test: `plateforme/outils/tests/test_generer_attendu.py`
 
 **Interfaces:**
-- Consumes: `_executer` de `valider_contenu` (T6), `charger_exercice` (T6)
+- Consumes: `_executer` de `valider_contenu` (T6)
 - Produces: `remplir_attendus(chemin: Path, ecrire_fichier: bool = True) -> list[str]` — renvoie les identifiants des tests modifiés
+
+> [!danger] Pourquoi ruamel.yaml et pas PyYAML ici
+> Cet outil **réécrit les fichiers d'exercices que le professeur édite à la main**.
+> `yaml.safe_load` ne conserve aucune information de style : un aller-retour par PyYAML
+> ==supprime tous les commentaires et transforme chaque bloc littéral `|` en chaîne
+> échappée sur une ligne==. Or `enonce:` et `solution:` sont précisément écrits en blocs `|`.
+>
+> La valeur survit, la lisibilité non. Après un seul passage de l'outil, le fichier n'est
+> plus éditable confortablement — et rien ne prévient. `ruamel.yaml` en mode aller-retour
+> préserve commentaires, ordre des clés et style de bloc.
 
 - [ ] **Step 1 : Écrire le test qui échoue**
 
@@ -2072,6 +2083,74 @@ def test_signale_une_solution_qui_plante(tmp_path):
     assert modifies == []
     relu = yaml.safe_load(chemin.read_text(encoding="utf-8"))
     assert relu["tests"][0]["attendu"] == "A REMPLIR"
+
+
+def test_mode_lecture_seule_n_ecrit_rien(tmp_path):
+    chemin = tmp_path / "s1-03.yaml"
+    chemin.write_text(yaml.safe_dump(BASE, allow_unicode=True), encoding="utf-8")
+    avant = chemin.read_bytes()
+
+    modifies = remplir_attendus(chemin, ecrire_fichier=False)
+
+    assert modifies == ["s1-03#0"]
+    assert chemin.read_bytes() == avant
+
+
+SOURCE_ANNOTEE = """\
+# Premier exercice de la seance 1 : ne pas reordonner les cles.
+id: s1-03
+concept: input
+seance: 1
+niveau: normal
+type: ecrire
+titre: Interrogatoire
+obligatoire: true
+enonce: |
+  Demande le nom de l'agent,
+  puis affiche-le.
+depart: ''
+indices: []
+tests:
+  # Une seule entree simulee suffit.
+  - type: sortie
+    entrees:
+      - Corbeau
+    attendu: A REMPLIR
+  - type: interdit
+    motif: xyzzy
+solution: |
+  nom = input("Nom : ")
+  print(f"Agent {nom}")
+"""
+
+
+def test_les_commentaires_et_les_blocs_litteraux_survivent(tmp_path):
+    """L'outil edite les fichiers du professeur : il ne doit rien detruire."""
+    chemin = tmp_path / "s1-03.yaml"
+    chemin.write_text(SOURCE_ANNOTEE, encoding="utf-8")
+
+    assert remplir_attendus(chemin) == ["s1-03#0"]
+
+    apres = chemin.read_text(encoding="utf-8")
+    assert "# Premier exercice de la seance 1" in apres
+    assert "# Une seule entree simulee suffit." in apres
+    assert "enonce: |" in apres
+    assert "solution: |" in apres
+    # L'attendu genere est multi-ligne : il doit lui aussi etre un bloc litteral.
+    assert "attendu: |" in apres
+    # L'ordre des cles est preserve : id vient avant concept.
+    assert apres.index("id: s1-03") < apres.index("concept: input")
+
+
+def test_relance_idempotente(tmp_path):
+    chemin = tmp_path / "s1-03.yaml"
+    chemin.write_text(SOURCE_ANNOTEE, encoding="utf-8")
+
+    remplir_attendus(chemin)
+    apres_premier = chemin.read_bytes()
+
+    assert remplir_attendus(chemin) == []
+    assert chemin.read_bytes() == apres_premier
 ```
 
 - [ ] **Step 2 : Lancer le test pour vérifier qu'il échoue**
@@ -2088,6 +2167,10 @@ Expected : FAIL — `ModuleNotFoundError: No module named 'generer_attendu'`
 
 Le professeur ecrit la solution, jamais l'attendu. C'est le levier de production
 numero un : il supprime l'erreur la plus probable, l'attendu tape a la main.
+
+L'ecriture passe par ruamel.yaml en mode aller-retour, jamais par PyYAML : ces
+fichiers sont edites a la main, et un safe_dump detruirait silencieusement les
+commentaires du professeur et ses blocs litteraux `|`.
 """
 
 from __future__ import annotations
@@ -2096,13 +2179,23 @@ import argparse
 import sys
 from pathlib import Path
 
-import yaml
+from ruamel.yaml import YAML
+from ruamel.yaml.scalarstring import LiteralScalarString
 
 from valider_contenu import _executer
 
+_yaml = YAML()
+_yaml.preserve_quotes = True
+_yaml.width = 4096
+
+
+def _en_scalaire(texte: str) -> str | LiteralScalarString:
+    """Une sortie multi-ligne s'ecrit en bloc litteral, pour rester lisible."""
+    return LiteralScalarString(texte + "\n") if "\n" in texte else texte
+
 
 def remplir_attendus(chemin: Path, ecrire_fichier: bool = True) -> list[str]:
-    donnees = yaml.safe_load(chemin.read_text(encoding="utf-8"))
+    donnees = _yaml.load(chemin.read_text(encoding="utf-8"))
     solution = donnees.get("solution", "")
     modifies: list[str] = []
 
@@ -2111,22 +2204,26 @@ def remplir_attendus(chemin: Path, ecrire_fichier: bool = True) -> list[str]:
             continue
         stdout, _, erreur = _executer(solution, test.get("entrees", []))
         if erreur:
-            print(f"  {donnees['id']}#{index} : la solution plante ({erreur}), attendu inchange")
+            print(f"  {donnees['id']}#{index} : la solution plante ({erreur}), attendu inchangé")
             continue
-        nouveau = stdout.rstrip("\n")
-        if test.get("attendu") != nouveau:
-            test["attendu"] = nouveau
+        # Meme portee de nettoyage que evaluer.ts et valider_contenu._passe :
+        # tout l'espace final, pas seulement les sauts de ligne.
+        nouveau = stdout.rstrip()
+        if str(test.get("attendu", "")).rstrip() != nouveau:
+            test["attendu"] = _en_scalaire(nouveau)
             modifies.append(f"{donnees['id']}#{index}")
 
     if modifies and ecrire_fichier:
-        chemin.write_text(
-            yaml.safe_dump(donnees, allow_unicode=True, sort_keys=False, width=1000),
-            encoding="utf-8",
-        )
+        with chemin.open("w", encoding="utf-8", newline="\n") as fichier:
+            _yaml.dump(donnees, fichier)
     return modifies
 
 
 def principal() -> int:
+    # La console Windows n'est pas en UTF-8 par defaut : sans cela, les messages
+    # accentues sortent en mojibake.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     parseur = argparse.ArgumentParser(description="Remplit le champ attendu depuis la solution.")
     parseur.add_argument("racine", type=Path, nargs="?", default=Path("../../contenu"))
     arguments = parseur.parse_args()
@@ -2136,7 +2233,7 @@ def principal() -> int:
     for chemin in cibles:
         total += remplir_attendus(chemin)
 
-    print(f"{len(total)} attendu(s) mis a jour." if total else "Rien a mettre a jour.")
+    print(f"{len(total)} attendu(s) mis à jour." if total else "Rien à mettre à jour.")
     return 0
 
 
