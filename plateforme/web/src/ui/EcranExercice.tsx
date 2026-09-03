@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Exercice } from '../contenu/types'
 import { nomsVariablesRequis } from '../contenu/chargeur'
 import { Executeur } from '../execution/executeur'
+import { categorieErreur } from '../execution/exceptions'
 import { evaluer } from '../validation/evaluer'
 import type { ResultatTest, Test } from '../validation/types'
 import { Editeur } from './Editeur'
@@ -66,7 +67,8 @@ export function EcranExercice({
     onTentative(
       evalue,
       execution.dureeMs,
-      execution.timeout ? 'TimeoutError' : (execution.erreur?.type ?? null),
+      // Filtré par liste blanche : un nom d'exception peut être choisi par l'élève.
+      categorieErreur(execution.timeout ? 'TimeoutError' : execution.erreur?.type),
     )
   }
 
