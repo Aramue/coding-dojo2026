@@ -19,8 +19,8 @@ const REGLES: Regle[] = [
     motif: /name '(.+?)' is not defined/,
     construire: (c) => ({
       titre: `La variable ${c[1]} n'existe pas encore`,
-      explication: `Tu utilises ${c[1]} avant de lui avoir donné une valeur. Cette variable n'existe pas.`,
-      piste: `Vérifie que tu l'as bien créée plus haut, et que tu l'écris exactement pareil — Python distingue les majuscules des minuscules.`,
+      explication: `Tu utilises ${c[1]} avant de lui avoir donné une valeur.`,
+      piste: `Vérifie que tu l'as bien créée plus haut, et que tu l'écris exactement pareil — Python distingue les majuscules des minuscules. Attention à l'orthographe, écris-la différemment.`,
     }),
   },
   {
@@ -73,7 +73,7 @@ const REGLES: Regle[] = [
     motif: /.*/,
     construire: () => ({
       titre: 'Cette ligne n\'est pas alignée avec les autres',
-      explication: `Tout ce qui est à l'intérieur d'un if, d'un for ou d'un while doit être decale de la même façon.`,
+      explication: `Tout ce qui est à l'intérieur d'un if, d'un for ou d'un while doit être décalé de la même façon.`,
       piste: `Utilise toujours 4 espaces, et le même décalage pour toutes les lignes d'un même bloc.`,
     }),
   },
@@ -81,8 +81,8 @@ const REGLES: Regle[] = [
     type: 'ZeroDivisionError',
     motif: /.*/,
     construire: () => ({
-      titre: 'Division par zero',
-      explication: `Diviser par zero n'a pas de résultat, Python s'arrête.`,
+      titre: 'Division par zéro',
+      explication: `Diviser par zéro n'a pas de résultat, Python s'arrête.`,
       piste: `Vérifie la valeur de ton diviseur juste avant la division.`,
     }),
   },

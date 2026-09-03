@@ -5,8 +5,9 @@ describe('traduireErreur', () => {
   it('traduit NameError en nommant la variable', () => {
     const m = traduireErreur({ type: 'NameError', message: "name 'nom' is not defined", ligne: 3 })
     expect(m.titre).toContain('nom')
-    expect(m.explication).toMatch(/existe pas/i)
-    expect(m.piste).toMatch(/majuscule|different/i)
+    expect(m.titre).toMatch(/existe pas/i)
+    expect(m.explication).toMatch(/avant de lui avoir donné une valeur/i)
+    expect(m.piste).toMatch(/majuscule|différemment/i)
   })
 
   it('traduit la concatenation texte + nombre', () => {
@@ -40,7 +41,7 @@ describe('traduireErreur', () => {
       message: 'expected an indented block',
       ligne: 6,
     })
-    expect(m.explication).toMatch(/decal/i)
+    expect(m.explication).toMatch(/décalé/i)
   })
 
   it('traduit la division par zero', () => {
@@ -49,7 +50,7 @@ describe('traduireErreur', () => {
       message: 'division by zero',
       ligne: 1,
     })
-    expect(m.explication).toMatch(/zero/i)
+    expect(m.explication).toMatch(/zéro/i)
   })
 
   it('ne donne jamais la ligne de code corrigee', () => {
