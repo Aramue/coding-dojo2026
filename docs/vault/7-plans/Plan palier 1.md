@@ -4043,7 +4043,15 @@ Répond à une seule question : ==lequel des 24 élèves est bloqué, et sur quo
 - Produces:
   - `GET /prof/seance` (en-tête `X-Code-Prof`) → `{agents: [{code_agent, exercice_id, statut, echecs_consecutifs, inactif_depuis_s, dernier_type_erreur}]}`
   - `POST /prof/verrou` `{concept, ouvert}` → `{concept, ouvert}`
-  - `statut ∈ {"bloque", "inactif", "en_cours", "termine"}`
+  - `statut ∈ {"bloque", "inactif", "en_cours"}`
+
+> [!note] Pas de statut « terminé » au palier 1
+> Le déterminer suppose de connaître le nombre total d'exercices de la séance,
+> que l'API ne possède pas : le contenu est construit côté front. Le faire
+> remonter par le client reviendrait à faire confiance au navigateur de l'élève,
+> ce que la tâche 11 a montré être une erreur. ==Un statut annoncé mais jamais
+> produit est pire qu'un statut absent== : on le laisse hors du contrat.
+> Le champ `reussis` suffit à voir qui avance.
 
 - [ ] **Step 1 : Écrire le test qui échoue**
 
@@ -4286,7 +4294,7 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
             }
         )
 
-    ordre = {"bloque": 0, "inactif": 1, "en_cours": 2, "termine": 3}
+    ordre = {"bloque": 0, "inactif": 1, "en_cours": 2}
     agents.sort(key=lambda a: (ordre[a["statut"]], -a["inactif_depuis_s"]))
     return {"agents": agents}
 
@@ -4330,7 +4338,7 @@ import './TableauDeBord.css'
 type LigneAgent = {
   code_agent: string
   exercice_id: string
-  statut: 'bloque' | 'inactif' | 'en_cours' | 'termine'
+  statut: 'bloque' | 'inactif' | 'en_cours'
   echecs_consecutifs: number
   inactif_depuis_s: number
   dernier_type_erreur: string | null
@@ -4341,7 +4349,6 @@ const LIBELLES: Record<LigneAgent['statut'], string> = {
   bloque: 'Bloqué',
   inactif: 'Inactif',
   en_cours: 'En cours',
-  termine: 'Terminé',
 }
 
 function minutes(secondes: number): string {
@@ -4423,7 +4430,7 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
 /* Teintes dérivées des tokens : aucune valeur hexadécimale nouvelle ici. */
 .ligne--bloque  { border-left-color: var(--ko); background: color-mix(in srgb, var(--ko) 6%, var(--ground)); }
 .ligne--inactif { border-left-color: var(--ko); background: color-mix(in srgb, var(--ko) 6%, var(--ground)); }
-.ligne--termine { border-left-color: var(--ok); }
+
 .ligne__agent { font-weight: 500; }
 .ligne__ou, .ligne__quoi { color: var(--ink-soft); }
 /* La forme encode un etat : c'est le seul endroit ou une pastille est justifiee. */
@@ -4437,7 +4444,7 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
 }
 .statut--bloque, .statut--inactif { background: color-mix(in srgb, var(--ko) 14%, var(--ground)); color: var(--ko); }
 .statut--en_cours { background: var(--ground-2); color: var(--ink-soft); }
-.statut--termine { background: color-mix(in srgb, var(--ok) 14%, var(--ground)); color: var(--ok); }
+
 ```
 
 - [ ] **Step 6 : Commit**
