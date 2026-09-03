@@ -4464,7 +4464,18 @@ git commit -m "feat: tableau de bord professeur avec detection de blocage"
 - Create: `plateforme/deploiement/Dockerfile.api`
 - Create: `plateforme/deploiement/Dockerfile.web`
 - Create: `plateforme/outils/construire_contenu.py`
+- Create: `plateforme/deploiement/.dockerignore` et `plateforme/deploiement/.gitignore`
+- Create: `plateforme/contenu/chapitre-1/seance-1/` — **2 ou 3 exercices YAML minimaux, commités**
 - Test: `plateforme/outils/tests/test_construire_contenu.py`
+
+> [!warning] Le contenu minimal doit être commité
+> `Dockerfile.web` fait `COPY contenu ./contenu`. Sans ce dossier dans le dépôt,
+> ==`docker compose build` échoue dur à froid== — vérifié : « failed to calculate
+> checksum … "/contenu": not found ». Quiconque clone le dépôt à ce commit ne peut
+> plus vérifier le déploiement, et ne devine pas qu'il manque un dossier.
+>
+> Ces exercices sont provisoires : la tâche 14 les remplace par les 25 vrais.
+> Mais **chaque commit de l'historique doit se construire**.
 
 **Interfaces:**
 - Consumes: `charger_tous`, `verifier_coherence` (T6)
