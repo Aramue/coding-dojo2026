@@ -4056,7 +4056,9 @@ from sqlmodel import Session
 
 from app.modeles import Agent, Tentative
 
-ENTETES = {"X-Code-Prof": "prof-dev"}
+# Doit correspondre au QG_CODE_PROF posé dans conftest.py, et faire au moins
+# 12 caractères pour satisfaire test_le_code_prof_par_defaut_n_est_pas_devinable.
+ENTETES = {"X-Code-Prof": "code-prof-test"}
 
 
 def _tentative(session: Session, code: str, exercice: str, verdict: str, il_y_a_s: int, erreur=None):
@@ -4418,8 +4420,9 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
   border-left: 3px solid transparent;
   font-size: 0.9rem;
 }
-.ligne--bloque  { border-left-color: var(--ko); background: #FEF6F5; }
-.ligne--inactif { border-left-color: var(--ko); background: #FEF6F5; }
+/* Teintes dérivées des tokens : aucune valeur hexadécimale nouvelle ici. */
+.ligne--bloque  { border-left-color: var(--ko); background: color-mix(in srgb, var(--ko) 6%, var(--ground)); }
+.ligne--inactif { border-left-color: var(--ko); background: color-mix(in srgb, var(--ko) 6%, var(--ground)); }
 .ligne--termine { border-left-color: var(--ok); }
 .ligne__agent { font-weight: 500; }
 .ligne__ou, .ligne__quoi { color: var(--ink-soft); }
@@ -4432,9 +4435,9 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.statut--bloque, .statut--inactif { background: #FBE3E1; color: var(--ko); }
+.statut--bloque, .statut--inactif { background: color-mix(in srgb, var(--ko) 14%, var(--ground)); color: var(--ko); }
 .statut--en_cours { background: var(--ground-2); color: var(--ink-soft); }
-.statut--termine { background: #E2F3E6; color: var(--ok); }
+.statut--termine { background: color-mix(in srgb, var(--ok) 14%, var(--ground)); color: var(--ok); }
 ```
 
 - [ ] **Step 6 : Commit**
