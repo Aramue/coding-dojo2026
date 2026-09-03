@@ -4135,6 +4135,23 @@ def test_verrouiller_puis_deverrouiller_un_concept(client):
     assert r.json() == {"concept": "types", "ouvert": False}
     r = client.post("/prof/verrou", headers=ENTETES, json={"concept": "types", "ouvert": True})
     assert r.json()["ouvert"] is True
+
+
+def test_un_concept_inconnu_est_refuse(client):
+    """Une liste déroulante côté client ne protège rien : la contrainte vit ici."""
+    reponse = client.post(
+        "/prof/verrou",
+        headers=ENTETES,
+        json={"concept": "texte_libre_choisi_par_l_appelant", "ouvert": False},
+    )
+    assert reponse.status_code == 422
+
+
+def test_le_code_prof_par_defaut_n_est_pas_devinable():
+    from app import routes_prof
+
+    assert routes_prof.CODE_PROF != "prof-dev"
+    assert len(routes_prof.CODE_PROF) >= 12
 ```
 
 Ajouter la fixture `session_test` dans `plateforme/api/tests/conftest.py`, qui expose la même session que le client :
@@ -4163,12 +4180,15 @@ Expected : FAIL — 404 sur `/prof/seance`
 
 from __future__ import annotations
 
+import hmac
 import os
+import secrets
+import warnings
 from datetime import datetime, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, field_validator
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
@@ -4176,19 +4196,48 @@ from .modeles import Tentative, Verrou
 
 routeur = APIRouter(prefix="/prof")
 
-CODE_PROF = os.environ.get("QG_CODE_PROF", "prof-dev")
+_code_fourni = os.environ.get("QG_CODE_PROF")
+if _code_fourni:
+    CODE_PROF = _code_fourni
+else:
+    # Meme raisonnement que pour QG_SECRET : un code par defaut devinable
+    # ("prof-dev") donnerait a n'importe quel eleve la progression de toute la
+    # classe et la main sur les verrous. Un code aleatoire echoue de facon
+    # visible ; un code publie echoue en silence.
+    CODE_PROF = secrets.token_urlsafe(12)
+    warnings.warn(
+        "QG_CODE_PROF n'est pas defini : code professeur aleatoire pour cette "
+        f"execution -> {CODE_PROF}. Definis QG_CODE_PROF en production.",
+        stacklevel=2,
+    )
+
 ECHECS_POUR_BLOQUE = 3
 SECONDES_POUR_INACTIF = 600
 
+# Liste blanche : `concept` est ecrit en base puis relu. Sans contrainte, ce champ
+# accepte n'importe quelle chaine. Une validation qui n'existerait que dans un
+# <select> cote client ne protegerait rien — la lecon des rondes de la tache 11.
+CONCEPTS = frozenset({"variables", "types", "operateurs", "conditions", "boucles"})
+
 
 def verifier_prof(x_code_prof: Annotated[str | None, Header()] = None) -> None:
-    if x_code_prof != CODE_PROF:
+    # compare_digest : comparaison a temps constant, comme pour les jetons eleve.
+    if not x_code_prof or not hmac.compare_digest(x_code_prof, CODE_PROF):
         raise HTTPException(401, "Code professeur invalide")
 
 
 class DemandeVerrou(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     concept: str
     ouvert: bool
+
+    @field_validator("concept")
+    @classmethod
+    def concept_connu(cls, valeur: str) -> str:
+        if valeur not in CONCEPTS:
+            raise ValueError("concept inconnu")
+        return valeur
 
 
 @routeur.get("/seance", dependencies=[Depends(verifier_prof)])
