@@ -2705,7 +2705,7 @@ git commit -m "feat: tokens de la charte, polices auto-hebergees et carte de cod
 
 ```bash
 cd plateforme/web
-pnpm add codemirror @codemirror/lang-python @codemirror/state @codemirror/view @codemirror/theme-one-dark
+pnpm add @codemirror/lang-python @codemirror/state @codemirror/view @codemirror/commands @codemirror/theme-one-dark
 pnpm add -D jsdom @testing-library/react @testing-library/jest-dom
 ```
 
