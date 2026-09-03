@@ -1,0 +1,31 @@
+id: s1-14
+concept: reaffectation
+seance: 1
+niveau: normal
+type: predire
+titre: x = x + 1 n'est pas une équation
+obligatoire: true
+enonce: |
+  Le QG compte les messages reçus depuis ce matin.
+  Lis ce programme ligne par ligne, dans l'ordre où il est écrit.
+  Qu'affiche ce programme à l'écran ?
+depart: |
+  compteur = 3
+  compteur = compteur + 1
+  compteur = compteur + 1
+  print(compteur)
+indices:
+  - Le signe = ne veut pas dire "est égal à". Il veut dire "range dans".
+  - Python calcule d'abord la partie à droite du signe =, avec la valeur que compteur a à ce moment-là, puis il range le résultat dans compteur. Fais-le une ligne après l'autre.
+tests:
+  - type: qcm
+    options:
+      - "5"
+      - "4"
+      - "Rien ne s'affiche, Python signale une erreur car compteur ne peut pas être égal à compteur + 1"
+    bonne_reponse: 0
+solution: |
+  compteur = 3
+  compteur = compteur + 1
+  compteur = compteur + 1
+  print(compteur)

@@ -1,0 +1,26 @@
+id: s1-11
+concept: reaffectation
+seance: 1
+niveau: normal
+type: predire
+titre: L'écrasement
+obligatoire: true
+enonce: |
+  Un agent du QG a changé de nom de code en pleine mission.
+  Le programme ci-dessous range deux valeurs l'une après l'autre dans le même carton nom.
+  Qu'est-ce qui apparaît à l'écran quand on l'exécute ?
+depart: |
+  nom = "Corbeau"
+  nom = "Faucon"
+  print(nom)
+indices:
+  - Une variable, c'est un carton avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.
+  - La deuxième ligne remplace ce qu'il y avait dans la variable. Au moment du print, une seule valeur reste.
+tests:
+  - type: qcm
+    options: ["Faucon", "Corbeau", "Corbeau Faucon"]
+    bonne_reponse: 0
+solution: |
+  nom = "Corbeau"
+  nom = "Faucon"
+  print(nom)

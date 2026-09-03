@@ -1,0 +1,23 @@
+id: s1-05
+concept: print
+seance: 1
+niveau: normal
+type: predire
+titre: La virgule met un espace
+obligatoire: true
+enonce: |
+  Le Quartier Général affiche ta ligne d'identification.
+  Cette fois, print() reçoit deux morceaux de texte séparés par une virgule.
+  Regarde bien les espaces : au QG, chaque caractère compte.
+  Qu'est-ce qui apparaît exactement à l'écran ?
+depart: |
+  print("Agent", "K7M2")
+indices:
+  - La virgule ne s'affiche jamais à l'écran. Elle sert seulement à séparer les morceaux à l'intérieur de print().
+  - Quand print() reçoit plusieurs morceaux séparés par des virgules, il les affiche l'un après l'autre en glissant un espace entre chacun.
+tests:
+  - type: qcm
+    options: ["Agent K7M2", "AgentK7M2", "Agent,K7M2"]
+    bonne_reponse: 0
+solution: |
+  print("Agent", "K7M2")

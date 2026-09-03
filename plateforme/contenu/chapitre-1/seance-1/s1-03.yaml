@@ -1,29 +1,31 @@
-# PROVISOIRE — contenu de demonstration cree en tache 13 pour verifier la
-# construction Docker. Ce n'est PAS du contenu pedagogique valide : il sera
-# remplace par les exercices reels de la tache 14. Ne pas utiliser en classe.
 id: s1-03
-concept: conditions
+concept: erreurs
 seance: 1
 niveau: normal
-type: completer
-titre: Contrôle d'accès au QG
+type: debug
+titre: Le guillemet manquant
 obligatoire: true
-enonce: Complète le programme pour qu'il affiche Accès autorisé si le code saisi vaut
-  exactement "7321", et Accès refusé sinon.
-depart: 'code = "7321"
+enonce: |
+  Un agent a tapé son rapport trop vite et le programme refuse de démarrer.
+  Il devait afficher exactement cette ligne :
 
+  Le canal est ouvert
 
-  # Complete la condition
+  Au lieu de ça, Python affiche ce message d'erreur :
 
-  '
+  SyntaxError: unterminated string literal (detected at line 1)
+
+  Traduction : un texte a été ouvert, mais il n'a jamais été refermé.
+  Répare la ligne pour que le message parte enfin.
+depart: |
+  print("Le canal est ouvert)
 indices:
-- Utilise une structure if / else.
-- Compare la variable code au texte attendu avec ==.
+  - Un texte s'ouvre et se ferme toujours par le même caractère. Compte les guillemets présents sur la ligne.
+  - Le guillemet du début est bien là. C'est celui de la fin, juste avant la parenthèse fermante, qui manque.
 tests:
-- type: sortie
-  entrees: []
-  attendu: Accès autorisé
-- type: contient
-  motif: if
-solution: "code = \"7321\"\n\nif code == \"7321\":\n    print(\"Accès autorisé\")\n\
-  else:\n    print(\"Accès refusé\")\n"
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Le canal est ouvert
+solution: |
+  print("Le canal est ouvert")

@@ -1,0 +1,33 @@
+id: s1-13
+concept: variable
+seance: 1
+niveau: normal
+type: debug
+titre: Le carton qui n'existe pas encore
+obligatoire: true
+enonce: |
+  Un agent a écrit ce programme pour annoncer qui tient le poste de guet.
+  Python refuse de le lancer. Il affiche ce message :
+  NameError: name 'guetteur' is not defined
+  Cela veut dire : Python ne connaît pas encore la variable guetteur.
+  Répare le programme. Il doit afficher exactement :
+  Agent en poste : Merle
+  Garde la variable : n'écris pas Merle à l'intérieur du print().
+depart: |
+  print("Agent en poste :", guetteur)
+  guetteur = "Merle"
+indices:
+  - Python lit les lignes de haut en bas, une par une. Quand il arrive au print(), le carton guetteur a-t-il déjà été rempli ?
+  - Un carton doit être rempli AVANT la ligne qui vient le lire. Regarde dans quel ordre tes deux lignes sont écrites.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Agent en poste : Merle
+  - type: interdit
+    motif: Merle")
+  - type: interdit
+    motif: Merle')
+solution: |
+  guetteur = "Merle"
+  print("Agent en poste :", guetteur)

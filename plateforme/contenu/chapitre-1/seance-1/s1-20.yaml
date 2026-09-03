@@ -1,0 +1,32 @@
+id: s1-20
+concept: types
+seance: 1
+niveau: normal
+type: predire
+titre: Trois familles
+obligatoire: true
+enonce: |
+  Dans les archives du Quartier Général, le même chiffre 7 est rangé de trois façons différentes.
+  Ce n'est pas une erreur : Python classe chaque valeur dans une famille.
+  7 est un nombre entier, sa famille s'appelle int.
+  7.0 est un nombre à virgule (Python écrit un point), sa famille s'appelle float.
+  "7" est du texte, sa famille s'appelle str.
+  Le programme applique le signe + entre chaque valeur et elle-même, puis affiche les trois résultats sur une seule ligne.
+  Qu'affiche-t-il à l'écran ?
+depart: |
+  agents = 7
+  alerte = 7.0
+  matricule = "7"
+  print(agents + agents, alerte + alerte, matricule + matricule)
+indices:
+  - Deux nombres reliés par + donnent un nombre. Deux textes reliés par + se collent bout à bout.
+  - Un float garde toujours ce qui suit le point, même quand cette partie vaut zéro.
+tests:
+  - type: qcm
+    options: ["14 14 77", "14 14.0 77", "14 14.0 14"]
+    bonne_reponse: 1
+solution: |
+  agents = 7
+  alerte = 7.0
+  matricule = "7"
+  print(agents + agents, alerte + alerte, matricule + matricule)

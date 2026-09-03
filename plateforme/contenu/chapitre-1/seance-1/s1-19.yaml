@@ -1,0 +1,28 @@
+id: s1-19
+concept: types
+seance: 1
+niveau: normal
+type: predire
+titre: 2 + 2 ou 22 ?
+obligatoire: true
+enonce: |
+  Le QG te transmet deux calculs qui se ressemblent beaucoup.
+  Regarde bien la différence : dans le premier, les 2 sont des nombres.
+  Dans le second, les 2 sont entourés de guillemets, c'est donc du texte.
+  Souviens-toi aussi que la virgule dans print ajoute un espace.
+  Qu'apparaît-il à l'écran ?
+depart: |
+  nombres = 2 + 2
+  textes = "2" + "2"
+  print(nombres, textes)
+indices:
+  - "Les guillemets changent tout : avec eux, 2 n'est plus un nombre, c'est du texte."
+  - Le signe + ne fait pas le même travail dans les deux cas. Sur des nombres il additionne, sur du texte il met les deux morceaux bout à bout.
+tests:
+  - type: qcm
+    options: ["4 22", "4 4", "22 22"]
+    bonne_reponse: 0
+solution: |
+  nombres = 2 + 2
+  textes = "2" + "2"
+  print(nombres, textes)

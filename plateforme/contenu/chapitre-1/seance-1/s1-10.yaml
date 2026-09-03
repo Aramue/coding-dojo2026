@@ -1,0 +1,30 @@
+id: s1-10
+concept: variable
+seance: 1
+niveau: normal
+type: completer
+titre: Range le nom de l'agent
+obligatoire: true
+enonce: |
+  Au QG, une variable est un carton avec une étiquette.
+  Ici l'étiquette est déjà écrite : le carton s'appelle nom. Mais il est vide.
+  Range le texte Corbeau à l'intérieur.
+  Le programme doit alors afficher exactement :
+  Agent Corbeau est en poste au QG
+depart: |
+  nom = _____
+  print("Agent", nom, "est en poste au QG")
+indices:
+  - À droite du signe égal, on écrit la valeur que l'on range dans le carton. Ici, cette valeur est du texte.
+  - Un texte s'écrit toujours entre guillemets, exactement comme le texte que tu mets dans print().
+tests:
+  - type: variable
+    nom: nom
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Agent Corbeau est en poste au QG
+solution: |
+  nom = "Corbeau"
+  print("Agent", nom, "est en poste au QG")

@@ -1,34 +1,25 @@
-# PROVISOIRE — contenu de demonstration cree en tache 13 pour verifier la
-# construction Docker. Ce n'est PAS du contenu pedagogique valide : il sera
-# remplace par les exercices reels de la tache 14. Ne pas utiliser en classe.
 id: s1-01
-concept: operateurs
+concept: print
 seance: 1
 niveau: normal
-type: ecrire
-titre: Effectif total sur le terrain
+type: predire
+titre: Le premier message du QG
 obligatoire: true
-enonce: Le Quartier Général te transmet le nombre d'agents postés au nord (5) et au
-  sud (3). Complète le programme pour calculer et afficher l'effectif total.
-depart: 'agents_nord = 5
-
-  agents_sud = 3
-
-  '
+enonce: |
+  Premier contact avec le Quartier Général. Tu n'as rien à écrire ici.
+  Le terminal du QG affiche ce programme.
+  Lis-le, puis choisis ce qui apparaît à l'écran quand on l'exécute.
+depart: |
+  print("Bienvenue au QG")
 indices:
-- Additionne les deux variables avec l'opérateur +.
-- Utilise print() pour afficher le résultat du calcul, jamais un nombre écrit à la
-  main.
+  - Les guillemets servent à marquer le début et la fin du texte. Demande-toi s'ils font partie du message.
+  - Le mot print et les parenthèses sont l'ordre donné à Python, pas le message. Seul ce qui se trouve à l'intérieur des guillemets arrive à l'écran.
 tests:
-- type: sortie
-  entrees: []
-  attendu: '8'
-- type: interdit
-  motif: '8'
-solution: 'agents_nord = 5
-
-  agents_sud = 3
-
-  print(agents_nord + agents_sud)
-
-  '
+  - type: qcm
+    options:
+      - Bienvenue au QG
+      - '"Bienvenue au QG"'
+      - print("Bienvenue au QG")
+    bonne_reponse: 0
+solution: |
+  print("Bienvenue au QG")

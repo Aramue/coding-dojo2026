@@ -1,0 +1,59 @@
+id: s1-31
+concept: input
+seance: 1
+niveau: normal
+type: ecrire
+titre: Interrogatoire
+obligatoire: true
+enonce: |
+  Le QG interroge chaque nouvelle recrue avant de lui ouvrir un dossier.
+  À toi d'écrire le programme de l'interrogatoire.
+
+  Il pose deux questions, dans cet ordre : d'abord "Nom de code : ", puis "Ton age : ".
+  Il affiche ensuite deux lignes : l'ouverture du dossier, puis la recrue et son âge.
+
+  Si la recrue répond Merle, puis 16, l'écran doit montrer exactement ceci :
+
+  Nom de code : Merle
+  Ton age : 16
+  Dossier ouvert au nom de Merle
+  Merle a 16 ans
+
+  Les deux premières lignes ne sont pas des print(). Ce sont les questions elles-mêmes :
+  elles s'affichent toutes seules au moment où input() s'exécute.
+
+  Ici, on ne calcule rien avec l'âge, on le réaffiche tel quel. Pas besoin de le
+  convertir en nombre : il peut rester du texte.
+
+  Recopie les textes exactement comme ils sont écrits ci-dessus. Dans ce programme,
+  la question s'écrit "Ton age : ", sans accent.
+
+  Le QG relancera ton programme avec une autre recrue. Rien ne doit donc être écrit
+  à la main. La première ligne est déjà en place.
+depart: |
+  nom = input("Nom de code : ")
+indices:
+  - "Regarde la ligne déjà écrite. La question se met entre les parenthèses de input(), et la réponse se range dans une variable. Fais pareil pour l'âge."
+  - "Il te faut ensuite deux print(). Un f-string permet de glisser une variable entre accolades, et la même variable peut resservir dans les deux lignes."
+tests:
+  - type: sortie
+    entrees: ["Merle", "16"]
+    attendu: |-
+      Nom de code : Merle
+      Ton age : 16
+      Dossier ouvert au nom de Merle
+      Merle a 16 ans
+  - type: sortie
+    entrees: ["Faucon", "19"]
+    attendu: |-
+      Nom de code : Faucon
+      Ton age : 19
+      Dossier ouvert au nom de Faucon
+      Faucon a 19 ans
+  - type: interdit
+    motif: Merle
+solution: |
+  nom = input("Nom de code : ")
+  age = input("Ton age : ")
+  print(f"Dossier ouvert au nom de {nom}")
+  print(f"{nom} a {age} ans")

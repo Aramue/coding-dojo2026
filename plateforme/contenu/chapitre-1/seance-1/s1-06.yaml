@@ -1,0 +1,38 @@
+id: s1-06
+concept: format exact
+seance: 1
+niveau: normal
+type: completer
+titre: Le format exact du QG
+obligatoire: true
+enonce: |
+  Le terminal du Quartier Général n'accepte qu'un seul format.
+  Un espace en trop et la transmission est refusée.
+
+  Ton programme doit afficher exactement ces trois lignes :
+
+  === QG ===
+  Agent Corbeau
+  Statut : actif
+
+  La première ligne est déjà écrite. Remplace chaque _____ pour obtenir les deux autres.
+  Compte les espaces un par un.
+depart: |
+  print("=== QG ===")
+  print("Agent", "_____")
+  print("Statut_____actif")
+indices:
+  - "La virgule de la deuxième ligne ajoute déjà quelque chose entre les deux morceaux. Regarde ce que cela donne avant d'écrire un espace de plus."
+  - "La troisième ligne ne contient aucune virgule. Tout ce qui doit apparaître à l'écran, espaces compris, se trouve donc à l'intérieur des guillemets."
+tests:
+  - type: sortie
+    entrees: []
+    exige_exact: true
+    attendu: |-
+      === QG ===
+      Agent Corbeau
+      Statut : actif
+solution: |
+  print("=== QG ===")
+  print("Agent", "Corbeau")
+  print("Statut : actif")

@@ -1,41 +1,731 @@
 [
   {
     "id": "s1-01",
-    "concept": "addition",
-    "famille": "operateurs",
-    "seance": 1,
-    "niveau": "normal",
-    "type": "ecrire",
-    "titre": "Effectif total sur le terrain",
-    "obligatoire": true,
-    "enonce": "Le Quartier Général te transmet le nombre d'agents postés au nord (5) et au sud (3). Complète le programme pour calculer et afficher l'effectif total.",
-    "depart": "agents_nord = 5\nagents_sud = 3\n",
-    "indices": [
-      "Additionne les deux variables avec l'opérateur +.",
-      "Utilise print() pour afficher le résultat du calcul, jamais un nombre écrit à la main."
-    ],
-    "tests": [
-      { "type": "sortie", "entrees": [], "attendu": "8" },
-      { "type": "interdit", "motif": "8" }
-    ]
-  },
-  {
-    "id": "s1-02",
-    "concept": "affichage",
-    "famille": "variables",
+    "concept": "print",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
-    "titre": "Message codé du QG",
+    "titre": "Le premier message du QG",
     "obligatoire": true,
-    "enonce": "Voici un message intercepté au Quartier Général :\n\nindicatif = \"QG\"\nnumero = 7\nprint(indicatif + str(numero))\n\nQu'affiche ce programme à l'écran ?",
-    "depart": "",
+    "enonce": "Premier contact avec le Quartier Général. Tu n'as rien à écrire ici.\nLe terminal du QG affiche ce programme.\nLis-le, puis choisis ce qui apparaît à l'écran quand on l'exécute.\n",
+    "depart": "print(\"Bienvenue au QG\")\n",
     "indices": [
-      "Python colle les deux morceaux dans l'ordre où ils apparaissent dans print().",
-      "str(numero) transforme le nombre 7 en texte \"7\" avant de le coller au texte."
+      "Les guillemets servent à marquer le début et la fin du texte. Demande-toi s'ils font partie du message.",
+      "Le mot print et les parenthèses sont l'ordre donné à Python, pas le message. Seul ce qui se trouve à l'intérieur des guillemets arrive à l'écran."
     ],
     "tests": [
-      { "type": "qcm", "options": ["QG7", "QG 7", "7QG", "QGnumero"], "bonneReponse": 0 }
-    ]
+      {
+        "type": "qcm",
+        "options": [
+          "Bienvenue au QG",
+          "\"Bienvenue au QG\"",
+          "print(\"Bienvenue au QG\")"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-02",
+    "concept": "print",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Ton indicatif d'appel",
+    "obligatoire": true,
+    "enonce": "Tu viens de franchir le sas du Quartier Général.\nIci, chaque agent annonce son indicatif d'appel en arrivant. Le tien est AGENT-K7M2.\n\nÀ toi d'écrire l'instruction, sur le modèle que tu viens de lire.\nTon programme doit afficher exactement cette ligne, et rien d'autre :\n\nIci AGENT-K7M2\n",
+    "depart": "",
+    "indices": [
+      "Une instruction qui affiche quelque chose commence par print, suivi d'une parenthèse ouvrante.",
+      "Le texte à afficher se place entre guillemets, à l'intérieur des parenthèses. Recopie l'indicatif annoncé plus haut : AGENT-K7M2."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Ici AGENT-K7M2",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "input("
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-03",
+    "concept": "erreurs",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le guillemet manquant",
+    "obligatoire": true,
+    "enonce": "Un agent a tapé son rapport trop vite et le programme refuse de démarrer.\nIl devait afficher exactement cette ligne :\n\nLe canal est ouvert\n\nAu lieu de ça, Python affiche ce message d'erreur :\n\nSyntaxError: unterminated string literal (detected at line 1)\n\nTraduction : un texte a été ouvert, mais il n'a jamais été refermé.\nRépare la ligne pour que le message parte enfin.\n",
+    "depart": "print(\"Le canal est ouvert)\n",
+    "indices": [
+      "Un texte s'ouvre et se ferme toujours par le même caractère. Compte les guillemets présents sur la ligne.",
+      "Le guillemet du début est bien là. C'est celui de la fin, juste avant la parenthèse fermante, qui manque."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Le canal est ouvert",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-04",
+    "concept": "execution sequentielle",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Deux lignes, deux ordres",
+    "obligatoire": true,
+    "enonce": "Le QG t'envoie deux consignes coup sur coup.\nQu'apparaît-il à l'écran ?\nLes propositions décrivent la sortie ligne par ligne.\n",
+    "depart": "print(\"Fermeture du canal\")\nprint(\"Ouverture du canal\")\n",
+    "indices": [
+      "Python ne comprend pas le sens des messages. Il traite les instructions une par une.",
+      "Le premier print() rencontré est le premier affiché. Et chaque print() passe ensuite à la ligne suivante."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Ligne 1 : Fermeture du canal / Ligne 2 : Ouverture du canal",
+          "Ligne 1 : Ouverture du canal / Ligne 2 : Fermeture du canal",
+          "Une seule ligne : Fermeture du canal Ouverture du canal"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-05",
+    "concept": "print",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La virgule met un espace",
+    "obligatoire": true,
+    "enonce": "Le Quartier Général affiche ta ligne d'identification.\nCette fois, print() reçoit deux morceaux de texte séparés par une virgule.\nRegarde bien les espaces : au QG, chaque caractère compte.\nQu'est-ce qui apparaît exactement à l'écran ?\n",
+    "depart": "print(\"Agent\", \"K7M2\")\n",
+    "indices": [
+      "La virgule ne s'affiche jamais à l'écran. Elle sert seulement à séparer les morceaux à l'intérieur de print().",
+      "Quand print() reçoit plusieurs morceaux séparés par des virgules, il les affiche l'un après l'autre en glissant un espace entre chacun."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Agent K7M2",
+          "AgentK7M2",
+          "Agent,K7M2"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-06",
+    "concept": "format exact",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Le format exact du QG",
+    "obligatoire": true,
+    "enonce": "Le terminal du Quartier Général n'accepte qu'un seul format.\nUn espace en trop et la transmission est refusée.\n\nTon programme doit afficher exactement ces trois lignes :\n\n=== QG ===\nAgent Corbeau\nStatut : actif\n\nLa première ligne est déjà écrite. Remplace chaque _____ pour obtenir les deux autres.\nCompte les espaces un par un.\n",
+    "depart": "print(\"=== QG ===\")\nprint(\"Agent\", \"_____\")\nprint(\"Statut_____actif\")\n",
+    "indices": [
+      "La virgule de la deuxième ligne ajoute déjà quelque chose entre les deux morceaux. Regarde ce que cela donne avant d'écrire un espace de plus.",
+      "La troisième ligne ne contient aucune virgule. Tout ce qui doit apparaître à l'écran, espaces compris, se trouve donc à l'intérieur des guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "=== QG ===\nAgent Corbeau\nStatut : actif",
+        "exigeExact": true
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-07",
+    "concept": "format exact",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'espace en trop",
+    "obligatoire": true,
+    "enonce": "Chaque transmission du QG doit arriver au caractère près.\nLe terminal doit afficher exactement ces deux lignes :\n\nRapport du soir\nAgent K7M2 en poste\n\nLe programme ci-dessous affiche presque cela. Presque : il glisse un espace\nen trop quelque part. Trouve-le et répare le programme.\n",
+    "depart": "print(\"Rapport du soir\")\nprint(\"Agent\", \" K7M2\", \"en poste\")\n",
+    "indices": [
+      "La première ligne est correcte. L'écart se trouve donc sur la seconde, et il tient en un seul caractère.",
+      "Rappelle-toi ce que fait la virgule dans un print() : elle place déjà un espace entre deux morceaux. Regarde maintenant comment commence chaque morceau."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Rapport du soir\nAgent K7M2 en poste",
+        "exigeExact": true
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-09",
+    "concept": "variable",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le carton et son étiquette",
+    "obligatoire": true,
+    "enonce": "Au Quartier Général, une information utile n'est pas affichée tout de suite :\nelle est d'abord rangée dans une variable.\nUne variable, c'est un carton avec une étiquette. L'étiquette est le nom du\ncarton. À l'intérieur, il y a une valeur.\n\nLa première ligne range le texte Corbeau dans un carton étiqueté indicatif.\nLa deuxième ligne demande d'afficher indicatif.\n\nQu'est-ce qui apparaît à l'écran quand on exécute ce programme ?\n",
+    "depart": "indicatif = \"Corbeau\"\nprint(indicatif)\n",
+    "indices": [
+      "Jusqu'ici, pour afficher du texte tel quel, on le mettait entre guillemets. Sur la deuxième ligne, il n'y a pas de guillemets.",
+      "Python va chercher ce qu'il y a à l'intérieur du carton, pas ce qui est écrit sur l'étiquette."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Corbeau",
+          "indicatif",
+          "indicatif = Corbeau"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-10",
+    "concept": "variable",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Range le nom de l'agent",
+    "obligatoire": true,
+    "enonce": "Au QG, une variable est un carton avec une étiquette.\nIci l'étiquette est déjà écrite : le carton s'appelle nom. Mais il est vide.\nRange le texte Corbeau à l'intérieur.\nLe programme doit alors afficher exactement :\nAgent Corbeau est en poste au QG\n",
+    "depart": "nom = _____\nprint(\"Agent\", nom, \"est en poste au QG\")\n",
+    "indices": [
+      "À droite du signe égal, on écrit la valeur que l'on range dans le carton. Ici, cette valeur est du texte.",
+      "Un texte s'écrit toujours entre guillemets, exactement comme le texte que tu mets dans print()."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nom",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Agent Corbeau est en poste au QG",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-11",
+    "concept": "reaffectation",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "L'écrasement",
+    "obligatoire": true,
+    "enonce": "Un agent du QG a changé de nom de code en pleine mission.\nLe programme ci-dessous range deux valeurs l'une après l'autre dans le même carton nom.\nQu'est-ce qui apparaît à l'écran quand on l'exécute ?\n",
+    "depart": "nom = \"Corbeau\"\nnom = \"Faucon\"\nprint(nom)\n",
+    "indices": [
+      "Une variable, c'est un carton avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.",
+      "La deuxième ligne remplace ce qu'il y avait dans la variable. Au moment du print, une seule valeur reste."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Faucon",
+          "Corbeau",
+          "Corbeau Faucon"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-12",
+    "concept": "reaffectation",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Photo, pas formule",
+    "obligatoire": true,
+    "enonce": "L'agent Corbeau reçoit un nouvel indicatif d'appel.\nAvant le changement, le QG range l'ancien indicatif dans un deuxième carton, pour l'archive.\nDéroule le programme ligne par ligne. Qu'est-ce qui apparaît à l'écran ?\n",
+    "depart": "indicatif = \"Corbeau\"\nsauvegarde = indicatif\nindicatif = \"Renard\"\nprint(indicatif, sauvegarde)\n",
+    "indices": [
+      "Arrête-toi juste après la ligne 2 et note ce que contient chaque carton à cet instant.",
+      "La ligne 2 recopie dans sauvegarde la valeur qu'indicatif contient à ce moment-là. Ce n'est pas un lien qui se mettrait à jour plus tard."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Renard Corbeau",
+          "Renard Renard",
+          "Corbeau Corbeau"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-13",
+    "concept": "variable",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le carton qui n'existe pas encore",
+    "obligatoire": true,
+    "enonce": "Un agent a écrit ce programme pour annoncer qui tient le poste de guet.\nPython refuse de le lancer. Il affiche ce message :\nNameError: name 'guetteur' is not defined\nCela veut dire : Python ne connaît pas encore la variable guetteur.\nRépare le programme. Il doit afficher exactement :\nAgent en poste : Merle\nGarde la variable : n'écris pas Merle à l'intérieur du print().\n",
+    "depart": "print(\"Agent en poste :\", guetteur)\nguetteur = \"Merle\"\n",
+    "indices": [
+      "Python lit les lignes de haut en bas, une par une. Quand il arrive au print(), le carton guetteur a-t-il déjà été rempli ?",
+      "Un carton doit être rempli AVANT la ligne qui vient le lire. Regarde dans quel ordre tes deux lignes sont écrites."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Agent en poste : Merle",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Merle\")"
+      },
+      {
+        "type": "interdit",
+        "motif": "Merle')"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-14",
+    "concept": "reaffectation",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "x = x + 1 n'est pas une équation",
+    "obligatoire": true,
+    "enonce": "Le QG compte les messages reçus depuis ce matin.\nLis ce programme ligne par ligne, dans l'ordre où il est écrit.\nQu'affiche ce programme à l'écran ?\n",
+    "depart": "compteur = 3\ncompteur = compteur + 1\ncompteur = compteur + 1\nprint(compteur)\n",
+    "indices": [
+      "Le signe = ne veut pas dire \"est égal à\". Il veut dire \"range dans\".",
+      "Python calcule d'abord la partie à droite du signe =, avec la valeur que compteur a à ce moment-là, puis il range le résultat dans compteur. Fais-le une ligne après l'autre."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "5",
+          "4",
+          "Rien ne s'affiche, Python signale une erreur car compteur ne peut pas être égal à compteur + 1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-19",
+    "concept": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "2 + 2 ou 22 ?",
+    "obligatoire": true,
+    "enonce": "Le QG te transmet deux calculs qui se ressemblent beaucoup.\nRegarde bien la différence : dans le premier, les 2 sont des nombres.\nDans le second, les 2 sont entourés de guillemets, c'est donc du texte.\nSouviens-toi aussi que la virgule dans print ajoute un espace.\nQu'apparaît-il à l'écran ?\n",
+    "depart": "nombres = 2 + 2\ntextes = \"2\" + \"2\"\nprint(nombres, textes)\n",
+    "indices": [
+      "Les guillemets changent tout : avec eux, 2 n'est plus un nombre, c'est du texte.",
+      "Le signe + ne fait pas le même travail dans les deux cas. Sur des nombres il additionne, sur du texte il met les deux morceaux bout à bout."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "4 22",
+          "4 4",
+          "22 22"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-20",
+    "concept": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Trois familles",
+    "obligatoire": true,
+    "enonce": "Dans les archives du Quartier Général, le même chiffre 7 est rangé de trois façons différentes.\nCe n'est pas une erreur : Python classe chaque valeur dans une famille.\n7 est un nombre entier, sa famille s'appelle int.\n7.0 est un nombre à virgule (Python écrit un point), sa famille s'appelle float.\n\"7\" est du texte, sa famille s'appelle str.\nLe programme applique le signe + entre chaque valeur et elle-même, puis affiche les trois résultats sur une seule ligne.\nQu'affiche-t-il à l'écran ?\n",
+    "depart": "agents = 7\nalerte = 7.0\nmatricule = \"7\"\nprint(agents + agents, alerte + alerte, matricule + matricule)\n",
+    "indices": [
+      "Deux nombres reliés par + donnent un nombre. Deux textes reliés par + se collent bout à bout.",
+      "Un float garde toujours ce qui suit le point, même quand cette partie vaut zéro."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "14 14 77",
+          "14 14.0 77",
+          "14 14.0 14"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-21",
+    "concept": "conversion",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Impossible d'additionner du texte et un nombre",
+    "obligatoire": true,
+    "enonce": "Une transmission d'un agent en mission nous parvient corrompue.\nLe programme devait afficher exactement cette ligne :\nAgent Corbeau a 17 ans\nMais il refuse de démarrer. Python s'arrête sur une erreur de type.\nLis le message d'erreur, puis répare la dernière ligne.\nGarde les signes + pour assembler la phrase, et ne change ni le nom de l'agent, ni son âge.\n",
+    "depart": "nom = \"Corbeau\"\nage = 17\nprint(\"Agent \" + nom + \" a \" + age + \" ans\")\n",
+    "indices": [
+      "Le signe + sait coller deux textes, ou additionner deux nombres. Ici Python trouve du texte d'un côté et un nombre de l'autre, et il ne sait pas quoi en faire.",
+      "La fonction str() transforme un nombre en texte. Le nombre rangé dans age doit devenir du texte avant d'être collé au reste de la phrase."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Agent Corbeau a 17 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Agent Corbeau"
+      },
+      {
+        "type": "interdit",
+        "motif": "17 ans"
+      },
+      {
+        "type": "contient",
+        "motif": "str("
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-22",
+    "concept": "conversion",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "str() à la rescousse",
+    "obligatoire": true,
+    "enonce": "Le QG vient de t'attribuer un casier au sous-sol.\nSon numéro est un nombre, et le signe + refuse de coller un nombre à du texte.\nTu viens de voir cette erreur : voici le remède.\nRemplace _____ par la fonction qui transforme un nombre en texte.\nLe programme doit afficher exactement :\nCasier numéro 42\n",
+    "depart": "numero = 42\nmessage = \"Casier numéro \" + _____(numero)\nprint(message)\n",
+    "indices": [
+      "Le problème ne vient pas de la valeur de numero, mais de son type. Un nombre ne se colle pas à du texte.",
+      "Il existe une fonction qui fabrique du texte à partir d'un nombre. Elle porte le nom du type texte, en trois lettres."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'Casier numéro 42'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Casier numéro 42",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Casier numéro 42"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-23",
+    "concept": "f-string",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le f-string",
+    "obligatoire": true,
+    "enonce": "Le QG a une deuxième façon d'assembler du texte et des variables.\nOn colle la lettre f juste avant les guillemets ouvrants.\nEnsuite, on écrit les noms des variables entre accolades, directement dans la phrase.\nLis ce programme. Qu'est-ce qui s'affiche à l'écran ?\n",
+    "depart": "nom = \"Corbeau\"\nage = 17\nprint(f\"Agent {nom} a {age} ans\")\n",
+    "indices": [
+      "Le f collé aux guillemets n'est pas du texte à afficher. Il change ce que Python fait des accolades.",
+      "Dans un f-string, chaque paire d'accolades est remplacée par la valeur de la variable écrite dedans."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Agent Corbeau a 17 ans",
+          "Agent {nom} a {age} ans",
+          "Agent nom a age ans"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-24",
+    "concept": "f-string",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Trois écritures, une seule sortie",
+    "obligatoire": true,
+    "enonce": "Trois agents du QG ont transmis la même information de trois façons différentes.\nLe premier colle les morceaux avec +, le deuxième sépare avec une virgule,\nle troisième utilise un f-string.\nQu'affiche ce programme à l'écran ?\n",
+    "depart": "nom = \"Corbeau\"\nprint(\"Agent \" + nom)\nprint(\"Agent\", nom)\nprint(f\"Agent {nom}\")\n",
+    "indices": [
+      "Traite chaque ligne l'une après l'autre, puis compare les trois résultats obtenus.",
+      "La virgule ajoute un espace toute seule, et le f devant les guillemets fait remplacer {nom} par le contenu de la variable."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Agent Corbeau\nAgent Corbeau\nAgent Corbeau",
+          "Agent Corbeau\nAgentCorbeau\nAgent Corbeau",
+          "Agent Corbeau\nAgent Corbeau\nAgent {nom}"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-27",
+    "concept": "input",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "input() rend toujours du texte",
+    "obligatoire": true,
+    "enonce": "Le QG installe une borne d'identification à l'entrée du bâtiment.\nLa fonction input() pose une question à l'agent, puis récupère ce qu'il tape au clavier.\nL'agent tape 17, puis il appuie sur Entrée.\nQu'affiche la ligne print() ?\n",
+    "depart": "age = input(\"Ton âge : \")\nprint(age + age)\n",
+    "indices": [
+      "Rappelle-toi le signe + : entre deux nombres il additionne, entre deux textes il colle bout à bout.",
+      "Ce que input() rend est toujours du texte, même quand l'agent tape des chiffres."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1717",
+          "34",
+          "17 17"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-28",
+    "concept": "input",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Poser la question DANS input()",
+    "obligatoire": true,
+    "enonce": "À ton arrivée, le QG te demande ton nom de code, puis il te salue.\nLa question ne se pose pas dans un print séparé : elle s'écrit entre les\nparenthèses de input().\nComplète le programme pour que la question affichée soit exactement ce texte,\navec un espace après les deux-points :\nTon nom de code :\n",
+    "depart": "nom = input(_____)\nprint(\"Bienvenue au QG, agent \" + nom)\n",
+    "indices": [
+      "Ce que tu places entre les parenthèses de input() s'affiche à l'écran juste avant que l'agent tape sa réponse.",
+      "L'invite est du texte : elle se met entre guillemets, à l'intérieur des parenthèses de input(). Ne perds pas l'espace de la fin."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Corbeau"
+        ],
+        "attendu": "Ton nom de code : Corbeau\nBienvenue au QG, agent Corbeau",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-29",
+    "concept": "conversion",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'âge qui refuse de s'additionner",
+    "obligatoire": true,
+    "enonce": "Au poste de garde du QG, un petit programme calcule l'âge que tu auras dans 5 ans.\nIl démarre, il te pose la question, puis il s'arrête net avec une erreur.\nLis le message d'erreur, puis répare le programme.\nLe programme doit calculer le résultat, jamais l'écrire à la main.\n",
+    "depart": "print(\"Poste de garde du QG\")\nage = input(\"Ton âge : \")\nprint(\"Dans 5 ans, tu auras :\")\nprint(age + 5)\n",
+    "indices": [
+      "Regarde ce que input() range dans la variable age. Même quand tu tapes des chiffres, input() rend toujours du TEXTE.",
+      "Tu connais déjà str(), qui fabrique du texte à partir d'un nombre. La fonction int() fait l'inverse : elle fabrique un nombre entier à partir d'un texte."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "17"
+        ],
+        "attendu": "Poste de garde du QG\nTon âge : 17\nDans 5 ans, tu auras :\n22",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "22"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-30",
+    "concept": "conversion",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "int(input())",
+    "obligatoire": true,
+    "enonce": "Le QG tient le compte des missions de chaque agent.\nLe programme te demande combien de missions tu as déjà accomplies,\npuis il annonce le total une fois celle d'aujourd'hui terminée.\nProblème : input() rend toujours du TEXTE, jamais un nombre.\nTel quel, l'addition est impossible et le programme s'arrête.\nComplète le trou pour que missions contienne un vrai nombre entier.\n",
+    "depart": "missions = _____(input(\"Nombre de missions accomplies : \"))\nprint(\"Après celle-ci, tu en auras\", missions + 1)\n",
+    "indices": [
+      "Ce que input() te rend est du texte. Il faut le transformer en nombre avant de pouvoir l'additionner.",
+      "Souviens-toi des trois familles de valeurs : int, float et str. C'est celle des nombres entiers qu'il te faut, et son nom est aussi celui de la fonction qui convertit."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12"
+        ],
+        "attendu": "Nombre de missions accomplies : 12\nAprès celle-ci, tu en auras 13",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "3"
+        ],
+        "attendu": "Nombre de missions accomplies : 3\nAprès celle-ci, tu en auras 4",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-31",
+    "concept": "input",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Interrogatoire",
+    "obligatoire": true,
+    "enonce": "Le QG interroge chaque nouvelle recrue avant de lui ouvrir un dossier.\nÀ toi d'écrire le programme de l'interrogatoire.\n\nIl pose deux questions, dans cet ordre : d'abord \"Nom de code : \", puis \"Ton age : \".\nIl affiche ensuite deux lignes : l'ouverture du dossier, puis la recrue et son âge.\n\nSi la recrue répond Merle, puis 16, l'écran doit montrer exactement ceci :\n\nNom de code : Merle\nTon age : 16\nDossier ouvert au nom de Merle\nMerle a 16 ans\n\nLes deux premières lignes ne sont pas des print(). Ce sont les questions elles-mêmes :\nelles s'affichent toutes seules au moment où input() s'exécute.\n\nIci, on ne calcule rien avec l'âge, on le réaffiche tel quel. Pas besoin de le\nconvertir en nombre : il peut rester du texte.\n\nRecopie les textes exactement comme ils sont écrits ci-dessus. Dans ce programme,\nla question s'écrit \"Ton age : \", sans accent.\n\nLe QG relancera ton programme avec une autre recrue. Rien ne doit donc être écrit\nà la main. La première ligne est déjà en place.\n",
+    "depart": "nom = input(\"Nom de code : \")\n",
+    "indices": [
+      "Regarde la ligne déjà écrite. La question se met entre les parenthèses de input(), et la réponse se range dans une variable. Fais pareil pour l'âge.",
+      "Il te faut ensuite deux print(). Un f-string permet de glisser une variable entre accolades, et la même variable peut resservir dans les deux lignes."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Merle",
+          "16"
+        ],
+        "attendu": "Nom de code : Merle\nTon age : 16\nDossier ouvert au nom de Merle\nMerle a 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Faucon",
+          "19"
+        ],
+        "attendu": "Nom de code : Faucon\nTon age : 19\nDossier ouvert au nom de Faucon\nFaucon a 19 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Merle"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-34",
+    "concept": "probleme narratif",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "TERMINAL QG - Bloc 1 : le badge d'agent",
+    "obligatoire": true,
+    "enonce": "Dernier poste de la séance : la borne d'inscription du Quartier Général.\nC'est toi qui écris le programme qui fabrique les badges.\n\nTon programme doit faire quatre choses :\n1. demander le nom de code, avec l'invite \"Nom de code : \" ;\n2. demander l'âge, avec l'invite \"Age : \", et le ranger sous forme de nombre entier ;\n3. ranger dans une variable l'âge que l'agent aura l'an prochain ;\n4. afficher le badge sur quatre lignes.\n\nSi l'agent répond Corbeau, puis 17, l'écran affiche ceci après les deux questions :\n\n=== BADGE QG ===\nAgent Corbeau\nAge : 17 ans\nL'an prochain : 18 ans\n\nRecopie ces textes au caractère près, espaces compris. Sur ce badge, le mot Age\ns'écrit sans accent : garde-le tel quel.\n\nAttention : les deux réponses écrites ici ne sont qu'un exemple. Ton programme doit\nfonctionner avec n'importe quel agent, donc Corbeau et 18 sont interdits dans ton code.\n\nLes lignes du code de départ qui commencent par # sont des remarques : Python les\nignore, elles sont là pour te guider. Écris ton code en dessous de chacune.\n",
+    "depart": "# 1. demander le nom de code et le ranger dans une variable\n\n# 2. demander l'age et le convertir en nombre entier\n\n# 3. calculer l'age de l'an prochain\n\n# 4. afficher les quatre lignes du badge\n",
+    "indices": [
+      "Commence par les deux questions. La question se met à l'intérieur des parenthèses de input(). Et souviens-toi, input() rend toujours du texte, même quand l'agent tape un nombre.",
+      "L'âge doit donc être converti avant qu'on puisse lui ajouter 1. Ensuite, chaque ligne du badge est un print() séparé, et un f-string permet de glisser une variable entre accolades."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Corbeau",
+          "17"
+        ],
+        "attendu": "Nom de code : Corbeau\nAge : 17\n=== BADGE QG ===\nAgent Corbeau\nAge : 17 ans\nL'an prochain : 18 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Vipere",
+          "15"
+        ],
+        "attendu": "Nom de code : Vipere\nAge : 15\n=== BADGE QG ===\nAgent Vipere\nAge : 15 ans\nL'an prochain : 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Corbeau"
+      },
+      {
+        "type": "interdit",
+        "motif": "18"
+      }
+    ],
+    "famille": "variables"
   }
 ]

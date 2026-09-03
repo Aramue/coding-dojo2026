@@ -1,0 +1,34 @@
+id: s1-30
+concept: conversion
+seance: 1
+niveau: normal
+type: completer
+titre: int(input())
+obligatoire: true
+enonce: |
+  Le QG tient le compte des missions de chaque agent.
+  Le programme te demande combien de missions tu as déjà accomplies,
+  puis il annonce le total une fois celle d'aujourd'hui terminée.
+  Problème : input() rend toujours du TEXTE, jamais un nombre.
+  Tel quel, l'addition est impossible et le programme s'arrête.
+  Complète le trou pour que missions contienne un vrai nombre entier.
+depart: |
+  missions = _____(input("Nombre de missions accomplies : "))
+  print("Après celle-ci, tu en auras", missions + 1)
+indices:
+  - "Ce que input() te rend est du texte. Il faut le transformer en nombre avant de pouvoir l'additionner."
+  - "Souviens-toi des trois familles de valeurs : int, float et str. C'est celle des nombres entiers qu'il te faut, et son nom est aussi celui de la fonction qui convertit."
+tests:
+  - type: sortie
+    entrees: ["12"]
+    attendu: |-
+      Nombre de missions accomplies : 12
+      Après celle-ci, tu en auras 13
+  - type: sortie
+    entrees: ["3"]
+    attendu: |-
+      Nombre de missions accomplies : 3
+      Après celle-ci, tu en auras 4
+solution: |
+  missions = int(input("Nombre de missions accomplies : "))
+  print("Après celle-ci, tu en auras", missions + 1)

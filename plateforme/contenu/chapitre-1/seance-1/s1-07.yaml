@@ -1,0 +1,32 @@
+id: s1-07
+concept: format exact
+seance: 1
+niveau: normal
+type: debug
+titre: L'espace en trop
+obligatoire: true
+enonce: |
+  Chaque transmission du QG doit arriver au caractère près.
+  Le terminal doit afficher exactement ces deux lignes :
+
+  Rapport du soir
+  Agent K7M2 en poste
+
+  Le programme ci-dessous affiche presque cela. Presque : il glisse un espace
+  en trop quelque part. Trouve-le et répare le programme.
+depart: |
+  print("Rapport du soir")
+  print("Agent", " K7M2", "en poste")
+indices:
+  - "La première ligne est correcte. L'écart se trouve donc sur la seconde, et il tient en un seul caractère."
+  - "Rappelle-toi ce que fait la virgule dans un print() : elle place déjà un espace entre deux morceaux. Regarde maintenant comment commence chaque morceau."
+tests:
+  - type: sortie
+    entrees: []
+    exige_exact: true
+    attendu: |-
+      Rapport du soir
+      Agent K7M2 en poste
+solution: |
+  print("Rapport du soir")
+  print("Agent", "K7M2", "en poste")

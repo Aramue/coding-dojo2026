@@ -1,0 +1,32 @@
+id: s1-24
+concept: f-string
+seance: 1
+niveau: normal
+type: predire
+titre: Trois écritures, une seule sortie
+obligatoire: true
+enonce: |
+  Trois agents du QG ont transmis la même information de trois façons différentes.
+  Le premier colle les morceaux avec +, le deuxième sépare avec une virgule,
+  le troisième utilise un f-string.
+  Qu'affiche ce programme à l'écran ?
+depart: |
+  nom = "Corbeau"
+  print("Agent " + nom)
+  print("Agent", nom)
+  print(f"Agent {nom}")
+indices:
+  - Traite chaque ligne l'une après l'autre, puis compare les trois résultats obtenus.
+  - La virgule ajoute un espace toute seule, et le f devant les guillemets fait remplacer {nom} par le contenu de la variable.
+tests:
+  - type: qcm
+    options:
+      - "Agent Corbeau\nAgent Corbeau\nAgent Corbeau"
+      - "Agent Corbeau\nAgentCorbeau\nAgent Corbeau"
+      - "Agent Corbeau\nAgent Corbeau\nAgent {nom}"
+    bonne_reponse: 0
+solution: |
+  nom = "Corbeau"
+  print("Agent " + nom)
+  print("Agent", nom)
+  print(f"Agent {nom}")

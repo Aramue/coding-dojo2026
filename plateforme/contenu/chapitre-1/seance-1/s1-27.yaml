@@ -1,0 +1,25 @@
+id: s1-27
+concept: input
+seance: 1
+niveau: normal
+type: predire
+titre: input() rend toujours du texte
+obligatoire: true
+enonce: |
+  Le QG installe une borne d'identification à l'entrée du bâtiment.
+  La fonction input() pose une question à l'agent, puis récupère ce qu'il tape au clavier.
+  L'agent tape 17, puis il appuie sur Entrée.
+  Qu'affiche la ligne print() ?
+depart: |
+  age = input("Ton âge : ")
+  print(age + age)
+indices:
+  - "Rappelle-toi le signe + : entre deux nombres il additionne, entre deux textes il colle bout à bout."
+  - "Ce que input() rend est toujours du texte, même quand l'agent tape des chiffres."
+tests:
+  - type: qcm
+    options: ["1717", "34", "17 17"]
+    bonne_reponse: 0
+solution: |
+  age = input("Ton âge : ")
+  print(age + age)

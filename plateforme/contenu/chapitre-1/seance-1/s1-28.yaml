@@ -1,0 +1,29 @@
+id: s1-28
+concept: input
+seance: 1
+niveau: normal
+type: completer
+titre: Poser la question DANS input()
+obligatoire: true
+enonce: |
+  À ton arrivée, le QG te demande ton nom de code, puis il te salue.
+  La question ne se pose pas dans un print séparé : elle s'écrit entre les
+  parenthèses de input().
+  Complète le programme pour que la question affichée soit exactement ce texte,
+  avec un espace après les deux-points :
+  Ton nom de code :
+depart: |
+  nom = input(_____)
+  print("Bienvenue au QG, agent " + nom)
+indices:
+  - Ce que tu places entre les parenthèses de input() s'affiche à l'écran juste avant que l'agent tape sa réponse.
+  - "L'invite est du texte : elle se met entre guillemets, à l'intérieur des parenthèses de input(). Ne perds pas l'espace de la fin."
+tests:
+  - type: sortie
+    entrees: ["Corbeau"]
+    attendu: |-
+      Ton nom de code : Corbeau
+      Bienvenue au QG, agent Corbeau
+solution: |
+  nom = input("Ton nom de code : ")
+  print("Bienvenue au QG, agent " + nom)
