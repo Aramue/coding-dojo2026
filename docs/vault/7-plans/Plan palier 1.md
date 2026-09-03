@@ -1454,7 +1454,7 @@ Créer `plateforme/web/verif-pyodide.html` :
 <pre id="sortie">chargement…</pre>
 <script type="module">
   import { Executeur } from '/src/execution/executeur.ts'
-  const ex = new Executeur(() => new Worker('/src/execution/worker.ts', { type: 'module' }))
+  const ex = new Executeur(() => new Worker(new URL('/src/execution/worker.ts', import.meta.url)))
   const r = await ex.executer({
     code: 'nom = input("Nom : ")\nage = int(input("Age : "))\nprint(f"Agent {nom}, {age} ans")',
     entrees: ['Corbeau', '17'],
