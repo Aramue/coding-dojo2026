@@ -1,5 +1,5 @@
 import { python } from '@codemirror/lang-python'
-import { EditorState } from '@codemirror/state'
+import { Compartment, EditorState } from '@codemirror/state'
 import { EditorView, keymap, lineNumbers } from '@codemirror/view'
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -19,17 +19,23 @@ export function Editeur({
   const rappel = useRef(onChange)
   rappel.current = onChange
 
+  // Compartiments : ils permettent de reconfigurer l'éditeur sans le détruire.
+  // Sans eux, basculer `lectureSeule` recrée la vue et l'élève perd son
+  // historique d'annulation, son curseur, son défilement et son focus.
+  const compartimentEditable = useRef(new Compartment())
+  const compartimentHistorique = useRef(new Compartment())
+
   useEffect(() => {
     if (!conteneur.current) return
     const etat = EditorState.create({
       doc: valeur,
       extensions: [
         lineNumbers(),
-        history(),
+        compartimentHistorique.current.of(history()),
         keymap.of([...defaultKeymap, ...historyKeymap]),
         python(),
         oneDark,
-        EditorView.editable.of(!lectureSeule),
+        compartimentEditable.current.of(EditorView.editable.of(!lectureSeule)),
         EditorView.updateListener.of((maj) => {
           if (maj.docChanged) rappel.current(maj.state.doc.toString())
         }),
@@ -42,15 +48,26 @@ export function Editeur({
     })
     vue.current = new EditorView({ state: etat, parent: conteneur.current })
     return () => vue.current?.destroy()
-    // Volontairement monté une seule fois : le contenu est piloté par l'effet suivant.
+    // Monté une seule fois, réellement : `lectureSeule` et `valeur` sont pilotés
+    // par les deux effets suivants, sans jamais recréer la vue.
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Bascule lecture/écriture sans détruire la vue.
+  useEffect(() => {
+    vue.current?.dispatch({
+      effects: compartimentEditable.current.reconfigure(EditorView.editable.of(!lectureSeule)),
+    })
   }, [lectureSeule])
 
-  // Remise à l'état de départ quand on change d'exercice.
+  // Changement d'exercice : on remplace le document et on vide l'historique.
+  // Sans ce vidage, Ctrl+Z ramènerait le code de l'exercice précédent.
   useEffect(() => {
     const v = vue.current
     if (!v || v.state.doc.toString() === valeur) return
     v.dispatch({ changes: { from: 0, to: v.state.doc.length, insert: valeur } })
+    v.dispatch({ effects: compartimentHistorique.current.reconfigure([]) })
+    v.dispatch({ effects: compartimentHistorique.current.reconfigure(history()) })
   }, [valeur])
 
   return <div ref={conteneur} className="editeur" aria-label="Éditeur de code Python" />
