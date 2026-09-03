@@ -192,6 +192,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: { target: 'es2022', outDir: 'dist' },
+  // En développement, l'API tourne à part sur le port 8000. En production, c'est
+  // Caddy qui fait ce relais — voir la tâche 13.
+  server: {
+    proxy: { '/api': { target: 'http://127.0.0.1:8000', changeOrigin: true, rewrite: (c) => c.replace(/^\/api/, '') } },
+  },
 })
 ```
 
@@ -3553,7 +3558,7 @@ import type { Exercice } from '../contenu/types'
 import { nomsVariablesRequis } from '../contenu/chargeur'
 import { Executeur } from '../execution/executeur'
 import { evaluer } from '../validation/evaluer'
-import type { ResultatTest } from '../validation/types'
+import type { ResultatTest, Test } from '../validation/types'
 import { Editeur } from './Editeur'
 import { PanneauVerdict } from './PanneauVerdict'
 
@@ -3562,11 +3567,12 @@ const SEUIL_INDICE = 2 // le deuxième indice se débloque après 2 essais infru
 export function EcranExercice({
   exercice,
   executeur,
-  onReussi,
+  onTentative,
 }: {
   exercice: Exercice
   executeur: Executeur
-  onReussi: (resultat: ResultatTest, dureeMs: number) => void
+  /** Appelée à CHAQUE validation, réussie ou non — d'où le nom. */
+  onTentative: (resultat: ResultatTest, dureeMs: number) => void
 }) {
   const [code, setCode] = useState(exercice.depart)
   const [resultat, setResultat] = useState<ResultatTest | null>(null)
@@ -3582,8 +3588,13 @@ export function EcranExercice({
   }, [exercice.id, exercice.depart])
 
   const noms = useMemo(() => nomsVariablesRequis(exercice), [exercice])
-  const qcm = exercice.tests.find((t) => t.type === 'qcm')
-  const entrees = exercice.tests.find((t) => t.type === 'sortie')?.entrees ?? []
+  // Prédicats de type : `Test` est une union discriminée, `.find()` seul ne
+  // suffit pas à donner accès aux champs propres à une variante.
+  const qcm = exercice.tests.find((t): t is Extract<Test, { type: 'qcm' }> => t.type === 'qcm')
+  const testSortie = exercice.tests.find(
+    (t): t is Extract<Test, { type: 'sortie' }> => t.type === 'sortie',
+  )
+  const entrees = testSortie?.entrees ?? []
 
   async function valider() {
     setEnCours(true)
@@ -3596,7 +3607,7 @@ export function EcranExercice({
     setResultat(evalue)
     setEssais((n) => n + 1)
     setEnCours(false)
-    onReussi(evalue, execution.dureeMs)
+    onTentative(evalue, execution.dureeMs)
   }
 
   const indicesVisibles = exercice.indices.slice(0, essais >= SEUIL_INDICE ? exercice.indices.length : 1)
@@ -3697,7 +3708,7 @@ export function App() {
     <EcranExercice
       exercice={courant}
       executeur={executeur}
-      onReussi={async (resultat, dureeMs) => {
+      onTentative={async (resultat, dureeMs) => {
         await client.enregistrerTentative({
           exerciceId: courant.id,
           verdict: resultat.verdict,
