@@ -34,6 +34,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Direction artistique | ✅ validée — voir [[Charte visuelle]] |
 | Progression pédagogique du chapitre 1 | ✅ conçue — 112 exercices, voir [[Chapitre 1]] |
 | Spécification complète | ✅ écrite — [[Spécification chapitre 1]] |
+| Plan d'implémentation | ✅ écrit — [[Plan palier 1]] |
 | Implémentation | ⬜ pas commencée |
 
 ## Le calendrier qui commande tout
@@ -57,3 +58,4 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Terminal QG]] · [[Archive des agents tombés]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
+- **Plans** — [[Plan palier 1]]
