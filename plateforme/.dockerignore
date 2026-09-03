@@ -1,0 +1,13 @@
+# Sans ce fichier, COPY web . (Dockerfile.web) embarque le node_modules du poste
+# hote — installe par pnpm sous Windows, avec des liens symboliques en chemins
+# absolus (C:/Users/...) — et ecrase le node_modules Linux fraichement installe
+# dans l'image. Meme logique pour les environnements virtuels Python et le
+# contenu deja construit : ce sont des artefacts locaux, jamais des sources.
+**/node_modules
+**/dist
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/*.pyc
+**/donnees
+.git

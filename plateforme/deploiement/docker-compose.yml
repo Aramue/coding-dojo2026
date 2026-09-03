@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploiement/Dockerfile.api
+    environment:
+      QG_SECRET: ${QG_SECRET:?definir QG_SECRET dans .env}
+      QG_CODE_PROF: ${QG_CODE_PROF:?definir QG_CODE_PROF dans .env}
+    volumes:
+      - donnees:/app/donnees
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploiement/Dockerfile.web
+    environment:
+      QG_DOMAINE: ${QG_DOMAINE:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+    volumes:
+      - caddy_data:/data
+    restart: unless-stopped
+
+volumes:
+  donnees:
+  caddy_data:

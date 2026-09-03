@@ -1,0 +1,26 @@
+http://{$QG_DOMAINE:localhost}, https://{$QG_DOMAINE:localhost} {
+	# Les deux schemas sont explicites : Caddy exclut de la redirection HTTPS
+	# automatique tout hote qui apparait dans un bloc http:// declare — sans
+	# quoi il redirige tout HTTP en 308 des qu'un nom d'hote est configure
+	# (y compris "localhost", via son autorite de certification interne), ce
+	# qui rendrait vaines les verifications curl en HTTP simple ci-dessous.
+	# Le HTTPS reste disponible sur le vrai domaine UNIGE (utile au test de
+	# charge de la seance, qui l'interroge explicitement).
+	encode zstd gzip
+
+	handle_path /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		root * /srv
+		# Pyodide et les polices : immuables, mis en cache un an.
+		@immuables path /pyodide/* /polices/* /assets/*
+		header @immuables Cache-Control "public, max-age=31536000, immutable"
+		# WebAssembly doit etre servi avec le bon type MIME, sinon Pyodide echoue.
+		@wasm path *.wasm
+		header @wasm Content-Type "application/wasm"
+		try_files {path} /index.html
+		file_server
+	}
+}
