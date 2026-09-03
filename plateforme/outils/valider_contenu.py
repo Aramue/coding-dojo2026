@@ -9,12 +9,13 @@ from __future__ import annotations
 
 import argparse
 import io
+import re
 import sys
 import unicodedata
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from schema import Exercice, TestMotif, TestSortie, TestVariable, charger_tous
+from schema import MOTIF_EMOJI, Exercice, TestMotif, TestSortie, TestVariable, charger_tous
 
 
 def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
@@ -40,14 +41,24 @@ def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
 
 
 def _normaliser(texte: str) -> str:
-    """Miroir Python de web/src/validation/normaliser.ts, pour le verdict bleu."""
+    """Miroir Python de web/src/validation/normaliser.ts, pour le verdict bleu.
+
+    Les deux implementations doivent se comporter a l'identique. Si elles divergent,
+    un exercice peut passer la validation a la construction et se comporter autrement
+    dans le navigateur de l'eleve. Toute modification ici en exige une la-bas, et le
+    test de parite doit etre mis a jour dans les deux suites.
+    """
     t = texte.replace("\r\n", "\n")
     t = "".join(c for c in unicodedata.normalize("NFD", t) if not unicodedata.combining(c))
-    t = t.replace("’", "'").replace("‘", "'")
-    for fleche in ("→", "->", ":"):
+    for apostrophe in ("‘", "’", "‛"):
+        t = t.replace(apostrophe, "'")
+    for guillemet in ("“", "”"):
+        t = t.replace(guillemet, '"')
+    for fleche in ("→", "➡", "->", ":"):
         t = t.replace(fleche, ">")
+    t = MOTIF_EMOJI.sub("", t)
     t = t.lower()
-    lignes = [" ".join(ligne.split()) for ligne in t.split("\n")]
+    lignes = [re.sub(r"[ \t]+", " ", ligne).strip() for ligne in t.split("\n")]
     return "\n".join(l for l in lignes if l != "").strip()
 
 
