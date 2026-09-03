@@ -313,11 +313,7 @@
       },
       {
         "type": "interdit",
-        "motif": "Merle\")"
-      },
-      {
-        "type": "interdit",
-        "motif": "Merle')"
+        "motif": "Agent en poste : Merle"
       }
     ],
     "famille": "variables"

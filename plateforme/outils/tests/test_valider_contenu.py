@@ -62,3 +62,35 @@ def test_solution_violant_son_propre_motif_interdit_est_signalee(tmp_path):
         ),
     )
     assert any("interdit" in p for p in verifier_coherence(ex))
+
+
+def test_motif_interdit_avec_guillemet_est_signale(tmp_path):
+    """Un motif ponctue ne bloque que sa ponctuation : l'eleve change de guillemet."""
+    ex = ecrire(
+        tmp_path,
+        dict(
+            BASE,
+            solution='nom = "Corbeau"\nprint("Agent", nom)',
+            tests=[
+                {"type": "sortie", "entrees": [], "attendu": "Agent Corbeau"},
+                {"type": "interdit", "motif": 'Corbeau")'},
+            ],
+        ),
+    )
+    problemes = verifier_coherence(ex)
+    assert any("guillemet" in p for p in problemes)
+
+
+def test_motif_interdit_nu_est_accepte(tmp_path):
+    ex = ecrire(
+        tmp_path,
+        dict(
+            BASE,
+            solution='nom = "Corbeau"\nprint("Agent", nom)',
+            tests=[
+                {"type": "sortie", "entrees": [], "attendu": "Agent Corbeau"},
+                {"type": "interdit", "motif": "Agent Corbeau"},
+            ],
+        ),
+    )
+    assert verifier_coherence(ex) == []

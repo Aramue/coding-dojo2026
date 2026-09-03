@@ -18,6 +18,10 @@ describe('traduireErreur', () => {
     })
     expect(m.explication).toMatch(/nombre.*texte|texte.*nombre/i)
     expect(m.piste).toContain('str(')
+    // Le f-string n'est enseigné qu'en s1-23, alors que ce TypeError se
+    // rencontre en s1-21 — dont le test exige justement str(). Conseiller une
+    // technique pas encore vue, et que l'exercice refuse, envoie l'élève au mur.
+    expect(m.piste).not.toMatch(/f-string/i)
   })
 
   it('traduit int() sur du texte non numerique', () => {

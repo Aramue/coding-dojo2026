@@ -24,10 +24,12 @@ tests:
     entrees: []
     attendu: |-
       Agent en poste : Merle
+  # Motif sans guillemet : il bloque toutes les manieres d'ecrire la reponse en
+  # dur (guillemets simples, doubles, triples, f-string), la ou un motif termine
+  # par un guillemet se contourne en changeant de ponctuation.
+  # La solution ne contient jamais cette suite : elle ecrit "Agent en poste :", guetteur
   - type: interdit
-    motif: Merle")
-  - type: interdit
-    motif: Merle')
+    motif: 'Agent en poste : Merle'
 solution: |
   guetteur = "Merle"
   print("Agent en poste :", guetteur)

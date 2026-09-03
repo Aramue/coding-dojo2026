@@ -97,9 +97,22 @@ def verifier_coherence(ex: Exercice) -> list[str]:
     problemes: list[str] = []
 
     for test in ex.tests:
-        if isinstance(test, TestMotif) and test.type == "interdit" and test.motif in ex.solution:
+        if not isinstance(test, TestMotif) or test.type != "interdit":
+            continue
+
+        if test.motif in ex.solution:
             problemes.append(
                 f"{ex.id} : la solution contient son propre motif interdit {test.motif!r}"
+            )
+
+        # Un motif qui contient un guillemet ne bloque que cette ponctuation-la.
+        # L'eleve ecrit la meme reponse en dur avec des guillemets simples, des
+        # triples guillemets ou un f-string, et passe au vert sans rien resoudre.
+        # Un motif nu bloque toutes les formes d'un coup.
+        if any(guillemet in test.motif for guillemet in "\"'"):
+            problemes.append(
+                f"{ex.id} : le motif interdit {test.motif!r} contient un guillemet, "
+                "il se contourne en changeant de ponctuation"
             )
 
     if ex.type != "predire" and not _passe(ex, ex.solution):

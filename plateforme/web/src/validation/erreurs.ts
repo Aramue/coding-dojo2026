@@ -29,7 +29,10 @@ const REGLES: Regle[] = [
     construire: () => ({
       titre: 'Tu essaies de coller un nombre à du texte',
       explication: `Python refuse d'additionner du texte et un nombre : ce sont deux types différents.`,
-      piste: `Transforme le nombre en texte avant de le coller : str(age). Ou utilise un f-string.`,
+      // Pas de mention du f-string : cette erreur est rencontree en s1-21, alors
+      // que le f-string n'est enseigne qu'en s1-23. Suggerer une technique pas
+      // encore vue, et que l'exercice refuse, envoie l'eleve dans le mur.
+      piste: `Transforme le nombre en texte avant de le coller : str(age).`,
     }),
   },
   {
