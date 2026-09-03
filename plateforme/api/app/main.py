@@ -6,6 +6,7 @@ from fastapi import FastAPI
 
 from .bdd import creer_schema
 from .routes_eleve import routeur as routeur_eleve
+from .routes_prof import routeur as routeur_prof
 
 
 @asynccontextmanager
@@ -16,6 +17,7 @@ async def cycle_de_vie(app: FastAPI):
 
 application = FastAPI(title="Quartier General", lifespan=cycle_de_vie)
 application.include_router(routeur_eleve)
+application.include_router(routeur_prof)
 
 
 @application.get("/sante")
