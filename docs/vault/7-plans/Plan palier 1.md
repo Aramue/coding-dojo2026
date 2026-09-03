@@ -1532,7 +1532,13 @@ def exercice_minimal(**remplacements):
         enonce="Affiche ton nom de code.",
         depart="",
         indices=["Un texte s'ecrit entre guillemets."],
-        tests=[{"type": "sortie", "entrees": [], "attendu": "Corbeau"}],
+        # Le test `interdit` est obligatoire sur tout exercice `ecrire` : sans lui,
+        # le schema rejette l'exercice et les tests ci-dessous passeraient pour la
+        # mauvaise raison.
+        tests=[
+            {"type": "sortie", "entrees": [], "attendu": "Corbeau"},
+            {"type": "interdit", "motif": "xyzzy"},
+        ],
         solution='print("Corbeau")',
     )
     base.update(remplacements)
@@ -1780,6 +1786,54 @@ def test_solution_violant_son_propre_motif_interdit_est_signalee(tmp_path):
     assert any("interdit" in p for p in verifier_coherence(ex))
 ```
 
+- [ ] **Step 8bis : Écrire le test de parité des deux normaliseurs**
+
+`plateforme/outils/tests/test_normaliser_parite.py` :
+
+```python
+"""Verrouille la parite entre _normaliser (Python) et normaliser.ts (TypeScript).
+
+Les dix cas ci-dessous sont exactement ceux de
+web/tests/validation/normaliser.test.ts. Si l'un des deux normaliseurs change,
+ce test casse — c'est le but. Une divergence entre les deux ferait valider un
+exercice a la construction et echouer le meme exercice dans le navigateur.
+"""
+
+import pytest
+
+from valider_contenu import _normaliser
+
+CAS = [
+    ("Agent Corbeau   \nAge 17", "agent corbeau\nage 17"),
+    ("Bonjour\n\n\n", "bonjour"),
+    ("Agent    Corbeau", "agent corbeau"),
+    ("ACCES AUTORISE", "acces autorise"),
+    ("Accès autorisé", "acces autorise"),
+    ("Acces autorise ✅", "acces autorise"),
+    ("a\r\nb", "a\nb"),
+    ("agent corbeau\nage 17", "agent corbeau\nage 17"),
+]
+
+
+@pytest.mark.parametrize("entree,attendu", CAS)
+def test_parite_avec_le_normaliseur_typescript(entree, attendu):
+    assert _normaliser(entree) == attendu
+
+
+def test_les_trois_formes_de_fleche_convergent():
+    assert _normaliser("Position 1 → 8") == _normaliser("Position 1 -> 8")
+    assert _normaliser("Position 1 : 8") == _normaliser("Position 1 -> 8")
+
+
+def test_les_deux_apostrophes_convergent():
+    assert _normaliser("Ton code d'acces") == _normaliser("Ton code d’acces")
+
+
+def test_un_texte_francais_accentue_ordinaire_survit():
+    """La normalisation retire les accents mais ne doit rien manger d'autre."""
+    assert _normaliser("Élève français : âge 17") == "eleve francais > age 17"
+```
+
 - [ ] **Step 7 : Lancer le test pour vérifier qu'il échoue**
 
 Run : `python -m pytest tests/test_valider_contenu.py -v`
@@ -1806,7 +1860,9 @@ import unicodedata
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from schema import Exercice, TestMotif, TestSortie, TestVariable, charger_tous
+import re
+
+from schema import MOTIF_EMOJI, Exercice, TestMotif, TestSortie, TestVariable, charger_tous
 
 
 def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
@@ -1832,14 +1888,24 @@ def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
 
 
 def _normaliser(texte: str) -> str:
-    """Miroir Python de web/src/validation/normaliser.ts, pour le verdict bleu."""
+    """Miroir Python de web/src/validation/normaliser.ts, pour le verdict bleu.
+
+    ==Les deux implementations doivent se comporter a l'identique.== Si elles divergent,
+    un exercice peut passer la validation a la construction et se comporter autrement
+    dans le navigateur de l'eleve. Toute modification ici en exige une la-bas, et le
+    test de parite doit etre mis a jour dans les deux suites.
+    """
     t = texte.replace("\r\n", "\n")
     t = "".join(c for c in unicodedata.normalize("NFD", t) if not unicodedata.combining(c))
-    t = t.replace("’", "'").replace("‘", "'")
-    for fleche in ("→", "->", ":"):
+    for apostrophe in ("‘", "’", "‛"):
+        t = t.replace(apostrophe, "'")
+    for guillemet in ("“", "”"):
+        t = t.replace(guillemet, '"')
+    for fleche in ("→", "➡", "->", ":"):
         t = t.replace(fleche, ">")
+    t = MOTIF_EMOJI.sub("", t)
     t = t.lower()
-    lignes = [" ".join(ligne.split()) for ligne in t.split("\n")]
+    lignes = [re.sub(r"[ \t]+", " ", ligne).strip() for ligne in t.split("\n")]
     return "\n".join(l for l in lignes if l != "").strip()
 
 
