@@ -3451,7 +3451,11 @@ export class ClientApi {
 
   constructor(
     private base = '/api',
-    private executerRequete: typeof fetch = fetch,
+    // `fetch` doit être lié à son contexte global. Appelé comme méthode
+    // (`this.executerRequete(...)`), un `fetch` non lié reçoit l'instance de
+    // ClientApi comme `this` et lève « Illegal invocation » dans un navigateur.
+    // Invisible en test, où `fetch` est remplacé par une doublure.
+    private executerRequete: typeof fetch = fetch.bind(globalThis),
   ) {}
 
   async ouvrirSession(codeAgent: string): Promise<string> {
