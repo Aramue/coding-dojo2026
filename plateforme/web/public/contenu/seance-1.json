@@ -1,0 +1,41 @@
+[
+  {
+    "id": "s1-01",
+    "concept": "addition",
+    "famille": "operateurs",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Effectif total sur le terrain",
+    "obligatoire": true,
+    "enonce": "Le Quartier Général te transmet le nombre d'agents postés au nord (5) et au sud (3). Complète le programme pour calculer et afficher l'effectif total.",
+    "depart": "agents_nord = 5\nagents_sud = 3\n",
+    "indices": [
+      "Additionne les deux variables avec l'opérateur +.",
+      "Utilise print() pour afficher le résultat du calcul, jamais un nombre écrit à la main."
+    ],
+    "tests": [
+      { "type": "sortie", "entrees": [], "attendu": "8" },
+      { "type": "interdit", "motif": "8" }
+    ]
+  },
+  {
+    "id": "s1-02",
+    "concept": "affichage",
+    "famille": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Message codé du QG",
+    "obligatoire": true,
+    "enonce": "Voici un message intercepté au Quartier Général :\n\nindicatif = \"QG\"\nnumero = 7\nprint(indicatif + str(numero))\n\nQu'affiche ce programme à l'écran ?",
+    "depart": "",
+    "indices": [
+      "Python colle les deux morceaux dans l'ordre où ils apparaissent dans print().",
+      "str(numero) transforme le nombre 7 en texte \"7\" avant de le coller au texte."
+    ],
+    "tests": [
+      { "type": "qcm", "options": ["QG7", "QG 7", "7QG", "QGnumero"], "bonneReponse": 0 }
+    ]
+  }
+]

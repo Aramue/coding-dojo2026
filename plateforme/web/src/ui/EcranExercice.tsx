@@ -1,0 +1,112 @@
+import { useEffect, useMemo, useState } from 'react'
+import type { Exercice } from '../contenu/types'
+import { nomsVariablesRequis } from '../contenu/chargeur'
+import { Executeur } from '../execution/executeur'
+import { evaluer } from '../validation/evaluer'
+import type { ResultatTest, Test } from '../validation/types'
+import { Editeur } from './Editeur'
+import { PanneauVerdict } from './PanneauVerdict'
+
+const SEUIL_INDICE = 2 // le deuxième indice se débloque après 2 essais infructueux
+
+export function EcranExercice({
+  exercice,
+  executeur,
+  onTentative,
+}: {
+  exercice: Exercice
+  executeur: Executeur
+  /** Appelée à CHAQUE validation, réussie ou non — d'où le nom. */
+  onTentative: (resultat: ResultatTest, dureeMs: number) => void
+}) {
+  const [code, setCode] = useState(exercice.depart)
+  const [resultat, setResultat] = useState<ResultatTest | null>(null)
+  const [essais, setEssais] = useState(0)
+  const [reponseQcm, setReponseQcm] = useState<number | undefined>(undefined)
+  const [enCours, setEnCours] = useState(false)
+
+  useEffect(() => {
+    setCode(exercice.depart)
+    setResultat(null)
+    setEssais(0)
+    setReponseQcm(undefined)
+  }, [exercice.id, exercice.depart])
+
+  const noms = useMemo(() => nomsVariablesRequis(exercice), [exercice])
+  // Prédicats de type : `Test` est une union discriminée, `.find()` seul ne
+  // suffit pas à donner accès aux champs propres à une variante.
+  const qcm = exercice.tests.find((t): t is Extract<Test, { type: 'qcm' }> => t.type === 'qcm')
+  const testSortie = exercice.tests.find(
+    (t): t is Extract<Test, { type: 'sortie' }> => t.type === 'sortie',
+  )
+  const entrees = testSortie?.entrees ?? []
+
+  async function valider() {
+    setEnCours(true)
+    const execution =
+      exercice.type === 'predire'
+        ? { stdout: '', erreur: null, variables: {}, dureeMs: 0, timeout: false }
+        : await executeur.executer({ code, entrees, nomsVariables: noms })
+
+    const evalue = evaluer({ code, tests: exercice.tests, execution, reponseQcm })
+    setResultat(evalue)
+    setEssais((n) => n + 1)
+    setEnCours(false)
+    onTentative(evalue, execution.dureeMs)
+  }
+
+  const indicesVisibles = exercice.indices.slice(0, essais >= SEUIL_INDICE ? exercice.indices.length : 1)
+
+  return (
+    <main className="exercice" data-famille={exercice.famille}>
+      <header className="exercice__entete">
+        <span>{exercice.titre}</span>
+        <span>{essais === 0 ? 'aucun essai' : `${essais} essai${essais > 1 ? 's' : ''}`}</span>
+      </header>
+
+      <section className="exercice__enonce">
+        <p>{exercice.enonce}</p>
+        {indicesVisibles.map((indice, i) => (
+          <p key={i} className="indice">
+            <b>Indice {i + 1}</b> {indice}
+          </p>
+        ))}
+        {exercice.indices.length > indicesVisibles.length && (
+          <p className="indice indice--verrouille">
+            <b>Indice {indicesVisibles.length + 1}</b> Verrouillé — encore un essai avant de le débloquer.
+          </p>
+        )}
+      </section>
+
+      <section className="exercice__travail">
+        {qcm && qcm.type === 'qcm' ? (
+          <fieldset>
+            <legend>Qu'affiche ce programme ?</legend>
+            {qcm.options.map((option, i) => (
+              <label key={i}>
+                <input
+                  type="radio"
+                  name="qcm"
+                  checked={reponseQcm === i}
+                  onChange={() => setReponseQcm(i)}
+                />
+                <span className="mono">{option}</span>
+              </label>
+            ))}
+          </fieldset>
+        ) : (
+          <Editeur valeur={code} onChange={setCode} />
+        )}
+
+        <div className="exercice__actions">
+          <button type="button" onClick={valider} disabled={enCours}>
+            {enCours ? 'Exécution…' : 'Valider'}
+          </button>
+          <span className="exercice__note">exécuté dans ton navigateur</span>
+        </div>
+
+        <PanneauVerdict resultat={resultat} />
+      </section>
+    </main>
+  )
+}
