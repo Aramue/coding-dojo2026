@@ -3276,6 +3276,7 @@ git commit -m "feat: editeur CodeMirror et panneau de verdict avec diff"
 Le premier moment où l'ensemble fonctionne bout à bout : un élève saisit son code, résout un exercice, et la progression est persistée.
 
 **Files:**
+- Create: `plateforme/web/src/execution/exceptions.ts`
 - Create: `plateforme/web/src/contenu/types.ts`
 - Create: `plateforme/web/src/contenu/chargeur.ts`
 - Create: `plateforme/web/src/api/client.ts`
@@ -3293,6 +3294,87 @@ Le premier moment où l'ensemble fonctionne bout à bout : un élève saisit son
   - `type Exercice` — miroir TypeScript du schéma Python de T6
   - `class ClientApi { ouvrirSession(code): Promise<string>; lireParcours(): Promise<string[]>; enregistrerTentative(t): Promise<void> }`
   - `nomsVariablesRequis(ex: Exercice): string[]`
+
+- [ ] **Step 0 : Filtrer les noms d'exception avant qu'ils ne quittent le navigateur**
+
+> [!danger] Un nom d'exception n'est pas une donnée de confiance
+> `type(e).__name__` semble être une catégorie technique. C'en est une **seulement**
+> pour les exceptions du langage. Un élève peut écrire :
+>
+> ```python
+> class MotDePasseSecretDeQuentin(Exception): pass
+> raise MotDePasseSecretDeQuentin()
+> ```
+>
+> et faire persister le texte de son choix sur le serveur. ==Vérifié en conditions
+> réelles : la chaîne est arrivée verbatim dans la base.== Seuls les noms d'une
+> liste blanche sortent du navigateur.
+
+`plateforme/web/src/execution/exceptions.ts` :
+
+```ts
+/**
+ * Liste blanche des noms d'exception autorisés à quitter le navigateur.
+ *
+ * Tout le reste devient `AutreErreur` : un élève peut définir sa propre classe
+ * d'exception et en choisir le nom, ce qui ferait sortir du texte de son cru.
+ * Le tableau de bord n'a besoin que de la catégorie, jamais du détail.
+ */
+const EXCEPTIONS_DU_LANGAGE = new Set([
+  'SyntaxError',
+  'IndentationError',
+  'TabError',
+  'NameError',
+  'UnboundLocalError',
+  'TypeError',
+  'ValueError',
+  'ZeroDivisionError',
+  'ArithmeticError',
+  'OverflowError',
+  'IndexError',
+  'KeyError',
+  'AttributeError',
+  'ImportError',
+  'ModuleNotFoundError',
+  'EOFError',
+  'RecursionError',
+  'AssertionError',
+  'StopIteration',
+  'TimeoutError',
+])
+
+export function categorieErreur(nom: string | null | undefined): string | null {
+  if (!nom) return null
+  return EXCEPTIONS_DU_LANGAGE.has(nom) ? nom : 'AutreErreur'
+}
+```
+
+`plateforme/web/tests/execution/exceptions.test.ts` :
+
+```ts
+import { describe, expect, it } from 'vitest'
+import { categorieErreur } from '../../src/execution/exceptions'
+
+describe('categorieErreur', () => {
+  it('laisse passer les exceptions du langage', () => {
+    expect(categorieErreur('NameError')).toBe('NameError')
+    expect(categorieErreur('TypeError')).toBe('TypeError')
+    expect(categorieErreur('TimeoutError')).toBe('TimeoutError')
+  })
+
+  it('remplace une exception definie par l eleve', () => {
+    // Un eleve peut ecrire : class MotDePasseSecret(Exception): pass
+    expect(categorieErreur('MotDePasseSecretDeQuentin')).toBe('AutreErreur')
+    expect(categorieErreur('CoucouLeProf')).toBe('AutreErreur')
+  })
+
+  it('renvoie null quand il n y a pas d erreur', () => {
+    expect(categorieErreur(null)).toBeNull()
+    expect(categorieErreur(undefined)).toBeNull()
+    expect(categorieErreur('')).toBeNull()
+  })
+})
+```
 
 - [ ] **Step 1 : Écrire les types de contenu et le test du chargeur**
 
@@ -3611,6 +3693,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Exercice } from '../contenu/types'
 import { nomsVariablesRequis } from '../contenu/chargeur'
 import { Executeur } from '../execution/executeur'
+import { categorieErreur } from '../execution/exceptions'
 import { evaluer } from '../validation/evaluer'
 import type { ResultatTest, Test } from '../validation/types'
 import { Editeur } from './Editeur'
@@ -3675,7 +3758,8 @@ export function EcranExercice({
     onTentative(
       evalue,
       execution.dureeMs,
-      execution.timeout ? 'TimeoutError' : (execution.erreur?.type ?? null),
+      // Filtré par liste blanche : un nom d'exception peut être choisi par l'élève.
+      categorieErreur(execution.timeout ? 'TimeoutError' : execution.erreur?.type),
     )
   }
 
