@@ -1,0 +1,29 @@
+.verdict {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.8rem 0.95rem;
+  border-radius: 10px;
+  border-left: 3px solid transparent;
+  font-size: 0.94rem;
+}
+.verdict__marque { font-weight: 700; flex: none; }
+.verdict__texte { display: flex; flex-direction: column; gap: 0.3rem; }
+.verdict__detail { opacity: 0.9; }
+.verdict__diff {
+  font-family: var(--police-code);
+  font-size: 0.84rem;
+  margin: 0.4rem 0 0;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 22%);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+.diff { border-radius: 3px; padding: 0 1px; }
+.diff--ajout  { background: var(--d-red); color: #fff; }
+.diff--manque { background: var(--d-green); color: #10240F; }
+
+.verdict--vert  { background: rgb(80 250 123 / 11%); border-left-color: var(--d-green); color: #D6FFE2; }
+.verdict--bleu  { background: rgb(139 233 253 / 12%); border-left-color: var(--d-cyan); color: #DAF6FF; }
+.verdict--rouge { background: rgb(255 85 85 / 13%); border-left-color: var(--d-red); color: #FFDCDA; }
