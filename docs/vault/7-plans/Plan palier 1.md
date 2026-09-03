@@ -1169,15 +1169,17 @@ cd plateforme/web
 mkdir -p public/pyodide
 curl -L https://github.com/pyodide/pyodide/releases/download/0.26.4/pyodide-0.26.4.tar.bz2 -o /tmp/pyodide.tar.bz2
 tar -xjf /tmp/pyodide.tar.bz2 -C /tmp
-cp /tmp/pyodide/pyodide.mjs /tmp/pyodide/pyodide.asm.js /tmp/pyodide/pyodide.asm.wasm \
+cp /tmp/pyodide/pyodide.js /tmp/pyodide/pyodide.asm.js /tmp/pyodide/pyodide.asm.wasm \
    /tmp/pyodide/python_stdlib.zip /tmp/pyodide/pyodide-lock.json public/pyodide/
 ```
 
-Vérifier : `ls -la public/pyodide` doit montrer `pyodide.asm.wasm` d'environ 9 Mo **et** `pyodide.mjs`.
+Vérifier : `ls -la public/pyodide` doit montrer `pyodide.asm.wasm` d'environ 9 Mo **et** `pyodide.js`.
 
-> [!warning] C'est `pyodide.mjs` qu'il faut, pas `pyodide.js`
-> Le worker est créé avec `{ type: 'module' }` : `importScripts()` n'y est pas disponible.
-> Seule la variante ESM se charge par `import()`.
+> [!warning] C'est `pyodide.js` qu'il faut, pas `pyodide.mjs`
+> Le worker est **classique**, jamais `{ type: 'module' }`. C'est la seule forme qui
+> fonctionne à la fois en développement et en production : `importScripts` est une
+> requête HTTP ordinaire que Vite sert depuis `public/`, alors qu'un `import()` de
+> module y est refusé par le serveur de développement.
 
 Ajouter `public/pyodide/` au `.gitignore` **sauf** si le dépôt doit rester autonome — ici on
 le versionne, parce que le déploiement UNIGE ne doit dépendre d'aucun réseau externe.
@@ -1189,6 +1191,13 @@ le versionne, parce que le déploiement UNIGE ne doit dépendre d'aucun réseau 
 ```ts
 /// <reference lib="webworker" />
 type PyodideLike = { runPython(code: string): unknown }
+declare const loadPyodide: (o: { indexURL: string }) => Promise<PyodideLike>
+
+// Worker CLASSIQUE, volontairement pas `type: 'module'`.
+// importScripts est une simple requête HTTP : Vite sert le fichier depuis public/.
+// Un import() de module, lui, déclenche la garde « this file is in /public and
+// should not be imported from source code » et échoue en développement.
+importScripts('/pyodide/pyodide.js')
 
 /**
  * Harnais Python. Il capture stdout, simule input() à partir d'une liste fournie,
@@ -1240,10 +1249,7 @@ let pyodide: PyodideLike | null = null
 
 async function demarrer(): Promise<PyodideLike> {
   if (!pyodide) {
-    // Le worker est de type module : `importScripts` n'y existe pas.
-    // On charge la variante ESM depuis public/, au runtime, sans que Vite la bundle.
-    const module = await import(/* @vite-ignore */ '/pyodide/pyodide.mjs')
-    const instance = (await module.loadPyodide({ indexURL: '/pyodide/' })) as PyodideLike
+    const instance = await loadPyodide({ indexURL: '/pyodide/' })
     instance.runPython(HARNAIS)
     pyodide = instance
   }
@@ -3382,7 +3388,7 @@ import { EcranExercice } from './ui/EcranExercice'
 export function App() {
   const client = useMemo(() => new ClientApi(), [])
   const executeur = useMemo(
-    () => new Executeur(() => new Worker(new URL('./execution/worker.ts', import.meta.url), { type: 'module' })),
+    () => new Executeur(() => new Worker(new URL('./execution/worker.ts', import.meta.url))),
     [],
   )
   const [connecte, setConnecte] = useState(false)
