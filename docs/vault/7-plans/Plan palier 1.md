@@ -2331,7 +2331,7 @@ from datetime import datetime, timezone
 from sqlmodel import Field, SQLModel
 
 
-def _maintenant() -> datetime:
+def maintenant() -> datetime:
     return datetime.now(timezone.utc)
 
 
@@ -2339,8 +2339,8 @@ class Agent(SQLModel, table=True):
     """Un eleve, connu uniquement par son code pseudonyme."""
 
     code_agent: str = Field(primary_key=True)
-    cree_le: datetime = Field(default_factory=_maintenant)
-    vu_le: datetime = Field(default_factory=_maintenant)
+    cree_le: datetime = Field(default_factory=maintenant)
+    vu_le: datetime = Field(default_factory=maintenant)
 
 
 class Tentative(SQLModel, table=True):
@@ -2352,7 +2352,7 @@ class Tentative(SQLModel, table=True):
     verdict: str  # vert | bleu | rouge
     type_erreur: str | None = None  # "TypeError", "NameError", ...
     duree_ms: int = 0
-    horodatage: datetime = Field(default_factory=_maintenant, index=True)
+    horodatage: datetime = Field(default_factory=maintenant, index=True)
 
 
 class Verrou(SQLModel, table=True):
@@ -2402,8 +2402,25 @@ from __future__ import annotations
 import hashlib
 import hmac
 import os
+import secrets
+import warnings
 
-SECRET = os.environ.get("QG_SECRET", "dev-uniquement-a-remplacer-en-production").encode()
+_fourni = os.environ.get("QG_SECRET")
+if _fourni:
+    SECRET = _fourni.encode()
+else:
+    # Aucun secret en dur dans le depot. Un secret publie permettrait de forger un
+    # jeton valide pour n'importe quel AGENT-XXXX, y compris un agent jamais cree.
+    # A defaut de configuration, on tire un secret aleatoire : les jetons ne
+    # survivent pas a un redemarrage, ce qui est visible et sans danger,
+    # contrairement a une cle que tout le monde peut lire.
+    SECRET = secrets.token_bytes(32)
+    warnings.warn(
+        "QG_SECRET n'est pas defini : un secret aleatoire a ete tire pour cette "
+        "execution. Les sessions ne survivront pas a un redemarrage. "
+        "Definis QG_SECRET en production.",
+        stacklevel=2,
+    )
 
 
 def creer_jeton(code_agent: str) -> str:
@@ -2543,6 +2560,45 @@ def test_la_route_tentative_refuse_tout_champ_de_code(client, jeton):
         },
     )
     assert reponse.status_code == 422
+
+
+def test_aucun_secret_en_dur_dans_le_code():
+    """Un secret publie dans le depot laisse forger un jeton pour n'importe quel agent."""
+    from pathlib import Path
+
+    from app import securite
+
+    source = Path(securite.__file__).read_text(encoding="utf-8")
+    assert "dev-uniquement" not in source
+
+
+def test_un_jeton_forge_avec_un_autre_secret_est_refuse(client):
+    import hashlib
+    import hmac
+
+    faux = hmac.new(
+        b"dev-uniquement-a-remplacer-en-production", b"AGENT-9999", hashlib.sha256
+    ).hexdigest()[:32]
+    reponse = client.get("/parcours", headers={"Authorization": f"Bearer AGENT-9999.{faux}"})
+    assert reponse.status_code == 401
+
+
+def test_une_seconde_session_met_a_jour_vu_le(client):
+    from app.modeles import Agent
+
+    client.post("/session", json={"code_agent": "AGENT-K7M2"})
+    client.post("/session", json={"code_agent": "AGENT-K7M2"})
+
+    # Un seul agent, et vu_le a bouge par rapport a cree_le.
+    from sqlmodel import Session, select
+
+    from app import bdd
+
+    generateur = client.app.dependency_overrides[bdd.obtenir_session]()
+    session: Session = next(generateur)
+    agents = session.exec(select(Agent)).all()
+    assert len(agents) == 1
+    assert agents[0].vu_le >= agents[0].cree_le
 ```
 
 - [ ] **Step 4 : Lancer le test pour vérifier qu'il échoue**
@@ -2565,7 +2621,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
-from .modeles import Agent, Tentative
+from .modeles import Agent, Tentative, maintenant
 from .securite import creer_jeton, lire_jeton
 
 routeur = APIRouter()
@@ -2607,7 +2663,12 @@ def ouvrir_session(
     agent = session.get(Agent, demande.code_agent)
     if agent is None:
         session.add(Agent(code_agent=demande.code_agent))
-        session.commit()
+    else:
+        # `vu_le` alimente le compteur d'agents connectes du tableau de bord :
+        # sans cette mise a jour, il resterait egal a `cree_le` et mentirait.
+        agent.vu_le = maintenant()
+        session.add(agent)
+    session.commit()
     return ReponseSession(jeton=creer_jeton(demande.code_agent), code_agent=demande.code_agent)
 
 
