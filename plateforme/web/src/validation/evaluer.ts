@@ -4,7 +4,9 @@ import { traduireErreur } from './erreurs'
 import { normaliser } from './normaliser'
 import type { ResultatTest, Test, Verdict } from './types'
 
-const VERT: ResultatTest = { verdict: 'vert', titre: 'Mission accomplie.' }
+// Gelé : cet objet est renvoyé par référence depuis six points. Sans freeze, un
+// appelant qui l'enrichirait en place contaminerait tous les verdicts verts suivants.
+const VERT: ResultatTest = Object.freeze({ verdict: 'vert', titre: 'Mission accomplie.' })
 
 export function evaluer(params: {
   code: string
@@ -122,6 +124,13 @@ function evaluerUn(
         detail: `Compare les deux sorties caractère par caractère.`,
         diff,
       }
+    }
+
+    default: {
+      // Garde d'exhaustivité : ajouter un type de Test sans le traiter ici
+      // devient une erreur de compilation, pas un undefined silencieux.
+      const jamais: never = test
+      throw new Error(`Type de test non géré : ${JSON.stringify(jamais)}`)
     }
   }
 }
