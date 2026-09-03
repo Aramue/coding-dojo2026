@@ -12,7 +12,7 @@ import path from 'node:path'
 const VERSION = process.argv[2] ?? '0.26.4'
 const BASE_URL = `https://cdn.jsdelivr.net/pyodide/v${VERSION}/full/`
 
-const FICHIERS = ['pyodide.mjs', 'pyodide.asm.js', 'pyodide.asm.wasm', 'python_stdlib.zip', 'pyodide-lock.json']
+const FICHIERS = ['pyodide.js', 'pyodide.asm.js', 'pyodide.asm.wasm', 'python_stdlib.zip', 'pyodide-lock.json']
 
 const ICI = path.dirname(fileURLToPath(import.meta.url))
 const DEST = path.join(ICI, '..', 'public', 'pyodide')

@@ -1,5 +1,12 @@
 /// <reference lib="webworker" />
 type PyodideLike = { runPython(code: string): unknown }
+declare const loadPyodide: (o: { indexURL: string }) => Promise<PyodideLike>
+
+// Worker CLASSIQUE, volontairement pas `type: 'module'`.
+// importScripts est une simple requête HTTP : Vite sert le fichier depuis public/.
+// Un import() de module, lui, déclenche la garde « this file is in /public and
+// should not be imported from source code » et échoue en développement.
+importScripts('/pyodide/pyodide.js')
 
 /**
  * Harnais Python. Il capture stdout, simule input() à partir d'une liste fournie,
@@ -51,16 +58,7 @@ let pyodide: PyodideLike | null = null
 
 async function demarrer(): Promise<PyodideLike> {
   if (!pyodide) {
-    // Le worker est de type module : `importScripts` n'y existe pas.
-    // On charge la variante ESM depuis public/, au runtime, sans que Vite la bundle.
-    // On passe par une variable (plutôt qu'un littéral inline) pour que
-    // l'analyse d'import de Vite ne tente pas de résoudre à la compilation
-    // ce fichier de public/ (« Cannot import non-asset file ... inside /public »),
-    // et pour que tsc ne tente pas non plus de résoudre ce chemin, résolu
-    // uniquement au runtime par le navigateur.
-    const chemin = '/pyodide/pyodide.mjs'
-    const module = await import(/* @vite-ignore */ chemin)
-    const instance = (await module.loadPyodide({ indexURL: '/pyodide/' })) as PyodideLike
+    const instance = await loadPyodide({ indexURL: '/pyodide/' })
     instance.runPython(HARNAIS)
     pyodide = instance
   }
