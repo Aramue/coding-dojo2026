@@ -3404,6 +3404,31 @@ describe('ClientApi', () => {
     const corps = JSON.parse(fetchFactice.mock.calls[1]![1].body)
     expect(Object.keys(corps).sort()).toEqual(['duree_ms', 'exercice_id', 'type_erreur', 'verdict'])
   })
+
+  it('leve quand l enregistrement echoue, pour ne pas faire avancer l eleve a tort', async () => {
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'j', code_agent: 'a' }) })
+      .mockResolvedValueOnce({ ok: false, status: 502, json: async () => ({}) })
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('AGENT-K7M2')
+
+    await expect(
+      client.enregistrerTentative({ exerciceId: 's1-01', verdict: 'vert', typeErreur: null, dureeMs: 12 }),
+    ).rejects.toThrow(/enregistr/i)
+  })
+
+  it('distingue une panne de plateforme d un code d agent refuse', async () => {
+    const enPanne = vi.fn().mockRejectedValue(new TypeError('Failed to fetch'))
+    await expect(
+      new ClientApi('/api', enPanne as unknown as typeof fetch).ouvrirSession('AGENT-K7M2'),
+    ).rejects.toThrow(/ne répond pas/i)
+
+    const refuse = vi.fn().mockResolvedValue({ ok: false, status: 422, json: async () => ({}) })
+    await expect(
+      new ClientApi('/api', refuse as unknown as typeof fetch).ouvrirSession('toto'),
+    ).rejects.toThrow(/code d'agent/i)
+  })
 })
 ```
 
@@ -3459,13 +3484,23 @@ export class ClientApi {
   ) {}
 
   async ouvrirSession(codeAgent: string): Promise<string> {
-    const reponse = await this.executerRequete(`${this.base}/session`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code_agent: codeAgent }),
-    })
-    if (!reponse.ok) {
+    let reponse: Response
+    try {
+      reponse = await this.executerRequete(`${this.base}/session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code_agent: codeAgent }),
+      })
+    } catch {
+      // Distinguer la panne du code refusé : sinon l'élève essaie d'autres codes
+      // pendant que le vrai problème est que le service ne répond pas.
+      throw new Error('La plateforme ne répond pas. Préviens ton professeur.')
+    }
+    if (reponse.status === 422) {
       throw new Error("Ce code d'agent n'est pas reconnu. Vérifie qu'il est de la forme AGENT-XXXX.")
+    }
+    if (!reponse.ok) {
+      throw new Error('La plateforme a un problème. Préviens ton professeur.')
     }
     const donnees = await reponse.json()
     this.jeton = donnees.jeton
@@ -3483,18 +3518,33 @@ export class ClientApi {
     return (await reponse.json()).reussis
   }
 
-  /** N'envoie jamais le code source : contrainte globale du projet. */
+  /**
+   * N'envoie jamais le code source : contrainte globale du projet.
+   * `typeErreur` est un nom d'exception Python, jamais un message.
+   *
+   * Lève si l'enregistrement échoue. ==L'appelant ne doit pas faire avancer
+   * l'élève sur une tentative non enregistrée== : il la croirait acquise et la
+   * retrouverait à faire au rechargement, sans explication.
+   */
   async enregistrerTentative(t: TentativeAEnvoyer): Promise<void> {
-    await this.executerRequete(`${this.base}/tentative`, {
-      method: 'POST',
-      headers: this.entetes(),
-      body: JSON.stringify({
-        exercice_id: t.exerciceId,
-        verdict: t.verdict,
-        type_erreur: t.typeErreur,
-        duree_ms: t.dureeMs,
-      }),
-    })
+    let reponse: Response
+    try {
+      reponse = await this.executerRequete(`${this.base}/tentative`, {
+        method: 'POST',
+        headers: this.entetes(),
+        body: JSON.stringify({
+          exercice_id: t.exerciceId,
+          verdict: t.verdict,
+          type_erreur: t.typeErreur,
+          duree_ms: t.dureeMs,
+        }),
+      })
+    } catch {
+      throw new Error('Progression non enregistrée : la plateforme ne répond pas.')
+    }
+    if (!reponse.ok) {
+      throw new Error(`Progression non enregistrée (erreur ${reponse.status}).`)
+    }
   }
 }
 ```
@@ -3575,8 +3625,19 @@ export function EcranExercice({
 }: {
   exercice: Exercice
   executeur: Executeur
-  /** Appelée à CHAQUE validation, réussie ou non — d'où le nom. */
-  onTentative: (resultat: ResultatTest, dureeMs: number) => void
+  /**
+   * Appelée à CHAQUE validation, réussie ou non — d'où le nom.
+   *
+   * `typeErreurPython` est le NOM de l'exception (`NameError`, `TypeError`…),
+   * jamais un message. ==Les messages de verdict contiennent des identifiants
+   * tapés par l'élève== : les transmettre ferait sortir du code source de son
+   * navigateur, ce que l'architecture interdit.
+   */
+  onTentative: (
+    resultat: ResultatTest,
+    dureeMs: number,
+    typeErreurPython: string | null,
+  ) => void
 }) {
   const [code, setCode] = useState(exercice.depart)
   const [resultat, setResultat] = useState<ResultatTest | null>(null)
@@ -3611,7 +3672,11 @@ export function EcranExercice({
     setResultat(evalue)
     setEssais((n) => n + 1)
     setEnCours(false)
-    onTentative(evalue, execution.dureeMs)
+    onTentative(
+      evalue,
+      execution.dureeMs,
+      execution.timeout ? 'TimeoutError' : (execution.erreur?.type ?? null),
+    )
   }
 
   const indicesVisibles = exercice.indices.slice(0, essais >= SEUIL_INDICE ? exercice.indices.length : 1)
@@ -3693,6 +3758,7 @@ export function App() {
   const [connecte, setConnecte] = useState(false)
   const [exercices, setExercices] = useState<Exercice[]>([])
   const [reussis, setReussis] = useState<string[]>([])
+  const [alerte, setAlerte] = useState<string | null>(null)
 
   useEffect(() => () => executeur.detruire(), [executeur])
 
@@ -3709,19 +3775,37 @@ export function App() {
   if (!courant) return <main><h1>Séance terminée. Beau travail, agent.</h1></main>
 
   return (
-    <EcranExercice
-      exercice={courant}
-      executeur={executeur}
-      onTentative={async (resultat, dureeMs) => {
-        await client.enregistrerTentative({
-          exerciceId: courant.id,
-          verdict: resultat.verdict,
-          typeErreur: resultat.verdict === 'rouge' ? resultat.titre.slice(0, 64) : null,
-          dureeMs,
-        })
-        if (resultat.verdict !== 'rouge') setReussis((liste) => [...liste, courant.id])
-      }}
-    />
+    <>
+      {alerte && (
+        <p role="alert" className="alerte">
+          {alerte}
+        </p>
+      )}
+      <EcranExercice
+        exercice={courant}
+        executeur={executeur}
+        onTentative={async (resultat, dureeMs, typeErreurPython) => {
+          try {
+            await client.enregistrerTentative({
+              exerciceId: courant.id,
+              verdict: resultat.verdict,
+              // Le NOM de l'exception, jamais le message : les messages
+              // contiennent des identifiants tapés par l'élève.
+              typeErreur: typeErreurPython,
+              dureeMs,
+            })
+            setAlerte(null)
+            if (resultat.verdict !== 'rouge') setReussis((liste) => [...liste, courant.id])
+          } catch {
+            // On ne fait PAS avancer l'élève sur une tentative non enregistrée :
+            // il la croirait acquise et la retrouverait au rechargement.
+            setAlerte(
+              "Ta progression n'a pas pu être enregistrée. Préviens ton professeur avant de continuer.",
+            )
+          }
+        }}
+      />
+    </>
   )
 }
 ```
