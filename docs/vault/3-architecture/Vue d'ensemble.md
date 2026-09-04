@@ -80,10 +80,14 @@ Volontairement minimal — chaque point d'entrée supplémentaire est du code à
 
 | Route | Rôle |
 |---|---|
-| `POST /session` | Échange un code d'accès (`DOJO-XXXX`) contre un jeton de session |
+| `POST /session` | Échange un code d'accès (`DOJO-XXXX`) contre un jeton de session. **404 si le code n'est pas dans la classe** |
 | `GET /parcours` | Renvoie les exercices déjà réussis par cet élève |
 | `POST /tentative` | Enregistre une tentative : exercice, verdict, type d'erreur, durée |
 | `GET /prof/seance` | Alimente le [[Tableau de bord]] : une ligne par élève, sans jamais son code source |
+| `GET /prof/eleves` | La liste de la classe, avec le nombre de tentatives de chacun |
+| `POST /prof/eleves` | Inscrit un élève ; **le serveur tire le code**, jamais l'appelant |
+| `PATCH /prof/eleves/{code}` | Corrige prénom, nom, établissement — jamais le code |
+| `DELETE /prof/eleves/{code}` | Retire un élève **et ses tentatives** |
 
 > [!note] Ce que l'API ne reçoit jamais
 > Le code source écrit par l'élève. Seuls le verdict et le **type** d'erreur remontent

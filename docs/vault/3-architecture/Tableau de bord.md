@@ -44,14 +44,51 @@ Une bande porte **un trait par élève**, posé là où il en est, plus la médi
 
 | Colonne | Contenu |
 |---|---|
-| Élève | le code d'accès, en chasse fixe |
+| Élève | **« Camille R. »** — le prénom et l'initiale ; le code en chasse fixe tant que rien n'est saisi |
 | Où | le **titre** de l'exercice, et sa notion en dessous |
 | Quoi | échecs d'affilée et type d'erreur · délai d'inactivité · `8 / 25 réussis` |
 | Statut | Bloqué · Inactif · En cours |
 
 `s1-29` ne dit rien à personne, pas même à celui qui a écrit l'exercice. « L'âge qui refuse de
 s'additionner », dans « Demander une information », se lit d'un coup d'œil et **se dit à voix
-haute dans la salle**.
+haute dans la salle**. De même pour l'élève : le professeur cherche quelqu'un dans une salle, pas
+une chaîne dans une base — ==« Camille R. » se dit à voix haute, « DOJO-K7M2 » non==. Le nom de
+famille est abrégé : vingt-quatre élèves de huit établissements tiennent dans un prénom et une
+initiale, et la ligne reste lisible.
+
+Un quatrième statut, **« pas commencé »**, pour les inscrits qui n'ont encore rien soumis. Ils
+étaient invisibles tant que la liste se construisait depuis les tentatives — or c'est justement
+ce qu'on cherche dans le premier quart d'heure.
+
+## Déplier une ligne
+
+Chaque ligne s'ouvre sur le **parcours complet** de l'élève : les notions côte à côte, chaque
+exercice avec son état — un point, une coche, deux coches — et celui sur lequel il travaille en ce
+moment, marqué comme tel. Les facultatifs y figurent, étiquetés.
+
+> [!danger] Ce que ce panneau ne montre pas, et ne montrera pas
+> ==Rien de ce que l'élève a tapé.== Ni son code, ni ses réponses, ni les valeurs qu'il a saisies.
+> L'API n'en transporte aucune — [[ADR-001 Exécution du code dans le navigateur]] : le code
+> s'exécute dans le navigateur de l'élève et n'en sort jamais.
+>
+> Un test fixe la forme des étapes (`id`, `titre`, `coches`, `courant`, `obligatoire`) pour qu'un
+> champ ajouté par inadvertance fasse échouer la suite plutôt que d'arriver à l'écran. Et le
+> panneau le dit en toutes lettres à celui qui le lit.
+
+## La classe
+
+Sous le tableau, « Ma classe » : créer, corriger, retirer. C'est ici que **naissent les codes
+d'accès**, tirés par le serveur — voir [[ADR-012 Le professeur tient la liste de sa classe]].
+
+Deux façons d'ajouter. Une fiche à la fois, ou **une liste collée** : vingt-quatre élèves saisis un
+par un font soixante-douze champs et vingt-quatre clics, alors que le professeur a déjà sa liste
+quelque part. Une ligne par élève, colonnes séparées par tabulation, point-virgule ou virgule — la
+tabulation d'abord, parce qu'un nom composé contient une virgule bien plus souvent qu'une
+tabulation. ==L'aperçu compte les élèves reconnus avant d'écrire quoi que ce soit== : sur
+vingt-quatre lignes, une colonne mal devinée doit se voir avant, pas après.
+
+Retirer un élève emporte ses tentatives. La confirmation nomme l'élève **et** le nombre de
+tentatives perdues, jamais un « Confirmer ? » nu.
 
 ## Le pouls
 

@@ -43,6 +43,8 @@ Les deux dernières datent du 4 septembre 2026, après une première interface l
   Plus de Quartier Général : des exemples du quotidien, et un code d'accès `DOJO-XXXX`.
 - **011** — [[ADR-011 Trois niveaux de réussite]]
   Rien, une coche, deux coches. La seconde récompense la méthode, elle ne conditionne rien.
+- **012** — [[ADR-012 Le professeur tient la liste de sa classe]]
+  L'élève porte un nom ; le code d'accès reste la clé, et un code inconnu n'ouvre plus rien.
 
 ## Le fil conducteur
 
