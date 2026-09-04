@@ -10,8 +10,12 @@ import type { Exercice, Notion } from '../contenu/types'
  */
 export type LigneEleve = {
   code_acces: string
-  exercice_id: string
-  statut: 'bloque' | 'inactif' | 'en_cours'
+  /** Vides tant que le professeur n'a rien saisi : l'écran retombe sur le code. */
+  prenom?: string
+  nom?: string
+  /** Nul pour un élève inscrit qui n'a encore rien soumis. */
+  exercice_id: string | null
+  statut: 'bloque' | 'inactif' | 'pas_commence' | 'en_cours'
   echecs_consecutifs: number
   inactif_depuis_s: number
   dernier_type_erreur: string | null
@@ -42,6 +46,8 @@ export function obligatoires(exercices: Exercice[]): Set<string> {
 export type Synthese = {
   bloques: number
   inactifs: number
+  /** Inscrits qui n'ont encore rien soumis — invisibles avant la liste de classe. */
+  pasCommence: number
   enCours: number
   /** Un nombre par élève, trié : la distribution, pas seulement sa moyenne. */
   avancements: number[]
@@ -63,6 +69,7 @@ export function synthese(eleves: LigneEleve[], comptes: Set<string>): Synthese {
   return {
     bloques: eleves.filter((e) => e.statut === 'bloque').length,
     inactifs: eleves.filter((e) => e.statut === 'inactif').length,
+    pasCommence: eleves.filter((e) => e.statut === 'pas_commence').length,
     enCours: eleves.filter((e) => e.statut === 'en_cours').length,
     avancements,
     mediane: mediane(avancements),
@@ -79,7 +86,7 @@ function mediane(triees: number[]): number {
 
 export type BlocageCollectif = {
   exerciceId: string
-  /** Les codes des élèves bloqués là, dans l'ordre où l'API les a rendus. */
+  /** Les élèves bloqués là, nommés, dans l'ordre où l'API les a rendus. */
   eleves: string[]
   /** Les types d'exception rencontrés, du plus fréquent au moins fréquent. */
   erreurs: string[]
@@ -97,7 +104,7 @@ export type BlocageCollectif = {
 export function blocagesCollectifs(eleves: LigneEleve[], seuil = 2): BlocageCollectif[] {
   const parExercice = new Map<string, LigneEleve[]>()
   for (const eleve of eleves) {
-    if (eleve.statut !== 'bloque') continue
+    if (eleve.statut !== 'bloque' || !eleve.exercice_id) continue
     const liste = parExercice.get(eleve.exercice_id)
     if (liste) liste.push(eleve)
     else parExercice.set(eleve.exercice_id, [eleve])
@@ -107,7 +114,7 @@ export function blocagesCollectifs(eleves: LigneEleve[], seuil = 2): BlocageColl
     .filter(([, liste]) => liste.length >= seuil)
     .map(([exerciceId, liste]) => ({
       exerciceId,
-      eleves: liste.map((e) => e.code_acces),
+      eleves: liste.map(nommer),
       erreurs: frequences(liste.map((e) => e.dernier_type_erreur)),
     }))
     .sort((a, b) => b.eleves.length - a.eleves.length || a.exerciceId.localeCompare(b.exerciceId))
@@ -123,4 +130,19 @@ function frequences(valeurs: (string | null)[]): string[] {
   return [...compte.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([nom]) => nom)
+}
+
+/**
+ * Le nom qu'on lit à l'écran, ou le code tant qu'il n'y en a pas.
+ *
+ * Le professeur cherche quelqu'un dans une salle, pas une chaîne dans une
+ * base : ==« Camille R. » se dit à voix haute, « DOJO-K7M2 » non==. Le nom de
+ * famille est abrégé — vingt-quatre élèves de huit établissements tiennent
+ * dans un prénom et une initiale, et la ligne reste lisible.
+ */
+export function nommer(eleve: LigneEleve): string {
+  const prenom = eleve.prenom?.trim()
+  if (!prenom) return eleve.code_acces
+  const nom = eleve.nom?.trim()
+  return nom ? `${prenom} ${nom[0]!.toUpperCase()}.` : prenom
 }

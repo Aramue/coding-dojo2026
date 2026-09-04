@@ -210,7 +210,8 @@ describe('App — tableau de bord professeur', () => {
     sessionStorage.setItem('dojo.code-prof', 'code-prof-test')
     history.pushState(null, '', '/prof')
     render(<App />)
-    expect(await screen.findByRole('alert')).toHaveTextContent(/inattendue/i)
+    const alertes = await screen.findAllByRole('alert')
+    expect(alertes.some((a) => /inattendue/i.test(a.textContent ?? ''))).toBe(true)
   })
 
   it('affiche un refus quand le code professeur est faux', async () => {
@@ -218,6 +219,42 @@ describe('App — tableau de bord professeur', () => {
     sessionStorage.setItem('dojo.code-prof', 'faux')
     history.pushState(null, '', '/prof')
     render(<App />)
-    expect(await screen.findByRole('alert')).toHaveTextContent(/refus/i)
+    const alertes = await screen.findAllByRole('alert')
+    expect(alertes.some((a) => /refus/i.test(a.textContent ?? ''))).toBe(true)
+  })
+})
+
+describe("App — l'élève voit qui il est", () => {
+  function reseau(session: Record<string, unknown>) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('chapitres')) return CHAPITRES
+          if (url.includes('notions')) return NOTIONS
+          if (url.includes('lecons')) return []
+          if (url.includes('parcours')) return { reussis: [] }
+          if (url.includes('session')) return session
+          return EXERCICES
+        },
+      })),
+    )
+  }
+
+  it('affiche le prénom en haut, à côté du code', async () => {
+    reseau({ jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST', prenom: 'Camille' })
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    render(<App />)
+    expect(await screen.findByText('Camille')).toBeInTheDocument()
+    expect(screen.getByText('DOJO-TEST')).toBeInTheDocument()
+  })
+
+  it("n'affiche que le code tant que le professeur n'a saisi aucun prénom", async () => {
+    reseau({ jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST', prenom: '' })
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    const { container } = render(<App />)
+    expect(await screen.findByText('DOJO-TEST')).toBeInTheDocument()
+    expect(container.querySelector('.entete__prenom')).toBeNull()
   })
 })

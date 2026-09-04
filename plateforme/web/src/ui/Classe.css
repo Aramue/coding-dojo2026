@@ -1,0 +1,270 @@
+/*
+ * La liste de classe. Meme langage que le tableau de bord : canevas neutre,
+ * contenu sur une carte blanche, lignes separees par des filets.
+ */
+
+.classe {
+  margin-top: var(--e-4);
+  padding: var(--e-3);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+}
+
+.classe__entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--e-2);
+}
+
+.classe__entete h2 {
+  margin: 0;
+  font-size: var(--t-5);
+  color: var(--ink);
+}
+
+.classe__effectif {
+  margin: 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.classe [role='alert'] {
+  margin: 0 0 var(--e-2);
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--ko) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 35%, var(--surface));
+  color: var(--ko);
+  font-size: var(--t-2);
+}
+
+.classe__vide {
+  margin: var(--e-2) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--t-2);
+}
+
+/* ---------- Ajouter ---------- */
+
+.ajout {
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: var(--surface-doux);
+  border: 1px solid var(--rule-doux);
+}
+
+.ajout__onglets {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: var(--e-2);
+}
+
+.ajout__onglet {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  font-family: inherit;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+
+.ajout__onglet:hover {
+  color: var(--ink);
+}
+
+.ajout__onglet[aria-selected='true'] {
+  background: var(--surface);
+  border-color: var(--rule-doux);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.ajout__onglet:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+}
+
+/* ---------- Champs ---------- */
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.champ > span {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.champ > span b {
+  color: var(--ko);
+}
+
+.champ input,
+.champ textarea {
+  font-family: inherit;
+  font-size: var(--t-2);
+  color: var(--ink);
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-1);
+  background: var(--surface);
+  width: 100%;
+}
+
+.champ textarea {
+  font-family: var(--police-code);
+  font-size: 0.84rem;
+  resize: vertical;
+}
+
+.champ input:focus-visible,
+.champ textarea:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 1px;
+  border-color: var(--py-blue);
+}
+
+.fiche__legende {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.fiche {
+  display: flex;
+  gap: var(--e-2);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.fiche__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* ---------- Coller une liste ---------- */
+
+.lot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.lot__pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+}
+
+.lot__apercu {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+/* ---------- Un inscrit ---------- */
+
+.classe__liste {
+  list-style: none;
+  margin: var(--e-2) 0 0;
+  padding: 0;
+}
+
+.inscrit {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--e-2);
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule-doux);
+}
+
+.inscrit:last-child {
+  border-bottom: 0;
+}
+
+.inscrit--edition {
+  display: block;
+  padding: var(--e-2) 0;
+}
+
+.inscrit__code {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-1);
+  background: var(--surface-doux);
+  white-space: nowrap;
+}
+
+.inscrit__identite {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.inscrit__identite b {
+  font-weight: 500;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inscrit__etablissement,
+.inscrit__tentatives {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.inscrit__actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.bouton--menu {
+  padding: 0.3rem 0.6rem;
+  font-size: var(--t-1);
+}
+
+.bouton--danger {
+  color: var(--ko);
+  border-color: color-mix(in srgb, var(--ko) 30%, var(--surface));
+}
+
+.bouton--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ko) 8%, var(--surface));
+}
+
+@media (max-width: 720px) {
+  .inscrit {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.3rem;
+  }
+
+  .inscrit__tentatives {
+    grid-column: 1;
+  }
+
+  .fiche {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

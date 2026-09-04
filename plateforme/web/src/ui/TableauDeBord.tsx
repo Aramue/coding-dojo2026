@@ -3,6 +3,7 @@ import { chargerNotions, chargerParcours } from '../contenu/chargeur'
 import type { Exercice, Notion } from '../contenu/types'
 import {
   blocagesCollectifs,
+  nommer,
   obligatoires,
   reperes,
   synthese,
@@ -14,6 +15,7 @@ import './TableauDeBord.css'
 const LIBELLES: Record<LigneEleve['statut'], string> = {
   bloque: 'Bloqué',
   inactif: 'Inactif',
+  pas_commence: 'Pas commencé',
   en_cours: 'En cours',
 }
 
@@ -141,7 +143,7 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
           <Ligne
             key={eleve.code_acces}
             eleve={eleve}
-            repere={titres.get(eleve.exercice_id)}
+            repere={eleve.exercice_id ? titres.get(eleve.exercice_id) : undefined}
             comptes={comptes}
             total={vue.total}
           />
@@ -183,6 +185,7 @@ function Synthese({ vue }: { vue: ReturnType<typeof synthese> }) {
       <div className="synthese__comptes">
         <Compte valeur={vue.bloques} libelle="bloqués" ton="bloque" />
         <Compte valeur={vue.inactifs} libelle="inactifs" ton="inactif" />
+        <Compte valeur={vue.pasCommence} libelle="pas commencé" ton="pas_commence" />
         <Compte valeur={vue.enCours} libelle="en cours" ton="en_cours" />
       </div>
       {vue.total > 0 && (
@@ -261,10 +264,22 @@ function Ligne({
 
   return (
     <article className={`ligne ligne--${eleve.statut}`}>
-      <span className="mono ligne__eleve">{eleve.code_acces}</span>
+      {/*
+        Le nom quand il existe, le code sinon. Le professeur cherche quelqu'un
+        dans une salle : « Camille R. » se dit à voix haute, « DOJO-K7M2 » non.
+      */}
+      <span className="ligne__eleve" data-anonyme={!eleve.prenom}>
+        {nommer(eleve)}
+      </span>
       <span className="ligne__ou">
-        <b>{repere ? repere.titre : eleve.exercice_id}</b>
-        {repere && <span className="ligne__notion">{repere.notion}</span>}
+        {eleve.exercice_id === null ? (
+          <b className="ligne__attente">aucune soumission</b>
+        ) : (
+          <>
+            <b>{repere ? repere.titre : eleve.exercice_id}</b>
+            {repere && <span className="ligne__notion">{repere.notion}</span>}
+          </>
+        )}
       </span>
       <span className="ligne__quoi">
         {eleve.statut === 'bloque' &&
@@ -273,6 +288,8 @@ function Ligne({
           }`}
         {/* Le délai d'un inactif EST son information : il porte le libellé complet. */}
         {eleve.statut === 'inactif' && `aucune soumission depuis ${depuis ?? "moins d'une minute"}`}
+        {eleve.statut === 'pas_commence' &&
+          (depuis ? `code créé, jamais utilisé depuis ${depuis}` : 'code créé à l’instant')}
         {eleve.statut === 'en_cours' &&
           (total > 0 ? `${faits} / ${total} réussis` : `${accord(faits, 'réussi', 'réussis')}`)}
       </span>

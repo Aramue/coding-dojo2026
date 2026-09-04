@@ -124,6 +124,26 @@
   transition: width 250ms ease-out;
 }
 
+/*
+ * Qui est connecte. Le prenom porte, le code accompagne : sur une machine de
+ * salle informatique, c'est le prenom qui repond a « est-ce bien ma session ? ».
+ */
+.entete__qui {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.entete__prenom {
+  font-size: var(--t-2);
+  font-weight: 500;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .entete__code {
   font-size: var(--t-1);
   color: var(--ink-soft);

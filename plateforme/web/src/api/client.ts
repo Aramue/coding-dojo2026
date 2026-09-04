@@ -1,5 +1,8 @@
 import type { Reussite, Verdict } from '../validation/types'
 
+/** Qui est connecté. `prenom` est vide tant que le professeur n'a rien saisi. */
+export type Identite = { codeAcces: string; prenom: string }
+
 export type TentativeAEnvoyer = {
   exerciceId: string
   verdict: Verdict
@@ -19,7 +22,7 @@ export class ClientApi {
     private executerRequete: typeof fetch = fetch.bind(globalThis),
   ) {}
 
-  async ouvrirSession(codeAcces: string): Promise<string> {
+  async ouvrirSession(codeAcces: string): Promise<Identite> {
     let reponse: Response
     try {
       reponse = await this.executerRequete(`${this.base}/session`, {
@@ -35,12 +38,20 @@ export class ClientApi {
     if (reponse.status === 422) {
       throw new Error("Ce code d'accès n'est pas reconnu. Vérifie qu'il est de la forme DOJO-XXXX.")
     }
+    // 404 : le code est bien formé mais n'est pas dans la liste de la classe.
+    // Le distinguer d'une faute de forme évite à l'élève de relire vingt fois
+    // un code correctement tapé qui n'a simplement jamais été créé.
+    if (reponse.status === 404) {
+      throw new Error(
+        "Ce code n'existe pas. Vérifie chaque caractère, puis demande-le à ton professeur.",
+      )
+    }
     if (!reponse.ok) {
       throw new Error('La plateforme a un problème. Préviens ton professeur.')
     }
     const donnees = await reponse.json()
     this.jeton = donnees.jeton
-    return donnees.code_acces
+    return { codeAcces: donnees.code_acces, prenom: donnees.prenom ?? '' }
   }
 
   private entetes(): Record<string, string> {

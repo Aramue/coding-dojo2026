@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ClientApi } from './api/client'
+import { ClientApi, type Identite } from './api/client'
 import {
   chargerChapitres,
   chargerLecons,
@@ -61,7 +61,7 @@ export function App() {
     [],
   )
   const destination = useRoute()
-  const [codeAcces, setCodeAcces] = useState<string | null>(null)
+  const [identite, setIdentite] = useState<Identite | null>(null)
   const [contenu, setContenu] = useState<{
     chapitres: Chapitre[]
     notions: Notion[]
@@ -96,7 +96,7 @@ export function App() {
   }, [])
 
   async function connecter(saisi: string) {
-    const identifiant = await client.ouvrirSession(saisi)
+    const qui = await client.ouvrirSession(saisi)
     const [chapitresPublies, notions, exercices, lecons, acquis] = await Promise.all([
       chargerChapitres(),
       chargerNotions(),
@@ -106,8 +106,8 @@ export function App() {
     ])
     setContenu({ chapitres: chapitresPublies, notions, exercices, lecons })
     setReussis(acquis)
-    setCodeAcces(identifiant)
-    memoriserCode(identifiant)
+    setIdentite(qui)
+    memoriserCode(qui.codeAcces)
 
     // Une URL profonde ouverte avant connexion est conservée ; sinon on envoie
     // l'élève sur la première notion qu'il n'a pas terminée.
@@ -128,7 +128,7 @@ export function App() {
     )
   }
 
-  if (!codeAcces) {
+  if (!identite) {
     return (
       <div className="appli appli--seul">
         <Entete />
@@ -139,7 +139,7 @@ export function App() {
 
   return (
     <div className="appli">
-      <Entete codeAcces={codeAcces} groupes={groupes} />
+      <Entete identite={identite} groupes={groupes} />
       <Menu chapitres={chapitres} destination={destination} />
       {alerte && (
         <p role="alert" className="alerte">
@@ -280,10 +280,10 @@ function Introuvable() {
 }
 
 function Entete({
-  codeAcces,
+  identite,
   groupes = [],
 }: {
-  codeAcces?: string
+  identite?: Identite
   groupes?: GroupeNotion[]
 }) {
   // Obligatoires seulement : la jauge de l'en-tete est le chemin minimal.
@@ -295,7 +295,7 @@ function Entete({
       <span className="entete__marque">
         Coding Dojo <span>Python</span>
       </span>
-      {codeAcces && <span className="entete__seance">Séance 1 — les bases de Python</span>}
+      {identite && <span className="entete__seance">Séance 1 — les bases de Python</span>}
       <span className="entete__espace" />
       {total > 0 && (
         <span
@@ -312,7 +312,18 @@ function Entete({
           {faits} / {total}
         </span>
       )}
-      {codeAcces && <span className="entete__code mono">{codeAcces}</span>}
+      {identite && (
+        <span className="entete__qui">
+          {/*
+            Le prénom d'abord : c'est ce qui dit « c'est bien MA session » à un
+            élève qui vient de taper quatre caractères sur une machine partagée.
+            Le code reste dessous, plus discret — il sert quand il faut le
+            redonner au professeur, pas à chaque coup d'œil.
+          */}
+          {identite.prenom && <b className="entete__prenom">{identite.prenom}</b>}
+          <span className="entete__code mono">{identite.codeAcces}</span>
+        </span>
+      )}
     </header>
   )
 }

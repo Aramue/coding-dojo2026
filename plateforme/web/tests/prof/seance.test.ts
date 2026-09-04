@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   blocagesCollectifs,
+  nommer,
   obligatoires,
   reperes,
   synthese,
@@ -186,5 +187,56 @@ describe('blocagesCollectifs', () => {
       ligne({ statut: 'bloque', exercice_id: 's1-29', dernier_type_erreur: null }),
     ])
     expect(blocages[0]!.erreurs).toEqual([])
+  })
+})
+
+describe('nommer', () => {
+  it("abrege le nom de famille : la ligne reste lisible, la personne reconnaissable", () => {
+    expect(nommer(ligne({ prenom: 'Camille', nom: 'Rey' }))).toBe('Camille R.')
+  })
+
+  it('se contente du prenom quand il n y a pas de nom', () => {
+    expect(nommer(ligne({ prenom: 'Camille', nom: '' }))).toBe('Camille')
+  })
+
+  it('retombe sur le code tant que rien n a ete saisi', () => {
+    expect(nommer(ligne({ code_acces: 'DOJO-K7M2' }))).toBe('DOJO-K7M2')
+  })
+
+  it("ignore une saisie faite d'espaces", () => {
+    expect(nommer(ligne({ code_acces: 'DOJO-K7M2', prenom: '  ', nom: ' ' }))).toBe('DOJO-K7M2')
+  })
+
+  it('met l initiale en capitale', () => {
+    expect(nommer(ligne({ prenom: 'Alex', nom: 'nikiforov' }))).toBe('Alex N.')
+  })
+})
+
+describe('synthese — ceux qui n ont pas commence', () => {
+  it('les compte a part', () => {
+    const s = synthese(
+      [ligne({ statut: 'pas_commence' }), ligne({ statut: 'pas_commence' }), ligne()],
+      new Set(['s1-01']),
+    )
+    expect(s.pasCommence).toBe(2)
+    expect(s.enCours).toBe(1)
+  })
+})
+
+describe('blocagesCollectifs — un inscrit sans tentative', () => {
+  it("n'entre dans aucun groupe : il n'est bloque nulle part", () => {
+    const blocages = blocagesCollectifs([
+      ligne({ statut: 'pas_commence', exercice_id: null }),
+      ligne({ statut: 'pas_commence', exercice_id: null }),
+    ])
+    expect(blocages).toEqual([])
+  })
+
+  it('nomme les eleves du bandeau plutot que de citer leurs codes', () => {
+    const blocages = blocagesCollectifs([
+      ligne({ statut: 'bloque', exercice_id: 's1-29', prenom: 'Camille', nom: 'Rey' }),
+      ligne({ statut: 'bloque', exercice_id: 's1-29', prenom: 'Alex', nom: 'Martin' }),
+    ])
+    expect(blocages[0]!.eleves).toEqual(['Camille R.', 'Alex M.'])
   })
 })

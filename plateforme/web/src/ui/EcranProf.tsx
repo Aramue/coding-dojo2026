@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { Classe } from './Classe'
 import { TableauDeBord } from './TableauDeBord'
 import './EcranProf.css'
 
@@ -51,6 +52,12 @@ export function EcranProf() {
     return (
       <main className="prof">
         <TableauDeBord codeProf={code} />
+        {/*
+          La classe vit SOUS la séance, pas dans un onglet à part : on la
+          consulte avant la première séance et entre deux séances, mais pendant
+          la séance c'est le tableau qu'on regarde. L'ordre dit lequel presse.
+        */}
+        <Classe codeProf={code} />
         <div className="prof__pied">
           <button type="button" className="bouton" onClick={fermer}>
             Fermer la session professeur
@@ -66,7 +73,8 @@ export function EcranProf() {
         <h1>Tableau de bord</h1>
         <p className="prof__intro">
           Qui avance, qui bloque, et sur quoi. La page se rafraîchit toute seule toutes les dix
-          secondes.
+          secondes. C'est aussi ici que se crée la liste de la classe et que se distribuent les
+          codes d'accès.
         </p>
         <label htmlFor="code-prof">Code professeur</label>
         <input

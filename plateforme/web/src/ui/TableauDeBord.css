@@ -282,9 +282,32 @@
   background: color-mix(in srgb, var(--ko) 5%, var(--surface));
 }
 
+/*
+ * Pas commence n'est pas une alerte : au debut d'une seance c'est l'etat de
+ * tout le monde. Un liseré neutre le distingue sans crier.
+ */
+.ligne--pas_commence {
+  border-left-color: var(--rule);
+  background: var(--surface-doux);
+}
+
 .ligne__eleve {
   font-weight: 500;
   color: var(--ink);
+}
+
+/* Faute de prenom saisi, c'est le code qui s'affiche : en chasse fixe, parce
+   qu'il se recopie caractere par caractere. */
+.ligne__eleve[data-anonyme='true'] {
+  font-family: var(--police-code);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.ligne__attente {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-style: italic;
 }
 
 .ligne__quoi {
@@ -327,7 +350,8 @@
   color: var(--ko);
 }
 
-.statut--inactif {
+.statut--inactif,
+.statut--pas_commence {
   background: var(--ground-2);
   color: var(--ink-soft);
 }
