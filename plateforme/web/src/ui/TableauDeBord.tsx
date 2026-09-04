@@ -127,9 +127,10 @@ export function TableauDeBord({
       {eleves.length > 0 && vue.total > 0 && (
         <section className="avancement" aria-label="Avancement de la classe">
           <p className="avancement__legende">
-            Avancement de la classe — médiane <b>{vue.mediane}</b> sur {vue.total} obligatoires
+            Avancement de la classe
+            <span>un point par élève, sur {vue.total} obligatoires</span>
           </p>
-          <Etalement avancements={vue.avancements} total={vue.total} />
+          <Etalement avancements={vue.avancements} total={vue.total} mediane={vue.mediane} />
         </section>
       )}
 
@@ -228,23 +229,64 @@ function Compte({
  * pendant que trois touchent la fin, c'est savoir qu'il faut aller au fond de
  * la salle plutôt que ralentir tout le monde.
  */
-function Etalement({ avancements, total }: { avancements: number[]; total: number }) {
+function Etalement({
+  avancements,
+  total,
+  mediane,
+}: {
+  avancements: number[]
+  total: number
+  mediane: number
+}) {
+  // Empilés : deux élèves au même point font une colonne de deux. La hauteur
+  // d'une colonne EST le nombre d'élèves à cet endroit — c'est ce qui distingue
+  // une classe groupée d'une classe étalée, et qu'un semis de traits sur une
+  // bande grise ne montrait pas.
+  const rangs = new Map<number, number>()
+  const points = avancements.map((fait) => {
+    const rang = rangs.get(fait) ?? 0
+    rangs.set(fait, rang + 1)
+    return { fait, rang }
+  })
+  const pile = Math.max(1, ...rangs.values())
+
   return (
-    <div
-      className="etalement"
-      role="img"
-      aria-label={`Répartition des ${avancements.length} élèves, de ${avancements[0] ?? 0} à ${
-        avancements[avancements.length - 1] ?? 0
-      } exercices réussis sur ${total}`}
-    >
-      {avancements.map((fait, index) => (
+    <figure className="etalement">
+      <div
+        className="etalement__nuage"
+        style={{ height: `${Math.max(2, pile) * 0.62 + 0.3}rem` }}
+        role="img"
+        aria-label={`Répartition des ${avancements.length} élèves : de ${
+          avancements[0] ?? 0
+        } à ${avancements[avancements.length - 1] ?? 0} exercices réussis sur ${total}, médiane ${mediane}`}
+      >
+        {points.map(({ fait, rang }, index) => (
+          <span
+            key={index}
+            className="etalement__eleve"
+            style={{
+              left: `${total === 0 ? 0 : (fait / total) * 100}%`,
+              bottom: `${rang * 0.62}rem`,
+            }}
+          />
+        ))}
         <span
-          key={index}
-          className="etalement__trait"
-          style={{ left: `${total === 0 ? 0 : (fait / total) * 100}%` }}
+          className="etalement__mediane"
+          style={{ left: `${total === 0 ? 0 : (mediane / total) * 100}%` }}
         />
-      ))}
-    </div>
+      </div>
+
+      <figcaption className="etalement__axe" aria-hidden="true">
+        <span>0</span>
+        <span
+          className="etalement__reperemediane"
+          style={{ left: `${total === 0 ? 0 : (mediane / total) * 100}%` }}
+        >
+          médiane {mediane}
+        </span>
+        <span>{total}</span>
+      </figcaption>
+    </figure>
   )
 }
 

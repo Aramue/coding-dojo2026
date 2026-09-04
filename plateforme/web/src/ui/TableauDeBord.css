@@ -44,7 +44,7 @@
 
 .tableau__comptes {
   display: flex;
-  gap: var(--e-2);
+  gap: 0.4rem;
   flex-wrap: wrap;
 }
 
@@ -97,11 +97,11 @@
  */
 .avancement {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: var(--e-3);
   flex-wrap: wrap;
   margin-bottom: var(--e-2);
-  padding: 0.6rem var(--e-3);
+  padding: var(--e-2) var(--e-3);
   background: var(--surface);
   border: 1px solid var(--rule-doux);
   border-radius: var(--rayon-2);
@@ -109,93 +109,112 @@
 
 .avancement__legende {
   flex: none;
+  display: flex;
+  flex-direction: column;
+  max-width: 15rem;
   margin: 0;
+  font-size: var(--t-2);
+  color: var(--ink);
+}
+
+.avancement__legende span {
   font-size: var(--t-1);
   color: var(--ink-soft);
 }
 
-.avancement__legende b {
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
 .compte {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.35rem;
   font-size: var(--t-2);
   color: var(--ink-soft);
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--ground-2);
   font-variant-numeric: tabular-nums;
-}
-
-/*
- * Un point et un mot, sans gélule teintée.
- *
- * Quatre pastilles colorées en haut, une par ligne en dessous : l'écran se
- * couvrait de fonds pastels qui ==décorent sans rien dire de plus==, et le
- * texte posé dessus y perdait du contraste. Le point porte la couleur, le mot
- * reste en encre pleine.
- */
-.compte::before {
-  content: '';
-  align-self: center;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--rule);
 }
 
 .compte b {
   color: var(--ink);
-  font-weight: 600;
 }
 
-.compte[data-ton='bloque']::before {
-  background: var(--ko);
+.compte[data-ton='bloque'] {
+  background: color-mix(in srgb, var(--ko) 13%, var(--surface));
+  color: var(--ko);
 }
 
-.compte[data-ton='inactif']::before {
-  background: var(--py-yellow);
+.compte[data-ton='bloque'] b { color: var(--ko); }
+
+.compte[data-ton='en_cours'] {
+  background: color-mix(in srgb, var(--ok) 11%, var(--surface));
+  color: var(--ok);
 }
 
-.compte[data-ton='en_cours']::before {
-  background: var(--ok);
-}
+.compte[data-ton='en_cours'] b { color: var(--ok); }
 
-/* Un compteur à zéro ne doit pas crier : il n'y a rien à y faire. */
+/* Un compteur a zero ne doit pas crier : il n'y a rien a y faire. */
 .compte[data-vide='true'] {
-  opacity: 0.45;
+  background: var(--ground-2);
+  color: var(--ink-soft);
 }
 
-.compte[data-vide='true']::before {
+.compte[data-vide='true'] b { color: var(--ink-soft); }
+
+/*
+ * La repartition de la classe, un point par eleve.
+ *
+ * C'etait une bande grise semee de traits fins : ca se lisait comme un curseur
+ * ou un chargement, pas comme une mesure. Les eleves au meme point s'empilent
+ * desormais — ==la hauteur d'une colonne EST le nombre d'eleves a cet
+ * endroit== — et un axe porte le zero, la mediane et le total.
+ */
+.etalement {
+  flex: 1;
+  min-width: 240px;
+  margin: 0;
+}
+
+.etalement__nuage {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+
+.etalement__eleve {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  border-radius: 50%;
+  background: var(--py-blue);
+  /* Un liseré clair détache deux points voisins qui se touchent. */
+  box-shadow: 0 0 0 1.5px var(--surface);
+}
+
+/* La mediane, discrete : elle situe, elle ne domine pas le nuage. */
+.etalement__mediane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  margin-left: -0.5px;
   background: var(--rule);
 }
 
-/*
- * Un trait par eleve. Les traits se superposent la ou plusieurs eleves sont au
- * meme point : la densite se lit alors comme un aplat plus soutenu, ce qu'une
- * moyenne ne montre pas.
- */
-.etalement {
+.etalement__axe {
   position: relative;
-  flex: 1;
-  min-width: 220px;
-  height: 1.1rem;
-  border-radius: var(--rayon-1);
-  background: var(--ground-2);
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25rem 0 0;
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
 }
 
-.etalement__trait {
+.etalement__reperemediane {
   position: absolute;
-  top: 0.15rem;
-  bottom: 0.15rem;
-  width: 3px;
-  margin-left: -1.5px;
-  border-radius: 2px;
-  background: var(--py-blue);
-  opacity: 0.55;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--ink);
+  font-weight: 500;
 }
-
 
 /* ---------- Ce qui bloque plusieurs eleves ---------- */
 
@@ -438,46 +457,31 @@
   color: var(--ink-soft);
 }
 
-/*
- * Le même point que dans l'en-tête, pour que les deux se répondent : ce qu'on
- * compte en haut se retrouve ligne par ligne.
- */
+/* La forme encode un état : c'est le seul endroit où une pastille est justifiée. */
 .statut {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
   font-size: var(--t-1);
   font-weight: 500;
-  color: var(--ink-soft);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
   justify-self: end;
 }
 
-.statut::before {
-  content: '';
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--rule);
-}
-
 .statut--bloque {
+  background: color-mix(in srgb, var(--ko) 15%, var(--surface));
   color: var(--ko);
-  font-weight: 600;
 }
 
-.statut--bloque::before {
-  background: var(--ko);
+.statut--inactif,
+.statut--pas_commence {
+  background: var(--ground-2);
+  color: var(--ink-soft);
 }
 
-.statut--inactif::before {
-  background: var(--py-yellow);
-}
-
-.statut--en_cours::before {
-  background: var(--ok);
+.statut--en_cours {
+  background: color-mix(in srgb, var(--ok) 13%, var(--surface));
+  color: var(--ok);
 }
 
 @media (max-width: 720px) {

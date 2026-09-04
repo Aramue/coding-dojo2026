@@ -197,17 +197,49 @@ describe('TableauDeBord — vue d ensemble', () => {
     expect(within(comptes).queryByText('bloqués')).toBeNull()
   })
 
-  it('pose un trait par eleve sur la ligne de repartition', async () => {
-    // Un trait chacun, pose la ou l'eleve en est : c'est l'ecart qui se pilote,
+  it('pose un point par eleve sur la repartition', async () => {
+    // Un point chacun, pose la ou l'eleve en est : c'est l'ecart qui se pilote,
     // et une moyenne l'effacerait.
     poserLeReseau([
       ligne({ code_acces: 'DOJO-A', reussis: [] }),
-      ligne({ code_acces: 'DOJO-B', reussis: [{ exercice_id: 's1-02', verdict: 'vert' as const }] }),
-      ligne({ code_acces: 'DOJO-C', reussis: [{ exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-29', verdict: 'vert' as const }, { exercice_id: 's1-31', verdict: 'vert' as const }] }),
+      ligne({ code_acces: 'DOJO-B', reussis: [reussi('s1-02')] }),
+      ligne({
+        code_acces: 'DOJO-C',
+        reussis: [reussi('s1-02'), reussi('s1-29'), reussi('s1-31')],
+      }),
     ])
     const { container } = render(<TableauDeBord codeProf="code-prof-test" />)
-    await waitFor(() => expect(container.querySelectorAll('.etalement__trait')).toHaveLength(3))
-    expect(screen.getByText(/médiane/)).toHaveTextContent('médiane 1 sur 3 obligatoires')
+    await waitFor(() => expect(container.querySelectorAll('.etalement__eleve')).toHaveLength(3))
+    expect(screen.getByText('médiane 1')).toBeInTheDocument()
+  })
+
+  it('empile les eleves qui sont au meme point', async () => {
+    // La hauteur d'une colonne EST le nombre d'eleves a cet endroit : c'est ce
+    // qui distingue une classe groupee d'une classe etalee, et qu'un semis de
+    // traits sur une bande grise ne montrait pas.
+    poserLeReseau([
+      ligne({ code_acces: 'DOJO-A', reussis: [reussi('s1-02')] }),
+      ligne({ code_acces: 'DOJO-B', reussis: [reussi('s1-29')] }),
+      ligne({ code_acces: 'DOJO-C', reussis: [] }),
+    ])
+    const { container } = render(<TableauDeBord codeProf="code-prof-test" />)
+    await waitFor(() => expect(container.querySelectorAll('.etalement__eleve')).toHaveLength(3))
+    const bas = [...container.querySelectorAll<HTMLElement>('.etalement__eleve')].map(
+      (point) => point.style.bottom,
+    )
+    // La distribution est triee : un eleve a 0, puis deux a « 1 sur 3 » —
+    // le second de ceux-la se pose au-dessus du premier.
+    expect(bas).toEqual(['0rem', '0rem', '0.62rem'])
+  })
+
+  it("decrit la repartition aux lecteurs d'ecran", async () => {
+    poserLeReseau([
+      ligne({ code_acces: 'DOJO-A', reussis: [] }),
+      ligne({ code_acces: 'DOJO-B', reussis: [reussi('s1-02'), reussi('s1-29')] }),
+    ])
+    render(<TableauDeBord codeProf="code-prof-test" />)
+    const nuage = await screen.findByRole('img', { name: /Répartition des 2 élèves/ })
+    expect(nuage).toHaveAccessibleName(/de 0 à 2 exercices réussis sur 3, médiane 1/)
   })
 
   it('ne montre ni comptes ni avancement sur une salle vide', async () => {
