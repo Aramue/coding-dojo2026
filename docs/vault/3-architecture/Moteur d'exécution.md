@@ -10,7 +10,12 @@ mis-a-jour: 2026-09-03
 
 Application de [[ADR-001 Exécution du code dans le navigateur]].
 
-## Pyodide dans un Web Worker
+## Pyodide dans un Web Worker **classique**
+
+> [!warning] Classique, jamais `{ type: 'module' }`
+> Le worker charge Pyodide par `importScripts('/pyodide/pyodide.js')`. Le passer en module casse
+> le développement de façon non évidente. La raison complète est dans
+> [[ADR-007 Worker classique et chargement de Pyodide]].
 
 > [!danger] Le worker n'est pas un détail d'implémentation
 > Le chapitre 1 enseigne la boucle `while`. Il y **aura** des boucles infinies — c'est même une
@@ -25,7 +30,7 @@ Application de [[ADR-001 Exécution du code dans le navigateur]].
 
 ## Cycle d'exécution
 
-1. Le worker charge Pyodide une fois, au premier chargement de la page (~7 Mo, mis en cache).
+1. Le worker charge Pyodide une fois, au premier chargement de la page (**13,1 Mo**, mis en cache).
 2. À chaque validation, on crée un **espace de noms neuf** — aucune fuite d'état entre deux essais.
 3. `stdin` est branché sur les entrées de test de l'exercice, ce qui fait fonctionner `input()`.
 4. `stdout` est capturé pour comparaison par le [[Moteur de validation]].
@@ -50,7 +55,7 @@ quels les énoncés de l'an dernier.
 
 | Limite | Effet | Traitement |
 |---|---|---|
-| ~7 Mo au premier chargement | 24 élèves simultanés en début de séance 1 | Servi depuis la machine UNIGE, pas d'un CDN ; en-têtes de cache longs |
+| **13,1 Mo** au premier chargement | 24 élèves simultanés en début de séance 1 | Servi depuis la machine UNIGE, pas d'un CDN ; en-têtes de cache d'un an |
 | Pas de `requests` | Sans effet chapitres 1 et 2 | À traiter au chapitre 3 |
 | Le client peut être trafiqué | Un élève peut forcer un verdict | Assumé — la certification repose sur les problèmes rendus |
 

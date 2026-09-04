@@ -35,7 +35,28 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Progression pédagogique du chapitre 1 | ✅ conçue — 112 exercices, voir [[Chapitre 1]] |
 | Spécification complète | ✅ écrite — [[Spécification chapitre 1]] |
 | Plan d'implémentation | ✅ écrit — [[Plan palier 1]] |
-| Implémentation | ⬜ pas commencée |
+| Implémentation du palier 1 | ✅ **livrée** — 14 tâches, branche `palier-1` |
+| Revue finale de branche | ⬜ à faire |
+
+## Ce qui tourne aujourd'hui
+
+Le code vit dans `plateforme/`, sur la branche `palier-1`.
+
+| Partie | État |
+|---|---|
+| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **66 tests** |
+| `api/` | FastAPI + SQLite, **27 tests** |
+| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **38 tests** |
+| `contenu/` | **25 exercices** de la séance 1 : 12 `predire`, 5 `debug`, 5 `completer`, 3 `ecrire` |
+| `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
+
+Un parcours complet a été joué dans un navigateur : connexion par code d'agent, résolution des
+25 exercices, « Séance terminée », progression persistée après rechargement.
+
+> [!warning] Deux décisions prises pendant l'implémentation
+> Elles ne découlent pas de la conception mais du code réel, et ce sont celles qu'on risque le
+> plus de défaire par ignorance : [[ADR-007 Worker classique et chargement de Pyodide]] et
+> [[ADR-008 Validation serveur des champs libres]].
 
 ## Le calendrier qui commande tout
 

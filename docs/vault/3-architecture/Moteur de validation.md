@@ -82,6 +82,30 @@ tests:
 > minutes. `interdit` empêche de coder la réponse en dur ; `contient` force l'usage de la
 > structure enseignée.
 
+## Une exécution par test, pas une pour l'exercice
+
+Un exercice peut déclarer **plusieurs tests `sortie` avec des jeux d'entrées différents**, pour
+vérifier que la solution généralise et pas seulement qu'elle marche sur le premier exemple. C'est
+le cas de `s1-30`, `s1-31` et `s1-34`.
+
+> [!danger] Le piège
+> Réutiliser une seule exécution partagée compare la sortie obtenue avec les entrées A à l'attendu
+> écrit pour les entrées B. ==Une solution correcte est alors refusée.== Le défaut n'apparaît
+> qu'avec un exercice à entrées multiples : il a été trouvé en résolvant réellement les 25
+> exercices dans le navigateur, jamais par les tests unitaires.
+
+`EcranExercice` lance donc une exécution par test, avec les entrées qui lui appartiennent :
+
+- les exécutions au **même jeu d'entrées sont mises en cache** — même code, mêmes entrées, même
+  résultat ;
+- les tests `interdit`, `contient` et `qcm` n'inspectent jamais l'exécution : ils ne sollicitent
+  pas Pyodide ;
+- un test `variable` relit l'espace de noms d'une exécution **sans entrée**, miroir de
+  `valider_contenu.py::_passe` ;
+- les exécutions sont lancées **l'une après l'autre**. `Executeur` ne pilote qu'un seul worker :
+  un second appel concurrent écraserait le gestionnaire de réponse du premier, qui expirerait en
+  silence.
+
 ## Ordre d'évaluation
 
 1. La syntaxe est-elle valide ? Sinon → message de syntaxe, on s'arrête.
