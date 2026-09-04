@@ -96,6 +96,18 @@
 .notion__corps > * {
   overflow: hidden;
   min-height: 0;
+  /*
+   * ==Zéro padding, zéro bordure sur l'enfant direct de la grille.==
+   * `min-height: 0` annule la hauteur du CONTENU ; le padding, lui, reste dans
+   * la boîte et s'ajoute par-dessus. Un `padding-bottom: 1rem` laissait donc
+   * une bande de 16 px visible sous le chapitre replié, avec le haut de la
+   * première notion qui dépassait.
+   *
+   * L'espacement se met sur les enfants, à l'intérieur de la boîte de contenu,
+   * où il se laisse écraser avec le reste.
+   */
+  padding: 0;
+  border: 0;
 }
 
 .chevron {
@@ -113,7 +125,11 @@
 .chapitre__notions {
   list-style: none;
   margin: 0;
-  padding: 0 0 var(--e-2);
+  padding: 0;
+}
+
+.chapitre__notions > :last-child {
+  margin-bottom: var(--e-2);
 }
 
 .notion {
@@ -182,7 +198,12 @@
 .notion__liens {
   display: flex;
   flex-direction: column;
-  padding: 0 var(--e-3) var(--e-1) calc(var(--e-3) + 1.9rem);
+  padding: 0;
+  margin: 0 var(--e-3) 0 calc(var(--e-3) + 1.9rem);
+}
+
+.notion__liens > :last-child {
+  margin-bottom: var(--e-1);
 }
 
 .menu__lien {
