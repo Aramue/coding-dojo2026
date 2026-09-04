@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Journal de décisions
@@ -36,6 +36,13 @@ Ce sont celles qu'un lecteur risque le plus de défaire par ignorance.
   Toute chaîne acceptée par l'API est validée par motif ou liste blanche, **côté serveur**.
 - **009** — [[ADR-009 Routage maison sans bibliothèque]]
   Quatre formes de chemin sur l'API History. Une fonction pure porte la logique, pas un routeur.
+
+Les deux dernières datent du 4 septembre 2026, après une première interface livrée et essayée.
+
+- **010** — [[ADR-010 Abandon de la fiction narrative]]
+  Plus de Quartier Général : des exemples du quotidien, et un code d'accès `DOJO-XXXX`.
+- **011** — [[ADR-011 Trois niveaux de réussite]]
+  Rien, une coche, deux coches. La seconde récompense la méthode, elle ne conditionne rien.
 
 ## Le fil conducteur
 
@@ -70,5 +77,6 @@ Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans 
 ## Ce qui n'est pas encore décidé
 
 - [ ] Le nombre exact d'exercices du chapitre 1 et leur ordre — voir [[Chapitre 1]]
-- [ ] La forme précise de la gamification (points, classement, badges)
+- [x] La forme précise de la gamification — tranchée par [[ADR-011 Trois niveaux de réussite]] :
+      deux coches, ni points ni classement
 - [ ] Le découpage du livrable de la séance 1 par rapport au reste

@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Pièges et invariants
@@ -42,6 +42,15 @@ des boucles infinies.
 **Ce qui casse :** un second appel concurrent écrase le gestionnaire de réponse du premier, qui
 expire alors en silence et affiche un faux message de boucle infinie. `EcranExercice` enchaîne
 donc les exécutions avec `await`, jamais un `Promise.all`.
+
+### Un `postMessage` par `print` noie le fil principal
+
+`_QgSortie.write` accumule et n'envoie qu'au-delà de **400 caractères ou 50 ms**.
+
+**Ce qui casse :** un `print` fait *deux* appels à `write()` — le texte, puis le saut de ligne. Un
+message par appel, c'est mille rendus React pour une boucle de cinq cents lignes : le fil
+principal passe son temps à redessiner au lieu d'afficher. Le tampon doit aussi être **vidé avant
+que l'exécution ne rende la main**, sinon la fin de la sortie n'arrive jamais.
 
 ### Se souvenir que l'invite d'`input()` part dans la sortie
 
@@ -157,6 +166,17 @@ un `useState` rempli à la connexion.
 compteur d'origine== — 0/6 après une réussite. Aucun test unitaire ne l'aurait vu : le bug n'existe
 qu'à l'assemblage. Trouvé en résolvant un exercice à la main dans le conteneur.
 
+### Un enfant de grille repliée ne porte ni marge intérieure ni bordure
+
+Le repli du sommaire s'anime sur `grid-template-rows: 1fr -> 0fr`, seule façon d'animer vers une
+hauteur *automatique* sans la mesurer en JavaScript. L'enfant direct porte `overflow: hidden` et
+`min-height: 0`, et ==zéro `padding`, zéro `border`==. L'espacement se met sur les enfants, à
+l'intérieur de la boîte de contenu.
+
+**Ce qui casse :** `min-height: 0` annule la hauteur du *contenu* ; le padding, lui, reste dans la
+boîte et s'ajoute par-dessus. Un `padding-bottom: 1rem` laissait une bande de 16 px visible sous
+le chapitre replié, avec le haut de la première notion qui dépassait.
+
 ### La couleur de notion est un accent, jamais un fond de page
 
 Le canevas est neutre (`--ground`), le contenu vit sur `--surface`, et la couleur de la famille
@@ -222,6 +242,14 @@ n'a pas bougé d'une ligne.
 **Ce qui casse :** un exercice comme `s1-30`, `s1-31` ou `s1-34` déclare plusieurs tests `sortie`
 avec des entrées différentes. Réutiliser une exécution partagée compare la sortie obtenue avec les
 entrées A à l'attendu écrit pour les entrées B. Trois rondes de correction.
+
+### Le rappel de réussite s'efface dès la première validation de la visite
+
+`EcranExercice` n'affiche le bandeau daté que si `dejaFait` existe **et** que `resultat` est
+encore nul.
+
+**Ce qui casse :** rien ne plante, mais deux encadrés qui disent la même chose se répondent en
+haut et en bas de l'écran, et l'élève ne sait plus lequel parle de l'essai qu'il vient de faire.
 
 ### Une lecture directe de `executions[i]` suppose l'alignement 1:1
 

@@ -3,7 +3,7 @@ title: Modèle de contenu
 tags:
   - architecture
   - contenu
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Modèle de contenu
@@ -108,6 +108,9 @@ Un bloc `code` peut porter deux champs de plus :
 >
 > La page d'exercices les affiche sous un intertitre « Pour aller plus loin », séparés du reste.
 
+La **seconde coche ne change rien à ce décompte non plus** : un exercice réussi compte pour un,
+qu'il porte une coche ou deux. Elle distingue, elle ne conditionne pas.
+
 ### Un motif interdit peut porter son propre message
 
 ```yaml
@@ -122,6 +125,24 @@ Le message par défaut dit « la réponse ne doit pas être écrite en dur ». V
 motifs, **faux quand le motif interdit une technique** : l'élève de `s1-18` n'a rien écrit en dur,
 il a utilisé l'affectation multiple. ==Un message trompeur l'envoie chercher un problème qu'il n'a
 pas.==
+
+### Un motif `contient` peut ne coûter qu'une coche
+
+```yaml
+- type: contient
+  motif: "{"
+  maitrise: true
+  message: >-
+    L'exercice est validé. Tu peux le refaire avec un f-string : un f collé
+    devant les guillemets, et la variable entre accolades.
+```
+
+Sans `maitrise`, un `contient` absent fait échouer l'exercice. Avec, il ne fait perdre que la
+**seconde coche** : l'exercice reste réussi et la suite reste ouverte. C'est la différence entre
+« ça marche » et « ça marche de la bonne façon ». Le mécanisme complet, l'ordre d'évaluation et le
+choix du motif sont dans [[Moteur de validation]].
+
+`maitrise` est refusé sur un `interdit` — un interdit disqualifie par définition.
 
 ## Le chapitre, unité de regroupement
 

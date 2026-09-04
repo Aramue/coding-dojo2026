@@ -3,7 +3,7 @@ title: Accueil
 tags:
   - moc
 statut: en-conception
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Coding Dojo 2026-2027
@@ -81,7 +81,7 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 ## Cartes du coffre
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
-- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]]
+- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
