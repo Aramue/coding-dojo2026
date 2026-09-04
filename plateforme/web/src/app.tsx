@@ -5,6 +5,16 @@ import type { Exercice } from './contenu/types'
 import { Executeur } from './execution/executeur'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
+import { Progression } from './ui/Progression'
+
+/** Nom lisible d'une famille de concept, pour l'en-tête. */
+const CONCEPTS: Record<Exercice['famille'], string> = {
+  variables: 'Variables',
+  types: 'Types de données',
+  operateurs: 'Opérateurs',
+  conditions: 'Conditions',
+  boucles: 'Boucles',
+}
 
 export function App() {
   const client = useMemo(() => new ClientApi(), [])
@@ -12,7 +22,7 @@ export function App() {
     () => new Executeur(() => new Worker(new URL('./execution/worker.ts', import.meta.url))),
     [],
   )
-  const [connecte, setConnecte] = useState(false)
+  const [codeAgent, setCodeAgent] = useState<string | null>(null)
   const [exercices, setExercices] = useState<Exercice[]>([])
   const [reussis, setReussis] = useState<string[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
@@ -20,19 +30,59 @@ export function App() {
   useEffect(() => () => executeur.detruire(), [executeur])
 
   async function connecter(code: string) {
-    await client.ouvrirSession(code)
+    const identifiant = await client.ouvrirSession(code)
     setExercices(await chargerParcours())
     setReussis(await client.lireParcours())
-    setConnecte(true)
+    setCodeAgent(identifiant)
   }
 
-  if (!connecte) return <EcranConnexion onConnecte={connecter} />
+  if (!codeAgent) {
+    return (
+      <div className="appli">
+        <Entete />
+        <EcranConnexion onConnecte={connecter} />
+      </div>
+    )
+  }
+
+  if (!exercices.length) {
+    return (
+      <div className="appli">
+        <Entete codeAgent={codeAgent} />
+        <p className="chargement">Chargement des exercices…</p>
+      </div>
+    )
+  }
 
   const courant = exercices.find((e) => !reussis.includes(e.id))
-  if (!courant) return <main><h1>Séance terminée. Beau travail, agent.</h1></main>
+  const faits = exercices.filter((e) => reussis.includes(e.id)).length
+
+  if (!courant) {
+    return (
+      <div className="appli">
+        <Entete codeAgent={codeAgent} total={exercices.length} faits={faits} />
+        <main className="fin">
+          <div className="fin__carte">
+            <p className="fin__compte">{faits}</p>
+            <h1>Séance terminée</h1>
+            <p>
+              Tu as résolu les {exercices.length} exercices de la séance. Ta progression est
+              enregistrée : tu la retrouveras à la prochaine connexion.
+            </p>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   return (
-    <>
+    <div className="appli">
+      <Entete
+        codeAgent={codeAgent}
+        concept={CONCEPTS[courant.famille]}
+        total={exercices.length}
+        faits={faits}
+      />
       {alerte && (
         <p role="alert" className="alerte">
           {alerte}
@@ -62,6 +112,29 @@ export function App() {
           }
         }}
       />
-    </>
+    </div>
+  )
+}
+
+function Entete({
+  codeAgent,
+  concept,
+  total,
+  faits,
+}: {
+  codeAgent?: string
+  concept?: string
+  total?: number
+  faits?: number
+}) {
+  return (
+    <header className="entete">
+      <span className="entete__marque">
+        Coding Dojo <span>Python</span>
+      </span>
+      {concept && <span className="entete__concept">{concept}</span>}
+      {total !== undefined && faits !== undefined && <Progression total={total} faits={faits} />}
+      {codeAgent && <span className="entete__code mono">{codeAgent}</span>}
+    </header>
   )
 }

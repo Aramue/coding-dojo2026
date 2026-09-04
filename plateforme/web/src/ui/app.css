@@ -1,0 +1,391 @@
+/*
+ * Mise en page de l'application.
+ *
+ * Règle fondatrice, relevée dans les supports de cours : le fond pastel porte
+ * ce qu'on lit, le fond sombre porte ce qu'on écrit. L'élève sait où il est
+ * sans lire un mot. Les familles de couleur sont posées par `data-famille`.
+ */
+
+/* ---------- Ossature ---------- */
+
+.appli {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+}
+
+.entete {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.9rem clamp(1rem, 4vw, 2rem);
+  border-bottom: 1px solid var(--rule);
+  background: var(--ground);
+  flex-wrap: wrap;
+}
+
+.entete__marque {
+  font-weight: 700;
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+  margin-right: auto;
+}
+
+.entete__marque span {
+  color: var(--py-blue-ink, #2d6b99);
+}
+
+.entete__concept {
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+}
+
+.entete__code {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--rule);
+}
+
+/* ---------- Progression ---------- */
+
+.progression {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progression__jauge {
+  display: flex;
+  gap: 3px;
+}
+
+.progression__pas {
+  width: 14px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--rule);
+  transition: background 0.15s ease;
+}
+
+.progression__pas--fait {
+  background: var(--ok);
+}
+
+.progression__pas--courant {
+  background: var(--ink);
+}
+
+.progression__compte {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Boutons ---------- */
+
+.bouton {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.98rem;
+  padding: 0.72rem 1.35rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.bouton:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.bouton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.bouton--primaire {
+  background: var(--py-yellow);
+  color: #2a2000;
+}
+
+.bouton--sombre {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+/* ---------- Connexion ---------- */
+
+.connexion {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem 5rem;
+}
+
+.connexion__carte {
+  width: min(26rem, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.connexion h1 {
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+  letter-spacing: -0.028em;
+}
+
+.connexion__intro {
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.connexion form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.connexion label {
+  font-weight: 600;
+  font-size: 0.94rem;
+}
+
+.connexion input {
+  font-family: var(--police-code);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.connexion input::placeholder {
+  color: #b3aa9c;
+  letter-spacing: 0.08em;
+}
+
+.connexion .bouton {
+  margin-top: 0.35rem;
+}
+
+/* ---------- Écran d'exercice ---------- */
+/* Fond sombre de la famille du concept : ici, on écrit du code. */
+
+.exercice {
+  flex: 1;
+  background: var(--profond, var(--var-deep));
+  color: #ece9f6;
+  padding: clamp(1.1rem, 3vw, 2rem) clamp(1rem, 4vw, 2rem) 3rem;
+}
+
+.exercice__entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: 1120px;
+  margin: 0 auto 1.25rem;
+}
+
+.exercice__titre {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  color: #fff;
+}
+
+.exercice__essais {
+  font-size: 0.9rem;
+  color: #b4add0;
+  font-variant-numeric: tabular-nums;
+}
+
+.exercice__grille {
+  display: grid;
+  gap: clamp(1.1rem, 2.5vw, 2rem);
+  max-width: 1120px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .exercice__grille {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+.exercice__enonce {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.exercice__enonce p {
+  margin: 0;
+  color: #d6d1e8;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.exercice__travail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.exercice__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.exercice__note {
+  font-size: 0.84rem;
+  color: #a79ecb;
+}
+
+/* ---------- Indices ---------- */
+
+.indice {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.7rem 0.85rem;
+  border: 1px dashed rgb(255 255 255 / 24%);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: #d6d1e8;
+  line-height: 1.5;
+}
+
+.indice b {
+  color: var(--py-yellow);
+  font-size: 0.86rem;
+  white-space: nowrap;
+  flex: none;
+  padding-top: 0.06rem;
+}
+
+.indice--verrouille {
+  opacity: 0.5;
+}
+
+/* ---------- Choix multiple ---------- */
+
+.qcm {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.qcm legend {
+  padding: 0;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.35rem;
+}
+
+.qcm__option {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.qcm__option:hover {
+  border-color: rgb(255 255 255 / 40%);
+}
+
+.qcm__option:has(input:checked) {
+  border-color: var(--py-yellow);
+  background: rgb(255 195 49 / 10%);
+}
+
+.qcm__option input {
+  accent-color: var(--py-yellow);
+  flex: none;
+}
+
+.qcm__option span {
+  font-family: var(--police-code);
+  font-size: 0.9rem;
+  color: var(--d-fg);
+  white-space: pre-wrap;
+}
+
+/* ---------- Éditeur ---------- */
+
+.editeur {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ---------- Alerte réseau ---------- */
+
+.alerte {
+  margin: 0;
+  padding: 0.8rem clamp(1rem, 4vw, 2rem);
+  background: var(--ko);
+  color: #fff;
+  font-size: 0.94rem;
+}
+
+/* ---------- Fin de séance ---------- */
+
+.fin {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem 5rem;
+  text-align: center;
+}
+
+.fin__carte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  align-items: center;
+  max-width: 34rem;
+}
+
+.fin h1 {
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  letter-spacing: -0.028em;
+}
+
+.fin p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.fin__compte {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--ok);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* ---------- Chargement ---------- */
+
+.chargement {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  padding: 3rem 1.25rem;
+}

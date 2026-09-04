@@ -6,6 +6,7 @@ import { categorieErreur } from '../execution/exceptions'
 import type { ResultatExecution } from '../execution/types'
 import { evaluer } from '../validation/evaluer'
 import type { ResultatTest, Test } from '../validation/types'
+import { CarteCode } from './CarteCode'
 import { Editeur } from './Editeur'
 import { PanneauVerdict } from './PanneauVerdict'
 
@@ -115,54 +116,77 @@ export function EcranExercice({
 
   return (
     <main className="exercice" data-famille={exercice.famille}>
-      <header className="exercice__entete">
-        <span>{exercice.titre}</span>
-        <span>{essais === 0 ? 'aucun essai' : `${essais} essai${essais > 1 ? 's' : ''}`}</span>
-      </header>
+      <div className="exercice__entete">
+        <h1 className="exercice__titre">{exercice.titre}</h1>
+        <span className="exercice__essais">
+          {essais === 0 ? 'aucun essai' : `${essais} essai${essais > 1 ? 's' : ''}`}
+        </span>
+      </div>
 
-      <section className="exercice__enonce">
-        <p>{exercice.enonce}</p>
-        {indicesVisibles.map((indice, i) => (
-          <p key={i} className="indice">
-            <b>Indice {i + 1}</b> {indice}
-          </p>
-        ))}
-        {exercice.indices.length > indicesVisibles.length && (
-          <p className="indice indice--verrouille">
-            <b>Indice {indicesVisibles.length + 1}</b> Verrouillé — encore un essai avant de le débloquer.
-          </p>
-        )}
-      </section>
+      <div className="exercice__grille">
+        <section className="exercice__enonce">
+          <p>{exercice.enonce.trim()}</p>
 
-      <section className="exercice__travail">
-        {qcm && qcm.type === 'qcm' ? (
-          <fieldset>
-            <legend>Qu'affiche ce programme ?</legend>
-            {qcm.options.map((option, i) => (
-              <label key={i}>
-                <input
-                  type="radio"
-                  name="qcm"
-                  checked={reponseQcm === i}
-                  onChange={() => setReponseQcm(i)}
-                />
-                <span className="mono">{option}</span>
-              </label>
-            ))}
-          </fieldset>
-        ) : (
-          <Editeur valeur={code} onChange={setCode} />
-        )}
+          {/*
+            Un exercice « predire » demande de LIRE un programme : sans cet
+            affichage, l'élève voit les propositions sans le code, et les douze
+            exercices de ce type sont impossibles à faire.
+          */}
+          {qcm && exercice.depart.trim() && (
+            <CarteCode legende="Le programme">
+              <pre>{exercice.depart.trimEnd()}</pre>
+            </CarteCode>
+          )}
 
-        <div className="exercice__actions">
-          <button type="button" onClick={valider} disabled={enCours}>
-            {enCours ? 'Exécution…' : 'Valider'}
-          </button>
-          <span className="exercice__note">exécuté dans ton navigateur</span>
-        </div>
+          {indicesVisibles.map((indice, i) => (
+            <p key={i} className="indice">
+              <b>Indice {i + 1}</b>
+              <span>{indice}</span>
+            </p>
+          ))}
+          {exercice.indices.length > indicesVisibles.length && (
+            <p className="indice indice--verrouille">
+              <b>Indice {indicesVisibles.length + 1}</b>
+              <span>Encore un essai avant de le débloquer.</span>
+            </p>
+          )}
+        </section>
 
-        <PanneauVerdict resultat={resultat} />
-      </section>
+        <section className="exercice__travail">
+          {qcm ? (
+            <fieldset className="qcm">
+              <legend>Qu'affiche ce programme&nbsp;?</legend>
+              {qcm.options.map((option, i) => (
+                <label key={i} className="qcm__option">
+                  <input
+                    type="radio"
+                    name="qcm"
+                    checked={reponseQcm === i}
+                    onChange={() => setReponseQcm(i)}
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </fieldset>
+          ) : (
+            <Editeur valeur={code} onChange={setCode} />
+          )}
+
+          <div className="exercice__actions">
+            <button
+              type="button"
+              className="bouton bouton--primaire"
+              onClick={valider}
+              disabled={enCours || (Boolean(qcm) && reponseQcm === undefined)}
+            >
+              {enCours ? 'Exécution…' : 'Valider'}
+            </button>
+            <span className="exercice__note">exécuté dans ton navigateur</span>
+          </div>
+
+          <PanneauVerdict resultat={resultat} />
+        </section>
+      </div>
     </main>
   )
 }
