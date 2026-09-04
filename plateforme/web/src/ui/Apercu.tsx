@@ -1,4 +1,5 @@
-import { useMemo, useState, type MouseEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { grouper, grouperParChapitre } from '../contenu/notions'
 import type { Executeur } from '../execution/executeur'
 import { useContenuPublie } from '../prof/contenu'
@@ -10,13 +11,20 @@ import { PageExercices } from './PageExercices'
 import './Apercu.css'
 
 /**
- * L'espace élève, vu par le professeur.
+ * L'espace élève, vu par le professeur, **par-dessus tout le reste**.
  *
  * Ce ne sont pas des copies d'écran ni une maquette : ==ce sont les composants
  * de l'élève, avec le contenu publié==, montés tels quels. Ce que le professeur
  * lit ici est exactement ce que la classe lira, y compris les fautes de frappe
  * d'un énoncé et la longueur réelle d'une leçon. C'est ce qui permet de cadrer
  * une séance avant de la faire.
+ *
+ * > [!danger] Pourquoi en plein écran, et pas dans un cadre
+ * > Encadré sous le tableau, il s'ouvrait à mille pixels du clic : le
+ * > professeur cliquait sur un exercice et ==rien ne semblait se passer==. Et
+ * > la fenêtre de 70 vh, avec ses deux barres de défilement imbriquées, rendait
+ * > un écran d'exercice illisible. Un aperçu de ce que voit l'élève doit
+ * > occuper l'écran, comme chez l'élève.
  *
  * Rien n'est enregistré : la progression affichée est vide, et une validation
  * ne part nulle part.
@@ -33,6 +41,33 @@ export function Apercu({
 }) {
   const contenu = useContenuPublie()
   const [ou, setOu] = useState<Destination | null>(depart ?? null)
+  const panneau = useRef<HTMLDivElement>(null)
+
+  // Échap ferme, comme toute fenêtre par-dessus. Le professeur y revient les
+  // mains sur le clavier, pas à la souris.
+  useEffect(() => {
+    const auClavier = (evenement: KeyboardEvent) => {
+      if (evenement.key === 'Escape') onFermer()
+    }
+    addEventListener('keydown', auClavier)
+    return () => removeEventListener('keydown', auClavier)
+  }, [onFermer])
+
+  // Le focus entre dans la fenêtre à l'ouverture : sans cela, la tabulation
+  // continuerait de courir dans le tableau caché derrière.
+  useEffect(() => {
+    panneau.current?.focus()
+  }, [])
+
+  // Le fond ne défile plus tant que l'aperçu est ouvert : deux défilements
+  // superposés, on ne sait plus lequel on pilote.
+  useEffect(() => {
+    const avant = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = avant
+    }
+  }, [])
 
   const groupes = useMemo(
     () =>
@@ -63,8 +98,24 @@ export function Apercu({
     setOu(analyser(new URL(lien.href, location.origin).pathname))
   }
 
-  return (
-    <section className="apercu" aria-label="Aperçu de l'espace élève">
+  /*
+   * Monté sur <body>, pas là où il est écrit.
+   *
+   * `.appli > main` porte une animation d'entrée qui déclare un `transform`.
+   * ==Un ancêtre transformé devient le bloc conteneur de ses descendants
+   * `position: fixed`==, et crée un contexte d'empilement : l'aperçu se posait
+   * donc à huit pixels du haut, sous l'en-tête collant, malgré `inset: 0` et
+   * `z-index: 50`. Un portail le sort de tout cela.
+   */
+  return createPortal(
+    <div
+      className="apercu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Aperçu de l'espace élève"
+      ref={panneau}
+      tabIndex={-1}
+    >
       <header className="apercu__barre">
         <div>
           <b>Aperçu de l'espace élève</b>
@@ -87,7 +138,8 @@ export function Apercu({
           </div>
         </div>
       )}
-    </section>
+    </div>,
+    document.body,
   )
 }
 

@@ -1,25 +1,43 @@
 /*
- * L'espace eleve, encadre. Le cadre doit se voir : sans lui, le professeur ne
- * sait plus s'il regarde son tableau ou celui de la classe.
+ * L'espace eleve, par-dessus tout le reste.
+ *
+ * Encadre sous le tableau, il s'ouvrait a mille pixels du clic — le professeur
+ * cliquait et rien ne semblait se passer — et sa fenetre de 70 vh, avec deux
+ * barres de defilement imbriquees, rendait un ecran d'exercice illisible.
  */
 
 .apercu {
-  margin-top: var(--e-4);
-  border: 1px solid var(--rule);
-  border-radius: var(--rayon-3);
-  overflow: hidden;
-  box-shadow: var(--ombre-2);
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+  animation: apercu-arrive 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.apercu:focus {
+  outline: none;
+}
+
+@keyframes apercu-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .apercu__barre {
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--e-2);
   flex-wrap: wrap;
   padding: var(--e-2) var(--e-3);
-  background: var(--ground-2);
+  background: var(--surface);
   border-bottom: 1px solid var(--rule);
+  box-shadow: var(--ombre-1);
 }
 
 .apercu__barre b {
@@ -35,37 +53,48 @@
 
 .apercu__vide {
   margin: 0;
-  padding: var(--e-4);
+  padding: var(--e-5);
   color: var(--ink-soft);
   font-size: var(--t-2);
-  background: var(--ground);
+  text-align: center;
 }
 
-/*
- * Le cadre defile pour lui-meme : une lecon fait plusieurs ecrans, et sans
- * hauteur bornee le tableau de bord se retrouverait a des milliers de pixels
- * au-dessus. 70vh laisse voir une page entiere sans avaler l'ecran.
- */
+/* UNE seule zone de defilement : celle-ci. Le fond est fige tant qu'on est la. */
 .apercu__cadre {
-  max-height: 70vh;
+  flex: 1;
+  min-height: 0;
   overflow: auto;
-  background: var(--ground);
 }
 
 /*
  * La grille de l'application vit normalement sous un en-tete fixe et occupe la
- * hauteur de la fenetre. Ici elle est imbriquee : elle prend la hauteur de son
- * contenu, et le sommaire ne defile plus separement.
+ * hauteur de la fenetre. Ici elle est imbriquee sous la barre de l'apercu : elle
+ * remplit ce qui reste, et le sommaire ne defile plus separement.
  */
 .appli--apercu {
-  min-height: 0;
-  height: auto;
+  min-height: 100%;
   /* Pas d'en-tete ici : la grille se reduit au sommaire et au contenu. */
   grid-template-areas: 'menu contenu';
-  grid-template-rows: auto;
+  grid-template-rows: minmax(100%, auto);
 }
 
 .appli--apercu .menu {
   overflow: visible;
   max-height: none;
+}
+
+@media (max-width: 900px) {
+  .appli--apercu {
+    grid-template-areas:
+      'menu'
+      'contenu';
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apercu {
+    animation: none;
+  }
 }

@@ -107,18 +107,14 @@ function SessionProf({ code, onFermer }: { code: string; onFermer: () => void })
     <main className="prof">
       <TableauDeBord codeProf={code} onApercu={(ou) => setApercu({ ou })} />
 
-      {apercu ? (
-        <Apercu depart={apercu.ou} executeur={executeur} onFermer={() => setApercu(null)} />
-      ) : (
-        <div className="prof__actions">
-          <button type="button" className="bouton" onClick={() => setApercu({})}>
-            Voir l'espace élève
-          </button>
-          <span className="prof__note">
-            Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
-          </span>
-        </div>
-      )}
+      <div className="prof__actions">
+        <button type="button" className="bouton" onClick={() => setApercu({})}>
+          Voir l'espace élève
+        </button>
+        <span className="prof__note">
+          Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
+        </span>
+      </div>
 
       <Classe codeProf={code} />
 
@@ -127,6 +123,11 @@ function SessionProf({ code, onFermer }: { code: string; onFermer: () => void })
           Fermer la session professeur
         </button>
       </div>
+
+      {/* Par-dessus, pas à la place : le tableau attend derrière, intact. */}
+      {apercu && (
+        <Apercu depart={apercu.ou} executeur={executeur} onFermer={() => setApercu(null)} />
+      )}
     </main>
   )
 }

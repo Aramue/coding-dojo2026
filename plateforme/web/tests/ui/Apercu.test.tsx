@@ -138,3 +138,35 @@ describe('Apercu — la navigation reste dans le cadre', () => {
     expect(await screen.findByRole('link', { name: /Dire bonjour/ })).toBeInTheDocument()
   })
 })
+
+describe('Apercu — une fenêtre par-dessus, pas un cadre en bas de page', () => {
+  it("s'annonce comme une fenêtre modale", async () => {
+    // Encadre sous le tableau, il s'ouvrait a mille pixels du clic : on
+    // cliquait sur un exercice et rien ne semblait se passer.
+    render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
+    const fenetre = await screen.findByRole('dialog', { name: /Aperçu de l'espace élève/ })
+    expect(fenetre).toHaveAttribute('aria-modal', 'true')
+  })
+
+  it('se ferme sur Échap', async () => {
+    const fermer = vi.fn()
+    render(<Apercu executeur={EXECUTEUR} onFermer={fermer} />)
+    await screen.findByRole('dialog')
+    await userEvent.keyboard('{Escape}')
+    expect(fermer).toHaveBeenCalled()
+  })
+
+  it('fige le fond, puis le rend', async () => {
+    // Deux defilements superposes, on ne sait plus lequel on pilote.
+    const { unmount } = render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
+    await screen.findByRole('dialog')
+    expect(document.body.style.overflow).toBe('hidden')
+    unmount()
+    expect(document.body.style.overflow).not.toBe('hidden')
+  })
+
+  it('prend le focus, pour que la tabulation ne coure pas derrière', async () => {
+    render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
+    expect(await screen.findByRole('dialog')).toHaveFocus()
+  })
+})

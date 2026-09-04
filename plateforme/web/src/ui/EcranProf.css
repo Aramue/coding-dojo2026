@@ -108,12 +108,7 @@
   color: var(--ink-soft);
 }
 
-.prof .apercu,
 .prof .classe {
   max-width: 1080px;
-  margin-inline: auto;
-}
-
-.prof .classe {
-  margin-top: var(--e-4);
+  margin: var(--e-4) auto 0;
 }
