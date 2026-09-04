@@ -4,6 +4,7 @@ import type { Bloc } from '../contenu/types'
 import type { Executeur } from '../execution/executeur'
 import { BacASable } from './BacASable'
 import { CarteCode } from './CarteCode'
+import { PiedNavigation } from './PiedNavigation'
 import { formaterTexte } from './texte'
 import './PageCours.css'
 
@@ -37,6 +38,17 @@ export function PageCours({
           </p>
         )}
       </div>
+
+      <PiedNavigation
+        suivant={
+          groupe.exercices.length > 0
+            ? {
+                cible: { vue: 'exercices', notion: groupe.id },
+                libelle: `${groupe.exercices.length} exercices`,
+              }
+            : undefined
+        }
+      />
     </main>
   )
 }

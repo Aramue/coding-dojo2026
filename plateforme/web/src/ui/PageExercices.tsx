@@ -2,6 +2,7 @@ import type { MouseEvent } from 'react'
 import type { GroupeNotion } from '../contenu/notions'
 import type { Exercice } from '../contenu/types'
 import { naviguer, versChemin } from '../routage'
+import { PiedNavigation } from './PiedNavigation'
 import './PageExercices.css'
 
 /** Le nom du type d'exercice, en français, tel que l'élève le lit. */
@@ -15,12 +16,16 @@ const TYPES: Record<Exercice['type'], string> = {
 export function PageExercices({
   groupe,
   reussis,
+  suivante,
 }: {
   groupe: GroupeNotion
   reussis: string[]
+  /** La notion d'après, pour ne pas laisser l'élève sans étape suivante. */
+  suivante?: GroupeNotion
 }) {
   const acquis = new Set(reussis)
   const total = groupe.exercices.length
+  const termine = total > 0 && groupe.faits === total
 
   return (
     <main className="page" data-famille={groupe.famille}>
@@ -74,6 +79,19 @@ export function PageExercices({
           </ol>
         )}
       </div>
+
+      <PiedNavigation
+        precedent={
+          groupe.lecon
+            ? { cible: { vue: 'cours', notion: groupe.id }, libelle: groupe.lecon.titre }
+            : undefined
+        }
+        suivant={
+          termine && suivante
+            ? { cible: { vue: 'cours', notion: suivante.id }, libelle: suivante.titre }
+            : undefined
+        }
+      />
     </main>
   )
 }

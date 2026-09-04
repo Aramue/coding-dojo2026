@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { PageExercices } from '../../src/ui/PageExercices'
@@ -105,5 +105,50 @@ describe('PageExercices', () => {
   it('annonce une notion sans exercice', () => {
     render(<PageExercices groupe={{ ...GROUPE, exercices: [], faits: 0 }} reussis={[]} />)
     expect(screen.getByText(/pas encore d'exercice/i)).toBeInTheDocument()
+  })
+})
+
+describe('PageExercices — continuité', () => {
+  it('ramene au cours de la notion', () => {
+    const avecLecon = {
+      ...GROUPE,
+      lecon: {
+        id: 'c1-variables',
+        notion: 'variables',
+        ordre: 2,
+        titre: 'Les variables',
+        dureeMin: 3,
+        famille: 'variables' as const,
+        blocs: [],
+      },
+    }
+    render(<PageExercices groupe={avecLecon} reussis={[]} />)
+    const pied = screen.getByRole('navigation', { name: /précédente et suivante/i })
+    expect(within(pied).getByRole('link', { name: /Les variables/ })).toHaveAttribute(
+      'href',
+      '/variables/cours',
+    )
+  })
+
+  it("ne propose la notion suivante qu'une fois la notion terminee", () => {
+    const suivante = { ...GROUPE, id: 'types', titre: 'Types et conversion' }
+
+    const { unmount } = render(
+      <PageExercices groupe={GROUPE} reussis={['s1-09']} suivante={suivante} />,
+    )
+    expect(screen.queryByRole('link', { name: /Types et conversion/ })).toBeNull()
+    unmount()
+
+    render(
+      <PageExercices
+        groupe={{ ...GROUPE, faits: 2 }}
+        reussis={['s1-09', 's1-10']}
+        suivante={suivante}
+      />,
+    )
+    expect(screen.getByRole('link', { name: /Types et conversion/ })).toHaveAttribute(
+      'href',
+      '/types/cours',
+    )
   })
 })

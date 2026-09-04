@@ -11,6 +11,16 @@
   --con-tint: #FFE7C2; --con-ink: #7A4900; --con-deep: #3C2500;
   --bou-tint: #FFD9C2; --bou-ink: #7A2800; --bou-deep: #3C1400;
 
+  /*
+   * Fond de l'ecran d'exercice. UN SEUL, pour les cinq familles : les couleurs
+   * `deep` derivees de la palette donnaient un brun (#3C2500) et un vert tres
+   * sombre (#022016) qui tenaient mal un ecran entier. La notion se lit dans
+   * les accents, en pastel — lisible sur sombre, contrairement a l'encre.
+   * Legerement plus sombre que le fond Dracula, pour que les cartes de code
+   * se posent DESSUS au lieu de s'y fondre.
+   */
+  --nuit: #1A1B23;
+
   --d-bg: #282A36; --d-fg: #F8F8F2; --d-pink: #FF79C6; --d-purple: #BD93F9;
   --d-cyan: #8BE9FD; --d-yellow: #F1FA8C; --d-green: #50FA7B;
   --d-comment: #6272A4; --d-red: #FF5555; --d-line: #44475A;

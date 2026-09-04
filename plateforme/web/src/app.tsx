@@ -178,14 +178,37 @@ function Vue({
 
   if (destination.vue === 'cours') return <PageCours groupe={groupe} executeur={executeur} />
   if (destination.vue === 'exercices') {
-    return <PageExercices groupe={groupe} reussis={reussis} />
+    const rang = groupes.indexOf(groupe)
+    return (
+      <PageExercices groupe={groupe} reussis={reussis} suivante={groupes[rang + 1]} />
+    )
   }
 
   if (destination.vue === 'exercice') {
     const exercice = groupe.exercices[destination.numero - 1]
     if (!exercice) return <Introuvable />
+
+    const avant = groupe.exercices[destination.numero - 2]
+    const apres = groupe.exercices[destination.numero]
     return (
       <EcranExercice
+        titreNotion={groupe.titre}
+        precedent={
+          avant
+            ? {
+                cible: { vue: 'exercice', notion: groupe.id, numero: destination.numero - 1 },
+                libelle: avant.titre,
+              }
+            : { cible: { vue: 'exercices', notion: groupe.id }, libelle: 'Liste des exercices' }
+        }
+        suivant={
+          apres
+            ? {
+                cible: { vue: 'exercice', notion: groupe.id, numero: destination.numero + 1 },
+                libelle: apres.titre,
+              }
+            : { cible: { vue: 'exercices', notion: groupe.id }, libelle: 'Liste des exercices' }
+        }
         // `key` force un composant neuf en changeant d'exercice : sans elle,
         // l'éditeur garderait le code tapé pour le précédent.
         key={exercice.id}

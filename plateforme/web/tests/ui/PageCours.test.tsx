@@ -138,3 +138,23 @@ describe('BacASable', () => {
     expect(await screen.findByText('(aucune sortie)')).toBeInTheDocument()
   })
 })
+
+describe('PageCours — continuité', () => {
+  it("mene aux exercices de la notion", () => {
+    // Sans cette etape, la page de cours s'arretait : cul-de-sac.
+    const avecExercices = {
+      ...groupe([]),
+      exercices: [{ id: 's1-09' }, { id: 's1-10' }] as unknown as GroupeNotion['exercices'],
+    }
+    render(<PageCours groupe={avecExercices} executeur={executeurFactice()} />)
+    expect(screen.getByRole('link', { name: /2 exercices/ })).toHaveAttribute(
+      'href',
+      '/variables/exercices',
+    )
+  })
+
+  it("ne propose rien quand la notion n'a pas encore d'exercice", () => {
+    render(<PageCours groupe={groupe([])} executeur={executeurFactice()} />)
+    expect(screen.queryByRole('navigation', { name: /précédente et suivante/i })).toBeNull()
+  })
+})

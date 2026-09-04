@@ -300,20 +300,23 @@
 
 /* ---------- Écran d'exercice ---------- */
 /*
- * Fond sombre : ici, on écrit du code. Un aplat de la couleur profonde de la
- * famille était trop saturé pour tenir un écran entier — un voile neutre le
- * ramène vers un gris chaud très sombre, et l'identité de la notion reste
- * lisible dans les accents et les bordures.
+ * Fond sombre : ici, on écrit du code. C'est la bascule « j'apprends /
+ * j'écris », et elle se voit sans être expliquée.
+ *
+ * Le fond est le MÊME pour les cinq notions. Le teinter avec la couleur
+ * `deep` de la famille donnait un brun et un vert très sombres qui tenaient
+ * mal un écran entier. ==Sur fond sombre, l'accent lisible est le pastel==,
+ * pas l'encre : `--tint` sert de couleur de notion ici.
  */
 
 .exercice {
   --panneau: rgb(255 255 255 / 4%);
   --trait: rgb(255 255 255 / 11%);
-  --texte-clair: #e8e5f2;
-  --texte-doux: #b6b0cb;
+  --texte-clair: #e9e8ee;
+  --texte-doux: #a8a6b4;
+  --accent: var(--tint, #c2ccff);
 
-  background-color: var(--profond, var(--var-deep));
-  background-image: linear-gradient(180deg, rgb(18 16 24 / 45%), rgb(18 16 24 / 68%));
+  background: var(--nuit);
   color: var(--texte-clair);
   padding: var(--e-3) var(--e-4) var(--e-6);
 }
@@ -342,9 +345,27 @@
 }
 
 .exercice__fil a:focus-visible {
-  outline: 2px solid var(--py-yellow);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: var(--rayon-1);
+}
+
+/* La notion, en pastel : c'est le seul rappel coloré de l'écran sombre. */
+.exercice__notion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.exercice__notion::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .exercice__entete {

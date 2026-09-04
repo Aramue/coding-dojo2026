@@ -11,6 +11,7 @@ import { CarteCode } from './CarteCode'
 import { decouperEnonce, formaterTexte } from './texte'
 import { Editeur } from './Editeur'
 import { PanneauVerdict } from './PanneauVerdict'
+import { PiedNavigation, type Etape } from './PiedNavigation'
 
 const EXECUTION_VIDE: ResultatExecution = {
   stdout: '',
@@ -26,9 +27,17 @@ export function EcranExercice({
   exercice,
   executeur,
   onTentative,
+  titreNotion,
+  precedent,
+  suivant,
 }: {
   exercice: Exercice
   executeur: Executeur
+  /** Nom affiche de la notion, pour le rappel colore en haut de page. */
+  titreNotion?: string
+  /** Les deux etapes voisines. Sans elles, l'exercice est un cul-de-sac. */
+  precedent?: Etape
+  suivant?: Etape
   /**
    * Appelée à CHAQUE validation, réussie ou non — d'où le nom.
    *
@@ -132,7 +141,10 @@ export function EcranExercice({
       </nav>
 
       <div className="exercice__entete">
-        <h1 className="exercice__titre">{exercice.titre}</h1>
+        <div>
+          {titreNotion && <p className="exercice__notion">{titreNotion}</p>}
+          <h1 className="exercice__titre">{exercice.titre}</h1>
+        </div>
         <span className="exercice__essais">
           {essais === 0 ? 'aucun essai' : `${essais} essai${essais > 1 ? 's' : ''}`}
         </span>
@@ -218,6 +230,8 @@ export function EcranExercice({
           <PanneauVerdict resultat={resultat} />
         </section>
       </div>
+
+      <PiedNavigation precedent={precedent} suivant={suivant} sombre />
     </main>
   )
 }
