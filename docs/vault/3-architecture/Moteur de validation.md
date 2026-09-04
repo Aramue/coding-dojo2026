@@ -33,6 +33,24 @@ C'est la reprise directe des fichiers `résultatattendu.txt` de l'an dernier.
 Quand les deux causes de BLEU se présentent ensemble, ==le format l'emporte== : c'est celle des
 deux qui montre un diff, donc la plus utile à l'élève sur le moment.
 
+### Comment l'écart est montré
+
+Deux lignes, `Attendu` et `Obtenu`, chacune reconstituée **en entier** depuis les mêmes segments :
+la première porte le commun et ce qui manque, la seconde le commun et ce qui est en trop. Les
+espaces y sont visibles (`·`), les retours à la ligne aussi (`⏎`).
+
+> [!danger] Une chaîne hybride n'est ni l'une ni l'autre
+> L'affichage entrelaçait d'abord les deux sorties en une seule chaîne, chaque caractère portant
+> sa couleur. Très lisible sur un écart d'un espace ; illisible dès que les deux textes s'éloignent.
+> « banane » face à « Bonjour tout le monde » donnait ==« Bobanjour tout le moande »== — la plus
+> longue sous-séquence commune n'est alors qu'un semis de lettres isolées, et le résultat ne
+> ressemble à aucune des deux sorties.
+>
+> Le surlignage n'apparaît donc que s'il a quelque chose à pointer : il faut qu'au moins **trois
+> dixièmes** de la plus longue des deux sorties soient communs. En dessous, les deux lignes
+> s'affichent nues, et le conseil change — il n'y a rien à comparer caractère par caractère, il y
+> a l'énoncé à relire.
+
 Le meilleur verdict obtenu est conservé : rejouer moins bien ne retire pas une coche déjà gagnée.
 La liste d'exercices et l'écran d'exercice affichent tous deux le nombre de coches, et l'écran
 rappelle en plus la **date de la première réussite** quand l'élève y revient.

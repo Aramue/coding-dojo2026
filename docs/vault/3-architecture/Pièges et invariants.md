@@ -243,6 +243,15 @@ n'a pas bougé d'une ligne.
 avec des entrées différentes. Réutiliser une exécution partagée compare la sortie obtenue avec les
 entrées A à l'attendu écrit pour les entrées B. Trois rondes de correction.
 
+### Un diff caractère par caractère suppose deux textes voisins
+
+`diffInformatif` exige au moins trois dixièmes de caractères communs avant de surligner.
+
+**Ce qui casse :** rien ne plante, mais sur deux sorties sans rapport la plus longue sous-séquence
+commune se réduit à des lettres isolées. Le surlignage découpe alors les lignes en confettis et
+l'élève n'a plus rien de lisible sous les yeux. Vu en séance de vérification sur « banane » face à
+« Bonjour tout le monde ».
+
 ### Le rappel de réussite s'efface dès la première validation de la visite
 
 `EcranExercice` n'affiche le bandeau daté que si `dejaFait` existe **et** que `resultat` est
