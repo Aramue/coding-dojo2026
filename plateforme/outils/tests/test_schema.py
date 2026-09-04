@@ -22,10 +22,10 @@ def exercice_minimal(**remplacements):
         # rejet derriere cette erreur de coherence. Ajoute pour rester coherent
         # avec le motif deja utilise dans test_valider_contenu.py::BASE.
         tests=[
-            {"type": "sortie", "entrees": [], "attendu": "Corbeau"},
+            {"type": "sortie", "entrees": [], "attendu": "Camille"},
             {"type": "interdit", "motif": "xyzzy"},
         ],
-        solution='print("Corbeau")',
+        solution='print("Camille")',
     )
     base.update(remplacements)
     return base

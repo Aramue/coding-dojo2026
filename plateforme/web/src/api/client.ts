@@ -19,13 +19,13 @@ export class ClientApi {
     private executerRequete: typeof fetch = fetch.bind(globalThis),
   ) {}
 
-  async ouvrirSession(codeAgent: string): Promise<string> {
+  async ouvrirSession(codeAcces: string): Promise<string> {
     let reponse: Response
     try {
       reponse = await this.executerRequete(`${this.base}/session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code_agent: codeAgent }),
+        body: JSON.stringify({ code_acces: codeAcces }),
       })
     } catch {
       // Distinguer la panne du code refusé : sinon l'élève essaie d'autres codes
@@ -33,14 +33,14 @@ export class ClientApi {
       throw new Error('La plateforme ne répond pas. Préviens ton professeur.')
     }
     if (reponse.status === 422) {
-      throw new Error("Ce code d'agent n'est pas reconnu. Vérifie qu'il est de la forme AGENT-XXXX.")
+      throw new Error("Ce code d'accès n'est pas reconnu. Vérifie qu'il est de la forme DOJO-XXXX.")
     }
     if (!reponse.ok) {
       throw new Error('La plateforme a un problème. Préviens ton professeur.')
     }
     const donnees = await reponse.json()
     this.jeton = donnees.jeton
-    return donnees.code_agent
+    return donnees.code_acces
   }
 
   private entetes(): Record<string, string> {

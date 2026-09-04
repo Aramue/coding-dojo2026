@@ -3,7 +3,7 @@ import { normaliser } from '../../src/validation/normaliser'
 
 describe('normaliser', () => {
   it('supprime les espaces en fin de ligne', () => {
-    expect(normaliser('Agent Corbeau   \nAge 17')).toBe('agent corbeau\nage 17')
+    expect(normaliser('Bonjour Camille   \nAge 17')).toBe('bonjour camille\nage 17')
   })
 
   it('supprime les lignes vides finales', () => {
@@ -11,7 +11,7 @@ describe('normaliser', () => {
   })
 
   it('reduit les espaces multiples internes a un seul', () => {
-    expect(normaliser('Agent    Corbeau')).toBe('agent corbeau')
+    expect(normaliser('Bonjour    Camille')).toBe('bonjour camille')
   })
 
   it('ignore la casse', () => {
@@ -41,6 +41,6 @@ describe('normaliser', () => {
   })
 
   it('laisse une sortie deja propre inchangee', () => {
-    expect(normaliser('agent corbeau\nage 17')).toBe('agent corbeau\nage 17')
+    expect(normaliser('bonjour camille\nage 17')).toBe('bonjour camille\nage 17')
   })
 })

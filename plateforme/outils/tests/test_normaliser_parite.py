@@ -11,14 +11,14 @@ import pytest
 from valider_contenu import _normaliser
 
 CAS = [
-    ("Agent Corbeau   \nAge 17", "agent corbeau\nage 17"),
+    ("Bonjour Camille   \nAge 17", "bonjour camille\nage 17"),
     ("Bonjour\n\n\n", "bonjour"),
-    ("Agent    Corbeau", "agent corbeau"),
+    ("Bonjour    Camille", "bonjour camille"),
     ("ACCES AUTORISE", "acces autorise"),
     ("Accès autorisé", "acces autorise"),
     ("Acces autorise ✅", "acces autorise"),
     ("a\r\nb", "a\nb"),
-    ("agent corbeau\nage 17", "agent corbeau\nage 17"),
+    ("bonjour camille\nage 17", "bonjour camille\nage 17"),
 ]
 
 

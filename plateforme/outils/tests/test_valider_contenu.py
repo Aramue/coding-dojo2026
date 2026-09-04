@@ -22,14 +22,14 @@ BASE = dict(
     type="ecrire",
     titre="Ton indicatif",
     obligatoire=True,
-    enonce="Affiche Corbeau.",
+    enonce="Affiche Camille.",
     depart="",
     indices=[],
     tests=[
-        {"type": "sortie", "entrees": [], "attendu": "Corbeau"},
+        {"type": "sortie", "entrees": [], "attendu": "Camille"},
         {"type": "interdit", "motif": "xyzzy"},
     ],
-    solution='print("Corbeau")',
+    solution='print("Camille")',
 )
 
 
@@ -44,7 +44,7 @@ def test_solution_qui_echoue_ses_propres_tests_est_signalee(tmp_path):
 
 
 def test_depart_qui_passe_deja_est_signale(tmp_path):
-    ex = ecrire(tmp_path, dict(BASE, depart='print("Corbeau")'))
+    ex = ecrire(tmp_path, dict(BASE, depart='print("Camille")'))
     problemes = verifier_coherence(ex)
     assert any("depart" in p for p in problemes)
 
@@ -54,10 +54,10 @@ def test_solution_violant_son_propre_motif_interdit_est_signalee(tmp_path):
         tmp_path,
         dict(
             BASE,
-            solution='print("Corbeau")',
+            solution='print("Camille")',
             tests=[
-                {"type": "sortie", "entrees": [], "attendu": "Corbeau"},
-                {"type": "interdit", "motif": 'print("Corbeau'},
+                {"type": "sortie", "entrees": [], "attendu": "Camille"},
+                {"type": "interdit", "motif": 'print("Camille'},
             ],
         ),
     )
@@ -70,10 +70,10 @@ def test_motif_interdit_avec_guillemet_est_signale(tmp_path):
         tmp_path,
         dict(
             BASE,
-            solution='nom = "Corbeau"\nprint("Agent", nom)',
+            solution='nom = "Camille"\nprint("Bonjour", nom)',
             tests=[
-                {"type": "sortie", "entrees": [], "attendu": "Agent Corbeau"},
-                {"type": "interdit", "motif": 'Corbeau")'},
+                {"type": "sortie", "entrees": [], "attendu": "Bonjour Camille"},
+                {"type": "interdit", "motif": 'Camille")'},
             ],
         ),
     )
@@ -86,10 +86,10 @@ def test_motif_interdit_nu_est_accepte(tmp_path):
         tmp_path,
         dict(
             BASE,
-            solution='nom = "Corbeau"\nprint("Agent", nom)',
+            solution='nom = "Camille"\nprint("Bonjour", nom)',
             tests=[
-                {"type": "sortie", "entrees": [], "attendu": "Agent Corbeau"},
-                {"type": "interdit", "motif": "Agent Corbeau"},
+                {"type": "sortie", "entrees": [], "attendu": "Bonjour Camille"},
+                {"type": "interdit", "motif": "Bonjour Camille"},
             ],
         ),
     )

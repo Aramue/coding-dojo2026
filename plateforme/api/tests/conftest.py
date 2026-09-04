@@ -1,12 +1,12 @@
 import os
 
-# A positionner avant l'import de app.main : routes_prof.py lit QG_CODE_PROF au
+# A positionner avant l'import de app.main : routes_prof.py lit DOJO_CODE_PROF au
 # chargement du module pour fixer CODE_PROF. Sans defaut ici, un code aleatoire
 # serait tire a chaque lancement et les tests ne pourraient pas le connaitre.
 # "prof-test" (9 caracteres) suffirait a distinguer la valeur de "prof-dev" mais
 # est trop court pour test_le_code_prof_par_defaut_n_est_pas_devinable, qui
 # exige au moins 12 caracteres : d'ou une valeur plus longue.
-os.environ.setdefault("QG_CODE_PROF", "code-prof-test")
+os.environ.setdefault("DOJO_CODE_PROF", "code-prof-test")
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
@@ -35,7 +35,7 @@ def fixture_client():
 
 @pytest.fixture(name="jeton")
 def fixture_jeton(client):
-    reponse = client.post("/session", json={"code_agent": "AGENT-K7M2"})
+    reponse = client.post("/session", json={"code_acces": "DOJO-K7M2"})
     return reponse.json()["jeton"]
 
 

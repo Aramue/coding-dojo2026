@@ -6,7 +6,7 @@ from pathlib import Path
 
 from sqlmodel import Session, SQLModel, create_engine
 
-URL = os.environ.get("QG_BDD", "sqlite:///./donnees/qg.db")
+URL = os.environ.get("DOJO_BDD", "sqlite:///./donnees/dojo.db")
 
 # SQLite ne cree pas le dossier parent : sans cela, le premier demarrage echoue,
 # y compris sous TestClient qui declenche le cycle de vie de l'application.

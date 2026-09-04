@@ -22,7 +22,7 @@ export function App() {
     () => new Executeur(() => new Worker(new URL('./execution/worker.ts', import.meta.url))),
     [],
   )
-  const [codeAgent, setCodeAgent] = useState<string | null>(null)
+  const [codeAcces, setCodeAcces] = useState<string | null>(null)
   const [exercices, setExercices] = useState<Exercice[]>([])
   const [reussis, setReussis] = useState<string[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
@@ -33,10 +33,10 @@ export function App() {
     const identifiant = await client.ouvrirSession(code)
     setExercices(await chargerParcours())
     setReussis(await client.lireParcours())
-    setCodeAgent(identifiant)
+    setCodeAcces(identifiant)
   }
 
-  if (!codeAgent) {
+  if (!codeAcces) {
     return (
       <div className="appli">
         <Entete />
@@ -48,7 +48,7 @@ export function App() {
   if (!exercices.length) {
     return (
       <div className="appli">
-        <Entete codeAgent={codeAgent} />
+        <Entete codeAcces={codeAcces} />
         <p className="chargement">Chargement des exercices…</p>
       </div>
     )
@@ -60,7 +60,7 @@ export function App() {
   if (!courant) {
     return (
       <div className="appli">
-        <Entete codeAgent={codeAgent} total={exercices.length} faits={faits} />
+        <Entete codeAcces={codeAcces} total={exercices.length} faits={faits} />
         <main className="fin">
           <div className="fin__carte">
             <p className="fin__compte">{faits}</p>
@@ -78,7 +78,7 @@ export function App() {
   return (
     <div className="appli">
       <Entete
-        codeAgent={codeAgent}
+        codeAcces={codeAcces}
         concept={CONCEPTS[courant.famille]}
         total={exercices.length}
         faits={faits}
@@ -117,12 +117,12 @@ export function App() {
 }
 
 function Entete({
-  codeAgent,
+  codeAcces,
   concept,
   total,
   faits,
 }: {
-  codeAgent?: string
+  codeAcces?: string
   concept?: string
   total?: number
   faits?: number
@@ -134,7 +134,7 @@ function Entete({
       </span>
       {concept && <span className="entete__concept">{concept}</span>}
       {total !== undefined && faits !== undefined && <Progression total={total} faits={faits} />}
-      {codeAgent && <span className="entete__code mono">{codeAgent}</span>}
+      {codeAcces && <span className="entete__code mono">{codeAcces}</span>}
     </header>
   )
 }

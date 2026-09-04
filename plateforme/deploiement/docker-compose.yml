@@ -4,8 +4,8 @@ services:
       context: ..
       dockerfile: deploiement/Dockerfile.api
     environment:
-      QG_SECRET: ${QG_SECRET:?definir QG_SECRET dans .env}
-      QG_CODE_PROF: ${QG_CODE_PROF:?definir QG_CODE_PROF dans .env}
+      DOJO_SECRET: ${DOJO_SECRET:?definir DOJO_SECRET dans .env}
+      DOJO_CODE_PROF: ${DOJO_CODE_PROF:?definir DOJO_CODE_PROF dans .env}
     volumes:
       - donnees:/app/donnees
     restart: unless-stopped
@@ -15,7 +15,7 @@ services:
       context: ..
       dockerfile: deploiement/Dockerfile.web
     environment:
-      QG_DOMAINE: ${QG_DOMAINE:-localhost}
+      DOJO_DOMAINE: ${DOJO_DOMAINE:-localhost}
     ports:
       - "80:80"
       - "443:443"

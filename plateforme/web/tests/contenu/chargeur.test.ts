@@ -9,7 +9,7 @@ const exercice = (tests: Exercice['tests']): Exercice => ({
   seance: 1,
   niveau: 'normal',
   type: 'completer',
-  titre: 'Range le nom de l agent',
+  titre: 'Range un prenom',
   obligatoire: true,
   enonce: '',
   depart: '',

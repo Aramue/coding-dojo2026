@@ -33,7 +33,7 @@ export function EcranConnexion({ onConnecte }: { onConnecte: (code: string) => P
             id="code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="AGENT-K7M2"
+            placeholder="DOJO-K7M2"
             autoComplete="off"
             autoCapitalize="characters"
             spellCheck={false}

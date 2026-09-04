@@ -14,18 +14,18 @@ const execution = (p: Partial<ResultatExecution> = {}): ResultatExecution => ({
 describe('evaluer', () => {
   it('rend VERT quand la sortie est exacte', () => {
     const r = evaluer({
-      code: 'print("Agent Corbeau")',
-      tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau' }],
-      executions: [execution({ stdout: 'Agent Corbeau\n' })],
+      code: 'print("Bonjour Camille")',
+      tests: [{ type: 'sortie', entrees: [], attendu: 'Bonjour Camille' }],
+      executions: [execution({ stdout: 'Bonjour Camille\n' })],
     })
     expect(r.verdict).toBe('vert')
   })
 
   it('rend BLEU quand seul le format differe, et fournit un diff', () => {
     const r = evaluer({
-      code: 'print("agent  corbeau")',
-      tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau' }],
-      executions: [execution({ stdout: 'agent  corbeau\n' })],
+      code: 'print("bonjour  camille")',
+      tests: [{ type: 'sortie', entrees: [], attendu: 'Bonjour Camille' }],
+      executions: [execution({ stdout: 'bonjour  camille\n' })],
     })
     expect(r.verdict).toBe('bleu')
     expect(r.diff).toBeDefined()
@@ -35,7 +35,7 @@ describe('evaluer', () => {
   it('rend ROUGE quand la sortie est vraiment differente', () => {
     const r = evaluer({
       code: 'print("Bonjour")',
-      tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau' }],
+      tests: [{ type: 'sortie', entrees: [], attendu: 'Bonjour Camille' }],
       executions: [execution({ stdout: 'Bonjour\n' })],
     })
     expect(r.verdict).toBe('rouge')
@@ -43,9 +43,9 @@ describe('evaluer', () => {
 
   it('exige le VERT quand exigeExact est vrai', () => {
     const r = evaluer({
-      code: 'print("agent corbeau")',
-      tests: [{ type: 'sortie', entrees: [], attendu: 'Agent Corbeau', exigeExact: true }],
-      executions: [execution({ stdout: 'agent corbeau\n' })],
+      code: 'print("bonjour camille")',
+      tests: [{ type: 'sortie', entrees: [], attendu: 'Bonjour Camille', exigeExact: true }],
+      executions: [execution({ stdout: 'bonjour camille\n' })],
     })
     expect(r.verdict).toBe('rouge')
   })
@@ -84,12 +84,12 @@ describe('evaluer', () => {
   })
 
   it('rejette un motif interdit avant tout autre test', () => {
-    const exec = execution({ stdout: 'Agent Corbeau\n' })
+    const exec = execution({ stdout: 'Bonjour Camille\n' })
     const r = evaluer({
-      code: 'print("Agent Corbeau")',
+      code: 'print("Bonjour Camille")',
       tests: [
-        { type: 'interdit', motif: 'print("Agent' },
-        { type: 'sortie', entrees: [], attendu: 'Agent Corbeau' },
+        { type: 'interdit', motif: 'print("Bonjour' },
+        { type: 'sortie', entrees: [], attendu: 'Bonjour Camille' },
       ],
       executions: [exec, exec],
     })
@@ -134,14 +134,14 @@ describe('evaluer', () => {
 
   it('rend BLEU global si un test est bleu et les autres verts', () => {
     const exec = execution({
-      stdout: 'agent corbeau\n',
-      variables: { nom: { valeur: "'Corbeau'", type: 'str' } },
+      stdout: 'bonjour camille\n',
+      variables: { nom: { valeur: "'Camille'", type: 'str' } },
     })
     const r = evaluer({
-      code: 'nom = "Corbeau"\nprint("agent corbeau")',
+      code: 'nom = "Camille"\nprint("bonjour camille")',
       tests: [
         { type: 'variable', nom: 'nom', typeAttendu: 'str' },
-        { type: 'sortie', entrees: [], attendu: 'Agent Corbeau' },
+        { type: 'sortie', entrees: [], attendu: 'Bonjour Camille' },
       ],
       executions: [exec, exec],
     })

@@ -23,10 +23,10 @@ describe('diffCaracteres', () => {
   })
 
   it('signale une espace en trop, le cas le plus frequent', () => {
-    expect(diffCaracteres('Agent Corbeau', 'Agent  Corbeau')).toEqual([
-      { type: 'egal', texte: 'Agent ' },
+    expect(diffCaracteres('Bonjour Camille', 'Bonjour  Camille')).toEqual([
+      { type: 'egal', texte: 'Bonjour ' },
       { type: 'ajout', texte: ' ' },
-      { type: 'egal', texte: 'Corbeau' },
+      { type: 'egal', texte: 'Camille' },
     ])
   })
 

@@ -11,10 +11,10 @@ def maintenant() -> datetime:
     return datetime.now(timezone.utc)
 
 
-class Agent(SQLModel, table=True):
+class Eleve(SQLModel, table=True):
     """Un eleve, connu uniquement par son code pseudonyme."""
 
-    code_agent: str = Field(primary_key=True)
+    code_acces: str = Field(primary_key=True)
     cree_le: datetime = Field(default_factory=maintenant)
     vu_le: datetime = Field(default_factory=maintenant)
 
@@ -23,7 +23,7 @@ class Tentative(SQLModel, table=True):
     """Une soumission. Ne contient jamais le code ecrit par l'eleve."""
 
     id: int | None = Field(default=None, primary_key=True)
-    code_agent: str = Field(foreign_key="agent.code_agent", index=True)
+    code_acces: str = Field(foreign_key="eleve.code_acces", index=True)
     exercice_id: str = Field(index=True)
     verdict: str  # vert | bleu | rouge
     type_erreur: str | None = None  # "TypeError", "NameError", ...

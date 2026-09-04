@@ -14,14 +14,14 @@ BASE = dict(
     type="ecrire",
     titre="Ton indicatif",
     obligatoire=True,
-    enonce="Affiche Corbeau.",
+    enonce="Affiche Camille.",
     depart="",
     indices=[],
     tests=[
-        {"type": "sortie", "entrees": [], "attendu": "Corbeau"},
+        {"type": "sortie", "entrees": [], "attendu": "Camille"},
         {"type": "interdit", "motif": "xyzzy"},
     ],
-    solution='print("Corbeau")',
+    solution='print("Camille")',
 )
 
 
@@ -49,7 +49,7 @@ def test_la_solution_n_est_jamais_publiee(tmp_path):
 
     brut = (sortie / "seance-1.json").read_text(encoding="utf-8")
     assert "solution" not in brut
-    assert "Corbeau" in brut  # l'attendu, lui, est bien present
+    assert "Camille" in brut  # l'attendu, lui, est bien present
 
 
 def test_un_contenu_incoherent_fait_echouer_la_construction(tmp_path):
@@ -63,13 +63,13 @@ def test_les_cles_sont_converties_en_camel_case(tmp_path):
     donnees = dict(BASE)
     donnees["tests"] = [
         {"type": "variable", "nom": "age", "type_attendu": "int"},
-        {"type": "sortie", "entrees": [], "attendu": "Corbeau", "exige_exact": True},
+        {"type": "sortie", "entrees": [], "attendu": "Camille", "exige_exact": True},
     ]
     donnees["type"] = "completer"
     # La solution doit satisfaire ses propres tests (verifier_coherence
     # l'exige) : elle doit donc aussi definir `age`, sans quoi la construction
     # echoue avant meme d'atteindre la conversion camelCase que ce test vise.
-    donnees["solution"] = 'age = 12\nprint("Corbeau")'
+    donnees["solution"] = 'age = 12\nprint("Camille")'
     _ecrire(tmp_path / "seance-1", donnees)
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)

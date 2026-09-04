@@ -130,12 +130,21 @@ Démontré en conditions réelles. Détail dans [[ADR-008 Validation serveur des
 
 ### Aucun secret n'a de valeur par défaut devinable
 
-`QG_SECRET` et `QG_CODE_PROF` : à défaut de configuration, un secret **aléatoire** est tiré et un
-avertissement est émis.
+`DOJO_SECRET` et `DOJO_CODE_PROF` : à défaut de configuration, un secret **aléatoire** est tiré et
+un avertissement est émis.
 
 **Ce qui casse :** une valeur par défaut publiée dans le dépôt laisse forger un jeton pour
-n'importe quel agent, ou obtenir l'accès professeur. Un secret aléatoire échoue de façon visible
+n'importe quel élève, ou obtenir l'accès professeur. Un secret aléatoire échoue de façon visible
 et bénigne — les élèves se reconnectent. Une clé publiée échoue en silence et gravement.
+
+### Renommer une variable d'environnement casse le déploiement, pas les tests
+
+Le 4 septembre 2026, `QG_SECRET`, `QG_CODE_PROF`, `QG_BDD` et `QG_DOMAINE` sont devenues
+`DOJO_*`. ==Aucun test n'aurait signalé un `.env` oublié== : le fichier est hors dépôt, et
+`docker compose` refuse alors de démarrer avec un message qui ne nomme que la nouvelle variable.
+
+**Ce qui casse :** un `.env` de production laissé sur les anciens noms. Le `.env` local a été mis
+à jour ; ==celui du serveur UNIGE doit l'être aussi avant le prochain déploiement==.
 
 ## Déploiement
 

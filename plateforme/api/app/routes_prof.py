@@ -18,18 +18,18 @@ from .modeles import Tentative, Verrou
 
 routeur = APIRouter(prefix="/prof")
 
-_code_fourni = os.environ.get("QG_CODE_PROF")
+_code_fourni = os.environ.get("DOJO_CODE_PROF")
 if _code_fourni:
     CODE_PROF = _code_fourni
 else:
-    # Meme raisonnement que pour QG_SECRET : un code par defaut devinable
+    # Meme raisonnement que pour DOJO_SECRET : un code par defaut devinable
     # ("prof-dev") donnerait a n'importe quel eleve la progression de toute la
     # classe et la main sur les verrous. Un code aleatoire echoue de facon
     # visible ; un code publie echoue en silence.
     CODE_PROF = secrets.token_urlsafe(12)
     warnings.warn(
-        "QG_CODE_PROF n'est pas defini : code professeur aleatoire pour cette "
-        f"execution -> {CODE_PROF}. Definis QG_CODE_PROF en production.",
+        "DOJO_CODE_PROF n'est pas defini : code professeur aleatoire pour cette "
+        f"execution -> {CODE_PROF}. Definis DOJO_CODE_PROF en production.",
         stacklevel=2,
     )
 
@@ -66,13 +66,13 @@ class DemandeVerrou(BaseModel):
 def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
     tentatives = session.exec(select(Tentative).order_by(Tentative.horodatage)).all()
 
-    par_agent: dict[str, list[Tentative]] = {}
+    par_eleve: dict[str, list[Tentative]] = {}
     for t in tentatives:
-        par_agent.setdefault(t.code_agent, []).append(t)
+        par_eleve.setdefault(t.code_acces, []).append(t)
 
     maintenant = datetime.now(timezone.utc)
-    agents = []
-    for code, liste in par_agent.items():
+    eleves = []
+    for code, liste in par_eleve.items():
         derniere = liste[-1]
 
         echecs = 0
@@ -94,9 +94,9 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
         else:
             statut = "en_cours"
 
-        agents.append(
+        eleves.append(
             {
-                "code_agent": code,
+                "code_acces": code,
                 "exercice_id": derniere.exercice_id,
                 "statut": statut,
                 "echecs_consecutifs": echecs,
@@ -114,8 +114,8 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
     # annonce mais jamais produit est pire qu'un statut absent : "reussis"
     # suffit deja a voir qui avance.
     ordre = {"bloque": 0, "inactif": 1, "en_cours": 2}
-    agents.sort(key=lambda a: (ordre[a["statut"]], -a["inactif_depuis_s"]))
-    return {"agents": agents}
+    eleves.sort(key=lambda a: (ordre[a["statut"]], -a["inactif_depuis_s"]))
+    return {"eleves": eleves}
 
 
 @routeur.post("/verrou", dependencies=[Depends(verifier_prof)])

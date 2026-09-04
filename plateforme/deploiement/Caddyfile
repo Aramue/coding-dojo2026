@@ -1,4 +1,4 @@
-http://{$QG_DOMAINE:localhost}, https://{$QG_DOMAINE:localhost} {
+http://{$DOJO_DOMAINE:localhost}, https://{$DOJO_DOMAINE:localhost} {
 	# Les deux schemas sont explicites : Caddy exclut de la redirection HTTPS
 	# automatique tout hote qui apparait dans un bloc http:// declare — sans
 	# quoi il redirige tout HTTP en 308 des qu'un nom d'hote est configure

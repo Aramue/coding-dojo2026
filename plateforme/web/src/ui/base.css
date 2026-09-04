@@ -20,7 +20,7 @@ h1, h2, h3 { font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; text
 
 /*
  * La chasse fixe est reservee au code, aux valeurs hexadecimales et aux
- * identifiants d'agent. Jamais de libelle d'interface en monospace,
+ * identifiants d'eleve. Jamais de libelle d'interface en monospace,
  * jamais de capitales interlettrees : voir ADR-005.
  */
 .mono { font-family: var(--police-code); }

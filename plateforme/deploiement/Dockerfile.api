@@ -4,6 +4,6 @@ COPY api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY api/app ./app
 RUN mkdir -p /app/donnees
-ENV QG_BDD=sqlite:////app/donnees/qg.db
+ENV DOJO_BDD=sqlite:////app/donnees/dojo.db
 EXPOSE 8000
 CMD ["uvicorn", "app.main:application", "--host", "0.0.0.0", "--port", "8000"]

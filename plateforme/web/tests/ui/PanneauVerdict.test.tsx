@@ -21,9 +21,9 @@ describe('PanneauVerdict', () => {
           verdict: 'bleu',
           titre: 'Ta logique est correcte, le format est à ajuster.',
           diff: [
-            { type: 'egal', texte: 'Agent·' },
+            { type: 'egal', texte: 'Bonjour·' },
             { type: 'ajout', texte: '·' },
-            { type: 'egal', texte: 'Corbeau' },
+            { type: 'egal', texte: 'Camille' },
           ],
         }}
       />,

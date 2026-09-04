@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import './TableauDeBord.css'
 
-type LigneAgent = {
-  code_agent: string
+type LigneEleve = {
+  code_acces: string
   exercice_id: string
   // Pas de "termine" : le determiner supposerait de connaitre le nombre total
   // d'exercices de la seance, une donnee que seul le front possede. Le faire
@@ -15,7 +15,7 @@ type LigneAgent = {
   reussis: number
 }
 
-const LIBELLES: Record<LigneAgent['statut'], string> = {
+const LIBELLES: Record<LigneEleve['statut'], string> = {
   bloque: 'Bloqué',
   inactif: 'Inactif',
   en_cours: 'En cours',
@@ -26,7 +26,7 @@ function minutes(secondes: number): string {
 }
 
 export function TableauDeBord({ codeProf }: { codeProf: string }) {
-  const [agents, setAgents] = useState<LigneAgent[]>([])
+  const [eleves, setEleves] = useState<LigneEleve[]>([])
   const [erreur, setErreur] = useState<string | null>(null)
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
         if (!reponse.ok) throw new Error('Accès refusé.')
         const donnees = await reponse.json()
         if (vivant) {
-          setAgents(donnees.agents)
+          setEleves(donnees.eleves)
           setErreur(null)
         }
       } catch (e) {
@@ -56,13 +56,13 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
     <main className="tableau">
       <header className="tableau__entete">
         <h1>Séance en cours</h1>
-        <p>{agents.length} agents connectés</p>
+        <p>{eleves.length} élèves connectés</p>
       </header>
       {erreur && <p role="alert">{erreur}</p>}
       <div className="tableau__lignes">
-        {agents.map((a) => (
-          <article key={a.code_agent} className={`ligne ligne--${a.statut}`}>
-            <span className="mono ligne__agent">{a.code_agent}</span>
+        {eleves.map((a) => (
+          <article key={a.code_acces} className={`ligne ligne--${a.statut}`}>
+            <span className="mono ligne__eleve">{a.code_acces}</span>
             <span className="ligne__ou">{a.exercice_id}</span>
             <span className="ligne__quoi">
               {a.statut === 'bloque' &&

@@ -16,10 +16,10 @@ BASE = dict(
     depart="",
     indices=[],
     tests=[
-        {"type": "sortie", "entrees": ["Corbeau"], "attendu": "A REMPLIR"},
+        {"type": "sortie", "entrees": ["Camille"], "attendu": "A REMPLIR"},
         {"type": "interdit", "motif": "xyzzy"},
     ],
-    solution='nom = input("Nom : ")\nprint(f"Agent {nom}")',
+    solution='nom = input("Nom : ")\nprint(f"Bonjour {nom}")',
 )
 
 
@@ -31,13 +31,13 @@ def test_remplit_l_attendu_depuis_la_solution(tmp_path):
 
     assert modifies == ["s1-03#0"]
     relu = yaml.safe_load(chemin.read_text(encoding="utf-8"))
-    assert relu["tests"][0]["attendu"] == "Nom : Corbeau\nAgent Corbeau\n"
+    assert relu["tests"][0]["attendu"] == "Nom : Camille\nBonjour Camille\n"
 
 
 def test_ne_touche_pas_un_attendu_deja_correct(tmp_path):
     donnees = dict(BASE)
     donnees["tests"] = [
-        {"type": "sortie", "entrees": ["Corbeau"], "attendu": "Nom : Corbeau\nAgent Corbeau"},
+        {"type": "sortie", "entrees": ["Camille"], "attendu": "Nom : Camille\nBonjour Camille"},
         {"type": "interdit", "motif": "xyzzy"},
     ]
     chemin = tmp_path / "s1-03.yaml"
@@ -79,7 +79,7 @@ type: ecrire
 titre: Interrogatoire
 obligatoire: true
 enonce: |
-  Demande le nom de l'agent,
+  Demande le nom de l'eleve,
   puis affiche-le.
 depart: ''
 indices: []
@@ -87,13 +87,13 @@ tests:
   # Une seule entree simulee suffit.
   - type: sortie
     entrees:
-      - Corbeau
+      - Camille
     attendu: A REMPLIR
   - type: interdit
     motif: xyzzy
 solution: |
   nom = input("Nom : ")
-  print(f"Agent {nom}")
+  print(f"Bonjour {nom}")
 """
 
 

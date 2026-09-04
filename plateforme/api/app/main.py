@@ -15,7 +15,7 @@ async def cycle_de_vie(app: FastAPI):
     yield
 
 
-application = FastAPI(title="Quartier General", lifespan=cycle_de_vie)
+application = FastAPI(title="Coding Dojo", lifespan=cycle_de_vie)
 application.include_router(routeur_eleve)
 application.include_router(routeur_prof)
 
