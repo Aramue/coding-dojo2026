@@ -38,8 +38,10 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Implémentation du palier 1 | ✅ **livrée** — 14 tâches, branche `palier-1` |
 | Spécification de l'interface | ✅ écrite — [[Spécification interface]] |
 | Plan de l'interface | ✅ écrit — [[Plan interface]], 16 tâches |
-| Implémentation de l'interface | ⬜ à faire |
-| Retrait de la fiction (code, contenu, vault) | ⬜ à faire — [[Plan interface]] tâches 1, 15, 16 |
+| Implémentation de l'interface | ✅ **livrée** — tâches 1 à 14, branche `palier-1` |
+| Retrait de la fiction — code et base | ✅ livré |
+| Retrait de la fiction — 25 énoncés | ⬜ à faire — [[Plan interface]] tâche 15 |
+| Retrait de la fiction — vault | ⬜ à faire — [[Plan interface]] tâche 16 |
 | Revue finale de branche | ⬜ à faire |
 
 ## Ce qui tourne aujourd'hui
@@ -48,10 +50,10 @@ Le code vit dans `plateforme/`, sur la branche `palier-1`.
 
 | Partie | État |
 |---|---|
-| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **66 tests** |
-| `api/` | FastAPI + SQLite, **27 tests** |
-| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **38 tests** |
-| `contenu/` | **25 exercices** de la séance 1 : 12 `predire`, 5 `debug`, 5 `completer`, 3 `ecrire` |
+| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **168 tests**, couverture 82 % |
+| `api/` | FastAPI + SQLite, **30 tests** |
+| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **81 tests**, couverture 89 % |
+| `contenu/` | **25 exercices** de la séance 1 (12 `predire`, 5 `debug`, 5 `completer`, 3 `ecrire`) et **4 leçons** |
 | `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
 
 Un parcours complet a été joué dans un navigateur : connexion par code d'agent, résolution des
@@ -78,7 +80,7 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'agen
 ## Cartes du coffre
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
-- **Décisions** — [[Journal de décisions]]
+- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Terminal QG]] · [[Archive des agents tombés]] · [[Types d'exercices]] · [[Plan de production]]

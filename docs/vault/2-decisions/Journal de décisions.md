@@ -34,6 +34,8 @@ Ce sont celles qu'un lecteur risque le plus de défaire par ignorance.
   Le worker est classique, pas un module : Vite refuse de servir `public/` à un `import()`.
 - **008** — [[ADR-008 Validation serveur des champs libres]]
   Toute chaîne acceptée par l'API est validée par motif ou liste blanche, **côté serveur**.
+- **009** — [[ADR-009 Routage maison sans bibliothèque]]
+  Quatre formes de chemin sur l'API History. Une fonction pure porte la logique, pas un routeur.
 
 ## Le fil conducteur
 
@@ -50,6 +52,20 @@ graph TD
     D["Identité visuelle<br/>déjà existante"] --> A6["ADR-006<br/>Palette des decks"]
     A6 --> A5["ADR-005<br/>General Sans"]
 ```
+
+## Décisions prises sans ADR
+
+Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans le code.
+
+- **La couleur suit la notion, pas le concept** (4 septembre 2026). La table `FAMILLES` mappait
+  `print → variables` et `input → types` : la séance 1 n'aurait affiché que ==deux couleurs pour
+  quatre notions==. La table `NOTIONS` de `outils/schema.py` est désormais la seule source, et
+  elle est publiée en JSON pour que le front n'en garde aucune copie. Voir
+  [[Spécification interface]].
+- **Un bloc de code de leçon peut déclarer ses entrées simulées** (4 septembre 2026). Sans cela,
+  la leçon sur `input()` ne pouvait montrer aucun exemple : le validateur exécute chaque bloc, et
+  `input()` sans entrée lève `EOFError`. Un bloc qui déclare des entrées ne peut pas être
+  exécutable — le bac à sable du navigateur ne sait pas les fournir.
 
 ## Ce qui n'est pas encore décidé
 

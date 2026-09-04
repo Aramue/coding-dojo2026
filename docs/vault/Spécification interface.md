@@ -3,7 +3,7 @@ title: Spécification interface
 tags:
   - specification
   - interface
-statut: à relire
+statut: livrée
 date: 2026-09-03
 ---
 

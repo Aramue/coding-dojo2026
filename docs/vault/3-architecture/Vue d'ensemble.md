@@ -45,9 +45,34 @@ graph LR
 
 - [[Moteur d'exécution]] — comment le Python tourne, et comment on tue une boucle infinie
 - [[Moteur de validation]] — les quatre types de test
-- [[Modèle de contenu]] — la structure d'un exercice
+- [[Modèle de contenu]] — la structure d'un exercice et d'une leçon
 - [[Messages d'erreur en français]] — la pièce qui remplace le professeur
 - [[Déploiement UNIGE]] — conteneurs, sauvegardes, dossier de sécurité
+- [[Pièges et invariants]] — ce qui a l'air arbitraire et ne l'est pas
+- [[ADR-009 Routage maison sans bibliothèque]] — les quatre formes d'adresse
+
+## Les pièces du front
+
+```
+web/src/
+  routage.ts              analyser() · versChemin() · naviguer() · useRoute()
+  app.tsx                 la coquille : en-tête, menu, aiguillage, alerte réseau
+  contenu/
+    types.ts              Exercice · Notion · Lecon · Bloc
+    chargeur.ts           chargerJson() et les trois chargeurs
+    notions.ts            grouper() · premiereOuverte()   (fonctions pures)
+  ui/
+    Menu.tsx              la colonne permanente des notions
+    PageCours.tsx         la leçon d'une notion, sur fond pastel
+    BacASable.tsx         « Essayer » : un éditeur sans verdict ni progression
+    PageExercices.tsx     la liste d'exercices d'une notion
+    EcranExercice.tsx     un exercice ouvert, sur fond sombre
+    EcranConnexion.tsx    la porte d'entrée
+    texte.tsx             formaterTexte() : **gras** et `code`, rien d'autre
+```
+
+==La logique vit dans les fonctions pures== — `routage.ts`, `notions.ts`, `texte.tsx`,
+`validation/` — qui se testent sans DOM ni serveur. Les composants affichent et délèguent.
 
 ## Ce que l'API expose
 
@@ -55,8 +80,8 @@ Volontairement minimal — chaque point d'entrée supplémentaire est du code à
 
 | Route | Rôle |
 |---|---|
-| `POST /session` | Échange un code d'agent contre un jeton de session |
-| `GET /parcours` | Renvoie les exercices débloqués pour cet agent |
+| `POST /session` | Échange un code d'accès (`DOJO-XXXX`) contre un jeton de session |
+| `GET /parcours` | Renvoie les exercices déjà réussis par cet élève |
 | `POST /tentative` | Enregistre une tentative : exercice, verdict, type d'erreur, durée |
 | `GET /prof/seance` | Alimente le tableau de bord — voir [[ADR-002 Identification par code d'agent]] |
 | `POST /prof/verrou` | Ouvre ou ferme un concept pour toute la classe |

@@ -146,6 +146,35 @@ Le 4 septembre 2026, `QG_SECRET`, `QG_CODE_PROF`, `QG_BDD` et `QG_DOMAINE` sont 
 **Ce qui casse :** un `.env` de production laissé sur les anciens noms. Le `.env` local a été mis
 à jour ; ==celui du serveur UNIGE doit l'être aussi avant le prochain déploiement==.
 
+## Interface
+
+### Le compteur du menu se dérive, il ne se stocke pas
+
+`groupes` est calculé par `useMemo` à partir de `reussis`. Une première version le stockait dans
+un `useState` rempli à la connexion.
+
+**Ce qui casse :** valider un exercice affichait bien son verdict, mais ==le menu restait sur son
+compteur d'origine== — 0/6 après une réussite. Aucun test unitaire ne l'aurait vu : le bug n'existe
+qu'à l'assemblage. Trouvé en résolvant un exercice à la main dans le conteneur.
+
+### Le fil d'Ariane touche `EcranExercice`, sa logique reste interdite
+
+`EcranExercice` orchestre **une exécution par test**, séquentiellement, avec cache par jeu
+d'entrées. ==Seul le JSX du `return` a été modifié== pour ajouter le fil d'Ariane ; `valider()`
+n'a pas bougé d'une ligne.
+
+**Ce qui casse :** un exercice comme `s1-30`, `s1-31` ou `s1-34` déclare plusieurs tests `sortie`
+avec des entrées différentes. Réutiliser une exécution partagée compare la sortie obtenue avec les
+entrées A à l'attendu écrit pour les entrées B. Trois rondes de correction.
+
+### Une lecture directe de `executions[i]` suppose l'alignement 1:1
+
+`evaluer` indexe `executions` par le rang du test, avec un `!` non nul.
+
+**Ce qui casse :** un appelant qui fournit moins d'exécutions que de tests fait planter
+`evaluerUn` sur un `undefined`. `EcranExercice` maintient l'alignement en poussant une exécution
+vide pour les tests qui n'exécutent rien (`interdit`, `contient`, `qcm`).
+
 ## Déploiement
 
 ### Le WebAssembly doit être servi en `application/wasm`
