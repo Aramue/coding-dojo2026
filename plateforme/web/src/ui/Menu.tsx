@@ -17,24 +17,38 @@ export function Menu({
 }) {
   return (
     <nav className="menu" aria-label="Notions de la séance">
+      <p className="menu__titre-seance">Séance 1</p>
       <ol className="menu__liste">
-        {groupes.map((groupe) => (
-          <li key={groupe.id} className="menu__notion" data-famille={groupe.famille}>
-            <span className="menu__pastille" aria-hidden="true" />
-            <span className="menu__titre">{groupe.titre}</span>
-            <span className="menu__avancement">
-              {groupe.faits} / {groupe.exercices.length}
-            </span>
-            <span className="menu__liens">
-              <Lien cible={{ vue: 'cours', notion: groupe.id }} destination={destination}>
-                Cours
-              </Lien>
-              <Lien cible={{ vue: 'exercices', notion: groupe.id }} destination={destination}>
-                Exercices
-              </Lien>
-            </span>
-          </li>
-        ))}
+        {groupes.map((groupe) => {
+          const courante = 'notion' in destination && destination.notion === groupe.id
+          const total = groupe.exercices.length
+          return (
+            <li
+              key={groupe.id}
+              className={'menu__notion' + (courante ? ' menu__notion--courante' : '')}
+              data-famille={groupe.famille}
+            >
+              <div className="menu__ligne">
+                <span className="menu__pastille" aria-hidden="true" />
+                <span className="menu__titre">{groupe.titre}</span>
+                <span className="menu__avancement">
+                  {groupe.faits} / {total}
+                </span>
+              </div>
+              <div className="menu__jauge" aria-hidden="true">
+                <span style={{ width: `${total === 0 ? 0 : (groupe.faits / total) * 100}%` }} />
+              </div>
+              <div className="menu__liens">
+                <Lien cible={{ vue: 'cours', notion: groupe.id }} destination={destination}>
+                  Cours
+                </Lien>
+                <Lien cible={{ vue: 'exercices', notion: groupe.id }} destination={destination}>
+                  Exercices
+                </Lien>
+              </div>
+            </li>
+          )
+        })}
       </ol>
     </nav>
   )

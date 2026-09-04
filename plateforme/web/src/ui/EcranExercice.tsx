@@ -8,6 +8,7 @@ import type { ResultatExecution } from '../execution/types'
 import { evaluer } from '../validation/evaluer'
 import type { ResultatTest, Test } from '../validation/types'
 import { CarteCode } from './CarteCode'
+import { decouperEnonce, formaterTexte } from './texte'
 import { Editeur } from './Editeur'
 import { PanneauVerdict } from './PanneauVerdict'
 
@@ -139,7 +140,23 @@ export function EcranExercice({
 
       <div className="exercice__grille">
         <section className="exercice__enonce">
-          <p>{exercice.enonce.trim()}</p>
+          {decouperEnonce(exercice.enonce).map((bloc, i) => {
+            if (bloc.genre === 'sortie') {
+              return (
+                <pre key={i} className="enonce__sortie">
+                  {bloc.texte}
+                </pre>
+              )
+            }
+            if (bloc.genre === 'liste') {
+              return (
+                <p key={i} className="enonce__liste">
+                  {formaterTexte(bloc.texte)}
+                </p>
+              )
+            }
+            return <p key={i}>{formaterTexte(bloc.texte)}</p>
+          })}
 
           {/*
             Un exercice « predire » demande de LIRE un programme : sans cet

@@ -1,39 +1,46 @@
 /*
- * La premiere chose que voient vingt-quatre eleves le 16 septembre. Carte
- * centree, un seul champ, un seul bouton : rien d'autre a comprendre.
+ * La première chose que voient vingt-quatre élèves le 16 septembre. Une carte
+ * centrée, un seul champ, un seul bouton : rien d'autre à comprendre.
  */
 
 .connexion {
   grid-area: contenu;
   display: grid;
   place-items: center;
-  padding: var(--e-4) var(--e-2) var(--e-6);
+  padding: var(--e-5) var(--e-2) var(--e-6);
   background: var(--ground);
 }
 
 .connexion__carte {
-  width: min(26rem, 100%);
+  width: min(27rem, 100%);
   display: flex;
   flex-direction: column;
   gap: var(--e-2);
+  padding: var(--e-4);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-2);
 }
 
 .connexion h1 {
-  font-size: var(--t-6);
+  font-size: var(--t-5);
   color: var(--ink);
+  margin: 0;
 }
 
 .connexion__intro {
   margin: 0;
   font-size: var(--t-3);
   color: var(--ink-soft);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .connexion form {
   display: flex;
   flex-direction: column;
   gap: var(--e-1);
+  margin-top: var(--e-1);
 }
 
 .connexion label {
@@ -43,9 +50,9 @@
 }
 
 /*
- * Le seul endroit hors code ou la chasse fixe est justifiee : c'est un
- * identifiant qu'on recopie caractere par caractere, et l'interlettrage aide
- * a distinguer O de 0 et I de 1.
+ * Le seul endroit hors code où la chasse fixe est justifiée : c'est un
+ * identifiant qu'on recopie caractère par caractère, et l'interlettrage aide
+ * à distinguer O de 0 et I de 1.
  */
 .connexion input {
   font-family: var(--police-code);
@@ -55,8 +62,9 @@
   padding: 0 var(--e-2);
   border: 1px solid var(--rule);
   border-radius: var(--rayon-2);
-  background: #fff;
+  background: var(--surface);
   color: var(--ink);
+  transition: border-color 150ms ease-out;
 }
 
 .connexion input:focus-visible {
@@ -66,7 +74,7 @@
 }
 
 .connexion input::placeholder {
-  color: #8c8478; /* 4.6:1 sur blanc — un placeholder doit rester lisible */
+  color: #8c8478; /* 4,6:1 sur blanc — un placeholder doit rester lisible */
   letter-spacing: 0.08em;
 }
 
@@ -76,12 +84,24 @@
 }
 
 /*
- * Etat desactive : on baisse le contraste du FOND, pas du texte. Un
- * `opacity: 0.55` sur tout le bouton rendait son libelle illisible, alors que
+ * État désactivé : on baisse le contraste du FOND, pas du texte. Un
+ * `opacity: 0.55` sur tout le bouton rendait son libellé illisible, alors que
  * c'est justement lui qui dit quoi faire.
  */
 .connexion .bouton:disabled {
-  opacity: 1;
-  background: var(--rule);
+  background: var(--ground-2);
   color: var(--ink-soft);
+  border-color: var(--rule-doux);
+}
+
+.connexion .alerte {
+  border-radius: var(--rayon-2);
+  padding: var(--e-2);
+  font-size: var(--t-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .connexion input {
+    transition: none;
+  }
 }

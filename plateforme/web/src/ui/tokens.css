@@ -23,6 +23,20 @@
   --ok: #0F5C23;
   --ko: #9C1B15;
 
+  /*
+   * Surfaces. Le fond de page est le neutre chaud ; le CONTENU vit sur une
+   * surface blanche posee dessus. Inonder la page d'un pastel sature donne
+   * l'impression d'une maquette : la couleur de notion sert d'accent, pas de
+   * fond.
+   */
+  --surface: #FFFFFF;
+  --surface-doux: #FCFAF7;
+  --rule-doux: #EDE7DC;
+
+  /* Ombres teintees chaud, pour rester dans la meme lumiere que le fond. */
+  --ombre-1: 0 1px 2px rgb(30 27 22 / 4%), 0 1px 3px rgb(30 27 22 / 6%);
+  --ombre-2: 0 1px 2px rgb(30 27 22 / 4%), 0 8px 24px rgb(30 27 22 / 7%);
+
   /* Rythme 4/8 : toute marge de l'interface sort de cette echelle. */
   --e-1: 0.5rem; --e-2: 1rem; --e-3: 1.5rem; --e-4: 2rem; --e-5: 3rem; --e-6: 4rem;
 

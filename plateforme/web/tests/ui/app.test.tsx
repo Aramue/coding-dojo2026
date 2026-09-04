@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '../../src/app'
 
@@ -126,6 +126,31 @@ describe('App — le menu suit la progression', () => {
     )
     sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
     render(<App />)
-    expect(await screen.findByText('1 / 1')).toBeInTheDocument()
+
+    // L'avancement s'affiche aussi dans l'en-tete : on vise le menu.
+    const menu = await screen.findByRole('navigation', { name: /notions/i })
+    expect(within(menu).getByText('1 / 1')).toBeInTheDocument()
+  })
+
+  it("montre l'avancement global de la seance dans l'en-tete", async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('notions')) return NOTIONS
+          if (url.includes('lecons')) return []
+          if (url.includes('parcours')) return { reussis: ['s1-01'] }
+          if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+          return EXERCICES
+        },
+      })),
+    )
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    render(<App />)
+
+    const jauge = await screen.findByRole('progressbar', { name: /séance/i })
+    expect(jauge).toHaveAttribute('aria-valuenow', '1')
+    expect(jauge).toHaveAttribute('aria-valuemax', '1')
   })
 })

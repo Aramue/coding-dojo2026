@@ -1,91 +1,67 @@
 /*
- * Meme fond pastel que la page Cours : on est encore du cote « je choisis »,
- * pas « j'ecris ». La bascule vers le sombre se fait en ouvrant un exercice.
+ * Une seule carte, des lignes séparées par des filets. Des pastilles flottant
+ * sur un aplat coloré donnaient l'impression d'une maquette : une liste se lit
+ * mieux comme une liste.
  */
 
-.exercices {
-  background: var(--tint);
-  padding: var(--e-5) var(--e-4) var(--e-6);
-  min-height: 100%;
-}
-
-.exercices__entete {
-  max-width: 68ch;
-  margin: 0 auto var(--e-4);
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--e-2);
-}
-
-.exercices__entete h1 {
-  font-size: var(--t-6);
-  color: var(--profond);
-}
-
 .exercices__avancement {
-  margin: 0;
-  font-size: var(--t-3);
   color: var(--encre);
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
 .exercices__liste {
-  max-width: 68ch;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--e-1);
+  overflow: hidden;
 }
 
 .exercices__ligne {
+  position: relative;
   display: grid;
-  grid-template-columns: 2rem 1fr auto;
+  grid-template-columns: 2rem minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--e-2);
-  min-height: 2.75rem; /* 44 px : cible tactile minimale */
-  padding: var(--e-1) var(--e-2);
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: var(--rayon-2);
+  min-height: 3.5rem;
+  padding: var(--e-1) var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
+  transition: background 150ms ease-out;
 }
 
-/* Pastille creuse tant que c'est a faire, pleine avec une coche une fois reussi. */
+.exercices__ligne:last-child {
+  border-bottom: 0;
+}
+
+.exercices__ligne:hover {
+  background: var(--surface-doux);
+}
+
+/* Pastille creuse tant que c'est à faire, pleine avec une coche une fois réussi. */
 .exercices__rang {
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 50%;
   font-size: var(--t-1);
   font-variant-numeric: tabular-nums;
 }
 
 [data-etat='a-faire'] .exercices__rang {
-  border: 1.8px solid var(--encre);
-  color: var(--encre);
+  border: 1.5px solid var(--rule);
+  color: var(--ink-soft);
 }
 
 [data-etat='reussi'] .exercices__rang {
   background: var(--encre);
-  color: var(--ground);
+  color: #fff;
 }
 
 .exercices__lien {
   font-size: var(--t-3);
   color: var(--ink);
   text-decoration: none;
-}
-
-.exercices__lien:hover {
-  text-decoration: underline;
-}
-
-.exercices__lien:focus-visible {
-  outline: 2px solid var(--encre);
-  outline-offset: 3px;
-  border-radius: var(--rayon-1);
 }
 
 /* Le lien couvre toute la ligne : la cible est la ligne, pas le seul texte. */
@@ -95,24 +71,57 @@
   inset: 0;
 }
 
-.exercices__ligne {
-  position: relative;
+.exercices__ligne:hover .exercices__lien {
+  color: var(--encre);
+}
+
+.exercices__lien:focus-visible {
+  outline: none;
+}
+
+.exercices__ligne:has(.exercices__lien:focus-visible) {
+  outline: 2px solid var(--encre);
+  outline-offset: -2px;
+  border-radius: var(--rayon-1);
 }
 
 .exercices__type {
   font-size: var(--t-1);
   color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.exercices__chevron {
+  color: var(--rule);
+  transition: color 150ms ease-out, transform 150ms ease-out;
+}
+
+.exercices__ligne:hover .exercices__chevron {
+  color: var(--encre);
+  transform: translateX(2px);
 }
 
 .exercices__vide {
-  max-width: 68ch;
-  margin: 0 auto;
-  font-size: var(--t-4);
-  color: var(--ink);
+  margin: 0;
+  padding: var(--e-4);
+  font-size: var(--t-3);
+  color: var(--ink-soft);
 }
 
-@media (max-width: 820px) {
-  .exercices {
-    padding: var(--e-3) var(--e-2) var(--e-5);
+@media (max-width: 720px) {
+  .exercices__ligne {
+    grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+    padding: var(--e-1) var(--e-2);
+  }
+
+  .exercices__chevron {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exercices__ligne,
+  .exercices__chevron {
+    transition: none;
   }
 }

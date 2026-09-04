@@ -116,7 +116,7 @@ export function App() {
 
   return (
     <div className="appli">
-      <Entete codeAcces={codeAcces} />
+      <Entete codeAcces={codeAcces} groupes={groupes} />
       <Menu groupes={groupes} destination={destination} />
       {alerte && (
         <p role="alert" className="alerte">
@@ -215,12 +215,38 @@ function Introuvable() {
   )
 }
 
-function Entete({ codeAcces }: { codeAcces?: string }) {
+function Entete({
+  codeAcces,
+  groupes = [],
+}: {
+  codeAcces?: string
+  groupes?: GroupeNotion[]
+}) {
+  const total = groupes.reduce((n, g) => n + g.exercices.length, 0)
+  const faits = groupes.reduce((n, g) => n + g.faits, 0)
+
   return (
     <header className="entete">
       <span className="entete__marque">
         Coding Dojo <span>Python</span>
       </span>
+      {codeAcces && <span className="entete__seance">Séance 1 — les bases de Python</span>}
+      <span className="entete__espace" />
+      {total > 0 && (
+        <span
+          className="entete__avancement"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={total}
+          aria-valuenow={faits}
+          aria-label="Progression dans la séance"
+        >
+          <span className="entete__jauge" aria-hidden="true">
+            <span style={{ width: `${(faits / total) * 100}%` }} />
+          </span>
+          {faits} / {total}
+        </span>
+      )}
       {codeAcces && <span className="entete__code mono">{codeAcces}</span>}
     </header>
   )

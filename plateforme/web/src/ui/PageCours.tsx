@@ -16,28 +16,27 @@ export function PageCours({
 }) {
   const { lecon } = groupe
 
-  if (!lecon) {
-    return (
-      <main className="cours" data-famille={groupe.famille}>
-        <h1>{groupe.titre}</h1>
-        <p className="cours__vide">
-          Il n'y a pas encore de cours pour cette notion. Va directement aux exercices.
-        </p>
-      </main>
-    )
-  }
-
   return (
-    <main className="cours" data-famille={groupe.famille}>
-      <header className="cours__entete">
-        <p className="cours__duree">{lecon.dureeMin} min de lecture</p>
-        <h1>{lecon.titre}</h1>
+    <main className="page" data-famille={groupe.famille}>
+      <header className="page__entete">
+        <p className="page__notion">{groupe.titre}</p>
+        <h1 className="page__titre">{lecon ? lecon.titre : groupe.titre}</h1>
+        {lecon && <p className="page__meta">{lecon.dureeMin} min de lecture</p>}
       </header>
-      <article className="cours__corps">
-        {lecon.blocs.map((bloc, index) => (
-          <BlocRendu key={index} bloc={bloc} executeur={executeur} />
-        ))}
-      </article>
+
+      <div className="page__corps carte">
+        {lecon ? (
+          <article className="cours__corps">
+            {lecon.blocs.map((bloc, index) => (
+              <BlocRendu key={index} bloc={bloc} executeur={executeur} />
+            ))}
+          </article>
+        ) : (
+          <p className="cours__vide">
+            Il n'y a pas encore de cours pour cette notion. Va directement aux exercices.
+          </p>
+        )}
+      </div>
     </main>
   )
 }

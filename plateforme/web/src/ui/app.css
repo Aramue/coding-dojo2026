@@ -1,29 +1,29 @@
 /*
  * Mise en page de l'application.
  *
- * Règle fondatrice, relevée dans les supports de cours : le fond pastel porte
- * ce qu'on lit, le fond sombre porte ce qu'on écrit. L'élève sait où il est
- * sans lire un mot. Les familles de couleur sont posées par `data-famille`.
+ * Principe : le CANEVAS est neutre, le CONTENU vit sur une surface blanche, et
+ * la couleur de la notion sert d'accent — filet, pastille, état actif. Inonder
+ * la page d'un pastel saturé faisait ressembler l'ensemble à une maquette : la
+ * couleur ne portait plus d'information, elle remplissait de l'espace.
+ *
+ * L'écran d'exercice reste sombre. C'est la bascule « j'apprends / j'écris »
+ * relevée dans les supports de cours, et elle se voit sans être expliquée.
  */
 
 /* ---------- Ossature ---------- */
 
-/*
- * Trois zones : l'en-tete en haut, le menu a gauche, la page a droite. Sous
- * 820 px les trois s'empilent et le menu devient une bande defilante.
- */
 .appli {
   min-height: 100vh;
   display: grid;
   grid-template-areas:
     'entete entete'
     'menu contenu';
-  grid-template-columns: 255px 1fr;
+  grid-template-columns: 272px minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   background: var(--ground);
 }
 
-/* Avant connexion, il n'y a pas de menu a placer. */
+/* Avant connexion, il n'y a pas de menu à placer. */
 .appli--seul {
   grid-template-areas:
     'entete'
@@ -33,7 +33,7 @@
 
 .appli > main {
   grid-area: contenu;
-  min-width: 0; /* sans quoi un <pre> large fait deborder toute la grille */
+  min-width: 0; /* sans quoi un <pre> large fait déborder toute la grille */
 }
 
 .appli > .alerte {
@@ -41,16 +41,7 @@
   align-self: start;
 }
 
-.introuvable {
-  padding: var(--e-5) var(--e-4);
-}
-
-.introuvable h1 {
-  font-size: var(--t-6);
-  margin-bottom: var(--e-2);
-}
-
-@media (max-width: 820px) {
+@media (max-width: 900px) {
   .appli {
     grid-template-areas:
       'entete'
@@ -61,60 +52,191 @@
   }
 }
 
+/* ---------- En-tête ---------- */
+
 .entete {
   grid-area: entete;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  padding: 0.9rem clamp(1rem, 4vw, 2rem);
-  border-bottom: 1px solid var(--rule);
-  background: var(--ground);
-  flex-wrap: wrap;
+  gap: var(--e-3);
+  height: 3.5rem;
+  padding: 0 var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
+  background: var(--surface);
 }
 
 .entete__marque {
   font-weight: 700;
-  font-size: 1.02rem;
+  font-size: var(--t-3);
   letter-spacing: -0.02em;
-  margin-right: auto;
+  color: var(--ink);
+  white-space: nowrap;
 }
 
 .entete__marque span {
-  color: var(--py-blue-ink, #2d6b99);
+  color: var(--py-blue);
 }
 
-.entete__concept {
-  font-size: 0.94rem;
+.entete__seance {
+  font-size: var(--t-2);
   color: var(--ink-soft);
+  padding-left: var(--e-3);
+  border-left: 1px solid var(--rule-doux);
+  white-space: nowrap;
+}
+
+.entete__espace {
+  flex: 1;
+}
+
+/* Avancement global de la séance : la seule question qu'on se pose en arrivant. */
+.entete__avancement {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.entete__jauge {
+  width: 7rem;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ground-2);
+  overflow: hidden;
+}
+
+.entete__jauge span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ok);
+  transition: width 250ms ease-out;
 }
 
 .entete__code {
-  font-size: 0.88rem;
+  font-size: var(--t-1);
   color: var(--ink-soft);
-  padding-left: 1.5rem;
-  border-left: 1px solid var(--rule);
+  padding: 0.3rem var(--e-1);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-1);
+  background: var(--surface-doux);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .entete__seance,
+  .entete__jauge {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entete__jauge span {
+    transition: none;
+  }
+}
+
+/* ---------- En-tête de page (Cours et Exercices) ---------- */
+
+.page {
+  padding: var(--e-5) var(--e-4) var(--e-6);
+}
+
+.page__entete {
+  max-width: 72ch;
+  margin: 0 auto var(--e-3);
+}
+
+/* Le sur-titre est le seul endroit où la couleur de notion prend du texte. */
+.page__notion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 var(--e-1);
+  font-size: var(--t-1);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--encre);
+}
+
+.page__notion::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--encre);
+}
+
+.page__titre {
+  font-size: var(--t-6);
+  color: var(--ink);
+  margin: 0;
+}
+
+.page__meta {
+  margin: var(--e-1) 0 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.page__corps {
+  max-width: 72ch;
+  margin: 0 auto;
+}
+
+/* La carte de contenu : c'est elle qui fait la différence avec un fond nu. */
+.carte {
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: var(--e-3) var(--e-2) var(--e-5);
+  }
 }
 
 /* ---------- Boutons ---------- */
 
 .bouton {
   font-family: inherit;
-  font-weight: 600;
-  font-size: 0.98rem;
-  padding: 0.72rem 1.35rem;
-  border-radius: 10px;
+  font-weight: 500;
+  font-size: var(--t-2);
+  padding: 0.65rem var(--e-3);
+  min-height: 2.75rem;
+  border-radius: var(--rayon-2);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: filter 0.15s ease;
+  transition: background 150ms ease-out, border-color 150ms ease-out;
 }
 
-.bouton:hover:not(:disabled) {
-  filter: brightness(1.08);
+.bouton:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
 }
 
 .bouton:disabled {
-  opacity: 0.55;
   cursor: default;
+}
+
+/* Bouton secondaire, sur fond clair. */
+.bouton:not(.bouton--primaire):not(.bouton--sombre) {
+  background: var(--surface);
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
+.bouton:not(.bouton--primaire):not(.bouton--sombre):hover:not(:disabled) {
+  background: var(--ground-2);
+  border-color: var(--ink-soft);
 }
 
 .bouton--primaire {
@@ -122,112 +244,248 @@
   color: #2a2000;
 }
 
+.bouton--primaire:hover:not(:disabled) {
+  background: #ffd35e;
+}
+
 .bouton--sombre {
   background: var(--ink);
   color: var(--ground);
 }
 
+.bouton--sombre:hover:not(:disabled) {
+  background: #33302a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton {
+    transition: none;
+  }
+}
+
+/* ---------- Page introuvable ---------- */
+
+.introuvable {
+  display: grid;
+  place-items: center;
+  padding: var(--e-6) var(--e-4);
+  text-align: center;
+}
+
+.introuvable h1 {
+  font-size: var(--t-5);
+  margin: 0 0 var(--e-1);
+  color: var(--ink);
+}
+
+.introuvable p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* ---------- Alerte réseau ---------- */
+
+.alerte {
+  margin: 0;
+  padding: 0.8rem var(--e-3);
+  background: var(--ko);
+  color: #fff;
+  font-size: var(--t-2);
+}
+
 /* ---------- Écran d'exercice ---------- */
-/* Fond sombre de la famille du concept : ici, on écrit du code. */
+/*
+ * Fond sombre : ici, on écrit du code. Un aplat de la couleur profonde de la
+ * famille était trop saturé pour tenir un écran entier — un voile neutre le
+ * ramène vers un gris chaud très sombre, et l'identité de la notion reste
+ * lisible dans les accents et les bordures.
+ */
 
 .exercice {
-  flex: 1;
-  background: var(--profond, var(--var-deep));
-  color: #ece9f6;
-  padding: clamp(1.1rem, 3vw, 2rem) clamp(1rem, 4vw, 2rem) 3rem;
+  --panneau: rgb(255 255 255 / 4%);
+  --trait: rgb(255 255 255 / 11%);
+  --texte-clair: #e8e5f2;
+  --texte-doux: #b6b0cb;
+
+  background-color: var(--profond, var(--var-deep));
+  background-image: linear-gradient(180deg, rgb(18 16 24 / 45%), rgb(18 16 24 / 68%));
+  color: var(--texte-clair);
+  padding: var(--e-3) var(--e-4) var(--e-6);
+}
+
+.exercice__fil {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.exercice__fil a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.25rem;
+  font-size: var(--t-2);
+  color: var(--texte-doux);
+  text-decoration: none;
+}
+
+.exercice__fil a::before {
+  content: '←';
+}
+
+.exercice__fil a:hover {
+  color: #fff;
+}
+
+.exercice__fil a:focus-visible {
+  outline: 2px solid var(--py-yellow);
+  outline-offset: 3px;
+  border-radius: var(--rayon-1);
 }
 
 .exercice__entete {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--e-2);
   flex-wrap: wrap;
-  max-width: 1120px;
-  margin: 0 auto 1.25rem;
+  max-width: 1180px;
+  margin: var(--e-1) auto var(--e-3);
+  padding-bottom: var(--e-2);
+  border-bottom: 1px solid var(--trait);
 }
 
 .exercice__titre {
-  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  font-size: var(--t-5);
   color: #fff;
+  margin: 0;
 }
 
 .exercice__essais {
-  font-size: 0.9rem;
-  color: #b4add0;
+  font-size: var(--t-1);
+  color: var(--texte-doux);
   font-variant-numeric: tabular-nums;
 }
 
 .exercice__grille {
   display: grid;
-  gap: clamp(1.1rem, 2.5vw, 2rem);
-  max-width: 1120px;
+  gap: var(--e-4);
+  max-width: 1180px;
   margin: 0 auto;
   align-items: start;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 980px) {
   .exercice__grille {
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   }
 }
 
+/* L'énoncé est un panneau, pas du texte posé sur la couleur. */
 .exercice__enonce {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: var(--e-2);
+  padding: var(--e-3);
+  background: var(--panneau);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-3);
 }
 
-.exercice__enonce p {
+.exercice__enonce > p {
   margin: 0;
-  color: #d6d1e8;
-  line-height: 1.6;
+  color: var(--texte-clair);
+  font-size: var(--t-3);
+  line-height: 1.65;
+}
+
+.exercice__enonce > p code {
+  font-family: var(--police-code);
+  font-size: 0.88em;
+  background: rgb(255 255 255 / 8%);
+  border-radius: var(--rayon-1);
+  padding: 0.08em 0.35em;
+}
+
+/*
+ * Sortie attendue, liste numerotee, message d'erreur : les retours a la ligne
+ * y portent du sens, on les garde tels quels.
+ */
+/* Une liste de consignes reste de la prose : ses retours comptent, sa police non. */
+.enonce__liste {
+  margin: 0;
+  color: var(--texte-clair);
+  font-size: var(--t-3);
+  line-height: 1.65;
   white-space: pre-line;
+}
+
+.enonce__sortie {
+  margin: 0;
+  padding: var(--e-2);
+  background: rgb(0 0 0 / 22%);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-2);
+  font-family: var(--police-code);
+  font-size: var(--t-2);
+  line-height: 1.6;
+  color: var(--d-fg);
+  white-space: pre-wrap;
+  overflow-x: auto;
 }
 
 .exercice__travail {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: var(--e-2);
   min-width: 0;
 }
 
 .exercice__actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--e-2);
   flex-wrap: wrap;
 }
 
 .exercice__note {
-  font-size: 0.84rem;
-  color: #a79ecb;
+  font-size: var(--t-1);
+  color: var(--texte-doux);
+}
+
+@media (max-width: 720px) {
+  .exercice {
+    padding: var(--e-2) var(--e-2) var(--e-5);
+  }
 }
 
 /* ---------- Indices ---------- */
 
 .indice {
   display: flex;
-  gap: 0.6rem;
+  gap: var(--e-1);
   align-items: flex-start;
-  padding: 0.7rem 0.85rem;
-  border: 1px dashed rgb(255 255 255 / 24%);
-  border-radius: 10px;
-  font-size: 0.92rem;
-  color: #d6d1e8;
-  line-height: 1.5;
+  padding: var(--e-2);
+  background: rgb(255 255 255 / 3%);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-2);
+  font-size: var(--t-2);
+  color: var(--texte-doux);
+  line-height: 1.55;
+  margin: 0;
 }
 
 .indice b {
   color: var(--py-yellow);
-  font-size: 0.86rem;
+  font-size: var(--t-1);
+  font-weight: 500;
   white-space: nowrap;
   flex: none;
-  padding-top: 0.06rem;
+  padding-top: 0.1rem;
 }
 
 .indice--verrouille {
-  opacity: 0.5;
+  opacity: 0.45;
+  border-style: dashed;
 }
 
 /* ---------- Choix multiple ---------- */
@@ -238,34 +496,40 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--e-1);
 }
 
 .qcm legend {
-  padding: 0;
-  font-weight: 600;
+  padding: 0 0 var(--e-1);
+  font-weight: 500;
+  font-size: var(--t-3);
   color: #fff;
-  margin-bottom: 0.35rem;
 }
 
 .qcm__option {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid rgb(255 255 255 / 16%);
-  border-radius: 10px;
+  gap: var(--e-1);
+  padding: var(--e-2);
+  background: var(--panneau);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-2);
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition: border-color 150ms ease-out, background 150ms ease-out;
 }
 
 .qcm__option:hover {
-  border-color: rgb(255 255 255 / 40%);
+  border-color: rgb(255 255 255 / 32%);
+}
+
+.qcm__option:has(input:focus-visible) {
+  outline: 2px solid var(--py-yellow);
+  outline-offset: 2px;
 }
 
 .qcm__option:has(input:checked) {
   border-color: var(--py-yellow);
-  background: rgb(255 195 49 / 10%);
+  background: rgb(255 195 49 / 12%);
 }
 
 .qcm__option input {
@@ -275,98 +539,21 @@
 
 .qcm__option span {
   font-family: var(--police-code);
-  font-size: 0.9rem;
+  font-size: var(--t-2);
   color: var(--d-fg);
   white-space: pre-wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qcm__option {
+    transition: none;
+  }
 }
 
 /* ---------- Éditeur ---------- */
 
 .editeur {
-  border-radius: 12px;
+  border-radius: var(--rayon-3);
   overflow: hidden;
-}
-
-/* ---------- Alerte réseau ---------- */
-
-.alerte {
-  margin: 0;
-  padding: 0.8rem clamp(1rem, 4vw, 2rem);
-  background: var(--ko);
-  color: #fff;
-  font-size: 0.94rem;
-}
-
-/* ---------- Fin de séance ---------- */
-
-.fin {
-  flex: 1;
-  display: grid;
-  place-items: center;
-  padding: 2rem 1.25rem 5rem;
-  text-align: center;
-}
-
-.fin__carte {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  align-items: center;
-  max-width: 34rem;
-}
-
-.fin h1 {
-  font-size: clamp(1.9rem, 5vw, 2.6rem);
-  letter-spacing: -0.028em;
-}
-
-.fin p {
-  margin: 0;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
-
-.fin__compte {
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: var(--ok);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-
-/* ---------- Chargement ---------- */
-
-.chargement {
-  flex: 1;
-  display: grid;
-  place-items: center;
-  color: var(--ink-soft);
-  padding: 3rem 1.25rem;
-}
-
-/* ---------- Fil d'Ariane de l'exercice ---------- */
-
-.exercice__fil {
-  max-width: 1120px;
-  margin: 0 auto var(--e-2);
-}
-
-.exercice__fil a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  font-size: var(--t-2);
-  color: #cfc9e4;
-  text-decoration: none;
-}
-
-.exercice__fil a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-
-.exercice__fil a:focus-visible {
-  outline: 2px solid var(--py-yellow);
-  outline-offset: 3px;
-  border-radius: var(--rayon-1);
+  border: 1px solid var(--trait);
 }
