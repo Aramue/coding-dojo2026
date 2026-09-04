@@ -258,7 +258,7 @@
 
 .ligne {
   display: grid;
-  grid-template-columns: minmax(104px, auto) minmax(0, 1.5fr) minmax(150px, 1fr) auto;
+  grid-template-columns: minmax(104px, auto) minmax(0, 1.5fr) minmax(150px, 1fr) auto auto;
   gap: var(--e-2);
   align-items: center;
   min-height: 3.25rem;
@@ -404,5 +404,152 @@
 @media (prefers-reduced-motion: reduce) {
   .pouls::before {
     animation: none;
+  }
+}
+
+/* ---------- Deplier un eleve ---------- */
+
+.ligne__deplier {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rayon-1);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+
+.ligne__deplier:hover {
+  background: var(--ground-2);
+  color: var(--ink);
+}
+
+.ligne__deplier:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 1px;
+}
+
+.ligne__chevron {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ligne__chevron[data-ouvert='true'] {
+  transform: rotate(90deg);
+}
+
+/* Le detail prend toute la largeur, sous les quatre colonnes de la ligne. */
+.detail {
+  grid-column: 1 / -1;
+  margin-top: var(--e-1);
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: var(--surface-doux);
+  border: 1px solid var(--rule-doux);
+}
+
+.detail__vide {
+  margin: 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.parcours {
+  display: grid;
+  gap: var(--e-2);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.parcours__titre {
+  margin: 0 0 0.35rem;
+  font-size: var(--t-1);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.parcours__etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.etape {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.15rem 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+/*
+ * La marque porte l'etat : un point, une coche, deux coches. Elle est en
+ * chasse fixe pour que les titres restent alignes quel que soit l'etat.
+ */
+.etape__marque {
+  flex: none;
+  width: 1.4rem;
+  font-family: var(--police-code);
+  font-size: 0.75rem;
+  color: var(--rule);
+  letter-spacing: -0.06em;
+}
+
+.etape[data-coches='1'] .etape__marque {
+  color: var(--py-blue);
+}
+
+.etape[data-coches='2'] .etape__marque {
+  color: var(--ok);
+}
+
+.etape[data-coches='2'] .etape__titre,
+.etape[data-coches='1'] .etape__titre {
+  color: var(--ink);
+}
+
+.etape__titre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Ou l'eleve se trouve maintenant : c'est ce qu'on vient chercher en depliant. */
+.etape[data-courant='true'] .etape__titre {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.etape__ici {
+  flex: none;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  background: var(--py-blue);
+  color: #fff;
+}
+
+.etape__bonus {
+  flex: none;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+.parcours__garde {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: var(--e-1);
+  border-top: 1px solid var(--rule-doux);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ligne__chevron {
+    transition: none;
   }
 }

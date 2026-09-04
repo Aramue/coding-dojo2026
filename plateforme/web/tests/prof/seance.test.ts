@@ -3,6 +3,7 @@ import {
   blocagesCollectifs,
   nommer,
   obligatoires,
+  parcoursEleve,
   reperes,
   synthese,
   type LigneEleve,
@@ -96,7 +97,7 @@ describe('synthese', () => {
 
   it('ne compte que les obligatoires dans un avancement', () => {
     // ADR-004 : un renfort ou un bonus n'entre jamais dans la progression.
-    const s = synthese([ligne({ reussis: ['s1-01', 's1-15', 's1-17'] })], comptes)
+    const s = synthese([ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-15', verdict: 'vert' as const }, { exercice_id: 's1-17', verdict: 'vert' as const }] })], comptes)
     expect(s.avancements).toEqual([1])
     expect(s.total).toBe(4)
   })
@@ -104,9 +105,9 @@ describe('synthese', () => {
   it('rend la distribution triée, pas seulement sa médiane', () => {
     const s = synthese(
       [
-        ligne({ reussis: ['s1-01', 's1-02', 's1-03'] }),
+        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-03', verdict: 'vert' as const }] }),
         ligne({ reussis: [] }),
-        ligne({ reussis: ['s1-01'] }),
+        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }] }),
       ],
       comptes,
     )
@@ -118,9 +119,9 @@ describe('synthese', () => {
     const s = synthese(
       [
         ligne({ reussis: [] }),
-        ligne({ reussis: ['s1-01'] }),
-        ligne({ reussis: ['s1-01', 's1-02'] }),
-        ligne({ reussis: ['s1-01', 's1-02', 's1-03', 's1-04'] }),
+        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }] }),
+        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-02', verdict: 'vert' as const }] }),
+        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-03', verdict: 'vert' as const }, { exercice_id: 's1-04', verdict: 'vert' as const }] }),
       ],
       comptes,
     )
@@ -238,5 +239,70 @@ describe('blocagesCollectifs — un inscrit sans tentative', () => {
       ligne({ statut: 'bloque', exercice_id: 's1-29', prenom: 'Enzo', nom: 'Poupard' }),
     ])
     expect(blocages[0]!.eleves).toEqual(['Camille R.', 'Enzo P.'])
+  })
+})
+
+describe('parcoursEleve', () => {
+  const EXERCICES = [
+    ex('s1-01', { notion: 'afficher', titre: 'Dire bonjour' }),
+    ex('s1-02', { notion: 'afficher', titre: 'Ton premier programme' }),
+    ex('s1-31', { notion: 'saisie', titre: 'Deux questions, une fiche' }),
+    ex('s1-33', { notion: 'saisie', titre: "L'ordre des questions", obligatoire: false }),
+  ]
+
+  const ELEVE = ligne({
+    exercice_id: 's1-31',
+    reussis: [
+      { exercice_id: 's1-01', verdict: 'vert' },
+      { exercice_id: 's1-02', verdict: 'bleu' },
+    ],
+  })
+
+  it('range les exercices par notion, dans l ordre du parcours', () => {
+    const parcours = parcoursEleve(ELEVE, EXERCICES, NOTIONS)
+    expect(parcours.map((n) => n.titre)).toEqual([
+      'Afficher un message',
+      'Demander une information',
+    ])
+  })
+
+  it('donne deux coches au vert, une au bleu, aucune au reste', () => {
+    const etapes = parcoursEleve(ELEVE, EXERCICES, NOTIONS)[0]!.etapes
+    expect(etapes.map((e) => e.coches)).toEqual([2, 1])
+    expect(parcoursEleve(ELEVE, EXERCICES, NOTIONS)[1]!.etapes[0]!.coches).toBe(0)
+  })
+
+  it('marque l exercice en cours : c est ce qu on vient chercher', () => {
+    const parcours = parcoursEleve(ELEVE, EXERCICES, NOTIONS)
+    const courants = parcours.flatMap((n) => n.etapes.filter((e) => e.courant))
+    expect(courants.map((e) => e.id)).toEqual(['s1-31'])
+  })
+
+  it('distingue les facultatifs sans les cacher', () => {
+    const saisie = parcoursEleve(ELEVE, EXERCICES, NOTIONS)[1]!
+    expect(saisie.etapes.map((e) => e.obligatoire)).toEqual([true, false])
+  })
+
+  it('ne montre pas une notion sans exercice', () => {
+    const parcours = parcoursEleve(ELEVE, [EXERCICES[0]!], NOTIONS)
+    expect(parcours.map((n) => n.id)).toEqual(['afficher'])
+  })
+
+  it('ne marque rien pour un eleve qui n a rien soumis', () => {
+    const parcours = parcoursEleve(
+      ligne({ exercice_id: null, statut: 'pas_commence', reussis: [] }),
+      EXERCICES,
+      NOTIONS,
+    )
+    const toutes = parcours.flatMap((n) => n.etapes)
+    expect(toutes.every((e) => e.coches === 0 && !e.courant)).toBe(true)
+  })
+
+  it("ne transporte que des identifiants et des verdicts", () => {
+    // Garde-fou explicite : ce que l'eleve tape ne doit jamais atteindre cette
+    // vue. La forme des etapes est fixee ici pour qu'un champ ajoute par
+    // inadvertance fasse echouer le test plutot que d'arriver a l'ecran.
+    const etape = parcoursEleve(ELEVE, EXERCICES, NOTIONS)[0]!.etapes[0]!
+    expect(Object.keys(etape).sort()).toEqual(['coches', 'courant', 'id', 'obligatoire', 'titre'])
   })
 })

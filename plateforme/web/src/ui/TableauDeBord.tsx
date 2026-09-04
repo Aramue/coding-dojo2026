@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import { chargerNotions, chargerParcours } from '../contenu/chargeur'
 import type { Exercice, Notion } from '../contenu/types'
 import {
   blocagesCollectifs,
   nommer,
   obligatoires,
+  parcoursEleve,
   reperes,
   synthese,
   type LigneEleve,
+  type NotionEleve,
   type Repere,
 } from '../prof/seance'
 import './TableauDeBord.css'
@@ -146,6 +148,9 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
             repere={eleve.exercice_id ? titres.get(eleve.exercice_id) : undefined}
             comptes={comptes}
             total={vue.total}
+            parcours={
+              contenu ? parcoursEleve(eleve, contenu.exercices, contenu.notions) : undefined
+            }
           />
         ))}
       </div>
@@ -253,17 +258,22 @@ function Ligne({
   repere,
   comptes,
   total,
+  parcours,
 }: {
   eleve: LigneEleve
   repere?: Repere
   comptes: Set<string>
   total: number
+  /** Le parcours détaillé. Absent tant que le contenu publié n'est pas chargé. */
+  parcours?: NotionEleve[]
 }) {
+  const [ouvert, setOuvert] = useState(false)
+  const idDetail = useId()
   const depuis = minutes(eleve.inactif_depuis_s)
-  const faits = eleve.reussis.filter((id) => comptes.has(id)).length
+  const faits = eleve.reussis.filter((r) => comptes.has(r.exercice_id)).length
 
   return (
-    <article className={`ligne ligne--${eleve.statut}`}>
+    <article className={`ligne ligne--${eleve.statut}`} data-ouvert={ouvert}>
       {/*
         Le nom quand il existe, le code sinon. Le professeur cherche quelqu'un
         dans une salle : « Camille R. » se dit à voix haute, « DOJO-K7M2 » non.
@@ -298,6 +308,101 @@ function Ligne({
         {/* « Bloqué 0 min » ne veut rien dire : le délai ne s'affiche que s'il compte. */}
         {eleve.statut === 'bloque' && depuis && ` · ${depuis}`}
       </span>
+
+      <button
+        type="button"
+        className="ligne__deplier"
+        aria-expanded={ouvert}
+        aria-controls={idDetail}
+        onClick={() => setOuvert((o) => !o)}
+      >
+        <span className="sr-only">
+          {ouvert ? 'Replier' : 'Déplier'} le parcours de {nommer(eleve)}
+        </span>
+        <Chevron ouvert={ouvert} />
+      </button>
+
+      {ouvert && (
+        <div className="detail" id={idDetail}>
+          {parcours ? <Parcours notions={parcours} /> : <p className="detail__vide">Chargement…</p>}
+        </div>
+      )}
     </article>
+  )
+}
+
+/**
+ * Le parcours d'un élève, notion par notion.
+ *
+ * > [!important] Ce que ce panneau ne montre pas, et ne montrera pas
+ * > ==Rien de ce que l'élève a tapé.== Ni son code, ni ses réponses, ni les
+ * > valeurs qu'il a saisies. L'API n'en transporte aucune — voir ADR-001 :
+ * > le code s'exécute dans le navigateur de l'élève et n'en sort jamais. Ce
+ * > panneau dit *où* il en est, jamais *ce qu'il écrit*.
+ */
+function Parcours({ notions }: { notions: NotionEleve[] }) {
+  return (
+    <div className="parcours">
+      {notions.map((notion) => (
+        <section key={notion.id} className="parcours__notion">
+          <h3 className="parcours__titre">{notion.titre}</h3>
+          <ul className="parcours__etapes">
+            {notion.etapes.map((etape) => (
+              <li
+                key={etape.id}
+                className="etape"
+                data-coches={etape.coches}
+                data-courant={etape.courant}
+                data-bonus={!etape.obligatoire}
+              >
+                <span className="etape__marque" aria-hidden="true">
+                  {etape.coches > 0 ? '✓'.repeat(etape.coches) : '·'}
+                </span>
+                {/* Quatre colonnes serrees coupent les titres longs : le
+                    survol rend le titre entier sans elargir le panneau. */}
+                <span className="etape__titre" title={etape.titre}>
+                  {etape.titre}
+                </span>
+                {etape.courant && <span className="etape__ici">en ce moment</span>}
+                {!etape.obligatoire && <span className="etape__bonus">facultatif</span>}
+                <span className="sr-only">
+                  {etape.coches === 2
+                    ? 'réussi, méthode maîtrisée'
+                    : etape.coches === 1
+                      ? 'réussi'
+                      : 'pas encore'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <p className="parcours__garde">
+        Le code écrit par l'élève ne quitte jamais son navigateur : cette vue dit où il en est,
+        pas ce qu'il tape.
+      </p>
+    </div>
+  )
+}
+
+function Chevron({ ouvert }: { ouvert: boolean }) {
+  return (
+    <svg
+      className="ligne__chevron"
+      data-ouvert={ouvert}
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M9 5l7 7-7 7"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }

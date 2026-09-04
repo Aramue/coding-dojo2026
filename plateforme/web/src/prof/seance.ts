@@ -19,9 +19,15 @@ export type LigneEleve = {
   echecs_consecutifs: number
   inactif_depuis_s: number
   dernier_type_erreur: string | null
-  /** Les identifiants réussis, pas leur compte : seul le front sait lesquels sont obligatoires. */
-  reussis: string[]
+  /**
+   * Les exercices réussis, pas leur compte : seul le front sait lesquels sont
+   * obligatoires. Le verdict accompagne chacun, pour que le professeur voie la
+   * même chose que l'élève — une coche ou deux.
+   */
+  reussis: ReussiteProf[]
 }
+
+export type ReussiteProf = { exercice_id: string; verdict: 'vert' | 'bleu' }
 
 /** Ce qu'un identifiant d'exercice devient à l'écran du professeur. */
 export type Repere = { titre: string; notion: string }
@@ -63,7 +69,7 @@ export type Synthese = {
  */
 export function synthese(eleves: LigneEleve[], comptes: Set<string>): Synthese {
   const avancements = eleves
-    .map((e) => e.reussis.filter((id) => comptes.has(id)).length)
+    .map((e) => e.reussis.filter((r) => comptes.has(r.exercice_id)).length)
     .sort((a, b) => a - b)
 
   return {
@@ -145,4 +151,59 @@ export function nommer(eleve: LigneEleve): string {
   if (!prenom) return eleve.code_acces
   const nom = eleve.nom?.trim()
   return nom ? `${prenom} ${nom[0]!.toUpperCase()}.` : prenom
+}
+
+/** Une ligne du dépliant : un exercice du parcours, et où en est l'élève. */
+export type EtapeEleve = {
+  id: string
+  titre: string
+  /** 0 : pas réussi. 1 : ça marche. 2 : ça marche de la bonne façon. */
+  coches: 0 | 1 | 2
+  /** Le dernier exercice soumis — celui sur lequel l'élève est en ce moment. */
+  courant: boolean
+  obligatoire: boolean
+}
+
+export type NotionEleve = { id: string; titre: string; etapes: EtapeEleve[] }
+
+/**
+ * Le parcours d'un élève, notion par notion.
+ *
+ * ==Rien de ce qu'il a tapé n'entre ici== : ni son code, ni ses réponses, ni
+ * les valeurs qu'il a saisies. L'API n'en transporte aucune, et cette fonction
+ * ne travaille que sur des identifiants d'exercice et des verdicts. La vue du
+ * professeur dit *où* en est un élève, jamais *ce qu'il écrit*.
+ */
+export function parcoursEleve(
+  eleve: LigneEleve,
+  exercices: Exercice[],
+  notions: Notion[],
+): NotionEleve[] {
+  const acquis = new Map(eleve.reussis.map((r) => [r.exercice_id, r.verdict]))
+  const parNotion = new Map<string, EtapeEleve[]>()
+
+  for (const exercice of exercices) {
+    const verdict = acquis.get(exercice.id)
+    const etapes = parNotion.get(exercice.notion) ?? []
+    etapes.push({
+      id: exercice.id,
+      titre: exercice.titre,
+      coches: verdict === 'vert' ? 2 : verdict === 'bleu' ? 1 : 0,
+      courant: exercice.id === eleve.exercice_id,
+      obligatoire: exercice.obligatoire,
+    })
+    parNotion.set(exercice.notion, etapes)
+  }
+
+  // L'ordre des notions est celui du parcours, pas celui de la table de hachage :
+  // un professeur lit la progression de haut en bas.
+  return notions
+    .slice()
+    .sort((a, b) => a.ordre - b.ordre)
+    .map((notion) => ({
+      id: notion.id,
+      titre: notion.titre,
+      etapes: parNotion.get(notion.id) ?? [],
+    }))
+    .filter((notion) => notion.etapes.length > 0)
 }

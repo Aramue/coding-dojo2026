@@ -101,7 +101,7 @@ def test_les_reussis_sont_la_liste_des_exercices_pas_leur_compte(client, session
         a for a in client.get("/prof/seance", headers=ENTETES).json()["eleves"]
         if a["code_acces"] == "DOJO-L4XZ"
     )
-    assert ligne["reussis"] == ["s1-02", "s1-05"]
+    assert [r["exercice_id"] for r in ligne["reussis"]] == ["s1-02", "s1-05"]
 
 
 def test_un_exercice_reussi_deux_fois_ne_compte_qu_une_fois(client, session_test):
@@ -111,7 +111,7 @@ def test_un_exercice_reussi_deux_fois_ne_compte_qu_une_fois(client, session_test
         a for a in client.get("/prof/seance", headers=ENTETES).json()["eleves"]
         if a["code_acces"] == "DOJO-P9WK"
     )
-    assert ligne["reussis"] == ["s1-02"]
+    assert [r["exercice_id"] for r in ligne["reussis"]] == ["s1-02"]
 
 
 def _inscrire(session: Session, code: str, prenom: str = "Camille", nom: str = "Rey") -> None:
@@ -149,3 +149,29 @@ def test_un_eleve_retire_disparait_de_la_seance(client, session_test):
     _inscrire(session_test, "DOJO-N4WQ", "Enzo")
     client.delete("/prof/eleves/DOJO-N4WQ", headers=ENTETES)
     assert client.get("/prof/seance", headers=ENTETES).json()["eleves"] == []
+
+
+def test_les_reussites_portent_leur_verdict(client, session_test):
+    """Le professeur voit la meme chose que l'eleve : une coche ou deux."""
+    _tentative(session_test, "DOJO-N4WQ", "s1-01", "vert", 300)
+    _tentative(session_test, "DOJO-N4WQ", "s1-02", "bleu", 200)
+    _tentative(session_test, "DOJO-N4WQ", "s1-03", "rouge", 100, "NameError")
+    ligne = next(
+        e for e in client.get("/prof/seance", headers=ENTETES).json()["eleves"]
+        if e["code_acces"] == "DOJO-N4WQ"
+    )
+    assert ligne["reussis"] == [
+        {"exercice_id": "s1-01", "verdict": "vert"},
+        {"exercice_id": "s1-02", "verdict": "bleu"},
+    ]
+
+
+def test_le_meilleur_verdict_est_conserve_cote_prof(client, session_test):
+    _tentative(session_test, "DOJO-N4WQ", "s1-01", "bleu", 300)
+    _tentative(session_test, "DOJO-N4WQ", "s1-01", "vert", 200)
+    _tentative(session_test, "DOJO-N4WQ", "s1-01", "bleu", 100)
+    ligne = next(
+        e for e in client.get("/prof/seance", headers=ENTETES).json()["eleves"]
+        if e["code_acces"] == "DOJO-N4WQ"
+    )
+    assert ligne["reussis"] == [{"exercice_id": "s1-01", "verdict": "vert"}]

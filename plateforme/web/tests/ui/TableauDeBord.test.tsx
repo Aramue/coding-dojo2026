@@ -1,4 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { TableauDeBord } from '../../src/ui/TableauDeBord'
 import type { LigneEleve } from '../../src/prof/seance'
@@ -32,6 +33,11 @@ const EXERCICES = [
   ex('s1-31', 'saisie', 'Deux questions, une fiche'),
   ex('s1-33', 'saisie', "L'ordre des questions", false),
 ]
+
+/** Une reussite, verte par defaut : deux coches. */
+function reussi(id: string, verdict: 'vert' | 'bleu' = 'vert') {
+  return { exercice_id: id, verdict }
+}
 
 function ligne(surcharge: Partial<LigneEleve> = {}): LigneEleve {
   return {
@@ -111,7 +117,7 @@ describe('TableauDeBord — ce que le professeur lit', () => {
 
   it('ne compte que les obligatoires dans un avancement', async () => {
     // s1-33 est un bonus : il ne doit ni compter, ni gonfler le total.
-    await rendre([ligne({ reussis: ['s1-02', 's1-33'] })])
+    await rendre([ligne({ reussis: [{ exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-33', verdict: 'vert' as const }] })])
     await waitFor(() => expect(screen.getByText('1 / 3 réussis')).toBeInTheDocument())
   })
 
@@ -183,8 +189,8 @@ describe('TableauDeBord — vue d ensemble', () => {
     // et une moyenne l'effacerait.
     poserLeReseau([
       ligne({ code_acces: 'DOJO-A', reussis: [] }),
-      ligne({ code_acces: 'DOJO-B', reussis: ['s1-02'] }),
-      ligne({ code_acces: 'DOJO-C', reussis: ['s1-02', 's1-29', 's1-31'] }),
+      ligne({ code_acces: 'DOJO-B', reussis: [{ exercice_id: 's1-02', verdict: 'vert' as const }] }),
+      ligne({ code_acces: 'DOJO-C', reussis: [{ exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-29', verdict: 'vert' as const }, { exercice_id: 's1-31', verdict: 'vert' as const }] }),
     ])
     const { container } = render(<TableauDeBord codeProf="code-prof-test" />)
     await waitFor(() => expect(container.querySelectorAll('.etalement__trait')).toHaveLength(3))
@@ -207,5 +213,74 @@ describe('TableauDeBord — le pouls', () => {
     poserLeReseau([], { ok: false })
     render(<TableauDeBord codeProf="code-prof-test" />)
     expect(await screen.findByText('plus de données')).toBeInTheDocument()
+  })
+})
+
+describe('TableauDeBord — deplier un eleve', () => {
+  const AVEC_PARCOURS = ligne({
+    prenom: 'Enzo',
+    nom: 'Poupard',
+    exercice_id: 's1-31',
+    reussis: [reussi('s1-02'), reussi('s1-29', 'bleu')],
+  })
+
+  async function deplier() {
+    await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
+  }
+
+  it('ne montre rien tant qu on n a pas deplie', async () => {
+    await rendre([AVEC_PARCOURS])
+    expect(screen.queryByText('Ton premier programme')).toBeNull()
+  })
+
+  it("montre le parcours, notion par notion", async () => {
+    await rendre([AVEC_PARCOURS])
+    await deplier()
+    expect(screen.getByRole('heading', { name: 'Afficher un message' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Demander une information' })).toBeInTheDocument()
+  })
+
+  it("marque l'exercice en cours", async () => {
+    await rendre([AVEC_PARCOURS])
+    await deplier()
+    const courant = document.querySelector('.etape[data-courant="true"]')
+    expect(courant).toHaveTextContent('Deux questions, une fiche')
+    expect(courant).toHaveTextContent('en ce moment')
+  })
+
+  it('donne deux coches au vert, une au bleu', async () => {
+    await rendre([AVEC_PARCOURS])
+    await deplier()
+    expect(document.querySelector('.etape[data-coches="2"]')).toHaveTextContent(
+      'Ton premier programme',
+    )
+    expect(document.querySelector('.etape[data-coches="1"]')).toHaveTextContent(
+      "L'âge qui refuse de s'additionner",
+    )
+  })
+
+  it("annonce l'état aux lecteurs d'écran, pas seulement par des coches", async () => {
+    await rendre([AVEC_PARCOURS])
+    await deplier()
+    expect(screen.getByText('réussi, méthode maîtrisée')).toBeInTheDocument()
+    expect(screen.getByText('réussi')).toBeInTheDocument()
+  })
+
+  it('se replie', async () => {
+    await rendre([AVEC_PARCOURS])
+    await deplier()
+    await userEvent.click(screen.getByRole('button', { name: /Replier le parcours/ }))
+    expect(screen.queryByText('Ton premier programme')).toBeNull()
+  })
+
+  it("n'affiche jamais ce que l'élève a tapé", async () => {
+    // ADR-001 : le code s'execute dans le navigateur de l'eleve et n'en sort
+    // jamais. Ce panneau dit OU il en est, jamais CE QU'IL ECRIT — et l'API ne
+    // transporte rien d'autre que des identifiants et des verdicts.
+    await rendre([AVEC_PARCOURS])
+    await deplier()
+    const texte = document.body.textContent ?? ''
+    expect(texte).not.toMatch(/print\(|input\(|=/)
+    expect(screen.getByText(/ne quitte jamais son navigateur/)).toBeInTheDocument()
   })
 })

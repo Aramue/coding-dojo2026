@@ -107,7 +107,9 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
                 # sont obligatoires — le contenu vit cote front — donc elle ne
                 # peut pas produire un decompte comparable a un total. Elle
                 # renvoie les identifiants, et le tableau de bord fait le tri.
-                "reussis": sorted({t.exercice_id for t in liste if t.verdict in ("vert", "bleu")}),
+                # Le verdict accompagne chacun : le professeur voit la meme
+                # chose que l'eleve, une coche ou deux.
+                "reussis": _reussites(liste),
             }
         )
 
@@ -128,3 +130,19 @@ def _ecoule(maintenant: datetime, quand: datetime) -> int:
     if quand.tzinfo is None:
         quand = quand.replace(tzinfo=timezone.utc)
     return int((maintenant - quand).total_seconds())
+
+
+def _reussites(tentatives: list[Tentative]) -> list[dict]:
+    """Un exercice reussi, une entree, et le MEILLEUR verdict obtenu.
+
+    Miroir de /parcours : rejouer moins bien ne retire pas une coche deja
+    gagnee, et le professeur ne doit pas voir un eleve regresser parce qu'il
+    s'est reessaye.
+    """
+    meilleurs: dict[str, str] = {}
+    for t in tentatives:
+        if t.verdict not in ("vert", "bleu"):
+            continue
+        if meilleurs.get(t.exercice_id) != "vert":
+            meilleurs[t.exercice_id] = t.verdict
+    return [{"exercice_id": cle, "verdict": meilleurs[cle]} for cle in sorted(meilleurs)]
