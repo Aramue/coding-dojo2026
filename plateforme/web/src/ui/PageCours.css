@@ -1,0 +1,115 @@
+/*
+ * La page de cours est sur fond PASTEL : « pastel = j'apprends, sombre = je
+ * code ». Les cartes de code gardent leur fond Dracula, ce qui fait la bascule
+ * visible sans l'expliquer.
+ */
+
+.cours {
+  background: var(--tint);
+  padding: var(--e-5) var(--e-4) var(--e-6);
+  min-height: 100%;
+}
+
+.cours__entete {
+  max-width: 68ch;
+  margin: 0 auto var(--e-4);
+}
+
+.cours__duree {
+  margin: 0 0 var(--e-1);
+  font-size: var(--t-1);
+  color: var(--encre);
+  opacity: 0.75;
+}
+
+.cours__entete h1 {
+  font-size: var(--t-6);
+  color: var(--profond);
+}
+
+.cours__corps {
+  max-width: 68ch;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.cours__corps p {
+  margin: 0;
+  font-size: var(--t-4);
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.cours__corps code {
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: var(--rayon-1);
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+}
+
+/* Filet à gauche, sans icône ni emoji : la charte les interdit. */
+.attention {
+  margin: 0;
+  padding: var(--e-2) var(--e-3);
+  border-left: 3px solid var(--encre);
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 0 var(--rayon-2) var(--rayon-2) 0;
+}
+
+.attention p {
+  font-size: var(--t-3);
+}
+
+.cours__exemple {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  align-items: flex-start;
+}
+
+.cours__exemple pre {
+  margin: 0;
+  font-family: var(--police-code);
+  font-size: var(--t-2);
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.bac {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.bac__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+}
+
+.bac__note {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.bac__sortie {
+  margin: 0;
+  padding: var(--e-2);
+  background: var(--d-bg);
+  color: var(--d-fg);
+  border-radius: var(--rayon-2);
+  font-size: var(--t-2);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+@media (max-width: 820px) {
+  .cours {
+    padding: var(--e-3) var(--e-2) var(--e-5);
+  }
+}
