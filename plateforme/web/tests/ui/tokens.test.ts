@@ -39,6 +39,14 @@ describe('charte visuelle', () => {
     }
   })
 
+  it('les echelles d espacement, de typographie et de rayon sont completes', () => {
+    // Sans elles, chaque feuille reinvente ses valeurs et le rythme 4/8
+    // annonce par la charte n'existe que sur le papier.
+    for (const nom of ['--e-1', '--e-6', '--t-1', '--t-7', '--rayon-1', '--rayon-3']) {
+      expect(tokens).toContain(`${nom}:`)
+    }
+  })
+
   it('aucune police externe n est chargee', () => {
     expect(base).not.toMatch(/fonts\.googleapis|fontshare|cdn\./)
   })

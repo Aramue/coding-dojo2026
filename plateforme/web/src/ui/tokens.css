@@ -23,6 +23,15 @@
   --ok: #0F5C23;
   --ko: #9C1B15;
 
+  /* Rythme 4/8 : toute marge de l'interface sort de cette echelle. */
+  --e-1: 0.5rem; --e-2: 1rem; --e-3: 1.5rem; --e-4: 2rem; --e-5: 3rem; --e-6: 4rem;
+
+  /* Echelle typographique a sept crans. Aucune taille hors de cette liste. */
+  --t-1: 0.82rem; --t-2: 0.94rem; --t-3: 1rem; --t-4: 1.15rem;
+  --t-5: 1.4rem; --t-6: 2rem; --t-7: 2.6rem;
+
+  --rayon-1: 6px; --rayon-2: 10px; --rayon-3: 16px;
+
   --police-texte: "General Sans", system-ui, sans-serif;
   --police-code: "JetBrains Mono", ui-monospace, Consolas, monospace;
 }
