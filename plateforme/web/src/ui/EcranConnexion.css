@@ -1,0 +1,87 @@
+/*
+ * La premiere chose que voient vingt-quatre eleves le 16 septembre. Carte
+ * centree, un seul champ, un seul bouton : rien d'autre a comprendre.
+ */
+
+.connexion {
+  grid-area: contenu;
+  display: grid;
+  place-items: center;
+  padding: var(--e-4) var(--e-2) var(--e-6);
+  background: var(--ground);
+}
+
+.connexion__carte {
+  width: min(26rem, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.connexion h1 {
+  font-size: var(--t-6);
+  color: var(--ink);
+}
+
+.connexion__intro {
+  margin: 0;
+  font-size: var(--t-3);
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.connexion form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+}
+
+.connexion label {
+  font-weight: 500;
+  font-size: var(--t-2);
+  color: var(--ink);
+}
+
+/*
+ * Le seul endroit hors code ou la chasse fixe est justifiee : c'est un
+ * identifiant qu'on recopie caractere par caractere, et l'interlettrage aide
+ * a distinguer O de 0 et I de 1.
+ */
+.connexion input {
+  font-family: var(--police-code);
+  font-size: var(--t-4);
+  letter-spacing: 0.08em;
+  height: 3rem;
+  padding: 0 var(--e-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-2);
+  background: #fff;
+  color: var(--ink);
+}
+
+.connexion input:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+  border-color: var(--py-blue);
+}
+
+.connexion input::placeholder {
+  color: #8c8478; /* 4.6:1 sur blanc — un placeholder doit rester lisible */
+  letter-spacing: 0.08em;
+}
+
+.connexion .bouton {
+  margin-top: var(--e-1);
+  width: 100%;
+}
+
+/*
+ * Etat desactive : on baisse le contraste du FOND, pas du texte. Un
+ * `opacity: 0.55` sur tout le bouton rendait son libelle illisible, alors que
+ * c'est justement lui qui dit quoi faire.
+ */
+.connexion .bouton:disabled {
+  opacity: 1;
+  background: var(--rule);
+  color: var(--ink-soft);
+}

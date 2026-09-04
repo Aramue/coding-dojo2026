@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import './EcranConnexion.css'
 
 export function EcranConnexion({ onConnecte }: { onConnecte: (code: string) => Promise<void> }) {
   const [code, setCode] = useState('')

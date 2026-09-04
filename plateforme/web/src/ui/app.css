@@ -116,63 +116,6 @@
   color: var(--ground);
 }
 
-/* ---------- Connexion ---------- */
-
-.connexion {
-  flex: 1;
-  display: grid;
-  place-items: center;
-  padding: 2rem 1.25rem 5rem;
-}
-
-.connexion__carte {
-  width: min(26rem, 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-
-.connexion h1 {
-  font-size: clamp(1.9rem, 5vw, 2.5rem);
-  letter-spacing: -0.028em;
-}
-
-.connexion__intro {
-  color: var(--ink-soft);
-  line-height: 1.55;
-}
-
-.connexion form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.connexion label {
-  font-weight: 600;
-  font-size: 0.94rem;
-}
-
-.connexion input {
-  font-family: var(--police-code);
-  font-size: 1.05rem;
-  letter-spacing: 0.08em;
-  padding: 0.8rem 0.9rem;
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--ink);
-}
-
-.connexion input::placeholder {
-  color: #b3aa9c;
-  letter-spacing: 0.08em;
-}
-
-.connexion .bouton {
-  margin-top: 0.35rem;
-}
-
 /* ---------- Écran d'exercice ---------- */
 /* Fond sombre de la famille du concept : ici, on écrit du code. */
 
