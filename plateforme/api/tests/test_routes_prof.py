@@ -81,23 +81,6 @@ def test_la_reponse_ne_contient_jamais_de_code_source(client, session_test):
         assert f'"{cle}"' not in corps
 
 
-def test_verrouiller_puis_deverrouiller_un_concept(client):
-    r = client.post("/prof/verrou", headers=ENTETES, json={"concept": "types", "ouvert": False})
-    assert r.json() == {"concept": "types", "ouvert": False}
-    r = client.post("/prof/verrou", headers=ENTETES, json={"concept": "types", "ouvert": True})
-    assert r.json()["ouvert"] is True
-
-
-def test_un_concept_inconnu_est_refuse(client):
-    """Une liste déroulante côté client ne protège rien : la contrainte vit ici."""
-    reponse = client.post(
-        "/prof/verrou",
-        headers=ENTETES,
-        json={"concept": "texte_libre_choisi_par_l_appelant", "ouvert": False},
-    )
-    assert reponse.status_code == 422
-
-
 def test_le_code_prof_par_defaut_n_est_pas_devinable():
     from app import routes_prof
 

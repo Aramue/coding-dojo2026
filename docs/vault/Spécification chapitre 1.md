@@ -91,7 +91,6 @@ Décision fondatrice : [[ADR-001 Exécution du code dans le navigateur]].
 | `GET /parcours` | Exercices déjà réussis par cet élève |
 | `POST /tentative` | Exercice, verdict, type d'erreur, durée |
 | `GET /prof/seance` | Alimente le tableau de bord |
-| `POST /prof/verrou` | Ouvre ou ferme un concept pour la classe |
 
 L'API ne reçoit **jamais** le code source écrit par l'élève — seulement le verdict et le *type*
 d'erreur.

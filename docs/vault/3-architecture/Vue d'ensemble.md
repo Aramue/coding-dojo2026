@@ -84,7 +84,6 @@ Volontairement minimal — chaque point d'entrée supplémentaire est du code à
 | `GET /parcours` | Renvoie les exercices déjà réussis par cet élève |
 | `POST /tentative` | Enregistre une tentative : exercice, verdict, type d'erreur, durée |
 | `GET /prof/seance` | Alimente le [[Tableau de bord]] : une ligne par élève, sans jamais son code source |
-| `POST /prof/verrou` | Ouvre ou ferme un concept pour toute la classe |
 
 > [!note] Ce que l'API ne reçoit jamais
 > Le code source écrit par l'élève. Seuls le verdict et le **type** d'erreur remontent

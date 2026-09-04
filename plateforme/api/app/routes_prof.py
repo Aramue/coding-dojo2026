@@ -10,11 +10,10 @@ from datetime import datetime, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, HTTPException
-from pydantic import BaseModel, ConfigDict, field_validator
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
-from .modeles import Tentative, Verrou
+from .modeles import Tentative
 
 routeur = APIRouter(prefix="/prof")
 
@@ -24,8 +23,8 @@ if _code_fourni:
 else:
     # Meme raisonnement que pour DOJO_SECRET : un code par defaut devinable
     # ("prof-dev") donnerait a n'importe quel eleve la progression de toute la
-    # classe et la main sur les verrous. Un code aleatoire echoue de facon
-    # visible ; un code publie echoue en silence.
+    # classe. Un code aleatoire echoue de facon visible ; un code publie echoue
+    # en silence.
     CODE_PROF = secrets.token_urlsafe(12)
     warnings.warn(
         "DOJO_CODE_PROF n'est pas defini : code professeur aleatoire pour cette "
@@ -36,30 +35,11 @@ else:
 ECHECS_POUR_BLOQUE = 3
 SECONDES_POUR_INACTIF = 600
 
-# Liste blanche : `concept` est ecrit en base puis relu. Sans contrainte, ce champ
-# accepte n'importe quelle chaine. Une validation qui n'existerait que dans un
-# <select> cote client ne protegerait rien — la lecon des rondes de la tache 11.
-CONCEPTS = frozenset({"variables", "types", "operateurs", "conditions", "boucles"})
-
 
 def verifier_prof(x_code_prof: Annotated[str | None, Header()] = None) -> None:
     # compare_digest : comparaison a temps constant, comme pour les jetons eleve.
     if not x_code_prof or not hmac.compare_digest(x_code_prof, CODE_PROF):
         raise HTTPException(401, "Code professeur invalide")
-
-
-class DemandeVerrou(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    concept: str
-    ouvert: bool
-
-    @field_validator("concept")
-    @classmethod
-    def concept_connu(cls, valeur: str) -> str:
-        if valeur not in CONCEPTS:
-            raise ValueError("concept inconnu")
-        return valeur
 
 
 @routeur.get("/seance", dependencies=[Depends(verifier_prof)])
@@ -120,18 +100,3 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
     ordre = {"bloque": 0, "inactif": 1, "en_cours": 2}
     eleves.sort(key=lambda a: (ordre[a["statut"]], -a["inactif_depuis_s"]))
     return {"eleves": eleves}
-
-
-@routeur.post("/verrou", dependencies=[Depends(verifier_prof)])
-def basculer_verrou(
-    demande: DemandeVerrou, session: Annotated[Session, Depends(obtenir_session)]
-) -> dict:
-    verrou = session.get(Verrou, demande.concept)
-    if verrou is None:
-        verrou = Verrou(concept=demande.concept, ouvert=demande.ouvert)
-        session.add(verrou)
-    else:
-        verrou.ouvert = demande.ouvert
-        session.add(verrou)
-    session.commit()
-    return {"concept": demande.concept, "ouvert": demande.ouvert}

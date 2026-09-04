@@ -30,9 +30,3 @@ class Tentative(SQLModel, table=True):
     duree_ms: int = 0
     horodatage: datetime = Field(default_factory=maintenant, index=True)
 
-
-class Verrou(SQLModel, table=True):
-    """Un concept ouvert ou ferme pour toute la classe."""
-
-    concept: str = Field(primary_key=True)
-    ouvert: bool = True

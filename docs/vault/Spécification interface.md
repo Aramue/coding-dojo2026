@@ -45,7 +45,6 @@ Le palier 1 a livré un moteur qui fonctionne et une interface qui n'existe pas.
 **Hors périmètre**
 
 - Le tableau de bord professeur, déjà livré
-- Le verrouillage de notions par le professeur — la route API existe, l'interface non
 - Les séances 2 et 3
 - Les exercices experts
 

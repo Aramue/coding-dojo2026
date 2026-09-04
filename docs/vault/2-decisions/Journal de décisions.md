@@ -74,6 +74,14 @@ Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans 
   `input()` sans entrée lève `EOFError`. Un bloc qui déclare des entrées ne peut pas être
   exécutable — le bac à sable du navigateur ne sait pas les fournir.
 
+- **Le verrouillage de notions par le professeur est abandonné** (4 septembre 2026). La route
+  `POST /prof/verrou` et la table `Verrou` existaient depuis le palier 1 ; ==aucune interface ne
+  les a jamais appelées==, ni côté professeur, ni côté élève. Un verrou par concept contredit de
+  toute façon la règle « aucun cul-de-sac » de [[Spécification interface]] : l'élève doit pouvoir
+  sauter ce qui le bloque. Route, modèle et tests supprimés. [[Plan palier 1]] et
+  [[Plan interface]] gardent leur texte d'origine — ils enregistrent ce qui a été construit à
+  l'époque.
+
 ## Ce qui n'est pas encore décidé
 
 - [ ] Le nombre exact d'exercices du chapitre 1 et leur ordre — voir [[Chapitre 1]]
