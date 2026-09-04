@@ -88,6 +88,28 @@ Voir [[Pièges et invariants]].
 > caractères et se relit mal. L'éditeur y tient largement — une ligne de Python de chapitre 1
 > occupe rarement la moitié de la colonne.
 
+## Amendement du 4 septembre 2026 — le décor n'informe pas
+
+> [!warning] Deux réflexes qui font « interface générée »
+> **La gélule teintée.** Le tableau de bord portait quatre pastilles colorées en en-tête et une
+> par ligne. Elles ==décorent sans rien dire de plus== que le mot qu'elles contiennent, et le
+> texte posé sur un fond pastel y perd du contraste. ==Un point porte la couleur, le mot reste en
+> encre pleine== — et le même point sert en haut et dans les lignes, pour que les deux se
+> répondent.
+>
+> **Le glyphe Unicode en guise d'icône.** `✓`, `✕`, `≈`, `·` sont des *caractères* : leur dessin
+> change d'une machine à l'autre, ils ne se calent ni sur la graisse ni sur la couleur autour, et
+> ils ne savent pas se mettre à la taille du texte. La charte impose des SVG tracés à la main —
+> cette règle vaut aussi pour les écrans du professeur.
+
+Deux corollaires, appris sur le même écran :
+
+- **Un onglet se souligne, il ne s'encapsule pas.** Deux gélules côte à côte se lisent comme deux
+  boutons, donc comme deux actions, alors que c'est un choix entre deux vues.
+- **Une action de sortie n'est pas une action de la page.** « Fermer la session professeur »,
+  collée sous la liste, se lisait comme le dernier bouton du tableau. Elle se détache par un filet
+  et une vraie respiration.
+
 ## Le mouvement, et ses quatre usages
 
 Rien ne bouge sans raison, et rien ne dure plus de 400 ms. Quatre usages, pas un de plus :
