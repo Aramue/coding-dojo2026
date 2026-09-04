@@ -50,7 +50,7 @@ const REGLES: Regle[] = [
     construire: (c) => ({
       titre: `int() n'arrive pas à convertir « ${c[1]} »`,
       explication: `int() attend uniquement des chiffres, pas des lettres.`,
-      piste: `Vérifie ce que tu donnes à int(). Si la valeur vient de input(), l'élève doit taper un nombre.`,
+      piste: `Vérifie ce que tu donnes à int(). Si la valeur vient de input(), il faut taper un nombre, pas des lettres.`,
     }),
   },
   {

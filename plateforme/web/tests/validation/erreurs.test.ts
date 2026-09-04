@@ -32,6 +32,8 @@ describe('traduireErreur', () => {
     })
     expect(m.explication).toMatch(/chiffres/i)
     expect(m.titre).toContain('vingt')
+    // Le message est lu PAR l'eleve : il s'adresse a lui, pas au professeur.
+    expect(m.piste).not.toMatch(/l'élève|l'eleve/i)
   })
 
   it('traduit le deux-points manquant', () => {
