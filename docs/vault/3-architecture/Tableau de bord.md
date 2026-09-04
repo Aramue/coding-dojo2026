@@ -47,7 +47,7 @@ Une bande porte **un trait par élève**, posé là où il en est, plus la médi
 | Élève | **« Camille R. »** — le prénom et l'initiale ; le code en chasse fixe tant que rien n'est saisi |
 | Où | le **titre** de l'exercice, et sa notion en dessous |
 | Quoi | échecs d'affilée et type d'erreur · délai d'inactivité · `8 / 25 réussis` |
-| Statut | Bloqué · Inactif · En cours |
+| Statut | Bloqué · Inactif · Pas commencé · En cours |
 
 `s1-29` ne dit rien à personne, pas même à celui qui a écrit l'exercice. « L'âge qui refuse de
 s'additionner », dans « Demander une information », se lit d'un coup d'œil et **se dit à voix
@@ -99,12 +99,13 @@ s'affiche en rouge, explicitement.
 
 ## Ce que l'API renvoie, et ce qu'elle ne sait pas
 
-`GET /prof/seance` rend une ligne par élève ayant soumis au moins une tentative.
+`GET /prof/seance` rend une ligne par élève **inscrit**, qu'il ait soumis quelque chose ou
+non. Elle part de la classe, pas des tentatives.
 
 > [!danger] L'API ne connaît pas le contenu
 > Elle ignore quels exercices sont **obligatoires** — le contenu est construit côté front — donc
 > elle ne peut produire aucun décompte comparable à un total. Elle renvoie la **liste** des
-> identifiants réussis, et le tableau de bord fait le tri selon
+> exercices réussis, chacun avec son verdict, et le tableau de bord fait le tri selon
 > [[ADR-004 Mode expert en bonus débloqué]].
 >
 > Le faire remonter par le client reviendrait à faire confiance au navigateur d'un élève pour une
@@ -124,7 +125,7 @@ Voir [[ADR-002 Identification par code d'agent]].
 > [!warning] Un compte sans dénominateur
 > « 24 exercices validés » ne dit pas si c'est beaucoup. Et le compte incluait les renforts et les
 > bonus, qui n'entrent dans aucune progression. C'est ce qui a motivé le passage de `reussis`
-> d'un entier à une liste d'identifiants.
+> d'un entier à une liste.
 
 ## La porte
 
