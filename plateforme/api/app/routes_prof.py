@@ -102,7 +102,11 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
                 "echecs_consecutifs": echecs,
                 "inactif_depuis_s": inactif_depuis,
                 "dernier_type_erreur": derniere.type_erreur if derniere.verdict == "rouge" else None,
-                "reussis": len({t.exercice_id for t in liste if t.verdict in ("vert", "bleu")}),
+                # La LISTE, pas le compte. L'API ne sait pas quels exercices
+                # sont obligatoires — le contenu vit cote front — donc elle ne
+                # peut pas produire un decompte comparable a un total. Elle
+                # renvoie les identifiants, et le tableau de bord fait le tri.
+                "reussis": sorted({t.exercice_id for t in liste if t.verdict in ("vert", "bleu")}),
             }
         )
 

@@ -11,6 +11,11 @@
 }
 
 .tableau__entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
   margin-bottom: var(--e-3);
 }
 
@@ -20,11 +25,207 @@
   color: var(--ink);
 }
 
-.tableau__entete p {
+.tableau__effectif {
   margin: var(--e-1) 0 0;
   font-size: var(--t-2);
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Le pouls ---------- */
+
+.pouls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.pouls::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pouls-bat 2.4s ease-in-out infinite;
+}
+
+.pouls--attente::before { background: var(--ink-soft); }
+.pouls--rompu::before { background: var(--ko); animation: none; }
+.pouls--rompu { color: var(--ko); }
+
+@keyframes pouls-bat {
+  50% { opacity: 0.25; }
+}
+
+/* ---------- Vue d'ensemble ---------- */
+
+.synthese {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--e-2);
+  padding: var(--e-2) var(--e-3);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+}
+
+.synthese__comptes {
+  display: flex;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+}
+
+.compte {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--ground-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.compte b {
+  color: var(--ink);
+}
+
+.compte[data-ton='bloque'] {
+  background: color-mix(in srgb, var(--ko) 13%, var(--surface));
+  color: var(--ko);
+}
+
+.compte[data-ton='bloque'] b { color: var(--ko); }
+
+.compte[data-ton='en_cours'] {
+  background: color-mix(in srgb, var(--ok) 11%, var(--surface));
+  color: var(--ok);
+}
+
+.compte[data-ton='en_cours'] b { color: var(--ok); }
+
+/* Un compteur a zero ne doit pas crier : il n'y a rien a y faire. */
+.compte[data-vide='true'] {
+  background: var(--ground-2);
+  color: var(--ink-soft);
+}
+
+.compte[data-vide='true'] b { color: var(--ink-soft); }
+
+.synthese__avancement {
+  flex: 1;
+  min-width: 260px;
+  /* Les bornes sont posees SOUS la bande : il leur faut leur place, sinon
+     elles s'assoient sur la bordure de la carte. */
+  padding-bottom: 1.1rem;
+}
+
+.synthese__legende {
+  margin: 0 0 0.4rem;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.synthese__legende b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Un trait par eleve. Les traits se superposent la ou plusieurs eleves sont au
+ * meme point : la densite se lit alors comme un aplat plus soutenu, ce qu'une
+ * moyenne ne montre pas.
+ */
+.etalement {
+  position: relative;
+  height: 1.4rem;
+  border-radius: var(--rayon-1);
+  background: var(--ground-2);
+}
+
+.etalement__trait {
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--py-blue);
+  opacity: 0.55;
+}
+
+.etalement__bornes {
+  position: absolute;
+  inset: auto 0 -1.1rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Ce qui bloque plusieurs eleves ---------- */
+
+.blocages {
+  margin-bottom: var(--e-2);
+  padding: var(--e-2) var(--e-3) var(--e-3);
+  border-radius: var(--rayon-3);
+  background: color-mix(in srgb, var(--ko) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 25%, var(--surface));
+}
+
+.blocages__titre {
+  margin: 0 0 var(--e-2);
+  font-size: var(--t-3);
+  color: var(--ko);
+}
+
+.blocage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--e-2);
+  padding: 0.5rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--ko) 18%, var(--surface));
+}
+
+.blocage__compte {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--ko);
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.blocage__texte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.blocage__texte b {
+  color: var(--ink);
+  font-size: var(--t-3);
+}
+
+.blocage__notion {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.blocage__codes {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  text-align: right;
 }
 
 .tableau [role='alert'] {
@@ -57,7 +258,7 @@
 
 .ligne {
   display: grid;
-  grid-template-columns: minmax(112px, 0.7fr) minmax(90px, 0.6fr) minmax(190px, 1.6fr) auto;
+  grid-template-columns: minmax(104px, auto) minmax(0, 1.5fr) minmax(150px, 1fr) auto;
   gap: var(--e-2);
   align-items: center;
   min-height: 3.25rem;
@@ -86,8 +287,27 @@
   color: var(--ink);
 }
 
-.ligne__ou,
 .ligne__quoi {
+  color: var(--ink-soft);
+}
+
+/* L'exercice porte son titre au-dessus de sa notion : deux lignes, une colonne. */
+.ligne__ou {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--ink);
+}
+
+.ligne__ou b {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ligne__notion {
+  font-size: var(--t-1);
   color: var(--ink-soft);
 }
 
@@ -134,5 +354,11 @@
 
   .ligne__quoi {
     grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pouls::before {
+    animation: none;
   }
 }

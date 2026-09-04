@@ -103,3 +103,29 @@ def test_le_code_prof_par_defaut_n_est_pas_devinable():
 
     assert routes_prof.CODE_PROF != "prof-dev"
     assert len(routes_prof.CODE_PROF) >= 12
+
+
+def test_les_reussis_sont_la_liste_des_exercices_pas_leur_compte(client, session_test):
+    """Le tableau de bord doit pouvoir ne compter que les obligatoires.
+
+    L'API ignore lesquels le sont — le contenu vit cote front — donc elle
+    renvoie les identifiants et laisse le tri a celui qui sait.
+    """
+    _tentative(session_test, "DOJO-L4XZ", "s1-02", "vert", 300)
+    _tentative(session_test, "DOJO-L4XZ", "s1-05", "bleu", 200)
+    _tentative(session_test, "DOJO-L4XZ", "s1-07", "rouge", 100, "NameError")
+    ligne = next(
+        a for a in client.get("/prof/seance", headers=ENTETES).json()["eleves"]
+        if a["code_acces"] == "DOJO-L4XZ"
+    )
+    assert ligne["reussis"] == ["s1-02", "s1-05"]
+
+
+def test_un_exercice_reussi_deux_fois_ne_compte_qu_une_fois(client, session_test):
+    _tentative(session_test, "DOJO-P9WK", "s1-02", "bleu", 300)
+    _tentative(session_test, "DOJO-P9WK", "s1-02", "vert", 100)
+    ligne = next(
+        a for a in client.get("/prof/seance", headers=ENTETES).json()["eleves"]
+        if a["code_acces"] == "DOJO-P9WK"
+    )
+    assert ligne["reussis"] == ["s1-02"]
