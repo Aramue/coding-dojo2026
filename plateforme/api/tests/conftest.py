@@ -33,8 +33,30 @@ def fixture_client():
     application.dependency_overrides.clear()
 
 
+@pytest.fixture(name="inscrire")
+def fixture_inscrire(client):
+    """Inscrit un eleve comme le ferait le professeur.
+
+    Un code inconnu n'ouvre plus de session : chaque test qui a besoin d'un
+    eleve doit donc le creer, exactement comme en vrai.
+    """
+
+    def inscrire(code: str, prenom: str = "Camille", **champs) -> None:
+        from app import bdd
+        from app.modeles import Eleve
+
+        generateur = application.dependency_overrides[bdd.obtenir_session]()
+        session = next(generateur)
+        session.add(Eleve(code_acces=code, prenom=prenom, **champs))
+        session.commit()
+        session.close()
+
+    return inscrire
+
+
 @pytest.fixture(name="jeton")
-def fixture_jeton(client):
+def fixture_jeton(client, inscrire):
+    inscrire("DOJO-K7M2")
     reponse = client.post("/session", json={"code_acces": "DOJO-K7M2"})
     return reponse.json()["jeton"]
 

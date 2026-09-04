@@ -112,3 +112,40 @@ def test_un_exercice_reussi_deux_fois_ne_compte_qu_une_fois(client, session_test
         if a["code_acces"] == "DOJO-P9WK"
     )
     assert ligne["reussis"] == ["s1-02"]
+
+
+def _inscrire(session: Session, code: str, prenom: str = "Camille", nom: str = "Rey") -> None:
+    session.add(Eleve(code_acces=code, prenom=prenom, nom=nom))
+    session.commit()
+
+
+def test_un_eleve_inscrit_qui_n_a_rien_soumis_apparait_quand_meme(client, session_test):
+    """« Qui n'a pas commence » est ce qu'il faut voir dans le premier quart
+    d'heure : construite depuis les tentatives, la liste l'ignorait."""
+    _inscrire(session_test, "DOJO-N4WQ", "Alex")
+    ligne = client.get("/prof/seance", headers=ENTETES).json()["eleves"][0]
+    assert ligne["code_acces"] == "DOJO-N4WQ"
+    assert ligne["statut"] == "pas_commence"
+    assert ligne["exercice_id"] is None
+    assert ligne["reussis"] == []
+
+
+def test_la_seance_porte_l_identite_de_l_eleve(client, session_test):
+    _inscrire(session_test, "DOJO-N4WQ", "Alex", "Nikiforov")
+    ligne = client.get("/prof/seance", headers=ENTETES).json()["eleves"][0]
+    assert ligne["prenom"] == "Alex"
+    assert ligne["nom"] == "Nikiforov"
+
+
+def test_ceux_qui_n_ont_pas_commence_passent_apres_les_bloques(client, session_test):
+    _inscrire(session_test, "DOJO-N4WQ", "Alex")
+    for _ in range(3):
+        _tentative(session_test, "DOJO-ZZZZ", "s1-21", "rouge", 30, "TypeError")
+    eleves = client.get("/prof/seance", headers=ENTETES).json()["eleves"]
+    assert [e["statut"] for e in eleves] == ["bloque", "pas_commence"]
+
+
+def test_un_eleve_retire_disparait_de_la_seance(client, session_test):
+    _inscrire(session_test, "DOJO-N4WQ", "Alex")
+    client.delete("/prof/eleves/DOJO-N4WQ", headers=ENTETES)
+    assert client.get("/prof/seance", headers=ENTETES).json()["eleves"] == []

@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
-from .modeles import Tentative
+from .modeles import Eleve, Tentative
 
 routeur = APIRouter(prefix="/prof")
 
@@ -44,7 +44,7 @@ def verifier_prof(x_code_prof: Annotated[str | None, Header()] = None) -> None:
 
 @routeur.get("/seance", dependencies=[Depends(verifier_prof)])
 def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
-    tentatives = session.exec(select(Tentative).order_by(Tentative.horodatage)).all()
+    tentatives = session.exec(select(Tentative).order_by(Tentative.horodatage)).all()  # type: ignore[arg-type]
 
     par_eleve: dict[str, list[Tentative]] = {}
     for t in tentatives:
@@ -52,7 +52,31 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
 
     maintenant = datetime.now(timezone.utc)
     eleves = []
-    for code, liste in par_eleve.items():
+    # On part de la CLASSE, pas des tentatives : un eleve inscrit qui n'a rien
+    # soumis n'apparaissait nulle part, alors que « qui n'a pas commence » est
+    # justement ce qu'il faut voir dans le premier quart d'heure d'une seance.
+    for inscrit in session.exec(select(Eleve)).all():
+        liste = par_eleve.get(inscrit.code_acces, [])
+        identite = {
+            "code_acces": inscrit.code_acces,
+            "prenom": inscrit.prenom,
+            "nom": inscrit.nom,
+        }
+
+        if not liste:
+            eleves.append(
+                {
+                    **identite,
+                    "exercice_id": None,
+                    "statut": "pas_commence",
+                    "echecs_consecutifs": 0,
+                    "inactif_depuis_s": _ecoule(maintenant, inscrit.vu_le),
+                    "dernier_type_erreur": None,
+                    "reussis": [],
+                }
+            )
+            continue
+
         derniere = liste[-1]
 
         echecs = 0
@@ -62,10 +86,7 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
             else:
                 break
 
-        horodatage = derniere.horodatage
-        if horodatage.tzinfo is None:
-            horodatage = horodatage.replace(tzinfo=timezone.utc)
-        inactif_depuis = int((maintenant - horodatage).total_seconds())
+        inactif_depuis = _ecoule(maintenant, derniere.horodatage)
 
         if echecs >= ECHECS_POUR_BLOQUE:
             statut = "bloque"
@@ -76,7 +97,7 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
 
         eleves.append(
             {
-                "code_acces": code,
+                **identite,
                 "exercice_id": derniere.exercice_id,
                 "statut": statut,
                 "echecs_consecutifs": echecs,
@@ -97,6 +118,13 @@ def lire_seance(session: Annotated[Session, Depends(obtenir_session)]) -> dict:
     # l'affichage professeur — la lecon des rondes de la tache 11. Un statut
     # annonce mais jamais produit est pire qu'un statut absent : "reussis"
     # suffit deja a voir qui avance.
-    ordre = {"bloque": 0, "inactif": 1, "en_cours": 2}
+    ordre = {"bloque": 0, "inactif": 1, "pas_commence": 2, "en_cours": 3}
     eleves.sort(key=lambda a: (ordre[a["statut"]], -a["inactif_depuis_s"]))
     return {"eleves": eleves}
+
+
+def _ecoule(maintenant: datetime, quand: datetime) -> int:
+    """Secondes ecoulees, en tolerant un horodatage sans fuseau (SQLite en rend)."""
+    if quand.tzinfo is None:
+        quand = quand.replace(tzinfo=timezone.utc)
+    return int((maintenant - quand).total_seconds())

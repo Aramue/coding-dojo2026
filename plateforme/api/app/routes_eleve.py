@@ -61,6 +61,9 @@ class DemandeSession(BaseModel):
 class ReponseSession(BaseModel):
     jeton: str
     code_acces: str
+    # Vide tant que le professeur n'a rien saisi : l'interface retombe alors
+    # sur le code, comme avant.
+    prenom: str = ""
 
 
 class DemandeTentative(BaseModel):
@@ -96,14 +99,22 @@ def ouvrir_session(
 ) -> ReponseSession:
     eleve = session.get(Eleve, demande.code_acces)
     if eleve is None:
-        session.add(Eleve(code_acces=demande.code_acces))
-    else:
-        # `vu_le` alimente le compteur d'eleves connectes du tableau de bord :
-        # sans cette mise a jour, il resterait egal a `cree_le` et mentirait.
-        eleve.vu_le = maintenant()
-        session.add(eleve)
+        # Un code inconnu n'ouvre plus rien. Auparavant il creait l'eleve a la
+        # volee : une faute de frappe donnait un compte vide, sans message, et
+        # l'eleve croyait avoir perdu sa progression — pendant que la liste du
+        # professeur se remplissait de fantomes.
+        raise HTTPException(404, "Code d'acces inconnu")
+
+    # `vu_le` alimente le compteur d'eleves connectes du tableau de bord :
+    # sans cette mise a jour, il resterait egal a `cree_le` et mentirait.
+    eleve.vu_le = maintenant()
+    session.add(eleve)
     session.commit()
-    return ReponseSession(jeton=creer_jeton(demande.code_acces), code_acces=demande.code_acces)
+    return ReponseSession(
+        jeton=creer_jeton(demande.code_acces),
+        code_acces=demande.code_acces,
+        prenom=eleve.prenom,
+    )
 
 
 @routeur.get("/parcours")

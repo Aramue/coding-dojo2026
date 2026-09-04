@@ -2,14 +2,33 @@ def entetes(jeton: str) -> dict:
     return {"Authorization": f"Bearer {jeton}"}
 
 
-def test_session_cree_l_eleve_et_rend_un_jeton(client):
+def test_un_code_inscrit_rend_un_jeton(client, inscrire):
+    inscrire("DOJO-K7M2")
     reponse = client.post("/session", json={"code_acces": "DOJO-K7M2"})
     assert reponse.status_code == 200
     assert reponse.json()["code_acces"] == "DOJO-K7M2"
     assert reponse.json()["jeton"].startswith("DOJO-K7M2.")
 
 
-def test_session_est_idempotente(client):
+def test_un_code_inconnu_n_ouvre_rien(client):
+    """Il creait l'eleve a la volee : une faute de frappe donnait un compte vide,
+    sans message, et l'eleve croyait avoir perdu sa progression."""
+    reponse = client.post("/session", json={"code_acces": "DOJO-ZZZZ"})
+    assert reponse.status_code == 404
+
+
+def test_la_session_rend_le_prenom_de_l_eleve(client, inscrire):
+    inscrire("DOJO-K7M2", prenom="Camille")
+    assert client.post("/session", json={"code_acces": "DOJO-K7M2"}).json()["prenom"] == "Camille"
+
+
+def test_un_eleve_sans_prenom_rend_une_chaine_vide(client, inscrire):
+    inscrire("DOJO-K7M2", prenom="")
+    assert client.post("/session", json={"code_acces": "DOJO-K7M2"}).json()["prenom"] == ""
+
+
+def test_session_est_idempotente(client, inscrire):
+    inscrire("DOJO-K7M2")
     client.post("/session", json={"code_acces": "DOJO-K7M2"})
     reponse = client.post("/session", json={"code_acces": "DOJO-K7M2"})
     assert reponse.status_code == 200
@@ -151,9 +170,10 @@ def test_un_jeton_forge_avec_un_autre_secret_est_refuse(client):
     assert reponse.status_code == 401
 
 
-def test_une_seconde_session_met_a_jour_vu_le(client):
+def test_une_seconde_session_met_a_jour_vu_le(client, inscrire):
     from app.modeles import Eleve
 
+    inscrire("DOJO-K7M2")
     client.post("/session", json={"code_acces": "DOJO-K7M2"})
     client.post("/session", json={"code_acces": "DOJO-K7M2"})
 
@@ -169,7 +189,8 @@ def test_une_seconde_session_met_a_jour_vu_le(client):
     assert eleves[0].vu_le >= eleves[0].cree_le
 
 
-def test_un_code_au_nouveau_format_est_accepte(client):
+def test_un_code_au_nouveau_format_est_accepte(client, inscrire):
+    inscrire("DOJO-K7M2")
     reponse = client.post("/session", json={"code_acces": "DOJO-K7M2"})
     assert reponse.status_code == 200
     assert reponse.json()["code_acces"] == "DOJO-K7M2"
