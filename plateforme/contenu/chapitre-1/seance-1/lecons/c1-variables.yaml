@@ -1,0 +1,53 @@
+id: c1-variables
+notion: variables
+ordre: 2
+titre: Les variables
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Une variable, c'est une **boîte avec une étiquette**. Tu écris un nom
+      dessus, tu ranges une valeur dedans, et tu la ressors quand tu en as
+      besoin.
+  - type: paragraphe
+    texte: >-
+      Le nom te sert à retrouver la valeur plus loin dans le programme, sans
+      avoir à la réécrire.
+  - type: code
+    legende: Ranger, puis ressortir
+    executable: true
+    python: |
+      prenom = "Camille"
+      age = 16
+
+      print(prenom)
+      print(age)
+  - type: paragraphe
+    texte: >-
+      Tu choisis le nom. Prends-en un qui dit ce qu'il y a dedans : `prenom` se
+      relit six mois plus tard, `x` non. Un nom de variable s'écrit sans espace
+      et sans accent, et Python distingue les majuscules des minuscules —
+      `prenom` et `Prenom` sont deux boîtes différentes.
+  - type: paragraphe
+    texte: >-
+      Ranger une nouvelle valeur dans la même boîte **efface l'ancienne**. Une
+      boîte ne garde qu'une seule valeur à la fois.
+  - type: code
+    legende: La deuxième valeur remplace la première
+    executable: true
+    python: |
+      score = 10
+      score = 25
+
+      print(score)
+  - type: paragraphe
+    texte: >-
+      Python lit ton programme **de haut en bas, une ligne à la fois**. Une
+      boîte doit donc être remplie avant la ligne qui vient la lire — sinon
+      Python s'arrête et dit qu'il ne connaît pas ce nom.
+  - type: attention
+    texte: >-
+      Le signe `=` ne veut pas dire « est égal à ». Il veut dire « range la
+      valeur de droite dans la boîte de gauche ». C'est pour ça que
+      `score = score + 1` a du sens en Python, alors que c'est impossible en
+      mathématiques.

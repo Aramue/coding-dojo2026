@@ -1,0 +1,219 @@
+[
+  {
+    "id": "c1-afficher",
+    "notion": "afficher",
+    "ordre": 1,
+    "titre": "Afficher un message",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un programme qui ne dit rien ne sert à rien. La toute première chose à savoir faire, c'est **écrire un message à l'écran**. En Python, cela s'appelle `print`."
+      },
+      {
+        "type": "code",
+        "legende": "Ton premier programme",
+        "python": "print(\"Bonjour\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Lis cette ligne comme une phrase : `print` est l'ordre donné à Python, les parenthèses disent où commence et où finit ce qu'on lui donne, et les guillemets marquent le début et la fin du texte."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les guillemets **ne s'affichent pas**. Ils servent à Python, pas au lecteur. À l'écran, tu vois `Bonjour`, sans rien autour."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Python exécute tes lignes **de haut en bas, une à la fois**. Deux `print` donnent deux lignes à l'écran, dans l'ordre où tu les as écrites."
+      },
+      {
+        "type": "code",
+        "legende": "Deux lignes, dans cet ordre",
+        "python": "print(\"Bonjour\")\nprint(\"À demain\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tu peux aussi donner plusieurs choses à un seul `print`, séparées par des virgules. Python les affiche à la suite, **en insérant une espace entre chacune**."
+      },
+      {
+        "type": "code",
+        "legende": "Une virgule insère une espace",
+        "python": "print(\"Bonjour\", \"Camille\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "Un message doit s'afficher **exactement** comme demandé : une majuscule oubliée, une espace en trop ou un point manquant, et ce n'est plus le même texte. Python compare caractère par caractère, il ne devine rien."
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "c1-variables",
+    "notion": "variables",
+    "ordre": 2,
+    "titre": "Les variables",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une variable, c'est une **boîte avec une étiquette**. Tu écris un nom dessus, tu ranges une valeur dedans, et tu la ressors quand tu en as besoin."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le nom te sert à retrouver la valeur plus loin dans le programme, sans avoir à la réécrire."
+      },
+      {
+        "type": "code",
+        "legende": "Ranger, puis ressortir",
+        "python": "prenom = \"Camille\"\nage = 16\n\nprint(prenom)\nprint(age)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tu choisis le nom. Prends-en un qui dit ce qu'il y a dedans : `prenom` se relit six mois plus tard, `x` non. Un nom de variable s'écrit sans espace et sans accent, et Python distingue les majuscules des minuscules — `prenom` et `Prenom` sont deux boîtes différentes."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ranger une nouvelle valeur dans la même boîte **efface l'ancienne**. Une boîte ne garde qu'une seule valeur à la fois."
+      },
+      {
+        "type": "code",
+        "legende": "La deuxième valeur remplace la première",
+        "python": "score = 10\nscore = 25\n\nprint(score)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Python lit ton programme **de haut en bas, une ligne à la fois**. Une boîte doit donc être remplie avant la ligne qui vient la lire — sinon Python s'arrête et dit qu'il ne connaît pas ce nom."
+      },
+      {
+        "type": "attention",
+        "texte": "Le signe `=` ne veut pas dire « est égal à ». Il veut dire « range la valeur de droite dans la boîte de gauche ». C'est pour ça que `score = score + 1` a du sens en Python, alors que c'est impossible en mathématiques."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c1-types",
+    "notion": "types",
+    "ordre": 3,
+    "titre": "Types et conversion",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Toutes les valeurs ne se ressemblent pas. Python distingue le **texte** (`str`), les **nombres entiers** (`int`) et les **nombres à virgule** (`float`). C'est ce qu'on appelle le *type* d'une valeur."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ce qui est entre guillemets est toujours du texte, même si ça ressemble à un nombre. `17` est un entier ; `\"17\"` est un texte de deux caractères."
+      },
+      {
+        "type": "code",
+        "legende": "Trois types différents",
+        "python": "age = 17\ntaille = 1.75\nprenom = \"Camille\"\n\nprint(type(age))\nprint(type(taille))\nprint(type(prenom))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le type change **ce que fait le signe `+`**. Entre deux nombres, il additionne. Entre deux textes, il colle bout à bout."
+      },
+      {
+        "type": "code",
+        "legende": "Le même signe, deux effets",
+        "python": "print(2 + 3)\nprint(\"2\" + \"3\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Entre un texte et un nombre, en revanche, Python refuse : il ne sait pas s'il doit additionner ou coller. Il faut d'abord **convertir**. `str()` transforme un nombre en texte, `int()` transforme un texte en entier."
+      },
+      {
+        "type": "code",
+        "legende": "Convertir avant de coller",
+        "python": "age = 17\nprint(\"J'ai \" + str(age) + \" ans\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Il existe plus court. Un **f-string** — un texte précédé de la lettre `f` — te laisse écrire le nom d'une variable directement dans le message, entre accolades."
+      },
+      {
+        "type": "code",
+        "legende": "La même phrase, en f-string",
+        "python": "age = 17\nprenom = \"Camille\"\n\nprint(f\"{prenom} a {age} ans\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "`int()` n'accepte que des chiffres. `int(\"17\")` vaut `17`, mais `int(\"dix-sept\")` arrête le programme : Python ne sait pas lire les nombres écrits en lettres."
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c1-saisie",
+    "notion": "saisie",
+    "ordre": 4,
+    "titre": "Demander une information",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Jusqu'ici tes programmes affichaient toujours la même chose. Pour qu'ils s'adaptent, il faut **poser une question** à la personne qui les utilise. C'est le rôle de `input`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`input` fait deux choses : il affiche une invite, puis il attend que la personne tape quelque chose et appuie sur Entrée. Ce qu'elle a tapé devient la valeur de `input`, qu'on range dans une variable."
+      },
+      {
+        "type": "code",
+        "legende": "Poser une question et garder la réponse",
+        "python": "prenom = input(\"Ton prénom : \")\nprint(\"Bonjour\", prenom)\n",
+        "executable": false,
+        "entrees": [
+          "Camille"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le texte entre parenthèses est l'**invite**. Écris-la avec soin : c'est tout ce que la personne voit pour comprendre ce qu'on lui demande. Termine par un deux-points et une espace, pour que sa réponse ne colle pas à la question."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Point le plus important de cette leçon : `input` rend **toujours du texte**. Même si la personne tape `17`, tu obtiens le texte `\"17\"`, pas le nombre `17`. Tu ne peux donc pas calculer avec directement."
+      },
+      {
+        "type": "code",
+        "legende": "Convertir la réponse pour pouvoir calculer",
+        "python": "age = int(input(\"Ton âge : \"))\nprint(\"L'an prochain tu auras\", age + 1, \"ans\")\n",
+        "executable": false,
+        "entrees": [
+          "17"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Lis cette ligne de l'intérieur vers l'extérieur : `input` pose la question et rend du texte, `int` transforme ce texte en nombre, et le résultat est rangé dans `age`."
+      },
+      {
+        "type": "attention",
+        "texte": "Oublier `int()` ne provoque pas toujours une erreur — parfois le programme tourne et donne un résultat faux. `age + 1` sur du texte s'arrête net, mais `age + age` colle deux fois la réponse au lieu de la doubler."
+      }
+    ],
+    "famille": "operateurs"
+  }
+]

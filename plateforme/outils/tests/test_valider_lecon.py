@@ -226,3 +226,24 @@ def test_verifier_racine_sans_dossier_de_lecons(tmp_path):
     assert len(exercices) == 1
     assert lecons == []
     assert problemes == []
+
+
+def test_un_exemple_avec_entrees_simulees_tourne():
+    assert (
+        verifier_lecon(
+            lecon(
+                [
+                    {
+                        "type": "code",
+                        "legende": "x",
+                        "python": 'nom = input("Nom : ")\nprint(nom)',
+                        "entrees": ["Camille"],
+                    }
+                ],
+                id="c1-saisie",
+                notion="saisie",
+                ordre=4,
+            )
+        )
+        == []
+    )

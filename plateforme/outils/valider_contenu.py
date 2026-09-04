@@ -170,7 +170,7 @@ def verifier_lecon(lecon: Lecon) -> list[str]:
                     f"{notion!r}, enseignee apres celle-ci"
                 )
 
-        _, _, erreur = _executer(bloc.python, [])
+        _, _, erreur = _executer(bloc.python, bloc.entrees)
         if erreur:
             problemes.append(f"{lecon.id} : l'exemple {bloc.legende!r} plante ({erreur})")
     return problemes

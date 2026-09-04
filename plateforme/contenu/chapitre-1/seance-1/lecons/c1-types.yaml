@@ -1,0 +1,65 @@
+id: c1-types
+notion: types
+ordre: 3
+titre: Types et conversion
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Toutes les valeurs ne se ressemblent pas. Python distingue le **texte**
+      (`str`), les **nombres entiers** (`int`) et les **nombres à virgule**
+      (`float`). C'est ce qu'on appelle le *type* d'une valeur.
+  - type: paragraphe
+    texte: >-
+      Ce qui est entre guillemets est toujours du texte, même si ça ressemble à
+      un nombre. `17` est un entier ; `"17"` est un texte de deux caractères.
+  - type: code
+    legende: Trois types différents
+    executable: true
+    python: |
+      age = 17
+      taille = 1.75
+      prenom = "Camille"
+
+      print(type(age))
+      print(type(taille))
+      print(type(prenom))
+  - type: paragraphe
+    texte: >-
+      Le type change **ce que fait le signe `+`**. Entre deux nombres, il
+      additionne. Entre deux textes, il colle bout à bout.
+  - type: code
+    legende: Le même signe, deux effets
+    executable: true
+    python: |
+      print(2 + 3)
+      print("2" + "3")
+  - type: paragraphe
+    texte: >-
+      Entre un texte et un nombre, en revanche, Python refuse : il ne sait pas
+      s'il doit additionner ou coller. Il faut d'abord **convertir**. `str()`
+      transforme un nombre en texte, `int()` transforme un texte en entier.
+  - type: code
+    legende: Convertir avant de coller
+    executable: true
+    python: |
+      age = 17
+      print("J'ai " + str(age) + " ans")
+  - type: paragraphe
+    texte: >-
+      Il existe plus court. Un **f-string** — un texte précédé de la lettre `f` —
+      te laisse écrire le nom d'une variable directement dans le message, entre
+      accolades.
+  - type: code
+    legende: La même phrase, en f-string
+    executable: true
+    python: |
+      age = 17
+      prenom = "Camille"
+
+      print(f"{prenom} a {age} ans")
+  - type: attention
+    texte: >-
+      `int()` n'accepte que des chiffres. `int("17")` vaut `17`, mais
+      `int("dix-sept")` arrête le programme : Python ne sait pas lire les
+      nombres écrits en lettres.

@@ -1,0 +1,51 @@
+id: c1-saisie
+notion: saisie
+ordre: 4
+titre: Demander une information
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Jusqu'ici tes programmes affichaient toujours la même chose. Pour qu'ils
+      s'adaptent, il faut **poser une question** à la personne qui les utilise.
+      C'est le rôle de `input`.
+  - type: paragraphe
+    texte: >-
+      `input` fait deux choses : il affiche une invite, puis il attend que la
+      personne tape quelque chose et appuie sur Entrée. Ce qu'elle a tapé
+      devient la valeur de `input`, qu'on range dans une variable.
+  - type: code
+    legende: Poser une question et garder la réponse
+    entrees:
+      - Camille
+    python: |
+      prenom = input("Ton prénom : ")
+      print("Bonjour", prenom)
+  - type: paragraphe
+    texte: >-
+      Le texte entre parenthèses est l'**invite**. Écris-la avec soin : c'est
+      tout ce que la personne voit pour comprendre ce qu'on lui demande. Termine
+      par un deux-points et une espace, pour que sa réponse ne colle pas à la
+      question.
+  - type: paragraphe
+    texte: >-
+      Point le plus important de cette leçon : `input` rend **toujours du
+      texte**. Même si la personne tape `17`, tu obtiens le texte `"17"`, pas le
+      nombre `17`. Tu ne peux donc pas calculer avec directement.
+  - type: code
+    legende: Convertir la réponse pour pouvoir calculer
+    entrees:
+      - "17"
+    python: |
+      age = int(input("Ton âge : "))
+      print("L'an prochain tu auras", age + 1, "ans")
+  - type: paragraphe
+    texte: >-
+      Lis cette ligne de l'intérieur vers l'extérieur : `input` pose la question
+      et rend du texte, `int` transforme ce texte en nombre, et le résultat est
+      rangé dans `age`.
+  - type: attention
+    texte: >-
+      Oublier `int()` ne provoque pas toujours une erreur — parfois le programme
+      tourne et donne un résultat faux. `age + 1` sur du texte s'arrête net,
+      mais `age + age` colle deux fois la réponse au lieu de la doubler.

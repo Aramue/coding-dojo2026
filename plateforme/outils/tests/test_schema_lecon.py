@@ -189,3 +189,40 @@ def test_charger_tous_ignore_le_dossier_des_lecons(tmp_path):
     _ecrire(seance / "lecons", lecon_minimale())
 
     assert [ex.id for ex in charger_tous(tmp_path)] == ["s1-01"]
+
+
+def test_un_bloc_peut_declarer_des_entrees_simulees():
+    lecon = Lecon(
+        **lecon_minimale(
+            id="c1-saisie",
+            notion="saisie",
+            ordre=4,
+            blocs=[
+                {
+                    "type": "code",
+                    "legende": "x",
+                    "python": 'nom = input("Nom : ")',
+                    "entrees": ["Camille"],
+                }
+            ],
+        )
+    )
+    assert lecon.blocs[0].entrees == ["Camille"]
+
+
+def test_un_bloc_avec_entrees_ne_peut_pas_etre_executable():
+    """Le bac a sable du navigateur n'a aucun moyen de fournir ces entrees."""
+    with pytest.raises(ValidationError):
+        Lecon(
+            **lecon_minimale(
+                blocs=[
+                    {
+                        "type": "code",
+                        "legende": "x",
+                        "python": 'nom = input()',
+                        "entrees": ["Camille"],
+                        "executable": True,
+                    }
+                ]
+            )
+        )

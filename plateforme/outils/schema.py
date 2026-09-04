@@ -182,6 +182,20 @@ class BlocCode(BaseModel):
     # Un bloc executable porte un bouton « Essayer » : l'eleve modifie l'exemple
     # et l'execute, sans verdict ni progression enregistree.
     executable: bool = False
+    # Entrees simulees, pour un exemple qui appelle input(). Sans elles, la
+    # validation le refuse — un exemple de lecon doit tourner. Un bloc qui en
+    # declare ne peut PAS etre executable : le bac a sable du navigateur n'a
+    # aucun moyen de les fournir, et l'eleve tomberait sur une EOFError.
+    entrees: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def entrees_incompatibles_avec_le_bac_a_sable(self) -> "BlocCode":
+        if self.entrees and self.executable:
+            raise ValueError(
+                "un bloc avec des entrees simulees ne peut pas etre executable : "
+                "le bac a sable ne sait pas les fournir"
+            )
+        return self
 
     @field_validator("python")
     @classmethod
