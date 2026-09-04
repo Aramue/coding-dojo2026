@@ -1,4 +1,4 @@
-import type { Exercice } from './types'
+import type { Exercice, Lecon, Notion } from './types'
 
 /** Variables à relire dans l'espace de noms après exécution, pour les tests `variable`. */
 export function nomsVariablesRequis(exercice: Exercice): string[] {
@@ -7,9 +7,18 @@ export function nomsVariablesRequis(exercice: Exercice): string[] {
   return [...noms].sort()
 }
 
-/** Les exercices sont construits dans l'image et servis en statique. */
-export async function chargerParcours(chemin = '/contenu/seance-1.json'): Promise<Exercice[]> {
+/** Le contenu est construit dans l'image et servi en statique. */
+export async function chargerJson<T>(chemin: string): Promise<T> {
   const reponse = await fetch(chemin)
   if (!reponse.ok) throw new Error(`Contenu introuvable (${reponse.status})`)
-  return (await reponse.json()) as Exercice[]
+  return (await reponse.json()) as T
 }
+
+export const chargerParcours = (chemin = '/contenu/seance-1.json') =>
+  chargerJson<Exercice[]>(chemin)
+
+export const chargerNotions = (chemin = '/contenu/seance-1-notions.json') =>
+  chargerJson<Notion[]>(chemin)
+
+export const chargerLecons = (chemin = '/contenu/seance-1-lecons.json') =>
+  chargerJson<Lecon[]>(chemin)

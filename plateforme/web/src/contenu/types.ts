@@ -2,8 +2,10 @@ import type { Test } from '../validation/types'
 
 export type Exercice = {
   id: string
-  /** Libre côté schéma Python : sert au regroupement, pas au typage. */
+  /** Libre côté schéma Python : sert au regroupement fin, pas au typage. */
   concept: string
+  /** L'unité de navigation : une leçon, un groupe d'exercices, une couleur. */
+  notion: string
   famille: 'variables' | 'types' | 'operateurs' | 'conditions' | 'boucles'
   seance: 1 | 2 | 3
   niveau: 'normal' | 'expert'
@@ -15,4 +17,34 @@ export type Exercice = {
   indices: string[]
   tests: Test[]
   expert?: string
+}
+
+/** Une notion de la séance. Publiée par construire_contenu.py, jamais recopiée ici. */
+export type Notion = {
+  id: string
+  ordre: number
+  titre: string
+  famille: Exercice['famille']
+}
+
+export type Bloc =
+  | { type: 'paragraphe'; texte: string }
+  | { type: 'attention'; texte: string }
+  | {
+      type: 'code'
+      legende: string
+      python: string
+      executable: boolean
+      /** Entrées simulées d'un exemple qui appelle `input()`. Jamais exécutable. */
+      entrees: string[]
+    }
+
+export type Lecon = {
+  id: string
+  notion: string
+  ordre: number
+  titre: string
+  dureeMin: number
+  famille: Exercice['famille']
+  blocs: Bloc[]
 }
