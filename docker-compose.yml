@@ -1,7 +1,16 @@
+# Lancé depuis la racine du dépôt :
+#
+#   docker compose up -d --build
+#
+# `name` fixe le préfixe des conteneurs et des volumes. Sans lui, Docker prend
+# le nom du dossier qui contient ce fichier — les conteneurs s'appelaient
+# « deploiement-web-1 », ce qui ne dit rien à personne dans six mois.
+name: coding-dojo
+
 services:
   api:
     build:
-      context: ..
+      context: .
       dockerfile: deploiement/Dockerfile.api
     environment:
       DOJO_SECRET: ${DOJO_SECRET:?definir DOJO_SECRET dans .env}
@@ -12,7 +21,7 @@ services:
 
   web:
     build:
-      context: ..
+      context: .
       dockerfile: deploiement/Dockerfile.web
     environment:
       DOJO_DOMAINE: ${DOJO_DOMAINE:-localhost}
