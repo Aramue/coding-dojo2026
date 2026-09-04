@@ -7,5 +7,29 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['tests/**/*.test.{ts,tsx}'],
     setupFiles: ['./tests/preparation.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text-summary', 'text'],
+      include: ['src/**/*.{ts,tsx}'],
+      // Exclus : le worker (il ne tourne que dans un vrai navigateur, pas sous
+      // jsdom), le point d'entrée, et les fichiers de types qui ne contiennent
+      // aucune instruction exécutable.
+      exclude: ['src/main.tsx', 'src/execution/worker.ts', 'src/**/types.ts'],
+      thresholds: {
+        // Logique pure : rien ne justifie une ligne non couverte.
+        'src/validation/**': { statements: 100, branches: 100, functions: 100, lines: 100 },
+        'src/routage.ts': { statements: 100, branches: 100, functions: 100, lines: 100 },
+        'src/ui/texte.tsx': { statements: 100, branches: 100, functions: 100, lines: 100 },
+        // Plancher global : la mesure du 4 septembre 2026, arrondie à l'entier
+        // inférieur. C'est un cliquet, pas un objectif — il ne descend jamais.
+        // Les composants sont testés sur leur comportement, pas ligne à ligne :
+        // viser 100 % ici se gagnerait en écrivant des tests qui montent un
+        // composant et n'affirment rien.
+        statements: 45,
+        branches: 45,
+        functions: 45,
+        lines: 45,
+      },
+    },
   },
 })

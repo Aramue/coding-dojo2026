@@ -175,3 +175,118 @@ describe('evaluer', () => {
     expect(r.verdict).toBe('vert')
   })
 })
+
+describe('evaluer — les messages de type de variable', () => {
+  it('explique les guillemets de trop quand un entier est attendu', () => {
+    const r = evaluer({
+      code: 'age = "17"',
+      tests: [{ type: 'variable', nom: 'age', typeAttendu: 'int' }],
+      executions: [execution({ variables: { age: { valeur: '17', type: 'str' } } })],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.detail).toMatch(/guillemets/i)
+  })
+
+  it('explique les guillemets manquants quand du texte est attendu', () => {
+    const r = evaluer({
+      code: 'nom = 17',
+      tests: [{ type: 'variable', nom: 'nom', typeAttendu: 'str' }],
+      executions: [execution({ variables: { nom: { valeur: '17', type: 'int' } } })],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.detail).toContain('"')
+  })
+
+  it("retombe sur un conseil general pour une paire de types sans message dedie", () => {
+    const r = evaluer({
+      code: 'prix = "3.5"',
+      tests: [{ type: 'variable', nom: 'prix', typeAttendu: 'float' }],
+      executions: [execution({ variables: { prix: { valeur: '3.5', type: 'str' } } })],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.detail).toMatch(/comment tu as créé/i)
+  })
+
+  it('nomme en francais les types connus, et laisse passer les autres', () => {
+    const connu = evaluer({
+      code: 'ok = 1',
+      tests: [{ type: 'variable', nom: 'ok', typeAttendu: 'bool' }],
+      executions: [execution({ variables: { ok: { valeur: '1', type: 'int' } } })],
+    })
+    expect(connu.titre).toContain('booléen')
+
+    const inconnu = evaluer({
+      code: 'xs = 1',
+      tests: [{ type: 'variable', nom: 'xs', typeAttendu: 'list' }],
+      executions: [execution({ variables: { xs: { valeur: '1', type: 'int' } } })],
+    })
+    expect(inconnu.titre).toContain('un list')
+  })
+
+  it("refuse un type de test non gere, plutot que de le laisser passer", () => {
+    // Garde d'exhaustivite : sans elle, ajouter un type de Test sans le traiter
+    // rendrait `undefined` en silence — donc un exercice toujours valide.
+    expect(() =>
+      evaluer({
+        code: '',
+        tests: [{ type: 'inconnu' } as unknown as Parameters<typeof evaluer>[0]['tests'][number]],
+        executions: [execution()],
+      }),
+    ).toThrow(/non géré/i)
+  })
+})
+
+describe('evaluer — les cas restants', () => {
+  it('signale un depassement de temps avant tout autre verdict', () => {
+    const r = evaluer({
+      code: 'while True: pass',
+      tests: [{ type: 'sortie', entrees: [], attendu: 'Fini' }],
+      executions: [execution({ timeout: true })],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.titre).toMatch(/tourne en rond/i)
+  })
+
+  it("signale un depassement de temps meme s'il n'arrive qu'au second jeu d'entrees", () => {
+    // Une seule execution examinee suffirait a laisser passer un programme qui
+    // ne boucle que sur certaines entrees.
+    const r = evaluer({
+      code: 'x = input()',
+      tests: [
+        { type: 'sortie', entrees: ['1'], attendu: '' },
+        { type: 'sortie', entrees: ['2'], attendu: '' },
+      ],
+      executions: [execution(), execution({ timeout: true })],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.titre).toMatch(/tourne en rond/i)
+  })
+
+  it('compare la valeur attendue d une variable', () => {
+    const r = evaluer({
+      code: 'score = 10',
+      tests: [{ type: 'variable', nom: 'score', valeurAttendue: '25' }],
+      executions: [execution({ variables: { score: { valeur: '10', type: 'int' } } })],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.detail).toContain('25')
+    expect(r.detail).toContain('10')
+  })
+
+  it('laisse passer un motif interdit qui est respecte', () => {
+    const r = evaluer({
+      code: 'nom = "Camille"\nprint(nom)',
+      tests: [
+        { type: 'interdit', motif: 'print("Camille")' },
+        { type: 'variable', nom: 'nom', valeurAttendue: 'Camille' },
+      ],
+      // Un element par test : `evaluer` indexe `executions` par le rang du
+      // test. Le test `interdit` n'execute rien, d'ou l'execution vide.
+      executions: [
+        execution(),
+        execution({ variables: { nom: { valeur: 'Camille', type: 'str' } } }),
+      ],
+    })
+    expect(r.verdict).toBe('vert')
+  })
+})

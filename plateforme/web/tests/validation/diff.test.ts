@@ -40,3 +40,18 @@ describe('rendreVisible', () => {
     expect(rendreVisible('a b\nc')).toBe('a·b⏎\nc')
   })
 })
+
+describe('diffCaracteres — les queues de chaine', () => {
+  it("signale les caracteres en trop a la fin", () => {
+    // Couvre la boucle de queue cote `obtenu` : sans ce cas, les caracteres
+    // ajoutes apres la fin de l'attendu ne seraient jamais rendus.
+    expect(diffCaracteres('ab', 'abc')).toEqual([
+      { type: 'egal', texte: 'ab' },
+      { type: 'ajout', texte: 'c' },
+    ])
+  })
+
+  it('gere une chaine attendue vide', () => {
+    expect(diffCaracteres('', 'abc')).toEqual([{ type: 'ajout', texte: 'abc' }])
+  })
+})

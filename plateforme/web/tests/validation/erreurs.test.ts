@@ -69,3 +69,72 @@ describe('traduireErreur', () => {
     expect(m.piste).toBeTruthy()
   })
 })
+
+describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
+  const erreur = (type: string, message: string) => ({ type, message, ligne: 1 })
+
+  it("nomme l'operation et les deux types sur un operande non supporte", () => {
+    const m = traduireErreur(
+      erreur('TypeError', "unsupported operand type(s) for +: 'int' and 'str'"),
+    )
+    expect(m.titre).toContain('+')
+    expect(m.titre).toContain('int')
+    expect(m.titre).toContain('str')
+    expect(m.piste).toMatch(/input\(\)/)
+  })
+
+  it('reconnait les deux formulations du guillemet non ferme', () => {
+    // Python 3.10+ dit « unterminated string literal », les versions
+    // anterieures « EOL while scanning ». Les deux doivent tomber sur le
+    // meme message.
+    for (const message of [
+      'unterminated string literal (detected at line 1)',
+      'EOL while scanning string literal',
+    ]) {
+      expect(traduireErreur(erreur('SyntaxError', message)).titre).toMatch(/guillemet/i)
+    }
+  })
+
+  it('rappelle que la premiere position est 0 sur un IndexError', () => {
+    const m = traduireErreur(erreur('IndexError', 'string index out of range'))
+    expect(m.explication).toContain('0')
+    expect(m.piste).toContain('len(')
+  })
+
+  it("nomme le type et l'attribut sur un AttributeError", () => {
+    const m = traduireErreur(erreur('AttributeError', "'int' object has no attribute 'upper'"))
+    expect(m.titre).toContain('int')
+    expect(m.titre).toContain('upper')
+  })
+
+  it('traite le depassement de temps a part, avant toute regle', () => {
+    const m = traduireErreur(erreur('TimeoutError', ''))
+    expect(m.titre).toMatch(/tourne en rond/i)
+    expect(m.piste).toContain('while')
+  })
+
+  it('retombe sur le generique quand le type est connu mais le message inattendu', () => {
+    // Une regle n'est retenue que si son motif accroche : un TypeError d'une
+    // autre forme ne doit pas emprunter le message d'une regle voisine.
+    const m = traduireErreur(erreur('TypeError', "'int' object is not callable"))
+    expect(m.titre).toMatch(/arrêté sur une erreur/i)
+  })
+
+  it("ne laisse jamais fuir de jargon anglais vers l'eleve", () => {
+    const cas = [
+      erreur('NameError', "name 'x' is not defined"),
+      erreur('TypeError', 'can only concatenate str (not "int") to str'),
+      erreur('ZeroDivisionError', 'division by zero'),
+      erreur('IndexError', 'string index out of range'),
+      erreur('AttributeError', "'int' object has no attribute 'upper'"),
+      erreur('TimeoutError', ''),
+      erreur('RecursionError', 'boom'),
+    ]
+    for (const e of cas) {
+      const m = traduireErreur(e)
+      expect(`${m.titre} ${m.explication}`).not.toMatch(
+        /is not defined|unsupported|invalid literal|out of range|division by zero|no attribute/,
+      )
+    }
+  })
+})
