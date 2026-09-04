@@ -1,0 +1,638 @@
+/*
+ * Même langage que les pages élève : canevas neutre, contenu sur une carte,
+ * lignes séparées par des filets. Le rouge n'est pas décoratif — il désigne
+ * l'élève à aller voir.
+ */
+
+.tableau {
+  max-width: 1080px;
+  margin-inline: auto;
+  padding: var(--e-5) var(--e-3) var(--e-3);
+}
+
+/*
+ * Une bande qui suit le defilement. Vingt-quatre lignes font deux ecrans, et
+ * ce sont les compteurs qu'on relit toutes les deux minutes, pas le titre.
+ * Elle se colle sous l'en-tete de l'application, qui fait 3,5 rem.
+ */
+.tableau__entete {
+  position: sticky;
+  top: 3.5rem;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: var(--e-2) var(--e-3);
+  flex-wrap: wrap;
+  margin: 0 calc(-1 * var(--e-3)) var(--e-3);
+  padding: var(--e-2) var(--e-3);
+  /* Opaque, pas depoli : un fond translucide laissait voir le contenu passer
+     dessous, ce qui se lit comme un defaut d'affichage. */
+  background: var(--ground);
+  border-bottom: 1px solid var(--rule-doux);
+}
+
+.tableau__titre {
+  margin-right: auto;
+}
+
+.tableau__entete h1 {
+  margin: 0;
+  font-size: var(--t-5);
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.tableau__comptes {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tableau__effectif {
+  margin: 0.15rem 0 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Le pouls ---------- */
+
+/*
+ * Le pouls porte le meme point que les compteurs : sans separation, il se
+ * lisait comme un cinquieme compteur de la serie.
+ */
+.pouls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-left: var(--e-2);
+  border-left: 1px solid var(--rule-doux);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.pouls::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pouls-bat 2.4s ease-in-out infinite;
+}
+
+.pouls--attente::before { background: var(--ink-soft); }
+.pouls--rompu::before { background: var(--ko); animation: none; }
+.pouls--rompu { color: var(--ko); }
+
+@keyframes pouls-bat {
+  50% { opacity: 0.25; }
+}
+
+/* ---------- Repartition de la classe ---------- */
+
+.compte {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--ground-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.compte b {
+  color: var(--ink);
+}
+
+.compte[data-ton='bloque'] {
+  background: color-mix(in srgb, var(--ko) 13%, var(--surface));
+  color: var(--ko);
+}
+
+.compte[data-ton='bloque'] b { color: var(--ko); }
+
+.compte[data-ton='en_cours'] {
+  background: color-mix(in srgb, var(--ok) 11%, var(--surface));
+  color: var(--ok);
+}
+
+.compte[data-ton='en_cours'] b { color: var(--ok); }
+
+/* Un compteur a zero ne doit pas crier : il n'y a rien a y faire. */
+.compte[data-vide='true'] {
+  background: var(--ground-2);
+  color: var(--ink-soft);
+}
+
+.compte[data-vide='true'] b { color: var(--ink-soft); }
+
+/* ---------- Ce qui bloque plusieurs eleves ---------- */
+
+.blocages {
+  margin-bottom: var(--e-2);
+  padding: var(--e-2) var(--e-3) var(--e-3);
+  border-radius: var(--rayon-3);
+  background: color-mix(in srgb, var(--ko) 7%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 25%, var(--surface));
+}
+
+.blocages__titre {
+  margin: 0 0 var(--e-2);
+  font-size: var(--t-3);
+  color: var(--ko);
+}
+
+.blocage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--e-2);
+  padding: 0.5rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--ko) 18%, var(--surface));
+}
+
+.blocage__compte {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--ko);
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.blocage__texte {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.blocage__texte b {
+  color: var(--ink);
+  font-size: var(--t-3);
+}
+
+.blocage__notion {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.blocage__codes {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+.tableau [role='alert'] {
+  margin: 0 0 var(--e-2);
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--ko) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 35%, var(--surface));
+  color: var(--ko);
+  font-size: var(--t-2);
+}
+
+.tableau__lignes {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+  overflow: hidden;
+}
+
+.tableau__lignes:empty::after {
+  content: 'Personne n’est encore connecté.';
+  display: block;
+  padding: var(--e-4);
+  color: var(--ink-soft);
+  font-size: var(--t-3);
+}
+
+/*
+ * Trois zones, deux bords. A gauche l'eleve et sa jauge, au centre ce qu'il
+ * fait, a droite son etat — le detail ALIGNE A DROITE contre la pastille,
+ * sinon il flotte au milieu d'une colonne large et le regard n'a plus de rail.
+ */
+.ligne {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.85fr) minmax(0, 1.4fr) minmax(0, auto) auto 2rem;
+  gap: var(--e-2);
+  align-items: center;
+  min-height: 3.5rem;
+  padding: var(--e-1) var(--e-2) var(--e-1) var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
+  border-left: 3px solid transparent;
+  font-size: var(--t-2);
+  transition: background 150ms ease-out;
+}
+
+.ligne:hover {
+  background: var(--surface-doux);
+}
+
+.ligne[data-ouvert='true'] {
+  background: var(--surface-doux);
+}
+
+.ligne:last-child {
+  border-bottom: 0;
+}
+
+/*
+ * Teintes de fond dérivées de --ko via color-mix() : aucune couleur de la
+ * charte n'est recopiée en dur ici, elle passe toujours par sa variable CSS.
+ */
+.ligne--bloque,
+.ligne--inactif {
+  border-left-color: var(--ko);
+  background: color-mix(in srgb, var(--ko) 4%, var(--surface));
+}
+
+.ligne--bloque:hover,
+.ligne--inactif:hover,
+.ligne--bloque[data-ouvert='true'],
+.ligne--inactif[data-ouvert='true'] {
+  background: color-mix(in srgb, var(--ko) 8%, var(--surface));
+}
+
+/*
+ * Pas commence n'est pas une alerte : au debut d'une seance c'est l'etat de
+ * tout le monde. Un liseré neutre le distingue sans crier.
+ */
+.ligne--pas_commence {
+  border-left-color: var(--rule);
+  background: var(--surface-doux);
+}
+
+.ligne__eleve {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.ligne__nom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Faute de prenom saisi, c'est le code qui s'affiche : en chasse fixe, parce
+   qu'il se recopie caractere par caractere. */
+.ligne__eleve[data-anonyme='true'] .ligne__nom {
+  font-family: var(--police-code);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+/* ---------- La jauge, celle de l'eleve ---------- */
+
+.jauge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 400;
+}
+
+.jauge__piste {
+  flex: 1;
+  min-width: 2.5rem;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--ground-2);
+  overflow: hidden;
+}
+
+.jauge__part {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ok);
+  transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.jauge__compte {
+  flex: none;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.jauge[data-discrete='true'] {
+  margin-bottom: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jauge__part {
+    transition: none;
+  }
+}
+
+.ligne__attente {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.ligne__quoi {
+  color: var(--ink-soft);
+  text-align: right;
+  font-size: var(--t-1);
+}
+
+/* L'exercice porte son titre au-dessus de sa notion : deux lignes, une colonne. */
+.ligne__ou {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--ink);
+}
+
+.ligne__ou b {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ligne__notion {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+/* La forme encode un état : c'est le seul endroit où une pastille est justifiée. */
+.statut {
+  font-size: var(--t-1);
+  font-weight: 500;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  justify-self: end;
+}
+
+.statut--bloque {
+  background: color-mix(in srgb, var(--ko) 15%, var(--surface));
+  color: var(--ko);
+}
+
+.statut--inactif,
+.statut--pas_commence {
+  background: var(--ground-2);
+  color: var(--ink-soft);
+}
+
+.statut--en_cours {
+  background: color-mix(in srgb, var(--ok) 13%, var(--surface));
+  color: var(--ok);
+}
+
+@media (max-width: 720px) {
+  .tableau {
+    padding: var(--e-3) var(--e-2);
+  }
+
+  /*
+   * Le professeur circule dans la salle, souvent avec son telephone. Sur trois
+   * colonnes, le titre de l'exercice se retrouvait ecrase a un mot par ligne
+   * et les codes lui passaient dessus.
+   */
+  .blocage {
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: 0.35rem;
+  }
+
+  .blocage__codes {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .ligne {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.35rem;
+    padding: var(--e-2);
+  }
+
+  .ligne__quoi {
+    text-align: left;
+  }
+
+  .tableau__entete {
+    position: static;
+    margin-inline: 0;
+    padding-inline: 0;
+    background: none;
+  }
+
+  .ligne__ou {
+    grid-column: 1;
+  }
+
+  .ligne__quoi {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pouls::before {
+    animation: none;
+  }
+}
+
+/* ---------- Deplier un eleve ---------- */
+
+.ligne__deplier {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rayon-1);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+
+.ligne__deplier:hover {
+  background: var(--ground-2);
+  color: var(--ink);
+}
+
+.ligne__deplier:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 1px;
+}
+
+.ligne__chevron {
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ligne__chevron[data-ouvert='true'] {
+  transform: rotate(90deg);
+}
+
+/* Le detail prend toute la largeur, sous les quatre colonnes de la ligne. */
+.detail {
+  grid-column: 1 / -1;
+  margin-top: var(--e-1);
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: var(--surface-doux);
+  border: 1px solid var(--rule-doux);
+}
+
+.detail__vide {
+  margin: 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.parcours {
+  display: grid;
+  gap: var(--e-2);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.parcours__titre {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 0 0.3rem;
+  font-size: var(--t-1);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.parcours__compte {
+  flex: none;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.parcours__etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.etape {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.15rem 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+/*
+ * La marque porte l'etat : un point, une coche, deux coches. Largeur fixe pour
+ * que les titres restent alignes quel que soit l'etat.
+ */
+.etape__marque {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 1.4rem;
+  color: var(--rule);
+}
+
+.etape__marque svg + svg {
+  margin-left: -3px;
+}
+
+.etape[data-coches='0'] .etape__marque {
+  opacity: 0.55;
+}
+
+.etape[data-coches='1'] .etape__marque {
+  color: var(--py-blue);
+}
+
+.etape[data-coches='2'] .etape__marque {
+  color: var(--ok);
+}
+
+.etape[data-coches='2'] .etape__titre,
+.etape[data-coches='1'] .etape__titre {
+  color: var(--ink);
+}
+
+/* Le titre est un bouton : il ouvre l'exercice tel que l'eleve le voit. */
+.etape__titre {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 1px solid transparent;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.etape__titre:hover:not(:disabled) {
+  color: var(--py-blue);
+  border-bottom-color: currentColor;
+}
+
+.etape__titre:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.etape__titre:disabled {
+  cursor: default;
+}
+
+/* Ou l'eleve se trouve maintenant : c'est ce qu'on vient chercher en depliant. */
+.etape[data-courant='true'] .etape__titre {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.etape__ici {
+  flex: none;
+  font-size: 0.7rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  background: var(--py-blue);
+  color: #fff;
+}
+
+.etape__bonus {
+  flex: none;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+.parcours__garde {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: var(--e-1);
+  border-top: 1px solid var(--rule-doux);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ligne__chevron {
+    transition: none;
+  }
+}

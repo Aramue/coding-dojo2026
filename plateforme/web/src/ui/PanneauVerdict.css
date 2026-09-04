@@ -1,0 +1,65 @@
+/*
+ * Le verdict est le seul retour que l'eleve attend : il doit arriver, pas
+ * apparaitre d'un coup au milieu de la page. 180 ms, une seule fois.
+ */
+@keyframes verdict-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.99);
+  }
+}
+
+.verdict {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.8rem 0.95rem;
+  border-radius: var(--rayon-2);
+  border-left: 3px solid transparent;
+  font-size: var(--t-2);
+  animation: verdict-arrive 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verdict {
+    animation: none;
+  }
+}
+.verdict__marque { font-weight: 700; flex: none; }
+.verdict__texte { display: flex; flex-direction: column; gap: 0.3rem; }
+.verdict__detail { opacity: 0.9; }
+/*
+ * Les deux sorties, l'une sous l'autre. Le libelle est au-dessus de son texte
+ * et non a cote : une sortie attendue tient souvent sur plusieurs lignes, et
+ * un libelle en debut de ligne desalignerait tout ce qui suit.
+ */
+.comparaison {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.comparaison__libelle {
+  display: block;
+  font-size: var(--t-1);
+  opacity: 0.75;
+  margin-bottom: 0.15rem;
+}
+
+.comparaison__texte {
+  font-family: var(--police-code);
+  font-size: 0.84rem;
+  margin: 0;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 22%);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+.diff { border-radius: 3px; padding: 0 1px; }
+.diff--ajout  { background: var(--d-red); color: #fff; }
+.diff--manque { background: var(--d-green); color: #10240F; }
+
+.verdict--vert  { background: rgb(80 250 123 / 11%); border-left-color: var(--d-green); color: #D6FFE2; }
+.verdict--bleu  { background: rgb(139 233 253 / 12%); border-left-color: var(--d-cyan); color: #DAF6FF; }
+.verdict--rouge { background: rgb(255 85 85 / 13%); border-left-color: var(--d-red); color: #FFDCDA; }

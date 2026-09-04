@@ -1,0 +1,34 @@
+id: s1-16
+concept: variable
+notion: variables
+seance: 1
+niveau: normal
+type: debug
+titre: prenom, Prenom, PRENOM
+obligatoire: false
+enonce: |
+  La boîte existe, elle est remplie, et pourtant Python dit qu'il ne la connaît
+  pas :
+
+  NameError: name 'Prenom' is not defined
+
+  Regarde les deux lignes de très près. Répare le programme sans changer la
+  première ligne.
+depart: |
+  prenom = "Camille"
+  print(Prenom)
+indices:
+  - Python distingue les majuscules des minuscules. Pour lui, deux noms qui ne s'écrivent pas exactement pareil sont deux boîtes différentes.
+  - "Compare caractère par caractère le nom écrit à la ligne 1 et celui écrit à la ligne 2. Un seul les sépare."
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Camille
+  # La sortie seule se falsifie en ecrivant le prenom en dur : on exige la
+  # ligne correcte, ce qui est justement ce que l'exercice enseigne.
+  - type: contient
+    motif: 'print(prenom)'
+solution: |
+  prenom = "Camille"
+  print(prenom)

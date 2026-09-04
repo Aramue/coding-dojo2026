@@ -1,0 +1,34 @@
+id: s1-15
+concept: variable
+notion: variables
+seance: 1
+niveau: normal
+type: debug
+titre: L'affectation à l'envers
+obligatoire: false
+enonce: |
+  Ce programme devait ranger 5 dans une boîte nommée age, puis l'afficher.
+  Python refuse de le lire, et s'arrête avant même de commencer :
+
+  SyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?
+
+  Traduction : on ne peut pas ranger quelque chose dans un nombre.
+  Répare la première ligne.
+depart: |
+  5 = age
+  print(age)
+indices:
+  - Le signe = range la valeur de droite dans la boîte de gauche. Demande-toi ce qui, dans cette ligne, est la boîte et ce qui est la valeur.
+  - Une boîte porte un nom, pas un nombre. Les deux morceaux de la première ligne sont dans le mauvais ordre.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      5
+  - type: variable
+    nom: age
+    type_attendu: int
+    valeur_attendue: "5"
+solution: |
+  age = 5
+  print(age)

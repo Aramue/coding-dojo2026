@@ -1,0 +1,31 @@
+id: s1-32
+concept: conversion
+notion: saisie
+seance: 1
+niveau: normal
+type: predire
+titre: int(input()) se lit de l'intérieur
+obligatoire: false
+enonce: |
+  Deux fonctions imbriquées, l'une dans les parenthèses de l'autre. Pour savoir
+  ce que fait cette ligne, il faut la lire de l'intérieur vers l'extérieur.
+
+  age = int(input("Ton âge : "))
+
+  Dans quel ordre Python fait-il les choses ?
+depart: |
+  age = int(input("Ton âge : "))
+  print(age + 1)
+indices:
+  - Python ne peut pas convertir une réponse qu'il n'a pas encore reçue. Demande-toi ce qui doit forcément arriver en premier.
+  - "La fonction la plus à l'intérieur des parenthèses s'exécute la première. Son résultat devient ce que reçoit la fonction juste au-dessus."
+tests:
+  - type: qcm
+    options:
+      - Il affiche la question, attend la réponse tapée, transforme ce texte en nombre entier, puis range le nombre dans age
+      - Il transforme d'abord la question en nombre entier, puis l'affiche et attend la réponse
+      - Il attend la réponse, la range dans age, puis la transforme en nombre entier
+    bonne_reponse: 0
+solution: |
+  age = int(input("Ton âge : "))
+  print(age + 1)

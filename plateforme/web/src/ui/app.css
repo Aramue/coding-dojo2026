@@ -1,0 +1,682 @@
+/*
+ * Mise en page de l'application.
+ *
+ * Principe : le CANEVAS est neutre, le CONTENU vit sur une surface blanche, et
+ * la couleur de la notion sert d'accent — filet, pastille, état actif. Inonder
+ * la page d'un pastel saturé faisait ressembler l'ensemble à une maquette : la
+ * couleur ne portait plus d'information, elle remplissait de l'espace.
+ *
+ * L'écran d'exercice reste sombre. C'est la bascule « j'apprends / j'écris »
+ * relevée dans les supports de cours, et elle se voit sans être expliquée.
+ */
+
+/* ---------- Ossature ---------- */
+
+.appli {
+  min-height: 100vh;
+  display: grid;
+  grid-template-areas:
+    'entete entete'
+    'menu contenu';
+  grid-template-columns: 272px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  background: var(--ground);
+}
+
+/* Avant connexion, il n'y a pas de menu à placer. */
+.appli--seul {
+  grid-template-areas:
+    'entete'
+    'contenu';
+  grid-template-columns: 1fr;
+}
+
+.appli > main {
+  grid-area: contenu;
+  min-width: 0; /* sans quoi un <pre> large fait déborder toute la grille */
+}
+
+.appli > .alerte {
+  grid-area: contenu;
+  align-self: start;
+}
+
+@media (max-width: 900px) {
+  .appli {
+    grid-template-areas:
+      'entete'
+      'menu'
+      'contenu';
+    /*
+     * minmax(0, 1fr) et non 1fr : une colonne `1fr` prend au minimum la
+     * largeur de son contenu, et la bande de menu defilante (quatre cartes de
+     * 12 rem) faisait alors deborder toute la page de 17 px vers la droite.
+     */
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+  }
+}
+
+/* ---------- En-tête ---------- */
+
+.entete {
+  grid-area: entete;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  height: 3.5rem;
+  padding: 0 var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
+  background: var(--surface);
+}
+
+.entete__marque {
+  font-weight: 700;
+  font-size: var(--t-3);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.entete__marque span {
+  color: var(--py-blue);
+}
+
+.entete__seance {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  padding-left: var(--e-3);
+  border-left: 1px solid var(--rule-doux);
+  white-space: nowrap;
+}
+
+.entete__espace {
+  flex: 1;
+}
+
+/* Avancement global de la séance : la seule question qu'on se pose en arrivant. */
+.entete__avancement {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.entete__jauge {
+  width: 7rem;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ground-2);
+  overflow: hidden;
+}
+
+.entete__jauge span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ok);
+  transition: width 250ms ease-out;
+}
+
+/*
+ * Qui est connecte. Le prenom porte, le code accompagne : sur une machine de
+ * salle informatique, c'est le prenom qui repond a « est-ce bien ma session ? ».
+ */
+.entete__qui {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.entete__prenom {
+  font-size: var(--t-2);
+  font-weight: 500;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entete__code {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  padding: 0.3rem var(--e-1);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-1);
+  background: var(--surface-doux);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .entete__seance,
+  .entete__jauge {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entete__jauge span {
+    transition: none;
+  }
+}
+
+/* ---------- En-tête de page (Cours et Exercices) ---------- */
+
+.page {
+  padding: var(--e-5) var(--e-4) var(--e-6);
+}
+
+.page__entete {
+  max-width: 72ch;
+  margin: 0 auto var(--e-3);
+}
+
+/* Le sur-titre est le seul endroit où la couleur de notion prend du texte. */
+.page__notion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 var(--e-1);
+  font-size: var(--t-1);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--encre);
+}
+
+.page__notion::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--encre);
+}
+
+.page__titre {
+  font-size: var(--t-6);
+  color: var(--ink);
+  margin: 0;
+}
+
+.page__meta {
+  margin: var(--e-1) 0 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.page__corps {
+  max-width: 72ch;
+  margin: 0 auto;
+}
+
+/* La carte de contenu : c'est elle qui fait la différence avec un fond nu. */
+.carte {
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+}
+
+/* Une page se relit du haut : le défilement fluide n'y est pas décoratif. */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: var(--e-3) var(--e-2) var(--e-5);
+  }
+}
+
+/* ---------- Mouvement ---------- */
+
+/*
+ * Trois usages seulement, et jamais plus de 250 ms : l'arrivée d'une page,
+ * l'apparition du verdict, l'avancement d'une jauge. Le reste est immobile.
+ *
+ * L'animation d'entrée est appliquée sur `main` avec la destination en clé :
+ * React remonte le nœud à chaque changement de page, donc l'animation rejoue
+ * sans qu'aucun état ait à la piloter.
+ */
+@keyframes entree-page {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.appli > main {
+  animation: entree-page 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Le contenu d'une carte apparaît juste après elle, pas en même temps. */
+@keyframes entree-douce {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.page__corps {
+  animation: entree-douce 260ms 60ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pied {
+  animation: entree-douce 260ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appli > main,
+  .page__corps,
+  .pied {
+    animation: none;
+  }
+}
+
+/* ---------- Boutons ---------- */
+
+.bouton {
+  font-family: inherit;
+  font-weight: 500;
+  font-size: var(--t-2);
+  padding: 0.65rem var(--e-3);
+  min-height: 2.75rem;
+  border-radius: var(--rayon-2);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 150ms ease-out, border-color 150ms ease-out;
+}
+
+.bouton:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+}
+
+.bouton:disabled {
+  cursor: default;
+}
+
+/* Bouton secondaire, sur fond clair. */
+.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu) {
+  background: var(--surface);
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
+.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu):hover:not(:disabled) {
+  background: var(--ground-2);
+  border-color: var(--ink-soft);
+}
+
+/*
+ * Troisieme variante : l'action de ligne. Deux par ligne, sur vingt-quatre
+ * lignes — au calme. Elles se dessinent au survol, sinon elles tirent l'oeil
+ * plus fort que les noms qu'elles accompagnent.
+ */
+.bouton--menu {
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  font-size: var(--t-1);
+  font-weight: 400;
+  color: var(--ink-soft);
+  background: none;
+}
+
+.bouton--menu:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--ground-2);
+}
+
+.bouton--primaire {
+  background: var(--py-yellow);
+  color: #2a2000;
+}
+
+.bouton--primaire:hover:not(:disabled) {
+  background: #ffd35e;
+}
+
+.bouton--sombre {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+.bouton--sombre:hover:not(:disabled) {
+  background: #33302a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton {
+    transition: none;
+  }
+}
+
+/* ---------- Page introuvable ---------- */
+
+.introuvable {
+  display: grid;
+  place-items: center;
+  padding: var(--e-6) var(--e-4);
+  text-align: center;
+}
+
+.introuvable h1 {
+  font-size: var(--t-5);
+  margin: 0 0 var(--e-1);
+  color: var(--ink);
+}
+
+.introuvable p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* ---------- Alerte réseau ---------- */
+
+.alerte {
+  margin: 0;
+  padding: 0.8rem var(--e-3);
+  background: var(--ko);
+  color: #fff;
+  font-size: var(--t-2);
+}
+
+/* ---------- Écran d'exercice ---------- */
+/*
+ * Fond sombre : ici, on écrit du code. C'est la bascule « j'apprends /
+ * j'écris », et elle se voit sans être expliquée.
+ *
+ * Le fond est le MÊME pour les cinq notions. Le teinter avec la couleur
+ * `deep` de la famille donnait un brun et un vert très sombres qui tenaient
+ * mal un écran entier. ==Sur fond sombre, l'accent lisible est le pastel==,
+ * pas l'encre : `--tint` sert de couleur de notion ici.
+ */
+
+.exercice {
+  --panneau: rgb(255 255 255 / 4%);
+  --trait: rgb(255 255 255 / 11%);
+  --texte-clair: #e9e8ee;
+  --texte-doux: #a8a6b4;
+  --accent: var(--tint, #c2ccff);
+  /*
+   * L'ecran d'exercice se lit en UNE colonne : la consigne, puis le code.
+   * Cote a cote, les deux se disputaient l'attention et l'eleve devait
+   * balayer de gauche a droite entre chaque phrase et chaque ligne tapee.
+   * Une seule largeur gouverne le fil, l'en-tete, le rappel et le corps :
+   * tout doit s'aligner sur le meme bord.
+   */
+  --colonne: 820px;
+
+  background: var(--nuit);
+  color: var(--texte-clair);
+  padding: var(--e-3) var(--e-4) var(--e-6);
+}
+
+.exercice__fil {
+  max-width: var(--colonne);
+  margin: 0 auto;
+}
+
+.exercice__fil a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.25rem;
+  font-size: var(--t-2);
+  color: var(--texte-doux);
+  text-decoration: none;
+}
+
+.exercice__fil a::before {
+  content: '←';
+}
+
+.exercice__fil a:hover {
+  color: #fff;
+}
+
+.exercice__fil a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--rayon-1);
+}
+
+/* La notion, en pastel : c'est le seul rappel coloré de l'écran sombre. */
+.exercice__notion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.exercice__notion::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.exercice__entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  max-width: var(--colonne);
+  margin: var(--e-1) auto var(--e-3);
+  padding-bottom: var(--e-2);
+  border-bottom: 1px solid var(--trait);
+}
+
+.exercice__titre {
+  font-size: var(--t-5);
+  color: #fff;
+  margin: 0;
+}
+
+.exercice__essais {
+  font-size: var(--t-1);
+  color: var(--texte-doux);
+  font-variant-numeric: tabular-nums;
+}
+
+.exercice__grille {
+  display: grid;
+  gap: var(--e-3);
+  max-width: var(--colonne);
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* L'énoncé est un panneau, pas du texte posé sur la couleur. */
+.exercice__enonce {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  padding: var(--e-3);
+  background: var(--panneau);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-3);
+}
+
+.exercice__enonce > p {
+  margin: 0;
+  color: var(--texte-clair);
+  font-size: var(--t-3);
+  line-height: 1.65;
+}
+
+.exercice__enonce > p code {
+  font-family: var(--police-code);
+  font-size: 0.88em;
+  background: rgb(255 255 255 / 8%);
+  border-radius: var(--rayon-1);
+  padding: 0.08em 0.35em;
+}
+
+/*
+ * Sortie attendue, liste numerotee, message d'erreur : les retours a la ligne
+ * y portent du sens, on les garde tels quels.
+ */
+/* Une liste de consignes reste de la prose : ses retours comptent, sa police non. */
+.enonce__liste {
+  margin: 0;
+  color: var(--texte-clair);
+  font-size: var(--t-3);
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.enonce__sortie {
+  margin: 0;
+  padding: var(--e-2);
+  background: rgb(0 0 0 / 22%);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-2);
+  font-family: var(--police-code);
+  font-size: var(--t-2);
+  line-height: 1.6;
+  color: var(--d-fg);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.exercice__travail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  min-width: 0;
+}
+
+.exercice__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+}
+
+.exercice__note {
+  font-size: var(--t-1);
+  color: var(--texte-doux);
+}
+
+@media (max-width: 720px) {
+  .exercice {
+    padding: var(--e-2) var(--e-2) var(--e-5);
+  }
+}
+
+/* ---------- Indices ---------- */
+
+.indice {
+  display: flex;
+  gap: var(--e-1);
+  align-items: flex-start;
+  padding: var(--e-2);
+  background: rgb(255 255 255 / 3%);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-2);
+  font-size: var(--t-2);
+  color: var(--texte-doux);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.indice b {
+  color: var(--py-yellow);
+  font-size: var(--t-1);
+  font-weight: 500;
+  white-space: nowrap;
+  flex: none;
+  padding-top: 0.1rem;
+}
+
+.indice--verrouille {
+  opacity: 0.45;
+  border-style: dashed;
+}
+
+/* ---------- Choix multiple ---------- */
+
+.qcm {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+}
+
+.qcm legend {
+  padding: 0 0 var(--e-1);
+  font-weight: 500;
+  font-size: var(--t-3);
+  color: #fff;
+}
+
+.qcm__option {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  padding: var(--e-2);
+  background: var(--panneau);
+  border: 1px solid var(--trait);
+  border-radius: var(--rayon-2);
+  cursor: pointer;
+  transition: border-color 150ms ease-out, background 150ms ease-out;
+}
+
+.qcm__option:hover {
+  border-color: rgb(255 255 255 / 32%);
+}
+
+.qcm__option:has(input:focus-visible) {
+  outline: 2px solid var(--py-yellow);
+  outline-offset: 2px;
+}
+
+.qcm__option:has(input:checked) {
+  border-color: var(--py-yellow);
+  background: rgb(255 195 49 / 12%);
+}
+
+.qcm__option input {
+  accent-color: var(--py-yellow);
+  flex: none;
+}
+
+.qcm__option span {
+  font-family: var(--police-code);
+  font-size: var(--t-2);
+  color: var(--d-fg);
+  white-space: pre-wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qcm__option {
+    transition: none;
+  }
+}
+
+/* ---------- Éditeur ---------- */
+
+.editeur {
+  border-radius: var(--rayon-3);
+  overflow: hidden;
+  border: 1px solid var(--trait);
+}

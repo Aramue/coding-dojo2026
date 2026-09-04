@@ -1,0 +1,23 @@
+id: s1-05
+concept: print
+notion: afficher
+seance: 1
+niveau: normal
+type: predire
+titre: La virgule met un espace
+obligatoire: true
+enonce: |
+  Cette fois, print() reçoit deux morceaux de texte séparés par une virgule.
+  Regarde bien les espaces : chaque caractère compte.
+  Qu'est-ce qui apparaît exactement à l'écran ?
+depart: |
+  print("Bonjour", "Camille")
+indices:
+  - La virgule ne s'affiche jamais à l'écran. Elle sert seulement à séparer les morceaux à l'intérieur de print().
+  - Quand print() reçoit plusieurs morceaux séparés par des virgules, il les affiche l'un après l'autre en glissant un espace entre chacun.
+tests:
+  - type: qcm
+    options: ["Bonjour Camille", "BonjourCamille", "Bonjour,Camille"]
+    bonne_reponse: 0
+solution: |
+  print("Bonjour", "Camille")

@@ -1,0 +1,6 @@
+# Outils de session Claude Code — local, jamais partage
+.claude/
+.superpowers/
+
+# Secrets de deploiement
+.env

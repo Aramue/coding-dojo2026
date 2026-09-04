@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Journal de décisions
@@ -27,6 +27,25 @@ Toutes acceptées le 3 septembre 2026.
 - **006** — [[ADR-006 Palette dérivée des slides]]
   La palette et la règle pastel/sombre sont relevées dans les decks, pas inventées.
 
+Les deux suivantes ont été prises **pendant l'implémentation**, sous la contrainte du code réel.
+Ce sont celles qu'un lecteur risque le plus de défaire par ignorance.
+
+- **007** — [[ADR-007 Worker classique et chargement de Pyodide]]
+  Le worker est classique, pas un module : Vite refuse de servir `public/` à un `import()`.
+- **008** — [[ADR-008 Validation serveur des champs libres]]
+  Toute chaîne acceptée par l'API est validée par motif ou liste blanche, **côté serveur**.
+- **009** — [[ADR-009 Routage maison sans bibliothèque]]
+  Quatre formes de chemin sur l'API History. Une fonction pure porte la logique, pas un routeur.
+
+Les deux dernières datent du 4 septembre 2026, après une première interface livrée et essayée.
+
+- **010** — [[ADR-010 Abandon de la fiction narrative]]
+  Plus de Quartier Général : des exemples du quotidien, et un code d'accès `DOJO-XXXX`.
+- **011** — [[ADR-011 Trois niveaux de réussite]]
+  Rien, une coche, deux coches. La seconde récompense la méthode, elle ne conditionne rien.
+- **012** — [[ADR-012 Le professeur tient la liste de sa classe]]
+  L'élève porte un nom ; le code d'accès reste la clé, et un code inconnu n'ouvre plus rien.
+
 ## Le fil conducteur
 
 Cinq de ces six décisions découlent d'un même constat, établi dans [[Bilan 2025-2026]] :
@@ -43,8 +62,31 @@ graph TD
     A6 --> A5["ADR-005<br/>General Sans"]
 ```
 
+## Décisions prises sans ADR
+
+Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans le code.
+
+- **La couleur suit la notion, pas le concept** (4 septembre 2026). La table `FAMILLES` mappait
+  `print → variables` et `input → types` : la séance 1 n'aurait affiché que ==deux couleurs pour
+  quatre notions==. La table `NOTIONS` de `outils/schema.py` est désormais la seule source, et
+  elle est publiée en JSON pour que le front n'en garde aucune copie. Voir
+  [[Spécification interface]].
+- **Un bloc de code de leçon peut déclarer ses entrées simulées** (4 septembre 2026). Sans cela,
+  la leçon sur `input()` ne pouvait montrer aucun exemple : le validateur exécute chaque bloc, et
+  `input()` sans entrée lève `EOFError`. Un bloc qui déclare des entrées ne peut pas être
+  exécutable — le bac à sable du navigateur ne sait pas les fournir.
+
+- **Le verrouillage de notions par le professeur est abandonné** (4 septembre 2026). La route
+  `POST /prof/verrou` et la table `Verrou` existaient depuis le palier 1 ; ==aucune interface ne
+  les a jamais appelées==, ni côté professeur, ni côté élève. Un verrou par concept contredit de
+  toute façon la règle « aucun cul-de-sac » de [[Spécification interface]] : l'élève doit pouvoir
+  sauter ce qui le bloque. Route, modèle et tests supprimés. [[Plan palier 1]] et
+  [[Plan interface]] gardent leur texte d'origine — ils enregistrent ce qui a été construit à
+  l'époque.
+
 ## Ce qui n'est pas encore décidé
 
 - [ ] Le nombre exact d'exercices du chapitre 1 et leur ordre — voir [[Chapitre 1]]
-- [ ] La forme précise de la gamification (points, classement, badges)
+- [x] La forme précise de la gamification — tranchée par [[ADR-011 Trois niveaux de réussite]] :
+      deux coches, ni points ni classement
 - [ ] Le découpage du livrable de la séance 1 par rapport au reste

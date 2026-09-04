@@ -1,0 +1,27 @@
+id: s1-11
+concept: reaffectation
+notion: variables
+seance: 1
+niveau: normal
+type: predire
+titre: L'écrasement
+obligatoire: true
+enonce: |
+  Le programme ci-dessous range deux valeurs l'une après l'autre dans la même
+  boîte prenom.
+  Qu'est-ce qui apparaît à l'écran quand on l'exécute ?
+depart: |
+  prenom = "Camille"
+  prenom = "Alex"
+  print(prenom)
+indices:
+  - Une variable, c'est une boîte avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.
+  - La deuxième ligne remplace ce qu'il y avait dans la variable. Au moment du print, une seule valeur reste.
+tests:
+  - type: qcm
+    options: ["Alex", "Camille", "Camille Alex"]
+    bonne_reponse: 0
+solution: |
+  prenom = "Camille"
+  prenom = "Alex"
+  print(prenom)

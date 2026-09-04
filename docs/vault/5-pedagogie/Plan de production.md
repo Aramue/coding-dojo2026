@@ -17,7 +17,7 @@ mis-a-jour: 2026-09-03
 
 | Lot | Contenu | Coût | Quand |
 |---|---|---|---|
-| **1** | 25 obligatoires S1 + bloc 1 du Terminal QG + décisions moteur | ~8 h | ==Les 13 jours. Seul engagement ferme.== |
+| **1** | 25 obligatoires S1 + programme d'assemblage S1 + décisions moteur | ~8 h | ==Les 13 jours. Seul engagement ferme.== |
 | **2** | 26 obligatoires S2 | ~7 h | Semaine 1 — le plus cher, donc produit **en premier**, quand la charge d'accompagnement est encore faible |
 | **3** | 24 obligatoires S3 | ~5 h | Semaine 2 — le **moins** cher : son problème, son corrigé et son résultat attendu existent déjà, et 4 debug sont des copies 2025 recopiées |
 | **4** | 14 renforts + 23 experts | ~6 h | Opportuniste, **jamais bloquant** — un renfort absent ne pénalise que l'élève qui a échoué, et le professeur est dans la salle |

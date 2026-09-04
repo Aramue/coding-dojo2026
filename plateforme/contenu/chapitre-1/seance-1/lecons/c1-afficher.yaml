@@ -1,0 +1,50 @@
+id: c1-afficher
+notion: afficher
+ordre: 1
+titre: Afficher un message
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Un programme qui ne dit rien ne sert à rien. La toute première chose à
+      savoir faire, c'est **écrire un message à l'écran**. En Python, cela
+      s'appelle `print`.
+  - type: code
+    legende: Ton premier programme
+    executable: true
+    python: |
+      print("Bonjour")
+  - type: paragraphe
+    texte: >-
+      Lis cette ligne comme une phrase : `print` est l'ordre donné à Python, les
+      parenthèses disent où commence et où finit ce qu'on lui donne, et les
+      guillemets marquent le début et la fin du texte.
+  - type: paragraphe
+    texte: >-
+      Les guillemets **ne s'affichent pas**. Ils servent à Python, pas au
+      lecteur. À l'écran, tu vois `Bonjour`, sans rien autour.
+  - type: paragraphe
+    texte: >-
+      Python exécute tes lignes **de haut en bas, une à la fois**. Deux `print`
+      donnent deux lignes à l'écran, dans l'ordre où tu les as écrites.
+  - type: code
+    legende: Deux lignes, dans cet ordre
+    executable: true
+    python: |
+      print("Bonjour")
+      print("À demain")
+  - type: paragraphe
+    texte: >-
+      Tu peux aussi donner plusieurs choses à un seul `print`, séparées par des
+      virgules. Python les affiche à la suite, **en insérant une espace entre
+      chacune**.
+  - type: code
+    legende: Une virgule insère une espace
+    executable: true
+    python: |
+      print("Bonjour", "Camille")
+  - type: attention
+    texte: >-
+      Un message doit s'afficher **exactement** comme demandé : une majuscule
+      oubliée, une espace en trop ou un point manquant, et ce n'est plus le même
+      texte. Python compare caractère par caractère, il ne devine rien.

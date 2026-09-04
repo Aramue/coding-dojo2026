@@ -1,0 +1,260 @@
+/*
+ * Sommaire dépliant : chapitre, notions, et sous chacune ses deux pages.
+ *
+ * Le repli est animé sur `grid-template-rows`, pas sur `height` : c'est la
+ * seule façon d'animer vers une hauteur *automatique* sans la mesurer en
+ * JavaScript. Le contenu garde sa hauteur naturelle, la grille l'écrase.
+ *
+ * Aucun bloc par famille ici : tokens.css mappe déjà [data-famille] vers
+ * --tint, --encre et --profond.
+ */
+
+.menu {
+  grid-area: menu;
+  background: var(--surface);
+  border-right: 1px solid var(--rule-doux);
+  padding: var(--e-2) 0 var(--e-5);
+  align-self: stretch;
+  overflow-y: auto;
+}
+
+/* ---------- Chapitre ---------- */
+
+.chapitre {
+  display: block;
+}
+
+.chapitre__tete {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: var(--e-2) var(--e-3);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.chapitre__tete:hover .chapitre__titre {
+  color: var(--py-blue);
+}
+
+.chapitre__tete:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: -2px;
+  border-radius: var(--rayon-1);
+}
+
+.chapitre__titre {
+  flex: 1;
+  font-size: var(--t-3);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  transition: color 150ms ease-out;
+}
+
+.chapitre__compte {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.chapitre__jauge {
+  height: 3px;
+  margin: 0 var(--e-3) var(--e-1);
+  border-radius: 999px;
+  background: var(--ground-2);
+  overflow: hidden;
+}
+
+.chapitre__jauge span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ok);
+  transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Repli animé ---------- */
+
+.chapitre__corps,
+.notion__corps {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chapitre__corps[data-ouvert='false'],
+.notion__corps[data-ouvert='false'] {
+  grid-template-rows: 0fr;
+}
+
+.chapitre__corps > *,
+.notion__corps > * {
+  overflow: hidden;
+  min-height: 0;
+  /*
+   * ==Zéro padding, zéro bordure sur l'enfant direct de la grille.==
+   * `min-height: 0` annule la hauteur du CONTENU ; le padding, lui, reste dans
+   * la boîte et s'ajoute par-dessus. Un `padding-bottom: 1rem` laissait donc
+   * une bande de 16 px visible sous le chapitre replié, avec le haut de la
+   * première notion qui dépassait.
+   *
+   * L'espacement se met sur les enfants, à l'intérieur de la boîte de contenu,
+   * où il se laisse écraser avec le reste.
+   */
+  padding: 0;
+  border: 0;
+}
+
+.chevron {
+  flex: none;
+  color: var(--ink-soft);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chevron--ouvert {
+  transform: rotate(90deg);
+}
+
+/* ---------- Notion ---------- */
+
+.chapitre__notions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chapitre__notions > :last-child {
+  margin-bottom: var(--e-2);
+}
+
+.notion {
+  border-left: 3px solid transparent;
+  transition: background 200ms ease-out, border-color 200ms ease-out;
+}
+
+.notion--courante {
+  border-left-color: var(--encre);
+  background: var(--surface-doux);
+}
+
+.notion__tete {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem var(--e-3) 0.4rem calc(var(--e-3) - 3px);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.notion__tete:focus-visible {
+  outline: 2px solid var(--encre);
+  outline-offset: -2px;
+}
+
+.notion__rang {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  transition: background 200ms ease-out, border-color 200ms ease-out, color 200ms ease-out;
+}
+
+/* Une notion terminée porte sa coche dans la couleur de sa famille. */
+.notion:has(.notion__rang svg) .notion__rang {
+  background: var(--encre);
+  border-color: var(--encre);
+  color: #fff;
+}
+
+.notion__titre {
+  flex: 1;
+  font-size: var(--t-2);
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.notion__compte {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.notion__liens {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0 var(--e-3) 0 calc(var(--e-3) + 1.9rem);
+}
+
+.notion__liens > :last-child {
+  margin-bottom: var(--e-1);
+}
+
+.menu__lien {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 0.6rem;
+  border-radius: var(--rayon-1);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: background 150ms ease-out, color 150ms ease-out, padding-left 150ms ease-out;
+}
+
+.menu__lien:hover {
+  background: var(--tint);
+  color: var(--encre);
+  padding-left: 0.85rem;
+}
+
+.menu__lien:focus-visible {
+  outline: 2px solid var(--encre);
+  outline-offset: 2px;
+}
+
+.menu__lien[aria-current='page'] {
+  background: var(--encre);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Sous 900 px, le sommaire passe au-dessus du contenu et se replie. */
+@media (max-width: 900px) {
+  .menu {
+    min-width: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule-doux);
+    padding: var(--e-1) 0 var(--e-2);
+    max-height: 45vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapitre__corps,
+  .notion__corps,
+  .chevron,
+  .chapitre__jauge span,
+  .notion,
+  .notion__rang,
+  .menu__lien,
+  .chapitre__titre {
+    transition: none;
+  }
+}

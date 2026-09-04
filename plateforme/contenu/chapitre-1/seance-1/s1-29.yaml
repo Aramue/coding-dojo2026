@@ -1,0 +1,36 @@
+id: s1-29
+concept: conversion
+notion: saisie
+seance: 1
+niveau: normal
+type: debug
+titre: L'âge qui refuse de s'additionner
+obligatoire: true
+enonce: |
+  Ce petit programme calcule l'âge que tu auras dans 5 ans.
+  Il démarre, il te pose la question, puis il s'arrête net avec une erreur.
+  Lis le message d'erreur, puis répare le programme.
+  Le programme doit calculer le résultat, jamais l'écrire à la main.
+depart: |
+  print("Calcul rapide")
+  age = input("Ton âge : ")
+  print("Dans 5 ans, tu auras :")
+  print(age + 5)
+indices:
+  - "Regarde ce que input() range dans la variable age. Même quand tu tapes des chiffres, input() rend toujours du TEXTE."
+  - "Tu connais déjà str(), qui fabrique du texte à partir d'un nombre. La fonction int() fait l'inverse : elle fabrique un nombre entier à partir d'un texte."
+tests:
+  - type: sortie
+    entrees: ["17"]
+    attendu: |-
+      Calcul rapide
+      Ton âge : 17
+      Dans 5 ans, tu auras :
+      22
+  - type: interdit
+    motif: "22"
+solution: |
+  print("Calcul rapide")
+  age = int(input("Ton âge : "))
+  print("Dans 5 ans, tu auras :")
+  print(age + 5)

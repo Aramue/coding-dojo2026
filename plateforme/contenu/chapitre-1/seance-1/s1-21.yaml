@@ -1,0 +1,36 @@
+id: s1-21
+concept: conversion
+notion: types
+seance: 1
+niveau: normal
+type: debug
+titre: Impossible d'additionner du texte et un nombre
+obligatoire: true
+enonce: |
+  Le programme devait afficher exactement cette ligne :
+  Bonjour Camille, tu as 17 ans
+  Mais il refuse de démarrer. Python s'arrête sur une erreur de type.
+  Lis le message d'erreur, puis répare la dernière ligne.
+  Garde les signes + pour assembler la phrase, et ne change ni le prénom, ni l'âge.
+depart: |
+  prenom = "Camille"
+  age = 17
+  print("Bonjour " + prenom + ", tu as " + age + " ans")
+indices:
+  - Le signe + sait coller deux textes, ou additionner deux nombres. Ici Python trouve du texte d'un côté et un nombre de l'autre, et il ne sait pas quoi en faire.
+  - La fonction str() transforme un nombre en texte. Le nombre rangé dans age doit devenir du texte avant d'être collé au reste de la phrase.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Bonjour Camille, tu as 17 ans
+  - type: interdit
+    motif: 'Bonjour Camille'
+  - type: interdit
+    motif: '17 ans'
+  - type: contient
+    motif: 'str('
+solution: |
+  prenom = "Camille"
+  age = 17
+  print("Bonjour " + prenom + ", tu as " + str(age) + " ans")

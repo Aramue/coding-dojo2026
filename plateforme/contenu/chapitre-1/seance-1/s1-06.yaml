@@ -1,0 +1,38 @@
+id: s1-06
+concept: format exact
+notion: afficher
+seance: 1
+niveau: normal
+type: completer
+titre: Le format exact
+obligatoire: true
+enonce: |
+  Un espace en trop, et ce n'est plus le même texte.
+
+  Ton programme doit afficher exactement ces trois lignes :
+
+  === MENU ===
+  Plat Lasagnes
+  Prix : 12 francs
+
+  La première ligne est déjà écrite. Remplace chaque _____ pour obtenir les deux autres.
+  Compte les espaces un par un.
+depart: |
+  print("=== MENU ===")
+  print("Plat", "_____")
+  print("Prix_____12 francs")
+indices:
+  - "La virgule de la deuxième ligne ajoute déjà quelque chose entre les deux morceaux. Regarde ce que cela donne avant d'écrire un espace de plus."
+  - "La troisième ligne ne contient aucune virgule. Tout ce qui doit apparaître à l'écran, espaces compris, se trouve donc à l'intérieur des guillemets."
+tests:
+  - type: sortie
+    entrees: []
+    exige_exact: true
+    attendu: |-
+      === MENU ===
+      Plat Lasagnes
+      Prix : 12 francs
+solution: |
+  print("=== MENU ===")
+  print("Plat", "Lasagnes")
+  print("Prix : 12 francs")

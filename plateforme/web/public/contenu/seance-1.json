@@ -1,0 +1,1082 @@
+[
+  {
+    "id": "s1-01",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Ce que Python affiche vraiment",
+    "obligatoire": true,
+    "enonce": "Tu n'as rien à écrire ici.\nLis ce programme, puis choisis ce qui apparaît à l'écran quand on l'exécute.\n",
+    "depart": "print(\"Bonjour\")\n",
+    "indices": [
+      "Les guillemets servent à marquer le début et la fin du texte. Demande-toi s'ils font partie du message.",
+      "Le mot print et les parenthèses sont l'ordre donné à Python, pas le message. Seul ce qui se trouve à l'intérieur des guillemets arrive à l'écran."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bonjour",
+          "\"Bonjour\"",
+          "print(\"Bonjour\")"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-02",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Ton premier programme",
+    "obligatoire": true,
+    "enonce": "À toi d'écrire l'instruction, sur le modèle que tu viens de lire.\nTon programme doit afficher exactement cette ligne, et rien d'autre :\n\nBonjour tout le monde\n",
+    "depart": "",
+    "indices": [
+      "Une instruction qui affiche quelque chose commence par print, suivi d'une parenthèse ouvrante.",
+      "Le texte à afficher se place entre guillemets, à l'intérieur des parenthèses. Recopie-le exactement : Bonjour tout le monde."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bonjour tout le monde",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "input(",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-03",
+    "concept": "erreurs",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le guillemet manquant",
+    "obligatoire": true,
+    "enonce": "Ce programme a été tapé trop vite et refuse de démarrer.\nIl devait afficher exactement cette ligne :\n\nLa séance commence\n\nAu lieu de ça, Python affiche ce message d'erreur :\n\nSyntaxError: unterminated string literal (detected at line 1)\n\nTraduction : un texte a été ouvert, mais il n'a jamais été refermé.\nRépare la ligne pour que le message s'affiche enfin.\n",
+    "depart": "print(\"La séance commence)\n",
+    "indices": [
+      "Un texte s'ouvre et se ferme toujours par le même caractère. Compte les guillemets présents sur la ligne.",
+      "Le guillemet du début est bien là. C'est celui de la fin, juste avant la parenthèse fermante, qui manque."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "La séance commence",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-04",
+    "concept": "execution sequentielle",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Deux lignes, deux ordres",
+    "obligatoire": true,
+    "enonce": "Ce programme donne deux consignes coup sur coup.\nQu'apparaît-il à l'écran ?\nLes propositions décrivent la sortie ligne par ligne.\n",
+    "depart": "print(\"Bonne nuit\")\nprint(\"Bonjour\")\n",
+    "indices": [
+      "Python ne comprend pas le sens des messages. Il traite les instructions une par une.",
+      "Le premier print() rencontré est le premier affiché. Et chaque print() passe ensuite à la ligne suivante."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Ligne 1 : Bonne nuit / Ligne 2 : Bonjour",
+          "Ligne 1 : Bonjour / Ligne 2 : Bonne nuit",
+          "Une seule ligne : Bonne nuit Bonjour"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-05",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La virgule met un espace",
+    "obligatoire": true,
+    "enonce": "Cette fois, print() reçoit deux morceaux de texte séparés par une virgule.\nRegarde bien les espaces : chaque caractère compte.\nQu'est-ce qui apparaît exactement à l'écran ?\n",
+    "depart": "print(\"Bonjour\", \"Camille\")\n",
+    "indices": [
+      "La virgule ne s'affiche jamais à l'écran. Elle sert seulement à séparer les morceaux à l'intérieur de print().",
+      "Quand print() reçoit plusieurs morceaux séparés par des virgules, il les affiche l'un après l'autre en glissant un espace entre chacun."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bonjour Camille",
+          "BonjourCamille",
+          "Bonjour,Camille"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-06",
+    "concept": "format exact",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Le format exact",
+    "obligatoire": true,
+    "enonce": "Un espace en trop, et ce n'est plus le même texte.\n\nTon programme doit afficher exactement ces trois lignes :\n\n=== MENU ===\nPlat Lasagnes\nPrix : 12 francs\n\nLa première ligne est déjà écrite. Remplace chaque _____ pour obtenir les deux autres.\nCompte les espaces un par un.\n",
+    "depart": "print(\"=== MENU ===\")\nprint(\"Plat\", \"_____\")\nprint(\"Prix_____12 francs\")\n",
+    "indices": [
+      "La virgule de la deuxième ligne ajoute déjà quelque chose entre les deux morceaux. Regarde ce que cela donne avant d'écrire un espace de plus.",
+      "La troisième ligne ne contient aucune virgule. Tout ce qui doit apparaître à l'écran, espaces compris, se trouve donc à l'intérieur des guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "=== MENU ===\nPlat Lasagnes\nPrix : 12 francs",
+        "exigeExact": true
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-07",
+    "concept": "format exact",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'espace en trop",
+    "obligatoire": true,
+    "enonce": "Le programme doit afficher exactement ces deux lignes :\n\nListe du jour\nPain Lait Riz\n\nCelui-ci affiche presque cela. Presque : il glisse un espace en trop quelque part.\nTrouve-le et répare le programme.\n",
+    "depart": "print(\"Liste du jour\")\nprint(\"Pain\", \" Lait\", \"Riz\")\n",
+    "indices": [
+      "La première ligne est correcte. L'écart se trouve donc sur la seconde, et il tient en un seul caractère.",
+      "Rappelle-toi ce que fait la virgule dans un print() : elle place déjà un espace entre deux morceaux. Regarde maintenant comment commence chaque morceau."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Liste du jour\nPain Lait Riz",
+        "exigeExact": true
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-08",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Trois lignes, un seul print",
+    "obligatoire": false,
+    "enonce": "Tu sais afficher trois lignes avec trois print. Il existe plus court.\n\nÀ l'intérieur des guillemets, la suite de deux caractères \\n demande à Python\nde passer à la ligne. Elle ne s'affiche pas : elle agit.\n\nÉcris **un seul** print qui affiche exactement ces trois lignes :\n\nMenu du jour\nEntrée : soupe\nPlat : lasagnes\n",
+    "depart": "",
+    "indices": [
+      "Écris d'abord la première ligne entre guillemets. Puis, sans fermer les guillemets, colle \n et continue avec la deuxième.",
+      "Il faut deux \n dans le texte : un après « Menu du jour », un après « Entrée : soupe ». Le texte entier reste dans une seule paire de guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Menu du jour\nEntrée : soupe\nPlat : lasagnes",
+        "exigeExact": true
+      },
+      {
+        "type": "contient",
+        "motif": "\\n",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "input(",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-09",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La boîte et son étiquette",
+    "obligatoire": true,
+    "enonce": "Une information utile n'est pas toujours affichée tout de suite :\nelle est d'abord rangée dans une variable.\nUne variable, c'est une boîte avec une étiquette. L'étiquette est le nom de\nla boîte. À l'intérieur, il y a une valeur.\n\nLa première ligne range le texte Camille dans une boîte étiquetée prenom.\nLa deuxième ligne demande d'afficher prenom.\n\nQu'est-ce qui apparaît à l'écran quand on exécute ce programme ?\n",
+    "depart": "prenom = \"Camille\"\nprint(prenom)\n",
+    "indices": [
+      "Jusqu'ici, pour afficher du texte tel quel, on le mettait entre guillemets. Sur la deuxième ligne, il n'y a pas de guillemets.",
+      "Python va chercher ce qu'il y a à l'intérieur de la boîte, pas ce qui est écrit sur l'étiquette."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Camille",
+          "prenom",
+          "prenom = Camille"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-10",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Range un prénom",
+    "obligatoire": true,
+    "enonce": "Une variable est une boîte avec une étiquette.\nIci l'étiquette est déjà écrite : la boîte s'appelle prenom. Mais elle est vide.\nRange le texte Camille à l'intérieur.\nLe programme doit alors afficher exactement :\nBonjour Camille et bienvenue\n",
+    "depart": "prenom = _____\nprint(\"Bonjour\", prenom, \"et bienvenue\")\n",
+    "indices": [
+      "À droite du signe égal, on écrit la valeur que l'on range dans la boîte. Ici, cette valeur est du texte.",
+      "Un texte s'écrit toujours entre guillemets, exactement comme le texte que tu mets dans print()."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "prenom",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bonjour Camille et bienvenue",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-11",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "L'écrasement",
+    "obligatoire": true,
+    "enonce": "Le programme ci-dessous range deux valeurs l'une après l'autre dans la même\nboîte prenom.\nQu'est-ce qui apparaît à l'écran quand on l'exécute ?\n",
+    "depart": "prenom = \"Camille\"\nprenom = \"Alex\"\nprint(prenom)\n",
+    "indices": [
+      "Une variable, c'est une boîte avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.",
+      "La deuxième ligne remplace ce qu'il y avait dans la variable. Au moment du print, une seule valeur reste."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alex",
+          "Camille",
+          "Camille Alex"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-12",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Photo, pas formule",
+    "obligatoire": true,
+    "enonce": "Avant de changer le contenu d'une boîte, le programme en range une copie\ndans une deuxième boîte.\nDéroule le programme ligne par ligne. Qu'est-ce qui apparaît à l'écran ?\n",
+    "depart": "prenom = \"Camille\"\nsauvegarde = prenom\nprenom = \"Alex\"\nprint(prenom, sauvegarde)\n",
+    "indices": [
+      "Arrête-toi juste après la ligne 2 et note ce que contient chaque boîte à cet instant.",
+      "La ligne 2 recopie dans sauvegarde la valeur que prenom contient à ce moment-là. Ce n'est pas un lien qui se mettrait à jour plus tard."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alex Camille",
+          "Alex Alex",
+          "Camille Camille"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-13",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La boîte qui n'existe pas encore",
+    "obligatoire": true,
+    "enonce": "Ce programme doit annoncer qui est de service aujourd'hui.\nPython refuse de le lancer. Il affiche ce message :\nNameError: name 'responsable' is not defined\nCela veut dire : Python ne connaît pas encore la variable responsable.\nRépare le programme. Il doit afficher exactement :\nDe service : Camille\nGarde la variable : n'écris pas Camille à l'intérieur du print().\n",
+    "depart": "print(\"De service :\", responsable)\nresponsable = \"Camille\"\n",
+    "indices": [
+      "Python lit les lignes de haut en bas, une par une. Quand il arrive au print(), la boîte responsable a-t-elle déjà été remplie ?",
+      "Une boîte doit être remplie AVANT la ligne qui vient la lire. Regarde dans quel ordre tes deux lignes sont écrites."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "De service : Camille",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "De service : Camille",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-14",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "x = x + 1 n'est pas une équation",
+    "obligatoire": true,
+    "enonce": "Ce programme compte les points marqués pendant une partie.\nLis-le ligne par ligne, dans l'ordre où il est écrit.\nQu'affiche-t-il à l'écran ?\n",
+    "depart": "points = 3\npoints = points + 1\npoints = points + 1\nprint(points)\n",
+    "indices": [
+      "Le signe = ne veut pas dire \"est égal à\". Il veut dire \"range dans\".",
+      "Python calcule d'abord la partie à droite du signe =, avec la valeur que points a à ce moment-là, puis il range le résultat dans points. Fais-le une ligne après l'autre."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "5",
+          "4",
+          "Rien ne s'affiche, Python signale une erreur car points ne peut pas être égal à points + 1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-15",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'affectation à l'envers",
+    "obligatoire": false,
+    "enonce": "Ce programme devait ranger 5 dans une boîte nommée age, puis l'afficher.\nPython refuse de le lire, et s'arrête avant même de commencer :\n\nSyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?\n\nTraduction : on ne peut pas ranger quelque chose dans un nombre.\nRépare la première ligne.\n",
+    "depart": "5 = age\nprint(age)\n",
+    "indices": [
+      "Le signe = range la valeur de droite dans la boîte de gauche. Demande-toi ce qui, dans cette ligne, est la boîte et ce qui est la valeur.",
+      "Une boîte porte un nom, pas un nombre. Les deux morceaux de la première ligne sont dans le mauvais ordre."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "5",
+        "exigeExact": false
+      },
+      {
+        "type": "variable",
+        "nom": "age",
+        "valeurAttendue": "5",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-16",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "prenom, Prenom, PRENOM",
+    "obligatoire": false,
+    "enonce": "La boîte existe, elle est remplie, et pourtant Python dit qu'il ne la connaît\npas :\n\nNameError: name 'Prenom' is not defined\n\nRegarde les deux lignes de très près. Répare le programme sans changer la\npremière ligne.\n",
+    "depart": "prenom = \"Camille\"\nprint(Prenom)\n",
+    "indices": [
+      "Python distingue les majuscules des minuscules. Pour lui, deux noms qui ne s'écrivent pas exactement pareil sont deux boîtes différentes.",
+      "Compare caractère par caractère le nom écrit à la ligne 1 et celui écrit à la ligne 2. Un seul les sépare."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Camille",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "print(prenom)",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-17",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "debug",
+    "titre": "La boîte recyclée",
+    "obligatoire": false,
+    "enonce": "Ce programme affiche le prix d'une place, puis le prix pour deux personnes.\nIl doit afficher exactement :\n\nPour deux : 40\nPour une : 20\n\nIl se trompe sur la deuxième ligne. Le problème n'est pas un calcul faux :\nc'est qu'une seule boîte sert à désigner deux choses différentes, et que la\nseconde efface la première.\n\nRépare le programme. Tu ne peux pas t'en sortir en changeant seulement\nl'ordre des lignes.\n",
+    "depart": "prix = 20\nprix = prix * 2\nprint(\"Pour deux :\", prix)\nprint(\"Pour une :\", prix)\n",
+    "indices": [
+      "Déroule le programme ligne par ligne et note ce que contient prix à chaque étape. À quel moment la valeur 20 disparaît-elle ?",
+      "Deux informations différentes demandent deux boîtes différentes. Garde prix pour le prix d'une place, et range le double ailleurs."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Pour deux : 40\nPour une : 20",
+        "exigeExact": false
+      },
+      {
+        "type": "variable",
+        "nom": "prix",
+        "valeurAttendue": "20",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-18",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Échanger deux boîtes",
+    "obligatoire": false,
+    "enonce": "Deux boîtes, deux couleurs. Tu dois échanger leur contenu : gauche doit\nfinir avec bleu, et droite avec rouge.\n\nLe programme doit alors afficher exactement :\n\nbleu rouge\n\nNe change pas les deux premières lignes : elles remplissent les boîtes au\ndépart. Écris la suite en dessous, puis affiche.\n\nAttention : Python connaît une écriture qui fait l'échange en une seule\nligne. Elle est interdite ici — c'est justement le raisonnement qu'on\ntravaille.\n",
+    "depart": "gauche = \"rouge\"\ndroite = \"bleu\"\n",
+    "indices": [
+      "Si tu ranges droite dans gauche en premier, la valeur de gauche est perdue et tu ne peux plus la mettre dans droite.",
+      "Il te faut une troisième boîte pour mettre de côté la valeur que tu vas écraser, avant de l'écraser."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "gauche",
+        "valeurAttendue": "'bleu'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "droite",
+        "valeurAttendue": "'rouge'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "bleu rouge",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "gauche, droite = droite, gauche",
+        "message": "L'échange en une seule ligne est écarté ici : c'est justement le raisonnement que cet exercice fait travailler.",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "gauche = \"rouge\"",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "droite = \"bleu\"",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-19",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "2 + 2 ou 22 ?",
+    "obligatoire": true,
+    "enonce": "Voici deux calculs qui se ressemblent beaucoup.\nRegarde bien la différence : dans le premier, les 2 sont des nombres.\nDans le second, les 2 sont entourés de guillemets, c'est donc du texte.\nSouviens-toi aussi que la virgule dans print ajoute un espace.\nQu'apparaît-il à l'écran ?\n",
+    "depart": "nombres = 2 + 2\ntextes = \"2\" + \"2\"\nprint(nombres, textes)\n",
+    "indices": [
+      "Les guillemets changent tout : avec eux, 2 n'est plus un nombre, c'est du texte.",
+      "Le signe + ne fait pas le même travail dans les deux cas. Sur des nombres il additionne, sur du texte il met les deux morceaux bout à bout."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "4 22",
+          "4 4",
+          "22 22"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-20",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Trois familles",
+    "obligatoire": true,
+    "enonce": "Le même chiffre 7 est ici rangé de trois façons différentes.\nCe n'est pas une erreur : Python classe chaque valeur dans une famille.\n7 est un nombre entier, sa famille s'appelle int.\n7.0 est un nombre à virgule (Python écrit un point), sa famille s'appelle float.\n\"7\" est du texte, sa famille s'appelle str.\nLe programme applique le signe + entre chaque valeur et elle-même, puis affiche les trois résultats sur une seule ligne.\nQu'affiche-t-il à l'écran ?\n",
+    "depart": "places = 7\nnote = 7.0\nnumero = \"7\"\nprint(places + places, note + note, numero + numero)\n",
+    "indices": [
+      "Deux nombres reliés par + donnent un nombre. Deux textes reliés par + se collent bout à bout.",
+      "Un float garde toujours ce qui suit le point, même quand cette partie vaut zéro."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "14 14 77",
+          "14 14.0 77",
+          "14 14.0 14"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-21",
+    "concept": "conversion",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Impossible d'additionner du texte et un nombre",
+    "obligatoire": true,
+    "enonce": "Le programme devait afficher exactement cette ligne :\nBonjour Camille, tu as 17 ans\nMais il refuse de démarrer. Python s'arrête sur une erreur de type.\nLis le message d'erreur, puis répare la dernière ligne.\nGarde les signes + pour assembler la phrase, et ne change ni le prénom, ni l'âge.\n",
+    "depart": "prenom = \"Camille\"\nage = 17\nprint(\"Bonjour \" + prenom + \", tu as \" + age + \" ans\")\n",
+    "indices": [
+      "Le signe + sait coller deux textes, ou additionner deux nombres. Ici Python trouve du texte d'un côté et un nombre de l'autre, et il ne sait pas quoi en faire.",
+      "La fonction str() transforme un nombre en texte. Le nombre rangé dans age doit devenir du texte avant d'être collé au reste de la phrase."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bonjour Camille, tu as 17 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Bonjour Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "17 ans",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "str(",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-22",
+    "concept": "conversion",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "str() à la rescousse",
+    "obligatoire": true,
+    "enonce": "Le numéro d'un casier est un nombre, et le signe + refuse de coller un nombre\nà du texte.\nTu viens de voir cette erreur : voici le remède.\nRemplace _____ par la fonction qui transforme un nombre en texte.\nLe programme doit afficher exactement :\nCasier numéro 42\n",
+    "depart": "numero = 42\nmessage = \"Casier numéro \" + _____(numero)\nprint(message)\n",
+    "indices": [
+      "Le problème ne vient pas de la valeur de numero, mais de son type. Un nombre ne se colle pas à du texte.",
+      "Il existe une fonction qui fabrique du texte à partir d'un nombre. Elle porte le nom du type texte, en trois lettres."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'Casier numéro 42'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Casier numéro 42",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Casier numéro 42",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-23",
+    "concept": "f-string",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le f-string",
+    "obligatoire": true,
+    "enonce": "Il existe une deuxième façon d'assembler du texte et des variables.\nOn colle la lettre f juste avant les guillemets ouvrants.\nEnsuite, on écrit les noms des variables entre accolades, directement dans la phrase.\nLis ce programme. Qu'est-ce qui s'affiche à l'écran ?\n",
+    "depart": "prenom = \"Camille\"\nage = 17\nprint(f\"{prenom} a {age} ans\")\n",
+    "indices": [
+      "Le f collé aux guillemets n'est pas du texte à afficher. Il change ce que Python fait des accolades.",
+      "Dans un f-string, chaque paire d'accolades est remplacée par la valeur de la variable écrite dedans."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Camille a 17 ans",
+          "{prenom} a {age} ans",
+          "prenom a age ans"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-24",
+    "concept": "f-string",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Trois écritures, une seule sortie",
+    "obligatoire": true,
+    "enonce": "La même information est écrite ici de trois façons différentes.\nLa première colle les morceaux avec +, la deuxième sépare avec une virgule,\nla troisième utilise un f-string.\nQu'affiche ce programme à l'écran ?\n",
+    "depart": "prenom = \"Camille\"\nprint(\"Bonjour \" + prenom)\nprint(\"Bonjour\", prenom)\nprint(f\"Bonjour {prenom}\")\n",
+    "indices": [
+      "Traite chaque ligne l'une après l'autre, puis compare les trois résultats obtenus.",
+      "La virgule ajoute un espace toute seule, et le f devant les guillemets fait remplacer {prenom} par le contenu de la variable."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bonjour Camille\nBonjour Camille\nBonjour Camille",
+          "Bonjour Camille\nBonjourCamille\nBonjour Camille",
+          "Bonjour Camille\nBonjour Camille\nBonjour {prenom}"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-25",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Fiche signalétique",
+    "obligatoire": false,
+    "enonce": "Ici, c'est toi qui choisis les valeurs. La seule contrainte est leur type :\nnom doit contenir du texte, age un nombre entier.\n\nRemplace chaque _____ par la valeur de ton choix. Le programme affiche\nensuite la valeur et son type.\n\nRappel : ce qui est entre guillemets est du texte, même si ça ressemble à un\nnombre.\n",
+    "depart": "nom = _____\nage = _____\n\nprint(\"Nom :\", nom, \"(type :\", type(nom), \")\")\nprint(\"Âge :\", age, \"(type :\", type(age), \")\")\n",
+    "indices": [
+      "Un texte s'écrit entre guillemets : \"Camille\". Un nombre entier s'écrit sans rien autour : 16.",
+      "Si le type affiché est <class 'str'> alors que tu attendais <class 'int'>, c'est que tu as laissé des guillemets autour du nombre."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nom",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "age",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-26",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "La boîte qui change de nature",
+    "obligatoire": false,
+    "enonce": "Une boîte n'a pas de type à elle. C'est ce qu'elle contient qui en a un, et\nranger une nouvelle valeur dedans change donc aussi son type.\n\nLis ce programme. Qu'affiche-t-il à l'écran ?\n",
+    "depart": "x = 5\nprint(type(x))\nx = \"cinq\"\nprint(type(x))\n",
+    "indices": [
+      "Python ne demande jamais de déclarer le type d'une variable. Il le déduit de la valeur qu'on y range.",
+      "La deuxième affectation remplace la valeur ET ce qu'elle est : 5 est un nombre entier, \"cinq\" est du texte."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "<class 'int'>\n<class 'str'>",
+          "<class 'int'>\n<class 'int'>",
+          "Python signale une erreur : on ne peut pas mettre du texte dans une boîte qui contenait un nombre"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-27",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "input() rend toujours du texte",
+    "obligatoire": true,
+    "enonce": "La fonction input() pose une question, puis récupère ce que la personne tape\nau clavier.\nIci, elle tape 17, puis elle appuie sur Entrée.\nQu'affiche la ligne print() ?\n",
+    "depart": "age = input(\"Ton âge : \")\nprint(age + age)\n",
+    "indices": [
+      "Rappelle-toi le signe + : entre deux nombres il additionne, entre deux textes il colle bout à bout.",
+      "Ce que input() rend est toujours du texte, même quand on tape des chiffres."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1717",
+          "34",
+          "17 17"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-28",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Poser la question DANS input()",
+    "obligatoire": true,
+    "enonce": "Ce programme demande un prénom, puis salue la personne.\nLa question ne se pose pas dans un print séparé : elle s'écrit entre les\nparenthèses de input().\nComplète le programme pour que la question affichée soit exactement ce texte,\navec un espace après les deux-points :\nTon prénom :\n",
+    "depart": "prenom = input(_____)\nprint(\"Bonjour \" + prenom)\n",
+    "indices": [
+      "Ce que tu places entre les parenthèses de input() s'affiche à l'écran juste avant que la personne tape sa réponse.",
+      "L'invite est du texte : elle se met entre guillemets, à l'intérieur des parenthèses de input(). Ne perds pas l'espace de la fin."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille"
+        ],
+        "attendu": "Ton prénom : Camille\nBonjour Camille",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-29",
+    "concept": "conversion",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'âge qui refuse de s'additionner",
+    "obligatoire": true,
+    "enonce": "Ce petit programme calcule l'âge que tu auras dans 5 ans.\nIl démarre, il te pose la question, puis il s'arrête net avec une erreur.\nLis le message d'erreur, puis répare le programme.\nLe programme doit calculer le résultat, jamais l'écrire à la main.\n",
+    "depart": "print(\"Calcul rapide\")\nage = input(\"Ton âge : \")\nprint(\"Dans 5 ans, tu auras :\")\nprint(age + 5)\n",
+    "indices": [
+      "Regarde ce que input() range dans la variable age. Même quand tu tapes des chiffres, input() rend toujours du TEXTE.",
+      "Tu connais déjà str(), qui fabrique du texte à partir d'un nombre. La fonction int() fait l'inverse : elle fabrique un nombre entier à partir d'un texte."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "17"
+        ],
+        "attendu": "Calcul rapide\nTon âge : 17\nDans 5 ans, tu auras :\n22",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "22",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-30",
+    "concept": "conversion",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "int(input())",
+    "obligatoire": true,
+    "enonce": "Ce programme demande combien de livres tu as déjà lus cette année,\npuis il annonce le total une fois celui-ci terminé.\nProblème : input() rend toujours du TEXTE, jamais un nombre.\nTel quel, l'addition est impossible et le programme s'arrête.\nComplète le trou pour que livres contienne un vrai nombre entier.\n",
+    "depart": "livres = _____(input(\"Nombre de livres lus : \"))\nprint(\"Après celui-ci, tu en auras\", livres + 1)\n",
+    "indices": [
+      "Ce que input() te rend est du texte. Il faut le transformer en nombre avant de pouvoir l'additionner.",
+      "Souviens-toi des trois familles de valeurs : int, float et str. C'est celle des nombres entiers qu'il te faut, et son nom est aussi celui de la fonction qui convertit."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12"
+        ],
+        "attendu": "Nombre de livres lus : 12\nAprès celui-ci, tu en auras 13",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "3"
+        ],
+        "attendu": "Nombre de livres lus : 3\nAprès celui-ci, tu en auras 4",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-31",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Deux questions, une fiche",
+    "obligatoire": true,
+    "enonce": "À toi d'écrire un programme qui remplit une fiche d'inscription.\n\nIl pose deux questions, dans cet ordre : d'abord \"Ton prénom : \", puis \"Ton âge : \".\nIl affiche ensuite deux lignes : la création de la fiche, puis le prénom et l'âge.\n\nSi la personne répond Camille, puis 16, l'écran doit montrer exactement ceci :\n\nTon prénom : Camille\nTon âge : 16\nFiche créée au nom de Camille\nCamille a 16 ans\n\nLes deux premières lignes ne sont pas des print(). Ce sont les questions elles-mêmes :\nelles s'affichent toutes seules au moment où input() s'exécute.\n\nIci, on ne calcule rien avec l'âge, on le réaffiche tel quel. Pas besoin de le\nconvertir en nombre : il peut rester du texte.\n\nRecopie les textes exactement comme ils sont écrits ci-dessus.\n\nTon programme sera relancé avec une autre personne. Rien ne doit donc être écrit\nà la main. La première ligne est déjà en place.\n",
+    "depart": "prenom = input(\"Ton prénom : \")\n",
+    "indices": [
+      "Regarde la ligne déjà écrite. La question se met entre les parenthèses de input(), et la réponse se range dans une variable. Fais pareil pour l'âge.",
+      "Il te faut ensuite deux print(). Un f-string permet de glisser une variable entre accolades, et la même variable peut resservir dans les deux lignes."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "16"
+        ],
+        "attendu": "Ton prénom : Camille\nTon âge : 16\nFiche créée au nom de Camille\nCamille a 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "19"
+        ],
+        "attendu": "Ton prénom : Alex\nTon âge : 19\nFiche créée au nom de Alex\nAlex a 19 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-32",
+    "concept": "conversion",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "int(input()) se lit de l'intérieur",
+    "obligatoire": false,
+    "enonce": "Deux fonctions imbriquées, l'une dans les parenthèses de l'autre. Pour savoir\nce que fait cette ligne, il faut la lire de l'intérieur vers l'extérieur.\n\nage = int(input(\"Ton âge : \"))\n\nDans quel ordre Python fait-il les choses ?\n",
+    "depart": "age = int(input(\"Ton âge : \"))\nprint(age + 1)\n",
+    "indices": [
+      "Python ne peut pas convertir une réponse qu'il n'a pas encore reçue. Demande-toi ce qui doit forcément arriver en premier.",
+      "La fonction la plus à l'intérieur des parenthèses s'exécute la première. Son résultat devient ce que reçoit la fonction juste au-dessus."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Il affiche la question, attend la réponse tapée, transforme ce texte en nombre entier, puis range le nombre dans age",
+          "Il transforme d'abord la question en nombre entier, puis l'affiche et attend la réponse",
+          "Il attend la réponse, la range dans age, puis la transforme en nombre entier"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-33",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "debug",
+    "titre": "L'ordre des questions",
+    "obligatoire": false,
+    "enonce": "Ce programme calcule juste. Il est pourtant refusé, parce qu'il pose ses\nquestions dans le mauvais ordre — et l'ordre des questions fait partie de ce\nqu'on demande, au même titre que le texte affiché.\n\nIl doit demander d'abord le prénom, puis l'âge.\n\nSi la personne répond Camille, puis 16, l'écran doit montrer exactement ceci :\n\nTon prénom : Camille\nTon âge : 16\nCamille a 16 ans\n\nRépare le programme.\n",
+    "depart": "age = input(\"Ton âge : \")\nprenom = input(\"Ton prénom : \")\nprint(f\"{prenom} a {age} ans\")\n",
+    "indices": [
+      "Les deux premières lignes de l'écran ne sont pas des print. Ce sont les questions elles-mêmes, affichées au moment où input s'exécute.",
+      "Python exécute les lignes de haut en bas. La question posée en premier est donc celle écrite en premier."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "16"
+        ],
+        "attendu": "Ton prénom : Camille\nTon âge : 16\nCamille a 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "19"
+        ],
+        "attendu": "Ton prénom : Alex\nTon âge : 19\nAlex a 19 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-34",
+    "concept": "probleme narratif",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Ta carte de membre",
+    "obligatoire": true,
+    "enonce": "Dernier exercice de la séance : un programme complet, qui réunit tout ce que\ntu viens d'apprendre.\n\nIl doit faire quatre choses :\n1. demander le prénom, avec l'invite \"Ton prénom : \" ;\n2. demander l'âge, avec l'invite \"Ton âge : \", et le ranger sous forme de nombre entier ;\n3. ranger dans une variable l'âge que la personne aura l'an prochain ;\n4. afficher la carte sur quatre lignes.\n\nSi la personne répond Camille, puis 17, l'écran affiche ceci après les deux questions :\n\n=== CARTE DE MEMBRE ===\nNom : Camille\nAge : 17 ans\nL'an prochain : 18 ans\n\nRecopie ces textes au caractère près, espaces compris. Sur cette carte, le mot Age\ns'écrit sans accent : garde-le tel quel.\n\nAttention : les deux réponses écrites ici ne sont qu'un exemple. Ton programme doit\nfonctionner avec n'importe qui, donc Camille et 18 sont interdits dans ton code.\n\nLes lignes du code de départ qui commencent par # sont des remarques : Python les\nignore, elles sont là pour te guider. Écris ton code en dessous de chacune.\n",
+    "depart": "# 1. demander le prénom et le ranger dans une variable\n\n# 2. demander l'âge et le convertir en nombre entier\n\n# 3. calculer l'âge de l'an prochain\n\n# 4. afficher les quatre lignes de la carte\n",
+    "indices": [
+      "Commence par les deux questions. La question se met à l'intérieur des parenthèses de input(). Et souviens-toi, input() rend toujours du texte, même quand on tape un nombre.",
+      "L'âge doit donc être converti avant qu'on puisse lui ajouter 1. Ensuite, chaque ligne de la carte est un print() séparé, et un f-string permet de glisser une variable entre accolades."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "17"
+        ],
+        "attendu": "Ton prénom : Camille\nTon âge : 17\n=== CARTE DE MEMBRE ===\nNom : Camille\nAge : 17 ans\nL'an prochain : 18 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "15"
+        ],
+        "attendu": "Ton prénom : Alex\nTon âge : 15\n=== CARTE DE MEMBRE ===\nNom : Alex\nAge : 15 ans\nL'an prochain : 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "18",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "operateurs"
+  }
+]

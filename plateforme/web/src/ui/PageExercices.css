@@ -1,0 +1,185 @@
+/*
+ * Une seule carte, des lignes séparées par des filets. Des pastilles flottant
+ * sur un aplat coloré donnaient l'impression d'une maquette : une liste se lit
+ * mieux comme une liste.
+ */
+
+.exercices__avancement {
+  color: var(--encre);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.exercices__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.exercices__ligne {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: var(--e-2);
+  min-height: 3.5rem;
+  padding: var(--e-1) var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
+  transition: background 150ms ease-out;
+}
+
+.exercices__ligne:last-child {
+  border-bottom: 0;
+}
+
+.exercices__ligne:hover {
+  background: var(--surface-doux);
+}
+
+/* Pastille creuse tant que c'est à faire, pleine avec une coche une fois réussi. */
+.exercices__rang {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  font-size: var(--t-1);
+  font-variant-numeric: tabular-nums;
+}
+
+[data-etat='a-faire'] .exercices__rang {
+  border: 1.5px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+[data-etat='reussi'] .exercices__rang {
+  background: var(--encre);
+  color: #fff;
+}
+
+.exercices__lien {
+  font-size: var(--t-3);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* Le lien couvre toute la ligne : la cible est la ligne, pas le seul texte. */
+.exercices__lien::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.exercices__ligne:hover .exercices__lien {
+  color: var(--encre);
+}
+
+.exercices__lien:focus-visible {
+  outline: none;
+}
+
+.exercices__ligne:has(.exercices__lien:focus-visible) {
+  outline: 2px solid var(--encre);
+  outline-offset: -2px;
+  border-radius: var(--rayon-1);
+}
+
+.exercices__type {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.exercices__chevron {
+  color: var(--rule);
+  transition: color 150ms ease-out, transform 150ms ease-out;
+}
+
+.exercices__ligne:hover .exercices__chevron {
+  color: var(--encre);
+  transform: translateX(2px);
+}
+
+.exercices__vide {
+  margin: 0;
+  padding: var(--e-4);
+  font-size: var(--t-3);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 720px) {
+  .exercices__ligne {
+    grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+    padding: var(--e-1) var(--e-2);
+  }
+
+  /* L'etiquette et le chevron cedent la place au titre sur ecran etroit. */
+  .etiquette,
+  .exercices__chevron {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exercices__ligne,
+  .exercices__chevron {
+    transition: none;
+  }
+}
+
+/* ---------- Le bloc facultatif ---------- */
+
+.exercices__bonus {
+  margin-top: var(--e-4);
+}
+
+.exercices__soustitre {
+  margin: 0 0 var(--e-1);
+  font-size: var(--t-3);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.exercices__note {
+  margin: 0 0 var(--e-2);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.55;
+  max-width: 56ch;
+}
+
+/*
+ * Les facultatifs portent un point plein, pas un numero : un numero annonce
+ * une suite a tenir dans l'ordre, ce qu'ils ne sont pas.
+ */
+.exercices__bonus .exercices__rang {
+  border-style: dashed;
+}
+
+.etiquette {
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--encre);
+  white-space: nowrap;
+}
+
+/* Une coche : ça marche. Deux : ça marche, et de la bonne façon. */
+.coches {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Les deux coches se chevauchent : elles forment un signe, pas une addition. */
+.coches[data-niveau='2'] svg + svg {
+  margin-left: -4px;
+}
+
+/* La pastille s'allonge en ovale pour les accueillir plutôt que de les serrer. */
+[data-etat='reussi'] .exercices__rang:has([data-niveau='2']) {
+  width: 2.4rem;
+  border-radius: 999px;
+}

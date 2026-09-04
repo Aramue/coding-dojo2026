@@ -1,0 +1,33 @@
+# Ce que le contexte de build ne doit JAMAIS emporter.
+#
+# Sans ce fichier, `COPY plateforme/web .` recopiait le node_modules de la
+# machine par-dessus l'installation propre faite dans l'image. Comme pnpm
+# construit une forêt de liens symboliques, la copie arrivait cassée et `tsc`
+# ne trouvait plus ses types. Le build dépendait alors de l'état du poste — il
+# passait chez l'un, échouait chez l'autre.
+
+# Dépendances : réinstallées dans l'image, à partir du lockfile.
+**/node_modules
+**/.venv
+**/__pycache__
+**/*.pyc
+
+# Sorties de construction : refaites dans l'image.
+**/dist
+plateforme/web/public/contenu
+
+# Bases locales et couverture.
+**/donnees/*.db
+**/.coverage
+**/htmlcov
+**/coverage
+**/.pytest_cache
+
+# Secrets et outillage local.
+.env
+.git
+.claude
+.superpowers
+
+# Documentation : elle ne sert pas à construire l'image.
+docs

@@ -33,7 +33,7 @@ professeur, ce que tout le projet cherche à éviter.
 
 > [!important] La chasse fixe ne sort jamais du code
 > JetBrains Mono est réservée au **code**, aux **valeurs hexadécimales** et aux **identifiants
-> d'agent**.
+> d'accès**.
 >
 > ==Aucun libellé d'interface, aucun en-tête de colonne, aucune étiquette en chasse fixe.
 > Et jamais de capitales interlettrées.==

@@ -1,0 +1,33 @@
+/*
+ * Collée sous l'en-tête, qui est lui-même collant. Elle occupe 3 px : assez
+ * pour se voir, trop peu pour se disputer l'attention avec le texte.
+ */
+.lecture {
+  position: sticky;
+  top: 3.5rem; /* la hauteur de .entete */
+  z-index: 9;
+  height: 3px;
+  background: transparent;
+  margin-bottom: -3px;
+}
+
+.lecture__part {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  background: var(--encre, var(--py-blue));
+  /*
+   * `transform: scaleX()` plutôt que `width` : la première est composée par
+   * le GPU, la seconde relance la mise en page à chaque pixel de défilement.
+   */
+  will-change: transform;
+}
+
+/*
+ * Dans l'apercu du professeur, il n'y a pas d'en-tete d'application au-dessus :
+ * le cadre commence sous la barre de l'apercu. Un decalage de 3,5 rem y posait
+ * la barre au milieu du contenu, en travers d'une carte de code.
+ */
+.apercu .lecture {
+  top: 0;
+}

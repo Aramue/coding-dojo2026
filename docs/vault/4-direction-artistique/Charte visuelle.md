@@ -4,7 +4,7 @@ tags:
   - moc
   - direction-artistique
 statut: validée
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Charte visuelle
@@ -53,3 +53,88 @@ Voir [[ADR-006 Palette dérivée des slides]].
 > Le code écrit par l'élève. Écarté explicitement à la conception. L'alerte de blocage porte le
 > **type** d'erreur et le test qui échoue, ce qui suffit à arriver en sachant quoi dire.
 > Voir [[ADR-002 Identification par code d'agent]].
+
+## Amendement du 4 septembre 2026 — la portée du pastel
+
+> [!warning] Ce que « pastel = j'apprends » veut dire, et ne veut pas dire
+> Dans les supports de cours, le pastel est le fond d'une **carte**, pas d'un écran. Appliqué en
+> aplat plein écran, il fait ressembler l'interface à une maquette : le texte flotte sans surface,
+> la couleur ne porte plus d'information, elle remplit de l'espace.
+>
+> **Règle appliquée** : le canevas est le neutre chaud, le contenu vit sur du blanc, et la couleur
+> de la notion tient les accents — sur-titre, pastille, état actif du menu, filet des blocs
+> « attention », bordure de la carte de code.
+>
+> L'écran d'exercice reste sombre : c'est la bascule « j'apprends / j'écris », et elle tient. La
+> couleur profonde de la famille y est voilée d'un gris très sombre — un aplat saturé sur un écran
+> entier fatigue et lit « prototype ».
+
+Voir [[Pièges et invariants]].
+
+## Amendement du 4 septembre 2026 — l'écran d'exercice se lit en une colonne
+
+> [!warning] La consigne au-dessus du code, jamais à côté
+> L'écran d'exercice a d'abord posé l'énoncé et l'éditeur **côte à côte** au-delà de 980 px. Deux
+> panneaux de poids visuel égal, deux points de départ possibles pour le regard : l'élève balaye
+> de gauche à droite entre chaque phrase lue et chaque ligne tapée, et rien ne dit lequel des deux
+> vient d'abord.
+>
+> **Règle appliquée** : une seule colonne de **820 px**, centrée, sur tous les écrans. On lit la
+> consigne, on voit les indices, puis on écrit. ==Le fil d'Ariane, l'en-tête, le rappel de
+> réussite et le corps partagent la même largeur== — une variable, `--colonne`, la gouverne, et
+> tout s'aligne sur le même bord.
+>
+> 820 px, pas la largeur de l'écran : au-delà, une ligne de prose dépasse la centaine de
+> caractères et se relit mal. L'éditeur y tient largement — une ligne de Python de chapitre 1
+> occupe rarement la moitié de la colonne.
+
+## Amendement du 4 septembre 2026 — le décor n'informe pas
+
+> [!warning] Deux réflexes qui font « interface générée »
+> **Le graphique qui redit la liste.** La répartition de la classe a été dessinée deux fois — une
+> bande semée de traits, puis un nuage de points avec son axe — avant qu'on voie que l'étalement
+> était ==déjà lisible dans la colonne de jauges de la liste==. Le second dessin était plus
+> honnête que le premier et pas plus beau : le problème n'était aucun des deux dessins.
+>
+> Avant de dessiner une donnée, chercher si elle n'est pas déjà à l'écran. Si elle y est, le
+> graphique la montre une seconde fois — et la seconde fois est toujours la moins bonne, faute de
+> place.
+>
+> **Le glyphe Unicode en guise d'icône.** `✓`, `✕`, `≈`, `·` sont des *caractères* : leur dessin
+> change d'une machine à l'autre, ils ne se calent ni sur la graisse ni sur la couleur autour, et
+> ils ne savent pas se mettre à la taille du texte. La charte impose des SVG tracés à la main —
+> cette règle vaut aussi pour les écrans du professeur.
+
+Deux corollaires, appris sur le même écran :
+
+- **Un onglet se souligne, il ne s'encapsule pas.** Deux gélules côte à côte se lisent comme deux
+  boutons, donc comme deux actions, alors que c'est un choix entre deux vues.
+- **Une action de sortie n'est pas une action de la page.** « Fermer la session professeur »,
+  collée sous la liste, se lisait comme le dernier bouton du tableau. Elle se détache par un filet
+  et une vraie respiration.
+
+> [!note] La pastille de statut, elle, reste
+> Elle a été retirée puis remise : elle se lit d'un coup d'œil dans une colonne, et c'est
+> exactement ce qu'on lui demande. ==Le problème n'était pas la gélule, c'était le graphique
+> qu'elle voisinait.== Un remède ne se généralise pas au voisinage de la maladie.
+
+## Le mouvement, et ses quatre usages
+
+Rien ne bouge sans raison, et rien ne dure plus de 400 ms. Quatre usages, pas un de plus :
+
+| Quoi | Durée | Pourquoi |
+|---|---|---|
+| L'arrivée d'une page | 220 ms | dit qu'on a changé d'endroit, là où un remplacement instantané laisse douter du clic |
+| Le repli d'un chapitre | 260 ms | rend le pliage lisible ; sans lui le sommaire saute |
+| L'apparition du verdict | 180 ms | c'est le seul retour que l'élève attend, il doit arriver et non surgir |
+| L'avancement d'une jauge | 400 ms | rend le gain visible au moment où il est acquis |
+
+> [!important] Deux règles techniques
+> Le repli s'anime sur `grid-template-rows: 1fr → 0fr`, jamais sur `height` : c'est la seule
+> façon d'animer vers une hauteur **automatique** sans la mesurer en JavaScript.
+>
+> La barre de lecture bouge par `transform: scaleX()`, jamais par `width` : la première est
+> composée par le GPU, la seconde relance la mise en page à chaque pixel de défilement — et
+> ==les machines des huit établissements ne sont pas des machines de développeur==.
+
+`prefers-reduced-motion: reduce` désactive les quatre.

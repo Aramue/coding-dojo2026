@@ -1,0 +1,32 @@
+id: s1-14
+concept: reaffectation
+notion: variables
+seance: 1
+niveau: normal
+type: predire
+titre: x = x + 1 n'est pas une équation
+obligatoire: true
+enonce: |
+  Ce programme compte les points marqués pendant une partie.
+  Lis-le ligne par ligne, dans l'ordre où il est écrit.
+  Qu'affiche-t-il à l'écran ?
+depart: |
+  points = 3
+  points = points + 1
+  points = points + 1
+  print(points)
+indices:
+  - Le signe = ne veut pas dire "est égal à". Il veut dire "range dans".
+  - Python calcule d'abord la partie à droite du signe =, avec la valeur que points a à ce moment-là, puis il range le résultat dans points. Fais-le une ligne après l'autre.
+tests:
+  - type: qcm
+    options:
+      - "5"
+      - "4"
+      - "Rien ne s'affiche, Python signale une erreur car points ne peut pas être égal à points + 1"
+    bonne_reponse: 0
+solution: |
+  points = 3
+  points = points + 1
+  points = points + 1
+  print(points)

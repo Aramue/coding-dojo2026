@@ -1,0 +1,121 @@
+/*
+ * Le cours se lit : mesure bornée à 72ch, interligne ample, texte sur surface
+ * blanche. La couleur de la notion tient le sur-titre, le filet des blocs
+ * « attention » et les accents — elle n'inonde plus la page.
+ */
+
+.cours__corps {
+  padding: var(--e-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.cours__corps > p {
+  margin: 0;
+  font-size: var(--t-4);
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/*
+ * Puce de code discrete, sans bordure. Une bordure nette et une marge de
+ * 0,35em creaient un ecart visible contre la ponctuation voisine — on lisait
+ * « ( str ) » et « 17 , mais », ce qui est faux en typographie francaise.
+ */
+.cours__corps code {
+  background: var(--ground-2);
+  border-radius: var(--rayon-1);
+  padding: 0.1em 0.24em;
+  font-size: 0.9em;
+  color: var(--ink);
+}
+
+/* Filet à gauche, sans icône ni emoji : la charte les interdit. */
+.attention {
+  margin: var(--e-1) 0;
+  padding: var(--e-2) var(--e-3);
+  border-left: 3px solid var(--encre);
+  background: var(--tint);
+  border-radius: 0 var(--rayon-2) var(--rayon-2) 0;
+}
+
+.attention p {
+  margin: 0;
+  font-size: var(--t-3);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.attention code {
+  background: rgb(255 255 255 / 62%);
+}
+
+.cours__exemple {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  align-items: flex-start;
+}
+
+.cours__exemple pre {
+  margin: 0;
+  font-family: var(--police-code);
+  font-size: var(--t-2);
+  line-height: 1.65;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.cours__vide {
+  padding: var(--e-4);
+  margin: 0;
+  font-size: var(--t-3);
+  color: var(--ink-soft);
+}
+
+/* ---------- Bac à sable ---------- */
+
+.bac {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  padding: var(--e-2);
+  background: var(--ground-2);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+}
+
+.bac .editeur {
+  border: 1px solid var(--rule);
+}
+
+.bac__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+}
+
+.bac__note {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.bac__sortie {
+  margin: 0;
+  padding: var(--e-2);
+  background: var(--d-bg);
+  color: var(--d-fg);
+  border-radius: var(--rayon-2);
+  font-size: var(--t-2);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+@media (max-width: 720px) {
+  .cours__corps {
+    padding: var(--e-2);
+  }
+}

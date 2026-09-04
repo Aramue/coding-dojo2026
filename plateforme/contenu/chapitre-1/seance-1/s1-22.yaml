@@ -1,0 +1,37 @@
+id: s1-22
+concept: conversion
+notion: types
+seance: 1
+niveau: normal
+type: completer
+titre: str() à la rescousse
+obligatoire: true
+enonce: |
+  Le numéro d'un casier est un nombre, et le signe + refuse de coller un nombre
+  à du texte.
+  Tu viens de voir cette erreur : voici le remède.
+  Remplace _____ par la fonction qui transforme un nombre en texte.
+  Le programme doit afficher exactement :
+  Casier numéro 42
+depart: |
+  numero = 42
+  message = "Casier numéro " + _____(numero)
+  print(message)
+indices:
+  - Le problème ne vient pas de la valeur de numero, mais de son type. Un nombre ne se colle pas à du texte.
+  - Il existe une fonction qui fabrique du texte à partir d'un nombre. Elle porte le nom du type texte, en trois lettres.
+tests:
+  - type: variable
+    nom: message
+    type_attendu: str
+    valeur_attendue: "'Casier numéro 42'"
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Casier numéro 42
+  - type: interdit
+    motif: Casier numéro 42
+solution: |
+  numero = 42
+  message = "Casier numéro " + str(numero)
+  print(message)

@@ -1,0 +1,63 @@
+id: s1-31
+concept: input
+notion: saisie
+seance: 1
+niveau: normal
+type: ecrire
+titre: Deux questions, une fiche
+obligatoire: true
+enonce: |
+  À toi d'écrire un programme qui remplit une fiche d'inscription.
+
+  Il pose deux questions, dans cet ordre : d'abord "Ton prénom : ", puis "Ton âge : ".
+  Il affiche ensuite deux lignes : la création de la fiche, puis le prénom et l'âge.
+
+  Si la personne répond Camille, puis 16, l'écran doit montrer exactement ceci :
+
+  Ton prénom : Camille
+  Ton âge : 16
+  Fiche créée au nom de Camille
+  Camille a 16 ans
+
+  Les deux premières lignes ne sont pas des print(). Ce sont les questions elles-mêmes :
+  elles s'affichent toutes seules au moment où input() s'exécute.
+
+  Ici, on ne calcule rien avec l'âge, on le réaffiche tel quel. Pas besoin de le
+  convertir en nombre : il peut rester du texte.
+
+  Recopie les textes exactement comme ils sont écrits ci-dessus.
+
+  Ton programme sera relancé avec une autre personne. Rien ne doit donc être écrit
+  à la main. La première ligne est déjà en place.
+depart: |
+  prenom = input("Ton prénom : ")
+indices:
+  - "Regarde la ligne déjà écrite. La question se met entre les parenthèses de input(), et la réponse se range dans une variable. Fais pareil pour l'âge."
+  - "Il te faut ensuite deux print(). Un f-string permet de glisser une variable entre accolades, et la même variable peut resservir dans les deux lignes."
+tests:
+  - type: sortie
+    entrees: ["Camille", "16"]
+    attendu: |-
+      Ton prénom : Camille
+      Ton âge : 16
+      Fiche créée au nom de Camille
+      Camille a 16 ans
+  - type: sortie
+    entrees: ["Alex", "19"]
+    attendu: |-
+      Ton prénom : Alex
+      Ton âge : 19
+      Fiche créée au nom de Alex
+      Alex a 19 ans
+  - type: interdit
+    motif: Camille
+  - type: contient
+    motif: "{"
+    maitrise: true
+    message: >-
+      L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.
+solution: |
+  prenom = input("Ton prénom : ")
+  age = input("Ton âge : ")
+  print(f"Fiche créée au nom de {prenom}")
+  print(f"{prenom} a {age} ans")

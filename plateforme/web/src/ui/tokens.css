@@ -1,0 +1,68 @@
+:root {
+  --ground: #FBF8F3;
+  --ground-2: #F3EEE5;
+  --ink: #1E1B16;
+  --ink-soft: #6B6459;
+  --rule: #E2DACC;
+
+  --var-tint: #C2CCFF; --var-ink: #2C0A71; --var-deep: #1A0640;
+  --typ-tint: #D9F4CC; --typ-ink: #053827; --typ-deep: #022016;
+  --ope-tint: #C2E8FF; --ope-ink: #004E7A; --ope-deep: #002B43;
+  --con-tint: #FFE7C2; --con-ink: #7A4900; --con-deep: #3C2500;
+  --bou-tint: #FFD9C2; --bou-ink: #7A2800; --bou-deep: #3C1400;
+
+  /*
+   * Fond de l'ecran d'exercice. UN SEUL, pour les cinq familles : les couleurs
+   * `deep` derivees de la palette donnaient un brun (#3C2500) et un vert tres
+   * sombre (#022016) qui tenaient mal un ecran entier. La notion se lit dans
+   * les accents, en pastel — lisible sur sombre, contrairement a l'encre.
+   * Legerement plus sombre que le fond Dracula, pour que les cartes de code
+   * se posent DESSUS au lieu de s'y fondre.
+   */
+  --nuit: #1A1B23;
+
+  --d-bg: #282A36; --d-fg: #F8F8F2; --d-pink: #FF79C6; --d-purple: #BD93F9;
+  --d-cyan: #8BE9FD; --d-yellow: #F1FA8C; --d-green: #50FA7B;
+  --d-comment: #6272A4; --d-red: #FF5555; --d-line: #44475A;
+  --d-label: #B4ADD0; /* 6.67 sur #282A36 — le commentaire Dracula est a 3.03, insuffisant */
+
+  --tl-red: #FF5F56; --tl-yel: #FFBD2E; --tl-grn: #27C93F;
+  --py-blue: #4B8BBE; --py-yellow: #FFC331;
+
+  /* Variantes assombries : les pastilles macOS sont illisibles en texte sur clair */
+  --ok: #0F5C23;
+  --ko: #9C1B15;
+
+  /*
+   * Surfaces. Le fond de page est le neutre chaud ; le CONTENU vit sur une
+   * surface blanche posee dessus. Inonder la page d'un pastel sature donne
+   * l'impression d'une maquette : la couleur de notion sert d'accent, pas de
+   * fond.
+   */
+  --surface: #FFFFFF;
+  --surface-doux: #FCFAF7;
+  --rule-doux: #EDE7DC;
+
+  /* Ombres teintees chaud, pour rester dans la meme lumiere que le fond. */
+  --ombre-1: 0 1px 2px rgb(30 27 22 / 4%), 0 1px 3px rgb(30 27 22 / 6%);
+  --ombre-2: 0 1px 2px rgb(30 27 22 / 4%), 0 8px 24px rgb(30 27 22 / 7%);
+
+  /* Rythme 4/8 : toute marge de l'interface sort de cette echelle. */
+  --e-1: 0.5rem; --e-2: 1rem; --e-3: 1.5rem; --e-4: 2rem; --e-5: 3rem; --e-6: 4rem;
+
+  /* Echelle typographique a sept crans. Aucune taille hors de cette liste. */
+  --t-1: 0.82rem; --t-2: 0.94rem; --t-3: 1rem; --t-4: 1.15rem;
+  --t-5: 1.4rem; --t-6: 2rem; --t-7: 2.6rem;
+
+  --rayon-1: 6px; --rayon-2: 10px; --rayon-3: 16px;
+
+  --police-texte: "General Sans", system-ui, sans-serif;
+  --police-code: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+/* Famille active, posee par l'ecran selon le concept courant */
+[data-famille="variables"] { --tint: var(--var-tint); --encre: var(--var-ink); --profond: var(--var-deep); }
+[data-famille="types"]     { --tint: var(--typ-tint); --encre: var(--typ-ink); --profond: var(--typ-deep); }
+[data-famille="operateurs"]{ --tint: var(--ope-tint); --encre: var(--ope-ink); --profond: var(--ope-deep); }
+[data-famille="conditions"]{ --tint: var(--con-tint); --encre: var(--con-ink); --profond: var(--con-deep); }
+[data-famille="boucles"]   { --tint: var(--bou-tint); --encre: var(--bou-ink); --profond: var(--bou-deep); }

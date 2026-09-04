@@ -1,0 +1,25 @@
+id: s1-01
+concept: print
+notion: afficher
+seance: 1
+niveau: normal
+type: predire
+titre: Ce que Python affiche vraiment
+obligatoire: true
+enonce: |
+  Tu n'as rien à écrire ici.
+  Lis ce programme, puis choisis ce qui apparaît à l'écran quand on l'exécute.
+depart: |
+  print("Bonjour")
+indices:
+  - Les guillemets servent à marquer le début et la fin du texte. Demande-toi s'ils font partie du message.
+  - Le mot print et les parenthèses sont l'ordre donné à Python, pas le message. Seul ce qui se trouve à l'intérieur des guillemets arrive à l'écran.
+tests:
+  - type: qcm
+    options:
+      - Bonjour
+      - '"Bonjour"'
+      - print("Bonjour")
+    bonne_reponse: 0
+solution: |
+  print("Bonjour")

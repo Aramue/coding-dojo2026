@@ -64,3 +64,18 @@ négligeable ; l'enjeu est de ne pas perdre la progression d'une séance.
 ## Voir aussi
 
 [[Vue d'ensemble]] · [[Contraintes]]
+
+## Structure du dépôt — 4 septembre 2026
+
+`docker-compose.yml` vit **à la racine** : `docker compose up -d --build` depuis la racine, sans
+changer de dossier. Le fichier déclare `name: coding-dojo`, ce qui nomme les conteneurs
+`coding-dojo-api-1` et `coding-dojo-web-1` — auparavant Docker prenait le nom du dossier qui
+contenait le fichier, et ils s'appelaient `deploiement-*`.
+
+> [!warning] Le contexte de build est la racine, donc `.dockerignore` est obligatoire
+> Sans lui, `COPY plateforme/web .` recopiait le `node_modules` de la machine par-dessus
+> l'installation faite dans l'image. Comme pnpm construit une forêt de liens symboliques, la copie
+> arrivait cassée et `tsc` ne trouvait plus ses types. ==Le build dépendait de l'état du poste== :
+> il passait chez l'un, échouait chez l'autre.
+
+Les secrets vivent dans `.env` à la racine, hors dépôt, documenté par `.env.example`.

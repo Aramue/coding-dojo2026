@@ -1,0 +1,33 @@
+id: s1-24
+concept: f-string
+notion: types
+seance: 1
+niveau: normal
+type: predire
+titre: Trois écritures, une seule sortie
+obligatoire: true
+enonce: |
+  La même information est écrite ici de trois façons différentes.
+  La première colle les morceaux avec +, la deuxième sépare avec une virgule,
+  la troisième utilise un f-string.
+  Qu'affiche ce programme à l'écran ?
+depart: |
+  prenom = "Camille"
+  print("Bonjour " + prenom)
+  print("Bonjour", prenom)
+  print(f"Bonjour {prenom}")
+indices:
+  - Traite chaque ligne l'une après l'autre, puis compare les trois résultats obtenus.
+  - La virgule ajoute un espace toute seule, et le f devant les guillemets fait remplacer {prenom} par le contenu de la variable.
+tests:
+  - type: qcm
+    options:
+      - "Bonjour Camille\nBonjour Camille\nBonjour Camille"
+      - "Bonjour Camille\nBonjourCamille\nBonjour Camille"
+      - "Bonjour Camille\nBonjour Camille\nBonjour {prenom}"
+    bonne_reponse: 0
+solution: |
+  prenom = "Camille"
+  print("Bonjour " + prenom)
+  print("Bonjour", prenom)
+  print(f"Bonjour {prenom}")

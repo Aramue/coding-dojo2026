@@ -1,0 +1,34 @@
+id: s1-09
+concept: variable
+notion: variables
+seance: 1
+niveau: normal
+type: predire
+titre: La boîte et son étiquette
+obligatoire: true
+enonce: |
+  Une information utile n'est pas toujours affichée tout de suite :
+  elle est d'abord rangée dans une variable.
+  Une variable, c'est une boîte avec une étiquette. L'étiquette est le nom de
+  la boîte. À l'intérieur, il y a une valeur.
+
+  La première ligne range le texte Camille dans une boîte étiquetée prenom.
+  La deuxième ligne demande d'afficher prenom.
+
+  Qu'est-ce qui apparaît à l'écran quand on exécute ce programme ?
+depart: |
+  prenom = "Camille"
+  print(prenom)
+indices:
+  - Jusqu'ici, pour afficher du texte tel quel, on le mettait entre guillemets. Sur la deuxième ligne, il n'y a pas de guillemets.
+  - Python va chercher ce qu'il y a à l'intérieur de la boîte, pas ce qui est écrit sur l'étiquette.
+tests:
+  - type: qcm
+    options:
+      - Camille
+      - prenom
+      - prenom = Camille
+    bonne_reponse: 0
+solution: |
+  prenom = "Camille"
+  print(prenom)

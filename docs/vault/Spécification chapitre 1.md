@@ -7,7 +7,14 @@ date: 2026-09-03
 echeance: 2026-09-16
 ---
 
-# Spécification — Plateforme Quartier Général, chapitre 1
+# Spécification — chapitre 1
+
+> [!warning] Amendée le 4 septembre 2026
+> Cette spécification a été écrite autour d'une fiction d'agents secrets, abandonnée depuis :
+> voir [[ADR-010 Abandon de la fiction narrative]]. Le **dispositif** qu'elle décrit — moteur,
+> validation, progression, API — reste exact. ==Tout ce qui relève de l'habillage narratif ne
+> l'est plus== : le code d'accès s'écrit `DOJO-XXXX`, et les énoncés parlent d'exemples du
+> quotidien. L'interface est spécifiée à part, dans [[Spécification interface]].
 
 > [!abstract] Ce que ce document est
 > La spécification validée du **premier chapitre uniquement**. Elle consolide les décisions
@@ -80,11 +87,10 @@ Décision fondatrice : [[ADR-001 Exécution du code dans le navigateur]].
 
 | Route | Rôle |
 |---|---|
-| `POST /session` | Échange un code d'agent contre un jeton |
-| `GET /parcours` | Exercices débloqués pour cet agent |
+| `POST /session` | Échange un code d'accès contre un jeton |
+| `GET /parcours` | Exercices déjà réussis par cet élève |
 | `POST /tentative` | Exercice, verdict, type d'erreur, durée |
 | `GET /prof/seance` | Alimente le tableau de bord |
-| `POST /prof/verrou` | Ouvre ou ferme un concept pour la classe |
 
 L'API ne reçoit **jamais** le code source écrit par l'élève — seulement le verdict et le *type*
 d'erreur.
@@ -93,11 +99,11 @@ d'erreur.
 
 [[ADR-002 Identification par code d'agent]].
 
-Chaque élève reçoit en séance un code de la forme `AGENT-K7M2`. Pas de mot de passe, pas
+Chaque élève reçoit en séance un code de la forme `DOJO-K7M2`. Pas de mot de passe, pas
 d'adresse, pas de nom. La base ne contient que le code, la progression et les horodatages ;
 ==la table de correspondance reste chez le professeur, hors de la plateforme==.
 
-Le code sert aussi la fiction : c'est littéralement l'identifiant d'agent, et il est injecté dans
+Le code n'a aucun autre rôle que l'identification. Il n'est pas injecté dans
 le programme que l'élève construit.
 
 ## 5. Contenu
@@ -178,8 +184,8 @@ Séances : **mercredis 16, 23 et 30 septembre 2026**, deux heures chacune.
 **La séance 1 est délestée** : opérateurs, `//`, `%`, priorité et `len()` passent en séance 2, et
 `bool` n'apparaît pas en séance 1. C'est la séance où se joue l'abandon.
 
-Deux dispositifs structurants : [[Terminal QG]] (un seul programme cumulatif, avec injection du
-bloc manquant) et [[Archive des agents tombés]] (les `debug` sont les vrais ratages de 2025).
+Deux dispositifs structurants : [[Programme d'assemblage]] (un seul programme cumulatif, avec injection du
+bloc manquant) et [[Bugs réels de la promotion 2025]] (les `debug` sont les vrais ratages de 2025).
 
 Mode expert : [[ADR-004 Mode expert en bonus débloqué]]. Non noté, non compté dans la progression
 affichée ; la certification ne dépend que du parcours obligatoire.
@@ -205,8 +211,8 @@ Décisions : [[ADR-005 Typographie General Sans]] · [[ADR-006 Palette dérivée
 ### Trois paliers
 
 **Palier 1 — le noyau irréductible, requis le 16 septembre**
-Worker Pyodide · moteur de validation · écran exercice · codes d'agent · API · les 25 exercices
-obligatoires de la séance 1 · bloc 1 du Terminal QG · déploiement.
+Worker Pyodide · moteur de validation · écran exercice · codes d'accès · API · les 25 exercices
+obligatoires de la séance 1 · programme d'assemblage · déploiement.
 
 **Palier 2 — si le temps le permet**
 Écran leçon · tableau de bord · messages d'erreur en français · indices progressifs.
@@ -225,7 +231,7 @@ Gamification (XP, classement hebdomadaire, badges) · exercices experts · verro
 | 1–2 | Worker Pyodide + moteur de validation |
 | 3 | Outillage contenu — 3 h qui économisent 17 h, **avant** d'écrire le premier exercice |
 | 4–5 | Écran exercice + éditeur, en DA |
-| 6 | API + codes d'agent + SQLite |
+| 6 | API + codes d'accès + SQLite |
 | 7–8 | Contenu lot 1, du moins cher au plus cher |
 | 9 | Déploiement UNIGE + test de charge à 24 onglets |
 | 10 | Messages d'erreur en français |

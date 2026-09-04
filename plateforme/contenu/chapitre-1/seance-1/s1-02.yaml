@@ -1,0 +1,26 @@
+id: s1-02
+concept: print
+notion: afficher
+seance: 1
+niveau: normal
+type: ecrire
+titre: Ton premier programme
+obligatoire: true
+enonce: |
+  À toi d'écrire l'instruction, sur le modèle que tu viens de lire.
+  Ton programme doit afficher exactement cette ligne, et rien d'autre :
+
+  Bonjour tout le monde
+depart: ''
+indices:
+  - "Une instruction qui affiche quelque chose commence par print, suivi d'une parenthèse ouvrante."
+  - "Le texte à afficher se place entre guillemets, à l'intérieur des parenthèses. Recopie-le exactement : Bonjour tout le monde."
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Bonjour tout le monde
+  - type: interdit
+    motif: "input("
+solution: |
+  print("Bonjour tout le monde")

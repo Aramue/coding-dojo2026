@@ -1,0 +1,100 @@
+/*
+ * L'espace eleve, par-dessus tout le reste.
+ *
+ * Encadre sous le tableau, il s'ouvrait a mille pixels du clic — le professeur
+ * cliquait et rien ne semblait se passer — et sa fenetre de 70 vh, avec deux
+ * barres de defilement imbriquees, rendait un ecran d'exercice illisible.
+ */
+
+.apercu {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+  animation: apercu-arrive 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.apercu:focus {
+  outline: none;
+}
+
+@keyframes apercu-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.apercu__barre {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  padding: var(--e-2) var(--e-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+  box-shadow: var(--ombre-1);
+}
+
+.apercu__barre b {
+  display: block;
+  font-size: var(--t-3);
+  color: var(--ink);
+}
+
+.apercu__note {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.apercu__vide {
+  margin: 0;
+  padding: var(--e-5);
+  color: var(--ink-soft);
+  font-size: var(--t-2);
+  text-align: center;
+}
+
+/* UNE seule zone de defilement : celle-ci. Le fond est fige tant qu'on est la. */
+.apercu__cadre {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/*
+ * La grille de l'application vit normalement sous un en-tete fixe et occupe la
+ * hauteur de la fenetre. Ici elle est imbriquee sous la barre de l'apercu : elle
+ * remplit ce qui reste, et le sommaire ne defile plus separement.
+ */
+.appli--apercu {
+  min-height: 100%;
+  /* Pas d'en-tete ici : la grille se reduit au sommaire et au contenu. */
+  grid-template-areas: 'menu contenu';
+  grid-template-rows: minmax(100%, auto);
+}
+
+.appli--apercu .menu {
+  overflow: visible;
+  max-height: none;
+}
+
+@media (max-width: 900px) {
+  .appli--apercu {
+    grid-template-areas:
+      'menu'
+      'contenu';
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apercu {
+    animation: none;
+  }
+}

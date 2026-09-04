@@ -1,0 +1,80 @@
+id: s1-34
+concept: probleme narratif
+notion: saisie
+seance: 1
+niveau: normal
+type: ecrire
+titre: Ta carte de membre
+obligatoire: true
+enonce: |
+  Dernier exercice de la séance : un programme complet, qui réunit tout ce que
+  tu viens d'apprendre.
+
+  Il doit faire quatre choses :
+  1. demander le prénom, avec l'invite "Ton prénom : " ;
+  2. demander l'âge, avec l'invite "Ton âge : ", et le ranger sous forme de nombre entier ;
+  3. ranger dans une variable l'âge que la personne aura l'an prochain ;
+  4. afficher la carte sur quatre lignes.
+
+  Si la personne répond Camille, puis 17, l'écran affiche ceci après les deux questions :
+
+  === CARTE DE MEMBRE ===
+  Nom : Camille
+  Age : 17 ans
+  L'an prochain : 18 ans
+
+  Recopie ces textes au caractère près, espaces compris. Sur cette carte, le mot Age
+  s'écrit sans accent : garde-le tel quel.
+
+  Attention : les deux réponses écrites ici ne sont qu'un exemple. Ton programme doit
+  fonctionner avec n'importe qui, donc Camille et 18 sont interdits dans ton code.
+
+  Les lignes du code de départ qui commencent par # sont des remarques : Python les
+  ignore, elles sont là pour te guider. Écris ton code en dessous de chacune.
+depart: |
+  # 1. demander le prénom et le ranger dans une variable
+
+  # 2. demander l'âge et le convertir en nombre entier
+
+  # 3. calculer l'âge de l'an prochain
+
+  # 4. afficher les quatre lignes de la carte
+indices:
+  - "Commence par les deux questions. La question se met à l'intérieur des parenthèses de input(). Et souviens-toi, input() rend toujours du texte, même quand on tape un nombre."
+  - "L'âge doit donc être converti avant qu'on puisse lui ajouter 1. Ensuite, chaque ligne de la carte est un print() séparé, et un f-string permet de glisser une variable entre accolades."
+tests:
+  - type: sortie
+    entrees: ["Camille", "17"]
+    attendu: |-
+      Ton prénom : Camille
+      Ton âge : 17
+      === CARTE DE MEMBRE ===
+      Nom : Camille
+      Age : 17 ans
+      L'an prochain : 18 ans
+  - type: sortie
+    entrees: ["Alex", "15"]
+    attendu: |-
+      Ton prénom : Alex
+      Ton âge : 15
+      === CARTE DE MEMBRE ===
+      Nom : Alex
+      Age : 15 ans
+      L'an prochain : 16 ans
+  - type: interdit
+    motif: Camille
+  - type: interdit
+    motif: "18"
+  - type: contient
+    motif: "{"
+    maitrise: true
+    message: >-
+      L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.
+solution: |
+  prenom = input("Ton prénom : ")
+  age = int(input("Ton âge : "))
+  age_prochain = age + 1
+  print("=== CARTE DE MEMBRE ===")
+  print(f"Nom : {prenom}")
+  print(f"Age : {age} ans")
+  print(f"L'an prochain : {age_prochain} ans")

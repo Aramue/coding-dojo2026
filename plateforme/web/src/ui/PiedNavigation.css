@@ -1,0 +1,114 @@
+.pied {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--e-2);
+  max-width: 72ch;
+  margin: var(--e-4) auto 0;
+}
+
+.pied__lien {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  min-height: 3.5rem;
+  padding: var(--e-2) var(--e-3);
+  max-width: 22rem;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.pied__lien:hover {
+  border-color: var(--encre, var(--ink-soft));
+}
+
+.pied__lien--suivant:hover {
+  transform: translateX(2px);
+}
+
+.pied__lien--precedent:hover {
+  transform: translateX(-2px);
+}
+
+.pied__lien:focus-visible {
+  outline: 2px solid var(--encre, var(--py-blue));
+  outline-offset: 2px;
+}
+
+.pied__texte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.pied__lien--suivant .pied__texte {
+  text-align: right;
+}
+
+.pied__sens {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.pied__libelle {
+  font-size: var(--t-2);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pied__lien svg {
+  flex: none;
+  color: var(--encre, var(--ink-soft));
+}
+
+/* ---------- Sur l'écran d'exercice ---------- */
+
+.pied--sombre {
+  max-width: 1180px;
+}
+
+.pied--sombre .pied__lien {
+  background: var(--panneau);
+  border-color: var(--trait);
+  box-shadow: none;
+  color: var(--texte-clair);
+}
+
+.pied--sombre .pied__lien:hover {
+  border-color: var(--accent);
+}
+
+.pied--sombre .pied__lien:focus-visible {
+  outline-color: var(--accent);
+}
+
+.pied--sombre .pied__sens {
+  color: var(--texte-doux);
+}
+
+.pied--sombre .pied__lien svg {
+  color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .pied__libelle {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pied__lien {
+    transition: none;
+  }
+
+  .pied__lien:hover {
+    transform: none;
+  }
+}

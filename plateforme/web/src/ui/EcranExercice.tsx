@@ -1,0 +1,276 @@
+import { useEffect, useMemo, useState } from 'react'
+import type { Exercice } from '../contenu/types'
+import { nomsVariablesRequis } from '../contenu/chargeur'
+import { Executeur } from '../execution/executeur'
+import { naviguer, versChemin } from '../routage'
+import { categorieErreur } from '../execution/exceptions'
+import type { ResultatExecution } from '../execution/types'
+import { evaluer } from '../validation/evaluer'
+import type { Reussite, ResultatTest, Test } from '../validation/types'
+import { CarteCode } from './CarteCode'
+import { Console, type Passage } from './Console'
+import { decouperEnonce, formaterTexte } from './texte'
+import { Editeur } from './Editeur'
+import { PanneauVerdict } from './PanneauVerdict'
+import { PiedNavigation, type Etape } from './PiedNavigation'
+import { RappelReussite } from './RappelReussite'
+
+const EXECUTION_VIDE: ResultatExecution = {
+  stdout: '',
+  erreur: null,
+  variables: {},
+  dureeMs: 0,
+  timeout: false,
+}
+
+const SEUIL_INDICE = 2 // le deuxième indice se débloque après 2 essais infructueux
+
+export function EcranExercice({
+  exercice,
+  executeur,
+  onTentative,
+  titreNotion,
+  dejaFait,
+  precedent,
+  suivant,
+}: {
+  exercice: Exercice
+  executeur: Executeur
+  /** Nom affiche de la notion, pour le rappel colore en haut de page. */
+  titreNotion?: string
+  /**
+   * La reussite deja enregistree pour cet exercice, s'il y en a une.
+   *
+   * Elle vient du parcours charge a l'ouverture de la session : elle survit
+   * donc au rechargement, contrairement a l'etat local de l'ecran.
+   */
+  dejaFait?: Reussite
+  /** Les deux etapes voisines. Sans elles, l'exercice est un cul-de-sac. */
+  precedent?: Etape
+  suivant?: Etape
+  /**
+   * Appelée à CHAQUE validation, réussie ou non — d'où le nom.
+   *
+   * `typeErreurPython` est le NOM de l'exception (`NameError`, `TypeError`…),
+   * jamais un message. Les messages de verdict contiennent des identifiants
+   * tapés par l'élève : les transmettre ferait sortir du code source de son
+   * navigateur, ce que l'architecture interdit.
+   */
+  onTentative: (
+    resultat: ResultatTest,
+    dureeMs: number,
+    typeErreurPython: string | null,
+  ) => void
+}) {
+  const [code, setCode] = useState(exercice.depart)
+  const [resultat, setResultat] = useState<ResultatTest | null>(null)
+  const [essais, setEssais] = useState(0)
+  const [reponseQcm, setReponseQcm] = useState<number | undefined>(undefined)
+  const [enCours, setEnCours] = useState(false)
+  const [passages, setPassages] = useState<Passage[]>([])
+
+  useEffect(() => {
+    setCode(exercice.depart)
+    setResultat(null)
+    setEssais(0)
+    setReponseQcm(undefined)
+    setPassages([])
+  }, [exercice.id, exercice.depart])
+
+  const noms = useMemo(() => nomsVariablesRequis(exercice), [exercice])
+  // Prédicat de type : `Test` est une union discriminée, `.find()` seul ne
+  // suffit pas à donner accès aux champs propres à une variante.
+  const qcm = exercice.tests.find((t): t is Extract<Test, { type: 'qcm' }> => t.type === 'qcm')
+
+  async function valider() {
+    setEnCours(true)
+    setPassages([])
+
+    // Une exécution par test, avec les entrées qui LUI appartiennent : un
+    // exercice comme s1-30/s1-31/s1-34 déclare plusieurs tests 'sortie' avec
+    // des entrées différentes (pour vérifier que la solution généralise, pas
+    // seulement le premier exemple). Réutiliser une seule exécution partagée
+    // comparerait la sortie obtenue avec des entrées A à l'attendu écrit pour
+    // des entrées B. Les exécutions identiques (même jeu d'entrées) sont mises
+    // en cache pour ne pas relancer Pyodide inutilement, et lancées l'une
+    // après l'autre : l'Executeur ne pilote qu'un seul worker à la fois, un
+    // second appel concurrent écraserait le gestionnaire de réponse du
+    // premier et le ferait expirer en silence (voir executeur.ts).
+    const executions: ResultatExecution[] = []
+    if (exercice.type === 'predire') {
+      executions.push(...exercice.tests.map(() => EXECUTION_VIDE))
+    } else {
+      const cache = new Map<string, ResultatExecution>()
+      for (const test of exercice.tests) {
+        // Le test 'variable' relit l'espace de noms d'une exécution sans
+        // entrée (miroir de valider_contenu.py::_passe). 'interdit',
+        // 'contient' et 'qcm' n'inspectent jamais l'exécution : inutile de
+        // solliciter Pyodide pour eux.
+        const entrees = test.type === 'sortie' ? test.entrees : test.type === 'variable' ? [] : null
+        if (entrees === null) {
+          executions.push(EXECUTION_VIDE)
+          continue
+        }
+        const cle = JSON.stringify(entrees)
+        let resultat = cache.get(cle)
+        if (!resultat) {
+          // Un passage de console par exécution réellement lancée. Les
+          // exécutions servies par le cache n'en ouvrent pas : elles
+          // afficheraient deux fois la même chose.
+          setPassages((liste) => [...liste, { entrees, texte: '' }])
+          resultat = await executeur.executer({
+            code,
+            entrees,
+            nomsVariables: noms,
+            // La sortie s'écrit dans le dernier passage ouvert — celui qui
+            // tourne. L'Executeur ne pilote qu'une exécution à la fois.
+            onSortie: (morceau) =>
+              setPassages((liste) => {
+                const dernier = liste[liste.length - 1]
+                if (!dernier) return liste
+                return [...liste.slice(0, -1), { ...dernier, texte: dernier.texte + morceau }]
+              }),
+          })
+          cache.set(cle, resultat)
+        }
+        executions.push(resultat)
+      }
+    }
+
+    const evalue = evaluer({ code, tests: exercice.tests, executions, reponseQcm })
+    setResultat(evalue)
+    setEssais((n) => n + 1)
+    setEnCours(false)
+
+    const dureeTotaleMs = executions.reduce((total, e) => total + e.dureeMs, 0)
+    const enErreur = executions.find((e) => e.timeout || e.erreur)
+    onTentative(
+      evalue,
+      dureeTotaleMs,
+      // Filtré par liste blanche : un nom d'exception peut être choisi par l'élève.
+      categorieErreur(enErreur?.timeout ? 'TimeoutError' : enErreur?.erreur?.type),
+    )
+  }
+
+  const indicesVisibles = exercice.indices.slice(0, essais >= SEUIL_INDICE ? exercice.indices.length : 1)
+
+  return (
+    <main className="exercice" data-famille={exercice.famille}>
+      <nav className="exercice__fil" aria-label="Fil d'Ariane">
+        <a
+          href={versChemin({ vue: 'exercices', notion: exercice.notion })}
+          onClick={(evenement) => {
+            if (evenement.metaKey || evenement.ctrlKey || evenement.shiftKey) return
+            evenement.preventDefault()
+            naviguer({ vue: 'exercices', notion: exercice.notion })
+          }}
+        >
+          Retour aux exercices
+        </a>
+      </nav>
+
+      <div className="exercice__entete">
+        <div>
+          {titreNotion && <p className="exercice__notion">{titreNotion}</p>}
+          <h1 className="exercice__titre">{exercice.titre}</h1>
+        </div>
+        <span className="exercice__essais">
+          {essais === 0 ? 'aucun essai' : `${essais} essai${essais > 1 ? 's' : ''}`}
+        </span>
+      </div>
+
+      {/*
+        Le rappel s'efface dès la première validation de la visite : le verdict
+        dit alors la même chose, en plus frais, et deux encadrés qui se
+        répondent brouillent la lecture.
+      */}
+      {dejaFait && !resultat && <RappelReussite reussite={dejaFait} />}
+
+      <div className="exercice__grille">
+        <section className="exercice__enonce">
+          {decouperEnonce(exercice.enonce).map((bloc, i) => {
+            if (bloc.genre === 'sortie') {
+              return (
+                <pre key={i} className="enonce__sortie">
+                  {bloc.texte}
+                </pre>
+              )
+            }
+            if (bloc.genre === 'liste') {
+              return (
+                <p key={i} className="enonce__liste">
+                  {formaterTexte(bloc.texte)}
+                </p>
+              )
+            }
+            return <p key={i}>{formaterTexte(bloc.texte)}</p>
+          })}
+
+          {/*
+            Un exercice « predire » demande de LIRE un programme : sans cet
+            affichage, l'élève voit les propositions sans le code, et les douze
+            exercices de ce type sont impossibles à faire.
+          */}
+          {qcm && exercice.depart.trim() && (
+            <CarteCode legende="Le programme">
+              <pre>{exercice.depart.trimEnd()}</pre>
+            </CarteCode>
+          )}
+
+          {indicesVisibles.map((indice, i) => (
+            <p key={i} className="indice">
+              <b>Indice {i + 1}</b>
+              <span>{indice}</span>
+            </p>
+          ))}
+          {exercice.indices.length > indicesVisibles.length && (
+            <p className="indice indice--verrouille">
+              <b>Indice {indicesVisibles.length + 1}</b>
+              <span>Encore un essai avant de le débloquer.</span>
+            </p>
+          )}
+        </section>
+
+        <section className="exercice__travail">
+          {qcm ? (
+            <fieldset className="qcm">
+              <legend>Qu'affiche ce programme&nbsp;?</legend>
+              {qcm.options.map((option, i) => (
+                <label key={i} className="qcm__option">
+                  <input
+                    type="radio"
+                    name="qcm"
+                    checked={reponseQcm === i}
+                    onChange={() => setReponseQcm(i)}
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </fieldset>
+          ) : (
+            <Editeur valeur={code} onChange={setCode} />
+          )}
+
+          <div className="exercice__actions">
+            <button
+              type="button"
+              className="bouton bouton--primaire"
+              onClick={valider}
+              disabled={enCours || (Boolean(qcm) && reponseQcm === undefined)}
+            >
+              {enCours ? 'Exécution…' : 'Valider'}
+            </button>
+            <span className="exercice__note">exécuté dans ton navigateur</span>
+          </div>
+
+          {/* Un QCM ne lance rien : une console y resterait vide à jamais. */}
+          {!qcm && <Console passages={passages} enCours={enCours} />}
+
+          <PanneauVerdict resultat={resultat} />
+        </section>
+      </div>
+
+      <PiedNavigation precedent={precedent} suivant={suivant} sombre />
+    </main>
+  )
+}

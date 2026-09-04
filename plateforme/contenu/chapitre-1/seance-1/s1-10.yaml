@@ -1,0 +1,31 @@
+id: s1-10
+concept: variable
+notion: variables
+seance: 1
+niveau: normal
+type: completer
+titre: Range un prénom
+obligatoire: true
+enonce: |
+  Une variable est une boîte avec une étiquette.
+  Ici l'étiquette est déjà écrite : la boîte s'appelle prenom. Mais elle est vide.
+  Range le texte Camille à l'intérieur.
+  Le programme doit alors afficher exactement :
+  Bonjour Camille et bienvenue
+depart: |
+  prenom = _____
+  print("Bonjour", prenom, "et bienvenue")
+indices:
+  - À droite du signe égal, on écrit la valeur que l'on range dans la boîte. Ici, cette valeur est du texte.
+  - Un texte s'écrit toujours entre guillemets, exactement comme le texte que tu mets dans print().
+tests:
+  - type: variable
+    nom: prenom
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Bonjour Camille et bienvenue
+solution: |
+  prenom = "Camille"
+  print("Bonjour", prenom, "et bienvenue")

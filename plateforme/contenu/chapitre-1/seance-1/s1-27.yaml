@@ -1,0 +1,26 @@
+id: s1-27
+concept: input
+notion: saisie
+seance: 1
+niveau: normal
+type: predire
+titre: input() rend toujours du texte
+obligatoire: true
+enonce: |
+  La fonction input() pose une question, puis récupère ce que la personne tape
+  au clavier.
+  Ici, elle tape 17, puis elle appuie sur Entrée.
+  Qu'affiche la ligne print() ?
+depart: |
+  age = input("Ton âge : ")
+  print(age + age)
+indices:
+  - "Rappelle-toi le signe + : entre deux nombres il additionne, entre deux textes il colle bout à bout."
+  - "Ce que input() rend est toujours du texte, même quand on tape des chiffres."
+tests:
+  - type: qcm
+    options: ["1717", "34", "17 17"]
+    bonne_reponse: 0
+solution: |
+  age = input("Ton âge : ")
+  print(age + age)

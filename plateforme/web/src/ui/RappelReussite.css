@@ -1,0 +1,58 @@
+/*
+ * Rappel de reussite, sur l'ecran d'exercice (fond --nuit).
+ *
+ * Il informe, il ne felicite pas : le verdict, lui, arrive apres un effort et
+ * a droit a son animation. Celui-ci est deja la quand la page s'ouvre, donc
+ * discret — un liseré, pas un bandeau vert.
+ */
+
+.rappel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  /* Meme colonne que le fil, l'en-tete et le corps : tout s'aligne sur un bord. */
+  max-width: var(--colonne);
+  margin: 0 auto var(--e-3);
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--rayon-2);
+  border-left: 3px solid var(--d-green);
+  background: rgb(80 250 123 / 8%);
+  font-size: var(--t-2);
+}
+
+.rappel__coches {
+  display: inline-flex;
+  flex: none;
+  margin-top: 0.1rem;
+  color: var(--d-green);
+}
+
+.rappel__coches svg + svg {
+  margin-left: -4px;
+}
+
+.rappel__texte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+  color: var(--texte-clair);
+}
+
+.rappel__mention {
+  font-weight: 600;
+}
+
+/* Une seule coche : la mention est vraie mais incomplete, le ton est neutre. */
+.rappel[data-niveau='1'] {
+  border-left-color: var(--d-cyan);
+  background: rgb(139 233 253 / 8%);
+}
+
+.rappel[data-niveau='1'] .rappel__coches {
+  color: var(--d-cyan);
+}
+
+.rappel[data-niveau='1'] .rappel__texte span {
+  color: var(--texte-doux);
+}
