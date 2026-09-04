@@ -25,8 +25,8 @@
   flex-wrap: wrap;
   margin: 0 calc(-1 * var(--e-3)) var(--e-3);
   padding: var(--e-2) var(--e-3);
-  /* Opaque, pas depoli : un fond translucide laissait voir la bande
-     d'avancement passer dessous, ce qui se lit comme un defaut d'affichage. */
+  /* Opaque, pas depoli : un fond translucide laissait voir le contenu passer
+     dessous, ce qui se lit comme un defaut d'affichage. */
   background: var(--ground);
   border-bottom: 1px solid var(--rule-doux);
 }
@@ -89,38 +89,7 @@
   50% { opacity: 0.25; }
 }
 
-/* ---------- Vue d'ensemble ---------- */
-
-/*
- * Une bande, pas une carte : elle ne porte qu'une idee — l'ecart dans la
- * classe — et une carte pleine hauteur lui donnait un poids qu'elle n'a pas.
- */
-.avancement {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--e-3);
-  flex-wrap: wrap;
-  margin-bottom: var(--e-2);
-  padding: var(--e-2) var(--e-3);
-  background: var(--surface);
-  border: 1px solid var(--rule-doux);
-  border-radius: var(--rayon-2);
-}
-
-.avancement__legende {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  max-width: 15rem;
-  margin: 0;
-  font-size: var(--t-2);
-  color: var(--ink);
-}
-
-.avancement__legende span {
-  font-size: var(--t-1);
-  color: var(--ink-soft);
-}
+/* ---------- Repartition de la classe ---------- */
 
 .compte {
   font-size: var(--t-2);
@@ -156,65 +125,6 @@
 }
 
 .compte[data-vide='true'] b { color: var(--ink-soft); }
-
-/*
- * La repartition de la classe, un point par eleve.
- *
- * C'etait une bande grise semee de traits fins : ca se lisait comme un curseur
- * ou un chargement, pas comme une mesure. Les eleves au meme point s'empilent
- * desormais — ==la hauteur d'une colonne EST le nombre d'eleves a cet
- * endroit== — et un axe porte le zero, la mediane et le total.
- */
-.etalement {
-  flex: 1;
-  min-width: 240px;
-  margin: 0;
-}
-
-.etalement__nuage {
-  position: relative;
-  border-bottom: 1px solid var(--rule);
-}
-
-.etalement__eleve {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  margin-left: -3.5px;
-  border-radius: 50%;
-  background: var(--py-blue);
-  /* Un liseré clair détache deux points voisins qui se touchent. */
-  box-shadow: 0 0 0 1.5px var(--surface);
-}
-
-/* La mediane, discrete : elle situe, elle ne domine pas le nuage. */
-.etalement__mediane {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  margin-left: -0.5px;
-  background: var(--rule);
-}
-
-.etalement__axe {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  margin: 0.25rem 0 0;
-  font-size: 0.68rem;
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-.etalement__reperemediane {
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  color: var(--ink);
-  font-weight: 500;
-}
 
 /* ---------- Ce qui bloque plusieurs eleves ---------- */
 

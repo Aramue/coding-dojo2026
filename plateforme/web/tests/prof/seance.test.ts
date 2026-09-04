@@ -101,14 +101,17 @@ describe('synthese', () => {
     expect([s.bloques, s.inactifs, s.enCours]).toEqual([2, 1, 1])
   })
 
-  it('ne compte que les obligatoires dans un avancement', () => {
+  it('ne compte que les obligatoires dans la mediane', () => {
     // ADR-004 : un renfort ou un bonus n'entre jamais dans la progression.
     const s = synthese([ligne({ reussis: [reussi('s1-01'), reussi('s1-15'), reussi('s1-17')] })], comptes)
-    expect(s.avancements).toEqual([1])
+    expect(s.mediane).toBe(1)
     expect(s.total).toBe(4)
   })
 
-  it('rend la distribution triée, pas seulement sa médiane', () => {
+  it('prend la valeur centrale, pas la moyenne', () => {
+    // Trois eleves a 0, 1 et 3 : la moyenne dirait 1,33 et arrondirait a 1 par
+    // hasard. Sur une classe ou trois ont fini et six n'ont rien commence,
+    // ==la moyenne rassure et la mediane dit vrai==.
     const s = synthese(
       [
         ligne({ reussis: [reussi('s1-01'), reussi('s1-02'), reussi('s1-03')] }),
@@ -117,7 +120,6 @@ describe('synthese', () => {
       ],
       comptes,
     )
-    expect(s.avancements).toEqual([0, 1, 3])
     expect(s.mediane).toBe(1)
   })
 
@@ -135,9 +137,7 @@ describe('synthese', () => {
   })
 
   it('ne divise pas par zéro sur une salle vide', () => {
-    const s = synthese([], comptes)
-    expect(s.mediane).toBe(0)
-    expect(s.avancements).toEqual([])
+    expect(synthese([], comptes).mediane).toBe(0)
   })
 })
 

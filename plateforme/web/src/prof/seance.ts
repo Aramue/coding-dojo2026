@@ -55,8 +55,6 @@ export type Synthese = {
   /** Inscrits qui n'ont encore rien soumis — invisibles avant la liste de classe. */
   pasCommence: number
   enCours: number
-  /** Un nombre par élève, trié : la distribution, pas seulement sa moyenne. */
-  avancements: number[]
   mediane: number
   total: number
 }
@@ -64,8 +62,9 @@ export type Synthese = {
 /**
  * Où en est la classe, en une ligne.
  *
- * La distribution complète est conservée : elle montre l'écart entre celui qui
- * a fini et celui qui n'a pas commencé, ce qu'une moyenne efface exactement.
+ * La médiane, pas la moyenne : une classe où trois élèves ont fini et six n'ont
+ * rien commencé a une moyenne rassurante et une médiane honnête. ==L'étalement,
+ * lui, se lit dans la liste==, une jauge par élève — inutile de le redessiner.
  */
 export function synthese(eleves: LigneEleve[], comptes: Set<string>): Synthese {
   const avancements = eleves
@@ -77,7 +76,6 @@ export function synthese(eleves: LigneEleve[], comptes: Set<string>): Synthese {
     inactifs: eleves.filter((e) => e.statut === 'inactif').length,
     pasCommence: eleves.filter((e) => e.statut === 'pas_commence').length,
     enCours: eleves.filter((e) => e.statut === 'en_cours').length,
-    avancements,
     mediane: mediane(avancements),
     total: comptes.size,
   }

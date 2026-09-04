@@ -102,6 +102,15 @@ export function TableauDeBord({
           <h1>Séance en cours</h1>
           <p className="tableau__effectif">
             {accord(eleves.length, 'élève connecté', 'élèves connectés')}
+            {/*
+              La mediane suffit ici. L'etalement de la classe se lit deja dans
+              la liste, une jauge par eleve : le redessiner en graphique au-
+              dessus, c'est ==montrer deux fois la meme chose== — et la seconde
+              fois moins bien, faute de place.
+            */}
+            {vue.total > 0 && eleves.length > 0 && (
+              <> · médiane {vue.mediane} / {vue.total}</>
+            )}
           </p>
         </div>
 
@@ -123,16 +132,6 @@ export function TableauDeBord({
       </header>
 
       {erreur && <p role="alert">{erreur}</p>}
-
-      {eleves.length > 0 && vue.total > 0 && (
-        <section className="avancement" aria-label="Avancement de la classe">
-          <p className="avancement__legende">
-            Avancement de la classe
-            <span>un point par élève, sur {vue.total} obligatoires</span>
-          </p>
-          <Etalement avancements={vue.avancements} total={vue.total} mediane={vue.mediane} />
-        </section>
-      )}
 
       {blocages.length > 0 && (
         <section className="blocages" aria-labelledby="titre-blocages">
@@ -229,67 +228,6 @@ function Compte({
  * pendant que trois touchent la fin, c'est savoir qu'il faut aller au fond de
  * la salle plutôt que ralentir tout le monde.
  */
-function Etalement({
-  avancements,
-  total,
-  mediane,
-}: {
-  avancements: number[]
-  total: number
-  mediane: number
-}) {
-  // Empilés : deux élèves au même point font une colonne de deux. La hauteur
-  // d'une colonne EST le nombre d'élèves à cet endroit — c'est ce qui distingue
-  // une classe groupée d'une classe étalée, et qu'un semis de traits sur une
-  // bande grise ne montrait pas.
-  const rangs = new Map<number, number>()
-  const points = avancements.map((fait) => {
-    const rang = rangs.get(fait) ?? 0
-    rangs.set(fait, rang + 1)
-    return { fait, rang }
-  })
-  const pile = Math.max(1, ...rangs.values())
-
-  return (
-    <figure className="etalement">
-      <div
-        className="etalement__nuage"
-        style={{ height: `${Math.max(2, pile) * 0.62 + 0.3}rem` }}
-        role="img"
-        aria-label={`Répartition des ${avancements.length} élèves : de ${
-          avancements[0] ?? 0
-        } à ${avancements[avancements.length - 1] ?? 0} exercices réussis sur ${total}, médiane ${mediane}`}
-      >
-        {points.map(({ fait, rang }, index) => (
-          <span
-            key={index}
-            className="etalement__eleve"
-            style={{
-              left: `${total === 0 ? 0 : (fait / total) * 100}%`,
-              bottom: `${rang * 0.62}rem`,
-            }}
-          />
-        ))}
-        <span
-          className="etalement__mediane"
-          style={{ left: `${total === 0 ? 0 : (mediane / total) * 100}%` }}
-        />
-      </div>
-
-      <figcaption className="etalement__axe" aria-hidden="true">
-        <span>0</span>
-        <span
-          className="etalement__reperemediane"
-          style={{ left: `${total === 0 ? 0 : (mediane / total) * 100}%` }}
-        >
-          médiane {mediane}
-        </span>
-        <span>{total}</span>
-      </figcaption>
-    </figure>
-  )
-}
-
 function Ligne({
   eleve,
   repere,

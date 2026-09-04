@@ -80,12 +80,12 @@ beforeEach(() => vi.unstubAllGlobals())
 describe('TableauDeBord — accords', () => {
   it('accorde le singulier', async () => {
     await rendre([ligne()])
-    expect(screen.getByText('1 élève connecté')).toBeInTheDocument()
+    expect(screen.getByText(/1 élève connecté/)).toBeInTheDocument()
   })
 
   it('accorde le pluriel', async () => {
     await rendre([ligne(), ligne({ code_acces: 'DOJO-DEUX' })])
-    expect(screen.getByText('2 élèves connectés')).toBeInTheDocument()
+    expect(screen.getByText(/2 élèves connectés/)).toBeInTheDocument()
   })
 
   it("accorde aussi le compte d'echecs", async () => {
@@ -197,55 +197,21 @@ describe('TableauDeBord — vue d ensemble', () => {
     expect(within(comptes).queryByText('bloqués')).toBeNull()
   })
 
-  it('pose un point par eleve sur la repartition', async () => {
-    // Un point chacun, pose la ou l'eleve en est : c'est l'ecart qui se pilote,
-    // et une moyenne l'effacerait.
-    poserLeReseau([
+  it("porte la mediane a cote de l'effectif", async () => {
+    // L'etalement se lit deja dans la liste, une jauge par eleve : le
+    // redessiner au-dessus, c'est montrer deux fois la meme chose.
+    await rendre([
       ligne({ code_acces: 'DOJO-A', reussis: [] }),
       ligne({ code_acces: 'DOJO-B', reussis: [reussi('s1-02')] }),
-      ligne({
-        code_acces: 'DOJO-C',
-        reussis: [reussi('s1-02'), reussi('s1-29'), reussi('s1-31')],
-      }),
+      ligne({ code_acces: 'DOJO-C', reussis: [reussi('s1-02'), reussi('s1-29')] }),
     ])
-    const { container } = render(<TableauDeBord codeProf="code-prof-test" />)
-    await waitFor(() => expect(container.querySelectorAll('.etalement__eleve')).toHaveLength(3))
-    expect(screen.getByText('médiane 1')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText(/médiane 1 \/ 3/)).toBeInTheDocument())
   })
 
-  it('empile les eleves qui sont au meme point', async () => {
-    // La hauteur d'une colonne EST le nombre d'eleves a cet endroit : c'est ce
-    // qui distingue une classe groupee d'une classe etalee, et qu'un semis de
-    // traits sur une bande grise ne montrait pas.
-    poserLeReseau([
-      ligne({ code_acces: 'DOJO-A', reussis: [reussi('s1-02')] }),
-      ligne({ code_acces: 'DOJO-B', reussis: [reussi('s1-29')] }),
-      ligne({ code_acces: 'DOJO-C', reussis: [] }),
-    ])
-    const { container } = render(<TableauDeBord codeProf="code-prof-test" />)
-    await waitFor(() => expect(container.querySelectorAll('.etalement__eleve')).toHaveLength(3))
-    const bas = [...container.querySelectorAll<HTMLElement>('.etalement__eleve')].map(
-      (point) => point.style.bottom,
-    )
-    // La distribution est triee : un eleve a 0, puis deux a « 1 sur 3 » —
-    // le second de ceux-la se pose au-dessus du premier.
-    expect(bas).toEqual(['0rem', '0rem', '0.62rem'])
-  })
-
-  it("decrit la repartition aux lecteurs d'ecran", async () => {
-    poserLeReseau([
-      ligne({ code_acces: 'DOJO-A', reussis: [] }),
-      ligne({ code_acces: 'DOJO-B', reussis: [reussi('s1-02'), reussi('s1-29')] }),
-    ])
-    render(<TableauDeBord codeProf="code-prof-test" />)
-    const nuage = await screen.findByRole('img', { name: /Répartition des 2 élèves/ })
-    expect(nuage).toHaveAccessibleName(/de 0 à 2 exercices réussis sur 3, médiane 1/)
-  })
-
-  it('ne montre ni comptes ni avancement sur une salle vide', async () => {
+  it('ne montre ni comptes ni mediane sur une salle vide', async () => {
     await rendre([])
     expect(screen.queryByLabelText('Répartition de la classe')).toBeNull()
-    expect(screen.queryByRole('region', { name: /Avancement de la classe/i })).toBeNull()
+    expect(screen.queryByText(/médiane/)).toBeNull()
   })
 })
 
