@@ -211,6 +211,20 @@ Règle explicite du `Caddyfile`.
 
 **Ce qui casse :** Pyodide refuse de démarrer. Rien ne fonctionne, sans message clair.
 
+### Le contenu ne doit PAS être mis en cache comme les ressources immuables
+
+`Caddyfile` sépare deux régimes : `/pyodide/*`, `/polices/*` et `/assets/*` sont immuables et
+gardés un an ; `/contenu/*` est en `Cache-Control: no-cache`, donc revalidé à chaque chargement.
+
+**Ce qui casse :** les fichiers d'`assets` portent un nom haché, qui change à chaque construction —
+le cache long est sans danger. ==`/contenu/seance-1.json` garde le même chemin d'une construction
+à l'autre.== Sans revalidation, tu corriges une faute dans un énoncé, tu reconstruis, tu déploies,
+et les navigateurs qui ont déjà ouvert la page continuent d'afficher l'ancien texte. En séance,
+c'est indétectable : chacun voit autre chose, personne ne comprend pourquoi.
+
+Vérifié le 4 septembre 2026 en conditions réelles : la correction ne se voyait qu'après un
+`fetch(..., {cache: 'reload'})` forcé.
+
 ### Aucune ressource externe à l'exécution
 
 Pyodide (**13,1 Mo**) et les cinq polices sont servis depuis l'image. Aucun `<link>` vers

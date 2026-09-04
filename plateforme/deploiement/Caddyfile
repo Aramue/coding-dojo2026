@@ -17,6 +17,14 @@ http://{$DOJO_DOMAINE:localhost}, https://{$DOJO_DOMAINE:localhost} {
 		# Pyodide et les polices : immuables, mis en cache un an.
 		@immuables path /pyodide/* /polices/* /assets/*
 		header @immuables Cache-Control "public, max-age=31536000, immutable"
+
+		# Le contenu, lui, change sans changer de nom de fichier : il est
+		# reconstruit a chaque `docker compose build`, mais /contenu/seance-1.json
+		# garde son chemin. Sans revalidation, une correction faite en seance
+		# n'atteindrait pas les navigateurs qui ont deja charge la page — et
+		# personne ne comprendrait pourquoi.
+		@contenu path /contenu/*
+		header @contenu Cache-Control "no-cache"
 		# WebAssembly doit etre servi avec le bon type MIME, sinon Pyodide echoue.
 		@wasm path *.wasm
 		header @wasm Content-Type "application/wasm"
