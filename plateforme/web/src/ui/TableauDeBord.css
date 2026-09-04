@@ -342,6 +342,26 @@
     padding: var(--e-3) var(--e-2);
   }
 
+  /*
+   * Le professeur circule dans la salle, souvent avec son telephone. Sur trois
+   * colonnes, le titre de l'exercice se retrouvait ecrase a un mot par ligne
+   * et les codes lui passaient dessus.
+   */
+  .blocage {
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: 0.35rem;
+  }
+
+  .blocage__codes {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .synthese {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .ligne {
     grid-template-columns: 1fr auto;
     row-gap: 0.25rem;
