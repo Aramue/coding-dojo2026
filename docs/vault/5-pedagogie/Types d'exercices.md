@@ -34,7 +34,7 @@ l'exercice imbloquable en exercice bloquant.
 
 ## `debug` — 29 exercices
 
-Un code cassé, l'élève répare. Le bug est authentique : voir [[Archive des agents tombés]].
+Un code cassé, l'élève répare. Le bug est authentique : voir [[Bugs réels de la promotion 2025]].
 
 Formateur parce qu'il fait rencontrer l'erreur **sous contrôle**, avant qu'elle ne surprenne
 l'élève dans son propre code. L'`IndentationError` de la séance 2 est rencontrée en `debug`

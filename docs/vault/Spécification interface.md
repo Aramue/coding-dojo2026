@@ -49,11 +49,11 @@ Le palier 1 a livré un moteur qui fonctionne et une interface qui n'existe pas.
 - Les séances 2 et 3
 - Les exercices experts
 
-> [!warning] Une dépendance de contenu
-> Les 25 exercices livrés ont leurs énoncés écrits autour d'une fiction d'agents secrets. Cette
-> spécification pose une interface **sans fiction**. Une passe de réécriture des énoncés est donc
-> nécessaire — elle ne touche ni au code, ni aux tests, ni à la structure des fichiers. Elle est
-> traitée comme une étape distincte, après l'interface.
+> [!success] La dépendance de contenu est levée
+> Les 25 énoncés étaient écrits autour d'une fiction d'agents secrets, que cette spécification ne
+> porte plus. ==Ils ont été réécrits le 4 septembre 2026== autour d'exemples du quotidien, sans
+> toucher au code, aux tests, ni à la structure des fichiers. Voir
+> [[ADR-010 Abandon de la fiction narrative]].
 
 ## 3. Structure
 
@@ -250,7 +250,7 @@ double, côté navigateur et côté serveur. C'est délibéré et commenté aux 
 > - **Le code d'accès devient `DOJO-XXXX`.** La base ne contenait que des codes de test, aucune
 >   migration n'est nécessaire.
 > - **Les 25 énoncés sont réécrits** autour d'exemples du quotidien, chaque exercice autonome.
->   ==Pas de fil rouge== — ce qui supprime le programme unique décrit dans [[Terminal QG]], dont le
+>   ==Pas de fil rouge== — ce qui supprime le programme unique décrit dans [[Programme d'assemblage]], dont le
 >   sort reste à trancher.
 >
 > Le découpage est dans [[Plan interface]], tâches 1, 15 et 16.

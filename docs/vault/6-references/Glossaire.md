@@ -11,14 +11,12 @@ Les termes propres au projet, pour que deux personnes parlent de la même chose.
 
 ## Vocabulaire du projet
 
-**Agent** — un élève, désigné par son code pseudonyme (`AGENT-K7M2`). La plateforme ne connaît
-jamais son nom. Voir [[ADR-002 Identification par code d'agent]].
+**Bloc** — dans une leçon, une unité de contenu : `paragraphe`, `code` ou `attention`.
+Voir [[Modèle de contenu]].
 
-**Archive des agents tombés** — le corpus des vrais ratages de 2025, rejoués comme exercices
-`debug`. Voir [[Archive des agents tombés]].
-
-**Bloc** — un tiers du programme cumulatif construit sur les trois séances.
-Voir [[Terminal QG]].
+**Code d'accès** — l'identifiant pseudonyme d'un élève (`DOJO-K7M2`), distribué en séance. La
+plateforme ne connaît jamais son nom. Voir [[ADR-002 Identification par code d'agent]] et
+[[ADR-010 Abandon de la fiction narrative]].
 
 **Chemin minimal** — les 75 exercices obligatoires. Un élève qui les termine tous obtient la
 certification, même sans avoir touché un seul expert.
@@ -30,15 +28,23 @@ Voir [[ADR-004 Mode expert en bonus débloqué]].
 **Famille** — un groupe de trois couleurs (`tint`, `ink`, `deep`) associé à un concept.
 Voir [[Palette]].
 
-**Injection de bloc** — quand un élève n'a pas fini le bloc précédent, la plateforme fournit le
-bloc de référence étiqueté pour que son programme tourne quand même.
+**Injection** — quand un élève n'a pas fini le programme d'assemblage de la séance précédente,
+la plateforme fournit la version de référence, étiquetée, pour que la suite tourne quand même.
+Conçue, pas encore implémentée. Voir [[Programme d'assemblage]].
 
 **Lot** — un paquet de production de contenu, du lot 1 (les 13 jours) au lot 4 (opportuniste).
 Voir [[Plan de production]].
 
 **Renfort** — un exercice supplémentaire proposé après un échec, non obligatoire.
 
-**Terminal QG** — le programme unique `acces_qg.py` que les trois séances construisent.
+**Leçon** — ce que l'élève lit avant les exercices d'une notion. Quatre pour la séance 1.
+Voir [[Modèle de contenu]].
+
+**Notion** — l'unité de navigation : une leçon, un groupe d'exercices et une couleur. Quatre par
+séance. Voir [[Spécification interface]].
+
+**Programme d'assemblage** — le petit programme complet qui clôt chaque séance et réunit les
+notions vues. Voir [[Programme d'assemblage]].
 
 **Verdict VERT / BLEU** — les deux niveaux de réussite du validateur.
 Voir [[Moteur de validation]].

@@ -92,13 +92,13 @@ choisir `for` ou `while` → bonus `import math`.
 
 ## Les deux idées de structure
 
-- [[Terminal QG]] — les trois séances construisent **un seul programme**, bloc par bloc
-- [[Archive des agents tombés]] — les vrais ratages de 2025 deviennent les exercices `debug`
+- [[Programme d'assemblage]] — les trois séances construisent **un seul programme**, bloc par bloc
+- [[Bugs réels de la promotion 2025]] — les vrais ratages de 2025 deviennent les exercices `debug`
 
 ## Production
 
 Voir [[Plan de production]]. ==Le seul engagement des treize jours est le lot 1== : les
-25 obligatoires de la séance 1 plus le bloc 1 du Terminal QG, environ 8 heures.
+25 obligatoires de la séance 1 plus son programme d'assemblage, environ 8 heures.
 
 ## Alertes à traiter avant d'écrire une ligne
 

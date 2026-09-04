@@ -55,7 +55,7 @@ Huit établissements, donc huit configurations réseau inconnues. Deux conséque
 - Le chapitre 1 couvre : variables, types, opérateurs, conditions, boucles. **Pas les fonctions.**
 - Moins de cours magistral, la pratique au plus tôt.
 - Le mode expert est un **bonus débloqué**, pas un parcours parallèle.
-- Le fil narratif « Quartier Général » se poursuit au chapitre 2 avec la cryptographie
+- Le chapitre 2 enchaîne naturellement sur la cryptographie — voir [[Programme d'assemblage]]
   (César, Vigenère).
 
 ## Objectifs déclarés

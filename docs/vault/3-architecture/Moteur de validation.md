@@ -72,7 +72,7 @@ sur lequel un débutant absolu **ne peut pas rester bloqué**.
 ```yaml
 tests:
   - type: interdit
-    motif: 'print("Agent Corbeau'
+    motif: 'print("Camille'
   - type: contient
     motif: 'for '
 ```

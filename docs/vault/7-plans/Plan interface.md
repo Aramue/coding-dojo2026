@@ -2995,7 +2995,7 @@ classe.
 - [ ] **Step 1 : Trancher le sort de `s1-34`**
 
 `s1-34` est de type `probleme narratif` : c'est l'assemblage final de la séance, et il construit
-aujourd'hui le « badge d'agent » décrit dans [[Terminal QG]].
+aujourd'hui le « badge d'agent » décrit dans [[Programme d'assemblage]] (alors « Terminal QG »).
 
 ==Sans fil rouge, cet exercice perd son sujet, pas sa fonction.== Sa fonction — réunir `input()`,
 `int()`, le f-string et un format de sortie exact dans un seul petit programme — reste la bonne
@@ -3190,7 +3190,7 @@ de statut :
 Ne touche à rien d'autre dans le fichier. Son titre reste `ADR-002 Identification par code
 d'agent` : ==renommer une ADR casse les renvois et efface la trace de ce qui a été décidé==.
 
-- [ ] **Step 3 : Sauver la substance de [[Archive des agents tombés]]**
+- [ ] **Step 3 : Sauver la substance de [[Bugs réels de la promotion 2025]] (alors « Archive des agents tombés »)**
 
 Cette note dit que les exercices `debug` ne sont **pas des erreurs inventées** : ce sont les vrais
 ratages de la promotion 2025, relevés dans les copies conservées. ==C'est la meilleure idée
@@ -3198,9 +3198,9 @@ pédagogique du dossier== et elle n'a rien de fictionnel — seul l'habillage (�
 corrompues d'agents tombés ») l'était.
 
 Renomme la note en `5-pedagogie/Bugs réels de la promotion 2025.md`, retire l'habillage, garde la
-méthode et les sources. Mets à jour les renvois `[[Archive des agents tombés]]`.
+méthode et les sources. Mets à jour les renvois `[[Bugs réels de la promotion 2025]] (alors « Archive des agents tombés »)`.
 
-- [ ] **Step 4 : Trancher le sort de [[Terminal QG]]**
+- [ ] **Step 4 : Trancher le sort de [[Programme d'assemblage]] (alors « Terminal QG »)**
 
 Cette note décrit le fil rouge des trois séances : un programme unique, `acces_qg.py`, construit
 bloc par bloc, dont la version finale reproduit `IDQuartierGénéralV1(Facile).py` du cours
@@ -3234,7 +3234,7 @@ et il est en haut de l'arborescence.
 cd docs/vault && git mv "Quartier Général.md" "Accueil.md"
 ```
 
-Puis remplacer `[[Quartier Général]]` par `[[Accueil]]` dans toutes les notes qui y renvoient.
+Puis remplacer `[[Accueil]]` par `[[Accueil]]` dans toutes les notes qui y renvoient.
 
 - [ ] **Step 7 : Vérifier qu'aucun lien n'est cassé**
 

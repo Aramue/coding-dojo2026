@@ -11,6 +11,12 @@ date: 2026-09-03
 
 > [!success] Statut : acceptée le 3 septembre 2026
 
+> [!warning] Amendée le 4 septembre 2026 par [[ADR-010 Abandon de la fiction narrative]]
+> Le format du code est passé de `AGENT-XXXX` à `DOJO-XXXX`, et la table `agent` s'appelle
+> désormais `eleve` (colonne `code_acces`). ==La décision elle-même — un code pseudonyme, aucune
+> donnée personnelle, aucun SSO — n'a pas changé.== Le texte ci-dessous est conservé tel qu'il a
+> été écrit.
+
 ## Contexte
 
 Les élèves ont des adresses `@eduge.ch` du DIP, pas des comptes UNIGE : ==aucun SSO n'est

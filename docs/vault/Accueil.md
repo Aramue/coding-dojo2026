@@ -1,12 +1,12 @@
 ---
-title: Quartier Général
+title: Accueil
 tags:
   - moc
 statut: en-conception
 mis-a-jour: 2026-09-03
 ---
 
-# Quartier Général
+# Coding Dojo 2026-2027
 
 Plateforme web d'apprentissage de Python pour le **Coding Dojo** de l'Université de Genève,
 année 2026-2027. Les élèves lisent une leçon courte, puis résolvent des exercices dont le code
@@ -40,8 +40,8 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Plan de l'interface | ✅ écrit — [[Plan interface]], 16 tâches |
 | Implémentation de l'interface | ✅ **livrée** — tâches 1 à 14, branche `palier-1` |
 | Retrait de la fiction — code et base | ✅ livré |
-| Retrait de la fiction — 25 énoncés | ⬜ à faire — [[Plan interface]] tâche 15 |
-| Retrait de la fiction — vault | ⬜ à faire — [[Plan interface]] tâche 16 |
+| Retrait de la fiction — 25 énoncés | ✅ livré |
+| Retrait de la fiction — vault | ✅ livré |
 | Revue finale de branche | ⬜ à faire |
 
 ## Ce qui tourne aujourd'hui
@@ -56,7 +56,7 @@ Le code vit dans `plateforme/`, sur la branche `palier-1`.
 | `contenu/` | **25 exercices** de la séance 1 (12 `predire`, 5 `debug`, 5 `completer`, 3 `ecrire`) et **4 leçons** |
 | `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
 
-Un parcours complet a été joué dans un navigateur : connexion par code d'agent, résolution des
+Un parcours complet a été joué dans un navigateur : connexion par code d'accès, résolution des
 25 exercices, « Séance terminée », progression persistée après rechargement.
 
 > [!warning] Deux décisions prises pendant l'implémentation
@@ -80,10 +80,10 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'agen
 ## Cartes du coffre
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
-- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]]
+- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
-- **Pédagogie** — [[Chapitre 1]] · [[Terminal QG]] · [[Archive des agents tombés]] · [[Types d'exercices]] · [[Plan de production]]
+- **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
 - **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]]
 - **Plans** — [[Plan palier 1]] · [[Plan interface]]

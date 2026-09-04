@@ -52,7 +52,7 @@ Les deux champs `str` n'avaient qu'une longueur maximale.
 
 | Champ | Validation |
 |---|---|
-| `code_agent` | motif `^AGENT-[A-Z0-9]{4}$` |
+| `code_agent` | motif `^AGENT-[A-Z0-9]{4}$` — devenu `code_acces` / `^DOJO-…$`, voir [[ADR-010 Abandon de la fiction narrative]] |
 | `exercice_id` | motif `^s[123]-[0-9]{2}(-expert)?$` |
 | `type_erreur` | liste blanche de 21 valeurs, dont `AutreErreur` |
 | `verdict` | `Literal["vert", "bleu", "rouge"]` |

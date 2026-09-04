@@ -18,15 +18,15 @@ concept: variables          # variables | types | operateurs | conditions | bouc
 seance: 1
 niveau: normal              # normal | expert
 type: ecrire                # predire | debug | completer | ecrire
-titre: "Le badge d'agent"
+titre: "Ta fiche"
 obligatoire: true           # fait-il partie du chemin minimal ?
 
 enonce: |
-  Le QG te demande ton badge. Crée une variable `nom_agent` qui contient
-  ton nom de code, et une variable `age` qui contient ton âge.
+  Crée une variable `prenom` qui contient ton prénom, et une variable
+  `age` qui contient ton âge.
 
 depart: |
-  nom_agent =
+  prenom =
   age =
 
 indices:
@@ -35,16 +35,16 @@ indices:
 
 tests:
   - type: variable
-    nom: nom_agent
+    nom: prenom
     type_attendu: str
   - type: variable
     nom: age
     type_attendu: int
   - type: interdit
-    motif: 'print("Agent'
+    motif: 'print("Camille'
 
 solution: |
-  nom_agent = "Corbeau"
+  prenom = "Camille"
   age = 17
 
 expert: ch1-var-03-expert   # débloqué après réussite — voir ADR-004

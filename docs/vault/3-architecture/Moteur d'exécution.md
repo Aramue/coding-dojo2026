@@ -38,14 +38,14 @@ Application de [[ADR-001 Exécution du code dans le navigateur]].
 
 ## `input()` simulé
 
-Les problèmes « Quartier Général » existants reposent massivement sur `input()`. Pyodide permet
+Les problèmes du cours 2025 reposent massivement sur `input()`. Pyodide permet
 d'injecter une liste d'entrées :
 
 ```yaml
 tests:
   - type: sortie
     entrees: ["Corbeau", "17"]
-    attendu: "Agent Corbeau, 17 ans"
+    attendu: "Camille, 17 ans"
 ```
 
 Le premier `input()` reçoit `"Corbeau"`, le second `"17"`. C'est ce qui permet de reprendre tels
