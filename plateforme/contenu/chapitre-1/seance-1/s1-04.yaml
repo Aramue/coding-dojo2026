@@ -7,22 +7,22 @@ type: predire
 titre: Deux lignes, deux ordres
 obligatoire: true
 enonce: |
-  Le QG t'envoie deux consignes coup sur coup.
+  Ce programme donne deux consignes coup sur coup.
   Qu'apparaît-il à l'écran ?
   Les propositions décrivent la sortie ligne par ligne.
 depart: |
-  print("Fermeture du canal")
-  print("Ouverture du canal")
+  print("Bonne nuit")
+  print("Bonjour")
 indices:
   - Python ne comprend pas le sens des messages. Il traite les instructions une par une.
   - Le premier print() rencontré est le premier affiché. Et chaque print() passe ensuite à la ligne suivante.
 tests:
   - type: qcm
     options:
-      - "Ligne 1 : Fermeture du canal / Ligne 2 : Ouverture du canal"
-      - "Ligne 1 : Ouverture du canal / Ligne 2 : Fermeture du canal"
-      - "Une seule ligne : Fermeture du canal Ouverture du canal"
+      - "Ligne 1 : Bonne nuit / Ligne 2 : Bonjour"
+      - "Ligne 1 : Bonjour / Ligne 2 : Bonne nuit"
+      - "Une seule ligne : Bonne nuit Bonjour"
     bonne_reponse: 0
 solution: |
-  print("Fermeture du canal")
-  print("Ouverture du canal")
+  print("Bonne nuit")
+  print("Bonjour")

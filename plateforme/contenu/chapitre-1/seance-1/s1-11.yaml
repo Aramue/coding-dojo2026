@@ -7,21 +7,21 @@ type: predire
 titre: L'écrasement
 obligatoire: true
 enonce: |
-  Un agent du QG a changé de nom de code en pleine mission.
-  Le programme ci-dessous range deux valeurs l'une après l'autre dans le même carton nom.
+  Le programme ci-dessous range deux valeurs l'une après l'autre dans la même
+  boîte prenom.
   Qu'est-ce qui apparaît à l'écran quand on l'exécute ?
 depart: |
-  nom = "Corbeau"
-  nom = "Faucon"
-  print(nom)
+  prenom = "Camille"
+  prenom = "Alex"
+  print(prenom)
 indices:
-  - Une variable, c'est un carton avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.
+  - Une variable, c'est une boîte avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.
   - La deuxième ligne remplace ce qu'il y avait dans la variable. Au moment du print, une seule valeur reste.
 tests:
   - type: qcm
-    options: ["Faucon", "Corbeau", "Corbeau Faucon"]
+    options: ["Alex", "Camille", "Camille Alex"]
     bonne_reponse: 0
 solution: |
-  nom = "Corbeau"
-  nom = "Faucon"
-  print(nom)
+  prenom = "Camille"
+  prenom = "Alex"
+  print(prenom)

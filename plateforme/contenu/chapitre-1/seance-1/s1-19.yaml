@@ -7,7 +7,7 @@ type: predire
 titre: 2 + 2 ou 22 ?
 obligatoire: true
 enonce: |
-  Le QG te transmet deux calculs qui se ressemblent beaucoup.
+  Voici deux calculs qui se ressemblent beaucoup.
   Regarde bien la différence : dans le premier, les 2 sont des nombres.
   Dans le second, les 2 sont entourés de guillemets, c'est donc du texte.
   Souviens-toi aussi que la virgule dans print ajoute un espace.

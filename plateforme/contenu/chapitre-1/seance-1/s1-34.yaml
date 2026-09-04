@@ -4,72 +4,72 @@ notion: saisie
 seance: 1
 niveau: normal
 type: ecrire
-titre: "TERMINAL QG - Bloc 1 : le badge d'agent"
+titre: Ta carte de membre
 obligatoire: true
 enonce: |
-  Dernier poste de la séance : la borne d'inscription du Quartier Général.
-  C'est toi qui écris le programme qui fabrique les badges.
+  Dernier exercice de la séance : un programme complet, qui réunit tout ce que
+  tu viens d'apprendre.
 
-  Ton programme doit faire quatre choses :
-  1. demander le nom de code, avec l'invite "Nom de code : " ;
-  2. demander l'âge, avec l'invite "Age : ", et le ranger sous forme de nombre entier ;
-  3. ranger dans une variable l'âge que l'agent aura l'an prochain ;
-  4. afficher le badge sur quatre lignes.
+  Il doit faire quatre choses :
+  1. demander le prénom, avec l'invite "Ton prénom : " ;
+  2. demander l'âge, avec l'invite "Ton âge : ", et le ranger sous forme de nombre entier ;
+  3. ranger dans une variable l'âge que la personne aura l'an prochain ;
+  4. afficher la carte sur quatre lignes.
 
-  Si l'agent répond Corbeau, puis 17, l'écran affiche ceci après les deux questions :
+  Si la personne répond Camille, puis 17, l'écran affiche ceci après les deux questions :
 
-  === BADGE QG ===
-  Agent Corbeau
+  === CARTE DE MEMBRE ===
+  Nom : Camille
   Age : 17 ans
   L'an prochain : 18 ans
 
-  Recopie ces textes au caractère près, espaces compris. Sur ce badge, le mot Age
+  Recopie ces textes au caractère près, espaces compris. Sur cette carte, le mot Age
   s'écrit sans accent : garde-le tel quel.
 
   Attention : les deux réponses écrites ici ne sont qu'un exemple. Ton programme doit
-  fonctionner avec n'importe quel agent, donc Corbeau et 18 sont interdits dans ton code.
+  fonctionner avec n'importe qui, donc Camille et 18 sont interdits dans ton code.
 
   Les lignes du code de départ qui commencent par # sont des remarques : Python les
   ignore, elles sont là pour te guider. Écris ton code en dessous de chacune.
 depart: |
-  # 1. demander le nom de code et le ranger dans une variable
+  # 1. demander le prénom et le ranger dans une variable
 
-  # 2. demander l'age et le convertir en nombre entier
+  # 2. demander l'âge et le convertir en nombre entier
 
-  # 3. calculer l'age de l'an prochain
+  # 3. calculer l'âge de l'an prochain
 
-  # 4. afficher les quatre lignes du badge
+  # 4. afficher les quatre lignes de la carte
 indices:
-  - "Commence par les deux questions. La question se met à l'intérieur des parenthèses de input(). Et souviens-toi, input() rend toujours du texte, même quand l'agent tape un nombre."
-  - "L'âge doit donc être converti avant qu'on puisse lui ajouter 1. Ensuite, chaque ligne du badge est un print() séparé, et un f-string permet de glisser une variable entre accolades."
+  - "Commence par les deux questions. La question se met à l'intérieur des parenthèses de input(). Et souviens-toi, input() rend toujours du texte, même quand on tape un nombre."
+  - "L'âge doit donc être converti avant qu'on puisse lui ajouter 1. Ensuite, chaque ligne de la carte est un print() séparé, et un f-string permet de glisser une variable entre accolades."
 tests:
   - type: sortie
-    entrees: ["Corbeau", "17"]
+    entrees: ["Camille", "17"]
     attendu: |-
-      Nom de code : Corbeau
-      Age : 17
-      === BADGE QG ===
-      Agent Corbeau
+      Ton prénom : Camille
+      Ton âge : 17
+      === CARTE DE MEMBRE ===
+      Nom : Camille
       Age : 17 ans
       L'an prochain : 18 ans
   - type: sortie
-    entrees: ["Vipere", "15"]
+    entrees: ["Alex", "15"]
     attendu: |-
-      Nom de code : Vipere
-      Age : 15
-      === BADGE QG ===
-      Agent Vipere
+      Ton prénom : Alex
+      Ton âge : 15
+      === CARTE DE MEMBRE ===
+      Nom : Alex
       Age : 15 ans
       L'an prochain : 16 ans
   - type: interdit
-    motif: Corbeau
+    motif: Camille
   - type: interdit
     motif: "18"
 solution: |
-  nom = input("Nom de code : ")
-  age = int(input("Age : "))
+  prenom = input("Ton prénom : ")
+  age = int(input("Ton âge : "))
   age_prochain = age + 1
-  print("=== BADGE QG ===")
-  print(f"Agent {nom}")
+  print("=== CARTE DE MEMBRE ===")
+  print(f"Nom : {prenom}")
   print(f"Age : {age} ans")
   print(f"L'an prochain : {age_prochain} ans")

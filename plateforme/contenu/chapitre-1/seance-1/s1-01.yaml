@@ -4,23 +4,22 @@ notion: afficher
 seance: 1
 niveau: normal
 type: predire
-titre: Le premier message du QG
+titre: Ce que Python affiche vraiment
 obligatoire: true
 enonce: |
-  Premier contact avec le Quartier Général. Tu n'as rien à écrire ici.
-  Le terminal du QG affiche ce programme.
-  Lis-le, puis choisis ce qui apparaît à l'écran quand on l'exécute.
+  Tu n'as rien à écrire ici.
+  Lis ce programme, puis choisis ce qui apparaît à l'écran quand on l'exécute.
 depart: |
-  print("Bienvenue au QG")
+  print("Bonjour")
 indices:
   - Les guillemets servent à marquer le début et la fin du texte. Demande-toi s'ils font partie du message.
   - Le mot print et les parenthèses sont l'ordre donné à Python, pas le message. Seul ce qui se trouve à l'intérieur des guillemets arrive à l'écran.
 tests:
   - type: qcm
     options:
-      - Bienvenue au QG
-      - '"Bienvenue au QG"'
-      - print("Bienvenue au QG")
+      - Bonjour
+      - '"Bonjour"'
+      - print("Bonjour")
     bonne_reponse: 0
 solution: |
-  print("Bienvenue au QG")
+  print("Bonjour")

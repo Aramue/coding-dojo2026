@@ -4,24 +4,23 @@ notion: afficher
 seance: 1
 niveau: normal
 type: completer
-titre: Le format exact du QG
+titre: Le format exact
 obligatoire: true
 enonce: |
-  Le terminal du Quartier Général n'accepte qu'un seul format.
-  Un espace en trop et la transmission est refusée.
+  Un espace en trop, et ce n'est plus le même texte.
 
   Ton programme doit afficher exactement ces trois lignes :
 
-  === QG ===
-  Agent Corbeau
-  Statut : actif
+  === MENU ===
+  Plat Lasagnes
+  Prix : 12 francs
 
   La première ligne est déjà écrite. Remplace chaque _____ pour obtenir les deux autres.
   Compte les espaces un par un.
 depart: |
-  print("=== QG ===")
-  print("Agent", "_____")
-  print("Statut_____actif")
+  print("=== MENU ===")
+  print("Plat", "_____")
+  print("Prix_____12 francs")
 indices:
   - "La virgule de la deuxième ligne ajoute déjà quelque chose entre les deux morceaux. Regarde ce que cela donne avant d'écrire un espace de plus."
   - "La troisième ligne ne contient aucune virgule. Tout ce qui doit apparaître à l'écran, espaces compris, se trouve donc à l'intérieur des guillemets."
@@ -30,10 +29,10 @@ tests:
     entrees: []
     exige_exact: true
     attendu: |-
-      === QG ===
-      Agent Corbeau
-      Statut : actif
+      === MENU ===
+      Plat Lasagnes
+      Prix : 12 francs
 solution: |
-  print("=== QG ===")
-  print("Agent", "Corbeau")
-  print("Statut : actif")
+  print("=== MENU ===")
+  print("Plat", "Lasagnes")
+  print("Prix : 12 francs")

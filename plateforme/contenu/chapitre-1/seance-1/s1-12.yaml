@@ -7,26 +7,26 @@ type: predire
 titre: Photo, pas formule
 obligatoire: true
 enonce: |
-  L'agent Corbeau reçoit un nouvel indicatif d'appel.
-  Avant le changement, le QG range l'ancien indicatif dans un deuxième carton, pour l'archive.
+  Avant de changer le contenu d'une boîte, le programme en range une copie
+  dans une deuxième boîte.
   Déroule le programme ligne par ligne. Qu'est-ce qui apparaît à l'écran ?
 depart: |
-  indicatif = "Corbeau"
-  sauvegarde = indicatif
-  indicatif = "Renard"
-  print(indicatif, sauvegarde)
+  prenom = "Camille"
+  sauvegarde = prenom
+  prenom = "Alex"
+  print(prenom, sauvegarde)
 indices:
-  - Arrête-toi juste après la ligne 2 et note ce que contient chaque carton à cet instant.
-  - La ligne 2 recopie dans sauvegarde la valeur qu'indicatif contient à ce moment-là. Ce n'est pas un lien qui se mettrait à jour plus tard.
+  - Arrête-toi juste après la ligne 2 et note ce que contient chaque boîte à cet instant.
+  - La ligne 2 recopie dans sauvegarde la valeur que prenom contient à ce moment-là. Ce n'est pas un lien qui se mettrait à jour plus tard.
 tests:
   - type: qcm
     options:
-      - Renard Corbeau
-      - Renard Renard
-      - Corbeau Corbeau
+      - Alex Camille
+      - Alex Alex
+      - Camille Camille
     bonne_reponse: 0
 solution: |
-  indicatif = "Corbeau"
-  sauvegarde = indicatif
-  indicatif = "Renard"
-  print(indicatif, sauvegarde)
+  prenom = "Camille"
+  sauvegarde = prenom
+  prenom = "Alex"
+  print(prenom, sauvegarde)

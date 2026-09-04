@@ -4,31 +4,31 @@ notion: variables
 seance: 1
 niveau: normal
 type: predire
-titre: Le carton et son étiquette
+titre: La boîte et son étiquette
 obligatoire: true
 enonce: |
-  Au Quartier Général, une information utile n'est pas affichée tout de suite :
+  Une information utile n'est pas toujours affichée tout de suite :
   elle est d'abord rangée dans une variable.
-  Une variable, c'est un carton avec une étiquette. L'étiquette est le nom du
-  carton. À l'intérieur, il y a une valeur.
+  Une variable, c'est une boîte avec une étiquette. L'étiquette est le nom de
+  la boîte. À l'intérieur, il y a une valeur.
 
-  La première ligne range le texte Corbeau dans un carton étiqueté indicatif.
-  La deuxième ligne demande d'afficher indicatif.
+  La première ligne range le texte Camille dans une boîte étiquetée prenom.
+  La deuxième ligne demande d'afficher prenom.
 
   Qu'est-ce qui apparaît à l'écran quand on exécute ce programme ?
 depart: |
-  indicatif = "Corbeau"
-  print(indicatif)
+  prenom = "Camille"
+  print(prenom)
 indices:
   - Jusqu'ici, pour afficher du texte tel quel, on le mettait entre guillemets. Sur la deuxième ligne, il n'y a pas de guillemets.
-  - Python va chercher ce qu'il y a à l'intérieur du carton, pas ce qui est écrit sur l'étiquette.
+  - Python va chercher ce qu'il y a à l'intérieur de la boîte, pas ce qui est écrit sur l'étiquette.
 tests:
   - type: qcm
     options:
-      - Corbeau
-      - indicatif
-      - indicatif = Corbeau
+      - Camille
+      - prenom
+      - prenom = Camille
     bonne_reponse: 0
 solution: |
-  indicatif = "Corbeau"
-  print(indicatif)
+  prenom = "Camille"
+  print(prenom)

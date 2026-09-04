@@ -7,8 +7,8 @@ type: completer
 titre: str() à la rescousse
 obligatoire: true
 enonce: |
-  Le QG vient de t'attribuer un casier au sous-sol.
-  Son numéro est un nombre, et le signe + refuse de coller un nombre à du texte.
+  Le numéro d'un casier est un nombre, et le signe + refuse de coller un nombre
+  à du texte.
   Tu viens de voir cette erreur : voici le remède.
   Remplace _____ par la fonction qui transforme un nombre en texte.
   Le programme doit afficher exactement :

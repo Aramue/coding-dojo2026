@@ -4,33 +4,33 @@ notion: variables
 seance: 1
 niveau: normal
 type: debug
-titre: Le carton qui n'existe pas encore
+titre: La boîte qui n'existe pas encore
 obligatoire: true
 enonce: |
-  Un agent a écrit ce programme pour annoncer qui tient le poste de guet.
+  Ce programme doit annoncer qui est de service aujourd'hui.
   Python refuse de le lancer. Il affiche ce message :
-  NameError: name 'guetteur' is not defined
-  Cela veut dire : Python ne connaît pas encore la variable guetteur.
+  NameError: name 'responsable' is not defined
+  Cela veut dire : Python ne connaît pas encore la variable responsable.
   Répare le programme. Il doit afficher exactement :
-  Agent en poste : Merle
-  Garde la variable : n'écris pas Merle à l'intérieur du print().
+  De service : Camille
+  Garde la variable : n'écris pas Camille à l'intérieur du print().
 depart: |
-  print("Agent en poste :", guetteur)
-  guetteur = "Merle"
+  print("De service :", responsable)
+  responsable = "Camille"
 indices:
-  - Python lit les lignes de haut en bas, une par une. Quand il arrive au print(), le carton guetteur a-t-il déjà été rempli ?
-  - Un carton doit être rempli AVANT la ligne qui vient le lire. Regarde dans quel ordre tes deux lignes sont écrites.
+  - Python lit les lignes de haut en bas, une par une. Quand il arrive au print(), la boîte responsable a-t-elle déjà été remplie ?
+  - Une boîte doit être remplie AVANT la ligne qui vient la lire. Regarde dans quel ordre tes deux lignes sont écrites.
 tests:
   - type: sortie
     entrees: []
     attendu: |-
-      Agent en poste : Merle
+      De service : Camille
   # Motif sans guillemet : il bloque toutes les manieres d'ecrire la reponse en
   # dur (guillemets simples, doubles, triples, f-string), la ou un motif termine
   # par un guillemet se contourne en changeant de ponctuation.
-  # La solution ne contient jamais cette suite : elle ecrit "Agent en poste :", guetteur
+  # La solution ne contient jamais cette suite : elle ecrit "De service :", responsable
   - type: interdit
-    motif: 'Agent en poste : Merle'
+    motif: 'De service : Camille'
 solution: |
-  guetteur = "Merle"
-  print("Agent en poste :", guetteur)
+  responsable = "Camille"
+  print("De service :", responsable)

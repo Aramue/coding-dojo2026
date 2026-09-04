@@ -7,12 +7,12 @@ type: debug
 titre: L'âge qui refuse de s'additionner
 obligatoire: true
 enonce: |
-  Au poste de garde du QG, un petit programme calcule l'âge que tu auras dans 5 ans.
+  Ce petit programme calcule l'âge que tu auras dans 5 ans.
   Il démarre, il te pose la question, puis il s'arrête net avec une erreur.
   Lis le message d'erreur, puis répare le programme.
   Le programme doit calculer le résultat, jamais l'écrire à la main.
 depart: |
-  print("Poste de garde du QG")
+  print("Calcul rapide")
   age = input("Ton âge : ")
   print("Dans 5 ans, tu auras :")
   print(age + 5)
@@ -23,14 +23,14 @@ tests:
   - type: sortie
     entrees: ["17"]
     attendu: |-
-      Poste de garde du QG
+      Calcul rapide
       Ton âge : 17
       Dans 5 ans, tu auras :
       22
   - type: interdit
     motif: "22"
 solution: |
-  print("Poste de garde du QG")
+  print("Calcul rapide")
   age = int(input("Ton âge : "))
   print("Dans 5 ans, tu auras :")
   print(age + 5)

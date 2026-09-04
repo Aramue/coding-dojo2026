@@ -7,19 +7,19 @@ type: debug
 titre: Le guillemet manquant
 obligatoire: true
 enonce: |
-  Un agent a tapé son rapport trop vite et le programme refuse de démarrer.
+  Ce programme a été tapé trop vite et refuse de démarrer.
   Il devait afficher exactement cette ligne :
 
-  Le canal est ouvert
+  La séance commence
 
   Au lieu de ça, Python affiche ce message d'erreur :
 
   SyntaxError: unterminated string literal (detected at line 1)
 
   Traduction : un texte a été ouvert, mais il n'a jamais été refermé.
-  Répare la ligne pour que le message parte enfin.
+  Répare la ligne pour que le message s'affiche enfin.
 depart: |
-  print("Le canal est ouvert)
+  print("La séance commence)
 indices:
   - Un texte s'ouvre et se ferme toujours par le même caractère. Compte les guillemets présents sur la ligne.
   - Le guillemet du début est bien là. C'est celui de la fin, juste avant la parenthèse fermante, qui manque.
@@ -27,6 +27,6 @@ tests:
   - type: sortie
     entrees: []
     attendu: |-
-      Le canal est ouvert
+      La séance commence
 solution: |
-  print("Le canal est ouvert")
+  print("La séance commence")

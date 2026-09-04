@@ -4,28 +4,28 @@ notion: variables
 seance: 1
 niveau: normal
 type: completer
-titre: Range le nom de l'agent
+titre: Range un prénom
 obligatoire: true
 enonce: |
-  Au QG, une variable est un carton avec une étiquette.
-  Ici l'étiquette est déjà écrite : le carton s'appelle nom. Mais il est vide.
-  Range le texte Corbeau à l'intérieur.
+  Une variable est une boîte avec une étiquette.
+  Ici l'étiquette est déjà écrite : la boîte s'appelle prenom. Mais elle est vide.
+  Range le texte Camille à l'intérieur.
   Le programme doit alors afficher exactement :
-  Agent Corbeau est en poste au QG
+  Bonjour Camille et bienvenue
 depart: |
-  nom = _____
-  print("Agent", nom, "est en poste au QG")
+  prenom = _____
+  print("Bonjour", prenom, "et bienvenue")
 indices:
-  - À droite du signe égal, on écrit la valeur que l'on range dans le carton. Ici, cette valeur est du texte.
+  - À droite du signe égal, on écrit la valeur que l'on range dans la boîte. Ici, cette valeur est du texte.
   - Un texte s'écrit toujours entre guillemets, exactement comme le texte que tu mets dans print().
 tests:
   - type: variable
-    nom: nom
+    nom: prenom
     type_attendu: str
   - type: sortie
     entrees: []
     attendu: |-
-      Agent Corbeau est en poste au QG
+      Bonjour Camille et bienvenue
 solution: |
-  nom = "Corbeau"
-  print("Agent", nom, "est en poste au QG")
+  prenom = "Camille"
+  print("Bonjour", prenom, "et bienvenue")

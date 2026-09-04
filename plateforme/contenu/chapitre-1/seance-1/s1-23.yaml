@@ -7,22 +7,22 @@ type: predire
 titre: Le f-string
 obligatoire: true
 enonce: |
-  Le QG a une deuxième façon d'assembler du texte et des variables.
+  Il existe une deuxième façon d'assembler du texte et des variables.
   On colle la lettre f juste avant les guillemets ouvrants.
   Ensuite, on écrit les noms des variables entre accolades, directement dans la phrase.
   Lis ce programme. Qu'est-ce qui s'affiche à l'écran ?
 depart: |
-  nom = "Corbeau"
+  prenom = "Camille"
   age = 17
-  print(f"Agent {nom} a {age} ans")
+  print(f"{prenom} a {age} ans")
 indices:
   - Le f collé aux guillemets n'est pas du texte à afficher. Il change ce que Python fait des accolades.
   - Dans un f-string, chaque paire d'accolades est remplacée par la valeur de la variable écrite dedans.
 tests:
   - type: qcm
-    options: ["Agent Corbeau a 17 ans", "Agent {nom} a {age} ans", "Agent nom a age ans"]
+    options: ["Camille a 17 ans", "{prenom} a {age} ans", "prenom a age ans"]
     bonne_reponse: 0
 solution: |
-  nom = "Corbeau"
+  prenom = "Camille"
   age = 17
-  print(f"Agent {nom} a {age} ans")
+  print(f"{prenom} a {age} ans")
