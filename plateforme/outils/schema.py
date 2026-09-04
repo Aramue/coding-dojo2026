@@ -110,7 +110,14 @@ def charger_exercice(chemin: Path) -> Exercice:
 
 
 def charger_tous(racine: Path) -> list[Exercice]:
-    return [charger_exercice(p) for p in sorted(racine.rglob("*.yaml"))]
+    # Les lecons vivent dans `seance-N/lecons/` et ne sont PAS des exercices :
+    # les charger ici ferait echouer la validation sur un fichier parfaitement
+    # valide, avec un message parlant de champs d'exercice manquants.
+    return [
+        charger_exercice(p)
+        for p in sorted(racine.rglob("*.yaml"))
+        if "lecons" not in p.parts
+    ]
 
 
 MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")

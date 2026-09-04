@@ -15,7 +15,18 @@ import unicodedata
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from schema import MOTIF_EMOJI, Exercice, TestMotif, TestSortie, TestVariable, charger_tous
+from schema import (
+    MOTIF_EMOJI,
+    NOTIONS,
+    BlocCode,
+    Exercice,
+    Lecon,
+    TestMotif,
+    TestSortie,
+    TestVariable,
+    charger_lecons,
+    charger_tous,
+)
 
 
 def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
@@ -124,12 +135,54 @@ def verifier_coherence(ex: Exercice) -> list[str]:
     return problemes
 
 
-def principal() -> int:
-    parseur = argparse.ArgumentParser(description="Valide tout le contenu du dojo.")
-    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../../contenu"))
-    arguments = parseur.parse_args()
+# Ce qui trahit une notion dans un exemple de code. Une lecon d'ordre N ne peut
+# utiliser que les notions d'ordre <= N : montrer une variable dans la lecon
+# « Afficher un message » demande a l'eleve de comprendre ce qu'il n'a pas
+# encore vu. Le motif est volontairement grossier — il attrape les cas
+# evidents, ce qui suffit pour quatre lecons relues a la main.
+#
+# 'afficher' n'y figure pas : etant d'ordre 1, sa condition ordre > lecon.ordre
+# ne peut jamais etre vraie. Une entree pour elle serait du code mort.
+MOTIFS_NOTION = {
+    # Une affectation en debut de ligne, mais pas une comparaison `==`.
+    "variables": re.compile(r"^\s*[a-z_][a-z0-9_]*\s*=(?!=)", re.MULTILINE),
+    "types": re.compile(r"\b(?:int|float|str)\s*\(|\bf[\"']"),
+    "saisie": re.compile(r"\binput\s*\("),
+}
 
-    exercices = charger_tous(arguments.racine)
+
+def verifier_lecon(lecon: Lecon) -> list[str]:
+    """Chaque exemple d'une lecon doit tourner, et rester dans sa notion.
+
+    Une lecon ne fournit aucune entree simulee : un exemple qui appelle input()
+    leve EOFError et sera signale, ce qui est voulu. Un exemple de lecon se lit
+    et se rejoue tel quel, il ne pose pas de question.
+    """
+    problemes: list[str] = []
+    for bloc in lecon.blocs:
+        if not isinstance(bloc, BlocCode):
+            continue
+
+        for notion, motif in MOTIFS_NOTION.items():
+            if NOTIONS[notion]["ordre"] > lecon.ordre and motif.search(bloc.python):
+                problemes.append(
+                    f"{lecon.id} : l'exemple {bloc.legende!r} utilise la notion "
+                    f"{notion!r}, enseignee apres celle-ci"
+                )
+
+        _, _, erreur = _executer(bloc.python, [])
+        if erreur:
+            problemes.append(f"{lecon.id} : l'exemple {bloc.legende!r} plante ({erreur})")
+    return problemes
+
+
+def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str]]:
+    """Charge tout le contenu d'une racine et rend les problemes trouves.
+
+    Separee de principal() pour etre testable : c'est cette fonction qui decide
+    si la construction passe, et une regression ici publierait du contenu casse.
+    """
+    exercices = charger_tous(racine)
     identifiants = {ex.id for ex in exercices}
     problemes: list[str] = []
 
@@ -138,7 +191,24 @@ def principal() -> int:
         if ex.expert and ex.expert not in identifiants:
             problemes.append(f"{ex.id} : renvoie vers un expert inexistant {ex.expert!r}")
 
+    lecons: list[Lecon] = []
+    for dossier in sorted(racine.glob("seance-*/lecons")):
+        lecons += charger_lecons(dossier)
+    for lecon in lecons:
+        problemes += verifier_lecon(lecon)
+
+    return exercices, lecons, problemes
+
+
+def principal() -> int:
+    parseur = argparse.ArgumentParser(description="Valide tout le contenu du dojo.")
+    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../../contenu"))
+    arguments = parseur.parse_args()
+
+    exercices, lecons, problemes = verifier_racine(arguments.racine)
+
     print(f"{len(exercices)} exercices charges.")
+    print(f"{len(lecons)} lecons chargees.")
     for p in problemes:
         print(f"  PROBLEME  {p}")
     print("Contenu valide." if not problemes else f"{len(problemes)} probleme(s).")

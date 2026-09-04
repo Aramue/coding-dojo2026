@@ -155,3 +155,36 @@ def test_charger_lecons_sur_un_dossier_vide(tmp_path):
     from schema import charger_lecons
 
     assert charger_lecons(tmp_path) == []
+
+
+def test_charger_tous_ignore_le_dossier_des_lecons(tmp_path):
+    """Une lecon n'est pas un exercice : la charger comme tel casserait la validation."""
+    import yaml
+
+    from schema import charger_tous
+
+    seance = tmp_path / "seance-1"
+    (seance / "lecons").mkdir(parents=True)
+    (seance / "s1-01.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "id": "s1-01",
+                "concept": "print",
+                "seance": 1,
+                "niveau": "normal",
+                "type": "predire",
+                "titre": "Lire",
+                "obligatoire": True,
+                "enonce": "Lis.",
+                "depart": 'print("Bonjour")',
+                "indices": [],
+                "tests": [{"type": "qcm", "options": ["a", "b"], "bonne_reponse": 0}],
+                "solution": 'print("Bonjour")',
+            },
+            allow_unicode=True,
+        ),
+        encoding="utf-8",
+    )
+    _ecrire(seance / "lecons", lecon_minimale())
+
+    assert [ex.id for ex in charger_tous(tmp_path)] == ["s1-01"]
