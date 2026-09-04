@@ -91,11 +91,10 @@ Voir [[Pièges et invariants]].
 ## Amendement du 4 septembre 2026 — le décor n'informe pas
 
 > [!warning] Deux réflexes qui font « interface générée »
-> **La gélule teintée.** Le tableau de bord portait quatre pastilles colorées en en-tête et une
-> par ligne. Elles ==décorent sans rien dire de plus== que le mot qu'elles contiennent, et le
-> texte posé sur un fond pastel y perd du contraste. ==Un point porte la couleur, le mot reste en
-> encre pleine== — et le même point sert en haut et dans les lignes, pour que les deux se
-> répondent.
+> **Le décor qui imite une mesure.** La répartition de la classe était une bande grise semée de
+> traits fins. ==Ça se lit comme un curseur ou un chargement, pas comme une mesure== : pas
+> d'échelle, des traits tous identiques, et deux élèves au même point indiscernables d'un seul.
+> Un graphique doit avoir un axe et une unité, sinon c'est une texture.
 >
 > **Le glyphe Unicode en guise d'icône.** `✓`, `✕`, `≈`, `·` sont des *caractères* : leur dessin
 > change d'une machine à l'autre, ils ne se calent ni sur la graisse ni sur la couleur autour, et
@@ -109,6 +108,11 @@ Deux corollaires, appris sur le même écran :
 - **Une action de sortie n'est pas une action de la page.** « Fermer la session professeur »,
   collée sous la liste, se lisait comme le dernier bouton du tableau. Elle se détache par un filet
   et une vraie respiration.
+
+> [!note] La pastille de statut, elle, reste
+> Elle a été retirée puis remise : elle se lit d'un coup d'œil dans une colonne, et c'est
+> exactement ce qu'on lui demande. ==Le problème n'était pas la gélule, c'était le graphique
+> qu'elle voisinait.== Un remède ne se généralise pas au voisinage de la maladie.
 
 ## Le mouvement, et ses quatre usages
 

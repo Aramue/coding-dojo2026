@@ -51,13 +51,19 @@ Trois zones, dans l'ordre où le professeur les lit.
 
 ## Où en est la classe
 
-Une bande porte **un trait par élève**, posé là où il en est, plus la médiane.
+**Un point par élève**, posé là où il en est, sur un axe qui porte le zéro, la médiane et le total.
+Les élèves au même endroit s'**empilent** : la hauteur d'une colonne est le nombre d'élèves à cet
+endroit.
 
 > [!note] Pourquoi pas une moyenne
 > Une moyenne dirait « la classe est à 12 » et laisserait croire à un groupe homogène. ==C'est
-> l'écart qui se pilote== : six traits collés à gauche pendant que trois touchent la fin, c'est
-> savoir qu'il faut aller au fond de la salle plutôt que ralentir tout le monde. Les traits se
-> superposent là où plusieurs élèves sont au même point, et la densité se lit comme un aplat.
+> l'écart qui se pilote== : six points collés à gauche pendant que trois touchent la fin, c'est
+> savoir qu'il faut aller au fond de la salle plutôt que ralentir tout le monde.
+
+> [!warning] Ce que la première version ratait
+> C'était une bande grise semée de traits fins, sans axe. Ça se lisait comme un curseur ou un
+> chargement, et deux élèves au même point ne se distinguaient pas d'un seul — ==la densité, qui
+> est justement l'information, était invisible==.
 
 ## Chaque ligne
 
@@ -132,7 +138,7 @@ plus, et le tableau attend derrière, intact — dépliant compris.
 > exercice et ==rien ne semblait se passer==. Et la fenêtre de 70 vh, avec ses deux barres de
 > défilement imbriquées, rendait un écran d'exercice illisible.
 
-> [!danger] Trois pièges, dans l'ordre où ils se sont présentés
+> [!danger] Quatre pièges, dans l'ordre où ils se sont présentés
 > **La fenêtre est montée sur `<body>` par un portail**, pas là où elle est écrite. `.appli > main`
 > porte une animation d'entrée qui déclare un `transform` ; un ancêtre transformé devient le bloc
 > conteneur de ses descendants `position: fixed` et crée un contexte d'empilement. L'aperçu se
@@ -145,6 +151,12 @@ plus, et le tableau attend derrière, intact — dépliant compris.
 > **La numérotation doit rester en parité avec `grouper()`**, et un test la verrouille : les deux
 > parcourent les exercices dans l'ordre de publication, filtré par notion. Si l'un des deux se met
 > à trier, le lien ouvre un autre exercice sans que rien ne le signale.
+>
+> **Ce n'est pas la fenêtre qui défile ici, c'est le cadre.** La barre de lecture d'une leçon
+> lisait `scrollY` : elle mesurait un défilement qui n'a pas lieu, se croyait lue en entier, et
+> s'affichait pleine — collée à 3,5 rem du haut du cadre, donc en travers d'une carte de code.
+> `ContexteDefilement` dit qui bouge réellement, et tout composant qui mesure un défilement doit
+> le consulter.
 
 ## La classe
 
