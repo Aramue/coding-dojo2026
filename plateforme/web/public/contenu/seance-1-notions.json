@@ -1,0 +1,26 @@
+[
+  {
+    "id": "afficher",
+    "ordre": 1,
+    "titre": "Afficher un message",
+    "famille": "conditions"
+  },
+  {
+    "id": "variables",
+    "ordre": 2,
+    "titre": "Les variables",
+    "famille": "variables"
+  },
+  {
+    "id": "types",
+    "ordre": 3,
+    "titre": "Types et conversion",
+    "famille": "types"
+  },
+  {
+    "id": "saisie",
+    "ordre": 4,
+    "titre": "Demander une information",
+    "famille": "operateurs"
+  }
+]

@@ -2,6 +2,7 @@
   {
     "id": "s1-01",
     "concept": "print",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -24,11 +25,12 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-02",
     "concept": "print",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "ecrire",
@@ -52,11 +54,12 @@
         "motif": "input("
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-03",
     "concept": "erreurs",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "debug",
@@ -76,11 +79,12 @@
         "exigeExact": false
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-04",
     "concept": "execution sequentielle",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -103,11 +107,12 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-05",
     "concept": "print",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -130,11 +135,12 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-06",
     "concept": "format exact",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "completer",
@@ -154,11 +160,12 @@
         "exigeExact": true
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-07",
     "concept": "format exact",
+    "notion": "afficher",
     "seance": 1,
     "niveau": "normal",
     "type": "debug",
@@ -178,11 +185,12 @@
         "exigeExact": true
       }
     ],
-    "famille": "variables"
+    "famille": "conditions"
   },
   {
     "id": "s1-09",
     "concept": "variable",
+    "notion": "variables",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -210,6 +218,7 @@
   {
     "id": "s1-10",
     "concept": "variable",
+    "notion": "variables",
     "seance": 1,
     "niveau": "normal",
     "type": "completer",
@@ -239,6 +248,7 @@
   {
     "id": "s1-11",
     "concept": "reaffectation",
+    "notion": "variables",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -266,6 +276,7 @@
   {
     "id": "s1-12",
     "concept": "reaffectation",
+    "notion": "variables",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -293,6 +304,7 @@
   {
     "id": "s1-13",
     "concept": "variable",
+    "notion": "variables",
     "seance": 1,
     "niveau": "normal",
     "type": "debug",
@@ -321,6 +333,7 @@
   {
     "id": "s1-14",
     "concept": "reaffectation",
+    "notion": "variables",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -348,6 +361,7 @@
   {
     "id": "s1-19",
     "concept": "types",
+    "notion": "types",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -375,6 +389,7 @@
   {
     "id": "s1-20",
     "concept": "types",
+    "notion": "types",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -402,6 +417,7 @@
   {
     "id": "s1-21",
     "concept": "conversion",
+    "notion": "types",
     "seance": 1,
     "niveau": "normal",
     "type": "debug",
@@ -438,6 +454,7 @@
   {
     "id": "s1-22",
     "concept": "conversion",
+    "notion": "types",
     "seance": 1,
     "niveau": "normal",
     "type": "completer",
@@ -472,6 +489,7 @@
   {
     "id": "s1-23",
     "concept": "f-string",
+    "notion": "types",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -499,6 +517,7 @@
   {
     "id": "s1-24",
     "concept": "f-string",
+    "notion": "types",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -526,6 +545,7 @@
   {
     "id": "s1-27",
     "concept": "input",
+    "notion": "saisie",
     "seance": 1,
     "niveau": "normal",
     "type": "predire",
@@ -548,11 +568,12 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "operateurs"
   },
   {
     "id": "s1-28",
     "concept": "input",
+    "notion": "saisie",
     "seance": 1,
     "niveau": "normal",
     "type": "completer",
@@ -574,11 +595,12 @@
         "exigeExact": false
       }
     ],
-    "famille": "types"
+    "famille": "operateurs"
   },
   {
     "id": "s1-29",
     "concept": "conversion",
+    "notion": "saisie",
     "seance": 1,
     "niveau": "normal",
     "type": "debug",
@@ -604,11 +626,12 @@
         "motif": "22"
       }
     ],
-    "famille": "types"
+    "famille": "operateurs"
   },
   {
     "id": "s1-30",
     "concept": "conversion",
+    "notion": "saisie",
     "seance": 1,
     "niveau": "normal",
     "type": "completer",
@@ -638,11 +661,12 @@
         "exigeExact": false
       }
     ],
-    "famille": "types"
+    "famille": "operateurs"
   },
   {
     "id": "s1-31",
     "concept": "input",
+    "notion": "saisie",
     "seance": 1,
     "niveau": "normal",
     "type": "ecrire",
@@ -678,11 +702,12 @@
         "motif": "Merle"
       }
     ],
-    "famille": "types"
+    "famille": "operateurs"
   },
   {
     "id": "s1-34",
     "concept": "probleme narratif",
+    "notion": "saisie",
     "seance": 1,
     "niveau": "normal",
     "type": "ecrire",
@@ -722,6 +747,6 @@
         "motif": "18"
       }
     ],
-    "famille": "variables"
+    "famille": "operateurs"
   }
 ]

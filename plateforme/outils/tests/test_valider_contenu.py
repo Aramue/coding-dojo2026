@@ -17,6 +17,7 @@ def ecrire(tmp_path: Path, donnees: dict) -> Exercice:
 BASE = dict(
     id="s1-02",
     concept="print",
+    notion="afficher",
     seance=1,
     niveau="normal",
     type="ecrire",

@@ -65,6 +65,10 @@ TestExercice = Annotated[
 class Exercice(BaseModel):
     id: str
     concept: str
+    # La notion est l'unite de navigation : elle porte une lecon, un groupe
+    # d'exercices et une couleur. Le concept, lui, reste libre et sert au
+    # regroupement pedagogique fin. Voir NOTIONS plus bas.
+    notion: str
     seance: int = Field(ge=1, le=3)
     niveau: Literal["normal", "expert"]
     type: Literal["predire", "debug", "completer", "ecrire"]

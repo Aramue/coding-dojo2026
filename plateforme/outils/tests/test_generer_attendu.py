@@ -7,6 +7,7 @@ from generer_attendu import remplir_attendus
 BASE = dict(
     id="s1-03",
     concept="input",
+    notion="saisie",
     seance=1,
     niveau="normal",
     type="ecrire",

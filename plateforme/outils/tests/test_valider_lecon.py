@@ -147,6 +147,7 @@ def _ecrire_lecon(dossier, donnees):
 EXERCICE = dict(
     id="s1-01",
     concept="print",
+    notion="afficher",
     seance=1,
     niveau="normal",
     type="predire",

@@ -170,6 +170,7 @@ def test_charger_tous_ignore_le_dossier_des_lecons(tmp_path):
             {
                 "id": "s1-01",
                 "concept": "print",
+                "notion": "afficher",
                 "seance": 1,
                 "niveau": "normal",
                 "type": "predire",

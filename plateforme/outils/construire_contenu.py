@@ -11,28 +11,8 @@ import json
 import sys
 from pathlib import Path
 
-from schema import charger_tous
-from valider_contenu import verifier_coherence
-
-# Familles de couleur par concept — voir la note Palette du coffre.
-FAMILLES = {
-    "print": "variables",
-    "execution": "variables",
-    "variable": "variables",
-    "variables": "variables",
-    "reaffectation": "variables",
-    "erreurs": "variables",
-    "format exact": "variables",
-    "types": "types",
-    "conversion": "types",
-    "f-string": "types",
-    "input": "types",
-    "operateurs": "operateurs",
-    "conditions": "conditions",
-    "boucles": "boucles",
-    "probleme narratif": "variables",
-}
-
+from schema import NOTIONS, charger_lecons, charger_tous
+from valider_contenu import verifier_coherence, verifier_lecon
 
 def _en_camel(nom: str) -> str:
     tete, *reste = nom.split("_")
@@ -65,6 +45,23 @@ def construire(racine: Path, sortie: Path) -> int:
         raise SystemExit(f"{len(problemes)} probleme(s) : construction interrompue.")
 
     sortie.mkdir(parents=True, exist_ok=True)
+
+    # Publiee telle quelle pour que le front n'ait pas a la recopier : le titre
+    # affiche et la couleur du menu viennent d'ici, et de nulle part ailleurs.
+    (sortie / "seance-1-notions.json").write_text(
+        json.dumps(
+            [
+                {"id": identifiant, **details}
+                for identifiant, details in sorted(
+                    NOTIONS.items(), key=lambda paire: paire[1]["ordre"]
+                )
+            ],
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
     for seance in (1, 2, 3):
         publiables = [
             {
@@ -74,7 +71,7 @@ def construire(racine: Path, sortie: Path) -> int:
                 # `!== undefined` de evaluer.ts et fait echouer a tort tout test
                 # `variable` qui ne fixe pas valeur_attendue, comme s1-10.
                 **_convertir_cles(ex.model_dump(exclude={"solution"}, exclude_none=True)),
-                "famille": FAMILLES.get(ex.concept, "variables"),
+                "famille": NOTIONS[ex.notion]["famille"],
             }
             for ex in exercices
             if ex.seance == seance
@@ -83,6 +80,34 @@ def construire(racine: Path, sortie: Path) -> int:
             (sortie / f"seance-{seance}.json").write_text(
                 json.dumps(publiables, ensure_ascii=False, indent=2), encoding="utf-8"
             )
+
+        dossier_lecons = racine / f"seance-{seance}" / "lecons"
+        if not dossier_lecons.is_dir():
+            continue
+        lecons = charger_lecons(dossier_lecons)
+        problemes_lecons: list[str] = []
+        for lecon in lecons:
+            problemes_lecons += verifier_lecon(lecon)
+        if problemes_lecons:
+            for p in problemes_lecons:
+                print(f"  PROBLEME  {p}", file=sys.stderr)
+            raise SystemExit(f"{len(problemes_lecons)} probleme(s) de lecon.")
+        if lecons:
+            (sortie / f"seance-{seance}-lecons.json").write_text(
+                json.dumps(
+                    [
+                        {
+                            **_convertir_cles(l.model_dump()),
+                            "famille": NOTIONS[l.notion]["famille"],
+                        }
+                        for l in lecons
+                    ],
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+
     return len(exercices)
 
 
