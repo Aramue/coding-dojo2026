@@ -41,6 +41,10 @@ export function Editeur({
         }),
         EditorView.theme({
           '&': { fontFamily: 'var(--police-code)', fontSize: '0.88rem', borderRadius: '12px' },
+          // Une zone d'écriture, pas un champ de formulaire. Sur un exercice
+          // qui démarre à vide, l'éditeur mesurait une ligne : sous un énoncé
+          // en pleine largeur, il ne se lisait plus comme l'endroit où agir.
+          '.cm-scroller': { minHeight: '9rem' },
           '.cm-content': { padding: '0.9rem 0' },
           '&.cm-focused': { outline: '3px solid var(--py-yellow)' },
         }),
