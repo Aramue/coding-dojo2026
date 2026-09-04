@@ -8,7 +8,7 @@ sait parcourir et cartographier.
 Ouvrir le coffre : dans Obsidian, *Ouvrir un coffre* → *Ouvrir un dossier local* → choisir
 `docs/vault`. Aucun plugin nécessaire.
 
-Point d'entrée : **[[Quartier Général]]** (`vault/Quartier Général.md`).
+Point d'entrée : **[[Accueil]]** (`vault/Accueil.md`).
 
 ## Comment c'est rangé
 

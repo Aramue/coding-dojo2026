@@ -42,6 +42,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Retrait de la fiction — code et base | ✅ livré |
 | Retrait de la fiction — 25 énoncés | ✅ livré |
 | Retrait de la fiction — vault | ✅ livré |
+| Tableau de bord professeur atteignable | ✅ livré — sur `/prof` |
 | Revue finale de branche | ⬜ à faire |
 
 ## Ce qui tourne aujourd'hui

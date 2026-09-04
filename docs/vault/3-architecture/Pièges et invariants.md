@@ -167,6 +167,34 @@ notion. ==Le résultat ressemblait à une maquette== — la couleur ne portait p
 elle remplissait de l'espace, et le texte flottait sans surface ni profondeur. La règle de la
 charte (« pastel = j'apprends ») parle de l'ambiance d'une carte, pas d'un aplat plein écran.
 
+### Un écran sombre ne se teinte pas avec la couleur `deep` de la famille
+
+`.exercice` prend `--nuit` (#1A1B23), le même pour les cinq notions. La notion s'y lit dans les
+accents, en **pastel** (`--tint`).
+
+**Ce qui casse :** les couleurs `deep` de la palette donnent un brun (#3C2500) et un vert très
+sombre (#022016). Elles fonctionnent en petit aplat sur une carte, pas sur un écran entier — le
+résultat était boueux. ==Sur fond sombre, l'accent lisible est le pastel, pas l'encre== : `--encre`
+y disparaît.
+
+### Aucune page ne doit être un cul-de-sac
+
+`PiedNavigation` donne l'étape d'avant et celle d'après en bas de chaque page : le cours mène aux
+exercices, chaque exercice a son voisin, la liste ramène au cours et propose la notion suivante
+une fois terminée.
+
+**Ce qui casse :** sans elles, il fallait repasser par le menu à chaque changement de page. Rien
+ne plantait — c'est justement le problème : ==l'application marchait et ressemblait à une
+maquette==, parce qu'un parcours d'apprentissage est un chemin et ne se lisait pas comme tel.
+
+### Le tableau de bord ne suppose jamais la forme de la réponse
+
+`TableauDeBord` vérifie `Array.isArray(donnees?.eleves)` avant de rendre.
+
+**Ce qui casse :** une réponse sans `eleves` mettait `undefined` dans l'état, et le rendu plantait
+sur `.length`. ==Le tableau du professeur devenait un écran blanc== en pleine séance, sans rien
+qui explique pourquoi. Trouvé par un test, pas en classe.
+
 ### Une colonne de grille `1fr` prend la largeur de son contenu
 
 En mise en page mobile, la grille de `.appli` déclare `minmax(0, 1fr)`.
