@@ -55,3 +55,27 @@ describe('charte visuelle', () => {
     expect(base).not.toMatch(/text-transform:\s*uppercase/)
   })
 })
+
+describe("mise en page de l'ecran d'exercice", () => {
+  const appli = readFileSync('src/ui/app.css', 'utf-8')
+  const rappel = readFileSync('src/ui/RappelReussite.css', 'utf-8')
+
+  it("declare une largeur de colonne unique", () => {
+    expect(appli).toMatch(/--colonne:\s*\d+px/)
+  })
+
+  it("aligne le fil, l'en-tete, le rappel et le corps sur cette largeur", () => {
+    // Quatre blocs, quatre `max-width` : trois dans app.css, un dans le rappel.
+    const occurrences = appli.match(/max-width:\s*var\(--colonne\)/g) ?? []
+    expect(occurrences).toHaveLength(3)
+    expect(rappel).toMatch(/max-width:\s*var\(--colonne\)/)
+  })
+
+  it("ne met jamais la consigne et l'editeur cote a cote", () => {
+    // La consigne se lit AVANT d'ecrire. Deux panneaux de poids egal laissent
+    // l'eleve balayer de gauche a droite sans savoir par lequel commencer.
+    const grille = appli.match(/\.exercice__grille\s*\{[^}]*\}/g) ?? []
+    expect(grille.length).toBeGreaterThan(0)
+    for (const bloc of grille) expect(bloc).not.toMatch(/grid-template-columns/)
+  })
+})

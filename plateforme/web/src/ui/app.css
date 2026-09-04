@@ -371,6 +371,14 @@ html {
   --texte-clair: #e9e8ee;
   --texte-doux: #a8a6b4;
   --accent: var(--tint, #c2ccff);
+  /*
+   * L'ecran d'exercice se lit en UNE colonne : la consigne, puis le code.
+   * Cote a cote, les deux se disputaient l'attention et l'eleve devait
+   * balayer de gauche a droite entre chaque phrase et chaque ligne tapee.
+   * Une seule largeur gouverne le fil, l'en-tete, le rappel et le corps :
+   * tout doit s'aligner sur le meme bord.
+   */
+  --colonne: 820px;
 
   background: var(--nuit);
   color: var(--texte-clair);
@@ -378,7 +386,7 @@ html {
 }
 
 .exercice__fil {
-  max-width: 1180px;
+  max-width: var(--colonne);
   margin: 0 auto;
 }
 
@@ -430,7 +438,7 @@ html {
   justify-content: space-between;
   gap: var(--e-2);
   flex-wrap: wrap;
-  max-width: 1180px;
+  max-width: var(--colonne);
   margin: var(--e-1) auto var(--e-3);
   padding-bottom: var(--e-2);
   border-bottom: 1px solid var(--trait);
@@ -450,16 +458,10 @@ html {
 
 .exercice__grille {
   display: grid;
-  gap: var(--e-4);
-  max-width: 1180px;
+  gap: var(--e-3);
+  max-width: var(--colonne);
   margin: 0 auto;
   align-items: start;
-}
-
-@media (min-width: 980px) {
-  .exercice__grille {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  }
 }
 
 /* L'énoncé est un panneau, pas du texte posé sur la couleur. */

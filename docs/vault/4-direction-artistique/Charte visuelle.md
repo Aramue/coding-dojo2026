@@ -4,7 +4,7 @@ tags:
   - moc
   - direction-artistique
 statut: validée
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Charte visuelle
@@ -70,6 +70,23 @@ Voir [[ADR-006 Palette dérivée des slides]].
 > entier fatigue et lit « prototype ».
 
 Voir [[Pièges et invariants]].
+
+## Amendement du 4 septembre 2026 — l'écran d'exercice se lit en une colonne
+
+> [!warning] La consigne au-dessus du code, jamais à côté
+> L'écran d'exercice a d'abord posé l'énoncé et l'éditeur **côte à côte** au-delà de 980 px. Deux
+> panneaux de poids visuel égal, deux points de départ possibles pour le regard : l'élève balaye
+> de gauche à droite entre chaque phrase lue et chaque ligne tapée, et rien ne dit lequel des deux
+> vient d'abord.
+>
+> **Règle appliquée** : une seule colonne de **820 px**, centrée, sur tous les écrans. On lit la
+> consigne, on voit les indices, puis on écrit. ==Le fil d'Ariane, l'en-tête, le rappel de
+> réussite et le corps partagent la même largeur== — une variable, `--colonne`, la gouverne, et
+> tout s'aligne sur le même bord.
+>
+> 820 px, pas la largeur de l'écran : au-delà, une ligne de prose dépasse la centaine de
+> caractères et se relit mal. L'éditeur y tient largement — une ligne de Python de chapitre 1
+> occupe rarement la moitié de la colonne.
 
 ## Le mouvement, et ses quatre usages
 
