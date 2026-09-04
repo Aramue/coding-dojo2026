@@ -1,19 +1,51 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ClientApi } from './api/client'
-import { chargerParcours } from './contenu/chargeur'
-import type { Exercice } from './contenu/types'
+import { chargerLecons, chargerNotions, chargerParcours } from './contenu/chargeur'
+import { grouper, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
+import { naviguer, useRoute, type Destination } from './routage'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
-import { Progression } from './ui/Progression'
+import { Menu } from './ui/Menu'
+import { PageCours } from './ui/PageCours'
+import { PageExercices } from './ui/PageExercices'
+import type { Exercice, Lecon, Notion } from './contenu/types'
+import type { GroupeNotion } from './contenu/notions'
+import type { ResultatTest } from './validation/types'
 
-/** Nom lisible d'une famille de concept, pour l'en-tête. */
-const CONCEPTS: Record<Exercice['famille'], string> = {
-  variables: 'Variables',
-  types: 'Types de données',
-  operateurs: 'Opérateurs',
-  conditions: 'Conditions',
-  boucles: 'Boucles',
+/**
+ * Le code d'accès survit à un rechargement, mais pas à la fermeture de
+ * l'onglet : `sessionStorage`, jamais `localStorage`. Les machines des huit
+ * établissements sont partagées — le code du voisin ne doit pas y rester.
+ *
+ * Ce n'est pas une donnée personnelle : c'est un pseudonyme distribué en
+ * séance. Voir ADR-002.
+ */
+const CLE_SESSION = 'dojo.code-acces'
+
+function lireCodeMemorise(): string | null {
+  try {
+    return sessionStorage.getItem(CLE_SESSION)
+  } catch {
+    // Navigation privée, ou stockage refusé : on retombe sur la saisie manuelle.
+    return null
+  }
+}
+
+function memoriserCode(code: string): void {
+  try {
+    sessionStorage.setItem(CLE_SESSION, code)
+  } catch {
+    // Sans mémoire, l'élève retapera son code au rechargement. Rien de plus.
+  }
+}
+
+function oublierCode(): void {
+  try {
+    sessionStorage.removeItem(CLE_SESSION)
+  } catch {
+    // Rien à faire : la clé n'a jamais pu être écrite.
+  }
 }
 
 export function App() {
@@ -22,118 +54,173 @@ export function App() {
     () => new Executeur(() => new Worker(new URL('./execution/worker.ts', import.meta.url))),
     [],
   )
+  const destination = useRoute()
   const [codeAcces, setCodeAcces] = useState<string | null>(null)
-  const [exercices, setExercices] = useState<Exercice[]>([])
+  const [contenu, setContenu] = useState<{
+    notions: Notion[]
+    exercices: Exercice[]
+    lecons: Lecon[]
+  }>({ notions: [], exercices: [], lecons: [] })
   const [reussis, setReussis] = useState<string[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
 
+  // Derive, jamais stocke : sans cela, le compteur du menu resterait fige sur
+  // sa valeur du moment de la connexion, et valider un exercice ne se verrait
+  // nulle part.
+  const groupes = useMemo(
+    () => grouper(contenu.notions, contenu.exercices, contenu.lecons, reussis),
+    [contenu, reussis],
+  )
+
   useEffect(() => () => executeur.detruire(), [executeur])
 
-  async function connecter(code: string) {
-    const identifiant = await client.ouvrirSession(code)
-    setExercices(await chargerParcours())
-    setReussis(await client.lireParcours())
+  // Reconnexion silencieuse au chargement : sans elle, un rafraichissement
+  // renvoie l'eleve a la saisie du code et lui fait perdre sa page.
+  useEffect(() => {
+    const memorise = lireCodeMemorise()
+    if (!memorise) return
+    connecter(memorise).catch(() => oublierCode())
+    // Volontairement au montage seulement : `connecter` change a chaque rendu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  async function connecter(saisi: string) {
+    const identifiant = await client.ouvrirSession(saisi)
+    const [notions, exercices, lecons, acquis] = await Promise.all([
+      chargerNotions(),
+      chargerParcours(),
+      chargerLecons(),
+      client.lireParcours(),
+    ])
+    setContenu({ notions, exercices, lecons })
+    setReussis(acquis)
     setCodeAcces(identifiant)
+    memoriserCode(identifiant)
+
+    // Une URL profonde ouverte avant connexion est conservée ; sinon on envoie
+    // l'élève sur la première notion qu'il n'a pas terminée.
+    if (destination.vue === 'connexion') {
+      const ouverte = premiereOuverte(grouper(notions, exercices, lecons, acquis))
+      if (ouverte) naviguer({ vue: 'cours', notion: ouverte.id })
+    }
   }
 
   if (!codeAcces) {
     return (
-      <div className="appli">
+      <div className="appli appli--seul">
         <Entete />
         <EcranConnexion onConnecte={connecter} />
       </div>
     )
   }
 
-  if (!exercices.length) {
-    return (
-      <div className="appli">
-        <Entete codeAcces={codeAcces} />
-        <p className="chargement">Chargement des exercices…</p>
-      </div>
-    )
-  }
-
-  const courant = exercices.find((e) => !reussis.includes(e.id))
-  const faits = exercices.filter((e) => reussis.includes(e.id)).length
-
-  if (!courant) {
-    return (
-      <div className="appli">
-        <Entete codeAcces={codeAcces} total={exercices.length} faits={faits} />
-        <main className="fin">
-          <div className="fin__carte">
-            <p className="fin__compte">{faits}</p>
-            <h1>Séance terminée</h1>
-            <p>
-              Tu as résolu les {exercices.length} exercices de la séance. Ta progression est
-              enregistrée : tu la retrouveras à la prochaine connexion.
-            </p>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
   return (
     <div className="appli">
-      <Entete
-        codeAcces={codeAcces}
-        concept={CONCEPTS[courant.famille]}
-        total={exercices.length}
-        faits={faits}
-      />
+      <Entete codeAcces={codeAcces} />
+      <Menu groupes={groupes} destination={destination} />
       {alerte && (
         <p role="alert" className="alerte">
           {alerte}
         </p>
       )}
-      <EcranExercice
-        exercice={courant}
+      <Vue
+        destination={destination}
+        groupes={groupes}
+        reussis={reussis}
         executeur={executeur}
-        onTentative={async (resultat, dureeMs, typeErreurPython) => {
+        client={client}
+        onReussi={(id) => setReussis((liste) => [...liste, id])}
+        onAlerte={setAlerte}
+      />
+    </div>
+  )
+}
+
+type ProprietesVue = {
+  destination: Destination
+  groupes: GroupeNotion[]
+  reussis: string[]
+  executeur: Executeur
+  client: ClientApi
+  onReussi: (id: string) => void
+  onAlerte: (message: string | null) => void
+}
+
+/**
+ * L'aiguillage ne fait que choisir une page. Toute la logique vit dans les
+ * composants et dans `notions.ts` — cette fonction reste lisible d'un coup d'œil.
+ */
+function Vue({
+  destination,
+  groupes,
+  reussis,
+  executeur,
+  client,
+  onReussi,
+  onAlerte,
+}: ProprietesVue) {
+  const groupe =
+    'notion' in destination ? groupes.find((g) => g.id === destination.notion) : undefined
+
+  if (!groupe) return <Introuvable />
+
+  if (destination.vue === 'cours') return <PageCours groupe={groupe} executeur={executeur} />
+  if (destination.vue === 'exercices') {
+    return <PageExercices groupe={groupe} reussis={reussis} />
+  }
+
+  if (destination.vue === 'exercice') {
+    const exercice = groupe.exercices[destination.numero - 1]
+    if (!exercice) return <Introuvable />
+    return (
+      <EcranExercice
+        // `key` force un composant neuf en changeant d'exercice : sans elle,
+        // l'éditeur garderait le code tapé pour le précédent.
+        key={exercice.id}
+        exercice={exercice}
+        executeur={executeur}
+        onTentative={async (resultat: ResultatTest, dureeMs, typeErreurPython) => {
           try {
             await client.enregistrerTentative({
-              exerciceId: courant.id,
+              exerciceId: exercice.id,
               verdict: resultat.verdict,
               // Le NOM de l'exception, jamais le message : les messages
               // contiennent des identifiants tapés par l'élève.
               typeErreur: typeErreurPython,
               dureeMs,
             })
-            setAlerte(null)
-            if (resultat.verdict !== 'rouge') setReussis((liste) => [...liste, courant.id])
+            onAlerte(null)
+            if (resultat.verdict !== 'rouge') onReussi(exercice.id)
           } catch {
             // On ne fait PAS avancer l'élève sur une tentative non enregistrée :
             // il la croirait acquise et la retrouverait au rechargement.
-            setAlerte(
+            onAlerte(
               "Ta progression n'a pas pu être enregistrée. Préviens ton professeur avant de continuer.",
             )
           }
         }}
       />
-    </div>
+    )
+  }
+
+  return <Introuvable />
+}
+
+function Introuvable() {
+  return (
+    <main className="introuvable">
+      <h1>Cette page n'existe pas</h1>
+      <p>Choisis une notion dans le menu.</p>
+    </main>
   )
 }
 
-function Entete({
-  codeAcces,
-  concept,
-  total,
-  faits,
-}: {
-  codeAcces?: string
-  concept?: string
-  total?: number
-  faits?: number
-}) {
+function Entete({ codeAcces }: { codeAcces?: string }) {
   return (
     <header className="entete">
       <span className="entete__marque">
         Coding Dojo <span>Python</span>
       </span>
-      {concept && <span className="entete__concept">{concept}</span>}
-      {total !== undefined && faits !== undefined && <Progression total={total} faits={faits} />}
       {codeAcces && <span className="entete__code mono">{codeAcces}</span>}
     </header>
   )

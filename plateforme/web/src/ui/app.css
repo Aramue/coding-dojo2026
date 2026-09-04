@@ -8,14 +8,61 @@
 
 /* ---------- Ossature ---------- */
 
+/*
+ * Trois zones : l'en-tete en haut, le menu a gauche, la page a droite. Sous
+ * 820 px les trois s'empilent et le menu devient une bande defilante.
+ */
 .appli {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas:
+    'entete entete'
+    'menu contenu';
+  grid-template-columns: 255px 1fr;
+  grid-template-rows: auto 1fr;
   background: var(--ground);
 }
 
+/* Avant connexion, il n'y a pas de menu a placer. */
+.appli--seul {
+  grid-template-areas:
+    'entete'
+    'contenu';
+  grid-template-columns: 1fr;
+}
+
+.appli > main {
+  grid-area: contenu;
+  min-width: 0; /* sans quoi un <pre> large fait deborder toute la grille */
+}
+
+.appli > .alerte {
+  grid-area: contenu;
+  align-self: start;
+}
+
+.introuvable {
+  padding: var(--e-5) var(--e-4);
+}
+
+.introuvable h1 {
+  font-size: var(--t-6);
+  margin-bottom: var(--e-2);
+}
+
+@media (max-width: 820px) {
+  .appli {
+    grid-template-areas:
+      'entete'
+      'menu'
+      'contenu';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+}
+
 .entete {
+  grid-area: entete;
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -46,42 +93,6 @@
   color: var(--ink-soft);
   padding-left: 1.5rem;
   border-left: 1px solid var(--rule);
-}
-
-/* ---------- Progression ---------- */
-
-.progression {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.progression__jauge {
-  display: flex;
-  gap: 3px;
-}
-
-.progression__pas {
-  width: 14px;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--rule);
-  transition: background 0.15s ease;
-}
-
-.progression__pas--fait {
-  background: var(--ok);
-}
-
-.progression__pas--courant {
-  background: var(--ink);
-}
-
-.progression__compte {
-  font-size: 0.88rem;
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 
 /* ---------- Boutons ---------- */
@@ -331,4 +342,31 @@
   place-items: center;
   color: var(--ink-soft);
   padding: 3rem 1.25rem;
+}
+
+/* ---------- Fil d'Ariane de l'exercice ---------- */
+
+.exercice__fil {
+  max-width: 1120px;
+  margin: 0 auto var(--e-2);
+}
+
+.exercice__fil a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: var(--t-2);
+  color: #cfc9e4;
+  text-decoration: none;
+}
+
+.exercice__fil a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.exercice__fil a:focus-visible {
+  outline: 2px solid var(--py-yellow);
+  outline-offset: 3px;
+  border-radius: var(--rayon-1);
 }

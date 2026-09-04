@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Exercice } from '../contenu/types'
 import { nomsVariablesRequis } from '../contenu/chargeur'
 import { Executeur } from '../execution/executeur'
+import { naviguer, versChemin } from '../routage'
 import { categorieErreur } from '../execution/exceptions'
 import type { ResultatExecution } from '../execution/types'
 import { evaluer } from '../validation/evaluer'
@@ -116,6 +117,19 @@ export function EcranExercice({
 
   return (
     <main className="exercice" data-famille={exercice.famille}>
+      <nav className="exercice__fil" aria-label="Fil d'Ariane">
+        <a
+          href={versChemin({ vue: 'exercices', notion: exercice.notion })}
+          onClick={(evenement) => {
+            if (evenement.metaKey || evenement.ctrlKey || evenement.shiftKey) return
+            evenement.preventDefault()
+            naviguer({ vue: 'exercices', notion: exercice.notion })
+          }}
+        >
+          Retour aux exercices
+        </a>
+      </nav>
+
       <div className="exercice__entete">
         <h1 className="exercice__titre">{exercice.titre}</h1>
         <span className="exercice__essais">

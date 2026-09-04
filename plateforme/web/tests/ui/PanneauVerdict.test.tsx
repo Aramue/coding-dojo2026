@@ -9,9 +9,9 @@ describe('PanneauVerdict', () => {
   })
 
   it('affiche le succes en vert', () => {
-    render(<PanneauVerdict resultat={{ verdict: 'vert', titre: 'Mission accomplie.' }} />)
+    render(<PanneauVerdict resultat={{ verdict: 'vert', titre: "C'est juste." }} />)
     expect(screen.getByRole('status')).toHaveClass('verdict--vert')
-    expect(screen.getByText('Mission accomplie.')).toBeInTheDocument()
+    expect(screen.getByText("C'est juste.")).toBeInTheDocument()
   })
 
   it('affiche le bleu et son diff', () => {
@@ -48,7 +48,7 @@ describe('PanneauVerdict', () => {
   })
 
   it('annonce le resultat aux lecteurs d ecran', () => {
-    render(<PanneauVerdict resultat={{ verdict: 'vert', titre: 'Mission accomplie.' }} />)
+    render(<PanneauVerdict resultat={{ verdict: 'vert', titre: "C'est juste." }} />)
     expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite')
   })
 })

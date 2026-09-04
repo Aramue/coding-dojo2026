@@ -6,7 +6,7 @@ import type { ResultatTest, Test, Verdict } from './types'
 
 // Gelé : cet objet est renvoyé par référence depuis six points. Sans freeze, un
 // appelant qui l'enrichirait en place contaminerait tous les verdicts verts suivants.
-const VERT: ResultatTest = Object.freeze({ verdict: 'vert', titre: 'Mission accomplie.' })
+const VERT: ResultatTest = Object.freeze({ verdict: 'vert', titre: "C'est juste." })
 
 export function evaluer(params: {
   code: string
