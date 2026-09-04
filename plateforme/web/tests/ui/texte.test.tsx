@@ -53,6 +53,30 @@ describe('formaterTexte', () => {
     expect(screen.getByTestId('p')).toBeEmptyDOMElement()
   })
 
+  it('met en italique entre astérisques simples', () => {
+    const { container } = rendre("C'est ce qu'on appelle le *type* d'une valeur.")
+    expect(container.querySelector('em')).toHaveTextContent('type')
+    expect(screen.getByTestId('p')).toHaveTextContent(
+      "C'est ce qu'on appelle le type d'une valeur.",
+    )
+  })
+
+  it('rend le code contenu DANS du gras', () => {
+    // Sans recursion, les accents graves s'affichaient tels quels au milieu
+    // de la phrase — visible sur la lecon « Types et conversion ».
+    const { container } = rendre('Le type change **ce que fait le signe `+`**.')
+    const gras = container.querySelector('strong')
+    expect(gras).toBeTruthy()
+    expect(gras!.querySelector('code')).toHaveTextContent('+')
+    expect(screen.getByTestId('p')).not.toHaveTextContent('`')
+  })
+
+  it('ne prend pas deux multiplications pour un italique', () => {
+    const { container } = rendre('2 * 3 et 4 * 5 font 6 et 20.')
+    expect(container.querySelector('em')).toBeNull()
+    expect(screen.getByTestId('p')).toHaveTextContent('2 * 3 et 4 * 5 font 6 et 20.')
+  })
+
   it('gere une marque en tout debut et en toute fin', () => {
     const { container } = rendre('**Attention** au `=`')
     expect(container.querySelector('strong')).toHaveTextContent('Attention')

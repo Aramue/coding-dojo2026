@@ -1,22 +1,29 @@
 import type { ReactNode } from 'react'
 
-// Deux marques, pas davantage : **gras** et `code`. Le contenu vient de nos
-// propres fichiers YAML, mais on n'injecte jamais de HTML — React échappe
-// chaque fragment de texte, donc une balise écrite dans une leçon s'affiche
-// telle quelle au lieu de s'exécuter.
+// Trois marques, pas davantage : **gras**, *italique* et `code`. Le contenu
+// vient de nos propres fichiers YAML, mais on n'injecte jamais de HTML — React
+// échappe chaque fragment de texte, donc une balise écrite dans une leçon
+// s'affiche telle quelle au lieu de s'exécuter.
 //
 // Le groupe capturant est délibéré : `split` avec une expression capturante
 // garde les séparateurs dans le tableau, ce qui permet de les reconnaître au
 // lieu de les perdre.
-const MARQUES = /(\*\*[^*]+\*\*|`[^`]+`)/g
+//
+// L'italique exige un caractère NON blanc juste après l'astérisque ouvrante :
+// sans cette garde, « 2 * 3 et 4 * 5 » deviendrait « 2  3 et 4  5 » en
+// italique.
+const MARQUES = /(\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`)/g
 
 export function formaterTexte(texte: string): ReactNode[] {
   return texte
     .split(MARQUES)
     .filter((fragment) => fragment !== '')
     .map((fragment, index) => {
+      // Recursif : `**le signe `+`**` doit rendre le code A L'INTERIEUR du
+      // gras. Sans cet appel, les accents graves s'affichaient tels quels au
+      // milieu de la phrase.
       if (fragment.startsWith('**') && fragment.endsWith('**')) {
-        return <strong key={index}>{fragment.slice(2, -2)}</strong>
+        return <strong key={index}>{formaterTexte(fragment.slice(2, -2))}</strong>
       }
       if (fragment.startsWith('`') && fragment.endsWith('`') && fragment.length > 1) {
         return (
@@ -24,6 +31,9 @@ export function formaterTexte(texte: string): ReactNode[] {
             {fragment.slice(1, -1)}
           </code>
         )
+      }
+      if (fragment.startsWith('*') && fragment.endsWith('*') && fragment.length > 2) {
+        return <em key={index}>{formaterTexte(fragment.slice(1, -1))}</em>
       }
       return fragment
     })
