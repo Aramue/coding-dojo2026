@@ -30,6 +30,25 @@ concernés.
 Un élève seul n'y apparaît pas : il est déjà en tête de la liste, et le signaler deux fois
 diluerait celui qui compte.
 
+## La mise en page, et ce qu'elle sert
+
+Trois zones, dans l'ordre où le professeur les lit.
+
+1. **La bande de titre**, qui suit le défilement : le titre, les quatre compteurs, le pouls.
+   ==Vingt-quatre lignes font deux écrans==, et ce sont les compteurs qu'on relit toutes les deux
+   minutes, pas le titre.
+2. **La bande d'avancement**, fine : elle ne porte qu'une idée — l'écart dans la classe.
+3. **La liste**, une ligne par élève, qui se déplie.
+
+> [!note] Chaque ligne a deux bords, pas trois
+> À gauche l'élève et sa jauge, au centre ce qu'il fait, à droite son état — et ==le détail est
+> aligné à droite, contre la pastille==. Au milieu d'une colonne large il flottait, et le regard
+> n'avait plus de rail à suivre.
+>
+> Le détail d'un élève en cours ne répète pas sa jauge : il dit **depuis quand il n'a rien
+> soumis**, ce que la jauge ne dit pas. C'est ce qui distingue celui qui vient de valider de celui
+> qui sèche en silence sans avoir encore atteint le seuil d'inactivité.
+
 ## Où en est la classe
 
 Une bande porte **un trait par élève**, posé là où il en est, plus la médiane.
