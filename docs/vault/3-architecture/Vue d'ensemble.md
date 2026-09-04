@@ -2,7 +2,7 @@
 title: Vue d'ensemble
 tags:
   - architecture
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-04
 ---
 
 # Vue d'ensemble
@@ -83,7 +83,7 @@ Volontairement minimal — chaque point d'entrée supplémentaire est du code à
 | `POST /session` | Échange un code d'accès (`DOJO-XXXX`) contre un jeton de session |
 | `GET /parcours` | Renvoie les exercices déjà réussis par cet élève |
 | `POST /tentative` | Enregistre une tentative : exercice, verdict, type d'erreur, durée |
-| `GET /prof/seance` | Alimente le tableau de bord — voir [[ADR-002 Identification par code d'agent]] |
+| `GET /prof/seance` | Alimente le [[Tableau de bord]] : une ligne par élève, sans jamais son code source |
 | `POST /prof/verrou` | Ouvre ou ferme un concept pour toute la classe |
 
 > [!note] Ce que l'API ne reçoit jamais

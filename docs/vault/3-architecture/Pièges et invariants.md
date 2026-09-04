@@ -177,6 +177,16 @@ l'intérieur de la boîte de contenu.
 boîte et s'ajoute par-dessus. Un `padding-bottom: 1rem` laissait une bande de 16 px visible sous
 le chapitre replié, avec le haut de la première notion qui dépassait.
 
+### L'API ne peut pas compter les exercices d'un élève sur un total
+
+`GET /prof/seance` renvoie la **liste** des identifiants réussis, pas leur compte.
+
+**Ce qui casse :** l'API ignore quels exercices sont obligatoires — le contenu est construit côté
+front — donc tout décompte qu'elle produirait mélangerait chemin minimal, renforts et bonus, et
+ne se comparerait à aucun total. Le faire remonter par le client reviendrait à faire confiance au
+navigateur d'un élève pour une donnée qui pilote l'affichage professeur. C'est la même raison qui
+interdit un statut « terminé ». Voir [[Tableau de bord]].
+
 ### La couleur de notion est un accent, jamais un fond de page
 
 Le canevas est neutre (`--ground`), le contenu vit sur `--surface`, et la couleur de la famille
