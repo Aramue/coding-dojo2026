@@ -1,4 +1,4 @@
-import type { Verdict } from '../validation/types'
+import type { Reussite, Verdict } from '../validation/types'
 
 export type TentativeAEnvoyer = {
   exerciceId: string
@@ -48,10 +48,16 @@ export class ClientApi {
     return { 'Content-Type': 'application/json', Authorization: `Bearer ${this.jeton}` }
   }
 
-  async lireParcours(): Promise<string[]> {
+  async lireParcours(): Promise<Reussite[]> {
     const reponse = await this.executerRequete(`${this.base}/parcours`, { headers: this.entetes() })
     if (!reponse.ok) throw new Error('Progression indisponible.')
-    return (await reponse.json()).reussis
+    const brut = (await reponse.json()).reussis
+    if (!Array.isArray(brut)) throw new Error('Progression indisponible.')
+    return brut.map((l: { exercice_id: string; verdict: Verdict; le: string }) => ({
+      exerciceId: l.exercice_id,
+      verdict: l.verdict,
+      le: l.le,
+    }))
   }
 
   /**

@@ -38,7 +38,8 @@ def test_tentative_verte_marque_l_exercice_reussi(client, jeton):
         headers=entetes(jeton),
         json={"exercice_id": "s1-01", "verdict": "vert", "type_erreur": None, "duree_ms": 42},
     )
-    assert client.get("/parcours", headers=entetes(jeton)).json()["reussis"] == ["s1-01"]
+    reussis = client.get("/parcours", headers=entetes(jeton)).json()["reussis"]
+    assert [l["exercice_id"] for l in reussis] == ["s1-01"]
 
 
 def test_tentative_bleue_marque_aussi_l_exercice_reussi(client, jeton):
@@ -47,7 +48,8 @@ def test_tentative_bleue_marque_aussi_l_exercice_reussi(client, jeton):
         headers=entetes(jeton),
         json={"exercice_id": "s1-01", "verdict": "bleu", "type_erreur": None, "duree_ms": 50},
     )
-    assert client.get("/parcours", headers=entetes(jeton)).json()["reussis"] == ["s1-01"]
+    reussis = client.get("/parcours", headers=entetes(jeton)).json()["reussis"]
+    assert [l["exercice_id"] for l in reussis] == ["s1-01"]
 
 
 def test_tentative_rouge_ne_marque_pas_reussi(client, jeton):
@@ -188,3 +190,42 @@ def test_un_champ_inconnu_est_refuse(client):
         "/session", json={"code_acces": "DOJO-K7M2", "code_agent": "DOJO-K7M2"}
     )
     assert reponse.status_code == 422
+
+
+def _valider(client, jeton, exercice, verdict="vert"):
+    return client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={"exercice_id": exercice, "verdict": verdict, "type_erreur": None, "duree_ms": 42},
+    )
+
+
+def test_le_parcours_porte_la_date_et_le_verdict(client, jeton):
+    _valider(client, jeton, "s1-01", "bleu")
+    ligne = client.get("/parcours", headers=entetes(jeton)).json()["reussis"][0]
+    assert ligne["exercice_id"] == "s1-01"
+    assert ligne["verdict"] == "bleu"
+    assert ligne["le"].startswith("20")
+
+
+def test_le_meilleur_verdict_est_conserve(client, jeton):
+    """Rejouer moins bien ne retire pas une coche deja obtenue."""
+    _valider(client, jeton, "s1-01", "bleu")
+    _valider(client, jeton, "s1-01", "vert")
+    _valider(client, jeton, "s1-01", "bleu")
+    reussis = client.get("/parcours", headers=entetes(jeton)).json()["reussis"]
+    assert len(reussis) == 1
+    assert reussis[0]["verdict"] == "vert"
+
+
+def test_la_date_est_celle_de_la_premiere_reussite(client, jeton):
+    _valider(client, jeton, "s1-01", "bleu")
+    premier = client.get("/parcours", headers=entetes(jeton)).json()["reussis"][0]["le"]
+    _valider(client, jeton, "s1-01", "vert")
+    apres = client.get("/parcours", headers=entetes(jeton)).json()["reussis"][0]["le"]
+    assert apres == premier
+
+
+def test_une_tentative_rouge_n_apparait_pas(client, jeton):
+    _valider(client, jeton, "s1-01", "rouge")
+    assert client.get("/parcours", headers=entetes(jeton)).json()["reussis"] == []

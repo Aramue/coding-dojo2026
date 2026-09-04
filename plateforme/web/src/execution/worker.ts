@@ -12,12 +12,39 @@ importScripts('/pyodide/pyodide.js')
  * Harnais Python. Il capture stdout, simule input() à partir d'une liste fournie,
  * attrape SyntaxError séparément (elle n'a pas de traceback exploitable) et
  * sérialise les variables demandées. Il ne juge jamais la réponse.
+ *
+ * stdout est à la fois RETENU, pour la comparaison finale, et DIFFUSÉ au fil de
+ * l'eau vers le fil principal. La diffusion sert deux cas que la capture seule
+ * ne couvrait pas : voir son programme écrire pendant qu'il tourne, et voir ce
+ * qu'une boucle infinie a affiché avant d'être coupée — auparavant l'élève
+ * n'obtenait rien du tout dans ce cas.
  */
 const HARNAIS = `
-import sys, io, json
+import sys, io, json, js
 
-def _qg_executer(code, entrees, noms):
-    sortie = io.StringIO()
+# Au-dela, on cesse de retenir et de diffuser. Une boucle qui affiche sans fin
+# produit des megaoctets en cinq secondes : sans plafond, l'onglet gonfle
+# jusqu'a devenir inutilisable avant meme que le minuteur ne coupe.
+_QG_PLAFOND = 60000
+
+
+class _QgSortie(io.StringIO):
+    def __init__(self, identifiant):
+        super().__init__()
+        self._identifiant = identifiant
+        self._ecrits = 0
+
+    def write(self, texte):
+        if self._ecrits >= _QG_PLAFOND:
+            return len(texte)
+        morceau = texte[: _QG_PLAFOND - self._ecrits]
+        self._ecrits += len(morceau)
+        js.postMessage(js.Object.fromEntries([["id", self._identifiant], ["flux", morceau]]))
+        return super().write(morceau)
+
+
+def _qg_executer(code, entrees, noms, identifiant):
+    sortie = _QgSortie(identifiant)
     restantes = list(entrees)
 
     def _input(invite=""):
@@ -70,7 +97,7 @@ self.onmessage = async (evenement: MessageEvent) => {
   try {
     const py = await demarrer()
     const appel = py.runPython(
-      `_qg_executer(${JSON.stringify(code)}, ${JSON.stringify(entrees)}, ${JSON.stringify(nomsVariables)})`,
+      `_qg_executer(${JSON.stringify(code)}, ${JSON.stringify(entrees)}, ${JSON.stringify(nomsVariables)}, ${JSON.stringify(id)})`,
     ) as string
     self.postMessage({ id, ok: true, charge: JSON.parse(appel) })
   } catch (e) {

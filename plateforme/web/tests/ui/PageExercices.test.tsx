@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { PageExercices } from '../../src/ui/PageExercices'
 import type { GroupeNotion } from '../../src/contenu/notions'
 import type { Exercice } from '../../src/contenu/types'
+import type { Reussite } from '../../src/validation/types'
 
 function ex(id: string, titre: string, type: Exercice['type']): Exercice {
   return {
@@ -23,6 +24,11 @@ function ex(id: string, titre: string, type: Exercice['type']): Exercice {
   }
 }
 
+/** Une reussite datee. Par defaut la simple : celle qui vaut une coche. */
+function fait(exerciceId: string, verdict: Reussite['verdict'] = 'bleu'): Reussite {
+  return { exerciceId, verdict, le: '2026-09-16T14:32:00.000Z' }
+}
+
 const GROUPE: GroupeNotion = {
   id: 'variables',
   ordre: 2,
@@ -40,19 +46,19 @@ const GROUPE: GroupeNotion = {
 
 describe('PageExercices', () => {
   it('liste tous les exercices de la notion', () => {
-    render(<PageExercices groupe={GROUPE} reussis={['s1-09']} />)
+    render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} />)
     expect(screen.getByText('Ranger un prénom')).toBeInTheDocument()
     expect(screen.getByText('Que vaut score ?')).toBeInTheDocument()
   })
 
   it('marque les exercices reussis', () => {
-    const { container } = render(<PageExercices groupe={GROUPE} reussis={['s1-09']} />)
+    const { container } = render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} />)
     expect(container.querySelectorAll('[data-etat="reussi"]')).toHaveLength(1)
     expect(container.querySelectorAll('[data-etat="a-faire"]')).toHaveLength(1)
   })
 
   it("annonce l'etat aux lecteurs d'ecran, pas seulement par la couleur", () => {
-    render(<PageExercices groupe={GROUPE} reussis={['s1-09']} />)
+    render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} />)
     expect(screen.getByText('réussi')).toBeInTheDocument()
     expect(screen.getByText('à faire')).toBeInTheDocument()
   })
@@ -70,7 +76,7 @@ describe('PageExercices', () => {
   })
 
   it("rappelle l'avancement de la notion", () => {
-    render(<PageExercices groupe={GROUPE} reussis={['s1-09']} />)
+    render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} />)
     expect(screen.getByText('1 / 2')).toBeInTheDocument()
   })
 
@@ -136,7 +142,7 @@ describe('PageExercices — continuité', () => {
     const suivante = { ...GROUPE, id: 'types', titre: 'Types et conversion' }
 
     const { unmount } = render(
-      <PageExercices groupe={GROUPE} reussis={['s1-09']} suivante={suivante} />,
+      <PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} suivante={suivante} />,
     )
     expect(screen.queryByRole('link', { name: /Types et conversion/ })).toBeNull()
     unmount()
@@ -144,7 +150,7 @@ describe('PageExercices — continuité', () => {
     render(
       <PageExercices
         groupe={{ ...GROUPE, faits: 2 }}
-        reussis={['s1-09', 's1-10']}
+        reussis={[fait('s1-09'), fait('s1-10')]}
         suivante={suivante}
       />,
     )
@@ -172,7 +178,7 @@ describe('PageExercices — obligatoires et facultatifs', () => {
 
   it("ne compte que les obligatoires dans l'avancement", () => {
     // ADR-004 : un expert n'est jamais compte dans la progression affichee.
-    render(<PageExercices groupe={avecBonus()} reussis={['s1-09']} />)
+    render(<PageExercices groupe={avecBonus()} reussis={[fait('s1-09')]} />)
     expect(screen.getByText('1 / 2')).toBeInTheDocument()
   })
 
@@ -201,5 +207,34 @@ describe('PageExercices — obligatoires et facultatifs', () => {
   it('ne montre aucun bloc facultatif quand il n y en a pas', () => {
     render(<PageExercices groupe={GROUPE} reussis={[]} />)
     expect(screen.queryByRole('heading', { name: /aller plus loin/i })).toBeNull()
+  })
+})
+
+describe('PageExercices — les deux niveaux de réussite', () => {
+  it('une seule coche quand ça marche', () => {
+    const { container } = render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} />)
+    const coches = container.querySelector('.coches')!
+    expect(coches).toHaveAttribute('data-niveau', '1')
+    expect(coches.querySelectorAll('svg')).toHaveLength(1)
+  })
+
+  it('deux coches quand la méthode est la bonne', () => {
+    const { container } = render(
+      <PageExercices groupe={GROUPE} reussis={[fait('s1-09', 'vert')]} />,
+    )
+    const coches = container.querySelector('.coches')!
+    expect(coches).toHaveAttribute('data-niveau', '2')
+    expect(coches.querySelectorAll('svg')).toHaveLength(2)
+  })
+
+  it('dit la différence aux lecteurs d écran, pas seulement par le nombre de coches', () => {
+    render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09', 'vert')]} />)
+    expect(screen.getByText('réussi, méthode maîtrisée')).toBeInTheDocument()
+  })
+
+  it('compte une réussite simple dans l avancement comme une autre', () => {
+    // Une coche suffit a valider : la seconde recompense, elle ne conditionne rien.
+    render(<PageExercices groupe={GROUPE} reussis={[fait('s1-09')]} />)
+    expect(screen.getByText('1 / 2')).toBeInTheDocument()
   })
 })

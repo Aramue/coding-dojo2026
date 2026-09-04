@@ -17,7 +17,7 @@ import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
 import type { Chapitre, Exercice, Lecon, Notion } from './contenu/types'
 import type { GroupeNotion } from './contenu/notions'
-import type { ResultatTest } from './validation/types'
+import type { Reussite, ResultatTest } from './validation/types'
 
 /**
  * Le code d'accès survit à un rechargement, mais pas à la fermeture de
@@ -68,7 +68,7 @@ export function App() {
     exercices: Exercice[]
     lecons: Lecon[]
   }>({ chapitres: [], notions: [], exercices: [], lecons: [] })
-  const [reussis, setReussis] = useState<string[]>([])
+  const [reussis, setReussis] = useState<Reussite[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
 
   // Derive, jamais stocke : sans cela, le compteur du menu resterait fige sur
@@ -155,7 +155,15 @@ export function App() {
         reussis={reussis}
         executeur={executeur}
         client={client}
-        onReussi={(id) => setReussis((liste) => [...liste, id])}
+        onReussi={(reussite) =>
+          setReussis((liste) => [
+            // Une seule entrée par exercice, et on garde la meilleure : rejouer
+            // moins bien ne retire pas une coche déjà obtenue.
+            ...liste.filter((r) => r.exerciceId !== reussite.exerciceId),
+            liste.find((r) => r.exerciceId === reussite.exerciceId && r.verdict === 'vert') ??
+              reussite,
+          ])
+        }
         onAlerte={setAlerte}
       />
     </div>
@@ -165,10 +173,10 @@ export function App() {
 type ProprietesVue = {
   destination: Destination
   groupes: GroupeNotion[]
-  reussis: string[]
+  reussis: Reussite[]
   executeur: Executeur
   client: ClientApi
-  onReussi: (id: string) => void
+  onReussi: (reussite: Reussite) => void
   onAlerte: (message: string | null) => void
 }
 
@@ -239,7 +247,13 @@ function Vue({
               dureeMs,
             })
             onAlerte(null)
-            if (resultat.verdict !== 'rouge') onReussi(exercice.id)
+            if (resultat.verdict !== 'rouge') {
+              onReussi({
+                exerciceId: exercice.id,
+                verdict: resultat.verdict,
+                le: new Date().toISOString(),
+              })
+            }
           } catch {
             // On ne fait PAS avancer l'élève sur une tentative non enregistrée :
             // il la croirait acquise et la retrouverait au rechargement.

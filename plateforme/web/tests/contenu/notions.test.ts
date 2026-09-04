@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { grouper, grouperParChapitre, premiereOuverte } from '../../src/contenu/notions'
 import type { Exercice, Lecon, Notion } from '../../src/contenu/types'
+import type { Reussite } from '../../src/validation/types'
+
+/** Les tests raisonnent sur des identifiants ; la date n'y change rien. */
+const faits = (...ids: string[]): Reussite[] =>
+  ids.map((exerciceId) => ({ exerciceId, verdict: 'vert' as const, le: '2026-09-04T10:00:00Z' }))
 
 const NOTIONS: Notion[] = [
   { id: 'afficher', ordre: 1, titre: 'Afficher un message', famille: 'conditions', chapitre: 'bases' },
@@ -68,14 +73,14 @@ describe('grouper', () => {
       NOTIONS,
       [ex('s1-01', 'afficher'), ex('s1-02', 'afficher')],
       [],
-      ['s1-01'],
+      faits('s1-01'),
     )
     expect(groupes[0]!.faits).toBe(1)
     expect(groupes[1]!.faits).toBe(0)
   })
 
   it('ne compte pas un exercice reussi d une autre notion', () => {
-    const groupes = grouper(NOTIONS, [ex('s1-01', 'afficher')], [], ['s1-09'])
+    const groupes = grouper(NOTIONS, [ex('s1-01', 'afficher')], [], faits('s1-09'))
     expect(groupes[0]!.faits).toBe(0)
   })
 
@@ -97,13 +102,13 @@ describe('premiereOuverte', () => {
       NOTIONS,
       [ex('s1-01', 'afficher'), ex('s1-09', 'variables')],
       [],
-      ['s1-01'],
+      faits('s1-01'),
     )
     expect(premiereOuverte(groupes)?.id).toBe('variables')
   })
 
   it('rend la premiere notion quand tout est reussi', () => {
-    const groupes = grouper(NOTIONS, [ex('s1-01', 'afficher')], [], ['s1-01'])
+    const groupes = grouper(NOTIONS, [ex('s1-01', 'afficher')], [], faits('s1-01'))
     expect(premiereOuverte(groupes)?.id).toBe('afficher')
   })
 
@@ -138,7 +143,7 @@ describe('grouperParChapitre', () => {
       NOTIONS,
       [ex('s1-01', 'afficher'), ex('s1-02', 'afficher'), ex('s1-09', 'variables')],
       [],
-      ['s1-01', 's1-09'],
+      faits('s1-01', 's1-09'),
     )
     const [bases] = grouperParChapitre(CHAPITRES, groupes)
     expect(bases!.faits).toBe(2)
@@ -164,7 +169,7 @@ describe('grouper — obligatoires et facultatifs', () => {
       NOTIONS,
       [ex('s1-01', 'afficher'), ex('s1-02', 'afficher'), facultatif('s1-08', 'afficher')],
       [],
-      ['s1-01', 's1-08'],
+      faits('s1-01', 's1-08'),
     )
     expect(groupes[0]!.total).toBe(2)
     expect(groupes[0]!.faits).toBe(1)
@@ -177,7 +182,7 @@ describe('grouper — obligatoires et facultatifs', () => {
       NOTIONS,
       [ex('s1-01', 'afficher'), facultatif('s1-08', 'afficher'), ex('s1-09', 'variables')],
       [],
-      ['s1-01'],
+      faits('s1-01'),
     )
     expect(premiereOuverte(groupes)?.id).toBe('variables')
   })

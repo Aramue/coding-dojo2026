@@ -20,7 +20,7 @@
 .exercices__ligne {
   position: relative;
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr) auto auto auto;
+  grid-template-columns: 2.6rem minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: var(--e-2);
   min-height: 3.5rem;
@@ -110,7 +110,7 @@
 
 @media (max-width: 720px) {
   .exercices__ligne {
-    grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+    grid-template-columns: 2.6rem minmax(0, 1fr) auto;
     padding: var(--e-1) var(--e-2);
   }
 
@@ -165,4 +165,21 @@
   background: var(--tint);
   color: var(--encre);
   white-space: nowrap;
+}
+
+/* Une coche : ça marche. Deux : ça marche, et de la bonne façon. */
+.coches {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Les deux coches se chevauchent : elles forment un signe, pas une addition. */
+.coches[data-niveau='2'] svg + svg {
+  margin-left: -4px;
+}
+
+/* La pastille s'allonge en ovale pour les accueillir plutôt que de les serrer. */
+[data-etat='reussi'] .exercices__rang:has([data-niveau='2']) {
+  width: 2.4rem;
+  border-radius: 999px;
 }

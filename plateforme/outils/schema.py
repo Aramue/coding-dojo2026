@@ -60,6 +60,16 @@ class TestMotif(BaseModel):
     # quand le motif interdit une TECHNIQUE (s1-18 : l'echange en une ligne).
     # Un message trompeur envoie l'eleve chercher un probleme qu'il n'a pas.
     message: str | None = None
+    # Un `contient` marque `maitrise` n'est PAS exige pour valider : il donne
+    # la seconde coche. L'exercice reste reussi sans lui — c'est la difference
+    # entre « ca marche » et « ca marche de la bonne facon ».
+    maitrise: bool = False
+
+    @model_validator(mode="after")
+    def maitrise_reservee_au_contient(self) -> "TestMotif":
+        if self.maitrise and self.type != "contient":
+            raise ValueError("seul un test 'contient' peut porter maitrise")
+        return self
 
 
 TestExercice = Annotated[

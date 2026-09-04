@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react'
 import type { GroupeNotion } from '../contenu/notions'
 import type { Exercice } from '../contenu/types'
+import type { Reussite } from '../validation/types'
 import { naviguer, versChemin } from '../routage'
 import { PiedNavigation } from './PiedNavigation'
 import './PageExercices.css'
@@ -19,11 +20,11 @@ export function PageExercices({
   suivante,
 }: {
   groupe: GroupeNotion
-  reussis: string[]
+  reussis: Reussite[]
   /** La notion d'après, pour ne pas laisser l'élève sans étape suivante. */
   suivante?: GroupeNotion
 }) {
-  const acquis = new Set(reussis)
+  const acquis = new Map(reussis.map((r) => [r.exerciceId, r]))
   const termine = groupe.total > 0 && groupe.faits === groupe.total
 
   // L'index dans `exercices` est le numéro de l'URL : il court sur TOUS les
@@ -98,7 +99,7 @@ function Liste({
 }: {
   exercices: { exercice: Exercice; numero: number }[]
   notion: string
-  acquis: Set<string>
+  acquis: Map<string, Reussite>
   numerote?: boolean
 }) {
   if (exercices.length === 0) return null
@@ -107,11 +108,11 @@ function Liste({
     <ol className="exercices__liste carte">
       {exercices.map(({ exercice, numero }, rang) => {
         const cible = { vue: 'exercice' as const, notion, numero }
-        const fait = acquis.has(exercice.id)
+        const reussite = acquis.get(exercice.id)
         return (
-          <li key={exercice.id} className="exercices__ligne" data-etat={fait ? 'reussi' : 'a-faire'}>
+          <li key={exercice.id} className="exercices__ligne" data-etat={reussite ? 'reussi' : 'a-faire'}>
             <span className="exercices__rang" aria-hidden="true">
-              {fait ? <Coche /> : numerote ? rang + 1 : <Point />}
+              {reussite ? <Coches verdict={reussite.verdict} /> : numerote ? rang + 1 : <Point />}
             </span>
             <a
               className="exercices__lien"
@@ -127,7 +128,13 @@ function Liste({
             </a>
             {exercice.niveau === 'expert' && <span className="etiquette">Bonus</span>}
             <span className="exercices__type">{TYPES[exercice.type]}</span>
-            <span className="sr-only">{fait ? 'réussi' : 'à faire'}</span>
+            <span className="sr-only">
+              {reussite
+                ? reussite.verdict === 'vert'
+                  ? 'réussi, méthode maîtrisée'
+                  : 'réussi'
+                : 'à faire'}
+            </span>
             <Chevron />
           </li>
         )
@@ -138,13 +145,29 @@ function Liste({
 
 /* SVG tracés à la main, trait 1,8 : la charte interdit emoji et icônes importées. */
 
+/**
+ * Une coche : ça marche. Deux : ça marche, et de la bonne façon.
+ *
+ * La seconde se gagne sur une sortie exacte — sans que la normalisation ait eu
+ * à rattraper le format — et sur les critères de maîtrise que l'exercice
+ * déclare, quand il en déclare.
+ */
+function Coches({ verdict }: { verdict: Reussite['verdict'] }) {
+  return (
+    <span className="coches" data-niveau={verdict === 'vert' ? 2 : 1}>
+      <Coche />
+      {verdict === 'vert' && <Coche />}
+    </span>
+  )
+}
+
 function Coche() {
   return (
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" aria-hidden="true">
       <path
         d="M5 12.5 10 17.5 19 7"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

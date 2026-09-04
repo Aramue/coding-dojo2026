@@ -1,3 +1,4 @@
+import type { Reussite } from '../validation/types'
 import type { Chapitre, Exercice, Lecon, Notion } from './types'
 
 export type GroupeNotion = Notion & {
@@ -21,9 +22,9 @@ export function grouper(
   notions: Notion[],
   exercices: Exercice[],
   lecons: Lecon[],
-  reussis: string[],
+  reussis: Reussite[],
 ): GroupeNotion[] {
-  const acquis = new Set(reussis)
+  const acquis = new Set(reussis.map((r) => r.exerciceId))
   // Copie avant tri : `sort` modifie le tableau en place, et celui-ci vient
   // de l'état React de l'appelant.
   return [...notions]

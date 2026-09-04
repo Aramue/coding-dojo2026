@@ -112,11 +112,28 @@ def lire_parcours(
     session: Annotated[Session, Depends(obtenir_session)],
 ) -> dict:
     lignes = session.exec(
-        select(Tentative.exercice_id)
+        select(Tentative)
         .where(Tentative.code_acces == code_acces)
         .where(Tentative.verdict.in_(("vert", "bleu")))  # type: ignore[attr-defined]
+        .order_by(Tentative.horodatage)
     ).all()
-    return {"reussis": sorted(set(lignes))}
+
+    # Une reussite par exercice : la PREMIERE date — c'est celle que l'eleve
+    # reconnait, « je l'avais fait mercredi » — et le MEILLEUR verdict, parce
+    # qu'on ne retire pas une coche deja obtenue si l'eleve rejoue moins bien.
+    reussis: dict[str, dict] = {}
+    for t in lignes:
+        deja = reussis.get(t.exercice_id)
+        if deja is None:
+            reussis[t.exercice_id] = {
+                "exercice_id": t.exercice_id,
+                "verdict": t.verdict,
+                "le": t.horodatage.isoformat(),
+            }
+        elif deja["verdict"] == "bleu" and t.verdict == "vert":
+            deja["verdict"] = "vert"
+
+    return {"reussis": [reussis[cle] for cle in sorted(reussis)]}
 
 
 @routeur.post("/tentative")

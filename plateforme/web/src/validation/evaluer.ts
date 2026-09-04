@@ -53,6 +53,9 @@ export function evaluer(params: {
           : `Ton programme doit calculer le résultat, pas l'afficher directement.`,
       }
     }
+    // Un critere de maitrise ne disqualifie pas : il coute la seconde coche.
+    // Traite plus bas, avec le verdict global.
+    if (test.type === 'contient' && test.maitrise) continue
     if (test.type === 'contient' && !code.includes(test.motif)) {
       return {
         verdict: 'rouge',
@@ -82,6 +85,21 @@ export function evaluer(params: {
       titre: 'Ta logique est correcte, le format est à ajuster.',
       detail: `L'exercice est validé et la suite est débloquée. Regarde quand même l'écart ci-dessous : au chapitre 2, le format comptera.`,
       diff: diffBleu,
+    }
+  }
+
+  // 4. La maîtrise, en dernier. Elle ne peut plus rien invalider : à ce point
+  // le programme marche. Elle décide seulement de la seconde coche.
+  const manquee = tests.find(
+    (t) => t.type === 'contient' && t.maitrise && !code.includes(t.motif),
+  )
+  if (manquee && manquee.type === 'contient') {
+    return {
+      verdict: 'bleu',
+      titre: 'Ça marche. Il y a plus court.',
+      detail:
+        manquee.message ??
+        `L'exercice est validé. Essaie de le refaire en utilisant « ${manquee.motif.trim()} » : c'est la méthode que la leçon fait travailler.`,
     }
   }
   return VERT
