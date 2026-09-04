@@ -122,7 +122,7 @@ def _inscrire(session: Session, code: str, prenom: str = "Camille", nom: str = "
 def test_un_eleve_inscrit_qui_n_a_rien_soumis_apparait_quand_meme(client, session_test):
     """« Qui n'a pas commence » est ce qu'il faut voir dans le premier quart
     d'heure : construite depuis les tentatives, la liste l'ignorait."""
-    _inscrire(session_test, "DOJO-N4WQ", "Alex")
+    _inscrire(session_test, "DOJO-N4WQ", "Enzo")
     ligne = client.get("/prof/seance", headers=ENTETES).json()["eleves"][0]
     assert ligne["code_acces"] == "DOJO-N4WQ"
     assert ligne["statut"] == "pas_commence"
@@ -131,14 +131,14 @@ def test_un_eleve_inscrit_qui_n_a_rien_soumis_apparait_quand_meme(client, sessio
 
 
 def test_la_seance_porte_l_identite_de_l_eleve(client, session_test):
-    _inscrire(session_test, "DOJO-N4WQ", "Alex", "Nikiforov")
+    _inscrire(session_test, "DOJO-N4WQ", "Enzo", "Poupard")
     ligne = client.get("/prof/seance", headers=ENTETES).json()["eleves"][0]
-    assert ligne["prenom"] == "Alex"
-    assert ligne["nom"] == "Nikiforov"
+    assert ligne["prenom"] == "Enzo"
+    assert ligne["nom"] == "Poupard"
 
 
 def test_ceux_qui_n_ont_pas_commence_passent_apres_les_bloques(client, session_test):
-    _inscrire(session_test, "DOJO-N4WQ", "Alex")
+    _inscrire(session_test, "DOJO-N4WQ", "Enzo")
     for _ in range(3):
         _tentative(session_test, "DOJO-ZZZZ", "s1-21", "rouge", 30, "TypeError")
     eleves = client.get("/prof/seance", headers=ENTETES).json()["eleves"]
@@ -146,6 +146,6 @@ def test_ceux_qui_n_ont_pas_commence_passent_apres_les_bloques(client, session_t
 
 
 def test_un_eleve_retire_disparait_de_la_seance(client, session_test):
-    _inscrire(session_test, "DOJO-N4WQ", "Alex")
+    _inscrire(session_test, "DOJO-N4WQ", "Enzo")
     client.delete("/prof/eleves/DOJO-N4WQ", headers=ENTETES)
     assert client.get("/prof/seance", headers=ENTETES).json()["eleves"] == []

@@ -81,10 +81,10 @@ def test_un_champ_trop_long_est_refuse(client):
 
 
 def test_la_liste_est_triee_par_prenom(client):
-    for prenom in ("Zoe", "Alex", "Marie"):
+    for prenom in ("Zoe", "Enzo", "Iziz"):
         creer(client, prenom)
     liste = client.get("/prof/eleves", headers=ENTETES).json()["eleves"]
-    assert [e["prenom"] for e in liste] == ["Alex", "Marie", "Zoe"]
+    assert [e["prenom"] for e in liste] == ["Enzo", "Iziz", "Zoe"]
 
 
 def test_modifier_un_eleve(client):
@@ -102,12 +102,12 @@ def test_modifier_un_eleve(client):
 def test_modifier_ne_change_jamais_le_code(client):
     """Le code est deja distribue : le changer couperait l'eleve de sa progression."""
     code = creer(client).json()["code_acces"]
-    apres = client.patch(f"/prof/eleves/{code}", headers=ENTETES, json={"prenom": "Alex"}).json()
+    apres = client.patch(f"/prof/eleves/{code}", headers=ENTETES, json={"prenom": "Enzo"}).json()
     assert apres["code_acces"] == code
 
 
 def test_modifier_un_eleve_inconnu_est_refuse(client):
-    reponse = client.patch("/prof/eleves/DOJO-ZZZZ", headers=ENTETES, json={"prenom": "Alex"})
+    reponse = client.patch("/prof/eleves/DOJO-ZZZZ", headers=ENTETES, json={"prenom": "Enzo"})
     assert reponse.status_code == 404
 
 

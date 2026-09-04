@@ -40,12 +40,12 @@ describe('decouperListe', () => {
   })
 
   it('lit une ligne par élève', () => {
-    const fiches = decouperListe('Camille\tRey\nAlex\tNikiforov\nZoe\tMartin')
-    expect(fiches.map((f) => f.prenom)).toEqual(['Camille', 'Alex', 'Zoe'])
+    const fiches = decouperListe('Camille\tRey\nEnzo\tPoupard\nIziz\tGaston')
+    expect(fiches.map((f) => f.prenom)).toEqual(['Camille', 'Enzo', 'Iziz'])
   })
 
   it('ignore les lignes vides et les espaces de bord', () => {
-    expect(decouperListe('\n  Camille\tRey  \n\n   \nAlex\n')).toHaveLength(2)
+    expect(decouperListe('\n  Camille\tRey  \n\n   \nEnzo\n')).toHaveLength(2)
   })
 
   it('ne rend rien sur un texte vide', () => {

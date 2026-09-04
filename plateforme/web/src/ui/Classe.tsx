@@ -297,7 +297,7 @@ function Lot({
           value={texte}
           rows={5}
           spellCheck={false}
-          placeholder={'Camille\tRey\tCalvin\nAlex\tNikiforov\tRousseau'}
+          placeholder={'Enzo\tPoupard\tCalvin\nIziz\tGaston\tRousseau'}
           onChange={(e) => setTexte(e.target.value)}
         />
       </label>

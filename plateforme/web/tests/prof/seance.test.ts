@@ -208,7 +208,7 @@ describe('nommer', () => {
   })
 
   it('met l initiale en capitale', () => {
-    expect(nommer(ligne({ prenom: 'Alex', nom: 'nikiforov' }))).toBe('Alex N.')
+    expect(nommer(ligne({ prenom: 'Enzo', nom: 'poupard' }))).toBe('Enzo P.')
   })
 })
 
@@ -235,8 +235,8 @@ describe('blocagesCollectifs — un inscrit sans tentative', () => {
   it('nomme les eleves du bandeau plutot que de citer leurs codes', () => {
     const blocages = blocagesCollectifs([
       ligne({ statut: 'bloque', exercice_id: 's1-29', prenom: 'Camille', nom: 'Rey' }),
-      ligne({ statut: 'bloque', exercice_id: 's1-29', prenom: 'Alex', nom: 'Martin' }),
+      ligne({ statut: 'bloque', exercice_id: 's1-29', prenom: 'Enzo', nom: 'Poupard' }),
     ])
-    expect(blocages[0]!.eleves).toEqual(['Camille R.', 'Alex M.'])
+    expect(blocages[0]!.eleves).toEqual(['Camille R.', 'Enzo P.'])
   })
 })

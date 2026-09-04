@@ -133,9 +133,9 @@ describe('Classe — coller une liste', () => {
 
     await userEvent.type(
       screen.getByLabelText(/Une ligne par élève/),
-      'Camille;Rey;Calvin\nAlex;Nikiforov;Rousseau',
+      'Camille;Rey;Calvin\nEnzo;Poupard;Rousseau',
     )
-    expect(screen.getByText(/2 élèves reconnus : Camille, Alex/)).toBeInTheDocument()
+    expect(screen.getByText(/2 élèves reconnus : Camille, Enzo/)).toBeInTheDocument()
   })
 
   it('crée un élève par ligne, dans l ordre', async () => {
@@ -144,13 +144,13 @@ describe('Classe — coller une liste', () => {
     await screen.findByText(/Aucun élève/)
     await ouvrirLeLot()
 
-    await userEvent.type(screen.getByLabelText(/Une ligne par élève/), 'Camille;Rey\nAlex;Martin')
+    await userEvent.type(screen.getByLabelText(/Une ligne par élève/), 'Camille;Rey\nIziz;Gaston')
     await userEvent.click(screen.getByRole('button', { name: /Créer/ }))
 
     await waitFor(() => expect(ecritures).toHaveLength(2))
     expect(ecritures.map((e) => (e.corps as { prenom: string }).prenom)).toEqual([
       'Camille',
-      'Alex',
+      'Iziz',
     ])
   })
 
