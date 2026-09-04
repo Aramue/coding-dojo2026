@@ -64,7 +64,8 @@ ce qu'on cherche dans le premier quart d'heure.
 
 Chaque ligne s'ouvre sur le **parcours complet** de l'élève : les notions côte à côte, chaque
 exercice avec son état — un point, une coche, deux coches — et celui sur lequel il travaille en ce
-moment, marqué comme tel. Les facultatifs y figurent, étiquetés.
+moment, marqué comme tel. Les facultatifs y figurent, étiquetés. Chaque titre est cliquable et
+ouvre l'aperçu sur cet exercice.
 
 > [!danger] Ce que ce panneau ne montre pas, et ne montrera pas
 > ==Rien de ce que l'élève a tapé.== Ni son code, ni ses réponses, ni les valeurs qu'il a saisies.
@@ -74,6 +75,31 @@ moment, marqué comme tel. Les facultatifs y figurent, étiquetés.
 > Un test fixe la forme des étapes (`id`, `titre`, `coches`, `courant`, `obligatoire`) pour qu'un
 > champ ajouté par inadvertance fasse échouer la suite plutôt que d'arriver à l'écran. Et le
 > panneau le dit en toutes lettres à celui qui le lit.
+
+## L'aperçu de l'espace élève
+
+Chaque exercice du dépliant **s'ouvre**. Le professeur savait qu'on bute sur « L'âge qui refuse de
+s'additionner » ; il peut maintenant relire ce que l'énoncé demande, les indices, le code de
+départ. Un bouton ouvre aussi l'espace au départ, pour parcourir la séance avant de la faire.
+
+> [!important] Ce ne sont ni des captures ni une maquette
+> ==Ce sont les composants de l'élève, avec le contenu publié==, montés tels quels. Ce que le
+> professeur lit est exactement ce que la classe lira, y compris la faute de frappe d'un énoncé et
+> la longueur réelle d'une leçon. Le bac à sable des leçons fonctionne : on peut exécuter un
+> exemple pour le vérifier.
+
+La progression affichée est **vide** et rien n'est enregistré : ce n'est la copie de personne, et
+une validation ne part nulle part. La solution de référence n'y figure pas non plus — elle n'est
+jamais publiée, voir [[Modèle de contenu]].
+
+> [!danger] Les composants élève naviguent par `pushState`
+> L'aperçu intercepte le clic **avant** eux et lit la destination dans le `href`. Sans cela, un
+> clic dans le cadre ferait quitter le tableau de bord au professeur, sans qu'il comprenne
+> pourquoi.
+>
+> Un test verrouille aussi la **parité entre la numérotation du dépliant et celle de `grouper()`** :
+> les deux parcourent les exercices dans l'ordre de publication, filtré par notion. Si l'un des
+> deux se met à trier, le lien ouvre un autre exercice sans que rien ne le signale.
 
 ## La classe
 
