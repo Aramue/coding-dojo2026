@@ -1,5 +1,5 @@
 import type { ResultatExecution } from '../execution/types'
-import { diffCaracteres, rendreVisible } from './diff'
+import { diffCaracteres, diffInformatif, rendreVisible } from './diff'
 import { traduireErreur } from './erreurs'
 import { normaliser } from './normaliser'
 import type { ResultatTest, Test, Verdict } from './types'
@@ -163,7 +163,12 @@ function evaluerUn(
       return {
         verdict: 'rouge',
         titre: 'Ton programme n\'affiche pas ce qui est attendu.',
-        detail: `Compare les deux sorties caractère par caractère.`,
+        // « Compare caractère par caractère » est un bon conseil devant un
+        // écart d'un espace, et un mauvais devant deux textes qui n'ont rien à
+        // voir : là il n'y a rien à comparer, il y a l'énoncé à relire.
+        detail: diffInformatif(diff)
+          ? `Compare les deux sorties caractère par caractère.`
+          : `Ce n'est pas le même texte. Relis la consigne : elle donne l'affichage attendu mot pour mot.`,
         diff,
       }
     }

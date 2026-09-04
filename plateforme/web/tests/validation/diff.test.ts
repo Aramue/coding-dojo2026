@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { diffCaracteres, rendreVisible } from '../../src/validation/diff'
+import { diffCaracteres, diffInformatif, rendreVisible } from '../../src/validation/diff'
 
 describe('diffCaracteres', () => {
   it('renvoie un seul segment egal quand les textes sont identiques', () => {
@@ -53,5 +53,36 @@ describe('diffCaracteres — les queues de chaine', () => {
 
   it('gere une chaine attendue vide', () => {
     expect(diffCaracteres('', 'abc')).toEqual([{ type: 'ajout', texte: 'abc' }])
+  })
+})
+
+describe('diffInformatif', () => {
+  const diff = (a: string, b: string) => diffCaracteres(a, b)
+
+  it('marque un ecart d un seul caractere', () => {
+    expect(diffInformatif(diff('Bonjour Camille', 'Bonjour camille'))).toBe(true)
+  })
+
+  it('marque un espace en trop', () => {
+    expect(diffInformatif(diff('Bonjour·Camille', 'Bonjour··Camille'))).toBe(true)
+  })
+
+  it('marque une fin de phrase manquante, qui est un seul bloc', () => {
+    expect(diffInformatif(diff('Bonjour·tout·le·monde', 'Bonjour'))).toBe(true)
+  })
+
+  it('renonce quand les deux sorties n ont rien a voir', () => {
+    // Le cas qui a motive le changement : la sous-sequence commune de
+    // « banane » et « Bonjour tout le monde » n'est qu'un semis de lettres,
+    // et le surlignage decoupait les deux lignes en confettis.
+    expect(diffInformatif(diff('Bonjour·tout·le·monde', 'banane'))).toBe(false)
+  })
+
+  it('renonce quand rien n est commun', () => {
+    expect(diffInformatif(diff('196', '42'))).toBe(false)
+  })
+
+  it('renonce sur deux sorties vides plutot que de diviser par zero', () => {
+    expect(diffInformatif(diff('', ''))).toBe(false)
   })
 })

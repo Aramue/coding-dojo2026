@@ -47,6 +47,30 @@ export function diffCaracteres(attendu: string, obtenu: string): SegmentDiff[] {
   return segments
 }
 
+/**
+ * Le surlignage vaut-il la peine d'être montré ?
+ *
+ * Sur deux sorties voisines, il désigne exactement le caractère fautif. Sur
+ * deux textes qui n'ont rien à voir — « banane » face à « Bonjour tout le
+ * monde » — la plus longue sous-séquence commune n'est qu'un semis de lettres
+ * isolées, et le surlignage découpe les deux lignes en confettis. Il faut donc
+ * qu'au moins ==trois dixièmes== de la plus longue des deux sorties soient
+ * communs pour que marquer le reste apprenne quoi que ce soit.
+ */
+export function diffInformatif(segments: SegmentDiff[]): boolean {
+  let communs = 0
+  let attendu = 0
+  let obtenu = 0
+  for (const segment of segments) {
+    const taille = segment.texte.length
+    if (segment.type !== 'ajout') attendu += taille
+    if (segment.type !== 'manque') obtenu += taille
+    if (segment.type === 'egal') communs += taille
+  }
+  const plusLong = Math.max(attendu, obtenu)
+  return plusLong > 0 && communs / plusLong >= 0.3
+}
+
 /** Rend visibles les caracteres invisibles, pour que l'eleve voie l'espace en trop. */
 export function rendreVisible(texte: string): string {
   return texte.replace(/ /g, '·').replace(/\n/g, '⏎\n')
