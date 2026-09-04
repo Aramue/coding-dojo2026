@@ -20,12 +20,21 @@ importScripts('/pyodide/pyodide.js')
  * n'obtenait rien du tout dans ce cas.
  */
 const HARNAIS = `
-import sys, io, json, js
+import sys, io, json, time, js
 
 # Au-dela, on cesse de retenir et de diffuser. Une boucle qui affiche sans fin
 # produit des megaoctets en cinq secondes : sans plafond, l'onglet gonfle
 # jusqu'a devenir inutilisable avant meme que le minuteur ne coupe.
 _QG_PLAFOND = 60000
+
+# Regroupement de la diffusion. Un print fait DEUX appels a write() : le texte,
+# puis le saut de ligne. Envoyer un message par appel ferait mille rendus pour
+# une boucle de cinq cents lignes, et le fil principal passerait son temps a
+# redessiner au lieu d'afficher. On accumule, et on n'envoie qu'au-dela d'un
+# seuil de taille ou de temps ecoule : au plus vingt messages par seconde,
+# quel que soit le volume, sans cesser d'etre vivant a l'oeil.
+_QG_TAMPON_MAX = 400
+_QG_DELAI_MAX = 0.05
 
 
 class _QgSortie(io.StringIO):
@@ -33,14 +42,33 @@ class _QgSortie(io.StringIO):
         super().__init__()
         self._identifiant = identifiant
         self._ecrits = 0
+        self._tampon = []
+        self._en_attente = 0
+        self._dernier_envoi = time.monotonic()
 
     def write(self, texte):
         if self._ecrits >= _QG_PLAFOND:
             return len(texte)
         morceau = texte[: _QG_PLAFOND - self._ecrits]
         self._ecrits += len(morceau)
-        js.postMessage(js.Object.fromEntries([["id", self._identifiant], ["flux", morceau]]))
+        self._tampon.append(morceau)
+        self._en_attente += len(morceau)
+        trop_gros = self._en_attente >= _QG_TAMPON_MAX
+        trop_vieux = time.monotonic() - self._dernier_envoi >= _QG_DELAI_MAX
+        if trop_gros or trop_vieux:
+            self.vider()
         return super().write(morceau)
+
+    def vider(self):
+        """Pousse ce qui reste. A appeler avant de rendre la main, sans quoi la
+        fin de la sortie n'arriverait jamais au fil principal."""
+        if not self._tampon:
+            return
+        texte = "".join(self._tampon)
+        del self._tampon[:]
+        self._en_attente = 0
+        self._dernier_envoi = time.monotonic()
+        js.postMessage(js.Object.fromEntries([["id", self._identifiant], ["flux", texte]]))
 
 
 def _qg_executer(code, entrees, noms, identifiant):
@@ -71,6 +99,7 @@ def _qg_executer(code, entrees, noms, identifiant):
         erreur = {"type": type(e).__name__, "message": str(e), "ligne": ligne}
     finally:
         sys.stdout = ancien
+        sortie.vider()
 
     variables = {}
     for nom in noms:

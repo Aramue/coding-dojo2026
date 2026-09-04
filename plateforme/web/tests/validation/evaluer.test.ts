@@ -315,3 +315,87 @@ describe('evaluer — le message d un motif interdit', () => {
     expect(r.titre).toMatch(/en dur/i)
   })
 })
+
+describe('evaluer — la maitrise, seconde coche', () => {
+  const attendu = 'Bonjour Camille'
+  const sortie = execution({ stdout: 'Bonjour Camille\n' })
+
+  it('rend VERT quand le critere de maitrise est employe', () => {
+    const r = evaluer({
+      code: 'print(f"Bonjour {prenom}")',
+      tests: [
+        { type: 'sortie', entrees: [], attendu },
+        { type: 'contient', motif: 'f"', maitrise: true },
+      ],
+      executions: [sortie, execution()],
+    })
+    expect(r.verdict).toBe('vert')
+  })
+
+  it('rend BLEU, pas ROUGE, quand il manque : la solution marche', () => {
+    const r = evaluer({
+      code: 'print("Bonjour " + prenom)',
+      tests: [
+        { type: 'sortie', entrees: [], attendu },
+        { type: 'contient', motif: 'f"', maitrise: true },
+      ],
+      executions: [sortie, execution()],
+    })
+    expect(r.verdict).toBe('bleu')
+    expect(r.titre).toMatch(/plus court/i)
+    expect(r.detail).toMatch(/f"/)
+  })
+
+  it('emploie le message de l exercice quand il en donne un', () => {
+    const r = evaluer({
+      code: 'print("Bonjour " + prenom)',
+      tests: [
+        { type: 'sortie', entrees: [], attendu },
+        { type: 'contient', motif: 'f"', maitrise: true, message: 'Le f-string fait ça en une ligne.' },
+      ],
+      executions: [sortie, execution()],
+    })
+    expect(r.detail).toBe('Le f-string fait ça en une ligne.')
+  })
+
+  it('ne masque pas une vraie erreur de sortie', () => {
+    // La maitrise se juge en DERNIER : un programme faux reste faux.
+    const r = evaluer({
+      code: 'print("Salut")',
+      tests: [
+        { type: 'sortie', entrees: [], attendu },
+        { type: 'contient', motif: 'f"', maitrise: true },
+      ],
+      executions: [execution({ stdout: 'Salut\n' }), execution()],
+    })
+    expect(r.verdict).toBe('rouge')
+  })
+
+  it('laisse le format primer sur la maitrise', () => {
+    // Deux raisons de rendre BLEU. Celle qui montre un diff est la plus utile.
+    const r = evaluer({
+      code: 'print("bonjour  camille")',
+      tests: [
+        { type: 'sortie', entrees: [], attendu },
+        { type: 'contient', motif: 'f"', maitrise: true },
+      ],
+      executions: [execution({ stdout: 'bonjour  camille\n' }), execution()],
+    })
+    expect(r.verdict).toBe('bleu')
+    expect(r.diff).toBeDefined()
+    expect(r.titre).toMatch(/format/i)
+  })
+
+  it('un contient SANS maitrise disqualifie toujours', () => {
+    const r = evaluer({
+      code: 'print("Bonjour " + prenom)',
+      tests: [
+        { type: 'sortie', entrees: [], attendu },
+        { type: 'contient', motif: 'f"' },
+      ],
+      executions: [sortie, execution()],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.titre).toMatch(/demande d'utiliser/i)
+  })
+})

@@ -28,6 +28,13 @@ const NOTIONS = [
   },
 ]
 
+/** Le parcours renvoie une reussite datee, pas un simple identifiant. */
+const REUSSI_S1_01 = {
+  exercice_id: 's1-01',
+  verdict: 'vert',
+  le: '2026-09-16T12:32:00+00:00',
+}
+
 const EXERCICES = [
   {
     id: 's1-01',
@@ -134,7 +141,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('chapitres')) return CHAPITRES
           if (url.includes('notions')) return NOTIONS
           if (url.includes('lecons')) return []
-          if (url.includes('parcours')) return { reussis: ['s1-01'] }
+          if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
           return EXERCICES
         },
@@ -158,7 +165,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('chapitres')) return CHAPITRES
           if (url.includes('notions')) return NOTIONS
           if (url.includes('lecons')) return []
-          if (url.includes('parcours')) return { reussis: ['s1-01'] }
+          if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
           return EXERCICES
         },

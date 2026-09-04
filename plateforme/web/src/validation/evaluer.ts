@@ -90,10 +90,14 @@ export function evaluer(params: {
 
   // 4. La maîtrise, en dernier. Elle ne peut plus rien invalider : à ce point
   // le programme marche. Elle décide seulement de la seconde coche.
+  // Prédicat de type : sans lui, il faudrait re-tester `type === 'contient'`
+  // après le find pour accéder à `motif`, et cette seconde vérification serait
+  // morte — vraie à coup sûr, jamais exercée en faux.
   const manquee = tests.find(
-    (t) => t.type === 'contient' && t.maitrise && !code.includes(t.motif),
+    (t): t is Extract<Test, { type: 'contient' }> =>
+      t.type === 'contient' && Boolean(t.maitrise) && !code.includes(t.motif),
   )
-  if (manquee && manquee.type === 'contient') {
+  if (manquee) {
     return {
       verdict: 'bleu',
       titre: 'Ça marche. Il y a plus court.',

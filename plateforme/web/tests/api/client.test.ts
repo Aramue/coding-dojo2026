@@ -5,10 +5,13 @@ describe('ClientApi', () => {
   beforeEach(() => vi.restoreAllMocks())
 
   it('ouvre une session et memorise le jeton', async () => {
-    const fetchFactice = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ jeton: 'DOJO-K7M2.sig', code_acces: 'DOJO-K7M2' }),
-    })
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ jeton: 'DOJO-K7M2.sig', code_acces: 'DOJO-K7M2' }),
+      })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ reussis: [] }) })
     const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
     await client.ouvrirSession('DOJO-K7M2')
 

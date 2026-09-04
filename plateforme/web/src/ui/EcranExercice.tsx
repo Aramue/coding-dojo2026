@@ -6,12 +6,14 @@ import { naviguer, versChemin } from '../routage'
 import { categorieErreur } from '../execution/exceptions'
 import type { ResultatExecution } from '../execution/types'
 import { evaluer } from '../validation/evaluer'
-import type { ResultatTest, Test } from '../validation/types'
+import type { Reussite, ResultatTest, Test } from '../validation/types'
 import { CarteCode } from './CarteCode'
+import { Console, type Passage } from './Console'
 import { decouperEnonce, formaterTexte } from './texte'
 import { Editeur } from './Editeur'
 import { PanneauVerdict } from './PanneauVerdict'
 import { PiedNavigation, type Etape } from './PiedNavigation'
+import { RappelReussite } from './RappelReussite'
 
 const EXECUTION_VIDE: ResultatExecution = {
   stdout: '',
@@ -28,6 +30,7 @@ export function EcranExercice({
   executeur,
   onTentative,
   titreNotion,
+  dejaFait,
   precedent,
   suivant,
 }: {
@@ -35,6 +38,13 @@ export function EcranExercice({
   executeur: Executeur
   /** Nom affiche de la notion, pour le rappel colore en haut de page. */
   titreNotion?: string
+  /**
+   * La reussite deja enregistree pour cet exercice, s'il y en a une.
+   *
+   * Elle vient du parcours charge a l'ouverture de la session : elle survit
+   * donc au rechargement, contrairement a l'etat local de l'ecran.
+   */
+  dejaFait?: Reussite
   /** Les deux etapes voisines. Sans elles, l'exercice est un cul-de-sac. */
   precedent?: Etape
   suivant?: Etape
@@ -57,12 +67,14 @@ export function EcranExercice({
   const [essais, setEssais] = useState(0)
   const [reponseQcm, setReponseQcm] = useState<number | undefined>(undefined)
   const [enCours, setEnCours] = useState(false)
+  const [passages, setPassages] = useState<Passage[]>([])
 
   useEffect(() => {
     setCode(exercice.depart)
     setResultat(null)
     setEssais(0)
     setReponseQcm(undefined)
+    setPassages([])
   }, [exercice.id, exercice.depart])
 
   const noms = useMemo(() => nomsVariablesRequis(exercice), [exercice])
@@ -72,6 +84,7 @@ export function EcranExercice({
 
   async function valider() {
     setEnCours(true)
+    setPassages([])
 
     // Une exécution par test, avec les entrées qui LUI appartiennent : un
     // exercice comme s1-30/s1-31/s1-34 déclare plusieurs tests 'sortie' avec
@@ -101,7 +114,23 @@ export function EcranExercice({
         const cle = JSON.stringify(entrees)
         let resultat = cache.get(cle)
         if (!resultat) {
-          resultat = await executeur.executer({ code, entrees, nomsVariables: noms })
+          // Un passage de console par exécution réellement lancée. Les
+          // exécutions servies par le cache n'en ouvrent pas : elles
+          // afficheraient deux fois la même chose.
+          setPassages((liste) => [...liste, { entrees, texte: '' }])
+          resultat = await executeur.executer({
+            code,
+            entrees,
+            nomsVariables: noms,
+            // La sortie s'écrit dans le dernier passage ouvert — celui qui
+            // tourne. L'Executeur ne pilote qu'une exécution à la fois.
+            onSortie: (morceau) =>
+              setPassages((liste) => {
+                const dernier = liste[liste.length - 1]
+                if (!dernier) return liste
+                return [...liste.slice(0, -1), { ...dernier, texte: dernier.texte + morceau }]
+              }),
+          })
           cache.set(cle, resultat)
         }
         executions.push(resultat)
@@ -149,6 +178,13 @@ export function EcranExercice({
           {essais === 0 ? 'aucun essai' : `${essais} essai${essais > 1 ? 's' : ''}`}
         </span>
       </div>
+
+      {/*
+        Le rappel s'efface dès la première validation de la visite : le verdict
+        dit alors la même chose, en plus frais, et deux encadrés qui se
+        répondent brouillent la lecture.
+      */}
+      {dejaFait && !resultat && <RappelReussite reussite={dejaFait} />}
 
       <div className="exercice__grille">
         <section className="exercice__enonce">
@@ -226,6 +262,9 @@ export function EcranExercice({
             </button>
             <span className="exercice__note">exécuté dans ton navigateur</span>
           </div>
+
+          {/* Un QCM ne lance rien : une console y resterait vide à jamais. */}
+          {!qcm && <Console passages={passages} enCours={enCours} />}
 
           <PanneauVerdict resultat={resultat} />
         </section>

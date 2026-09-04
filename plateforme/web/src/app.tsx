@@ -235,6 +235,7 @@ function Vue({
         // l'éditeur garderait le code tapé pour le précédent.
         key={exercice.id}
         exercice={exercice}
+        dejaFait={reussis.find((r) => r.exerciceId === exercice.id)}
         executeur={executeur}
         onTentative={async (resultat: ResultatTest, dureeMs, typeErreurPython) => {
           try {
