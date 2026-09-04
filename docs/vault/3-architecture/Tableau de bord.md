@@ -44,7 +44,7 @@ Une bande porte **un trait par élève**, posé là où il en est, plus la médi
 
 | Colonne | Contenu |
 |---|---|
-| Élève | **« Camille R. »** — le prénom et l'initiale ; le code en chasse fixe tant que rien n'est saisi |
+| Élève | **« Camille R. »** — le prénom et l'initiale ; le code en chasse fixe tant que rien n'est saisi. Dessous, sa **jauge** |
 | Où | le **titre** de l'exercice, et sa notion en dessous |
 | Quoi | échecs d'affilée et type d'erreur · délai d'inactivité · `8 / 25 réussis` |
 | Statut | Bloqué · Inactif · Pas commencé · En cours |
@@ -59,6 +59,19 @@ initiale, et la ligne reste lisible.
 Un quatrième statut, **« pas commencé »**, pour les inscrits qui n'ont encore rien soumis. Ils
 étaient invisibles tant que la liste se construisait depuis les tentatives — or c'est justement
 ce qu'on cherche dans le premier quart d'heure.
+
+### La jauge, celle de l'élève
+
+Sous chaque nom, la même barre que l'élève a en haut de son écran. Le dépliant en porte une par
+notion, avec son compte — exactement ce que l'élève lit dans son sommaire.
+
+> [!note] Pourquoi une barre à côté d'un chiffre
+> ==Le chiffre se lit ligne par ligne, la barre se lit en balayant la colonne.== C'est ainsi qu'on
+> repère qui traîne sans lire vingt-quatre nombres.
+>
+> Les deux décomptes ne comptent que les **obligatoires**, comme chez l'élève
+> ([[ADR-004 Mode expert en bonus débloqué]]). S'ils divergeaient, le professeur annoncerait à la
+> classe une avance qu'elle ne voit nulle part.
 
 ## Déplier une ligne
 
@@ -92,14 +105,27 @@ La progression affichée est **vide** et rien n'est enregistré : ce n'est la co
 une validation ne part nulle part. La solution de référence n'y figure pas non plus — elle n'est
 jamais publiée, voir [[Modèle de contenu]].
 
-> [!danger] Les composants élève naviguent par `pushState`
-> L'aperçu intercepte le clic **avant** eux et lit la destination dans le `href`. Sans cela, un
-> clic dans le cadre ferait quitter le tableau de bord au professeur, sans qu'il comprenne
-> pourquoi.
+C'est une **fenêtre par-dessus tout le reste** : Échap ferme, le focus y entre, le fond ne défile
+plus, et le tableau attend derrière, intact — dépliant compris.
+
+> [!warning] Pourquoi en plein écran, et pas dans un cadre
+> Encadré sous le tableau, il s'ouvrait tout en bas de la page : le professeur cliquait sur un
+> exercice et ==rien ne semblait se passer==. Et la fenêtre de 70 vh, avec ses deux barres de
+> défilement imbriquées, rendait un écran d'exercice illisible.
+
+> [!danger] Trois pièges, dans l'ordre où ils se sont présentés
+> **La fenêtre est montée sur `<body>` par un portail**, pas là où elle est écrite. `.appli > main`
+> porte une animation d'entrée qui déclare un `transform` ; un ancêtre transformé devient le bloc
+> conteneur de ses descendants `position: fixed` et crée un contexte d'empilement. L'aperçu se
+> posait donc à huit pixels du haut, sous l'en-tête collant, malgré `inset: 0` et `z-index: 50`.
 >
-> Un test verrouille aussi la **parité entre la numérotation du dépliant et celle de `grouper()`** :
-> les deux parcourent les exercices dans l'ordre de publication, filtré par notion. Si l'un des
-> deux se met à trier, le lien ouvre un autre exercice sans que rien ne le signale.
+> **Les composants élève naviguent par `pushState`.** L'aperçu intercepte le clic *avant* eux et lit
+> la destination dans le `href`. Sans cela, un clic dans le cadre ferait quitter le tableau de bord
+> au professeur, sans qu'il comprenne pourquoi.
+>
+> **La numérotation doit rester en parité avec `grouper()`**, et un test la verrouille : les deux
+> parcourent les exercices dans l'ordre de publication, filtré par notion. Si l'un des deux se met
+> à trier, le lien ouvre un autre exercice sans que rien ne le signale.
 
 ## La classe
 
