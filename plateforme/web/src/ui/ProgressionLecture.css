@@ -22,3 +22,12 @@
    */
   will-change: transform;
 }
+
+/*
+ * Dans l'apercu du professeur, il n'y a pas d'en-tete d'application au-dessus :
+ * le cadre commence sous la barre de l'apercu. Un decalage de 3,5 rem y posait
+ * la barre au milieu du contenu, en travers d'une carte de code.
+ */
+.apercu .lecture {
+  top: 0;
+}

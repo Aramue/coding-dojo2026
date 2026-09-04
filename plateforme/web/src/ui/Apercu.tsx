@@ -4,6 +4,7 @@ import { grouper, grouperParChapitre } from '../contenu/notions'
 import type { Executeur } from '../execution/executeur'
 import { useContenuPublie } from '../prof/contenu'
 import { analyser, type Destination } from '../routage'
+import { ContexteDefilement } from './defilement'
 import { EcranExercice } from './EcranExercice'
 import { Menu } from './Menu'
 import { PageCours } from './PageCours'
@@ -42,6 +43,8 @@ export function Apercu({
   const contenu = useContenuPublie()
   const [ou, setOu] = useState<Destination | null>(depart ?? null)
   const panneau = useRef<HTMLDivElement>(null)
+  // Le cadre, une fois monté : c'est LUI qui défile ici, pas la page.
+  const [cadre, setCadre] = useState<HTMLElement | null>(null)
 
   // Échap ferme, comme toute fenêtre par-dessus. Le professeur y revient les
   // mains sur le clavier, pas à la souris.
@@ -131,11 +134,18 @@ export function Apercu({
       {!contenu ? (
         <p className="apercu__vide">Chargement du contenu…</p>
       ) : (
-        <div className="apercu__cadre" onClickCapture={intercepter}>
-          <div className="appli appli--apercu">
-            <Menu chapitres={chapitres} destination={destination} />
-            <Vue destination={destination} groupes={groupes} executeur={executeur} />
-          </div>
+        <div className="apercu__cadre" ref={setCadre} onClickCapture={intercepter}>
+          {/*
+            Tout ce qui mesure un défilement à l'intérieur doit savoir que la
+            fenêtre, elle, ne bouge pas — sinon la barre de lecture d'une leçon
+            se croit lue en entier et se plante au milieu du contenu.
+          */}
+          <ContexteDefilement.Provider value={cadre}>
+            <div className="appli appli--apercu">
+              <Menu chapitres={chapitres} destination={destination} />
+              <Vue destination={destination} groupes={groupes} executeur={executeur} />
+            </div>
+          </ContexteDefilement.Provider>
         </div>
       )}
     </div>,

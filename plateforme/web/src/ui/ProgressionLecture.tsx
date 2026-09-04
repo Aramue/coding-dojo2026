@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { partLue, useDefilement } from './defilement'
 import './ProgressionLecture.css'
 
 /**
@@ -8,21 +9,28 @@ import './ProgressionLecture.css'
  * il en reste. Sur une leçon de trois minutes, c'est ce qui empêche de la
  * refermer en croyant qu'elle est longue.
  *
- * `scrollY` est lu dans un `requestAnimationFrame` : l'événement de défilement
- * part à chaque pixel, et recalculer la mise en page à cette cadence fait
- * saccader la page sur les machines des salles.
+ * > [!danger] Elle ne suppose pas que c'est la fenêtre qui défile
+ * > Dans l'aperçu du professeur, la page est figée et c'est le cadre qui
+ * > défile. En lisant `scrollY`, la barre mesurait ==un défilement qui n'a pas
+ * > lieu== : elle se croyait lue en entier et s'affichait pleine, plantée au
+ * > milieu du contenu. `ContexteDefilement` dit qui bouge réellement.
+ *
+ * La mesure passe par `requestAnimationFrame` : l'événement de défilement part
+ * à chaque pixel, et recalculer la mise en page à cette cadence fait saccader
+ * la page sur les machines des salles.
  */
 export function ProgressionLecture() {
+  const conteneur = useDefilement()
   const [part, setPart] = useState(0)
 
   useEffect(() => {
     let demande = 0
+    // La fenêtre pour l'élève, le cadre pour le professeur : l'écouteur se
+    // pose sur celui qui bouge.
+    const source: HTMLElement | Window = conteneur ?? window
 
     function mesurer() {
-      const parcourable = document.documentElement.scrollHeight - innerHeight
-      // Une page plus courte que la fenêtre est lue en entier d'emblée : sans
-      // ce cas, on divise par zéro et la barre part à NaN.
-      setPart(parcourable <= 0 ? 1 : Math.min(1, Math.max(0, scrollY / parcourable)))
+      setPart(partLue(conteneur))
       demande = 0
     }
 
@@ -31,14 +39,14 @@ export function ProgressionLecture() {
     }
 
     mesurer()
-    addEventListener('scroll', auDefilement, { passive: true })
+    source.addEventListener('scroll', auDefilement, { passive: true })
     addEventListener('resize', auDefilement)
     return () => {
       cancelAnimationFrame(demande)
-      removeEventListener('scroll', auDefilement)
+      source.removeEventListener('scroll', auDefilement)
       removeEventListener('resize', auDefilement)
     }
-  }, [])
+  }, [conteneur])
 
   return (
     <div className="lecture" aria-hidden="true">
