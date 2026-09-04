@@ -272,7 +272,13 @@ function Ligne({
         dans une salle : « Camille R. » se dit à voix haute, « DOJO-K7M2 » non.
       */}
       <span className="ligne__eleve" data-anonyme={!eleve.prenom}>
-        {nommer(eleve)}
+        <span className="ligne__nom">{nommer(eleve)}</span>
+        {/*
+          La meme jauge que l'eleve a en haut de son ecran, en petit. Le chiffre
+          seul se lit ligne par ligne ; ==la barre se lit en balayant la
+          colonne==, et c'est ainsi qu'on repere qui traine.
+        */}
+        {total > 0 && <Jauge faits={faits} total={total} />}
       </span>
       <span className="ligne__ou">
         {eleve.exercice_id === null ? (
@@ -348,7 +354,16 @@ function Parcours({
     <div className="parcours">
       {notions.map((notion) => (
         <section key={notion.id} className="parcours__notion">
-          <h3 className="parcours__titre">{notion.titre}</h3>
+          <h3 className="parcours__titre">
+            <span>{notion.titre}</span>
+            {notion.total > 0 && (
+              <span className="parcours__compte">
+                {notion.faits}/{notion.total}
+              </span>
+            )}
+          </h3>
+          {/* La même jauge que dans le sommaire de l'élève, notion par notion. */}
+          {notion.total > 0 && <Jauge faits={notion.faits} total={notion.total} discrete />}
           <ul className="parcours__etapes">
             {notion.etapes.map((etape) => (
               <li
@@ -398,6 +413,45 @@ function Parcours({
         pas ce qu'il tape.
       </p>
     </div>
+  )
+}
+
+/**
+ * La jauge de progression, celle que l'élève a en haut de son écran.
+ *
+ * Elle ne compte que les obligatoires — [[ADR-004]] : un bonus n'entre jamais
+ * dans la progression affichée, ni chez l'élève ni ici. Les deux doivent dire
+ * le même chiffre, sinon le professeur annonce à la classe une avance qu'elle
+ * ne voit pas.
+ */
+function Jauge({
+  faits,
+  total,
+  discrete = false,
+}: {
+  faits: number
+  total: number
+  /** Sans le compte à côté : le titre le porte déjà. */
+  discrete?: boolean
+}) {
+  return (
+    <span className="jauge" data-discrete={discrete}>
+      <span
+        className="jauge__piste"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={total}
+        aria-valuenow={faits}
+        aria-label={`${faits} exercices réussis sur ${total}`}
+      >
+        <span className="jauge__part" style={{ width: `${(faits / total) * 100}%` }} />
+      </span>
+      {!discrete && (
+        <span className="jauge__compte">
+          {faits}/{total}
+        </span>
+      )}
+    </span>
   )
 }
 

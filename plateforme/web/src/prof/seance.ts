@@ -166,7 +166,14 @@ export type EtapeEleve = {
   numero: number
 }
 
-export type NotionEleve = { id: string; titre: string; etapes: EtapeEleve[] }
+export type NotionEleve = {
+  id: string
+  titre: string
+  etapes: EtapeEleve[]
+  /** Obligatoires réussis et total, comme le compteur du sommaire de l'élève. */
+  faits: number
+  total: number
+}
 
 /**
  * Le parcours d'un élève, notion par notion.
@@ -205,10 +212,18 @@ export function parcoursEleve(
   return notions
     .slice()
     .sort((a, b) => a.ordre - b.ordre)
-    .map((notion) => ({
-      id: notion.id,
-      titre: notion.titre,
-      etapes: parNotion.get(notion.id) ?? [],
-    }))
+    .map((notion) => {
+      const etapes = parNotion.get(notion.id) ?? []
+      // Le meme decompte que chez l'eleve : les obligatoires seulement, sinon
+      // le professeur lit une progression que l'eleve ne voit nulle part.
+      const obligatoires = etapes.filter((e) => e.obligatoire)
+      return {
+        id: notion.id,
+        titre: notion.titre,
+        etapes,
+        faits: obligatoires.filter((e) => e.coches > 0).length,
+        total: obligatoires.length,
+      }
+    })
     .filter((notion) => notion.etapes.length > 0)
 }

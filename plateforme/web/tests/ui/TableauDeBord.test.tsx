@@ -239,8 +239,9 @@ describe('TableauDeBord — deplier un eleve', () => {
   it("montre le parcours, notion par notion", async () => {
     await rendre([AVEC_PARCOURS])
     await deplier()
-    expect(screen.getByRole('heading', { name: 'Afficher un message' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Demander une information' })).toBeInTheDocument()
+    // Le titre porte desormais le compte de la notion a cote de son nom.
+    expect(screen.getByRole('heading', { name: /Afficher un message/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Demander une information/ })).toBeInTheDocument()
   })
 
   it("marque l'exercice en cours", async () => {
@@ -312,5 +313,41 @@ describe("TableauDeBord — ouvrir l'exercice depuis le parcours", () => {
     expect(
       screen.getByRole('button', { name: /L'âge qui refuse de s'additionner/ }),
     ).toBeDisabled()
+  })
+})
+
+describe('TableauDeBord — les jauges', () => {
+  it("montre la progression de chaque eleve, comme il la voit lui-meme", async () => {
+    // Le chiffre seul se lit ligne par ligne ; la barre se lit en balayant la
+    // colonne, et c'est ainsi qu'on repere qui traine.
+    await rendre([
+      ligne({ code_acces: 'DOJO-A', prenom: 'Enzo', reussis: [reussi('s1-02')] }),
+      ligne({ code_acces: 'DOJO-B', prenom: 'Iziz', reussis: [] }),
+    ])
+    const jauges = await waitFor(() => {
+      const trouvees = screen.getAllByRole('progressbar', { name: /exercices réussis sur/ })
+      expect(trouvees).toHaveLength(2)
+      return trouvees
+    })
+    expect(jauges[0]).toHaveAttribute('aria-valuenow', '1')
+    expect(jauges[0]).toHaveAttribute('aria-valuemax', '3')
+    expect(jauges[1]).toHaveAttribute('aria-valuenow', '0')
+  })
+
+  it('ne compte que les obligatoires, comme chez l eleve', async () => {
+    // s1-33 est un bonus : il ne bouge ni la barre ni le total.
+    await rendre([ligne({ prenom: 'Enzo', reussis: [reussi('s1-02'), reussi('s1-33')] })])
+    const jauge = await screen.findByRole('progressbar', { name: /exercices réussis sur/ })
+    expect(jauge).toHaveAttribute('aria-valuenow', '1')
+    expect(jauge).toHaveAttribute('aria-valuemax', '3')
+  })
+
+  it('donne une jauge par notion dans le parcours déplié', async () => {
+    await rendre([ligne({ prenom: 'Enzo', reussis: [reussi('s1-02')] })])
+    await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
+    // Une pour la ligne, une par notion qui compte des obligatoires.
+    const jauges = screen.getAllByRole('progressbar', { name: /exercices réussis sur/ })
+    expect(jauges.length).toBeGreaterThan(1)
+    expect(screen.getByRole('heading', { name: 'Afficher un message1/1' })).toBeInTheDocument()
   })
 })
