@@ -34,10 +34,10 @@ diluerait celui qui compte.
 
 Trois zones, dans l'ordre où le professeur les lit.
 
-1. **La bande de titre**, qui suit le défilement : le titre, les quatre compteurs, le pouls.
-   ==Vingt-quatre lignes font deux écrans==, et ce sont les compteurs qu'on relit toutes les deux
-   minutes, pas le titre.
-2. **La bande d'avancement**, fine : elle ne porte qu'une idée — l'écart dans la classe.
+1. **La bande de titre**, qui suit le défilement : le titre, l'effectif et la médiane, les quatre
+   compteurs, le pouls. ==Vingt-quatre lignes font deux écrans==, et ce sont les compteurs qu'on
+   relit toutes les deux minutes, pas le titre.
+2. **Ce qui bloque plusieurs élèves**, quand il y en a.
 3. **La liste**, une ligne par élève, qui se déplie.
 
 > [!note] Chaque ligne a deux bords, pas trois
@@ -51,19 +51,25 @@ Trois zones, dans l'ordre où le professeur les lit.
 
 ## Où en est la classe
 
-**Un point par élève**, posé là où il en est, sur un axe qui porte le zéro, la médiane et le total.
-Les élèves au même endroit s'**empilent** : la hauteur d'une colonne est le nombre d'élèves à cet
-endroit.
+**Dans la liste**, une jauge par élève. On lit la colonne de haut en bas et on voit la rampe :
+0/25, 2/25, 3/25, 5/25, 9/25, 13/25, 20/25. ==L'étalement de la classe est déjà là.==
 
-> [!note] Pourquoi pas une moyenne
-> Une moyenne dirait « la classe est à 12 » et laisserait croire à un groupe homogène. ==C'est
-> l'écart qui se pilote== : six points collés à gauche pendant que trois touchent la fin, c'est
-> savoir qu'il faut aller au fond de la salle plutôt que ralentir tout le monde.
+L'en-tête n'ajoute qu'un chiffre, celui que la liste ne donne pas d'elle-même : la **médiane**,
+à côté de l'effectif — « 7 élèves connectés · médiane 5 / 25 ».
 
-> [!warning] Ce que la première version ratait
-> C'était une bande grise semée de traits fins, sans axe. Ça se lisait comme un curseur ou un
-> chargement, et deux élèves au même point ne se distinguaient pas d'un seul — ==la densité, qui
-> est justement l'information, était invisible==.
+> [!note] Pourquoi la médiane, pas la moyenne
+> Une classe où trois élèves ont fini et six n'ont rien commencé a une moyenne rassurante et une
+> médiane honnête. ==C'est l'écart qui se pilote== : savoir qu'il faut aller au fond de la salle
+> plutôt que ralentir tout le monde.
+
+> [!warning] Deux graphiques essayés, deux retirés
+> D'abord une bande grise semée de traits fins, sans axe : ça se lisait comme un curseur ou un
+> chargement, et deux élèves au même point ne se distinguaient pas d'un seul. Puis un nuage de
+> points empilés avec son axe : plus honnête, pas plus beau.
+>
+> Le problème n'était le dessin ni de l'un ni de l'autre. ==Redessiner au-dessus de la liste une
+> information que la liste porte déjà==, c'est la montrer deux fois — et la seconde fois moins
+> bien, faute de place.
 
 ## Chaque ligne
 

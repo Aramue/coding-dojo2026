@@ -91,10 +91,14 @@ Voir [[Pièges et invariants]].
 ## Amendement du 4 septembre 2026 — le décor n'informe pas
 
 > [!warning] Deux réflexes qui font « interface générée »
-> **Le décor qui imite une mesure.** La répartition de la classe était une bande grise semée de
-> traits fins. ==Ça se lit comme un curseur ou un chargement, pas comme une mesure== : pas
-> d'échelle, des traits tous identiques, et deux élèves au même point indiscernables d'un seul.
-> Un graphique doit avoir un axe et une unité, sinon c'est une texture.
+> **Le graphique qui redit la liste.** La répartition de la classe a été dessinée deux fois — une
+> bande semée de traits, puis un nuage de points avec son axe — avant qu'on voie que l'étalement
+> était ==déjà lisible dans la colonne de jauges de la liste==. Le second dessin était plus
+> honnête que le premier et pas plus beau : le problème n'était aucun des deux dessins.
+>
+> Avant de dessiner une donnée, chercher si elle n'est pas déjà à l'écran. Si elle y est, le
+> graphique la montre une seconde fois — et la seconde fois est toujours la moins bonne, faute de
+> place.
 >
 > **Le glyphe Unicode en guise d'icône.** `✓`, `✕`, `≈`, `·` sont des *caractères* : leur dessin
 > change d'une machine à l'autre, ils ne se calent ni sur la graisse ni sur la couleur autour, et
