@@ -242,10 +242,15 @@ un seuil qui fait échouer la construction sous la cible.
 double, côté navigateur et côté serveur. C'est délibéré et commenté aux deux endroits
 ([[ADR-008 Validation serveur des champs libres]]). Toute autre duplication est un défaut.
 
-## 9. Questions ouvertes
+## 9. Questions tranchées
 
-- Le code d'accès garde le format `AGENT-XXXX`, hérité de la fiction. Le changer touche l'API,
-  ses tests et le vault. À trancher séparément.
-- La réécriture des 25 énoncés pour retirer la fiction : à faire après l'interface.
-- Les leçons des séances 2 et 3 : hors périmètre, mais le modèle de contenu les accueille sans
-  changement.
+> [!success] Décidé le 4 septembre 2026
+> - **La fiction disparaît partout**, code et base compris : table `eleve`, colonne `code_acces`,
+>   variables `DOJO_*`. Voir [[ADR-010 Abandon de la fiction narrative]].
+> - **Le code d'accès devient `DOJO-XXXX`.** La base ne contenait que des codes de test, aucune
+>   migration n'est nécessaire.
+> - **Les 25 énoncés sont réécrits** autour d'exemples du quotidien, chaque exercice autonome.
+>   ==Pas de fil rouge== — ce qui supprime le programme unique décrit dans [[Terminal QG]], dont le
+>   sort reste à trancher.
+>
+> Le découpage est dans [[Plan interface]], tâches 1, 15 et 16.

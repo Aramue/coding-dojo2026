@@ -36,6 +36,10 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Spécification complète | ✅ écrite — [[Spécification chapitre 1]] |
 | Plan d'implémentation | ✅ écrit — [[Plan palier 1]] |
 | Implémentation du palier 1 | ✅ **livrée** — 14 tâches, branche `palier-1` |
+| Spécification de l'interface | ✅ écrite — [[Spécification interface]] |
+| Plan de l'interface | ✅ écrit — [[Plan interface]], 16 tâches |
+| Implémentation de l'interface | ⬜ à faire |
+| Retrait de la fiction (code, contenu, vault) | ⬜ à faire — [[Plan interface]] tâches 1, 15, 16 |
 | Revue finale de branche | ⬜ à faire |
 
 ## Ce qui tourne aujourd'hui
@@ -75,8 +79,9 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'agen
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
 - **Décisions** — [[Journal de décisions]]
-- **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Déploiement UNIGE]]
+- **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Terminal QG]] · [[Archive des agents tombés]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
-- **Plans** — [[Plan palier 1]]
+- **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]]
+- **Plans** — [[Plan palier 1]] · [[Plan interface]]
