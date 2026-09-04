@@ -58,6 +58,9 @@ function poserLeReseau(eleves: unknown[], seance: { ok?: boolean } = {}) {
     'fetch',
     vi.fn(async (url: string) => {
       if (url.includes('notions')) return { ok: true, json: async () => NOTIONS }
+      if (url.includes('chapitres') || url.includes('lecons')) {
+        return { ok: true, json: async () => [] }
+      }
       if (url.includes('prof/seance')) {
         return { ok: seance.ok ?? true, status: 200, json: async () => ({ eleves }) }
       }
@@ -282,5 +285,32 @@ describe('TableauDeBord — deplier un eleve', () => {
     const texte = document.body.textContent ?? ''
     expect(texte).not.toMatch(/print\(|input\(|=/)
     expect(screen.getByText(/ne quitte jamais son navigateur/)).toBeInTheDocument()
+  })
+})
+
+describe("TableauDeBord — ouvrir l'exercice depuis le parcours", () => {
+  it("ouvre l'aperçu sur l'exercice cliqué", async () => {
+    // Le professeur sait qu'on bute sur « L'age qui refuse de s'additionner » ;
+    // sans ce clic il ne peut pas relire ce que l'enonce demande.
+    const onApercu = vi.fn()
+    poserLeReseau([ligne({ prenom: 'Enzo', nom: 'Poupard', exercice_id: 's1-29' })])
+    render(<TableauDeBord codeProf="code-prof-test" onApercu={onApercu} />)
+
+    await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
+    await userEvent.click(
+      screen.getByRole('button', { name: /L'âge qui refuse de s'additionner/ }),
+    )
+
+    // s1-29 est le premier exercice de « saisie » dans le contenu de test.
+    expect(onApercu).toHaveBeenCalledWith({ vue: 'exercice', notion: 'saisie', numero: 1 })
+  })
+
+  it("n'offre pas le clic quand personne n'écoute", async () => {
+    poserLeReseau([ligne({ prenom: 'Enzo', exercice_id: 's1-29' })])
+    render(<TableauDeBord codeProf="code-prof-test" />)
+    await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
+    expect(
+      screen.getByRole('button', { name: /L'âge qui refuse de s'additionner/ }),
+    ).toBeDisabled()
   })
 })

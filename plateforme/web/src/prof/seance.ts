@@ -162,6 +162,8 @@ export type EtapeEleve = {
   /** Le dernier exercice soumis — celui sur lequel l'élève est en ce moment. */
   courant: boolean
   obligatoire: boolean
+  /** Le rang dans sa notion, tel que l'URL élève le compte : 1 pour le premier. */
+  numero: number
 }
 
 export type NotionEleve = { id: string; titre: string; etapes: EtapeEleve[] }
@@ -191,6 +193,9 @@ export function parcoursEleve(
       coches: verdict === 'vert' ? 2 : verdict === 'bleu' ? 1 : 0,
       courant: exercice.id === eleve.exercice_id,
       obligatoire: exercice.obligatoire,
+      // Le rang court sur TOUS les exercices de la notion, facultatifs
+      // compris : c'est ainsi que l'URL élève les numérote.
+      numero: etapes.length + 1,
     })
     parNotion.set(exercice.notion, etapes)
   }

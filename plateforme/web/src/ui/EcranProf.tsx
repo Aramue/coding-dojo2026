@@ -1,4 +1,7 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { Executeur } from '../execution/executeur'
+import type { Destination } from '../routage'
+import { Apercu } from './Apercu'
 import { Classe } from './Classe'
 import { TableauDeBord } from './TableauDeBord'
 import './EcranProf.css'
@@ -49,22 +52,7 @@ export function EcranProf() {
   }
 
   if (code) {
-    return (
-      <main className="prof">
-        <TableauDeBord codeProf={code} />
-        {/*
-          La classe vit SOUS la séance, pas dans un onglet à part : on la
-          consulte avant la première séance et entre deux séances, mais pendant
-          la séance c'est le tableau qu'on regarde. L'ordre dit lequel presse.
-        */}
-        <Classe codeProf={code} />
-        <div className="prof__pied">
-          <button type="button" className="bouton" onClick={fermer}>
-            Fermer la session professeur
-          </button>
-        </div>
-      </main>
-    )
+    return <SessionProf code={code} onFermer={fermer} />
   }
 
   return (
@@ -93,6 +81,52 @@ export function EcranProf() {
           <code className="mono">.env</code> du serveur.
         </p>
       </form>
+    </main>
+  )
+}
+
+
+/**
+ * Ce que le professeur voit une fois entré : la séance, sa classe, et l'aperçu
+ * de l'espace élève quand il l'ouvre.
+ */
+function SessionProf({ code, onFermer }: { code: string; onFermer: () => void }) {
+  // Un seul exécuteur pour tout l'aperçu, détruit en sortant : sans lui, les
+  // exemples exécutables des leçons et le bouton « Valider » ne feraient rien.
+  const executeur = useMemo(
+    () => new Executeur(() => new Worker(new URL('../execution/worker.ts', import.meta.url))),
+    [],
+  )
+  useEffect(() => () => executeur.detruire(), [executeur])
+
+  // `null` : fermé. Une destination : ouvert là-dessus. `undefined` dans
+  // l'objet signifie « ouvre où tu veux », c'est-à-dire la première leçon.
+  const [apercu, setApercu] = useState<{ ou?: Destination } | null>(null)
+
+  return (
+    <main className="prof">
+      <TableauDeBord codeProf={code} onApercu={(ou) => setApercu({ ou })} />
+
+      {apercu ? (
+        <Apercu depart={apercu.ou} executeur={executeur} onFermer={() => setApercu(null)} />
+      ) : (
+        <div className="prof__actions">
+          <button type="button" className="bouton" onClick={() => setApercu({})}>
+            Voir l'espace élève
+          </button>
+          <span className="prof__note">
+            Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
+          </span>
+        </div>
+      )}
+
+      <Classe codeProf={code} />
+
+      <div className="prof__pied">
+        <button type="button" className="bouton" onClick={onFermer}>
+          Fermer la session professeur
+        </button>
+      </div>
     </main>
   )
 }

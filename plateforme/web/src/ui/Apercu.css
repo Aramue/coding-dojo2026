@@ -1,0 +1,71 @@
+/*
+ * L'espace eleve, encadre. Le cadre doit se voir : sans lui, le professeur ne
+ * sait plus s'il regarde son tableau ou celui de la classe.
+ */
+
+.apercu {
+  margin-top: var(--e-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-3);
+  overflow: hidden;
+  box-shadow: var(--ombre-2);
+}
+
+.apercu__barre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  padding: var(--e-2) var(--e-3);
+  background: var(--ground-2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.apercu__barre b {
+  display: block;
+  font-size: var(--t-3);
+  color: var(--ink);
+}
+
+.apercu__note {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.apercu__vide {
+  margin: 0;
+  padding: var(--e-4);
+  color: var(--ink-soft);
+  font-size: var(--t-2);
+  background: var(--ground);
+}
+
+/*
+ * Le cadre defile pour lui-meme : une lecon fait plusieurs ecrans, et sans
+ * hauteur bornee le tableau de bord se retrouverait a des milliers de pixels
+ * au-dessus. 70vh laisse voir une page entiere sans avaler l'ecran.
+ */
+.apercu__cadre {
+  max-height: 70vh;
+  overflow: auto;
+  background: var(--ground);
+}
+
+/*
+ * La grille de l'application vit normalement sous un en-tete fixe et occupe la
+ * hauteur de la fenetre. Ici elle est imbriquee : elle prend la hauteur de son
+ * contenu, et le sommaire ne defile plus separement.
+ */
+.appli--apercu {
+  min-height: 0;
+  height: auto;
+  /* Pas d'en-tete ici : la grille se reduit au sommaire et au contenu. */
+  grid-template-areas: 'menu contenu';
+  grid-template-rows: auto;
+}
+
+.appli--apercu .menu {
+  overflow: visible;
+  max-height: none;
+}

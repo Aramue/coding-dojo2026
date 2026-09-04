@@ -8,7 +8,13 @@ import {
   synthese,
   type LigneEleve,
 } from '../../src/prof/seance'
+import { grouper } from '../../src/contenu/notions'
 import type { Exercice, Notion } from '../../src/contenu/types'
+
+/** Une réussite, verte par défaut : deux coches. */
+function reussi(id: string, verdict: 'vert' | 'bleu' = 'vert') {
+  return { exercice_id: id, verdict }
+}
 
 function ligne(surcharge: Partial<LigneEleve> = {}): LigneEleve {
   return {
@@ -97,7 +103,7 @@ describe('synthese', () => {
 
   it('ne compte que les obligatoires dans un avancement', () => {
     // ADR-004 : un renfort ou un bonus n'entre jamais dans la progression.
-    const s = synthese([ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-15', verdict: 'vert' as const }, { exercice_id: 's1-17', verdict: 'vert' as const }] })], comptes)
+    const s = synthese([ligne({ reussis: [reussi('s1-01'), reussi('s1-15'), reussi('s1-17')] })], comptes)
     expect(s.avancements).toEqual([1])
     expect(s.total).toBe(4)
   })
@@ -105,9 +111,9 @@ describe('synthese', () => {
   it('rend la distribution triée, pas seulement sa médiane', () => {
     const s = synthese(
       [
-        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-03', verdict: 'vert' as const }] }),
+        ligne({ reussis: [reussi('s1-01'), reussi('s1-02'), reussi('s1-03')] }),
         ligne({ reussis: [] }),
-        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }] }),
+        ligne({ reussis: [reussi('s1-01')] }),
       ],
       comptes,
     )
@@ -119,9 +125,9 @@ describe('synthese', () => {
     const s = synthese(
       [
         ligne({ reussis: [] }),
-        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }] }),
-        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-02', verdict: 'vert' as const }] }),
-        ligne({ reussis: [{ exercice_id: 's1-01', verdict: 'vert' as const }, { exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-03', verdict: 'vert' as const }, { exercice_id: 's1-04', verdict: 'vert' as const }] }),
+        ligne({ reussis: [reussi('s1-01')] }),
+        ligne({ reussis: [reussi('s1-01'), reussi('s1-02')] }),
+        ligne({ reussis: [reussi('s1-01'), reussi('s1-02'), reussi('s1-03'), reussi('s1-04')] }),
       ],
       comptes,
     )
@@ -303,6 +309,56 @@ describe('parcoursEleve', () => {
     // vue. La forme des etapes est fixee ici pour qu'un champ ajoute par
     // inadvertance fasse echouer le test plutot que d'arriver a l'ecran.
     const etape = parcoursEleve(ELEVE, EXERCICES, NOTIONS)[0]!.etapes[0]!
-    expect(Object.keys(etape).sort()).toEqual(['coches', 'courant', 'id', 'obligatoire', 'titre'])
+    expect(Object.keys(etape).sort()).toEqual([
+      'coches',
+      'courant',
+      'id',
+      'numero',
+      'obligatoire',
+      'titre',
+    ])
+  })
+})
+
+describe('parcoursEleve — ouvrir un exercice', () => {
+  it('numerote chaque exercice comme l URL eleve le fait', () => {
+    // Le rang court sur TOUS les exercices de la notion, facultatifs compris.
+    const exercices = [
+      ex('s1-01', { notion: 'afficher' }),
+      ex('s1-02', { notion: 'afficher', obligatoire: false }),
+      ex('s1-03', { notion: 'afficher' }),
+    ]
+    const etapes = parcoursEleve(ligne(), exercices, NOTIONS)[0]!.etapes
+    expect(etapes.map((e) => e.numero)).toEqual([1, 2, 3])
+  })
+
+  it('repart de 1 dans chaque notion', () => {
+    const exercices = [
+      ex('s1-01', { notion: 'afficher' }),
+      ex('s1-31', { notion: 'saisie' }),
+    ]
+    const parcours = parcoursEleve(ligne(), exercices, NOTIONS)
+    expect(parcours.map((n) => n.etapes[0]!.numero)).toEqual([1, 1])
+  })
+})
+
+describe('parcoursEleve — parité avec la numérotation élève', () => {
+  it("numérote comme grouper(), sinon l'aperçu ouvrirait le mauvais exercice", () => {
+    // Les deux parcourent `exercices` dans l'ordre de publication, filtré par
+    // notion. ==Si l'un des deux se met a trier, le lien du tableau de bord
+    // pointe sur un autre exercice sans que rien ne le signale.==
+    const exercices = [
+      ex('s1-27', { notion: 'saisie' }),
+      ex('s1-28', { notion: 'saisie', obligatoire: false }),
+      ex('s1-29', { notion: 'saisie' }),
+      ex('s1-01', { notion: 'afficher' }),
+    ]
+    const coteProf = parcoursEleve(ligne(), exercices, NOTIONS).find((n) => n.id === 'saisie')!
+    const coteEleve = grouper(NOTIONS, exercices, [], []).find((g) => g.id === 'saisie')!
+
+    expect(coteProf.etapes.map((e) => e.id)).toEqual(coteEleve.exercices.map((e) => e.id))
+    expect(coteProf.etapes.map((e) => e.numero)).toEqual(
+      coteEleve.exercices.map((_, index) => index + 1),
+    )
   })
 })

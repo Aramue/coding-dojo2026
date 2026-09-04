@@ -1,6 +1,5 @@
 import { useEffect, useId, useMemo, useState } from 'react'
-import { chargerNotions, chargerParcours } from '../contenu/chargeur'
-import type { Exercice, Notion } from '../contenu/types'
+import { useContenuPublie } from '../prof/contenu'
 import {
   blocagesCollectifs,
   nommer,
@@ -12,6 +11,7 @@ import {
   type NotionEleve,
   type Repere,
 } from '../prof/seance'
+import type { Destination } from '../routage'
 import './TableauDeBord.css'
 
 const LIBELLES: Record<LigneEleve['statut'], string> = {
@@ -33,31 +33,21 @@ function accord(nombre: number, singulier: string, pluriel: string): string {
   return `${nombre} ${nombre <= 1 ? singulier : pluriel}`
 }
 
-export function TableauDeBord({ codeProf }: { codeProf: string }) {
+export function TableauDeBord({
+  codeProf,
+  onApercu,
+}: {
+  codeProf: string
+  /** Ouvre l'aperçu de l'espace élève sur une page précise. */
+  onApercu?: (ou: Destination) => void
+}) {
   const [eleves, setEleves] = useState<LigneEleve[]>([])
   const [erreur, setErreur] = useState<string | null>(null)
   const [recuA, setRecuA] = useState<number | null>(null)
-  const [contenu, setContenu] = useState<{ exercices: Exercice[]; notions: Notion[] } | null>(null)
 
-  // Le contenu publié, pour lire des titres au lieu d'identifiants. Il est
-  // statique : chargé une fois, jamais rafraîchi avec la séance.
-  useEffect(() => {
-    let vivant = true
-    Promise.all([chargerParcours(), chargerNotions()])
-      .then(([exercices, notions]) => {
-        // Même garde que sur `eleves` : une réponse d'une autre forme mettrait
-        // un non-tableau dans l'état, et le premier `.map` du rendu ferait du
-        // tableau du professeur ==un écran blanc en pleine séance==.
-        if (!Array.isArray(exercices) || !Array.isArray(notions)) return
-        if (vivant) setContenu({ exercices, notions })
-      })
-      // Sans le contenu, le tableau affiche des identifiants bruts : c'est
-      // dégradé, pas cassé. Il ne doit surtout pas disparaître pour autant.
-      .catch(() => undefined)
-    return () => {
-      vivant = false
-    }
-  }, [])
+  // Le contenu publié, pour lire des titres au lieu d'identifiants. Sans lui le
+  // tableau affiche des identifiants bruts : dégradé, jamais cassé.
+  const contenu = useContenuPublie()
 
   useEffect(() => {
     let vivant = true
@@ -151,6 +141,7 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
             parcours={
               contenu ? parcoursEleve(eleve, contenu.exercices, contenu.notions) : undefined
             }
+            onApercu={onApercu}
           />
         ))}
       </div>
@@ -259,6 +250,7 @@ function Ligne({
   comptes,
   total,
   parcours,
+  onApercu,
 }: {
   eleve: LigneEleve
   repere?: Repere
@@ -266,6 +258,7 @@ function Ligne({
   total: number
   /** Le parcours détaillé. Absent tant que le contenu publié n'est pas chargé. */
   parcours?: NotionEleve[]
+  onApercu?: (ou: Destination) => void
 }) {
   const [ouvert, setOuvert] = useState(false)
   const idDetail = useId()
@@ -324,7 +317,11 @@ function Ligne({
 
       {ouvert && (
         <div className="detail" id={idDetail}>
-          {parcours ? <Parcours notions={parcours} /> : <p className="detail__vide">Chargement…</p>}
+          {parcours ? (
+            <Parcours notions={parcours} onApercu={onApercu} />
+          ) : (
+            <p className="detail__vide">Chargement…</p>
+          )}
         </div>
       )}
     </article>
@@ -340,7 +337,13 @@ function Ligne({
  * > le code s'exécute dans le navigateur de l'élève et n'en sort jamais. Ce
  * > panneau dit *où* il en est, jamais *ce qu'il écrit*.
  */
-function Parcours({ notions }: { notions: NotionEleve[] }) {
+function Parcours({
+  notions,
+  onApercu,
+}: {
+  notions: NotionEleve[]
+  onApercu?: (ou: Destination) => void
+}) {
   return (
     <div className="parcours">
       {notions.map((notion) => (
@@ -358,11 +361,24 @@ function Parcours({ notions }: { notions: NotionEleve[] }) {
                 <span className="etape__marque" aria-hidden="true">
                   {etape.coches > 0 ? '✓'.repeat(etape.coches) : '·'}
                 </span>
-                {/* Quatre colonnes serrees coupent les titres longs : le
-                    survol rend le titre entier sans elargir le panneau. */}
-                <span className="etape__titre" title={etape.titre}>
+                {/*
+                  Le titre ouvre l'exercice tel que l'eleve le voit. Sans cela,
+                  le professeur sait qu'on bute sur « L'age qui refuse de
+                  s'additionner » sans pouvoir relire ce que l'enonce demande.
+                  Quatre colonnes serrees coupent les titres longs : le survol
+                  rend le titre entier sans elargir le panneau.
+                */}
+                <button
+                  type="button"
+                  className="etape__titre"
+                  title={`${etape.titre} — voir l'exercice`}
+                  disabled={!onApercu}
+                  onClick={() =>
+                    onApercu?.({ vue: 'exercice', notion: notion.id, numero: etape.numero })
+                  }
+                >
                   {etape.titre}
-                </span>
+                </button>
                 {etape.courant && <span className="etape__ici">en ce moment</span>}
                 {!etape.obligatoire && <span className="etape__bonus">facultatif</span>}
                 <span className="sr-only">

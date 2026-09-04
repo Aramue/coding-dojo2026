@@ -4,7 +4,6 @@
  */
 
 .classe {
-  margin-top: var(--e-4);
   padding: var(--e-3);
   background: var(--surface);
   border: 1px solid var(--rule-doux);

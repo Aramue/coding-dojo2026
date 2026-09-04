@@ -511,10 +511,36 @@
   color: var(--ink);
 }
 
+/* Le titre est un bouton : il ouvre l'exercice tel que l'eleve le voit. */
 .etape__titre {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-bottom: 1px solid transparent;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.etape__titre:hover:not(:disabled) {
+  color: var(--py-blue);
+  border-bottom-color: currentColor;
+}
+
+.etape__titre:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.etape__titre:disabled {
+  cursor: default;
 }
 
 /* Ou l'eleve se trouve maintenant : c'est ce qu'on vient chercher en depliant. */
