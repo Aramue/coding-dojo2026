@@ -111,3 +111,103 @@ def charger_exercice(chemin: Path) -> Exercice:
 
 def charger_tous(racine: Path) -> list[Exercice]:
     return [charger_exercice(p) for p in sorted(racine.rglob("*.yaml"))]
+
+
+MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
+
+# Les quatre notions de la seance 1. Une notion est l'unite de navigation :
+# elle porte une lecon et un groupe d'exercices.
+#
+# SEULE SOURCE de cette table. Le schema la valide, construire_contenu.py
+# l'importe pour publier seance-1-notions.json, et le front la lit dans ce
+# JSON. Personne ne la recopie — une copie TypeScript divergerait au premier
+# changement de libelle.
+#
+# La couleur suit la NOTION, pas le concept : la seance 1 ne couvre que deux
+# concepts (print et input), ce qui donnerait deux couleurs pour quatre
+# notions, et un menu ou la couleur n'oriente plus. Les noms de famille sont
+# ceux de la palette (variables, types, operateurs, conditions) : ce sont des
+# noms de couleur, pas de sens.
+NOTIONS: dict[str, dict] = {
+    "afficher": {"ordre": 1, "titre": "Afficher un message", "famille": "conditions"},
+    "variables": {"ordre": 2, "titre": "Les variables", "famille": "variables"},
+    "types": {"ordre": 3, "titre": "Types et conversion", "famille": "types"},
+    "saisie": {"ordre": 4, "titre": "Demander une information", "famille": "operateurs"},
+}
+
+
+def _texte_utilisable(valeur: str, quoi: str) -> str:
+    if not valeur.strip():
+        raise ValueError(f"{quoi} vide")
+    if MOTIF_EMOJI.search(valeur):
+        raise ValueError(f"aucun emoji dans {quoi}")
+    return valeur
+
+
+class BlocParagraphe(BaseModel):
+    type: Literal["paragraphe"]
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un paragraphe")
+
+
+class BlocAttention(BaseModel):
+    type: Literal["attention"]
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un bloc attention")
+
+
+class BlocCode(BaseModel):
+    type: Literal["code"]
+    legende: str = Field(min_length=1)
+    python: str = Field(min_length=1)
+    # Un bloc executable porte un bouton « Essayer » : l'eleve modifie l'exemple
+    # et l'execute, sans verdict ni progression enregistree.
+    executable: bool = False
+
+    @field_validator("python")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        _texte_utilisable(v, "un bloc de code")
+        if "getpass" in v:
+            raise ValueError("getpass est impossible sous Pyodide, il est banni")
+        return v
+
+
+BlocLecon = Annotated[
+    Union[BlocParagraphe, BlocAttention, BlocCode], Field(discriminator="type")
+]
+
+
+class Lecon(BaseModel):
+    """Une lecon : ce que l'eleve lit avant d'attaquer les exercices d'une notion."""
+
+    id: str
+    notion: Literal[tuple(NOTIONS)]  # type: ignore[valid-type]
+    ordre: int = Field(ge=1, le=9)
+    titre: str = Field(min_length=1)
+    duree_min: int = Field(ge=1, le=30)
+    blocs: list[BlocLecon] = Field(min_length=1)
+
+    @field_validator("id")
+    @classmethod
+    def identifiant_bien_forme(cls, v: str) -> str:
+        if not MOTIF_LECON.match(v):
+            raise ValueError(f"identifiant de lecon invalide : {v!r} (attendu c1-variables)")
+        return v
+
+
+def charger_lecon(chemin: Path) -> Lecon:
+    return Lecon(**yaml.safe_load(chemin.read_text(encoding="utf-8")))
+
+
+def charger_lecons(racine: Path) -> list[Lecon]:
+    lecons = [charger_lecon(p) for p in sorted(racine.rglob("*.yaml"))]
+    return sorted(lecons, key=lambda l: l.ordre)
