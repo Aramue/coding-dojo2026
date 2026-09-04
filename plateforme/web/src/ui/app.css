@@ -309,15 +309,34 @@ html {
 }
 
 /* Bouton secondaire, sur fond clair. */
-.bouton:not(.bouton--primaire):not(.bouton--sombre) {
+.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu) {
   background: var(--surface);
   border-color: var(--rule);
   color: var(--ink);
 }
 
-.bouton:not(.bouton--primaire):not(.bouton--sombre):hover:not(:disabled) {
+.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu):hover:not(:disabled) {
   background: var(--ground-2);
   border-color: var(--ink-soft);
+}
+
+/*
+ * Troisieme variante : l'action de ligne. Deux par ligne, sur vingt-quatre
+ * lignes — au calme. Elles se dessinent au survol, sinon elles tirent l'oeil
+ * plus fort que les noms qu'elles accompagnent.
+ */
+.bouton--menu {
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  font-size: var(--t-1);
+  font-weight: 400;
+  color: var(--ink-soft);
+  background: none;
+}
+
+.bouton--menu:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--ground-2);
 }
 
 .bouton--primaire {

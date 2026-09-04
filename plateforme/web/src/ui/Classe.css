@@ -190,8 +190,15 @@
   grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--e-2);
-  padding: 0.6rem 0;
+  padding: 0.5rem var(--e-1);
+  margin-inline: calc(-1 * var(--e-1));
   border-bottom: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-1);
+  transition: background 150ms ease-out;
+}
+
+.inscrit:hover {
+  background: var(--surface-doux);
 }
 
 .inscrit:last-child {
@@ -238,18 +245,13 @@
   gap: 0.35rem;
 }
 
-.bouton--menu {
-  padding: 0.3rem 0.6rem;
-  font-size: var(--t-1);
-}
-
 .bouton--danger {
-  color: var(--ko);
-  border-color: color-mix(in srgb, var(--ko) 30%, var(--surface));
+  color: color-mix(in srgb, var(--ko) 70%, var(--ink-soft));
 }
 
 .bouton--danger:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--ko) 8%, var(--surface));
+  color: var(--ko);
+  background: color-mix(in srgb, var(--ko) 9%, var(--surface));
 }
 
 @media (max-width: 720px) {

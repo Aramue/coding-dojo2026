@@ -92,19 +92,41 @@ export function TableauDeBord({
 
   return (
     <main className="tableau">
+      {/*
+        Une bande qui suit le défilement : vingt-quatre lignes font deux écrans,
+        et ==les compteurs doivent rester lisibles pendant qu'on parcourt la
+        liste==. C'est eux qu'on relit toutes les deux minutes, pas le titre.
+      */}
       <header className="tableau__entete">
-        <div>
+        <div className="tableau__titre">
           <h1>Séance en cours</h1>
           <p className="tableau__effectif">
             {accord(eleves.length, 'élève connecté', 'élèves connectés')}
           </p>
         </div>
+
+        {eleves.length > 0 && (
+          <div className="tableau__comptes" aria-label="Répartition de la classe">
+            <Compte valeur={vue.bloques} libelle="bloqués" ton="bloque" />
+            <Compte valeur={vue.inactifs} libelle="inactifs" ton="inactif" />
+            <Compte valeur={vue.pasCommence} libelle="pas commencé" ton="pas_commence" />
+            <Compte valeur={vue.enCours} libelle="en cours" ton="en_cours" />
+          </div>
+        )}
+
         <Pouls recuA={recuA} enErreur={Boolean(erreur)} />
       </header>
 
       {erreur && <p role="alert">{erreur}</p>}
 
-      {eleves.length > 0 && <Synthese vue={vue} />}
+      {eleves.length > 0 && vue.total > 0 && (
+        <section className="avancement" aria-label="Avancement de la classe">
+          <p className="avancement__legende">
+            Avancement de la classe — médiane <b>{vue.mediane}</b> sur {vue.total} obligatoires
+          </p>
+          <Etalement avancements={vue.avancements} total={vue.total} />
+        </section>
+      )}
 
       {blocages.length > 0 && (
         <section className="blocages" aria-labelledby="titre-blocages">
@@ -174,28 +196,6 @@ function Pouls({ recuA, enErreur }: { recuA: number | null; enErreur: boolean })
   )
 }
 
-/** Où en est la classe : les trois statuts, et l'étalement des avancements. */
-function Synthese({ vue }: { vue: ReturnType<typeof synthese> }) {
-  return (
-    <section className="synthese" aria-label="Vue d'ensemble de la classe">
-      <div className="synthese__comptes">
-        <Compte valeur={vue.bloques} libelle="bloqués" ton="bloque" />
-        <Compte valeur={vue.inactifs} libelle="inactifs" ton="inactif" />
-        <Compte valeur={vue.pasCommence} libelle="pas commencé" ton="pas_commence" />
-        <Compte valeur={vue.enCours} libelle="en cours" ton="en_cours" />
-      </div>
-      {vue.total > 0 && (
-        <div className="synthese__avancement">
-          <p className="synthese__legende">
-            Avancement — médiane <b>{vue.mediane}</b> sur {vue.total} obligatoires
-          </p>
-          <Etalement avancements={vue.avancements} total={vue.total} />
-        </div>
-      )}
-    </section>
-  )
-}
-
 function Compte({
   valeur,
   libelle,
@@ -236,10 +236,6 @@ function Etalement({ avancements, total }: { avancements: number[]; total: numbe
           style={{ left: `${total === 0 ? 0 : (fait / total) * 100}%` }}
         />
       ))}
-      <span className="etalement__bornes" aria-hidden="true">
-        <span>0</span>
-        <span>{total}</span>
-      </span>
     </div>
   )
 }
@@ -299,8 +295,13 @@ function Ligne({
         {eleve.statut === 'inactif' && `aucune soumission depuis ${depuis ?? "moins d'une minute"}`}
         {eleve.statut === 'pas_commence' &&
           (depuis ? `code créé, jamais utilisé depuis ${depuis}` : 'code créé à l’instant')}
+        {/*
+          La jauge dit déjà « 12/25 » : le répéter ici ne rajoute rien. Le
+          délai, lui, distingue celui qui vient de valider de celui qui sèche
+          en silence sans avoir encore atteint le seuil d'inactivité.
+        */}
         {eleve.statut === 'en_cours' &&
-          (total > 0 ? `${faits} / ${total} réussis` : `${accord(faits, 'réussi', 'réussis')}`)}
+          (depuis ? `dernière soumission il y a ${depuis}` : 'vient de soumettre')}
       </span>
       <span className={`statut statut--${eleve.statut}`}>
         {LIBELLES[eleve.statut]}

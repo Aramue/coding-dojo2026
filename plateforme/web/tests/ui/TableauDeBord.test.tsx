@@ -118,10 +118,17 @@ describe('TableauDeBord — ce que le professeur lit', () => {
     expect(await screen.findByText('s1-29')).toBeInTheDocument()
   })
 
-  it('ne compte que les obligatoires dans un avancement', async () => {
-    // s1-33 est un bonus : il ne doit ni compter, ni gonfler le total.
-    await rendre([ligne({ reussis: [{ exercice_id: 's1-02', verdict: 'vert' as const }, { exercice_id: 's1-33', verdict: 'vert' as const }] })])
-    await waitFor(() => expect(screen.getByText('1 / 3 réussis')).toBeInTheDocument())
+  it("dit depuis quand un élève en cours n'a rien soumis", async () => {
+    // La jauge dit déjà « 1/3 » : le répéter ici n'ajoute rien. Le délai, lui,
+    // distingue celui qui vient de valider de celui qui sèche en silence sans
+    // avoir encore atteint le seuil d'inactivité.
+    await rendre([ligne({ inactif_depuis_s: 240 })])
+    expect(await screen.findByText('dernière soumission il y a 4 min')).toBeInTheDocument()
+  })
+
+  it('le dit autrement quand la soumission est toute fraîche', async () => {
+    await rendre([ligne({ inactif_depuis_s: 5 })])
+    expect(await screen.findByText('vient de soumettre')).toBeInTheDocument()
   })
 
   it("n'ecrit jamais « Bloqué 0 min »", async () => {
@@ -182,9 +189,9 @@ describe('TableauDeBord — vue d ensemble', () => {
       ligne({ code_acces: 'DOJO-C' }),
       ligne({ code_acces: 'DOJO-D' }),
     ])
-    const vue = await screen.findByRole('region', { name: /vue d'ensemble/i })
-    expect(within(vue).getByText('bloqués').parentElement).toHaveTextContent('1 bloqués')
-    expect(within(vue).getByText('en cours').parentElement).toHaveTextContent('2 en cours')
+    const comptes = await screen.findByLabelText('Répartition de la classe')
+    expect(within(comptes).getByText('bloqués').parentElement).toHaveTextContent('1 bloqués')
+    expect(within(comptes).getByText('en cours').parentElement).toHaveTextContent('2 en cours')
   })
 
   it('pose un trait par eleve sur la ligne de repartition', async () => {
@@ -200,9 +207,10 @@ describe('TableauDeBord — vue d ensemble', () => {
     expect(screen.getByText(/médiane/)).toHaveTextContent('médiane 1 sur 3 obligatoires')
   })
 
-  it('ne montre aucune vue d ensemble sur une salle vide', async () => {
+  it('ne montre ni comptes ni avancement sur une salle vide', async () => {
     await rendre([])
-    expect(screen.queryByRole('region', { name: /vue d'ensemble/i })).toBeNull()
+    expect(screen.queryByLabelText('Répartition de la classe')).toBeNull()
+    expect(screen.queryByRole('region', { name: /Avancement de la classe/i })).toBeNull()
   })
 })
 
