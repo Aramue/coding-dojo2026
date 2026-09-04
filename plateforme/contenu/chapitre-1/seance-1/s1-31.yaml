@@ -51,6 +51,11 @@ tests:
       Alex a 19 ans
   - type: interdit
     motif: Camille
+  - type: contient
+    motif: "{"
+    maitrise: true
+    message: >-
+      L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.
 solution: |
   prenom = input("Ton prénom : ")
   age = input("Ton âge : ")

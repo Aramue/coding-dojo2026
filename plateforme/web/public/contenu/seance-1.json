@@ -51,7 +51,8 @@
       },
       {
         "type": "interdit",
-        "motif": "input("
+        "motif": "input(",
+        "maitrise": false
       }
     ],
     "famille": "conditions"
@@ -211,11 +212,13 @@
       },
       {
         "type": "contient",
-        "motif": "\\n"
+        "motif": "\\n",
+        "maitrise": false
       },
       {
         "type": "interdit",
-        "motif": "input("
+        "motif": "input(",
+        "maitrise": false
       }
     ],
     "famille": "conditions"
@@ -358,7 +361,8 @@
       },
       {
         "type": "interdit",
-        "motif": "De service : Camille"
+        "motif": "De service : Camille",
+        "maitrise": false
       }
     ],
     "famille": "variables"
@@ -446,7 +450,8 @@
       },
       {
         "type": "contient",
-        "motif": "print(prenom)"
+        "motif": "print(prenom)",
+        "maitrise": false
       }
     ],
     "famille": "variables"
@@ -519,15 +524,18 @@
       {
         "type": "interdit",
         "motif": "gauche, droite = droite, gauche",
-        "message": "L'échange en une seule ligne est écarté ici : c'est justement le raisonnement que cet exercice fait travailler."
+        "message": "L'échange en une seule ligne est écarté ici : c'est justement le raisonnement que cet exercice fait travailler.",
+        "maitrise": false
       },
       {
         "type": "contient",
-        "motif": "gauche = \"rouge\""
+        "motif": "gauche = \"rouge\"",
+        "maitrise": false
       },
       {
         "type": "contient",
-        "motif": "droite = \"bleu\""
+        "motif": "droite = \"bleu\"",
+        "maitrise": false
       }
     ],
     "famille": "variables"
@@ -612,15 +620,18 @@
       },
       {
         "type": "interdit",
-        "motif": "Bonjour Camille"
+        "motif": "Bonjour Camille",
+        "maitrise": false
       },
       {
         "type": "interdit",
-        "motif": "17 ans"
+        "motif": "17 ans",
+        "maitrise": false
       },
       {
         "type": "contient",
-        "motif": "str("
+        "motif": "str(",
+        "maitrise": false
       }
     ],
     "famille": "types"
@@ -655,7 +666,8 @@
       },
       {
         "type": "interdit",
-        "motif": "Casier numéro 42"
+        "motif": "Casier numéro 42",
+        "maitrise": false
       }
     ],
     "famille": "types"
@@ -854,7 +866,8 @@
       },
       {
         "type": "interdit",
-        "motif": "22"
+        "motif": "22",
+        "maitrise": false
       }
     ],
     "famille": "operateurs"
@@ -930,7 +943,14 @@
       },
       {
         "type": "interdit",
-        "motif": "Camille"
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
       }
     ],
     "famille": "operateurs"
@@ -996,6 +1016,12 @@
         ],
         "attendu": "Ton prénom : Alex\nTon âge : 19\nAlex a 19 ans",
         "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
       }
     ],
     "famille": "operateurs"
@@ -1036,11 +1062,19 @@
       },
       {
         "type": "interdit",
-        "motif": "Camille"
+        "motif": "Camille",
+        "maitrise": false
       },
       {
         "type": "interdit",
-        "motif": "18"
+        "motif": "18",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
       }
     ],
     "famille": "operateurs"

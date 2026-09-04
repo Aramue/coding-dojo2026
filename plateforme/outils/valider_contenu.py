@@ -73,13 +73,26 @@ def _normaliser(texte: str) -> str:
     return "\n".join(l for l in lignes if l != "").strip()
 
 
-def _passe(ex: Exercice, code: str) -> bool:
-    """Le code satisfait-il tous les tests de l'exercice ?"""
+def _passe(ex: Exercice, code: str, *, exiger_maitrise: bool = True) -> bool:
+    """Le code satisfait-il tous les tests de l'exercice ?
+
+    `exiger_maitrise` distingue les deux questions que l'outil pose :
+
+    - de la solution de reference, on exige TOUT, criteres de maitrise compris.
+      Une solution qui n'emploie pas la methode que l'exercice recompense ne
+      sert de modele a personne.
+    - du code de depart, on demande seulement s'il est deja VALIDE aux yeux de
+      l'eleve. Un critere de maitrise manquant ne bloque pas dans le navigateur
+      (il coute la seconde coche) : le compter ici masquerait un depart qui
+      resout deja l'exercice.
+    """
     for test in ex.tests:
         if isinstance(test, TestMotif):
             if test.type == "interdit" and test.motif in code:
                 return False
             if test.type == "contient" and test.motif not in code:
+                if test.maitrise and not exiger_maitrise:
+                    continue
                 return False
             continue
         if isinstance(test, TestSortie):
@@ -129,7 +142,11 @@ def verifier_coherence(ex: Exercice) -> list[str]:
     if ex.type != "predire" and not _passe(ex, ex.solution):
         problemes.append(f"{ex.id} : la solution de reference ne passe pas ses propres tests")
 
-    if ex.type in ("ecrire", "completer", "debug") and ex.depart and _passe(ex, ex.depart):
+    if (
+        ex.type in ("ecrire", "completer", "debug")
+        and ex.depart
+        and _passe(ex, ex.depart, exiger_maitrise=False)
+    ):
         problemes.append(f"{ex.id} : le code de depart passe deja les tests, l'exercice est resolu")
 
     return problemes

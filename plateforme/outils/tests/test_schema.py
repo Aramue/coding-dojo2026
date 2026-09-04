@@ -100,3 +100,43 @@ def test_texte_francais_accentue_ordinaire_est_accepte():
         )
     )
     assert ex.tests[0].attendu == "Accès autorisé"
+
+
+def test_un_contient_peut_porter_maitrise():
+    ex = Exercice(
+        **exercice_minimal(
+            tests=[
+                {"type": "sortie", "entrees": [], "attendu": "Bonjour Camille"},
+                {"type": "interdit", "motif": "Bonjour Camille"},
+                {"type": "contient", "motif": "{", "maitrise": True},
+            ],
+        )
+    )
+    assert ex.tests[2].maitrise is True
+
+
+def test_un_interdit_ne_peut_pas_porter_maitrise():
+    """Un interdit disqualifie, par definition : le marquer 'maitrise' n'aurait
+    pas de sens et laisserait croire qu'il ne fait que couter une coche."""
+    with pytest.raises(ValidationError, match="maitrise"):
+        Exercice(
+            **exercice_minimal(
+                tests=[
+                    {"type": "sortie", "entrees": [], "attendu": "Bonjour"},
+                    {"type": "interdit", "motif": "Bonjour", "maitrise": True},
+                ],
+            )
+        )
+
+
+def test_un_motif_est_exigeant_par_defaut():
+    ex = Exercice(
+        **exercice_minimal(
+            tests=[
+                {"type": "sortie", "entrees": [], "attendu": "Bonjour"},
+                {"type": "interdit", "motif": "xyzzy"},
+                {"type": "contient", "motif": "input("},
+            ],
+        )
+    )
+    assert ex.tests[2].maitrise is False

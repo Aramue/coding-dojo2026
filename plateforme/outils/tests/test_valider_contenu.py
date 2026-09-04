@@ -95,3 +95,39 @@ def test_motif_interdit_nu_est_accepte(tmp_path):
         ),
     )
     assert verifier_coherence(ex) == []
+
+
+MAITRISE = dict(
+    BASE,
+    enonce="Affiche le prenom range dans la variable.",
+    depart='prenom = "Camille"',
+    tests=[
+        {"type": "sortie", "entrees": [], "attendu": "Bonjour Camille"},
+        {"type": "interdit", "motif": "Bonjour Camille"},
+        {"type": "contient", "motif": "{", "maitrise": True},
+    ],
+    solution='prenom = "Camille"\nprint(f"Bonjour {prenom}")',
+)
+
+
+def test_solution_qui_emploie_la_methode_recompensee_est_acceptee(tmp_path):
+    assert verifier_coherence(ecrire(tmp_path, dict(MAITRISE))) == []
+
+
+def test_solution_qui_ignore_son_critere_de_maitrise_est_signalee(tmp_path):
+    """La solution de reference sert de modele : elle doit montrer la methode."""
+    ex = ecrire(
+        tmp_path,
+        dict(MAITRISE, solution='prenom = "Camille"\nprint("Bonjour " + prenom)'),
+    )
+    assert any("solution" in p for p in verifier_coherence(ex))
+
+
+def test_un_depart_deja_valide_est_signale_meme_sans_la_maitrise(tmp_path):
+    """Le critere de maitrise ne bloque pas l'eleve : il ne doit pas masquer
+    un code de depart qui resout deja l'exercice."""
+    ex = ecrire(
+        tmp_path,
+        dict(MAITRISE, depart='prenom = "Camille"\nprint("Bonjour " + prenom)'),
+    )
+    assert any("depart" in p for p in verifier_coherence(ex))
