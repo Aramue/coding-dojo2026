@@ -9,9 +9,23 @@ vi.mock('../../src/execution/executeur', () => ({
   },
 }))
 
+const CHAPITRES = [{ id: 'bases', ordre: 1, titre: 'Les bases de Python', seance: 1 }]
+
 const NOTIONS = [
-  { id: 'afficher', ordre: 1, titre: 'Afficher un message', famille: 'conditions' },
-  { id: 'variables', ordre: 2, titre: 'Les variables', famille: 'variables' },
+  {
+    id: 'afficher',
+    ordre: 1,
+    titre: 'Afficher un message',
+    famille: 'conditions',
+    chapitre: 'bases',
+  },
+  {
+    id: 'variables',
+    ordre: 2,
+    titre: 'Les variables',
+    famille: 'variables',
+    chapitre: 'bases',
+  },
 ]
 
 const EXERCICES = [
@@ -38,6 +52,7 @@ function poserLeReseau() {
     vi.fn(async (url: string) => ({
       ok: true,
       json: async () => {
+        if (url.includes('chapitres')) return CHAPITRES
         if (url.includes('notions')) return NOTIONS
         if (url.includes('lecons')) return []
         if (url.includes('parcours')) return { reussis: [] }
@@ -58,7 +73,7 @@ describe('App', () => {
   it("demande le code d'acces avant tout, et ne montre pas le menu", () => {
     render(<App />)
     expect(screen.getByRole('button', { name: 'Commencer' })).toBeInTheDocument()
-    expect(screen.queryByRole('navigation', { name: /notions/i })).toBeNull()
+    expect(screen.queryByRole('navigation', { name: /sommaire/i })).toBeNull()
   })
 
   it('garde la porte fermee meme sur une URL profonde', () => {
@@ -71,7 +86,7 @@ describe('App', () => {
   it("se reconnecte seul quand un code est memorise, et affiche le menu", async () => {
     sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
     render(<App />)
-    expect(await screen.findByRole('navigation', { name: /notions/i })).toBeInTheDocument()
+    expect(await screen.findByRole('navigation', { name: /sommaire/i })).toBeInTheDocument()
     expect(screen.getByText('Les variables')).toBeInTheDocument()
   })
 
@@ -116,6 +131,7 @@ describe('App — le menu suit la progression', () => {
       vi.fn(async (url: string) => ({
         ok: true,
         json: async () => {
+          if (url.includes('chapitres')) return CHAPITRES
           if (url.includes('notions')) return NOTIONS
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: ['s1-01'] }
@@ -127,9 +143,10 @@ describe('App — le menu suit la progression', () => {
     sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
     render(<App />)
 
-    // L'avancement s'affiche aussi dans l'en-tete : on vise le menu.
-    const menu = await screen.findByRole('navigation', { name: /notions/i })
-    expect(within(menu).getByText('1 / 1')).toBeInTheDocument()
+    // L'avancement s'affiche a trois endroits : en-tete, chapitre, notion.
+    // On vise la ligne de la notion.
+    const notion = await screen.findByRole('button', { name: /Afficher un message/ })
+    expect(within(notion).getByText('1/1')).toBeInTheDocument()
   })
 
   it("montre l'avancement global de la seance dans l'en-tete", async () => {
@@ -138,6 +155,7 @@ describe('App — le menu suit la progression', () => {
       vi.fn(async (url: string) => ({
         ok: true,
         json: async () => {
+          if (url.includes('chapitres')) return CHAPITRES
           if (url.includes('notions')) return NOTIONS
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: ['s1-01'] }

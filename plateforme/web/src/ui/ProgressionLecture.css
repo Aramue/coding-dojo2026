@@ -1,0 +1,24 @@
+/*
+ * Collée sous l'en-tête, qui est lui-même collant. Elle occupe 3 px : assez
+ * pour se voir, trop peu pour se disputer l'attention avec le texte.
+ */
+.lecture {
+  position: sticky;
+  top: 3.5rem; /* la hauteur de .entete */
+  z-index: 9;
+  height: 3px;
+  background: transparent;
+  margin-bottom: -3px;
+}
+
+.lecture__part {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  background: var(--encre, var(--py-blue));
+  /*
+   * `transform: scaleX()` plutôt que `width` : la première est composée par
+   * le GPU, la seconde relance la mise en page à chaque pixel de défilement.
+   */
+  will-change: transform;
+}

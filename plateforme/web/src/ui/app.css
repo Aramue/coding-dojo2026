@@ -203,9 +203,65 @@
   box-shadow: var(--ombre-1);
 }
 
+/* Une page se relit du haut : le défilement fluide n'y est pas décoratif. */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @media (max-width: 720px) {
   .page {
     padding: var(--e-3) var(--e-2) var(--e-5);
+  }
+}
+
+/* ---------- Mouvement ---------- */
+
+/*
+ * Trois usages seulement, et jamais plus de 250 ms : l'arrivée d'une page,
+ * l'apparition du verdict, l'avancement d'une jauge. Le reste est immobile.
+ *
+ * L'animation d'entrée est appliquée sur `main` avec la destination en clé :
+ * React remonte le nœud à chaque changement de page, donc l'animation rejoue
+ * sans qu'aucun état ait à la piloter.
+ */
+@keyframes entree-page {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.appli > main {
+  animation: entree-page 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Le contenu d'une carte apparaît juste après elle, pas en même temps. */
+@keyframes entree-douce {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.page__corps {
+  animation: entree-douce 260ms 60ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pied {
+  animation: entree-douce 260ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appli > main,
+  .page__corps,
+  .pied {
+    animation: none;
   }
 }
 

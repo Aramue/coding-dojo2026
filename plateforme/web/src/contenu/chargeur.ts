@@ -1,4 +1,4 @@
-import type { Exercice, Lecon, Notion } from './types'
+import type { Chapitre, Exercice, Lecon, Notion } from './types'
 
 /** Variables à relire dans l'espace de noms après exécution, pour les tests `variable`. */
 export function nomsVariablesRequis(exercice: Exercice): string[] {
@@ -22,3 +22,6 @@ export const chargerNotions = (chemin = '/contenu/seance-1-notions.json') =>
 
 export const chargerLecons = (chemin = '/contenu/seance-1-lecons.json') =>
   chargerJson<Lecon[]>(chemin)
+
+export const chargerChapitres = (chemin = '/contenu/seance-1-chapitres.json') =>
+  chargerJson<Chapitre[]>(chemin)

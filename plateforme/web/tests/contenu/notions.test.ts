@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { grouper, premiereOuverte } from '../../src/contenu/notions'
+import { grouper, grouperParChapitre, premiereOuverte } from '../../src/contenu/notions'
 import type { Exercice, Lecon, Notion } from '../../src/contenu/types'
 
 const NOTIONS: Notion[] = [
-  { id: 'afficher', ordre: 1, titre: 'Afficher un message', famille: 'conditions' },
-  { id: 'variables', ordre: 2, titre: 'Les variables', famille: 'variables' },
+  { id: 'afficher', ordre: 1, titre: 'Afficher un message', famille: 'conditions', chapitre: 'bases' },
+  { id: 'variables', ordre: 2, titre: 'Les variables', famille: 'variables', chapitre: 'bases' },
 ]
 
 function ex(id: string, notion: string): Exercice {
@@ -116,5 +116,38 @@ describe('premiereOuverte', () => {
     // ou une notion n'a pas encore d'exercices.
     const groupes = grouper(NOTIONS, [ex('s1-09', 'variables')], [], [])
     expect(premiereOuverte(groupes)?.id).toBe('variables')
+  })
+})
+
+describe('grouperParChapitre', () => {
+  const CHAPITRES = [
+    { id: 'bases', ordre: 1, titre: 'Les bases de Python', seance: 1 },
+    { id: 'suite', ordre: 2, titre: 'Aller plus loin', seance: 1 },
+  ]
+
+  it('range chaque notion dans son chapitre, dans l ordre declare', () => {
+    const groupes = grouper(NOTIONS, [], [], [])
+    const chapitres = grouperParChapitre(CHAPITRES, groupes)
+    expect(chapitres.map((c) => c.id)).toEqual(['bases', 'suite'])
+    expect(chapitres[0]!.notions.map((n) => n.id)).toEqual(['afficher', 'variables'])
+    expect(chapitres[1]!.notions).toHaveLength(0)
+  })
+
+  it('cumule l avancement des notions du chapitre', () => {
+    const groupes = grouper(
+      NOTIONS,
+      [ex('s1-01', 'afficher'), ex('s1-02', 'afficher'), ex('s1-09', 'variables')],
+      [],
+      ['s1-01', 's1-09'],
+    )
+    const [bases] = grouperParChapitre(CHAPITRES, groupes)
+    expect(bases!.faits).toBe(2)
+    expect(bases!.total).toBe(3)
+  })
+
+  it('ignore une notion dont le chapitre n existe pas', () => {
+    const orpheline = [{ ...NOTIONS[0]!, chapitre: 'ailleurs' }]
+    const chapitres = grouperParChapitre(CHAPITRES, grouper(orpheline, [], [], []))
+    expect(chapitres.flatMap((c) => c.notions)).toHaveLength(0)
   })
 })

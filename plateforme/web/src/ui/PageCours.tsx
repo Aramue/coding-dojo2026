@@ -5,6 +5,7 @@ import type { Executeur } from '../execution/executeur'
 import { BacASable } from './BacASable'
 import { CarteCode } from './CarteCode'
 import { PiedNavigation } from './PiedNavigation'
+import { ProgressionLecture } from './ProgressionLecture'
 import { formaterTexte } from './texte'
 import './PageCours.css'
 
@@ -19,6 +20,7 @@ export function PageCours({
 
   return (
     <main className="page" data-famille={groupe.famille}>
+      {lecon && <ProgressionLecture />}
       <header className="page__entete">
         <p className="page__notion">{groupe.titre}</p>
         <h1 className="page__titre">{lecon ? lecon.titre : groupe.titre}</h1>

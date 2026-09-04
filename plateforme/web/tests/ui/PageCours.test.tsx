@@ -12,6 +12,7 @@ function groupe(blocs: Bloc[]): GroupeNotion {
     ordre: 2,
     titre: 'Les variables',
     famille: 'variables',
+    chapitre: 'bases',
     exercices: [],
     faits: 0,
     lecon: {

@@ -1,16 +1,21 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ClientApi } from './api/client'
-import { chargerLecons, chargerNotions, chargerParcours } from './contenu/chargeur'
-import { grouper, premiereOuverte } from './contenu/notions'
+import {
+  chargerChapitres,
+  chargerLecons,
+  chargerNotions,
+  chargerParcours,
+} from './contenu/chargeur'
+import { grouper, grouperParChapitre, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
-import { naviguer, useRoute, type Destination } from './routage'
+import { naviguer, useRoute, versChemin, type Destination } from './routage'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
 import { EcranProf } from './ui/EcranProf'
 import { Menu } from './ui/Menu'
 import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
-import type { Exercice, Lecon, Notion } from './contenu/types'
+import type { Chapitre, Exercice, Lecon, Notion } from './contenu/types'
 import type { GroupeNotion } from './contenu/notions'
 import type { ResultatTest } from './validation/types'
 
@@ -58,10 +63,11 @@ export function App() {
   const destination = useRoute()
   const [codeAcces, setCodeAcces] = useState<string | null>(null)
   const [contenu, setContenu] = useState<{
+    chapitres: Chapitre[]
     notions: Notion[]
     exercices: Exercice[]
     lecons: Lecon[]
-  }>({ notions: [], exercices: [], lecons: [] })
+  }>({ chapitres: [], notions: [], exercices: [], lecons: [] })
   const [reussis, setReussis] = useState<string[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
 
@@ -71,6 +77,10 @@ export function App() {
   const groupes = useMemo(
     () => grouper(contenu.notions, contenu.exercices, contenu.lecons, reussis),
     [contenu, reussis],
+  )
+  const chapitres = useMemo(
+    () => grouperParChapitre(contenu.chapitres, groupes),
+    [contenu.chapitres, groupes],
   )
 
   useEffect(() => () => executeur.detruire(), [executeur])
@@ -87,13 +97,14 @@ export function App() {
 
   async function connecter(saisi: string) {
     const identifiant = await client.ouvrirSession(saisi)
-    const [notions, exercices, lecons, acquis] = await Promise.all([
+    const [chapitresPublies, notions, exercices, lecons, acquis] = await Promise.all([
+      chargerChapitres(),
       chargerNotions(),
       chargerParcours(),
       chargerLecons(),
       client.lireParcours(),
     ])
-    setContenu({ notions, exercices, lecons })
+    setContenu({ chapitres: chapitresPublies, notions, exercices, lecons })
     setReussis(acquis)
     setCodeAcces(identifiant)
     memoriserCode(identifiant)
@@ -129,13 +140,16 @@ export function App() {
   return (
     <div className="appli">
       <Entete codeAcces={codeAcces} groupes={groupes} />
-      <Menu groupes={groupes} destination={destination} />
+      <Menu chapitres={chapitres} destination={destination} />
       {alerte && (
         <p role="alert" className="alerte">
           {alerte}
         </p>
       )}
       <Vue
+        // `key` remonte la vue à chaque changement de page : c'est ce qui
+        // rejoue l'animation d'entrée, sans état à piloter.
+        key={versChemin(destination)}
         destination={destination}
         groupes={groupes}
         reussis={reussis}

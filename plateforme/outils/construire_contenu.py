@@ -11,7 +11,7 @@ import json
 import sys
 from pathlib import Path
 
-from schema import NOTIONS, charger_lecons, charger_tous
+from schema import CHAPITRES, NOTIONS, charger_lecons, charger_tous
 from valider_contenu import verifier_coherence, verifier_lecon
 
 def _en_camel(nom: str) -> str:
@@ -45,6 +45,21 @@ def construire(racine: Path, sortie: Path) -> int:
         raise SystemExit(f"{len(problemes)} probleme(s) : construction interrompue.")
 
     sortie.mkdir(parents=True, exist_ok=True)
+
+    # Le chapitre est le niveau de regroupement du menu.
+    (sortie / "seance-1-chapitres.json").write_text(
+        json.dumps(
+            [
+                {"id": identifiant, **details}
+                for identifiant, details in sorted(
+                    CHAPITRES.items(), key=lambda paire: paire[1]["ordre"]
+                )
+            ],
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
     # Publiee telle quelle pour que le front n'ait pas a la recopier : le titre
     # affiche et la couleur du menu viennent d'ici, et de nulle part ailleurs.

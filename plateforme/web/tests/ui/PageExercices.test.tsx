@@ -28,6 +28,7 @@ const GROUPE: GroupeNotion = {
   ordre: 2,
   titre: 'Les variables',
   famille: 'variables',
+  chapitre: 'bases',
   lecon: null,
   faits: 1,
   exercices: [

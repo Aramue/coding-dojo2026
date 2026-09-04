@@ -140,10 +140,37 @@ MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
 # ceux de la palette (variables, types, operateurs, conditions) : ce sont des
 # noms de couleur, pas de sens.
 NOTIONS: dict[str, dict] = {
-    "afficher": {"ordre": 1, "titre": "Afficher un message", "famille": "conditions"},
-    "variables": {"ordre": 2, "titre": "Les variables", "famille": "variables"},
-    "types": {"ordre": 3, "titre": "Types et conversion", "famille": "types"},
-    "saisie": {"ordre": 4, "titre": "Demander une information", "famille": "operateurs"},
+    "afficher": {
+        "ordre": 1,
+        "titre": "Afficher un message",
+        "famille": "conditions",
+        "chapitre": "bases",
+    },
+    "variables": {
+        "ordre": 2,
+        "titre": "Les variables",
+        "famille": "variables",
+        "chapitre": "bases",
+    },
+    "types": {
+        "ordre": 3,
+        "titre": "Types et conversion",
+        "famille": "types",
+        "chapitre": "bases",
+    },
+    "saisie": {
+        "ordre": 4,
+        "titre": "Demander une information",
+        "famille": "operateurs",
+        "chapitre": "bases",
+    },
+}
+
+# Un chapitre regroupe les notions d'un meme sujet. Il n'y en a qu'un pour
+# l'instant, mais c'est lui qui structure le menu : sans ce niveau, quatre
+# notions flottaient cote a cote sans dire de quoi elles parlaient ensemble.
+CHAPITRES: dict[str, dict] = {
+    "bases": {"ordre": 1, "titre": "Les bases de Python", "seance": 1},
 }
 
 

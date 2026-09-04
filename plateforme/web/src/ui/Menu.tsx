@@ -1,56 +1,129 @@
-import type { MouseEvent, ReactNode } from 'react'
-import type { GroupeNotion } from '../contenu/notions'
+import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
+import type { GroupeChapitre, GroupeNotion } from '../contenu/notions'
 import { naviguer, versChemin, type Destination } from '../routage'
 import './Menu.css'
 
 /**
- * Le menu est permanent : depuis n'importe où, l'élève atteint n'importe quelle
- * page. C'est ce qui manquait — l'application n'affichait que le premier
- * exercice non réussi, sans retour en arrière ni moyen de sauter un blocage.
+ * Le sommaire du cours : partie, chapitres dépliants, et sous chaque notion
+ * ses deux pages. C'est la carte du parcours — depuis n'importe où, l'élève
+ * atteint n'importe quelle page et voit où il en est.
  */
 export function Menu({
-  groupes,
+  chapitres,
   destination,
 }: {
-  groupes: GroupeNotion[]
+  chapitres: GroupeChapitre[]
   destination: Destination
 }) {
   return (
-    <nav className="menu" aria-label="Notions de la séance">
-      <p className="menu__titre-seance">Séance 1</p>
-      <ol className="menu__liste">
-        {groupes.map((groupe) => {
-          const courante = 'notion' in destination && destination.notion === groupe.id
-          const total = groupe.exercices.length
-          return (
-            <li
-              key={groupe.id}
-              className={'menu__notion' + (courante ? ' menu__notion--courante' : '')}
-              data-famille={groupe.famille}
-            >
-              <div className="menu__ligne">
-                <span className="menu__pastille" aria-hidden="true" />
-                <span className="menu__titre">{groupe.titre}</span>
-                <span className="menu__avancement">
-                  {groupe.faits} / {total}
-                </span>
-              </div>
-              <div className="menu__jauge" aria-hidden="true">
-                <span style={{ width: `${total === 0 ? 0 : (groupe.faits / total) * 100}%` }} />
-              </div>
-              <div className="menu__liens">
-                <Lien cible={{ vue: 'cours', notion: groupe.id }} destination={destination}>
-                  Cours
-                </Lien>
-                <Lien cible={{ vue: 'exercices', notion: groupe.id }} destination={destination}>
-                  Exercices
-                </Lien>
-              </div>
-            </li>
-          )
-        })}
-      </ol>
+    <nav className="menu" aria-label="Sommaire du cours">
+      {chapitres.map((chapitre) => (
+        <Chapitre key={chapitre.id} chapitre={chapitre} destination={destination} />
+      ))}
     </nav>
+  )
+}
+
+function Chapitre({
+  chapitre,
+  destination,
+}: {
+  chapitre: GroupeChapitre
+  destination: Destination
+}) {
+  const contientLaPageCourante = chapitre.notions.some(
+    (n) => 'notion' in destination && destination.notion === n.id,
+  )
+  const [ouvert, setOuvert] = useState(true)
+
+  // Naviguer vers une notion d'un chapitre replié le rouvre : sinon la page
+  // courante n'apparaît nulle part dans le sommaire.
+  useEffect(() => {
+    if (contientLaPageCourante) setOuvert(true)
+  }, [contientLaPageCourante])
+
+  const pourcent = chapitre.total === 0 ? 0 : (chapitre.faits / chapitre.total) * 100
+
+  return (
+    <section className="chapitre">
+      <button
+        type="button"
+        className="chapitre__tete"
+        aria-expanded={ouvert}
+        onClick={() => setOuvert((o) => !o)}
+      >
+        <Chevron ouvert={ouvert} />
+        <span className="chapitre__titre">{chapitre.titre}</span>
+        <span className="chapitre__compte">
+          {chapitre.faits}/{chapitre.total}
+        </span>
+      </button>
+
+      <div className="chapitre__jauge" aria-hidden="true">
+        <span style={{ width: `${pourcent}%` }} />
+      </div>
+
+      <div className="chapitre__corps" data-ouvert={ouvert}>
+        <ol className="chapitre__notions">
+          {chapitre.notions.map((notion, rang) => (
+            <Notion key={notion.id} notion={notion} rang={rang + 1} destination={destination} />
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+function Notion({
+  notion,
+  rang,
+  destination,
+}: {
+  notion: GroupeNotion
+  rang: number
+  destination: Destination
+}) {
+  const courante = 'notion' in destination && destination.notion === notion.id
+  const [ouverte, setOuverte] = useState(courante)
+
+  useEffect(() => {
+    if (courante) setOuverte(true)
+  }, [courante])
+
+  const total = notion.exercices.length
+  const terminee = total > 0 && notion.faits === total
+
+  return (
+    <li
+      className={'notion' + (courante ? ' notion--courante' : '')}
+      data-famille={notion.famille}
+    >
+      <button
+        type="button"
+        className="notion__tete"
+        aria-expanded={ouverte}
+        onClick={() => setOuverte((o) => !o)}
+      >
+        <span className="notion__rang" aria-hidden="true">
+          {terminee ? <Coche /> : rang}
+        </span>
+        <span className="notion__titre">{notion.titre}</span>
+        <span className="notion__compte">
+          {notion.faits}/{total}
+        </span>
+      </button>
+
+      <div className="notion__corps" data-ouvert={ouverte}>
+        <div className="notion__liens">
+          <Lien cible={{ vue: 'cours', notion: notion.id }} destination={destination}>
+            Cours
+          </Lien>
+          <Lien cible={{ vue: 'exercices', notion: notion.id }} destination={destination}>
+            Exercices
+          </Lien>
+        </div>
+      </div>
+    </li>
   )
 }
 
@@ -86,6 +159,7 @@ function Lien({
     if (evenement.metaKey || evenement.ctrlKey || evenement.shiftKey) return
     evenement.preventDefault()
     naviguer(cible)
+    scrollTo({ top: 0 })
   }
 
   return (
@@ -97,5 +171,42 @@ function Lien({
     >
       {children}
     </a>
+  )
+}
+
+/* SVG tracés à la main, trait 1,8 : la charte interdit emoji et icônes importées. */
+
+function Chevron({ ouvert }: { ouvert: boolean }) {
+  return (
+    <svg
+      className={'chevron' + (ouvert ? ' chevron--ouvert' : '')}
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M9 5l7 7-7 7"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function Coche() {
+  return (
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" aria-hidden="true">
+      <path
+        d="M5 12.5 10 17.5 19 7"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }

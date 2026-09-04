@@ -1,92 +1,188 @@
 /*
- * Colonne de navigation, sur surface blanche.
+ * Sommaire dépliant : chapitre, notions, et sous chacune ses deux pages.
+ *
+ * Le repli est animé sur `grid-template-rows`, pas sur `height` : c'est la
+ * seule façon d'animer vers une hauteur *automatique* sans la mesurer en
+ * JavaScript. Le contenu garde sa hauteur naturelle, la grille l'écrase.
  *
  * Aucun bloc par famille ici : tokens.css mappe déjà [data-famille] vers
- * --tint, --encre et --profond. Poser l'attribut sur le <li> suffit.
+ * --tint, --encre et --profond.
  */
 
 .menu {
   grid-area: menu;
   background: var(--surface);
   border-right: 1px solid var(--rule-doux);
-  padding: var(--e-3) 0 var(--e-5);
+  padding: var(--e-2) 0 var(--e-5);
   align-self: stretch;
+  overflow-y: auto;
 }
 
-.menu__titre-seance {
-  margin: 0 var(--e-3) var(--e-2);
-  font-size: var(--t-1);
-  font-weight: 500;
-  color: var(--ink-soft);
+/* ---------- Chapitre ---------- */
+
+.chapitre {
+  display: block;
 }
 
-.menu__liste {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.menu__notion {
-  padding: var(--e-2) var(--e-3) var(--e-2) calc(var(--e-3) - 3px);
-  border-left: 3px solid transparent;
-}
-
-/* La notion ouverte se repère à son filet et à son fond, pas à un chip isolé. */
-.menu__notion--courante {
-  border-left-color: var(--encre);
-  background: var(--surface-doux);
-}
-
-.menu__ligne {
+.chapitre__tete {
   display: flex;
-  align-items: baseline;
-  gap: var(--e-1);
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: var(--e-2) var(--e-3);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
 }
 
-.menu__pastille {
-  flex: none;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--encre);
-  transform: translateY(-1px);
+.chapitre__tete:hover .chapitre__titre {
+  color: var(--py-blue);
 }
 
-.menu__titre {
+.chapitre__tete:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: -2px;
+  border-radius: var(--rayon-1);
+}
+
+.chapitre__titre {
   flex: 1;
-  font-size: var(--t-2);
-  font-weight: 500;
+  font-size: var(--t-3);
+  font-weight: 700;
+  letter-spacing: -0.015em;
   color: var(--ink);
-  line-height: 1.35;
+  transition: color 150ms ease-out;
 }
 
-.menu__avancement {
+.chapitre__compte {
   font-size: var(--t-1);
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
 }
 
-/* Jauge fine : l'avancement se lit d'un coup d'œil, sans compter. */
-.menu__jauge {
-  height: 4px;
-  margin: var(--e-1) 0 0 calc(0.5rem + var(--e-1));
+.chapitre__jauge {
+  height: 3px;
+  margin: 0 var(--e-3) var(--e-1);
   border-radius: 999px;
   background: var(--ground-2);
   overflow: hidden;
 }
 
-.menu__jauge span {
+.chapitre__jauge span {
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: var(--encre);
-  transition: width 250ms ease-out;
+  background: var(--ok);
+  transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.menu__liens {
+/* ---------- Repli animé ---------- */
+
+.chapitre__corps,
+.notion__corps {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chapitre__corps[data-ouvert='false'],
+.notion__corps[data-ouvert='false'] {
+  grid-template-rows: 0fr;
+}
+
+.chapitre__corps > *,
+.notion__corps > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.chevron {
+  flex: none;
+  color: var(--ink-soft);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chevron--ouvert {
+  transform: rotate(90deg);
+}
+
+/* ---------- Notion ---------- */
+
+.chapitre__notions {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--e-2);
+}
+
+.notion {
+  border-left: 3px solid transparent;
+  transition: background 200ms ease-out, border-color 200ms ease-out;
+}
+
+.notion--courante {
+  border-left-color: var(--encre);
+  background: var(--surface-doux);
+}
+
+.notion__tete {
   display: flex;
-  gap: var(--e-1);
-  margin: var(--e-1) 0 0 calc(0.5rem + var(--e-1));
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem var(--e-3) 0.4rem calc(var(--e-3) - 3px);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.notion__tete:focus-visible {
+  outline: 2px solid var(--encre);
+  outline-offset: -2px;
+}
+
+.notion__rang {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  transition: background 200ms ease-out, border-color 200ms ease-out, color 200ms ease-out;
+}
+
+/* Une notion terminée porte sa coche dans la couleur de sa famille. */
+.notion:has(.notion__rang svg) .notion__rang {
+  background: var(--encre);
+  border-color: var(--encre);
+  color: #fff;
+}
+
+.notion__titre {
+  flex: 1;
+  font-size: var(--t-2);
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.notion__compte {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.notion__liens {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--e-3) var(--e-1) calc(var(--e-3) + 1.9rem);
 }
 
 .menu__lien {
@@ -98,12 +194,13 @@
   font-size: var(--t-1);
   color: var(--ink-soft);
   text-decoration: none;
-  transition: background 150ms ease-out, color 150ms ease-out;
+  transition: background 150ms ease-out, color 150ms ease-out, padding-left 150ms ease-out;
 }
 
 .menu__lien:hover {
   background: var(--tint);
   color: var(--encre);
+  padding-left: 0.85rem;
 }
 
 .menu__lien:focus-visible {
@@ -117,43 +214,26 @@
   font-weight: 500;
 }
 
-/* Sous 900 px, la colonne devient une bande horizontale au-dessus du contenu. */
+/* Sous 900 px, le sommaire passe au-dessus du contenu et se replie. */
 @media (max-width: 900px) {
   .menu {
-    min-width: 0; /* sinon la bande defilante impose sa largeur a la grille */
+    min-width: 0;
     border-right: 0;
     border-bottom: 1px solid var(--rule-doux);
-    padding: var(--e-2) 0;
-    overflow-x: auto;
-  }
-
-  .menu__titre-seance {
-    display: none;
-  }
-
-  .menu__liste {
-    display: flex;
-    gap: var(--e-2);
-    padding: 0 var(--e-2);
-  }
-
-  .menu__notion {
-    flex: 0 0 auto;
-    min-width: 12rem;
-    padding: var(--e-2);
-    border-left: 0;
-    border-radius: var(--rayon-2);
-    border: 1px solid var(--rule-doux);
-  }
-
-  .menu__notion--courante {
-    border-color: var(--encre);
+    padding: var(--e-1) 0 var(--e-2);
+    max-height: 45vh;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .menu__jauge span,
-  .menu__lien {
+  .chapitre__corps,
+  .notion__corps,
+  .chevron,
+  .chapitre__jauge span,
+  .notion,
+  .notion__rang,
+  .menu__lien,
+  .chapitre__titre {
     transition: none;
   }
 }

@@ -19,12 +19,25 @@ export type Exercice = {
   expert?: string
 }
 
+/**
+ * Un chapitre regroupe les notions d'un même sujet. C'est le niveau qui
+ * structure le menu : sans lui, les notions flottaient côte à côte sans dire
+ * de quoi elles parlaient ensemble.
+ */
+export type Chapitre = {
+  id: string
+  ordre: number
+  titre: string
+  seance: number
+}
+
 /** Une notion de la séance. Publiée par construire_contenu.py, jamais recopiée ici. */
 export type Notion = {
   id: string
   ordre: number
   titre: string
   famille: Exercice['famille']
+  chapitre: string
 }
 
 export type Bloc =

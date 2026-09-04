@@ -3,24 +3,28 @@
     "id": "afficher",
     "ordre": 1,
     "titre": "Afficher un message",
-    "famille": "conditions"
+    "famille": "conditions",
+    "chapitre": "bases"
   },
   {
     "id": "variables",
     "ordre": 2,
     "titre": "Les variables",
-    "famille": "variables"
+    "famille": "variables",
+    "chapitre": "bases"
   },
   {
     "id": "types",
     "ordre": 3,
     "titre": "Types et conversion",
-    "famille": "types"
+    "famille": "types",
+    "chapitre": "bases"
   },
   {
     "id": "saisie",
     "ordre": 4,
     "titre": "Demander une information",
-    "famille": "operateurs"
+    "famille": "operateurs",
+    "chapitre": "bases"
   }
 ]

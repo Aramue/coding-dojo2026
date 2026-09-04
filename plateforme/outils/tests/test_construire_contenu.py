@@ -105,6 +105,7 @@ def test_la_table_des_notions_est_publiee(tmp_path):
         "ordre": 3,
         "titre": "Types et conversion",
         "famille": "types",
+        "chapitre": "bases",
     }
 
 
@@ -155,3 +156,22 @@ def test_une_seance_sans_lecons_se_construit(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
     assert not (sortie / "seance-1-lecons.json").exists()
+
+
+def test_la_table_des_chapitres_est_publiee(tmp_path):
+    """Le chapitre est le niveau de regroupement du menu."""
+    _ecrire(tmp_path / "seance-1", dict(BASE))
+    sortie = tmp_path / "sortie"
+    construire(tmp_path, sortie)
+
+    chapitres = json.loads((sortie / "seance-1-chapitres.json").read_text(encoding="utf-8"))
+    assert chapitres == [{"id": "bases", "ordre": 1, "titre": "Les bases de Python", "seance": 1}]
+
+
+def test_chaque_notion_declare_son_chapitre(tmp_path):
+    _ecrire(tmp_path / "seance-1", dict(BASE))
+    sortie = tmp_path / "sortie"
+    construire(tmp_path, sortie)
+
+    notions = json.loads((sortie / "seance-1-notions.json").read_text(encoding="utf-8"))
+    assert {n["chapitre"] for n in notions} == {"bases"}

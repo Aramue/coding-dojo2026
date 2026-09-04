@@ -1,4 +1,4 @@
-import type { Exercice, Lecon, Notion } from './types'
+import type { Chapitre, Exercice, Lecon, Notion } from './types'
 
 export type GroupeNotion = Notion & {
   exercices: Exercice[]
@@ -38,4 +38,33 @@ export function grouper(
 /** Là où `/` envoie l'élève : la première notion qu'il n'a pas terminée. */
 export function premiereOuverte(groupes: GroupeNotion[]): GroupeNotion | null {
   return groupes.find((g) => g.faits < g.exercices.length) ?? groupes[0] ?? null
+}
+
+export type GroupeChapitre = Chapitre & {
+  notions: GroupeNotion[]
+  /** Exercices réussis et total, cumulés sur les notions du chapitre. */
+  faits: number
+  total: number
+}
+
+/**
+ * Le niveau au-dessus : ce que le menu déplie. Une notion dont le chapitre
+ * n'existe pas est ignorée, comme un exercice dont la notion n'existe pas —
+ * le contenu publié reste la seule autorité.
+ */
+export function grouperParChapitre(
+  chapitres: Chapitre[],
+  groupes: GroupeNotion[],
+): GroupeChapitre[] {
+  return [...chapitres]
+    .sort((a, b) => a.ordre - b.ordre)
+    .map((chapitre) => {
+      const siennes = groupes.filter((g) => g.chapitre === chapitre.id)
+      return {
+        ...chapitre,
+        notions: siennes,
+        faits: siennes.reduce((n, g) => n + g.faits, 0),
+        total: siennes.reduce((n, g) => n + g.exercices.length, 0),
+      }
+    })
 }
