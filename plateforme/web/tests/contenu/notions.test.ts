@@ -151,3 +151,34 @@ describe('grouperParChapitre', () => {
     expect(chapitres.flatMap((c) => c.notions)).toHaveLength(0)
   })
 })
+
+describe('grouper — obligatoires et facultatifs', () => {
+  function facultatif(id: string, notion: string): Exercice {
+    return { ...ex(id, notion), obligatoire: false }
+  }
+
+  it("ne compte que les obligatoires, au numérateur comme au dénominateur", () => {
+    // ADR-004 : un expert n'est jamais compte dans la progression affichee.
+    // Sans cette regle, un eleve qui a fini le chemin minimal verrait 6/10.
+    const groupes = grouper(
+      NOTIONS,
+      [ex('s1-01', 'afficher'), ex('s1-02', 'afficher'), facultatif('s1-08', 'afficher')],
+      [],
+      ['s1-01', 's1-08'],
+    )
+    expect(groupes[0]!.total).toBe(2)
+    expect(groupes[0]!.faits).toBe(1)
+    // Les facultatifs restent dans la liste : c'est l'affichage qui les separe.
+    expect(groupes[0]!.exercices).toHaveLength(3)
+  })
+
+  it('considère une notion terminée quand ses obligatoires le sont', () => {
+    const groupes = grouper(
+      NOTIONS,
+      [ex('s1-01', 'afficher'), facultatif('s1-08', 'afficher'), ex('s1-09', 'variables')],
+      [],
+      ['s1-01'],
+    )
+    expect(premiereOuverte(groupes)?.id).toBe('variables')
+  })
+})

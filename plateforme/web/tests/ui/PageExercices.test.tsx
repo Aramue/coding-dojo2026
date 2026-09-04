@@ -31,6 +31,7 @@ const GROUPE: GroupeNotion = {
   chapitre: 'bases',
   lecon: null,
   faits: 1,
+  total: 2,
   exercices: [
     ex('s1-09', 'Ranger un prénom', 'ecrire'),
     ex('s1-10', 'Que vaut score ?', 'predire'),
@@ -151,5 +152,54 @@ describe('PageExercices — continuité', () => {
       'href',
       '/types/cours',
     )
+  })
+})
+
+describe('PageExercices — obligatoires et facultatifs', () => {
+  function avecBonus(): GroupeNotion {
+    return {
+      ...GROUPE,
+      faits: 1,
+      total: 2,
+      exercices: [
+        ex('s1-09', 'Ranger un prénom', 'ecrire'),
+        ex('s1-10', 'Que vaut score ?', 'predire'),
+        { ...ex('s1-15', 'Un renfort', 'debug'), obligatoire: false },
+        { ...ex('s1-17', 'Un bonus', 'debug'), obligatoire: false, niveau: 'expert' as const },
+      ],
+    }
+  }
+
+  it("ne compte que les obligatoires dans l'avancement", () => {
+    // ADR-004 : un expert n'est jamais compte dans la progression affichee.
+    render(<PageExercices groupe={avecBonus()} reussis={['s1-09']} />)
+    expect(screen.getByText('1 / 2')).toBeInTheDocument()
+  })
+
+  it('sépare les facultatifs du chemin obligatoire', () => {
+    render(<PageExercices groupe={avecBonus()} reussis={[]} />)
+    const bloc = screen.getByRole('heading', { name: /aller plus loin/i }).parentElement!
+    expect(within(bloc).getByRole('link', { name: /Un renfort/ })).toBeInTheDocument()
+    expect(within(bloc).getByRole('link', { name: /Un bonus/ })).toBeInTheDocument()
+    expect(within(bloc).queryByRole('link', { name: /Ranger un prénom/ })).toBeNull()
+  })
+
+  it('étiquette les experts, pas les renforts', () => {
+    render(<PageExercices groupe={avecBonus()} reussis={[]} />)
+    expect(screen.getAllByText('Bonus')).toHaveLength(1)
+  })
+
+  it("garde le numéro d'URL de l'exercice, pas son rang affiché", () => {
+    // Le renfort est le 3e du tableau publie : son URL doit rester /…/3.
+    render(<PageExercices groupe={avecBonus()} reussis={[]} />)
+    expect(screen.getByRole('link', { name: /Un renfort/ })).toHaveAttribute(
+      'href',
+      '/variables/exercices/3',
+    )
+  })
+
+  it('ne montre aucun bloc facultatif quand il n y en a pas', () => {
+    render(<PageExercices groupe={GROUPE} reussis={[]} />)
+    expect(screen.queryByRole('heading', { name: /aller plus loin/i })).toBeNull()
   })
 })

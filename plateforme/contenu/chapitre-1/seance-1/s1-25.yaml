@@ -1,0 +1,41 @@
+id: s1-25
+concept: types
+notion: types
+seance: 1
+niveau: normal
+type: completer
+titre: Fiche signalétique
+obligatoire: false
+enonce: |
+  Ici, c'est toi qui choisis les valeurs. La seule contrainte est leur type :
+  nom doit contenir du texte, age un nombre entier.
+
+  Remplace chaque _____ par la valeur de ton choix. Le programme affiche
+  ensuite la valeur et son type.
+
+  Rappel : ce qui est entre guillemets est du texte, même si ça ressemble à un
+  nombre.
+depart: |
+  nom = _____
+  age = _____
+
+  print("Nom :", nom, "(type :", type(nom), ")")
+  print("Âge :", age, "(type :", type(age), ")")
+indices:
+  - "Un texte s'écrit entre guillemets : \"Camille\". Un nombre entier s'écrit sans rien autour : 16."
+  - "Si le type affiché est <class 'str'> alors que tu attendais <class 'int'>, c'est que tu as laissé des guillemets autour du nombre."
+tests:
+  # Ni sortie ni valeur attendue : l'eleve choisit librement. C'est le TYPE
+  # qui est verifie, comme dans l'exercice d'origine du notebook 2025.
+  - type: variable
+    nom: nom
+    type_attendu: str
+  - type: variable
+    nom: age
+    type_attendu: int
+solution: |
+  nom = "Camille"
+  age = 16
+
+  print("Nom :", nom, "(type :", type(nom), ")")
+  print("Âge :", age, "(type :", type(age), ")")

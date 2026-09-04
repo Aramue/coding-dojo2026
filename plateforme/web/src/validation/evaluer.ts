@@ -47,8 +47,10 @@ export function evaluer(params: {
     if (test.type === 'interdit' && code.includes(test.motif)) {
       return {
         verdict: 'rouge',
-        titre: 'La réponse ne doit pas être écrite en dur.',
-        detail: `Ton programme doit calculer le résultat, pas l'afficher directement.`,
+        titre: test.message ?? 'La réponse ne doit pas être écrite en dur.',
+        detail: test.message
+          ? `Relis la consigne : cette écriture est écartée volontairement.`
+          : `Ton programme doit calculer le résultat, pas l'afficher directement.`,
       }
     }
     if (test.type === 'contient' && !code.includes(test.motif)) {

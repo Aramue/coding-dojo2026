@@ -10,8 +10,8 @@ export type Test =
   | { type: 'sortie'; entrees: string[]; attendu: string; exigeExact?: boolean }
   | { type: 'variable'; nom: string; valeurAttendue?: string; typeAttendu?: string }
   | { type: 'qcm'; options: string[]; bonneReponse: number }
-  | { type: 'interdit'; motif: string }
-  | { type: 'contient'; motif: string }
+  | { type: 'interdit'; motif: string; message?: string }
+  | { type: 'contient'; motif: string; message?: string }
 
 export type ResultatTest = {
   verdict: Verdict

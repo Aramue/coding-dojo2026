@@ -1,0 +1,46 @@
+id: s1-33
+concept: input
+notion: saisie
+seance: 1
+niveau: expert
+type: debug
+titre: L'ordre des questions
+obligatoire: false
+enonce: |
+  Ce programme calcule juste. Il est pourtant refusé, parce qu'il pose ses
+  questions dans le mauvais ordre — et l'ordre des questions fait partie de ce
+  qu'on demande, au même titre que le texte affiché.
+
+  Il doit demander d'abord le prénom, puis l'âge.
+
+  Si la personne répond Camille, puis 16, l'écran doit montrer exactement ceci :
+
+  Ton prénom : Camille
+  Ton âge : 16
+  Camille a 16 ans
+
+  Répare le programme.
+depart: |
+  age = input("Ton âge : ")
+  prenom = input("Ton prénom : ")
+  print(f"{prenom} a {age} ans")
+indices:
+  - Les deux premières lignes de l'écran ne sont pas des print. Ce sont les questions elles-mêmes, affichées au moment où input s'exécute.
+  - Python exécute les lignes de haut en bas. La question posée en premier est donc celle écrite en premier.
+tests:
+  - type: sortie
+    entrees: ["Camille", "16"]
+    attendu: |-
+      Ton prénom : Camille
+      Ton âge : 16
+      Camille a 16 ans
+  - type: sortie
+    entrees: ["Alex", "19"]
+    attendu: |-
+      Ton prénom : Alex
+      Ton âge : 19
+      Alex a 19 ans
+solution: |
+  prenom = input("Ton prénom : ")
+  age = input("Ton âge : ")
+  print(f"{prenom} a {age} ans")

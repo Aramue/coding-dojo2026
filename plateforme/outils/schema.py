@@ -55,6 +55,11 @@ class TestQcm(BaseModel):
 class TestMotif(BaseModel):
     type: Literal["interdit", "contient"]
     motif: str
+    # Ce que l'eleve lit quand le motif se declenche. Le message par defaut
+    # parle de reponse ecrite en dur — vrai pour la plupart des interdits, faux
+    # quand le motif interdit une TECHNIQUE (s1-18 : l'echange en une ligne).
+    # Un message trompeur envoie l'eleve chercher un probleme qu'il n'a pas.
+    message: str | None = None
 
 
 TestExercice = Annotated[

@@ -290,3 +290,28 @@ describe('evaluer — les cas restants', () => {
     expect(r.verdict).toBe('vert')
   })
 })
+
+describe('evaluer — le message d un motif interdit', () => {
+  it('utilise le message du motif quand il en porte un', () => {
+    // Le message par defaut parle de reponse ecrite en dur. C'est faux quand
+    // le motif interdit une TECHNIQUE : l'eleve chercherait un probleme qu'il
+    // n'a pas.
+    const r = evaluer({
+      code: 'a, b = b, a',
+      tests: [{ type: 'interdit', motif: 'a, b = b, a', message: "Cette écriture est écartée ici." }],
+      executions: [execution()],
+    })
+    expect(r.verdict).toBe('rouge')
+    expect(r.titre).toBe('Cette écriture est écartée ici.')
+    expect(r.detail).not.toMatch(/en dur/i)
+  })
+
+  it('garde le message par defaut sans message propre', () => {
+    const r = evaluer({
+      code: 'print(Camille)',
+      tests: [{ type: 'interdit', motif: 'print(Camille' }],
+      executions: [execution()],
+    })
+    expect(r.titre).toMatch(/en dur/i)
+  })
+})

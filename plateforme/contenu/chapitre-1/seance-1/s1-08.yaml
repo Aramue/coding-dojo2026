@@ -1,0 +1,39 @@
+id: s1-08
+concept: print
+notion: afficher
+seance: 1
+niveau: expert
+type: ecrire
+titre: Trois lignes, un seul print
+obligatoire: false
+enonce: |
+  Tu sais afficher trois lignes avec trois print. Il existe plus court.
+
+  À l'intérieur des guillemets, la suite de deux caractères \n demande à Python
+  de passer à la ligne. Elle ne s'affiche pas : elle agit.
+
+  Écris **un seul** print qui affiche exactement ces trois lignes :
+
+  Menu du jour
+  Entrée : soupe
+  Plat : lasagnes
+depart: ''
+indices:
+  - "Écris d'abord la première ligne entre guillemets. Puis, sans fermer les guillemets, colle \n et continue avec la deuxième."
+  - "Il faut deux \n dans le texte : un après « Menu du jour », un après « Entrée : soupe ». Le texte entier reste dans une seule paire de guillemets."
+tests:
+  - type: sortie
+    entrees: []
+    exige_exact: true
+    attendu: |-
+      Menu du jour
+      Entrée : soupe
+      Plat : lasagnes
+  # Le contient force la technique : trois print separes donneraient la meme
+  # sortie, et l'exercice ne travaillerait plus rien.
+  - type: contient
+    motif: '\n'
+  - type: interdit
+    motif: "input("
+solution: |
+  print("Menu du jour\nEntrée : soupe\nPlat : lasagnes")

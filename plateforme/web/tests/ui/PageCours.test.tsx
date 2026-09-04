@@ -15,6 +15,7 @@ function groupe(blocs: Bloc[]): GroupeNotion {
     chapitre: 'bases',
     exercices: [],
     faits: 0,
+    total: 0,
     lecon: {
       id: 'c1-variables',
       notion: 'variables',
@@ -146,6 +147,7 @@ describe('PageCours — continuité', () => {
     const avecExercices = {
       ...groupe([]),
       exercices: [{ id: 's1-09' }, { id: 's1-10' }] as unknown as GroupeNotion['exercices'],
+      total: 2,
     }
     render(<PageCours groupe={avecExercices} executeur={executeurFactice()} />)
     expect(screen.getByRole('link', { name: /2 exercices/ })).toHaveAttribute(

@@ -1,0 +1,33 @@
+id: s1-26
+concept: types
+notion: types
+seance: 1
+niveau: expert
+type: predire
+titre: La boîte qui change de nature
+obligatoire: false
+enonce: |
+  Une boîte n'a pas de type à elle. C'est ce qu'elle contient qui en a un, et
+  ranger une nouvelle valeur dedans change donc aussi son type.
+
+  Lis ce programme. Qu'affiche-t-il à l'écran ?
+depart: |
+  x = 5
+  print(type(x))
+  x = "cinq"
+  print(type(x))
+indices:
+  - Python ne demande jamais de déclarer le type d'une variable. Il le déduit de la valeur qu'on y range.
+  - "La deuxième affectation remplace la valeur ET ce qu'elle est : 5 est un nombre entier, \"cinq\" est du texte."
+tests:
+  - type: qcm
+    options:
+      - "<class 'int'>\n<class 'str'>"
+      - "<class 'int'>\n<class 'int'>"
+      - "Python signale une erreur : on ne peut pas mettre du texte dans une boîte qui contenait un nombre"
+    bonne_reponse: 0
+solution: |
+  x = 5
+  print(type(x))
+  x = "cinq"
+  print(type(x))

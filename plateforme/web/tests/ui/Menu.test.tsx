@@ -21,6 +21,7 @@ const NOTIONS: GroupeNotion[] = [
     exercices: exercices(7),
     lecon: null,
     faits: 7,
+    total: 7,
   },
   {
     id: 'variables',
@@ -31,6 +32,7 @@ const NOTIONS: GroupeNotion[] = [
     exercices: exercices(6),
     lecon: null,
     faits: 1,
+    total: 6,
   },
 ]
 

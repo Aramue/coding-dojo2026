@@ -43,10 +43,10 @@ export function PageCours({
 
       <PiedNavigation
         suivant={
-          groupe.exercices.length > 0
+          groupe.total > 0
             ? {
                 cible: { vue: 'exercices', notion: groupe.id },
-                libelle: `${groupe.exercices.length} exercices`,
+                libelle: `${groupe.total} exercices`,
               }
             : undefined
         }

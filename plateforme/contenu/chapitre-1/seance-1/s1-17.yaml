@@ -1,0 +1,44 @@
+id: s1-17
+concept: variable
+notion: variables
+seance: 1
+niveau: expert
+type: debug
+titre: La boîte recyclée
+obligatoire: false
+enonce: |
+  Ce programme affiche le prix d'une place, puis le prix pour deux personnes.
+  Il doit afficher exactement :
+
+  Pour deux : 40
+  Pour une : 20
+
+  Il se trompe sur la deuxième ligne. Le problème n'est pas un calcul faux :
+  c'est qu'une seule boîte sert à désigner deux choses différentes, et que la
+  seconde efface la première.
+
+  Répare le programme. Tu ne peux pas t'en sortir en changeant seulement
+  l'ordre des lignes.
+depart: |
+  prix = 20
+  prix = prix * 2
+  print("Pour deux :", prix)
+  print("Pour une :", prix)
+indices:
+  - Déroule le programme ligne par ligne et note ce que contient prix à chaque étape. À quel moment la valeur 20 disparaît-elle ?
+  - Deux informations différentes demandent deux boîtes différentes. Garde prix pour le prix d'une place, et range le double ailleurs.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Pour deux : 40
+      Pour une : 20
+  - type: variable
+    nom: prix
+    type_attendu: int
+    valeur_attendue: "20"
+solution: |
+  prix = 20
+  prix_double = prix * 2
+  print("Pour deux :", prix_double)
+  print("Pour une :", prix)

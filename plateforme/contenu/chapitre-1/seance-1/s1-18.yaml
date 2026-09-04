@@ -1,0 +1,61 @@
+id: s1-18
+concept: reaffectation
+notion: variables
+seance: 1
+niveau: expert
+type: ecrire
+titre: Échanger deux boîtes
+obligatoire: false
+enonce: |
+  Deux boîtes, deux couleurs. Tu dois échanger leur contenu : gauche doit
+  finir avec bleu, et droite avec rouge.
+
+  Le programme doit alors afficher exactement :
+
+  bleu rouge
+
+  Ne change pas les deux premières lignes : elles remplissent les boîtes au
+  départ. Écris la suite en dessous, puis affiche.
+
+  Attention : Python connaît une écriture qui fait l'échange en une seule
+  ligne. Elle est interdite ici — c'est justement le raisonnement qu'on
+  travaille.
+depart: |
+  gauche = "rouge"
+  droite = "bleu"
+indices:
+  - Si tu ranges droite dans gauche en premier, la valeur de gauche est perdue et tu ne peux plus la mettre dans droite.
+  - Il te faut une troisième boîte pour mettre de côté la valeur que tu vas écraser, avant de l'écraser.
+tests:
+  - type: variable
+    nom: gauche
+    type_attendu: str
+    valeur_attendue: "'bleu'"
+  - type: variable
+    nom: droite
+    type_attendu: str
+    valeur_attendue: "'rouge'"
+  - type: sortie
+    entrees: []
+    attendu: |-
+      bleu rouge
+  # Sans ce motif, l'echange passe par une syntaxe jamais enseignee et
+  # l'exercice ne travaille plus rien. Exige par la progression.
+  - type: interdit
+    motif: 'gauche, droite = droite, gauche'
+    message: >-
+      L'échange en une seule ligne est écarté ici : c'est justement le
+      raisonnement que cet exercice fait travailler.
+  # Les deux premieres lignes doivent rester : sinon il suffit d'inverser les
+  # valeurs de depart.
+  - type: contient
+    motif: 'gauche = "rouge"'
+  - type: contient
+    motif: 'droite = "bleu"'
+solution: |
+  gauche = "rouge"
+  droite = "bleu"
+  temporaire = gauche
+  gauche = droite
+  droite = temporaire
+  print(gauche, droite)

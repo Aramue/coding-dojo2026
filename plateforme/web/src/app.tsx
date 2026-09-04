@@ -271,7 +271,8 @@ function Entete({
   codeAcces?: string
   groupes?: GroupeNotion[]
 }) {
-  const total = groupes.reduce((n, g) => n + g.exercices.length, 0)
+  // Obligatoires seulement : la jauge de l'en-tete est le chemin minimal.
+  const total = groupes.reduce((n, g) => n + g.total, 0)
   const faits = groupes.reduce((n, g) => n + g.faits, 0)
 
   return (

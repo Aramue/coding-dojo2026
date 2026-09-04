@@ -90,7 +90,8 @@ function Notion({
     if (courante) setOuverte(true)
   }, [courante])
 
-  const total = notion.exercices.length
+  // `total` compte les OBLIGATOIRES : un bonus ne fait pas partie du chemin.
+  const total = notion.total
   const terminee = total > 0 && notion.faits === total
 
   return (
