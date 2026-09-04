@@ -53,3 +53,20 @@ Voir [[ADR-006 Palette dérivée des slides]].
 > Le code écrit par l'élève. Écarté explicitement à la conception. L'alerte de blocage porte le
 > **type** d'erreur et le test qui échoue, ce qui suffit à arriver en sachant quoi dire.
 > Voir [[ADR-002 Identification par code d'agent]].
+
+## Amendement du 4 septembre 2026 — la portée du pastel
+
+> [!warning] Ce que « pastel = j'apprends » veut dire, et ne veut pas dire
+> Dans les supports de cours, le pastel est le fond d'une **carte**, pas d'un écran. Appliqué en
+> aplat plein écran, il fait ressembler l'interface à une maquette : le texte flotte sans surface,
+> la couleur ne porte plus d'information, elle remplit de l'espace.
+>
+> **Règle appliquée** : le canevas est le neutre chaud, le contenu vit sur du blanc, et la couleur
+> de la notion tient les accents — sur-titre, pastille, état actif du menu, filet des blocs
+> « attention », bordure de la carte de code.
+>
+> L'écran d'exercice reste sombre : c'est la bascule « j'apprends / j'écris », et elle tient. La
+> couleur profonde de la famille y est voilée d'un gris très sombre — un aplat saturé sur un écran
+> entier fatigue et lit « prototype ».
+
+Voir [[Pièges et invariants]].

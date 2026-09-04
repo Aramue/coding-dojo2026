@@ -120,6 +120,7 @@
 /* Sous 900 px, la colonne devient une bande horizontale au-dessus du contenu. */
 @media (max-width: 900px) {
   .menu {
+    min-width: 0; /* sinon la bande defilante impose sa largeur a la grille */
     border-right: 0;
     border-bottom: 1px solid var(--rule-doux);
     padding: var(--e-2) 0;

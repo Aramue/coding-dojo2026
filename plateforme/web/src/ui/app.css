@@ -47,7 +47,12 @@
       'entete'
       'menu'
       'contenu';
-    grid-template-columns: 1fr;
+    /*
+     * minmax(0, 1fr) et non 1fr : une colonne `1fr` prend au minimum la
+     * largeur de son contenu, et la bande de menu defilante (quatre cartes de
+     * 12 rem) faisait alors deborder toute la page de 17 px vers la droite.
+     */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto 1fr;
   }
 }

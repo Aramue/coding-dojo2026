@@ -157,6 +157,34 @@ un `useState` rempli à la connexion.
 compteur d'origine== — 0/6 après une réussite. Aucun test unitaire ne l'aurait vu : le bug n'existe
 qu'à l'assemblage. Trouvé en résolvant un exercice à la main dans le conteneur.
 
+### La couleur de notion est un accent, jamais un fond de page
+
+Le canevas est neutre (`--ground`), le contenu vit sur `--surface`, et la couleur de la famille
+tient le sur-titre, la pastille, l'état actif du menu et le filet des blocs « attention ».
+
+**Ce qui casse :** une première version peignait toute la zone de contenu avec le `tint` de la
+notion. ==Le résultat ressemblait à une maquette== — la couleur ne portait plus d'information,
+elle remplissait de l'espace, et le texte flottait sans surface ni profondeur. La règle de la
+charte (« pastel = j'apprends ») parle de l'ambiance d'une carte, pas d'un aplat plein écran.
+
+### Une colonne de grille `1fr` prend la largeur de son contenu
+
+En mise en page mobile, la grille de `.appli` déclare `minmax(0, 1fr)`.
+
+**Ce qui casse :** avec `1fr`, la bande de menu horizontale (quatre cartes de 12 rem) impose sa
+largeur minimale à toute la grille. La page débordait de 17 px vers la droite sur un écran de
+375 px, et tout le site se décalait au défilement horizontal.
+
+### Les retours à la ligne d'un énoncé ne veulent pas tous dire la même chose
+
+`decouperEnonce` distingue trois genres de bloc : prose (réenroulée), liste de consignes (retours
+gardés, typographie normale) et sortie attendue (retours gardés, chasse fixe).
+
+**Ce qui casse :** rendre l'énoncé entier en `white-space: pre-line` coupait les phrases là où
+l'auteur avait coupé son fichier YAML, vers 75 colonnes — une largeur qui n'a aucun rapport avec
+l'écran de l'élève. Tout supprimer écraserait au contraire les sorties attendues sur une ligne,
+alors que ces exercices se jouent au caractère près.
+
 ### Le fil d'Ariane touche `EcranExercice`, sa logique reste interdite
 
 `EcranExercice` orchestre **une exécution par test**, séquentiellement, avec cache par jeu
