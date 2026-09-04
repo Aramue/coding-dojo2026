@@ -25,6 +25,15 @@ function minutes(secondes: number): string {
   return `${Math.floor(secondes / 60)} min`
 }
 
+/** « 1 exercice validé », pas « 1 exercices validés ». */
+function valides(nombre: number): string {
+  return nombre <= 1 ? `${nombre} exercice validé` : `${nombre} exercices validés`
+}
+
+function echecs(nombre: number): string {
+  return nombre <= 1 ? `${nombre} échec` : `${nombre} échecs d'affilée`
+}
+
 export function TableauDeBord({ codeProf }: { codeProf: string }) {
   const [eleves, setEleves] = useState<LigneEleve[]>([])
   const [erreur, setErreur] = useState<string | null>(null)
@@ -36,6 +45,12 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
         const reponse = await fetch('/api/prof/seance', { headers: { 'X-Code-Prof': codeProf } })
         if (!reponse.ok) throw new Error('Accès refusé.')
         const donnees = await reponse.json()
+        // Une réponse sans `eleves` mettait `undefined` dans l'état, et le
+        // rendu plantait sur `.length` : ==le tableau du professeur devenait
+        // un écran blanc== en pleine séance, sans rien qui explique pourquoi.
+        if (!Array.isArray(donnees?.eleves)) {
+          throw new Error('Réponse inattendue de la plateforme.')
+        }
         if (vivant) {
           setEleves(donnees.eleves)
           setErreur(null)
@@ -56,7 +71,9 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
     <main className="tableau">
       <header className="tableau__entete">
         <h1>Séance en cours</h1>
-        <p>{eleves.length} élèves connectés</p>
+        <p>
+          {eleves.length} {eleves.length <= 1 ? 'élève connecté' : 'élèves connectés'}
+        </p>
       </header>
       {erreur && <p role="alert">{erreur}</p>}
       <div className="tableau__lignes">
@@ -66,9 +83,9 @@ export function TableauDeBord({ codeProf }: { codeProf: string }) {
             <span className="ligne__ou">{a.exercice_id}</span>
             <span className="ligne__quoi">
               {a.statut === 'bloque' &&
-                `${a.echecs_consecutifs} échecs d'affilée${a.dernier_type_erreur ? ` — ${a.dernier_type_erreur}` : ''}`}
+                `${echecs(a.echecs_consecutifs)}${a.dernier_type_erreur ? ` — ${a.dernier_type_erreur}` : ''}`}
               {a.statut === 'inactif' && `aucune soumission depuis ${minutes(a.inactif_depuis_s)}`}
-              {a.statut === 'en_cours' && `${a.reussis} exercices validés`}
+              {a.statut === 'en_cours' && valides(a.reussis)}
             </span>
             <span className={`statut statut--${a.statut}`}>
               {LIBELLES[a.statut]}

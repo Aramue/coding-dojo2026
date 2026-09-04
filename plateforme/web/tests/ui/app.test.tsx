@@ -154,3 +154,84 @@ describe('App — le menu suit la progression', () => {
     expect(jauge).toHaveAttribute('aria-valuemax', '1')
   })
 })
+
+describe('App — tableau de bord professeur', () => {
+  it("s'atteint sur /prof sans code eleve", async () => {
+    // Le tableau de bord a sa propre porte : il doit rester joignable meme
+    // quand personne n'est connecte cote eleve.
+    history.pushState(null, '', '/prof')
+    render(<App />)
+    expect(await screen.findByRole('heading', { name: /tableau de bord/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/code professeur/i)).toBeInTheDocument()
+  })
+
+  it('ne demande pas le code deux fois dans le meme onglet', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, json: async () => ({ eleves: [] }) })),
+    )
+    sessionStorage.setItem('dojo.code-prof', 'code-prof-test')
+    history.pushState(null, '', '/prof')
+    render(<App />)
+    expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+  })
+
+  it("dit ce qui ne va pas plutot que de rendre un ecran blanc", async () => {
+    // Une reponse sans `eleves` plantait le rendu sur `.length`.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, json: async () => ({ pasCeQuOnAttend: true }) })),
+    )
+    sessionStorage.setItem('dojo.code-prof', 'code-prof-test')
+    history.pushState(null, '', '/prof')
+    render(<App />)
+    expect(await screen.findByRole('alert')).toHaveTextContent(/inattendue/i)
+  })
+
+  it('affiche un refus quand le code professeur est faux', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 401, json: async () => ({}) })))
+    sessionStorage.setItem('dojo.code-prof', 'faux')
+    history.pushState(null, '', '/prof')
+    render(<App />)
+    expect(await screen.findByRole('alert')).toHaveTextContent(/refus/i)
+  })
+})
+
+describe('TableauDeBord — accords', () => {
+  const LIGNE = {
+    code_acces: 'DOJO-TEST',
+    exercice_id: 's1-02',
+    statut: 'en_cours' as const,
+    echecs_consecutifs: 1,
+    inactif_depuis_s: 0,
+    dernier_type_erreur: null,
+    reussis: 1,
+  }
+
+  async function rendreAvec(eleves: unknown[]) {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ eleves }) })))
+    sessionStorage.setItem('dojo.code-prof', 'code-prof-test')
+    history.pushState(null, '', '/prof')
+    render(<App />)
+    return screen.findByRole('heading', { name: /séance en cours/i })
+  }
+
+  it('accorde le singulier', async () => {
+    await rendreAvec([LIGNE])
+    expect(screen.getByText('1 élève connecté')).toBeInTheDocument()
+    expect(screen.getByText('1 exercice validé')).toBeInTheDocument()
+  })
+
+  it('accorde le pluriel', async () => {
+    await rendreAvec([LIGNE, { ...LIGNE, code_acces: 'DOJO-DEUX', reussis: 4 }])
+    expect(screen.getByText('2 élèves connectés')).toBeInTheDocument()
+    expect(screen.getByText('4 exercices validés')).toBeInTheDocument()
+  })
+
+  it("accorde aussi le compte d'echecs", async () => {
+    await rendreAvec([
+      { ...LIGNE, statut: 'bloque' as const, echecs_consecutifs: 1, dernier_type_erreur: null },
+    ])
+    expect(screen.getByText('1 échec')).toBeInTheDocument()
+  })
+})

@@ -1,0 +1,90 @@
+.prof {
+  grid-area: contenu;
+  background: var(--ground);
+  min-width: 0;
+}
+
+.prof--porte {
+  display: grid;
+  place-items: center;
+  padding: var(--e-5) var(--e-2) var(--e-6);
+}
+
+.prof__carte {
+  width: min(24rem, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-4);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-2);
+}
+
+.prof__carte h1 {
+  margin: 0;
+  font-size: var(--t-5);
+  color: var(--ink);
+}
+
+.prof__intro {
+  margin: 0 0 var(--e-2);
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.prof__carte label {
+  font-weight: 500;
+  font-size: var(--t-2);
+  color: var(--ink);
+}
+
+.prof__carte input {
+  height: 3rem;
+  padding: 0 var(--e-2);
+  font-family: var(--police-code);
+  font-size: var(--t-3);
+  letter-spacing: 0.08em;
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-2);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.prof__carte input:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+  border-color: var(--py-blue);
+}
+
+.prof__carte .bouton {
+  margin-top: var(--e-1);
+  width: 100%;
+}
+
+.prof__carte .bouton:disabled {
+  background: var(--ground-2);
+  color: var(--ink-soft);
+  border-color: var(--rule-doux);
+}
+
+.prof__aide {
+  margin: var(--e-1) 0 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.prof__aide code {
+  background: var(--ground-2);
+  border-radius: var(--rayon-1);
+  padding: 0.1em 0.24em;
+}
+
+.prof__pied {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--e-3) var(--e-5);
+}

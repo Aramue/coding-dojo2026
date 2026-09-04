@@ -7,6 +7,15 @@ describe('analyser', () => {
     expect(analyser('')).toEqual({ vue: 'connexion' })
   })
 
+  it('reconnait le tableau de bord professeur', () => {
+    expect(analyser('/prof')).toEqual({ vue: 'prof' })
+    expect(analyser('/prof/')).toEqual({ vue: 'prof' })
+  })
+
+  it('ne confond pas /prof avec une notion', () => {
+    expect(analyser('/prof/cours')).toEqual({ vue: 'cours', notion: 'prof' })
+  })
+
   it('reconnait une page de cours', () => {
     expect(analyser('/variables/cours')).toEqual({ vue: 'cours', notion: 'variables' })
   })
@@ -69,11 +78,12 @@ describe('versChemin', () => {
     expect(versChemin({ vue: 'exercice', notion: 'saisie', numero: 12 })).toBe(
       '/saisie/exercices/12',
     )
+    expect(versChemin({ vue: 'prof' })).toBe('/prof')
     expect(versChemin({ vue: 'inconnue' })).toBe('/')
   })
 
   it('fait l aller-retour sans perte', () => {
-    for (const chemin of ['/', '/variables/cours', '/types/exercices', '/saisie/exercices/12']) {
+    for (const chemin of ['/', '/prof', '/variables/cours', '/types/exercices', '/saisie/exercices/12']) {
       expect(versChemin(analyser(chemin))).toBe(chemin)
     }
   })

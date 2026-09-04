@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 
 export type Destination =
   | { vue: 'connexion' }
+  /** Tableau de bord professeur. Sa porte est le code prof, pas un code eleve. */
+  | { vue: 'prof' }
   | { vue: 'cours'; notion: string }
   | { vue: 'exercices'; notion: string }
   | { vue: 'exercice'; notion: string; numero: number }
@@ -20,6 +22,7 @@ const NUMERO_MAX = 99
 export function analyser(chemin: string): Destination {
   const morceaux = chemin.split('/').filter(Boolean)
   if (morceaux.length === 0) return { vue: 'connexion' }
+  if (morceaux.length === 1 && morceaux[0] === 'prof') return { vue: 'prof' }
 
   const [notion, page, numero] = morceaux
   if (!notion || !MOTIF_NOTION.test(notion)) return { vue: 'inconnue' }
@@ -45,6 +48,8 @@ export function versChemin(destination: Destination): string {
       return `/${destination.notion}/exercices`
     case 'exercice':
       return `/${destination.notion}/exercices/${destination.numero}`
+    case 'prof':
+      return '/prof'
     default:
       return '/'
   }

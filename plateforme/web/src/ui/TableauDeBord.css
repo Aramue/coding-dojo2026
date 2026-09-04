@@ -1,32 +1,138 @@
-.tableau { max-width: 1080px; margin-inline: auto; padding: 1.5rem; }
-.tableau__lignes { display: flex; flex-direction: column; }
+/*
+ * Même langage que les pages élève : canevas neutre, contenu sur une carte,
+ * lignes séparées par des filets. Le rouge n'est pas décoratif — il désigne
+ * l'élève à aller voir.
+ */
+
+.tableau {
+  max-width: 1080px;
+  margin-inline: auto;
+  padding: var(--e-5) var(--e-3) var(--e-3);
+}
+
+.tableau__entete {
+  margin-bottom: var(--e-3);
+}
+
+.tableau__entete h1 {
+  margin: 0;
+  font-size: var(--t-6);
+  color: var(--ink);
+}
+
+.tableau__entete p {
+  margin: var(--e-1) 0 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.tableau [role='alert'] {
+  margin: 0 0 var(--e-2);
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--ko) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 35%, var(--surface));
+  color: var(--ko);
+  font-size: var(--t-2);
+}
+
+.tableau__lignes {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+  overflow: hidden;
+}
+
+.tableau__lignes:empty::after {
+  content: 'Personne n’est encore connecté.';
+  display: block;
+  padding: var(--e-4);
+  color: var(--ink-soft);
+  font-size: var(--t-3);
+}
+
 .ligne {
   display: grid;
   grid-template-columns: minmax(112px, 0.7fr) minmax(90px, 0.6fr) minmax(190px, 1.6fr) auto;
-  gap: 1rem;
+  gap: var(--e-2);
   align-items: center;
-  padding: 0.85rem 1rem;
-  border-top: 1px solid var(--rule);
+  min-height: 3.25rem;
+  padding: var(--e-1) var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
   border-left: 3px solid transparent;
-  font-size: 0.9rem;
+  font-size: var(--t-2);
 }
+
+.ligne:last-child {
+  border-bottom: 0;
+}
+
 /*
- * Teintes de fond derivees de --ko/--ok via color-mix() : aucune couleur de la
- * charte n'est recopiee en dur ici, elle passe toujours par sa variable CSS.
+ * Teintes de fond dérivées de --ko via color-mix() : aucune couleur de la
+ * charte n'est recopiée en dur ici, elle passe toujours par sa variable CSS.
  */
 .ligne--bloque,
-.ligne--inactif { border-left-color: var(--ko); background: color-mix(in srgb, var(--ko) 6%, var(--ground)); }
-.ligne__eleve { font-weight: 500; }
-.ligne__ou, .ligne__quoi { color: var(--ink-soft); }
-/* La forme encode un etat : c'est le seul endroit ou une pastille est justifiee. */
+.ligne--inactif {
+  border-left-color: var(--ko);
+  background: color-mix(in srgb, var(--ko) 5%, var(--surface));
+}
+
+.ligne__eleve {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.ligne__ou,
+.ligne__quoi {
+  color: var(--ink-soft);
+}
+
+/* La forme encode un état : c'est le seul endroit où une pastille est justifiée. */
 .statut {
-  font-size: 0.86rem;
-  font-weight: 600;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
+  font-size: var(--t-1);
+  font-weight: 500;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  justify-self: end;
 }
-.statut--bloque,
-.statut--inactif { background: color-mix(in srgb, var(--ko) 16%, var(--ground)); color: var(--ko); }
-.statut--en_cours { background: var(--ground-2); color: var(--ink-soft); }
+
+.statut--bloque {
+  background: color-mix(in srgb, var(--ko) 15%, var(--surface));
+  color: var(--ko);
+}
+
+.statut--inactif {
+  background: var(--ground-2);
+  color: var(--ink-soft);
+}
+
+.statut--en_cours {
+  background: color-mix(in srgb, var(--ok) 13%, var(--surface));
+  color: var(--ok);
+}
+
+@media (max-width: 720px) {
+  .tableau {
+    padding: var(--e-3) var(--e-2);
+  }
+
+  .ligne {
+    grid-template-columns: 1fr auto;
+    row-gap: 0.25rem;
+    padding: var(--e-2);
+  }
+
+  .ligne__ou {
+    grid-column: 1;
+  }
+
+  .ligne__quoi {
+    grid-column: 1 / -1;
+  }
+}

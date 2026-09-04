@@ -6,6 +6,7 @@ import { Executeur } from './execution/executeur'
 import { naviguer, useRoute, type Destination } from './routage'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
+import { EcranProf } from './ui/EcranProf'
 import { Menu } from './ui/Menu'
 import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
@@ -103,6 +104,17 @@ export function App() {
       const ouverte = premiereOuverte(grouper(notions, exercices, lecons, acquis))
       if (ouverte) naviguer({ vue: 'cours', notion: ouverte.id })
     }
+  }
+
+  // Le tableau de bord ne passe pas par le code eleve : il a sa propre porte,
+  // et il doit rester atteignable meme si personne n'est connecte cote eleve.
+  if (destination.vue === 'prof') {
+    return (
+      <div className="appli appli--seul">
+        <Entete />
+        <EcranProf />
+      </div>
+    )
   }
 
   if (!codeAcces) {
