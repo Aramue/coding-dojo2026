@@ -92,6 +92,18 @@ Un bloc `code` peut porter deux champs de plus :
 > Sans `entrees`, la leçon sur `input()` ne pourrait montrer **aucun** exemple : le validateur
 > exécute chaque bloc de code, et `input()` sans entrée lève `EOFError`.
 
+## Le chapitre, unité de regroupement
+
+Un chapitre rassemble les notions d'un même sujet. C'est **le niveau que le menu déplie** : sans
+lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient ensemble.
+
+| Identifiant | Titre affiché | Notions |
+|---|---|---|
+| `bases` | Les bases de Python | `afficher`, `variables`, `types`, `saisie` |
+
+La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
+`seance-1-chapitres.json`. Chaque notion déclare son `chapitre`.
+
 ## La notion, unité de navigation
 
 Une notion porte une leçon, un groupe d'exercices et une couleur. La table vit dans

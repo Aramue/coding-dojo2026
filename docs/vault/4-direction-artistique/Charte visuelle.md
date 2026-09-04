@@ -70,3 +70,24 @@ Voir [[ADR-006 Palette dérivée des slides]].
 > entier fatigue et lit « prototype ».
 
 Voir [[Pièges et invariants]].
+
+## Le mouvement, et ses quatre usages
+
+Rien ne bouge sans raison, et rien ne dure plus de 400 ms. Quatre usages, pas un de plus :
+
+| Quoi | Durée | Pourquoi |
+|---|---|---|
+| L'arrivée d'une page | 220 ms | dit qu'on a changé d'endroit, là où un remplacement instantané laisse douter du clic |
+| Le repli d'un chapitre | 260 ms | rend le pliage lisible ; sans lui le sommaire saute |
+| L'apparition du verdict | 180 ms | c'est le seul retour que l'élève attend, il doit arriver et non surgir |
+| L'avancement d'une jauge | 400 ms | rend le gain visible au moment où il est acquis |
+
+> [!important] Deux règles techniques
+> Le repli s'anime sur `grid-template-rows: 1fr → 0fr`, jamais sur `height` : c'est la seule
+> façon d'animer vers une hauteur **automatique** sans la mesurer en JavaScript.
+>
+> La barre de lecture bouge par `transform: scaleX()`, jamais par `width` : la première est
+> composée par le GPU, la seconde relance la mise en page à chaque pixel de défilement — et
+> ==les machines des huit établissements ne sont pas des machines de développeur==.
+
+`prefers-reduced-motion: reduce` désactive les quatre.
