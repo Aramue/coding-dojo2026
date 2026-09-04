@@ -190,8 +190,11 @@ describe('TableauDeBord — vue d ensemble', () => {
       ligne({ code_acces: 'DOJO-D' }),
     ])
     const comptes = await screen.findByLabelText('Répartition de la classe')
-    expect(within(comptes).getByText('bloqués').parentElement).toHaveTextContent('1 bloqués')
-    expect(within(comptes).getByText('en cours').parentElement).toHaveTextContent('2 en cours')
+    // Accordé : « 1 bloqué », pas « 1 bloqués ».
+    expect(comptes).toHaveTextContent('1 bloqué')
+    expect(comptes).toHaveTextContent('1 inactif')
+    expect(comptes).toHaveTextContent('2 en cours')
+    expect(within(comptes).queryByText('bloqués')).toBeNull()
   })
 
   it('pose un trait par eleve sur la ligne de repartition', async () => {

@@ -83,10 +83,19 @@
   padding: 0.1em 0.24em;
 }
 
+/*
+ * Fermer la session est une SORTIE, pas une action de la page : elle se detache
+ * du contenu par un filet et une vraie respiration. Collee sous la liste de la
+ * classe, elle se lisait comme le dernier bouton du tableau — et un bouton de
+ * deconnexion qu'on peut confondre avec « valider », c'est un clic de trop.
+ */
 .prof__pied {
+  display: flex;
+  justify-content: flex-end;
   max-width: 1080px;
-  margin: 0 auto;
-  padding: 0 var(--e-3) var(--e-5);
+  margin: var(--e-5) auto 0;
+  padding: var(--e-3) var(--e-3) var(--e-6);
+  border-top: 1px solid var(--rule-doux);
 }
 
 /*

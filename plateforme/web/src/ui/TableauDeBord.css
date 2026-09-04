@@ -44,7 +44,7 @@
 
 .tableau__comptes {
   display: flex;
-  gap: 0.4rem;
+  gap: var(--e-2);
   flex-wrap: wrap;
 }
 
@@ -57,10 +57,16 @@
 
 /* ---------- Le pouls ---------- */
 
+/*
+ * Le pouls porte le meme point que les compteurs : sans separation, il se
+ * lisait comme un cinquieme compteur de la serie.
+ */
 .pouls {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  padding-left: var(--e-2);
+  border-left: 1px solid var(--rule-doux);
   font-size: var(--t-1);
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
@@ -114,39 +120,56 @@
 }
 
 .compte {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
   font-size: var(--t-2);
   color: var(--ink-soft);
-  padding: 0.3rem 0.6rem;
-  border-radius: 999px;
-  background: var(--ground-2);
   font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Un point et un mot, sans gélule teintée.
+ *
+ * Quatre pastilles colorées en haut, une par ligne en dessous : l'écran se
+ * couvrait de fonds pastels qui ==décorent sans rien dire de plus==, et le
+ * texte posé dessus y perdait du contraste. Le point porte la couleur, le mot
+ * reste en encre pleine.
+ */
+.compte::before {
+  content: '';
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rule);
 }
 
 .compte b {
   color: var(--ink);
+  font-weight: 600;
 }
 
-.compte[data-ton='bloque'] {
-  background: color-mix(in srgb, var(--ko) 13%, var(--surface));
-  color: var(--ko);
+.compte[data-ton='bloque']::before {
+  background: var(--ko);
 }
 
-.compte[data-ton='bloque'] b { color: var(--ko); }
-
-.compte[data-ton='en_cours'] {
-  background: color-mix(in srgb, var(--ok) 11%, var(--surface));
-  color: var(--ok);
+.compte[data-ton='inactif']::before {
+  background: var(--py-yellow);
 }
 
-.compte[data-ton='en_cours'] b { color: var(--ok); }
+.compte[data-ton='en_cours']::before {
+  background: var(--ok);
+}
 
-/* Un compteur a zero ne doit pas crier : il n'y a rien a y faire. */
+/* Un compteur à zéro ne doit pas crier : il n'y a rien à y faire. */
 .compte[data-vide='true'] {
-  background: var(--ground-2);
-  color: var(--ink-soft);
+  opacity: 0.45;
 }
 
-.compte[data-vide='true'] b { color: var(--ink-soft); }
+.compte[data-vide='true']::before {
+  background: var(--rule);
+}
 
 /*
  * Un trait par eleve. Les traits se superposent la ou plusieurs eleves sont au
@@ -415,31 +438,46 @@
   color: var(--ink-soft);
 }
 
-/* La forme encode un état : c'est le seul endroit où une pastille est justifiée. */
+/*
+ * Le même point que dans l'en-tête, pour que les deux se répondent : ce qu'on
+ * compte en haut se retrouve ligne par ligne.
+ */
 .statut {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: var(--t-1);
   font-weight: 500;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
+  color: var(--ink-soft);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
   justify-self: end;
 }
 
+.statut::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rule);
+}
+
 .statut--bloque {
-  background: color-mix(in srgb, var(--ko) 15%, var(--surface));
   color: var(--ko);
+  font-weight: 600;
 }
 
-.statut--inactif,
-.statut--pas_commence {
-  background: var(--ground-2);
-  color: var(--ink-soft);
+.statut--bloque::before {
+  background: var(--ko);
 }
 
-.statut--en_cours {
-  background: color-mix(in srgb, var(--ok) 13%, var(--surface));
-  color: var(--ok);
+.statut--inactif::before {
+  background: var(--py-yellow);
+}
+
+.statut--en_cours::before {
+  background: var(--ok);
 }
 
 @media (max-width: 720px) {
@@ -583,16 +621,24 @@
 }
 
 /*
- * La marque porte l'etat : un point, une coche, deux coches. Elle est en
- * chasse fixe pour que les titres restent alignes quel que soit l'etat.
+ * La marque porte l'etat : un point, une coche, deux coches. Largeur fixe pour
+ * que les titres restent alignes quel que soit l'etat.
  */
 .etape__marque {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
   width: 1.4rem;
-  font-family: var(--police-code);
-  font-size: 0.75rem;
   color: var(--rule);
-  letter-spacing: -0.06em;
+}
+
+.etape__marque svg + svg {
+  margin-left: -3px;
+}
+
+.etape[data-coches='0'] .etape__marque {
+  opacity: 0.55;
 }
 
 .etape[data-coches='1'] .etape__marque {

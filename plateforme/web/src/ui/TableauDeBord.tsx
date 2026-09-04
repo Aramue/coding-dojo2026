@@ -107,10 +107,15 @@ export function TableauDeBord({
 
         {eleves.length > 0 && (
           <div className="tableau__comptes" aria-label="Répartition de la classe">
-            <Compte valeur={vue.bloques} libelle="bloqués" ton="bloque" />
-            <Compte valeur={vue.inactifs} libelle="inactifs" ton="inactif" />
-            <Compte valeur={vue.pasCommence} libelle="pas commencé" ton="pas_commence" />
-            <Compte valeur={vue.enCours} libelle="en cours" ton="en_cours" />
+            <Compte valeur={vue.bloques} un="bloqué" plusieurs="bloqués" ton="bloque" />
+            <Compte valeur={vue.inactifs} un="inactif" plusieurs="inactifs" ton="inactif" />
+            <Compte
+              valeur={vue.pasCommence}
+              un="pas commencé"
+              plusieurs="pas commencé"
+              ton="pas_commence"
+            />
+            <Compte valeur={vue.enCours} un="en cours" plusieurs="en cours" ton="en_cours" />
           </div>
         )}
 
@@ -196,18 +201,21 @@ function Pouls({ recuA, enErreur }: { recuA: number | null; enErreur: boolean })
   )
 }
 
+/** Un point, un nombre, un mot. « 1 inactifs » se remarque tout de suite. */
 function Compte({
   valeur,
-  libelle,
+  un,
+  plusieurs,
   ton,
 }: {
   valeur: number
-  libelle: string
+  un: string
+  plusieurs: string
   ton: LigneEleve['statut']
 }) {
   return (
     <span className="compte" data-ton={ton} data-vide={valeur === 0}>
-      <b>{valeur}</b> {libelle}
+      <b>{valeur}</b> {valeur <= 1 ? un : plusieurs}
     </span>
   )
 }
@@ -374,8 +382,15 @@ function Parcours({
                 data-courant={etape.courant}
                 data-bonus={!etape.obligatoire}
               >
+                {/*
+                  La même coche que l'élève voit dans sa liste, tracée à la
+                  main comme le reste. ==Un « ✓ » de la police est un caractère,
+                  pas une icône== : son dessin change d'une machine à l'autre et
+                  ne se cale ni sur la graisse ni sur la couleur autour.
+                */}
                 <span className="etape__marque" aria-hidden="true">
-                  {etape.coches > 0 ? '✓'.repeat(etape.coches) : '·'}
+                  {etape.coches === 0 ? <Point /> : <Coche />}
+                  {etape.coches === 2 && <Coche />}
                 </span>
                 {/*
                   Le titre ouvre l'exercice tel que l'eleve le voit. Sans cela,
@@ -453,6 +468,31 @@ function Jauge({
         </span>
       )}
     </span>
+  )
+}
+
+/* SVG tracés à la main, trait 2,2 : la charte interdit emoji et icônes importées. */
+
+function Coche() {
+  return (
+    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" aria-hidden="true">
+      <path
+        d="M5 12.5 10 17.5 19 7"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** Pas encore fait : un point, pas un vide — la ligne garde son alignement. */
+function Point() {
+  return (
+    <svg viewBox="0 0 24 24" width="6" height="6" aria-hidden="true">
+      <circle cx="12" cy="12" r="6" fill="currentColor" />
+    </svg>
   )
 }
 

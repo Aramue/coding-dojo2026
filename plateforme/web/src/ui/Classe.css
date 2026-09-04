@@ -60,20 +60,26 @@
 
 .ajout__onglets {
   display: flex;
-  gap: 0.35rem;
-  margin-bottom: var(--e-2);
+  margin-bottom: var(--e-3);
+  border-bottom: 1px solid var(--rule-doux);
 }
 
+/*
+ * Un onglet se souligne, il ne s'encapsule pas. Deux gelules cote a cote se
+ * lisaient comme deux boutons — donc comme deux actions — alors que c'est un
+ * choix entre deux vues du meme formulaire.
+ */
 .ajout__onglet {
-  padding: 0.35rem 0.7rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
+  padding: 0.3rem 0.1rem;
+  margin-right: var(--e-2);
+  border: 0;
+  border-bottom: 2px solid transparent;
   background: none;
   font-family: inherit;
-  font-size: var(--t-1);
+  font-size: var(--t-2);
   color: var(--ink-soft);
   cursor: pointer;
-  transition: background 150ms ease-out, color 150ms ease-out;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
 }
 
 .ajout__onglet:hover {
@@ -81,8 +87,7 @@
 }
 
 .ajout__onglet[aria-selected='true'] {
-  background: var(--surface);
-  border-color: var(--rule-doux);
+  border-bottom-color: var(--ink);
   color: var(--ink);
   font-weight: 500;
 }
@@ -210,13 +215,14 @@
   padding: var(--e-2) 0;
 }
 
+/*
+ * La chasse fixe dit deja « ceci se recopie caractere par caractere » : le
+ * cadre autour n'ajoutait rien et transformait sept lignes en sept etiquettes.
+ */
 .inscrit__code {
   font-size: var(--t-1);
   color: var(--ink-soft);
-  padding: 0.25rem 0.45rem;
-  border: 1px solid var(--rule-doux);
-  border-radius: var(--rayon-1);
-  background: var(--surface-doux);
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
