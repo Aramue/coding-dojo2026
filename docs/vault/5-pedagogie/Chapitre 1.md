@@ -49,6 +49,22 @@ Détail des copies dans [[Bilan 2025-2026]].
 ==le seul type sur lequel un débutant absolu ne peut pas rester bloqué==.
 Voir [[Types d'exercices]].
 
+> [!success] Séance 1 écrite en entier — 4 septembre 2026
+> Les **34 exercices** de la séance 1 existent : 25 obligatoires, 4 renforts, 5 experts. Les neuf
+> derniers viennent de `progression-chapitre-1.json` et, quand elle le prescrit, directement du
+> matériel 2025 :
+>
+> | Exercice | Source |
+> |---|---|
+> | `s1-25` Fiche signalétique | l'Exercice 1 du notebook `variables_type_de_donnee`, ==amputé de sa ligne `bool`== reportée en séance 2 |
+> | `s1-26` La boîte qui change de nature | la cellule 10 du notebook du cours, écrite et jamais travaillée |
+> | `s1-17` La boîte recyclée | la copie Nikiforov, où `code` désigne successivement trois choses |
+> | `s1-33` L'ordre des questions | la copie Kaena Couto `(MAUVAIS ORDRE)`, logiquement juste et sanctionnée sur le seul ordre |
+>
+> Les cinq autres travaillent un point isolé : `
+`, `5 = age`, la casse, l'échange de deux
+> variables, la lecture d'un appel imbriqué. Voir [[Bugs réels de la promotion 2025]].
+
 ## Les trois séances
 
 ### Séance 1 — mercredi 16 septembre · *Le recrutement : dire, retenir, demander*

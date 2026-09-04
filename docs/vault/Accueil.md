@@ -54,7 +54,7 @@ Le code vit dans `plateforme/`, sur la branche `palier-1`.
 | `web/` | Front React + TypeScript, Pyodide auto-hébergé, **168 tests**, couverture 82 % |
 | `api/` | FastAPI + SQLite, **30 tests** |
 | `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **81 tests**, couverture 89 % |
-| `contenu/` | **25 exercices** de la séance 1 (12 `predire`, 5 `debug`, 5 `completer`, 3 `ecrire`) et **4 leçons** |
+| `contenu/` | **34 exercices** de la séance 1 — 25 obligatoires, 4 renforts, 5 experts — et **4 leçons** |
 | `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
 
 Un parcours complet a été joué dans un navigateur : connexion par code d'accès, résolution des

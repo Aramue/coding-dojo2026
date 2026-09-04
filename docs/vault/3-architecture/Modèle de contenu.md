@@ -92,6 +92,37 @@ Un bloc `code` peut porter deux champs de plus :
 > Sans `entrees`, la leçon sur `input()` ne pourrait montrer **aucun** exemple : le validateur
 > exécute chaque bloc de code, et `input()` sans entrée lève `EOFError`.
 
+## Trois statuts d'exercice
+
+| `obligatoire` | `niveau` | Ce que c'est | Compté dans la progression ? |
+|---|---|---|---|
+| `true` | `normal` | le chemin minimal, celui de la certification | **oui** |
+| `false` | `normal` | un **renfort** : même difficulté, pour qui a besoin de refaire | non |
+| `false` | `expert` | un **bonus** : pour qui a fini et va vite | non |
+
+> [!important] Un facultatif n'entre jamais dans le dénominateur
+> `grouper()` calcule `faits` et `total` sur les **obligatoires seulement**. Sans cette règle, un
+> élève qui a terminé le chemin minimal de « Les variables » verrait `6/10` et se croirait en
+> retard, alors qu'il a fini. ==C'est l'application de [[ADR-004 Mode expert en bonus débloqué]]==,
+> qui pose qu'un expert n'est jamais compté dans la progression affichée.
+>
+> La page d'exercices les affiche sous un intertitre « Pour aller plus loin », séparés du reste.
+
+### Un motif interdit peut porter son propre message
+
+```yaml
+- type: interdit
+  motif: 'gauche, droite = droite, gauche'
+  message: >-
+    L'échange en une seule ligne est écarté ici : c'est justement le
+    raisonnement que cet exercice fait travailler.
+```
+
+Le message par défaut dit « la réponse ne doit pas être écrite en dur ». Vrai pour la plupart des
+motifs, **faux quand le motif interdit une technique** : l'élève de `s1-18` n'a rien écrit en dur,
+il a utilisé l'affectation multiple. ==Un message trompeur l'envoie chercher un problème qu'il n'a
+pas.==
+
 ## Le chapitre, unité de regroupement
 
 Un chapitre rassemble les notions d'un même sujet. C'est **le niveau que le menu déplie** : sans
