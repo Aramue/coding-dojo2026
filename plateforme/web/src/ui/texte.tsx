@@ -66,9 +66,24 @@ export type GenreBloc =
   /** Sortie attendue ou message d'erreur : chasse fixe, au caractère près. */
   | 'sortie'
 
-export function genreDuBloc(paragraphe: string): GenreBloc {
+/**
+ * Un bloc d'une seule ligne est ambigu : « La séance commence » a exactement la
+ * forme d'une phrase. C'est son ANNONCE qui le trahit — tous les énoncés
+ * l'introduisent par un deux-points (« il devait afficher exactement cette
+ * ligne : », « Python affiche ce message d'erreur : »).
+ *
+ * Sans ce signal, la sortie attendue d'un exercice `debug` s'affichait comme de
+ * la prose, alors que l'élève doit la reproduire au caractère près.
+ */
+function estAnnonce(bloc: string | undefined): boolean {
+  return bloc !== undefined && /:\s*$/.test(bloc)
+}
+
+export function genreDuBloc(paragraphe: string, precedent?: string): GenreBloc {
   const lignes = paragraphe.split('\n')
-  if (lignes.length === 1) return 'paragraphe'
+  if (lignes.length === 1) {
+    return estAnnonce(precedent) ? 'sortie' : 'paragraphe'
+  }
   if (lignes.some((ligne) => MOTIF_LISTE.test(ligne))) return 'liste'
   if (lignes.every((ligne) => ligne.trim().length <= LARGEUR_SORTIE)) return 'sortie'
   return 'paragraphe'
@@ -85,8 +100,8 @@ export function decouperEnonce(enonce: string): { texte: string; genre: GenreBlo
         .join('\n'),
     )
     .filter((bloc) => bloc !== '')
-    .map((bloc) => {
-      const genre = genreDuBloc(bloc)
+    .map((bloc, index, blocs) => {
+      const genre = genreDuBloc(bloc, blocs[index - 1])
       return { genre, texte: genre === 'paragraphe' ? bloc.replace(/\n/g, ' ') : bloc }
     })
 }

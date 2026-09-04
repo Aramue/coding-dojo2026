@@ -6,9 +6,9 @@ duree_min: 3
 blocs:
   - type: paragraphe
     texte: >-
-      Toutes les valeurs ne se ressemblent pas. Python distingue le **texte**
-      (`str`), les **nombres entiers** (`int`) et les **nombres à virgule**
-      (`float`). C'est ce qu'on appelle le *type* d'une valeur.
+      Toutes les valeurs ne se ressemblent pas. Python distingue le **texte**,
+      appelé `str`, les **nombres entiers** `int` et les **nombres à virgule**
+      `float`. C'est ce qu'on appelle le *type* d'une valeur.
   - type: paragraphe
     texte: >-
       Ce qui est entre guillemets est toujours du texte, même si ça ressemble à

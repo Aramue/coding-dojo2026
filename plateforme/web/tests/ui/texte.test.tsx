@@ -126,6 +126,35 @@ describe('decouperEnonce', () => {
     expect(genreDuBloc('=== CARTE ===')).toBe('paragraphe')
   })
 
+  it('reconnait une sortie sur une seule ligne a son annonce', () => {
+    // « La séance commence » a exactement la forme d'une phrase : c'est le
+    // deux-points de la ligne precedente qui dit que c'est une sortie.
+    const blocs = decouperEnonce(
+      [
+        'Il devait afficher exactement cette ligne :',
+        'La séance commence',
+        "Au lieu de ça, Python affiche ce message d'erreur :",
+        'SyntaxError: unterminated string literal',
+      ].join('\n\n'),
+    )
+    expect(blocs.map((b) => b.genre)).toEqual(['paragraphe', 'sortie', 'paragraphe', 'sortie'])
+  })
+
+  it('laisse en prose une ligne unique qui ne suit aucune annonce', () => {
+    const blocs = decouperEnonce('Lis ce programme.\n\nQue voit-on ?')
+    expect(blocs.map((b) => b.genre)).toEqual(['paragraphe', 'paragraphe'])
+  })
+
+  it('ne prend pas une liste annoncee pour une sortie', () => {
+    const blocs = decouperEnonce(
+      [
+        'Il doit faire deux choses :',
+        '1. demander le prénom, avec une invite complète ;\n2. afficher la carte sur quatre lignes.',
+      ].join('\n\n'),
+    )
+    expect(blocs[1]!.genre).toBe('liste')
+  })
+
   it('ignore les lignes vides en trop', () => {
     expect(decouperEnonce('\n\nUn.\n\n\n\nDeux.\n\n')).toHaveLength(2)
   })
