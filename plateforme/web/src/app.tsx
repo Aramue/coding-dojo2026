@@ -1,11 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ClientApi, type Identite } from './api/client'
-import {
-  chargerChapitres,
-  chargerLecons,
-  chargerNotions,
-  chargerParcours,
-} from './contenu/chargeur'
+import { chargerContenu } from './contenu/chargeur'
 import { grouper, grouperParChapitre, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
 import { naviguer, useRoute, versChemin, type Destination } from './routage'
@@ -15,7 +10,7 @@ import { EcranProf } from './ui/EcranProf'
 import { Menu } from './ui/Menu'
 import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
-import type { Chapitre, Exercice, Lecon, Notion } from './contenu/types'
+import type { ContenuPublie } from './contenu/types'
 import type { GroupeNotion } from './contenu/notions'
 import type { Reussite, ResultatTest } from './validation/types'
 
@@ -62,12 +57,12 @@ export function App() {
   )
   const destination = useRoute()
   const [identite, setIdentite] = useState<Identite | null>(null)
-  const [contenu, setContenu] = useState<{
-    chapitres: Chapitre[]
-    notions: Notion[]
-    exercices: Exercice[]
-    lecons: Lecon[]
-  }>({ chapitres: [], notions: [], exercices: [], lecons: [] })
+  const [contenu, setContenu] = useState<ContenuPublie>({
+    chapitres: [],
+    notions: [],
+    exercices: [],
+    lecons: [],
+  })
   const [reussis, setReussis] = useState<Reussite[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
 
@@ -97,14 +92,8 @@ export function App() {
 
   async function connecter(saisi: string) {
     const qui = await client.ouvrirSession(saisi)
-    const [chapitresPublies, notions, exercices, lecons, acquis] = await Promise.all([
-      chargerChapitres(),
-      chargerNotions(),
-      chargerParcours(),
-      chargerLecons(),
-      client.lireParcours(),
-    ])
-    setContenu({ chapitres: chapitresPublies, notions, exercices, lecons })
+    const [publie, acquis] = await Promise.all([chargerContenu(), client.lireParcours()])
+    setContenu(publie)
     setReussis(acquis)
     setIdentite(qui)
     memoriserCode(qui.codeAcces)
@@ -112,7 +101,9 @@ export function App() {
     // Une URL profonde ouverte avant connexion est conservée ; sinon on envoie
     // l'élève sur la première notion qu'il n'a pas terminée.
     if (destination.vue === 'connexion') {
-      const ouverte = premiereOuverte(grouper(notions, exercices, lecons, acquis))
+      const ouverte = premiereOuverte(
+        grouper(publie.notions, publie.exercices, publie.lecons, acquis),
+      )
       if (ouverte) naviguer({ vue: 'cours', notion: ouverte.id })
     }
   }

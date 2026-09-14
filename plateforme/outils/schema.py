@@ -145,7 +145,7 @@ MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
 # elle porte une lecon et un groupe d'exercices.
 #
 # SEULE SOURCE de cette table. Le schema la valide, construire_contenu.py
-# l'importe pour publier seance-1-notions.json, et le front la lit dans ce
+# l'importe pour publier notions.json, et le front la lit dans ce
 # JSON. Personne ne la recopie — une copie TypeScript divergerait au premier
 # changement de libelle.
 #

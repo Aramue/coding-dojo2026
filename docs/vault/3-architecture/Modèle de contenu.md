@@ -3,7 +3,7 @@ title: Modèle de contenu
 tags:
   - architecture
   - contenu
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-14
 ---
 
 # Modèle de contenu
@@ -154,12 +154,12 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | `bases` | Les bases de Python | `afficher`, `variables`, `types`, `saisie` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
-`seance-1-chapitres.json`. Chaque notion déclare son `chapitre`.
+`chapitres.json`. Chaque notion déclare son `chapitre`.
 
 ## La notion, unité de navigation
 
 Une notion porte une leçon, un groupe d'exercices et une couleur. La table vit dans
-`outils/schema.py` et **nulle part ailleurs** : elle est publiée en `seance-1-notions.json` pour
+`outils/schema.py` et **nulle part ailleurs** : elle est publiée en `notions.json` pour
 que le front n'en garde aucune copie.
 
 | Identifiant | Titre affiché | Couleur | Exercices |
@@ -192,13 +192,25 @@ contenu/
 `charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,
 et la charger comme tel ferait échouer la validation sur un fichier parfaitement valide.
 
-Ce que la construction publie dans `web/public/contenu/` :
+Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers, toutes séances
+confondues** :
 
 | Fichier | Contenu |
 |---|---|
-| `seance-1.json` | les exercices, sans leur `solution`, chacun avec sa `famille` |
-| `seance-1-lecons.json` | les leçons, triées par `ordre` |
-| `seance-1-notions.json` | la table des notions |
+| `exercices.json` | les exercices, sans leur `solution`, chacun avec sa `famille` |
+| `lecons.json` | les leçons, dans l'ordre du cours — écrit même vide |
+| `notions.json` | la table des notions |
+| `chapitres.json` | la table des chapitres |
+
+> [!note] Un fichier par nature de contenu, pas un par séance
+> Jusqu'au 14 septembre 2026, chaque séance publiait les siens (`seance-1.json`,
+> `seance-1-lecons.json`…) et le front ne demandait que ceux de la séance 1. Ajouter la séance 2
+> l'aurait obligé à savoir combien de séances existent, et à tolérer un fichier de leçons absent :
+> ==ce fichier répondrait 404, et la connexion de l'élève échouerait==. Quatre chemins fixes lui
+> épargnent les deux, et `lecons.json` est écrit même vide.
+>
+> `construire` appelle désormais `verifier_racine` au lieu de refaire ses propres contrôles : un
+> contenu que le validateur refuse ne peut plus se publier par un autre chemin.
 
 ## Validation à la construction
 

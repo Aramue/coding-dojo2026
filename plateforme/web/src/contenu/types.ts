@@ -31,7 +31,7 @@ export type Chapitre = {
   seance: number
 }
 
-/** Une notion de la séance. Publiée par construire_contenu.py, jamais recopiée ici. */
+/** Une notion du cours. Publiée par construire_contenu.py, jamais recopiée ici. */
 export type Notion = {
   id: string
   ordre: number
@@ -60,4 +60,12 @@ export type Lecon = {
   dureeMin: number
   famille: Exercice['famille']
   blocs: Bloc[]
+}
+
+/** Tout ce que la construction publie, toutes séances confondues. */
+export type ContenuPublie = {
+  chapitres: Chapitre[]
+  notions: Notion[]
+  exercices: Exercice[]
+  lecons: Lecon[]
 }

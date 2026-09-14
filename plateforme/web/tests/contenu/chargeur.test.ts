@@ -48,7 +48,7 @@ describe('chargerJson', () => {
       'fetch',
       vi.fn(async () => ({ ok: true, json: async () => [{ id: 's1-01' }] })),
     )
-    await expect(chargerJson('/contenu/seance-1.json')).resolves.toEqual([{ id: 's1-01' }])
+    await expect(chargerJson('/contenu/exercices.json')).resolves.toEqual([{ id: 's1-01' }])
     vi.unstubAllGlobals()
   })
 
@@ -60,23 +60,30 @@ describe('chargerJson', () => {
     await expect(chargerJson('/contenu/absent.json')).rejects.toThrow(/404/)
     vi.unstubAllGlobals()
   })
+})
 
-  it('chaque chargeur vise son propre fichier', async () => {
-    const { chargerParcours, chargerNotions, chargerLecons } = await import(
-      '../../src/contenu/chargeur'
+describe('chargerContenu', () => {
+  it('range chacun des quatre fichiers publies a sa place', async () => {
+    const { chargerContenu } = await import('../../src/contenu/chargeur')
+    // Chaque fichier repond son propre chemin : une inversion se verrait.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (chemin: string) => ({ ok: true, json: async () => [chemin] })),
     )
-    const factice = vi.fn(async (_chemin: string) => ({ ok: true, json: async () => [] }))
-    vi.stubGlobal('fetch', factice)
 
-    await chargerParcours()
-    await chargerNotions()
-    await chargerLecons()
+    await expect(chargerContenu()).resolves.toEqual({
+      chapitres: ['/contenu/chapitres.json'],
+      notions: ['/contenu/notions.json'],
+      exercices: ['/contenu/exercices.json'],
+      lecons: ['/contenu/lecons.json'],
+    })
+    vi.unstubAllGlobals()
+  })
 
-    expect(factice.mock.calls.map((c) => c[0])).toEqual([
-      '/contenu/seance-1.json',
-      '/contenu/seance-1-notions.json',
-      '/contenu/seance-1-lecons.json',
-    ])
+  it("refuse un fichier qui n'est pas un tableau", async () => {
+    const { chargerContenu } = await import('../../src/contenu/chargeur')
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => ({ eleves: [] }) })))
+    await expect(chargerContenu()).rejects.toThrow(/illisible/)
     vi.unstubAllGlobals()
   })
 })

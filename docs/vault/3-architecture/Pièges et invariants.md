@@ -292,7 +292,7 @@ Règle explicite du `Caddyfile`.
 gardés un an ; `/contenu/*` est en `Cache-Control: no-cache`, donc revalidé à chaque chargement.
 
 **Ce qui casse :** les fichiers d'`assets` portent un nom haché, qui change à chaque construction —
-le cache long est sans danger. ==`/contenu/seance-1.json` garde le même chemin d'une construction
+le cache long est sans danger. ==`/contenu/exercices.json` garde le même chemin d'une construction
 à l'autre.== Sans revalidation, tu corriges une faute dans un énoncé, tu reconstruis, tu déploies,
 et les navigateurs qui ont déjà ouvert la page continuent d'afficher l'ancien texte. En séance,
 c'est indétectable : chacun voit autre chose, personne ne comprend pourquoi.
