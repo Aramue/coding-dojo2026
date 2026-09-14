@@ -1,0 +1,48 @@
+id: c3-tantque
+notion: tantque
+ordre: 14
+titre: Répéter tant que
+duree_min: 5
+blocs:
+  - type: paragraphe
+    texte: >-
+      `for` répète un nombre de tours connu d'avance. `while` répète **tant
+      qu'une condition est vraie** : c'est la boucle qu'il faut quand on ne sait
+      pas combien de tours seront nécessaires.
+  - type: code
+    legende: Tant que
+    executable: true
+    python: |
+      compteur = 3
+      while compteur > 0:
+          print("Encore", compteur)
+          compteur = compteur - 1
+      print("Terminé")
+  - type: paragraphe
+    texte: >-
+      Python vérifie la condition **avant chaque tour**, y compris avant le tout
+      premier. Si elle est fausse dès le départ, la boucle ne tourne pas une
+      seule fois, et Python passe directement à la suite.
+  - type: attention
+    texte: >-
+      **Quelque chose doit changer dans la boucle.** Si la variable de la
+      condition ne bouge jamais, la condition reste vraie pour toujours : le
+      programme tourne en rond, et la plateforme l'arrête au bout de quelques
+      secondes.
+  - type: paragraphe
+    texte: >-
+      Là où `while` est irremplaçable : répéter une question **jusqu'à une
+      réponse précise**, sans savoir combien de fois il faudra la poser.
+  - type: code
+    legende: Jusqu'à la bonne réponse
+    entrees: ["pas encore", "non", "oui"]
+    python: |
+      reponse = input("On y va ? ")
+      while reponse != "oui":
+          reponse = input("On y va ? ")
+      print("C'est parti !")
+  - type: paragraphe
+    texte: >-
+      Pour choisir, une seule question : sait-on d'avance combien de tours
+      faire ? Si oui, `for` et `range()` comptent à ta place. Sinon, c'est
+      `while`, et c'est à toi de faire changer la condition.

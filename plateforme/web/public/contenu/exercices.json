@@ -3465,5 +3465,497 @@
       }
     ],
     "famille": "operateurs"
+  },
+  {
+    "id": "s3-30",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La condition, avant chaque tour",
+    "obligatoire": true,
+    "enonce": "`while` répète les lignes décalées **tant que** sa condition vaut True. Il la\nvérifie avant chaque tour, y compris avant le tout premier.\n",
+    "depart": "compteur = 0\nwhile compteur < 3:\n    print(\"Compteur =\", compteur)\n    compteur = compteur + 1\nprint(\"---\")\nessais = 5\nwhile essais < 3:\n    print(\"Tour de la seconde boucle\")\nprint(\"Fin\")\n",
+    "indices": [
+      "Dans la première boucle, que vaut compteur quand la condition devient fausse ? Ce tour-là s'exécute-t-il ?",
+      "Dans la seconde, essais vaut 5 dès le départ. La condition est fausse avant même le premier tour, et la boucle ne tourne jamais."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Compteur = 0\nCompteur = 1\nCompteur = 2\n---\nFin",
+          "Compteur = 0\nCompteur = 1\nCompteur = 2\nCompteur = 3\n---\nFin",
+          "Compteur = 0\nCompteur = 1\nCompteur = 2\n---\nTour de la seconde boucle\nFin"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-31",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La boucle qui ne s'arrête jamais",
+    "obligatoire": true,
+    "enonce": "Ce programme doit annoncer les trois tours d'un échauffement, puis s'arrêter.\nIl ne s'arrête jamais : au bout de quelques secondes, la plateforme\nl'interrompt. Trouve pourquoi, puis répare-le.\n",
+    "depart": "tour = 1\nwhile tour <= 3:\n    print(\"Tour\", tour)\nprint(\"Échauffement terminé\")\n",
+    "indices": [
+      "La condition dépend de la variable tour. Que vaut tour au deuxième passage ? Et au centième ?",
+      "Rien ne change tour dans la boucle, donc la condition reste vraie pour toujours. Ajoute 1 à tour à chaque passage, dans la boucle."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Tour 1\nTour 2\nTour 3\nÉchauffement terminé",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-32",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Jusqu'au mot fin",
+    "obligatoire": true,
+    "enonce": "Ce programme note les courses à faire, une par une, jusqu'à ce qu'on tape fin.\nComplète le trou pour que la boucle continue tant que la réponse n'est pas\nfin.\n\nTon programme sera aussi essayé avec quelqu'un qui tape fin tout de suite.\n",
+    "depart": "article = input(\"Article (ou fin) : \")\nwhile _____:\n    print(\"Ajouté :\", article)\n    article = input(\"Article (ou fin) : \")\nprint(\"Liste terminée.\")\n",
+    "indices": [
+      "La boucle doit tourner tant que article est différent du texte fin. Quel comparateur veut dire « différent de » ?",
+      "La condition compare la variable article au texte \"fin\", avec !=. Le texte s'écrit entre guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "pain",
+          "lait",
+          "fin"
+        ],
+        "attendu": "Article (ou fin) : pain\nAjouté : pain\nArticle (ou fin) : lait\nAjouté : lait\nArticle (ou fin) : fin\nListe terminée.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "fin"
+        ],
+        "attendu": "Article (ou fin) : fin\nListe terminée.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-33",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "for ou while ?",
+    "obligatoire": true,
+    "enonce": "Quand on sait d'avance combien de tours faire, `for` suffit, et `range()`\ncompte à ta place. Quand on ne le sait pas, comme pour « jusqu'à ce qu'on tape\nfin », il faut `while`, et compter soi-même si besoin. Ces deux boucles-ci\nfont le même travail.\n",
+    "depart": "for i in range(1, 4):\n    print(i)\nprint(\"---\")\ni = 1\nwhile i < 4:\n    print(i)\n    i = i + 1\n",
+    "indices": [
+      "La première boucle prend les valeurs de range(1, 4). La seconde part de 1 et avance d'un à chaque tour.",
+      "La seconde s'arrête dès que i vaut 4, puisque 4 < 4 est faux. Le 4 n'est donc jamais affiché, pas plus que dans range(1, 4)."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n2\n3\n---\n1\n2\n3",
+          "1\n2\n3\n---\n1\n2\n3\n4",
+          "1\n2\n3\n4\n---\n1\n2\n3"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-34",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'étage oublié",
+    "obligatoire": false,
+    "enonce": "L'ascenseur annonce chaque étage en descendant, du 4e jusqu'au rez-de-chaussée,\nqui est l'étage 0. Le programme tourne, mais l'étage 0 n'est jamais annoncé.\nRépare-le.\n",
+    "depart": "etage = 4\nwhile etage > 0:\n    print(\"Étage\", etage)\n    etage = etage - 1\nprint(\"Portes ouvertes\")\n",
+    "indices": [
+      "Quand etage vaut 0, la condition etage > 0 est-elle vraie ? Le tour de l'étage 0 a-t-il lieu ?",
+      "Pour que l'étage 0 soit annoncé, la condition doit rester vraie quand etage vaut 0. C'est la borne comprise, comme à la séance 2."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Étage 4\nÉtage 3\nÉtage 2\nÉtage 1\nÉtage 0\nPortes ouvertes",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-35",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Trois essais, pas un de plus",
+    "obligatoire": false,
+    "enonce": "Défi : un casier s'ouvre avec le mot de passe Piscine26, et laisse trois\nessais. Écris un programme qui redemande le mot de passe tant qu'il est faux\net qu'il reste des essais, puis affiche le résultat.\n\nAvec un mauvais mot de passe, puis le bon, l'écran doit montrer :\n\nMot de passe : piscine\nMot de passe faux.\nMot de passe : Piscine26\nCasier ouvert.\n\nAprès trois mauvais essais, le programme affiche Casier bloqué.\n",
+    "depart": "",
+    "indices": [
+      "Il faut deux variables avant la boucle, le nombre d'essais et le dernier mot de passe tapé. La boucle continue tant que le mot de passe est faux ET qu'il reste des essais.",
+      "Une fois la boucle finie, un if regarde pourquoi elle s'est arrêtée. Le mot de passe est-il le bon, ou les essais sont-ils épuisés ?"
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "piscine",
+          "Piscine26"
+        ],
+        "attendu": "Mot de passe : piscine\nMot de passe faux.\nMot de passe : Piscine26\nCasier ouvert.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Piscine26"
+        ],
+        "attendu": "Mot de passe : Piscine26\nCasier ouvert.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "un",
+          "deux",
+          "Piscine26"
+        ],
+        "attendu": "Mot de passe : un\nMot de passe faux.\nMot de passe : deux\nMot de passe faux.\nMot de passe : Piscine26\nCasier ouvert.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "un",
+          "deux",
+          "trois"
+        ],
+        "attendu": "Mot de passe : un\nMot de passe faux.\nMot de passe : deux\nMot de passe faux.\nMot de passe : trois\nMot de passe faux.\nCasier bloqué.",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "piscine",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-36",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le nombre mystère",
+    "obligatoire": false,
+    "enonce": "Défi : le programme cache le nombre 37 dans la variable `secret`. Écris la\nsuite. Redemande une proposition tant qu'elle n'est pas le bon nombre, en\ndisant chaque fois s'il faut viser plus grand ou plus petit, puis annonce en\ncombien d'essais le nombre a été trouvé.\n\nPour 50, puis 25, puis 37, l'écran doit montrer :\n\nTa proposition : 50\nPlus petit.\nTa proposition : 25\nPlus grand.\nTa proposition : 37\nTrouvé en 3 essais !\n",
+    "depart": "secret = 37\n",
+    "indices": [
+      "Pose une première question avant la boucle, et compte cet essai. La boucle tourne tant que la proposition est différente de secret.",
+      "Dans la boucle, un if choisit entre Plus petit et Plus grand, puis la question est reposée et le compteur d'essais augmente de 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "50",
+          "25",
+          "37"
+        ],
+        "attendu": "Ta proposition : 50\nPlus petit.\nTa proposition : 25\nPlus grand.\nTa proposition : 37\nTrouvé en 3 essais !",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "40",
+          "37"
+        ],
+        "attendu": "Ta proposition : 40\nPlus petit.\nTa proposition : 37\nTrouvé en 2 essais !",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "10",
+          "20",
+          "30",
+          "36",
+          "38",
+          "37"
+        ],
+        "attendu": "Ta proposition : 10\nPlus grand.\nTa proposition : 20\nPlus grand.\nTa proposition : 30\nPlus grand.\nTa proposition : 36\nPlus grand.\nTa proposition : 38\nPlus petit.\nTa proposition : 37\nTrouvé en 6 essais !",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "!= 37",
+        "message": "Compare la proposition à la variable secret, pas au nombre écrit en dur : le programme doit marcher si le secret change.",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "== 37",
+        "message": "Compare la proposition à la variable secret, pas au nombre écrit en dur : le programme doit marcher si le secret change.",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-37",
+    "concept": "import math",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La boîte à outils math",
+    "obligatoire": false,
+    "enonce": "Python range des outils supplémentaires dans des modules. Pour se servir de\nceux du module math, on écrit d'abord `import math`, puis `math.` devant\nl'outil : `math.sqrt()` calcule une racine carrée, et `math.pi` vaut 3,14159…\n\nComplète les deux trous.\n",
+    "depart": "import math\nracine = math._____(81)\naire = math._____ * 2 * 2\nprint(\"Racine carrée de 81 :\", racine)\nprint(\"Aire d'un disque de rayon 2 :\", aire)\n",
+    "indices": [
+      "Le premier trou attend le nom de l'outil qui calcule une racine carrée, le second celui qui vaut 3,14159.",
+      "Après math. on écrit sqrt pour la racine carrée, et pi pour le nombre pi, sans parenthèses puisque ce n'est pas une fonction."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "racine",
+        "valeurAttendue": "9.0",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "variable",
+        "nom": "aire",
+        "valeurAttendue": "12.566370614359172",
+        "typeAttendu": "float"
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-38",
+    "concept": "import math",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "À vol d'oiseau",
+    "obligatoire": false,
+    "enonce": "Défi : sur un plan quadrillé, l'école est au point (1, 2) et la piscine au\npoint (7, 10). La distance à vol d'oiseau se calcule avec Pythagore : c'est la\nracine carrée de la somme des carrés des deux écarts.\n\nComplète le programme pour que la variable `distance` contienne cette\ndistance.\n",
+    "depart": "import math\nx1 = 1\ny1 = 2\nx2 = 7\ny2 = 10\n",
+    "indices": [
+      "L'écart horizontal est x2 - x1, l'écart vertical y2 - y1. Un carré se calcule avec la double étoile, ou en multipliant un nombre par lui-même.",
+      "Additionne les deux carrés, puis donne la somme à math.sqrt(). Des parenthèses gardent chaque écart entier avant qu'on le mette au carré."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "distance",
+        "valeurAttendue": "10.0",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "interdit",
+        "motif": "distance = 10",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-39",
+    "concept": "probleme narratif",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "La carte jeune du cinéma",
+    "obligatoire": true,
+    "enonce": "Dernier exercice obligatoire du chapitre : un programme complet, qui réunit ce\nque tu as appris pendant les trois séances.\n\nLe cinéma propose une carte jeune de 15 à 25 ans, bornes comprises. Chaque\ncarte porte un code, calculé à partir de l'âge.\n\nLe programme doit faire quatre choses :\n\n1. demander le prénom, avec l'invite \"Prénom : \", puis l'âge, avec l'invite \"Âge : \", en nombre entier ;\n2. si l'âge est dans les bornes, souhaiter la bienvenue, puis afficher le code de la carte, qui vaut `(age * 43) % 1000` ;\n3. afficher ensuite chaque chiffre du code sur sa propre ligne, numéroté à partir de 1 ;\n4. sinon, afficher un refus.\n\nSi la personne répond Camille, puis 19, l'écran affiche ceci après les deux questions :\n\nBienvenue Camille !\nCode de la carte : 817\nChiffre 1 : 8\nChiffre 2 : 1\nChiffre 3 : 7\n\nSi elle répond Camille, puis 14 :\n\nCarte jeune refusée pour Camille\n\nRecopie ces textes au caractère près : cet exercice exige le format exact. Ton\nprogramme sera essayé avec d'autres prénoms et d'autres âges, dont 15 et 25.\n",
+    "depart": "# 1. demander le prénom, puis l'âge en nombre entier\n\n# 2. si l'âge est entre 15 et 25 ans : bienvenue, et code de la carte\n\n# 3. chaque chiffre du code sur sa ligne, numéroté à partir de 1\n\n# 4. sinon : refus\n",
+    "indices": [
+      "Les deux questions, puis un if avec un encadrement. Dans la branche acceptée, calcule le code avant de l'afficher.",
+      "Pour les chiffres, une boucle for sur str(code), avec un compteur créé avant la boucle et augmenté dedans. Tout ce bloc reste décalé sous le if."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "19"
+        ],
+        "attendu": "Prénom : Camille\nÂge : 19\nBienvenue Camille !\nCode de la carte : 817\nChiffre 1 : 8\nChiffre 2 : 1\nChiffre 3 : 7",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "14"
+        ],
+        "attendu": "Prénom : Alex\nÂge : 14\nCarte jeune refusée pour Alex",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "15"
+        ],
+        "attendu": "Prénom : Noé\nÂge : 15\nBienvenue Noé !\nCode de la carte : 645\nChiffre 1 : 6\nChiffre 2 : 4\nChiffre 3 : 5",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "25"
+        ],
+        "attendu": "Prénom : Léa\nÂge : 25\nBienvenue Léa !\nCode de la carte : 75\nChiffre 1 : 7\nChiffre 2 : 5",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Sam",
+          "26"
+        ],
+        "attendu": "Prénom : Sam\nÂge : 26\nCarte jeune refusée pour Sam",
+        "exigeExact": true
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "817",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-40",
+    "concept": "probleme narratif",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "La carte jeune, en double contrôle",
+    "obligatoire": false,
+    "enonce": "Défi de fin de chapitre : la carte jeune, avec trois contrôles au lieu d'un.\n\nLe programme demande quatre choses, dans cet ordre : le prénom (\"Prénom : \"),\nl'âge (\"Âge : \"), le mot de passe (\"Mot de passe : \") et le numéro de membre\n(\"Numéro de membre : \"), ces deux nombres en entiers. L'accès est accordé\nseulement si les trois contrôles passent :\n\n- l'âge est entre 15 et 25 ans, bornes comprises ;\n- le mot de passe est exactement Popcorn26 ;\n- le numéro de membre est pair.\n\nSi l'accès est accordé, le programme souhaite la bienvenue, calcule le code\n`(age * numero + len(prenom) * 42) % 10000`, l'affiche, puis le transmet\nchiffre par chiffre. Pour Camille, 19 ans, Popcorn26 et le numéro 26 :\n\nBienvenue Camille !\nCode d'accès : 788\nTransmission :\nPosition 1 : 7\nPosition 2 : 8\nPosition 3 : 8\n\nSinon, il affiche Accès refusé pour Camille.\n",
+    "depart": "",
+    "indices": [
+      "Range True dans une variable avant les contrôles, et fais-la passer à False dans un if par contrôle qui échoue. Un seul if final décide ensuite.",
+      "Le code a jusqu'à quatre chiffres. Parcours str(code) avec un compteur créé avant la boucle, qui numérote les positions à partir de 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "19",
+          "Popcorn26",
+          "26"
+        ],
+        "attendu": "Prénom : Camille\nÂge : 19\nMot de passe : Popcorn26\nNuméro de membre : 26\nBienvenue Camille !\nCode d'accès : 788\nTransmission :\nPosition 1 : 7\nPosition 2 : 8\nPosition 3 : 8",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "24",
+          "Popcorn26",
+          "100"
+        ],
+        "attendu": "Prénom : Léa\nÂge : 24\nMot de passe : Popcorn26\nNuméro de membre : 100\nBienvenue Léa !\nCode d'accès : 2526\nTransmission :\nPosition 1 : 2\nPosition 2 : 5\nPosition 3 : 2\nPosition 4 : 6",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "15",
+          "Popcorn26",
+          "40"
+        ],
+        "attendu": "Prénom : Noé\nÂge : 15\nMot de passe : Popcorn26\nNuméro de membre : 40\nBienvenue Noé !\nCode d'accès : 726\nTransmission :\nPosition 1 : 7\nPosition 2 : 2\nPosition 3 : 6",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Sam",
+          "20",
+          "Popcorn26",
+          "7"
+        ],
+        "attendu": "Prénom : Sam\nÂge : 20\nMot de passe : Popcorn26\nNuméro de membre : 7\nAccès refusé pour Sam",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "20",
+          "popcorn26",
+          "8"
+        ],
+        "attendu": "Prénom : Alex\nÂge : 20\nMot de passe : popcorn26\nNuméro de membre : 8\nAccès refusé pour Alex",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Zoé",
+          "26",
+          "Popcorn26",
+          "2"
+        ],
+        "attendu": "Prénom : Zoé\nÂge : 26\nMot de passe : Popcorn26\nNuméro de membre : 2\nAccès refusé pour Zoé",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "788",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
   }
 ]

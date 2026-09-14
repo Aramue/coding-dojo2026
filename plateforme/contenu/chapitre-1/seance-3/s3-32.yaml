@@ -1,0 +1,44 @@
+id: s3-32
+concept: while
+notion: tantque
+seance: 3
+niveau: normal
+type: completer
+titre: Jusqu'au mot fin
+obligatoire: true
+enonce: |
+  Ce programme note les courses à faire, une par une, jusqu'à ce qu'on tape fin.
+  Complète le trou pour que la boucle continue tant que la réponse n'est pas
+  fin.
+
+  Ton programme sera aussi essayé avec quelqu'un qui tape fin tout de suite.
+depart: |
+  article = input("Article (ou fin) : ")
+  while _____:
+      print("Ajouté :", article)
+      article = input("Article (ou fin) : ")
+  print("Liste terminée.")
+indices:
+  - La boucle doit tourner tant que article est différent du texte fin. Quel comparateur veut dire « différent de » ?
+  - La condition compare la variable article au texte "fin", avec !=. Le texte s'écrit entre guillemets.
+tests:
+  - type: sortie
+    entrees: ["pain", "lait", "fin"]
+    attendu: |-
+      Article (ou fin) : pain
+      Ajouté : pain
+      Article (ou fin) : lait
+      Ajouté : lait
+      Article (ou fin) : fin
+      Liste terminée.
+  - type: sortie
+    entrees: ["fin"]
+    attendu: |-
+      Article (ou fin) : fin
+      Liste terminée.
+solution: |
+  article = input("Article (ou fin) : ")
+  while article != "fin":
+      print("Ajouté :", article)
+      article = input("Article (ou fin) : ")
+  print("Liste terminée.")

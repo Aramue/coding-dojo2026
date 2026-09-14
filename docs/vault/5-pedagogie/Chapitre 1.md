@@ -3,7 +3,7 @@ title: Chapitre 1
 tags:
   - moc
   - pedagogie
-statut: conçu
+statut: écrit
 mis-a-jour: 2026-09-14
 ---
 
@@ -109,9 +109,11 @@ Voir [[Types d'exercices]].
 >   `(age * 37) % 1000` : entre 18 et 65 ans, `age * 7` ne dépasse jamais 1000, et aucun essai
 >   n'aurait distingué `% 1000` de `% 10000`. Voir [[Programme d'assemblage]].
 
-> [!info] Séance 3 en cours d'écriture — 14 septembre 2026
-> Même méthode que la séance 2 : notion par notion, chacune avec sa leçon, validée par exécution
-> et relue dans l'aperçu. Elle s'ouvre aux élèves le **30 septembre**.
+> [!success] Séance 3 écrite en entier — 14 septembre 2026
+> Les **40 exercices** de la séance 3 existent : 24 obligatoires, 6 renforts, 10 experts, répartis
+> en cinq notions qui ont chacune leur leçon. Même méthode que la séance 2 : validés par exécution
+> et relus dans l'aperçu. Elle s'ouvre aux élèves le **30 septembre**. ==Le chapitre 1 est complet :
+> 112 exercices, dont 75 obligatoires, conformes au volume conçu.==
 >
 > | Notion | Exercices | Leçon |
 > |---|---|---|
@@ -119,6 +121,7 @@ Voir [[Types d'exercices]].
 > | Répéter avec for | `s3-04` à `s3-12` — 6 obligatoires, 1 renfort, 2 experts | `c3-repeter` |
 > | Parcourir un texte | `s3-13` à `s3-20` — 5 obligatoires, 1 renfort, 2 experts | `c3-parcourir` |
 > | Compter et cumuler | `s3-21` à `s3-29` — 5 obligatoires, 2 renforts, 2 experts | `c3-compter` |
+> | Répéter tant que | `s3-30` à `s3-40` — 5 obligatoires, 2 renforts, 4 experts | `c3-tantque` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -142,6 +145,13 @@ Voir [[Types d'exercices]].
 >   `s3-21` le fait lire ; les exercices à écrire gardent la forme longue.
 > - `s3-28` exige une boucle (`for`) : le reste de la division du numéro lui-même par 9 donne le
 >   même chiffre de contrôle, et contournerait l'addition des chiffres, qui est le défi.
+> - `s3-33`, « for ou while ? », devait être un QCM de quatre situations à trier. Or tout QCM de
+>   la plateforme demande *Qu'affiche ce programme ?* : le choix est donc enseigné par
+>   l'énoncé, sur deux boucles qui font le même travail, l'une avec `for`, l'autre avec `while`.
+> - `s3-39`, le programme de fin de chapitre, devient « La carte jeune du cinéma », autonome. À
+>   25 ans, son code n'a que deux chiffres : l'essai démasque une boucle qui n'en serait pas une.
+>   Son bonus `s3-40` reprend le corrigé avancé de 2025 **sans `enumerate()`**, avec le compteur
+>   manuel de `s3-24`, et sans emoji. Voir [[Programme d'assemblage]].
 
 ## Les trois séances
 

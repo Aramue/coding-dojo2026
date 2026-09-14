@@ -45,20 +45,38 @@ exact, exigé. Les essais passent par les deux bornes, 18 et 65 ans.
 > que la conception voulait justement démasquer. Avec 37, un abonné de 65 ans obtient 2405 avant
 > le modulo, et 405 après.
 
-## Séance 3 — conçue, sujet à retrancher
+## Séance 3 — la carte jeune du cinéma
 
-> [!danger] Le sujet de ce bloc n'est plus valide
+`s3-39`, écrit le 14 septembre 2026. Le programme demande un prénom et un âge. De 15 à 25 ans,
+bornes comprises, il souhaite la bienvenue et calcule le code de la carte, `(age * 43) % 1000`,
+puis en affiche chaque chiffre sur sa ligne, numéroté à partir de 1 ; sinon, il refuse.
+
+```
+Bienvenue Camille !
+Code de la carte : 817
+Chiffre 1 : 8
+Chiffre 2 : 1
+Chiffre 3 : 7
+```
+
+Notions réunies : les trois séances. `input()` et `int()`, l'encadrement et `if` / `else`, le
+modulo, `str()` pour parcourir un nombre, le compteur qui numérote, et le format exact, exigé.
+
+> [!note] Un code à deux chiffres, exprès
+> À 25 ans, `25 * 43` vaut 1075, et le code n'a que deux chiffres : 75. L'essai démasque un
+> programme qui afficherait toujours trois lignes de chiffres au lieu de parcourir le code.
+
+Son bonus, `s3-40`, reprend le corrigé « avancé » de 2025 : quatre questions, un drapeau et trois
+contrôles, puis un code à quatre chiffres transmis position par position. ==Le compteur manuel
+remplace `enumerate()`==, que ce corrigé employait sans l'avoir jamais enseigné, et aucun emoji ne
+reste dans une sortie comparée.
+
+> [!note] Les blocs de 2025, retranchés
 > Les blocs des séances 2 et 3 étaient conçus autour d'un programme `acces_qg.py` construit sur
 > les trois séances, dont la version finale reproduisait un fichier du cours précédent. ==Le choix
-> « chaque exercice est autonome » ([[ADR-010 Abandon de la fiction narrative]]) supprime ce fil
-> rouge.== Le bloc de la séance 2 a été réécrit ci-dessus, en programme autonome.
->
-> **La progression technique ci-dessous reste bonne. Seul son habillage est à refaire**, quand la
-> séance 3 sera produite.
-
-| Bloc | Séance | Ce que le programme sait faire en plus |
-|---|---|---|
-| 3 | 3 | Boucle sur les caractères d'un nombre converti en texte et les affiche un par un. Boucles. |
+> « chaque exercice est autonome » ([[ADR-010 Abandon de la fiction narrative]]) a supprimé ce fil
+> rouge== : les deux blocs ont été réécrits en programmes autonomes. La progression technique,
+> elle, n'a pas changé.
 
 ## L'injection de bloc manquant
 
@@ -77,8 +95,8 @@ Rappel du problème traité : en 2025, 18 élèves sur 24 ont décroché ([[Bila
 > [!warning] Non implémentée
 > L'injection est un choix de conception, pas encore du code. Rien dans la plateforme ne la fait
 > aujourd'hui. ==La séance 2 n'en a pas eu besoin== : `s2-38` ne reprend pas `s1-34`, il part de
-> quatre remarques qui découpent le travail, comme le programme de la séance 1. La question reste
-> ouverte pour la séance 3.
+> quatre remarques qui découpent le travail, comme le programme de la séance 1. La séance 3 non plus :
+> `s3-39` part, lui aussi, de quatre remarques.
 
 ## Ce que la réécriture a coûté
 

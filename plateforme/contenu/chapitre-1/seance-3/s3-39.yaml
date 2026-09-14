@@ -1,0 +1,113 @@
+id: s3-39
+concept: probleme narratif
+notion: tantque
+seance: 3
+niveau: normal
+type: ecrire
+titre: La carte jeune du cinéma
+obligatoire: true
+enonce: |
+  Dernier exercice obligatoire du chapitre : un programme complet, qui réunit ce
+  que tu as appris pendant les trois séances.
+
+  Le cinéma propose une carte jeune de 15 à 25 ans, bornes comprises. Chaque
+  carte porte un code, calculé à partir de l'âge.
+
+  Le programme doit faire quatre choses :
+
+  1. demander le prénom, avec l'invite "Prénom : ", puis l'âge, avec l'invite "Âge : ", en nombre entier ;
+  2. si l'âge est dans les bornes, souhaiter la bienvenue, puis afficher le code de la carte, qui vaut `(age * 43) % 1000` ;
+  3. afficher ensuite chaque chiffre du code sur sa propre ligne, numéroté à partir de 1 ;
+  4. sinon, afficher un refus.
+
+  Si la personne répond Camille, puis 19, l'écran affiche ceci après les deux questions :
+
+  Bienvenue Camille !
+  Code de la carte : 817
+  Chiffre 1 : 8
+  Chiffre 2 : 1
+  Chiffre 3 : 7
+
+  Si elle répond Camille, puis 14 :
+
+  Carte jeune refusée pour Camille
+
+  Recopie ces textes au caractère près : cet exercice exige le format exact. Ton
+  programme sera essayé avec d'autres prénoms et d'autres âges, dont 15 et 25.
+depart: |
+  # 1. demander le prénom, puis l'âge en nombre entier
+
+  # 2. si l'âge est entre 15 et 25 ans : bienvenue, et code de la carte
+
+  # 3. chaque chiffre du code sur sa ligne, numéroté à partir de 1
+
+  # 4. sinon : refus
+indices:
+  - Les deux questions, puis un if avec un encadrement. Dans la branche acceptée, calcule le code avant de l'afficher.
+  - Pour les chiffres, une boucle for sur str(code), avec un compteur créé avant la boucle et augmenté dedans. Tout ce bloc reste décalé sous le if.
+tests:
+  - type: sortie
+    entrees: ["Camille", "19"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Camille
+      Âge : 19
+      Bienvenue Camille !
+      Code de la carte : 817
+      Chiffre 1 : 8
+      Chiffre 2 : 1
+      Chiffre 3 : 7
+  - type: sortie
+    entrees: ["Alex", "14"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Alex
+      Âge : 14
+      Carte jeune refusée pour Alex
+  - type: sortie
+    entrees: ["Noé", "15"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Noé
+      Âge : 15
+      Bienvenue Noé !
+      Code de la carte : 645
+      Chiffre 1 : 6
+      Chiffre 2 : 4
+      Chiffre 3 : 5
+  # A 25 ans, 25 * 43 vaut 1075 : le code n'a que deux chiffres. Un programme
+  # qui afficherait toujours trois lignes de chiffres est demasque ici.
+  - type: sortie
+    entrees: ["Léa", "25"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Léa
+      Âge : 25
+      Bienvenue Léa !
+      Code de la carte : 75
+      Chiffre 1 : 7
+      Chiffre 2 : 5
+  - type: sortie
+    entrees: ["Sam", "26"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Sam
+      Âge : 26
+      Carte jeune refusée pour Sam
+  - type: interdit
+    motif: Camille
+  - type: interdit
+    motif: "817"
+solution: |
+  prenom = input("Prénom : ")
+  age = int(input("Âge : "))
+  if 15 <= age <= 25:
+      code = (age * 43) % 1000
+      print(f"Bienvenue {prenom} !")
+      print(f"Code de la carte : {code}")
+      numero = 1
+      for chiffre in str(code):
+          print(f"Chiffre {numero} : {chiffre}")
+          numero = numero + 1
+  else:
+      print(f"Carte jeune refusée pour {prenom}")

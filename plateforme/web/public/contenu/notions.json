@@ -89,5 +89,12 @@
     "titre": "Compter et cumuler",
     "famille": "operateurs",
     "chapitre": "boucles"
+  },
+  {
+    "id": "tantque",
+    "ordre": 14,
+    "titre": "Répéter tant que",
+    "famille": "conditions",
+    "chapitre": "boucles"
   }
 ]

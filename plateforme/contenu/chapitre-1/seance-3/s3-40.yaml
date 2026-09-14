@@ -1,0 +1,127 @@
+id: s3-40
+concept: probleme narratif
+notion: tantque
+seance: 3
+niveau: expert
+type: ecrire
+titre: La carte jeune, en double contrôle
+obligatoire: false
+enonce: |
+  Défi de fin de chapitre : la carte jeune, avec trois contrôles au lieu d'un.
+
+  Le programme demande quatre choses, dans cet ordre : le prénom ("Prénom : "),
+  l'âge ("Âge : "), le mot de passe ("Mot de passe : ") et le numéro de membre
+  ("Numéro de membre : "), ces deux nombres en entiers. L'accès est accordé
+  seulement si les trois contrôles passent :
+
+  - l'âge est entre 15 et 25 ans, bornes comprises ;
+  - le mot de passe est exactement Popcorn26 ;
+  - le numéro de membre est pair.
+
+  Si l'accès est accordé, le programme souhaite la bienvenue, calcule le code
+  `(age * numero + len(prenom) * 42) % 10000`, l'affiche, puis le transmet
+  chiffre par chiffre. Pour Camille, 19 ans, Popcorn26 et le numéro 26 :
+
+  Bienvenue Camille !
+  Code d'accès : 788
+  Transmission :
+  Position 1 : 7
+  Position 2 : 8
+  Position 3 : 8
+
+  Sinon, il affiche Accès refusé pour Camille.
+depart: ""
+indices:
+  - Range True dans une variable avant les contrôles, et fais-la passer à False dans un if par contrôle qui échoue. Un seul if final décide ensuite.
+  - Le code a jusqu'à quatre chiffres. Parcours str(code) avec un compteur créé avant la boucle, qui numérote les positions à partir de 1.
+tests:
+  - type: sortie
+    entrees: ["Camille", "19", "Popcorn26", "26"]
+    attendu: |-
+      Prénom : Camille
+      Âge : 19
+      Mot de passe : Popcorn26
+      Numéro de membre : 26
+      Bienvenue Camille !
+      Code d'accès : 788
+      Transmission :
+      Position 1 : 7
+      Position 2 : 8
+      Position 3 : 8
+  # 24 * 100 + 3 * 42 vaut 2526 : un % 1000 donnerait 526, et serait demasque.
+  - type: sortie
+    entrees: ["Léa", "24", "Popcorn26", "100"]
+    attendu: |-
+      Prénom : Léa
+      Âge : 24
+      Mot de passe : Popcorn26
+      Numéro de membre : 100
+      Bienvenue Léa !
+      Code d'accès : 2526
+      Transmission :
+      Position 1 : 2
+      Position 2 : 5
+      Position 3 : 2
+      Position 4 : 6
+  - type: sortie
+    entrees: ["Noé", "15", "Popcorn26", "40"]
+    attendu: |-
+      Prénom : Noé
+      Âge : 15
+      Mot de passe : Popcorn26
+      Numéro de membre : 40
+      Bienvenue Noé !
+      Code d'accès : 726
+      Transmission :
+      Position 1 : 7
+      Position 2 : 2
+      Position 3 : 6
+  - type: sortie
+    entrees: ["Sam", "20", "Popcorn26", "7"]
+    attendu: |-
+      Prénom : Sam
+      Âge : 20
+      Mot de passe : Popcorn26
+      Numéro de membre : 7
+      Accès refusé pour Sam
+  - type: sortie
+    entrees: ["Alex", "20", "popcorn26", "8"]
+    attendu: |-
+      Prénom : Alex
+      Âge : 20
+      Mot de passe : popcorn26
+      Numéro de membre : 8
+      Accès refusé pour Alex
+  - type: sortie
+    entrees: ["Zoé", "26", "Popcorn26", "2"]
+    attendu: |-
+      Prénom : Zoé
+      Âge : 26
+      Mot de passe : Popcorn26
+      Numéro de membre : 2
+      Accès refusé pour Zoé
+  - type: interdit
+    motif: "788"
+solution: |
+  prenom = input("Prénom : ")
+  age = int(input("Âge : "))
+  mot_de_passe = input("Mot de passe : ")
+  numero = int(input("Numéro de membre : "))
+  autorise = True
+  if not (15 <= age <= 25):
+      autorise = False
+  if mot_de_passe != "Popcorn26":
+      autorise = False
+  if numero % 2 != 0:
+      autorise = False
+  if autorise:
+      code = (age * numero + len(prenom) * 42) % 10000
+      print(f"Bienvenue {prenom} !")
+      print(f"Code d'accès : {code}")
+      print("Transmission :")
+      position = 1
+      for chiffre in str(code):
+          print(f"Position {position} : {chiffre}")
+          position = position + 1
+  else:
+      print(f"Accès refusé pour {prenom}")
