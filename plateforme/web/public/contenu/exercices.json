@@ -3165,5 +3165,305 @@
       }
     ],
     "famille": "types"
+  },
+  {
+    "id": "s3-21",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Avant la boucle, et dedans",
+    "obligatoire": true,
+    "enonce": "Une variable qui compte les tours se crée avant la boucle, et se met à jour\ndedans. `tours += 1` est un raccourci pour `tours = tours + 1`.\n",
+    "depart": "tours = 0\nfor lettre in \"vélo\":\n    tours += 1\n    print(tours)\nprint(\"Total :\", tours)\n",
+    "indices": [
+      "Au premier tour, tours vaut 0 juste avant la ligne tours += 1. Que vaut-il juste après, au moment du print ?",
+      "La variable n'est créée qu'une fois, avant la boucle. À chaque tour elle gagne 1, et le print décalé affiche sa nouvelle valeur."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n2\n3\n4\nTotal : 4",
+          "0\n1\n2\n3\nTotal : 4",
+          "1\n1\n1\n1\nTotal : 1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-22",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le numéro qui ne bouge pas",
+    "obligatoire": true,
+    "enonce": "Ce programme doit numéroter les chiffres d'un code. Il tourne sans erreur,\nmais tous les chiffres portent le numéro 1. Répare-le.\n",
+    "depart": "code = input(\"Ton code : \")\nposition = 1\nfor chiffre in code:\n    print(f\"Position {position} : {chiffre}\")\n",
+    "indices": [
+      "La variable position est bien créée avant la boucle. Mais change-t-elle, à un moment, pendant la boucle ?",
+      "Un compteur doit être mis à jour dedans, à chaque tour. Ajoute-lui 1 dans la boucle, après l'affichage."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "472"
+        ],
+        "attendu": "Ton code : 472\nPosition 1 : 4\nPosition 2 : 7\nPosition 3 : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "90"
+        ],
+        "attendu": "Ton code : 90\nPosition 1 : 9\nPosition 2 : 0",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-23",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La lettre numéro 0",
+    "obligatoire": true,
+    "enonce": "Ce programme numérote les lettres d'un mot. Le compteur avance bien, mais la\npremière lettre porte le numéro 0, et personne ne compte comme ça. Répare-le\npour que la numérotation commence à 1.\n",
+    "depart": "mot = input(\"Un mot : \")\nnumero = 0\nfor lettre in mot:\n    print(f\"Lettre {numero} : {lettre}\")\n    numero = numero + 1\n",
+    "indices": [
+      "Au premier tour, que vaut numero au moment du print ?",
+      "Deux façons de réparer. Faire partir numero de 1, ou lui ajouter 1 avant l'affichage plutôt qu'après."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "ski"
+        ],
+        "attendu": "Un mot : ski\nLettre 1 : s\nLettre 2 : k\nLettre 3 : i",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "eau"
+        ],
+        "attendu": "Un mot : eau\nLettre 1 : e\nLettre 2 : a\nLettre 3 : u",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-24",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Partir de 1, de deux façons",
+    "obligatoire": true,
+    "enonce": "Les deux boucles numérotent les lettres du même mot, à partir de 1. La\npremière ajoute 1 avant d'afficher, la seconde après. Complète les deux trous\navec la valeur de départ qui convient à chacune.\n",
+    "depart": "mot = input(\"Un mot : \")\nposition = _____\nfor lettre in mot:\n    position = position + 1\n    print(position, lettre)\nprint(\"---\")\nposition = _____\nfor lettre in mot:\n    print(position, lettre)\n    position = position + 1\n",
+    "indices": [
+      "Dans la première boucle, le compteur gagne 1 avant l'affichage. Quelle valeur doit-il avoir avant le premier tour, pour afficher 1 ?",
+      "Dans la seconde, l'affichage vient avant l'ajout. Le compteur doit donc déjà valoir 1 au premier tour."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "vélo"
+        ],
+        "attendu": "Un mot : vélo\n1 v\n2 é\n3 l\n4 o\n---\n1 v\n2 é\n3 l\n4 o",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "eau"
+        ],
+        "attendu": "Un mot : eau\n1 e\n2 a\n3 u\n---\n1 e\n2 a\n3 u",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-25",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le total qui repart de zéro",
+    "obligatoire": true,
+    "enonce": "Ce programme demande le prix de trois articles, puis affiche le total. Il\ntourne sans erreur, mais le total ne vaut que le prix du dernier article.\nRépare-le.\n",
+    "depart": "for article in range(1, 4):\n    total = 0\n    prix = int(input(f\"Prix de l'article {article} : \"))\n    total = total + prix\nprint(\"Total :\", total)\n",
+    "indices": [
+      "À quel endroit total est-il remis à 0 ? Combien de fois cette ligne s'exécute-t-elle ?",
+      "Une variable qui cumule se crée une seule fois, avant la boucle. Dans la boucle, elle ne fait que grandir."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12",
+          "5",
+          "8"
+        ],
+        "attendu": "Prix de l'article 1 : 12\nPrix de l'article 2 : 5\nPrix de l'article 3 : 8\nTotal : 25",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "3",
+          "3",
+          "3"
+        ],
+        "attendu": "Prix de l'article 1 : 3\nPrix de l'article 2 : 3\nPrix de l'article 3 : 3\nTotal : 9",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-26",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La somme des chiffres",
+    "obligatoire": false,
+    "enonce": "Ce programme additionne les chiffres d'un code. Complète le trou pour que la\nvariable `somme` contienne bien la somme des chiffres, et non une erreur.\n",
+    "depart": "code = 4729\nsomme = 0\nfor chiffre in str(code):\n    somme = somme + _____(chiffre)\nprint(\"Somme des chiffres :\", somme)\n",
+    "indices": [
+      "Chaque chiffre du tour est un caractère, donc du texte. Peut-on additionner du texte à un nombre ?",
+      "La fonction qui transforme un texte en nombre entier est celle qu'on place autour de input()."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "somme",
+        "valeurAttendue": "22",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "int(",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-27",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le compteur qui n'existe pas",
+    "obligatoire": false,
+    "enonce": "Ce programme doit compter les lettres e d'une phrase. Il s'arrête sur une\nerreur dès la première lettre e. Lis le message, puis répare le programme.\n",
+    "depart": "phrase = input(\"Une phrase : \")\nfor lettre in phrase:\n    if lettre == \"e\":\n        nombre = nombre + 1\nprint(\"Nombre de e :\", nombre)\n",
+    "indices": [
+      "La première fois que Python arrive sur nombre = nombre + 1, que vaut nombre ?",
+      "La variable doit exister avant le premier tour. Crée-la avant la boucle, avec la valeur qui convient quand on n'a encore rien compté."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "le vélo de Léa"
+        ],
+        "attendu": "Une phrase : le vélo de Léa\nNombre de e : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "abc"
+        ],
+        "attendu": "Une phrase : abc\nNombre de e : 0",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-28",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le chiffre de contrôle",
+    "obligatoire": false,
+    "enonce": "Défi : beaucoup de numéros portent un chiffre de contrôle, qui repère les\nfautes de frappe. Le calcul le plus simple additionne les chiffres du numéro,\npuis garde le reste de la division par 9.\n\nComplète le programme pour que la variable `controle` contienne ce chiffre\npour le numéro 58213, en additionnant ses chiffres dans une boucle.\n",
+    "depart": "numero = 58213\n",
+    "indices": [
+      "Commence par une somme qui part de 0, puis ajoute-lui chaque chiffre de str(numero), converti en nombre.",
+      "Une fois la boucle finie, controle est le reste de la division de la somme par 9, avec le signe pourcent."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "controle",
+        "valeurAttendue": "1",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "interdit",
+        "motif": "controle = 1",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "for",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-29",
+    "concept": "for",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "enumerate(), hors programme",
+    "obligatoire": false,
+    "enonce": "Pour les curieux, et hors programme : on croise parfois `enumerate()` dans le\ncode des autres. À chaque tour, il donne deux valeurs à la fois, que la boucle\nrange dans deux variables.\n",
+    "depart": "for position, lettre in enumerate(\"ski\"):\n    print(position, lettre)\n",
+    "indices": [
+      "enumerate() donne à chaque tour une position et un caractère, dans cet ordre. Par quelle position commence-t-il ?",
+      "Comme range(), enumerate() compte à partir de 0. La première ligne associe donc 0 et s."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "0 s\n1 k\n2 i",
+          "1 s\n2 k\n3 i",
+          "s 0\nk 1\ni 2"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
   }
 ]

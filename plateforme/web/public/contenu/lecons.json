@@ -649,5 +649,45 @@
       }
     ],
     "famille": "types"
+  },
+  {
+    "id": "c3-compter",
+    "notion": "compter",
+    "ordre": 13,
+    "titre": "Compter et cumuler",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Pour compter les tours d'une boucle, ou additionner des valeurs au fil des tours, il faut une variable qui **se souvient** d'un tour à l'autre. Deux règles la font marcher : on la crée **avant** la boucle, une seule fois, et on la met à jour **dedans**, à chaque tour."
+      },
+      {
+        "type": "code",
+        "legende": "Additionner au fil des tours",
+        "python": "total = 0\nfor prix in range(5, 20, 5):\n    total = total + prix\n    print(\"Total provisoire :\", total)\nprint(\"Total :\", total)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Avant, et dedans.** Créée dans la boucle, la variable repart de zéro à chaque tour, et le total ne garde que la dernière valeur. Jamais créée, elle n'existe pas au premier tour, et Python s'arrête."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`total = total + prix` s'écrit aussi `total += prix` : même effet, en plus court. Les deux écritures se rencontrent partout."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un compteur sert aussi à **numéroter**. Pour partir de 1, deux façons marchent : partir de 0 et ajouter 1 **avant** d'afficher, ou partir de 1 et ajouter 1 **après**."
+      },
+      {
+        "type": "code",
+        "legende": "Numéroter à partir de 1",
+        "python": "numero = 0\nfor lettre in \"abc\":\n    numero = numero + 1\n    print(numero, lettre)\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "operateurs"
   }
 ]

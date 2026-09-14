@@ -82,5 +82,12 @@
     "titre": "Parcourir un texte",
     "famille": "types",
     "chapitre": "boucles"
+  },
+  {
+    "id": "compter",
+    "ordre": 13,
+    "titre": "Compter et cumuler",
+    "famille": "operateurs",
+    "chapitre": "boucles"
   }
 ]

@@ -118,6 +118,7 @@ Voir [[Types d'exercices]].
 > | Rappels avant les boucles | `s3-01` à `s3-03` — 3 obligatoires | `c3-rappels` |
 > | Répéter avec for | `s3-04` à `s3-12` — 6 obligatoires, 1 renfort, 2 experts | `c3-repeter` |
 > | Parcourir un texte | `s3-13` à `s3-20` — 5 obligatoires, 1 renfort, 2 experts | `c3-parcourir` |
+> | Compter et cumuler | `s3-21` à `s3-29` — 5 obligatoires, 2 renforts, 2 experts | `c3-compter` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -136,6 +137,11 @@ Voir [[Types d'exercices]].
 >   `while` : celui-ci n'arrive que deux notions plus loin.
 > - `s3-20`, « le brouilleur », devient « Le mot à l'envers » : même accumulateur de texte,
 >   vérifié sur la variable, et même pont vers le chiffrement de César du chapitre 2.
+> - La leçon « Compter et cumuler » présente `total += prix` comme raccourci de
+>   `total = total + prix` : le notebook de 2025 l'emploie, et les élèves le croiseront partout.
+>   `s3-21` le fait lire ; les exercices à écrire gardent la forme longue.
+> - `s3-28` exige une boucle (`for`) : le reste de la division du numéro lui-même par 9 donne le
+>   même chiffre de contrôle, et contournerait l'addition des chiffres, qui est le défi.
 
 ## Les trois séances
 
