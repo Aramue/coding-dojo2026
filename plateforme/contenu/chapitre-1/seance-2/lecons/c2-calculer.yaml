@@ -1,0 +1,70 @@
+id: c2-calculer
+notion: calculer
+ordre: 6
+titre: Calculer
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Python calcule comme une calculatrice. Quatre signes pour les quatre
+      opérations : `+` additionne, `-` soustrait, `*` multiplie et `/` divise.
+      La multiplication s'écrit avec une étoile, jamais avec une croix.
+  - type: code
+    legende: Les quatre opérations
+    executable: true
+    python: |
+      print(20 + 5)
+      print(20 - 5)
+      print(20 * 5)
+      print(20 / 5)
+  - type: attention
+    texte: >-
+      **`/` rend toujours un nombre à virgule**, même quand la division tombe
+      juste : `20 / 5` donne `4.0`, pas `4`. Et ce nombre s'écrit avec un point,
+      jamais avec une virgule.
+  - type: paragraphe
+    texte: >-
+      Pour un partage en parts entières, deux autres signes. `//` donne le
+      nombre de parts entières, et `%` donne **ce qui reste** une fois le
+      partage fait.
+  - type: code
+    legende: 22 billes pour 4 enfants
+    executable: true
+    python: |
+      billes = 22
+      enfants = 4
+      print(billes // enfants)
+      print(billes % enfants)
+  - type: paragraphe
+    texte: >-
+      Le reste sert plus souvent qu'on ne le croit. Un nombre est **pair**
+      quand le reste de sa division par 2 vaut 0.
+  - type: code
+    legende: Pair ou impair ?
+    executable: true
+    python: |
+      print(14 % 2)
+      print(15 % 2)
+  - type: paragraphe
+    texte: >-
+      Comme en mathématiques, **les multiplications passent avant les
+      additions**, et des parenthèses changent l'ordre. `**` calcule une
+      puissance, qui passe même avant la multiplication : `2 ** 3` vaut 2 fois 2
+      fois 2.
+  - type: code
+    legende: L'ordre des opérations
+    executable: true
+    python: |
+      print(10 - 2 * 3)
+      print((10 - 2) * 3)
+      print(5 * 2 ** 2)
+  - type: paragraphe
+    texte: >-
+      Enfin, une fonction pour mesurer un texte : `len()` compte ses caractères,
+      espaces et signes compris.
+  - type: code
+    legende: Compter les caractères
+    executable: true
+    python: |
+      print(len("Genève"))
+      print(len("Bonjour à tous"))

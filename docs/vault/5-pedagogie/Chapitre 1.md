@@ -73,6 +73,7 @@ Voir [[Types d'exercices]].
 > | Notion | Exercices | Leçon |
 > |---|---|---|
 > | Se remettre en route | `s2-01` à `s2-03` — 3 obligatoires | `c2-reveil` |
+> | Calculer | `s2-04` à `s2-12` — 6 obligatoires, 1 renfort, 2 experts | `c2-calculer` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -83,6 +84,10 @@ Voir [[Types d'exercices]].
 >   réactive : deux « Photo, pas formule » dans le même menu se confondraient.
 > - `s2-03` « la ligne de rapport » devient « La phrase au format exact » : le rapport venait du
 >   Quartier Général, abandonné avec [[ADR-010 Abandon de la fiction narrative]].
+> - `s2-12` se valide **sur sa sortie**, pour 472 et pour 905 et son zéro au milieu, et non par
+>   inspection de variables : le programme demande le nombre avec `input()`, et une inspection
+>   s'exécute sans entrée. Un second motif interdit, `[`, ferme le contournement par un f-string
+>   découpé — sans lui, le défi se résoudrait sans toucher à `//` ni à `%`.
 
 ## Les trois séances
 

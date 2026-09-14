@@ -1189,5 +1189,282 @@
       }
     ],
     "famille": "variables"
+  },
+  {
+    "id": "s2-04",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les quatre opérations",
+    "obligatoire": true,
+    "enonce": "Python sait calculer comme une calculatrice : `+` pour additionner, `-` pour\nsoustraire, `*` pour multiplier et `/` pour diviser.\nAttention, la multiplication s'écrit avec une étoile, pas avec une croix.\n",
+    "depart": "a = 12\nb = 3\nprint(a + b, a - b, a * b)\n",
+    "indices": [
+      "Python calcule chaque expression avant de l'afficher. print reçoit trois résultats, pas trois formules.",
+      "L'étoile est le signe de la multiplication. a * b, c'est douze fois trois."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "15 9 36",
+          "15 9 4",
+          "a + b a - b a * b"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-05",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La division rend un nombre à virgule",
+    "obligatoire": true,
+    "enonce": "Trois amis partagent une addition de 60 francs au restaurant, et chacun paie\nla même part.\n",
+    "depart": "addition = 60\namis = 3\npart = addition / amis\nprint(part)\n",
+    "indices": [
+      "Regarde le signe utilisé pour diviser. En Python, / rend toujours un nombre à virgule, même quand la division tombe juste.",
+      "Un nombre à virgule s'affiche avec un point, pas avec une virgule, et il garde son .0 même quand il est rond."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "20.0",
+          "20",
+          "20,0"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-06",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "// coupe, % reste",
+    "obligatoire": true,
+    "enonce": "17 bonbons sont partagés entre 5 enfants, en parts égales.\n`//` donne le nombre de bonbons que reçoit chaque enfant, et `%` donne ce qui\nreste une fois le partage fait.\n",
+    "depart": "bonbons = 17\nenfants = 5\nprint(bonbons // enfants, bonbons % enfants)\n",
+    "indices": [
+      "Fais le partage à la main. Combien de fois 5 rentre-t-il dans 17 ?",
+      "// garde le nombre de parts entières, % garde ce qui ne rentre dans aucune part. 5 fois 3 font 15, il en reste 2."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "3 2",
+          "3.4 2",
+          "2 3"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-07",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Le reste de la division",
+    "obligatoire": true,
+    "enonce": "Une classe de 23 élèves forme des équipes de 4.\nComplète le trou pour que la variable `seuls` contienne le nombre d'élèves\nqui restent sans équipe complète.\n",
+    "depart": "eleves = 23\npar_equipe = 4\nseuls = eleves _____ par_equipe\nprint(\"Élèves sans équipe complète :\", seuls)\n",
+    "indices": [
+      "Tu cherches ce qui RESTE une fois formées toutes les équipes possibles.",
+      "L'opérateur qui donne le reste d'une division s'écrit avec le signe pourcent."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "seuls",
+        "valeurAttendue": "3",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "%",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-08",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Priorité et parenthèses",
+    "obligatoire": true,
+    "enonce": "Comme en mathématiques, Python fait les multiplications avant les additions,\nsauf si des parenthèses changent l'ordre.\n`**` calcule une puissance : `3 ** 2` vaut 3 fois 3. La puissance passe même\navant la multiplication.\n",
+    "depart": "print(2 + 3 * 4)\nprint((2 + 3) * 4)\nprint(2 * 3 ** 2)\n",
+    "indices": [
+      "Traite chaque ligne séparément. Sur la première, quelle opération Python fait-il en premier ?",
+      "L'ordre est le suivant. D'abord les parenthèses, puis la puissance, puis la multiplication et la division, et enfin l'addition et la soustraction. Sur la dernière ligne, 3 ** 2 est calculé avant d'être multiplié par 2."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "14\n20\n18",
+          "20\n20\n36",
+          "14\n20\n36"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-09",
+    "concept": "chaines",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "len() compte les caractères",
+    "obligatoire": true,
+    "enonce": "La fonction `len()` compte les caractères d'un texte, espaces et signes\ncompris. Complète le trou pour que la variable `longueur` contienne le nombre\nde caractères du pseudo.\n",
+    "depart": "pseudo = \"Léa_2026\"\nlongueur = _____(pseudo)\nprint(\"Ton pseudo fait\", longueur, \"caractères\")\n",
+    "indices": [
+      "Le nom de la fonction qui compte est écrit dans la phrase au-dessus du programme.",
+      "La fonction se place devant les parenthèses, et entre les parenthèses on met ce qu'on veut mesurer."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "longueur",
+        "valeurAttendue": "8",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "len(",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-10",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Les parenthèses oubliées",
+    "obligatoire": false,
+    "enonce": "Ce programme calcule la moyenne de trois notes.\nIl tourne sans erreur, mais il se trompe : il affiche 10.666666666666666 au\nlieu de 4.0.\nTrouve pourquoi, puis répare-le.\n",
+    "depart": "note1 = 6\nnote2 = 4\nnote3 = 2\nmoyenne = note1 + note2 + note3 / 3\nprint(\"Moyenne :\", moyenne)\n",
+    "indices": [
+      "Python ne lit pas cette ligne de gauche à droite comme une phrase. Il divise avant d'additionner. Qu'est-ce qui est vraiment divisé par 3 ici ?",
+      "Des parenthèses autour de la somme forcent Python à additionner d'abord."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Moyenne : 4.0",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "4.0",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-11",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Le reste, hors des sentiers battus",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : le reste d'une division marche aussi avec des nombres\nnégatifs et des nombres à virgule, mais pas toujours comme on l'imagine.\n",
+    "depart": "print(-7 % 3)\nprint(7.5 % 2)\n",
+    "indices": [
+      "En Python, le reste d'une division par 3 est toujours compris entre 0 et 2, même quand le nombre de départ est négatif.",
+      "Pour -7, cherche le multiple de 3 juste en dessous, c'est -9. Il faut ajouter 2 pour arriver à -7. Pour 7.5, enlève 2 autant de fois que possible."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "2\n1.5",
+          "-1\n1.5",
+          "1\n1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-12",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Décomposer un nombre sans boucle",
+    "obligatoire": false,
+    "enonce": "Défi : sépare les trois chiffres d'un nombre, sans le transformer en texte.\nSeuls `//` et `%` sont permis.\n\nPour 472, ton programme doit afficher :\n\nUn nombre à trois chiffres : 472\nCentaines : 4\nDizaines : 7\nUnités : 2\n\nTon programme sera relancé avec un autre nombre.\n",
+    "depart": "nombre = int(input(\"Un nombre à trois chiffres : \"))\n",
+    "indices": [
+      "Commence par les unités. C'est le reste de la division par 10.",
+      "Pour les centaines, combien de fois 100 rentre-t-il dans le nombre ? Pour les dizaines, enlève d'abord les unités avec // 10, puis garde le reste de la division par 10."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "472"
+        ],
+        "attendu": "Un nombre à trois chiffres : 472\nCentaines : 4\nDizaines : 7\nUnités : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "905"
+        ],
+        "attendu": "Un nombre à trois chiffres : 905\nCentaines : 9\nDizaines : 0\nUnités : 5",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "str(",
+        "message": "Ce défi se résout sans transformer le nombre en texte : seuls // et % sont permis.",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "[",
+        "message": "Ce défi se résout sans transformer le nombre en texte : seuls // et % sont permis.",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
   }
 ]

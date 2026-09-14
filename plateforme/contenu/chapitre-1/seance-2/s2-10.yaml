@@ -1,0 +1,35 @@
+id: s2-10
+concept: arithmetique
+notion: calculer
+seance: 2
+niveau: normal
+type: debug
+titre: Les parenthèses oubliées
+obligatoire: false
+enonce: |
+  Ce programme calcule la moyenne de trois notes.
+  Il tourne sans erreur, mais il se trompe : il affiche 10.666666666666666 au
+  lieu de 4.0.
+  Trouve pourquoi, puis répare-le.
+depart: |
+  note1 = 6
+  note2 = 4
+  note3 = 2
+  moyenne = note1 + note2 + note3 / 3
+  print("Moyenne :", moyenne)
+indices:
+  - Python ne lit pas cette ligne de gauche à droite comme une phrase. Il divise avant d'additionner. Qu'est-ce qui est vraiment divisé par 3 ici ?
+  - Des parenthèses autour de la somme forcent Python à additionner d'abord.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Moyenne : 4.0
+  - type: interdit
+    motif: "4.0"
+solution: |
+  note1 = 6
+  note2 = 4
+  note3 = 2
+  moyenne = (note1 + note2 + note3) / 3
+  print("Moyenne :", moyenne)

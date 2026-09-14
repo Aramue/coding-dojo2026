@@ -1,0 +1,27 @@
+id: s2-06
+concept: modulo
+notion: calculer
+seance: 2
+niveau: normal
+type: predire
+titre: "// coupe, % reste"
+obligatoire: true
+enonce: |
+  17 bonbons sont partagés entre 5 enfants, en parts égales.
+  `//` donne le nombre de bonbons que reçoit chaque enfant, et `%` donne ce qui
+  reste une fois le partage fait.
+depart: |
+  bonbons = 17
+  enfants = 5
+  print(bonbons // enfants, bonbons % enfants)
+indices:
+  - Fais le partage à la main. Combien de fois 5 rentre-t-il dans 17 ?
+  - // garde le nombre de parts entières, % garde ce qui ne rentre dans aucune part. 5 fois 3 font 15, il en reste 2.
+tests:
+  - type: qcm
+    options: ["3 2", "3.4 2", "2 3"]
+    bonne_reponse: 0
+solution: |
+  bonbons = 17
+  enfants = 5
+  print(bonbons // enfants, bonbons % enfants)

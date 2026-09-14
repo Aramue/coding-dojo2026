@@ -78,6 +78,15 @@ blocs:
 paragraphes se limite à `**gras**` et `` `code` `` — une fonction d'une dizaine de lignes,
 aucune bibliothèque de rendu markdown.
 
+> [!warning] Un opérateur s'écrit entre accents graves, dans un énoncé comme dans une leçon
+> `formaterTexte` lit une double étoile comme une ouverture de gras. Un premier jet de `s2-08`
+> écrivait `** calcule une puissance : 3 ** 2 vaut 3 fois 3` : tout ce qui séparait les deux
+> doubles étoiles serait sorti en gras, et les étoiles auraient disparu de l'écran. ==Entre
+> accents graves, un opérateur est du code, et rien d'autre.==
+>
+> Les **indices** et les **propositions de QCM** s'affichent en texte brut : un accent grave y
+> resterait visible. On y écrit les opérateurs tels quels.
+
 Un bloc `code` peut porter deux champs de plus :
 
 | Champ | Effet |
@@ -152,7 +161,7 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | Identifiant | Titre affiché | Séance | Ouverture | Notions |
 |---|---|---|---|---|
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
-| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil` |
+| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
@@ -174,6 +183,7 @@ que le front n'en garde aucune copie.
 | `types` | Types et conversion | vert | 6 |
 | `saisie` | Demander une information | bleu | 6 |
 | `reveil` | Se remettre en route | indigo | 3 |
+| `calculer` | Calculer | bleu | 9 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour

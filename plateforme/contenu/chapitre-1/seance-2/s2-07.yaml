@@ -1,0 +1,32 @@
+id: s2-07
+concept: modulo
+notion: calculer
+seance: 2
+niveau: normal
+type: completer
+titre: Le reste de la division
+obligatoire: true
+enonce: |
+  Une classe de 23 élèves forme des équipes de 4.
+  Complète le trou pour que la variable `seuls` contienne le nombre d'élèves
+  qui restent sans équipe complète.
+depart: |
+  eleves = 23
+  par_equipe = 4
+  seuls = eleves _____ par_equipe
+  print("Élèves sans équipe complète :", seuls)
+indices:
+  - Tu cherches ce qui RESTE une fois formées toutes les équipes possibles.
+  - L'opérateur qui donne le reste d'une division s'écrit avec le signe pourcent.
+tests:
+  - type: variable
+    nom: seuls
+    valeur_attendue: "3"
+    type_attendu: int
+  - type: contient
+    motif: "%"
+solution: |
+  eleves = 23
+  par_equipe = 4
+  seuls = eleves % par_equipe
+  print("Élèves sans équipe complète :", seuls)
