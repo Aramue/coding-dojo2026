@@ -13,6 +13,13 @@ type Regle = {
   construire: (c: RegExpMatchArray) => MessageErreur
 }
 
+/** Le nom qu'un débutant comprend, pour les types qu'il a appris. */
+const NOMS_DE_TYPE: Record<string, string> = {
+  int: 'un nombre entier',
+  float: 'un nombre à virgule',
+  bool: 'un booléen',
+}
+
 const REGLES: Regle[] = [
   {
     type: 'NameError',
@@ -42,6 +49,17 @@ const REGLES: Regle[] = [
       titre: `Impossible de faire ${c[1]} entre ${c[2]} et ${c[3]}`,
       explication: `Ces deux valeurs ne sont pas du même type, Python ne sait pas les combiner.`,
       piste: `Regarde d'où vient chaque valeur. Une réponse de input() est toujours du texte, même si elle ressemble à un nombre.`,
+    }),
+  },
+  {
+    type: 'TypeError',
+    // Rencontrée exprès en s3-14 : for sur un nombre. Sans cette règle, le
+    // message générique ne disait pas ce qu'on ne peut pas parcourir.
+    motif: /'(\w+)' object is not iterable/,
+    construire: (c) => ({
+      titre: `On ne parcourt pas ${NOMS_DE_TYPE[c[1]!] ?? `une valeur de type ${c[1]}`}`,
+      explication: `for parcourt un texte caractère par caractère, ou les valeurs d'un range(). Cette valeur n'a rien à parcourir.`,
+      piste: `Pour parcourir les chiffres d'un nombre, transforme-le d'abord en texte avec str().`,
     }),
   },
   {

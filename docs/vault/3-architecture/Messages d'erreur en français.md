@@ -35,6 +35,7 @@ Une quinzaine d'entrées couvrent l'essentiel de ce que produit un débutant.
 | `NameError` | *La variable `nom` n'existe pas encore. Tu l'as peut-être écrite différemment plus haut ? Python distingue `Nom` et `nom`.* |
 | `TypeError` (str + int) | *Tu essaies de coller un nombre à du texte. Python refuse. Transforme-le d'abord : `str(age)`.* |
 | `ValueError` (int) | *`int()` attend des chiffres, pas des lettres. Vérifie ce que tu lui donnes.* |
+| `TypeError` (`for` sur un nombre) | *On ne parcourt pas un nombre entier. `for` parcourt un texte caractère par caractère, ou les valeurs d'un `range()`. Pour parcourir les chiffres d'un nombre, transforme-le d'abord en texte avec `str()`.* |
 | `SyntaxError` (`:` manquant) | *Il manque un `:` à la fin de la ligne. En Python, `if`, `for` et `while` finissent toujours par deux-points.* |
 | `SyntaxError` (`=` au lieu de `==`) | *Un seul `=` là où Python attend une comparaison. Le signe `=` range une valeur dans une variable, il ne demande pas si deux valeurs sont égales.* |
 | `IndentationError` | *Cette ligne n'est pas alignée avec les autres. Tout ce qui est à l'intérieur d'un `if` ou d'un `for` doit être décalé de la même façon.* |
