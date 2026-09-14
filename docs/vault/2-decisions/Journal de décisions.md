@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-14
 ---
 
 # Journal de décisions
@@ -37,7 +37,7 @@ Ce sont celles qu'un lecteur risque le plus de défaire par ignorance.
 - **009** — [[ADR-009 Routage maison sans bibliothèque]]
   Quatre formes de chemin sur l'API History. Une fonction pure porte la logique, pas un routeur.
 
-Les deux dernières datent du 4 septembre 2026, après une première interface livrée et essayée.
+Les trois suivantes datent du 4 septembre 2026, après une première interface livrée et essayée.
 
 - **010** — [[ADR-010 Abandon de la fiction narrative]]
   Plus de Quartier Général : des exemples du quotidien, et un code d'accès `DOJO-XXXX`.
@@ -45,6 +45,12 @@ Les deux dernières datent du 4 septembre 2026, après une première interface l
   Rien, une coche, deux coches. La seconde récompense la méthode, elle ne conditionne rien.
 - **012** — [[ADR-012 Le professeur tient la liste de sa classe]]
   L'élève porte un nom ; le code d'accès reste la clé, et un code inconnu n'ouvre plus rien.
+
+Le 14 septembre 2026, en publiant la séance 2 avant que la séance 1 ait eu lieu :
+
+- **013** — [[ADR-013 Une séance s'ouvre à sa date]]
+  Chaque chapitre porte sa date. Avant, il n'existe ni pour l'élève ni dans les comptes du
+  professeur ; seul l'aperçu le montre, en le signalant.
 
 ## Le fil conducteur
 

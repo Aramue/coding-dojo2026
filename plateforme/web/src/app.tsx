@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ClientApi, type Identite } from './api/client'
+import { aujourdhui, contenuDisponible } from './contenu/calendrier'
 import { chargerContenu } from './contenu/chargeur'
 import { grouper, grouperParChapitre, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
@@ -10,7 +11,7 @@ import { EcranProf } from './ui/EcranProf'
 import { Menu } from './ui/Menu'
 import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
-import type { ContenuPublie } from './contenu/types'
+import type { Chapitre, ContenuPublie } from './contenu/types'
 import type { GroupeNotion } from './contenu/notions'
 import type { Reussite, ResultatTest } from './validation/types'
 
@@ -92,7 +93,10 @@ export function App() {
 
   async function connecter(saisi: string) {
     const qui = await client.ouvrirSession(saisi)
-    const [publie, acquis] = await Promise.all([chargerContenu(), client.lireParcours()])
+    const [tout, acquis] = await Promise.all([chargerContenu(), client.lireParcours()])
+    // Une séance publiée d'avance reste fermée jusqu'à sa date : elle ne doit
+    // rien changer à celle qui se déroule. Voir ADR-013.
+    const publie = contenuDisponible(tout, aujourdhui())
     setContenu(publie)
     setReussis(acquis)
     setIdentite(qui)
@@ -130,7 +134,12 @@ export function App() {
 
   return (
     <div className="appli">
-      <Entete identite={identite} groupes={groupes} />
+      <Entete
+        identite={identite}
+        groupes={groupes}
+        // La séance du jour : celle du dernier chapitre ouvert.
+        chapitre={chapitres[chapitres.length - 1]}
+      />
       <Menu chapitres={chapitres} destination={destination} />
       {alerte && (
         <p role="alert" className="alerte">
@@ -273,9 +282,11 @@ function Introuvable() {
 function Entete({
   identite,
   groupes = [],
+  chapitre,
 }: {
   identite?: Identite
   groupes?: GroupeNotion[]
+  chapitre?: Chapitre
 }) {
   // Obligatoires seulement : la jauge de l'en-tete est le chemin minimal.
   const total = groupes.reduce((n, g) => n + g.total, 0)
@@ -286,7 +297,11 @@ function Entete({
       <span className="entete__marque">
         Coding Dojo <span>Python</span>
       </span>
-      {identite && <span className="entete__seance">Séance 1 — les bases de Python</span>}
+      {identite && chapitre && (
+        <span className="entete__seance">
+          Séance {chapitre.seance} — {chapitre.titre}
+        </span>
+      )}
       <span className="entete__espace" />
       {total > 0 && (
         <span
@@ -295,7 +310,7 @@ function Entete({
           aria-valuemin={0}
           aria-valuemax={total}
           aria-valuenow={faits}
-          aria-label="Progression dans la séance"
+          aria-label="Progression dans le cours"
         >
           <span className="entete__jauge" aria-hidden="true">
             <span style={{ width: `${(faits / total) * 100}%` }} />

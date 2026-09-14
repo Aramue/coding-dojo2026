@@ -13,9 +13,11 @@ import re
 import sys
 import unicodedata
 from contextlib import redirect_stdout
+from datetime import date
 from pathlib import Path
 
 from schema import (
+    CHAPITRES,
     MOTIF_EMOJI,
     NOTIONS,
     BlocCode,
@@ -193,6 +195,34 @@ def verifier_lecon(lecon: Lecon) -> list[str]:
     return problemes
 
 
+MOTIF_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+
+
+def verifier_chapitres(chapitres: dict[str, dict]) -> list[str]:
+    """Une date d'ouverture mal ecrite ne plante rien : c'est tout le danger.
+
+    Le front compare des chaines `AAAA-MM-JJ`. « 23/09/2026 » s'y compare
+    quand meme, et la seance reste fermee ou s'ouvre trop tot, en silence, le
+    matin du cours. Voir ADR-013.
+    """
+    problemes: list[str] = []
+    for identifiant, details in chapitres.items():
+        ouverture = details.get("ouverture")
+        if ouverture is None:
+            continue
+        try:
+            # Le motif d'abord : Python lit aussi « 20260923 », le front non.
+            lisible = bool(MOTIF_DATE.match(ouverture)) and bool(date.fromisoformat(ouverture))
+        except (TypeError, ValueError):
+            lisible = False
+        if not lisible:
+            problemes.append(
+                f"chapitre {identifiant} : date d'ouverture illisible {ouverture!r}, "
+                "attendu AAAA-MM-JJ"
+            )
+    return problemes
+
+
 def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str]]:
     """Charge tout le contenu d'une racine et rend les problemes trouves.
 
@@ -201,7 +231,7 @@ def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str
     """
     exercices = charger_tous(racine)
     identifiants = {ex.id for ex in exercices}
-    problemes: list[str] = []
+    problemes: list[str] = verifier_chapitres(CHAPITRES)
 
     for ex in exercices:
         problemes += verifier_coherence(ex)

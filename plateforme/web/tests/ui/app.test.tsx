@@ -156,7 +156,7 @@ describe('App — le menu suit la progression', () => {
     expect(within(notion).getByText('1/1')).toBeInTheDocument()
   })
 
-  it("montre l'avancement global de la seance dans l'en-tete", async () => {
+  it("montre l'avancement global dans l'en-tete", async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async (url: string) => ({
@@ -174,7 +174,7 @@ describe('App — le menu suit la progression', () => {
     sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
     render(<App />)
 
-    const jauge = await screen.findByRole('progressbar', { name: /séance/i })
+    const jauge = await screen.findByRole('progressbar', { name: /cours/i })
     expect(jauge).toHaveAttribute('aria-valuenow', '1')
     expect(jauge).toHaveAttribute('aria-valuemax', '1')
   })
@@ -256,5 +256,49 @@ describe("App — l'élève voit qui il est", () => {
     const { container } = render(<App />)
     expect(await screen.findByText('DOJO-TEST')).toBeInTheDocument()
     expect(container.querySelector('.entete__prenom')).toBeNull()
+  })
+})
+
+describe('App — une séance s’ouvre à sa date', () => {
+  const DECISIONS = { id: 'decisions', ordre: 2, titre: 'Calculer, comparer, décider', seance: 2 }
+  const CALCULER = {
+    id: 'calculer',
+    ordre: 3,
+    titre: 'Calculer',
+    famille: 'operateurs',
+    chapitre: 'decisions',
+  }
+
+  function reseau(ouverture: string) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('chapitres')) return [...CHAPITRES, { ...DECISIONS, ouverture }]
+          if (url.includes('notions')) return [...NOTIONS, CALCULER]
+          if (url.includes('lecons')) return []
+          if (url.includes('parcours')) return { reussis: [] }
+          if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+          return EXERCICES
+        },
+      })),
+    )
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+  }
+
+  it('cache une séance avant sa date, et nomme celle du jour', async () => {
+    reseau('2999-01-01')
+    render(<App />)
+    await screen.findByRole('navigation', { name: /sommaire/i })
+    expect(screen.queryByText('Calculer')).toBeNull()
+    expect(screen.getByText('Séance 1 — Les bases de Python')).toBeInTheDocument()
+  })
+
+  it('la montre à partir de sa date, et la nomme dans l’en-tête', async () => {
+    reseau('2000-01-01')
+    render(<App />)
+    expect(await screen.findByText('Calculer')).toBeInTheDocument()
+    expect(screen.getByText('Séance 2 — Calculer, comparer, décider')).toBeInTheDocument()
   })
 })

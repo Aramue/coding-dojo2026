@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo, useState } from 'react'
+import { aujourdhui, contenuDisponible } from '../contenu/calendrier'
 import { useContenuPublie } from '../prof/contenu'
 import {
   blocagesCollectifs,
@@ -47,7 +48,13 @@ export function TableauDeBord({
 
   // Le contenu publié, pour lire des titres au lieu d'identifiants. Sans lui le
   // tableau affiche des identifiants bruts : dégradé, jamais cassé.
-  const contenu = useContenuPublie()
+  const publie = useContenuPublie()
+  // Et seulement ce que la classe voit aujourd'hui : une séance publiée
+  // d'avance gonflerait le total de la médiane et chaque jauge. Voir ADR-013.
+  const contenu = useMemo(
+    () => (publie ? contenuDisponible(publie, aujourdhui()) : null),
+    [publie],
+  )
 
   useEffect(() => {
     let vivant = true

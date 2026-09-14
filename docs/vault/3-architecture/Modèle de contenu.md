@@ -149,12 +149,16 @@ choix du motif sont dans [[Moteur de validation]].
 Un chapitre rassemble les notions d'un même sujet. C'est **le niveau que le menu déplie** : sans
 lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient ensemble.
 
-| Identifiant | Titre affiché | Notions |
-|---|---|---|
-| `bases` | Les bases de Python | `afficher`, `variables`, `types`, `saisie` |
+| Identifiant | Titre affiché | Séance | Ouverture | Notions |
+|---|---|---|---|---|
+| `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
+
+Un chapitre peut porter une date d'`ouverture`, écrite `AAAA-MM-JJ`. Avant ce jour, ni lui ni ses
+notions, ses exercices et ses leçons n'existent pour l'élève, ni dans les comptes du professeur.
+Sans date, il est ouvert d'emblée. Voir [[ADR-013 Une séance s'ouvre à sa date]].
 
 ## La notion, unité de navigation
 
@@ -221,6 +225,8 @@ la construction** plutôt que d'atteindre les élèves. Contrôles :
 - La `solution` passe réellement tous ses propres tests
 - Le `depart` échoue au moins un test — sinon l'exercice est déjà résolu
 - Chaque `expert` référencé existe
+- Chaque date d'ouverture de chapitre est un vrai jour, écrit `AAAA-MM-JJ` — « 23/09/2026 » se
+  comparerait quand même dans le navigateur, et la séance resterait fermée en silence
 - **Chaque exemple de code d'une leçon s'exécute sans lever d'exception**
 - Une leçon n'utilise aucune notion enseignée après elle — une affectation dans « Afficher un
   message », un `int()` avant « Types et conversion », un `input()` avant « Demander une

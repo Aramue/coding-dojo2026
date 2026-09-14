@@ -360,3 +360,52 @@ describe('TableauDeBord — les jauges', () => {
     expect(screen.getByRole('heading', { name: 'Afficher un message1/1' })).toBeInTheDocument()
   })
 })
+
+describe("TableauDeBord — une séance à venir n'entre pas dans les comptes", () => {
+  it('laisse ses exercices hors du total de la médiane', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url.includes('chapitres')) {
+          return {
+            ok: true,
+            json: async () => [
+              { id: 'bases', ordre: 1, titre: 'Les bases de Python', seance: 1 },
+              {
+                id: 'decisions',
+                ordre: 2,
+                titre: 'Calculer, comparer, décider',
+                seance: 2,
+                ouverture: '2999-01-01',
+              },
+            ],
+          }
+        }
+        if (url.includes('notions')) {
+          return {
+            ok: true,
+            json: async () => [
+              ...NOTIONS,
+              { id: 'calculer', ordre: 6, titre: 'Calculer', famille: 'operateurs', chapitre: 'decisions' },
+            ],
+          }
+        }
+        if (url.includes('lecons')) return { ok: true, json: async () => [] }
+        if (url.includes('prof/seance')) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ eleves: [ligne({ reussis: [reussi('s1-02')] })] }),
+          }
+        }
+        return {
+          ok: true,
+          json: async () => [...EXERCICES, ex('s2-04', 'calculer', 'Les quatre opérations')],
+        }
+      }),
+    )
+    render(<TableauDeBord codeProf="code-prof-test" />)
+    // Trois obligatoires ouverts ; le quatrième appartient à la séance 2.
+    expect(await screen.findByText(/médiane 1 \/ 3/)).toBeInTheDocument()
+  })
+})

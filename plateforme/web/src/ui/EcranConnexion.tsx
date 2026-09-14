@@ -22,10 +22,14 @@ export function EcranConnexion({ onConnecte }: { onConnecte: (code: string) => P
   return (
     <main className="connexion">
       <div className="connexion__carte">
-        <h1>Séance 1 — les bases de Python</h1>
+        {/*
+          Rien ici ne nomme une séance : cet écran est le même le 16 et le 30
+          septembre, et le contenu n'est chargé qu'une fois le code accepté.
+        */}
+        <h1>Introduction à la programmation</h1>
         <p className="connexion__intro">
-          Vingt-cinq exercices pour écrire tes premiers programmes. Ton code s'exécute dans ce
-          navigateur et se corrige tout seul : tu sais immédiatement si tu as juste.
+          Écris tes premiers programmes en Python, une notion après l'autre. Ton code s'exécute
+          dans ce navigateur et se corrige tout seul : tu sais immédiatement si tu as juste.
         </p>
 
         <form onSubmit={soumettre}>

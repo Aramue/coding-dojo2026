@@ -3,7 +3,7 @@ title: Tableau de bord
 tags:
   - architecture
   - professeur
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-14
 ---
 
 # Tableau de bord
@@ -56,6 +56,11 @@ Trois zones, dans l'ordre où le professeur les lit.
 
 L'en-tête n'ajoute qu'un chiffre, celui que la liste ne donne pas d'elle-même : la **médiane**,
 à côté de l'effectif — « 7 élèves connectés · médiane 5 / 25 ».
+
+Médiane, jauges et dépliants ne comptent que **les séances ouvertes**. La séance 2, publiée
+d'avance, n'entre dans aucun total avant le 23 septembre : sans cette règle, la médiane du 16 se
+serait lue sur 51 exercices, et la classe aurait paru en retard sans l'être. Voir
+[[ADR-013 Une séance s'ouvre à sa date]].
 
 > [!note] Pourquoi la médiane, pas la moyenne
 > Une classe où trois élèves ont fini et six n'ont rien commencé a une moyenne rassurante et une
@@ -125,6 +130,10 @@ ouvre l'aperçu sur cet exercice.
 Chaque exercice du dépliant **s'ouvre**. Le professeur savait qu'on bute sur « L'âge qui refuse de
 s'additionner » ; il peut maintenant relire ce que l'énoncé demande, les indices, le code de
 départ. Un bouton ouvre aussi l'espace au départ, pour parcourir la séance avant de la faire.
+
+L'aperçu montre **tout le contenu publié, séances à venir comprises**, puisque c'est avant une
+séance qu'on la cadre. Il est le seul écran à le faire, et il le dit : une ligne sous son titre
+nomme ce que la classe ne voit pas encore, et le jour où elle le verra.
 
 > [!important] Ce ne sont ni des captures ni une maquette
 > ==Ce sont les composants de l'élève, avec le contenu publié==, montés tels quels. Ce que le

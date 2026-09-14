@@ -29,6 +29,12 @@ export type Chapitre = {
   ordre: number
   titre: string
   seance: number
+  /**
+   * Le jour où le chapitre s'ouvre aux élèves, `AAAA-MM-JJ`. Absent : ouvert
+   * d'emblée — c'est le cas du premier, que le professeur doit pouvoir
+   * parcourir avant le premier cours. Voir ADR-013.
+   */
+  ouverture?: string
 }
 
 /** Une notion du cours. Publiée par construire_contenu.py, jamais recopiée ici. */

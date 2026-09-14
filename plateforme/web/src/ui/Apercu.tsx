@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
+import { aujourdhui, chapitresAVenir, dateLongue } from '../contenu/calendrier'
 import { grouper, grouperParChapitre } from '../contenu/notions'
 import type { Executeur } from '../execution/executeur'
 import { useContenuPublie } from '../prof/contenu'
@@ -81,6 +82,12 @@ export function Apercu({
     () => (contenu ? grouperParChapitre(contenu.chapitres, groupes) : []),
     [contenu, groupes],
   )
+  // L'aperçu montre TOUT, séances à venir comprises : c'est avant une séance
+  // qu'on la cadre. Il doit donc dire ce que la classe, elle, ne voit pas encore.
+  const aVenir = useMemo(
+    () => (contenu ? chapitresAVenir(contenu.chapitres, aujourdhui()) : []),
+    [contenu],
+  )
 
   // Faute de point de départ, on ouvre sur la première leçon : c'est par là que
   // l'élève commence, donc par là qu'on cadre.
@@ -125,6 +132,12 @@ export function Apercu({
           <span className="apercu__note">
             Le contenu réel, avec une progression vide. Rien n'est enregistré ici.
           </span>
+          {aVenir.map((chapitre) => (
+            <span key={chapitre.id} className="apercu__note">
+              Les élèves ne voient pas encore «&nbsp;{chapitre.titre}&nbsp;»&nbsp;: la séance{' '}
+              {chapitre.seance} s'ouvre le {dateLongue(chapitre.ouverture)}.
+            </span>
+          ))}
         </div>
         <button type="button" className="bouton" onClick={onFermer}>
           Fermer l'aperçu
