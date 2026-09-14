@@ -75,5 +75,12 @@
     "titre": "Répéter avec for",
     "famille": "boucles",
     "chapitre": "boucles"
+  },
+  {
+    "id": "parcourir",
+    "ordre": 12,
+    "titre": "Parcourir un texte",
+    "famille": "types",
+    "chapitre": "boucles"
   }
 ]

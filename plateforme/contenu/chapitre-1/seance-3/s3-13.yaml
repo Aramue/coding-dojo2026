@@ -1,0 +1,29 @@
+id: s3-13
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: normal
+type: predire
+titre: Un texte, lettre après lettre
+obligatoire: true
+enonce: |
+  `for` sait aussi parcourir un texte. À chaque tour, la variable prend le
+  caractère suivant, du premier au dernier.
+depart: |
+  for lettre in "Léa":
+      print(lettre)
+  print("Fin du prénom")
+indices:
+  - Combien de caractères le texte "Léa" contient-il ? C'est le nombre de tours de la boucle.
+  - À chaque tour, lettre contient un seul caractère. La dernière ligne n'est pas décalée, elle s'affiche une seule fois.
+tests:
+  - type: qcm
+    options:
+      - "L\né\na\nFin du prénom"
+      - "Léa\nFin du prénom"
+      - "Léa\nLéa\nLéa\nFin du prénom"
+    bonne_reponse: 0
+solution: |
+  for lettre in "Léa":
+      print(lettre)
+  print("Fin du prénom")

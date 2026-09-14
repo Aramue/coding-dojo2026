@@ -117,6 +117,7 @@ Voir [[Types d'exercices]].
 > |---|---|---|
 > | Rappels avant les boucles | `s3-01` à `s3-03` — 3 obligatoires | `c3-rappels` |
 > | Répéter avec for | `s3-04` à `s3-12` — 6 obligatoires, 1 renfort, 2 experts | `c3-repeter` |
+> | Parcourir un texte | `s3-13` à `s3-20` — 5 obligatoires, 1 renfort, 2 experts | `c3-parcourir` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -131,6 +132,10 @@ Voir [[Types d'exercices]].
 >   question », puisque `range(1, 5)` s'arrête un tour **trop tôt**.
 > - `s3-12`, « la grille de sécurité », quitte le Quartier Général pour les tables de
 >   multiplication : deux boucles imbriquées, et une sortie que chacun sait vérifier de tête.
+> - `s3-19` lit les caractères par leur position avec `for` et `range(len(mot))`, et non avec un
+>   `while` : celui-ci n'arrive que deux notions plus loin.
+> - `s3-20`, « le brouilleur », devient « Le mot à l'envers » : même accumulateur de texte,
+>   vérifié sur la variable, et même pont vers le chiffrement de César du chapitre 2.
 
 ## Les trois séances
 

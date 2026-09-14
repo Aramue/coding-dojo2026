@@ -1,0 +1,39 @@
+id: s3-14
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: normal
+type: debug
+titre: On ne parcourt pas un nombre
+obligatoire: true
+enonce: |
+  Ce programme doit afficher, un par ligne, les chiffres d'un code de casier.
+  Il pose sa question, puis s'arrête sur une erreur au moment d'entrer dans la
+  boucle. Lis le message, puis répare le programme.
+depart: |
+  code = int(input("Code du casier : "))
+  for chiffre in code:
+      print(chiffre)
+indices:
+  - Que contient la variable code après la première ligne ? Un texte, ou un nombre ?
+  - for parcourt les caractères d'un texte. Un nombre n'en a pas, il faut d'abord le transformer en texte.
+tests:
+  - type: sortie
+    entrees: ["4721"]
+    attendu: |-
+      Code du casier : 4721
+      4
+      7
+      2
+      1
+  - type: sortie
+    entrees: ["905"]
+    attendu: |-
+      Code du casier : 905
+      9
+      0
+      5
+solution: |
+  code = int(input("Code du casier : "))
+  for chiffre in str(code):
+      print(chiffre)

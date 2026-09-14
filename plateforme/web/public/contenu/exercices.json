@@ -2897,5 +2897,273 @@
       }
     ],
     "famille": "boucles"
+  },
+  {
+    "id": "s3-13",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un texte, lettre après lettre",
+    "obligatoire": true,
+    "enonce": "`for` sait aussi parcourir un texte. À chaque tour, la variable prend le\ncaractère suivant, du premier au dernier.\n",
+    "depart": "for lettre in \"Léa\":\n    print(lettre)\nprint(\"Fin du prénom\")\n",
+    "indices": [
+      "Combien de caractères le texte \"Léa\" contient-il ? C'est le nombre de tours de la boucle.",
+      "À chaque tour, lettre contient un seul caractère. La dernière ligne n'est pas décalée, elle s'affiche une seule fois."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "L\né\na\nFin du prénom",
+          "Léa\nFin du prénom",
+          "Léa\nLéa\nLéa\nFin du prénom"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-14",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "On ne parcourt pas un nombre",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher, un par ligne, les chiffres d'un code de casier.\nIl pose sa question, puis s'arrête sur une erreur au moment d'entrer dans la\nboucle. Lis le message, puis répare le programme.\n",
+    "depart": "code = int(input(\"Code du casier : \"))\nfor chiffre in code:\n    print(chiffre)\n",
+    "indices": [
+      "Que contient la variable code après la première ligne ? Un texte, ou un nombre ?",
+      "for parcourt les caractères d'un texte. Un nombre n'en a pas, il faut d'abord le transformer en texte."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "4721"
+        ],
+        "attendu": "Code du casier : 4721\n4\n7\n2\n1",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "905"
+        ],
+        "attendu": "Code du casier : 905\n9\n0\n5",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-15",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Transformer le nombre en texte",
+    "obligatoire": true,
+    "enonce": "Ce programme calcule le nombre de secondes dans une journée, puis doit en\nafficher les chiffres un par un. Complète le trou pour que la boucle puisse\nparcourir ce nombre.\n",
+    "depart": "secondes = 24 * 60 * 60\nfor chiffre in _____(secondes):\n    print(chiffre)\n",
+    "indices": [
+      "Une boucle for ne parcourt pas un nombre. Quelle fonction transforme un nombre en texte ?",
+      "La fonction qui transforme en texte s'écrit avec les trois lettres du type texte, que tu as vu à la séance 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "8\n6\n4\n0\n0",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "str(",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-16",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La lettre, ou sa position ?",
+    "obligatoire": true,
+    "enonce": "Deux façons de parcourir le même mot. Dans la première boucle, la variable\nprend les caractères. Dans la seconde, elle prend les valeurs de `range()`,\net `len()` compte les caractères du mot.\n",
+    "depart": "mot = \"vélo\"\nfor c in mot:\n    print(c)\nprint(\"---\")\nfor i in range(len(mot)):\n    print(i)\n",
+    "indices": [
+      "len(mot) vaut 4, puisque vélo a quatre caractères. Que donne alors range(4) ?",
+      "La seconde boucle ne touche jamais aux lettres. Elle affiche les positions, qui commencent à 0."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "v\né\nl\no\n---\n0\n1\n2\n3",
+          "v\né\nl\no\n---\nv\né\nl\no",
+          "v\né\nl\no\n---\n1\n2\n3\n4"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-17",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Chaque chiffre sur sa ligne",
+    "obligatoire": true,
+    "enonce": "Le programme demande un code. Ajoute une boucle qui en affiche les chiffres,\nun par ligne.\n\nSi on répond 3072, l'écran doit montrer :\n\nTon code : 3072\n3\n0\n7\n2\n\nTon programme sera relancé avec d'autres codes.\n",
+    "depart": "code = int(input(\"Ton code : \"))\n",
+    "indices": [
+      "La variable code contient un nombre. Avant de le parcourir avec for, il faut le transformer en texte.",
+      "Une boucle for sur str(code), et un print décalé dans la boucle, qui affiche le caractère du tour."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "3072"
+        ],
+        "attendu": "Ton code : 3072\n3\n0\n7\n2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "95"
+        ],
+        "attendu": "Ton code : 95\n9\n5",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "100"
+        ],
+        "attendu": "Ton code : 100\n1\n0\n0",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "3072",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-18",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les caractères qu'on ne voit pas",
+    "obligatoire": false,
+    "enonce": "Pour Python, un espace, un accent ou un chiffre sont des caractères comme les\nautres. Ce programme encadre chaque caractère de crochets, pour qu'on les voie\ntous.\n",
+    "depart": "for c in \"Noël 24\":\n    print(\"[\" + c + \"]\")\n",
+    "indices": [
+      "Compte les caractères de \"Noël 24\" un par un, sans en oublier aucun, pas même celui qu'on ne voit pas.",
+      "L'espace entre Noël et 24 est un caractère, et le ë reste un ë. Il y a donc sept tours."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "[N]\n[o]\n[ë]\n[l]\n[ ]\n[2]\n[4]",
+          "[N]\n[o]\n[e]\n[l]\n[2]\n[4]",
+          "[Noël]\n[24]"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-19",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Un caractère par sa position",
+    "obligatoire": false,
+    "enonce": "Défi : `mot[0]` donne le premier caractère d'un texte, `mot[1]` le deuxième,\net ainsi de suite. Combine-le avec `range(len(mot))` pour afficher chaque\nlettre du mot avec son numéro, en commençant à 1 :\n\n1 : v\n2 : é\n3 : l\n4 : o\n",
+    "depart": "mot = \"vélo\"\n",
+    "indices": [
+      "range(len(mot)) donne les positions 0, 1, 2 et 3. À chaque tour, mot[position] donne le caractère qui s'y trouve.",
+      "Le numéro affiché commence à 1, alors que la position commence à 0. Il suffit d'ajouter 1 à la position."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "1 : v\n2 : é\n3 : l\n4 : o",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "1 : v",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "mot[",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-20",
+    "concept": "accumulateur de chaine",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le mot à l'envers",
+    "obligatoire": false,
+    "enonce": "Défi : un texte se construit aussi morceau par morceau. Complète le programme\npour que la variable `envers` contienne le mot écrit à l'envers. Parcours le\nmot, et range chaque lettre **devant** celles déjà rangées.\n",
+    "depart": "mot = \"Genève\"\nenvers = \"\"\n",
+    "indices": [
+      "À chaque tour, envers doit devenir la lettre du tour, suivie de ce qu'il contenait déjà.",
+      "Dans la boucle, envers = lettre + envers. Après G, envers vaut G ; après e, il vaut eG ; et ainsi de suite."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "envers",
+        "valeurAttendue": "'evèneG'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "interdit",
+        "motif": "evèneG",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "::-1",
+        "message": "Ce défi se résout avec une boucle, en rangeant les lettres une par une.",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
   }
 ]
