@@ -64,6 +64,18 @@ const REGLES: Regle[] = [
   },
   {
     type: 'SyntaxError',
+    // Python le devine depuis la version 3.10, mais le dit en anglais. Sans
+    // cette règle, l'erreur la plus fréquente du débutant qui compare tombait
+    // sur le message générique, qui ne dit rien.
+    motif: /Maybe you meant '==' or ':=' instead of '='/,
+    construire: () => ({
+      titre: 'Un seul = là où Python attend une comparaison',
+      explication: `Le signe = range une valeur dans une variable. Il ne demande pas si deux valeurs sont égales.`,
+      piste: `Regarde le = de la ligne signalée : range-t-il une valeur, ou pose-t-il une question ? Pour comparer, le signe s'écrit ==.`,
+    }),
+  },
+  {
+    type: 'SyntaxError',
     motif: /unterminated string literal|EOL while scanning string literal/,
     construire: () => ({
       titre: 'Un guillemet n\'est pas fermé',
