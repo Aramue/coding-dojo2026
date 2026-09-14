@@ -2066,5 +2066,471 @@
       }
     ],
     "famille": "boucles"
+  },
+  {
+    "id": "s2-29",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Une seule branche s'exécute",
+    "obligatoire": true,
+    "enonce": "`if` pose une question. Si la réponse est True, Python exécute les lignes\ndécalées juste en dessous. Sinon, il saute au `else` et exécute les siennes.\nLa dernière ligne, elle, n'est pas décalée.\n",
+    "depart": "age = 16\nif age >= 18:\n    print(\"Tu es majeur.\")\nelse:\n    print(\"Tu es mineur.\")\nprint(\"Fin du programme.\")\n",
+    "indices": [
+      "Commence par la question du if. 16 est-il plus grand ou égal à 18 ?",
+      "Une seule des deux branches s'exécute. La dernière ligne n'est pas décalée, elle ne dépend donc ni du if ni du else."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Tu es mineur.\nFin du programme.",
+          "Tu es majeur.\nTu es mineur.\nFin du programme.",
+          "Tu es mineur."
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-30",
+    "concept": "indentation",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le bloc qui n'est pas décalé",
+    "obligatoire": true,
+    "enonce": "Ce programme doit dire s'il faut prendre un parapluie. Python refuse de le\nlancer : il ne sait pas quelles lignes dépendent du `if` et du `else`.\nLis le message d'erreur, puis répare le programme.\n",
+    "depart": "pluie = input(\"Il pleut ? (oui ou non) : \")\nif pluie == \"oui\":\nprint(\"Prends ton parapluie.\")\nelse:\nprint(\"Pas besoin de parapluie.\")\n",
+    "indices": [
+      "Les lignes qui dépendent d'un if ou d'un else doivent être décalées vers la droite, juste en dessous de lui.",
+      "Place le curseur au début de la ligne 3 et appuie sur Tab. Fais de même pour la ligne 5."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "oui"
+        ],
+        "attendu": "Il pleut ? (oui ou non) : oui\nPrends ton parapluie.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "non"
+        ],
+        "attendu": "Il pleut ? (oui ou non) : non\nPas besoin de parapluie.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-31",
+    "concept": "indentation",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le message sorti du bloc",
+    "obligatoire": true,
+    "enonce": "Une attraction est réservée aux personnes d'au moins 120 cm. Le programme\ntourne sans erreur. Mais essaie avec 110 cm : il refuse, puis souhaite quand\nmême une bonne descente.\n\nRépare-le, pour que le souhait ne s'affiche qu'aux personnes acceptées.\n",
+    "depart": "taille = int(input(\"Ta taille en cm : \"))\nif taille >= 120:\n    print(\"C'est bon, tu peux monter.\")\nelse:\n    print(\"Pas encore : il faut au moins 120 cm.\")\nprint(\"Bonne descente !\")\n",
+    "indices": [
+      "Quelle ligne s'exécute dans tous les cas, quelle que soit la taille ? Regarde son décalage.",
+      "Une ligne qui n'est pas décalée ne dépend d'aucun bloc. Pour appartenir au if, elle doit être décalée comme les autres lignes du if, et placée avant le else."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "130"
+        ],
+        "attendu": "Ta taille en cm : 130\nC'est bon, tu peux monter.\nBonne descente !",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "110"
+        ],
+        "attendu": "Ta taille en cm : 110\nPas encore : il faut au moins 120 cm.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-32",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Trois branches",
+    "obligatoire": true,
+    "enonce": "Ce programme conseille une tenue selon la température. Complète les deux\ntrous pour obtenir trois branches : 25 degrés ou plus, puis 15 degrés ou\nplus, et tout le reste.\n\nTon programme sera essayé avec plusieurs températures, dont 25 et 15.\n",
+    "depart": "temperature = int(input(\"Température : \"))\nif temperature >= 25:\n    print(\"Short et t-shirt.\")\n_____ temperature >= 15:\n    print(\"Un pull suffit.\")\n_____:\n    print(\"Prends ta veste.\")\n",
+    "indices": [
+      "Le premier trou ajoute une deuxième question, qui n'est posée que si la première a répondu False.",
+      "Le second trou n'a pas de condition. Il prend tout ce que les deux questions ont refusé."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "30"
+        ],
+        "attendu": "Température : 30\nShort et t-shirt.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "25"
+        ],
+        "attendu": "Température : 25\nShort et t-shirt.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "20"
+        ],
+        "attendu": "Température : 20\nUn pull suffit.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15"
+        ],
+        "attendu": "Température : 15\nUn pull suffit.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "8"
+        ],
+        "attendu": "Température : 8\nPrends ta veste.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-33",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le cas oublié",
+    "obligatoire": true,
+    "enonce": "Pour s'inscrire au cours de plongée, il faut avoir au moins 16 ans. Ce\nprogramme accueille bien ceux qui ont l'âge. Mais essaie avec 14 ans : il ne\ndit rien du tout, et on ne sait pas si on est inscrit.\n\nAjoute ce qui manque pour que, à 14 ans, l'écran montre :\n\nÂge : 14\nRefusé : il faut au moins 16 ans.\n",
+    "depart": "age = int(input(\"Âge : \"))\nif age >= 16:\n    print(\"Inscription acceptée.\")\n",
+    "indices": [
+      "Le programme ne prévoit rien pour ceux que le if refuse. Quel mot prend en charge tous les autres cas ?",
+      "Ajoute un else aligné sur le if, avec son deux-points, et le message décalé juste en dessous."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "17"
+        ],
+        "attendu": "Âge : 17\nInscription acceptée.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "16"
+        ],
+        "attendu": "Âge : 16\nInscription acceptée.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "14"
+        ],
+        "attendu": "Âge : 14\nRefusé : il faut au moins 16 ans.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-34",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'ordre des elif",
+    "obligatoire": true,
+    "enonce": "Un cinéma est gratuit avant 6 ans, au tarif enfant avant 16 ans, et au plein\ntarif ensuite. Ce programme ne plante pas, et pourtant un enfant de 4 ans\npaie le tarif enfant. Trouve pourquoi, puis répare-le.\n",
+    "depart": "age = int(input(\"Âge : \"))\nif age < 16:\n    print(\"Tarif enfant : 10 francs\")\nelif age < 6:\n    print(\"Gratuit\")\nelse:\n    print(\"Plein tarif : 15 francs\")\n",
+    "indices": [
+      "Déroule le programme pour 4 ans. Quelle est la première question qui répond True ?",
+      "Python s'arrête à la première condition vraie. Une question plus précise doit donc être posée avant une question plus large."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "4"
+        ],
+        "attendu": "Âge : 4\nGratuit",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "6"
+        ],
+        "attendu": "Âge : 6\nTarif enfant : 10 francs",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15"
+        ],
+        "attendu": "Âge : 15\nTarif enfant : 10 francs",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "16"
+        ],
+        "attendu": "Âge : 16\nPlein tarif : 15 francs",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-35",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La variable née dans un if",
+    "obligatoire": false,
+    "enonce": "Un club accorde 10 francs de rabais à ses membres. Pour un membre, le\nprogramme marche. Pour quelqu'un qui n'est pas membre, il s'arrête sur une\nerreur. Répare-le : un non-membre paie le prix normal.\n",
+    "depart": "prix = 40\nmembre = input(\"Membre du club ? (oui ou non) : \")\nif membre == \"oui\":\n    rabais = 10\nprint(\"Prix à payer :\", prix - rabais)\n",
+    "indices": [
+      "Pour un non-membre, la ligne 4 ne s'exécute jamais. Que vaut rabais quand Python arrive à la dernière ligne ?",
+      "La variable rabais doit exister dans tous les cas. Donne-lui une valeur avant le if, celle qui convient à un non-membre."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "oui"
+        ],
+        "attendu": "Membre du club ? (oui ou non) : oui\nPrix à payer : 30",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "non"
+        ],
+        "attendu": "Membre du club ? (oui ou non) : non\nPrix à payer : 40",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-36",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "elif ou deux if ?",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : ce programme pose deux fois les mêmes questions. D'abord\navec deux `if` à la suite, puis avec un `if` et un `elif`.\n",
+    "depart": "points = 18\nif points >= 10:\n    print(\"Réussi\")\nif points >= 15:\n    print(\"Très bien\")\nprint(\"---\")\nif points >= 10:\n    print(\"Réussi\")\nelif points >= 15:\n    print(\"Très bien\")\n",
+    "indices": [
+      "Dans la première moitié, les deux if sont indépendants : Python pose les deux questions, quelle que soit la réponse à la première.",
+      "Dans la seconde moitié, le elif n'est examiné que si le if a répondu False. Or 18 est plus grand ou égal à 10."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Réussi\nTrès bien\n---\nRéussi",
+          "Réussi\nTrès bien\n---\nRéussi\nTrès bien",
+          "Réussi\n---\nRéussi"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-37",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Dire pourquoi c'est refusé",
+    "obligatoire": false,
+    "enonce": "Défi : la salle de répétition du collège est réservée aux élèves de 12 à 20\nans, et sa porte s'ouvre avec le code Musique2026. Le programme pose déjà\nles deux questions. Écris la suite, qui donne une raison précise à chaque\nrefus :\n\n- moins de 12 ans : Refusé : il faut au moins 12 ans.\n- plus de 20 ans : Refusé : il faut 20 ans au plus.\n- mauvais code : Refusé : le code est faux.\n- sinon : Bienvenue dans la salle.\n\nL'âge se vérifie avant le code. Pour 25 ans et le bon code, l'écran doit\nmontrer :\n\nÂge : 25\nCode de la porte : Musique2026\nRefusé : il faut 20 ans au plus.\n\nTon programme sera relancé avec d'autres réponses.\n",
+    "depart": "age = int(input(\"Âge : \"))\ncode = input(\"Code de la porte : \")\n",
+    "indices": [
+      "Une seule chaîne de questions, if puis elif puis else. Chaque refus a sa propre branche, dans l'ordre de la liste.",
+      "La troisième question compare deux textes avec !=. Elle n'est posée que si l'âge convient, puisqu'elle vient après les deux questions sur l'âge."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "25",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 25\nCode de la porte : Musique2026\nRefusé : il faut 20 ans au plus.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "11",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 11\nCode de la porte : Musique2026\nRefusé : il faut au moins 12 ans.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "musique2026"
+        ],
+        "attendu": "Âge : 15\nCode de la porte : musique2026\nRefusé : le code est faux.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "9",
+          "piano"
+        ],
+        "attendu": "Âge : 9\nCode de la porte : piano\nRefusé : il faut au moins 12 ans.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "12",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 12\nCode de la porte : Musique2026\nBienvenue dans la salle.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "20",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 20\nCode de la porte : Musique2026\nBienvenue dans la salle.",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "25",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-38",
+    "concept": "probleme narratif",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "L'abonnement de la piscine",
+    "obligatoire": true,
+    "enonce": "Dernier exercice de la séance : un programme complet, qui réunit ce que tu\nviens d'apprendre.\n\nLa piscine propose un abonnement adulte, de 18 à 65 ans, bornes comprises.\nChaque abonné reçoit un code de casier, calculé à partir de son âge.\n\nLe programme doit faire quatre choses :\n\n1. demander le prénom, avec l'invite \"Prénom : \" ;\n2. demander l'âge, avec l'invite \"Âge : \", et le ranger sous forme de nombre entier ;\n3. si l'âge est dans les bornes, souhaiter la bienvenue et afficher le code de casier, qui vaut `(age * 37) % 1000` ;\n4. sinon, afficher un refus.\n\nSi la personne répond Camille, puis 30, l'écran affiche ceci après les deux questions :\n\nBienvenue Camille !\nAbonnement accepté\nTon code de casier : 110\n\nSi elle répond Camille, puis 17 :\n\nAbonnement refusé pour Camille\n\nRecopie ces textes au caractère près : cet exercice exige le format exact. Ton\nprogramme sera essayé avec d'autres prénoms et d'autres âges, dont 18 et 65.\n",
+    "depart": "# 1. demander le prénom\n\n# 2. demander l'âge et le convertir en nombre entier\n\n# 3. si l'âge est entre 18 et 65 ans : bienvenue, et code de casier\n\n# 4. sinon : refus\n",
+    "indices": [
+      "Commence par les deux questions, comme à la séance 1. Ensuite, une seule condition, écrite comme un encadrement, choisit entre deux branches.",
+      "Dans la branche de l'abonnement accepté, calcule le code avant de l'afficher. Un f-string glisse le prénom et le code dans les phrases."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "30"
+        ],
+        "attendu": "Prénom : Camille\nÂge : 30\nBienvenue Camille !\nAbonnement accepté\nTon code de casier : 110",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "17"
+        ],
+        "attendu": "Prénom : Alex\nÂge : 17\nAbonnement refusé pour Alex",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "18"
+        ],
+        "attendu": "Prénom : Noé\nÂge : 18\nBienvenue Noé !\nAbonnement accepté\nTon code de casier : 666",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "65"
+        ],
+        "attendu": "Prénom : Léa\nÂge : 65\nBienvenue Léa !\nAbonnement accepté\nTon code de casier : 405",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Sam",
+          "66"
+        ],
+        "attendu": "Prénom : Sam\nÂge : 66\nAbonnement refusé pour Sam",
+        "exigeExact": true
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "110",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
   }
 ]

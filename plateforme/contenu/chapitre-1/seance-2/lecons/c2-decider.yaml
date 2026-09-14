@@ -1,0 +1,60 @@
+id: c2-decider
+notion: decider
+ordre: 9
+titre: Décider
+duree_min: 5
+blocs:
+  - type: paragraphe
+    texte: >-
+      Jusqu'ici, un programme exécutait toutes ses lignes, dans l'ordre. `if`
+      lui permet de **décider** : exécuter certaines lignes seulement quand une
+      condition vaut `True`.
+  - type: code
+    legende: Si, sinon
+    executable: true
+    python: |
+      temperature = 12
+      if temperature >= 20:
+          print("Il fait bon.")
+      else:
+          print("Prends une veste.")
+      print("Bonne journée !")
+  - type: paragraphe
+    texte: >-
+      La ligne du `if` se termine par **deux-points**. Les lignes qui dépendent
+      de lui sont **décalées de quatre espaces** : c'est ce décalage, et lui
+      seul, qui dit à Python où le bloc commence et où il s'arrête. `else` n'a
+      pas de condition, il prend tout ce que le `if` a refusé. Une seule des
+      deux branches s'exécute, jamais les deux.
+  - type: attention
+    texte: >-
+      **Le décalage n'est pas décoratif.** Une ligne décalée appartient au
+      bloc ; une ligne alignée sur le `if` s'exécute dans tous les cas. Et un
+      `if` sans aucune ligne décalée en dessous empêche le programme de
+      démarrer. Dans l'éditeur, la touche Tab décale de quatre espaces.
+  - type: paragraphe
+    texte: >-
+      Pour plus de deux cas, `elif` ajoute une question. Python les pose **dans
+      l'ordre**, et n'exécute que la branche de la **première** condition
+      vraie : les suivantes ne sont même pas examinées.
+  - type: code
+    legende: Trois branches
+    executable: true
+    python: |
+      vitesse = 42
+      if vitesse > 50:
+          print("Beaucoup trop vite !")
+      elif vitesse > 30:
+          print("Ralentis, tu es en zone 30.")
+      else:
+          print("Bonne allure.")
+  - type: paragraphe
+    texte: >-
+      L'ordre compte donc : une condition trop large, placée en premier, attrape
+      des cas destinés aux suivantes. Et pense à tous les cas : sans `else`, une
+      valeur qu'aucune condition n'accepte ne produit rien du tout.
+  - type: paragraphe
+    texte: >-
+      Enfin, une variable créée dans une branche n'existe que si cette branche a
+      été prise. Si la suite du programme en a besoin, crée-la **avant** le
+      `if`.

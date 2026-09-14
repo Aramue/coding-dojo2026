@@ -1,0 +1,43 @@
+id: s2-36
+concept: conditions
+notion: decider
+seance: 2
+niveau: expert
+type: predire
+titre: elif ou deux if ?
+obligatoire: false
+enonce: |
+  Pour les curieux : ce programme pose deux fois les mêmes questions. D'abord
+  avec deux `if` à la suite, puis avec un `if` et un `elif`.
+depart: |
+  points = 18
+  if points >= 10:
+      print("Réussi")
+  if points >= 15:
+      print("Très bien")
+  print("---")
+  if points >= 10:
+      print("Réussi")
+  elif points >= 15:
+      print("Très bien")
+indices:
+  - "Dans la première moitié, les deux if sont indépendants : Python pose les deux questions, quelle que soit la réponse à la première."
+  - Dans la seconde moitié, le elif n'est examiné que si le if a répondu False. Or 18 est plus grand ou égal à 10.
+tests:
+  - type: qcm
+    options:
+      - "Réussi\nTrès bien\n---\nRéussi"
+      - "Réussi\nTrès bien\n---\nRéussi\nTrès bien"
+      - "Réussi\n---\nRéussi"
+    bonne_reponse: 0
+solution: |
+  points = 18
+  if points >= 10:
+      print("Réussi")
+  if points >= 15:
+      print("Très bien")
+  print("---")
+  if points >= 10:
+      print("Réussi")
+  elif points >= 15:
+      print("Très bien")

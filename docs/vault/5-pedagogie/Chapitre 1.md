@@ -65,10 +65,11 @@ Voir [[Types d'exercices]].
 `, `5 = age`, la casse, l'échange de deux
 > variables, la lecture d'un appel imbriqué. Voir [[Bugs réels de la promotion 2025]].
 
-> [!info] Séance 2 en cours d'écriture — 14 septembre 2026
-> Écrite notion par notion. Chaque notion arrive avec sa leçon, validée par exécution et relue
-> dans l'aperçu du professeur. Publiée d'avance, la séance ne s'ouvre aux élèves que le
-> **23 septembre** — voir [[ADR-013 Une séance s'ouvre à sa date]].
+> [!success] Séance 2 écrite en entier — 14 septembre 2026
+> Les **38 exercices** de la séance 2 existent : 26 obligatoires, 4 renforts, 8 experts, répartis
+> en cinq notions qui ont chacune leur leçon. Tout est validé par exécution et relu dans l'aperçu
+> du professeur. Publiée d'avance, la séance ne s'ouvre aux élèves que le **23 septembre** — voir
+> [[ADR-013 Une séance s'ouvre à sa date]].
 >
 > | Notion | Exercices | Leçon |
 > |---|---|---|
@@ -76,6 +77,7 @@ Voir [[Types d'exercices]].
 > | Calculer | `s2-04` à `s2-12` — 6 obligatoires, 1 renfort, 2 experts | `c2-calculer` |
 > | Comparer | `s2-13` à `s2-21` — 6 obligatoires, 1 renfort, 2 experts | `c2-comparer` |
 > | Combiner des conditions | `s2-22` à `s2-28` — 4 obligatoires, 1 renfort, 2 experts | `c2-combiner` |
+> | Décider | `s2-29` à `s2-38` — 7 obligatoires, 1 renfort, 2 experts | `c2-decider` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -102,6 +104,10 @@ Voir [[Types d'exercices]].
 >   se met ici à jour avec `and` après chaque question : même idée, avec un outil déjà vu. Le
 >   motif `autorise and` est exigé : un seul `and` écrit à la fin marche, mais ne fait pas
 >   travailler le drapeau.
+> - `s2-38`, le programme de fin de séance, quitte le Quartier Général et devient
+>   « L'abonnement de la piscine », autonome. Sa formule passe de `(age * 7) % 1000` à
+>   `(age * 37) % 1000` : entre 18 et 65 ans, `age * 7` ne dépasse jamais 1000, et aucun essai
+>   n'aurait distingué `% 1000` de `% 10000`. Voir [[Programme d'assemblage]].
 
 ## Les trois séances
 

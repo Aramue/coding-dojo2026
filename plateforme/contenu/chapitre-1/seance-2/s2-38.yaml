@@ -1,0 +1,103 @@
+id: s2-38
+concept: probleme narratif
+notion: decider
+seance: 2
+niveau: normal
+type: ecrire
+titre: L'abonnement de la piscine
+obligatoire: true
+enonce: |
+  Dernier exercice de la séance : un programme complet, qui réunit ce que tu
+  viens d'apprendre.
+
+  La piscine propose un abonnement adulte, de 18 à 65 ans, bornes comprises.
+  Chaque abonné reçoit un code de casier, calculé à partir de son âge.
+
+  Le programme doit faire quatre choses :
+
+  1. demander le prénom, avec l'invite "Prénom : " ;
+  2. demander l'âge, avec l'invite "Âge : ", et le ranger sous forme de nombre entier ;
+  3. si l'âge est dans les bornes, souhaiter la bienvenue et afficher le code de casier, qui vaut `(age * 37) % 1000` ;
+  4. sinon, afficher un refus.
+
+  Si la personne répond Camille, puis 30, l'écran affiche ceci après les deux questions :
+
+  Bienvenue Camille !
+  Abonnement accepté
+  Ton code de casier : 110
+
+  Si elle répond Camille, puis 17 :
+
+  Abonnement refusé pour Camille
+
+  Recopie ces textes au caractère près : cet exercice exige le format exact. Ton
+  programme sera essayé avec d'autres prénoms et d'autres âges, dont 18 et 65.
+depart: |
+  # 1. demander le prénom
+
+  # 2. demander l'âge et le convertir en nombre entier
+
+  # 3. si l'âge est entre 18 et 65 ans : bienvenue, et code de casier
+
+  # 4. sinon : refus
+indices:
+  - Commence par les deux questions, comme à la séance 1. Ensuite, une seule condition, écrite comme un encadrement, choisit entre deux branches.
+  - Dans la branche de l'abonnement accepté, calcule le code avant de l'afficher. Un f-string glisse le prénom et le code dans les phrases.
+tests:
+  - type: sortie
+    entrees: ["Camille", "30"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Camille
+      Âge : 30
+      Bienvenue Camille !
+      Abonnement accepté
+      Ton code de casier : 110
+  - type: sortie
+    entrees: ["Alex", "17"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Alex
+      Âge : 17
+      Abonnement refusé pour Alex
+  - type: sortie
+    entrees: ["Noé", "18"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Noé
+      Âge : 18
+      Bienvenue Noé !
+      Abonnement accepté
+      Ton code de casier : 666
+  # A 65 ans, 65 * 37 vaut 2405 : c'est le modulo qui ramene le code a 405.
+  # Sans cet essai, un % 10000 passerait tous les autres.
+  - type: sortie
+    entrees: ["Léa", "65"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Léa
+      Âge : 65
+      Bienvenue Léa !
+      Abonnement accepté
+      Ton code de casier : 405
+  - type: sortie
+    entrees: ["Sam", "66"]
+    exige_exact: true
+    attendu: |-
+      Prénom : Sam
+      Âge : 66
+      Abonnement refusé pour Sam
+  - type: interdit
+    motif: Camille
+  - type: interdit
+    motif: "110"
+solution: |
+  prenom = input("Prénom : ")
+  age = int(input("Âge : "))
+  if 18 <= age <= 65:
+      code = (age * 37) % 1000
+      print(f"Bienvenue {prenom} !")
+      print("Abonnement accepté")
+      print(f"Ton code de casier : {code}")
+  else:
+      print(f"Abonnement refusé pour {prenom}")

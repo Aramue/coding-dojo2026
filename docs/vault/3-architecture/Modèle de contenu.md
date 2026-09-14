@@ -168,7 +168,7 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | Identifiant | Titre affiché | Séance | Ouverture | Notions |
 |---|---|---|---|---|
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
-| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner` |
+| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner`, `decider` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
@@ -193,6 +193,7 @@ que le front n'en garde aucune copie.
 | `calculer` | Calculer | bleu | 9 |
 | `comparer` | Comparer | vert | 9 |
 | `combiner` | Combiner des conditions | corail | 7 |
+| `decider` | Décider | ambre | 10 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour
@@ -204,13 +205,20 @@ quatre notions. Voir [[Spécification interface]].
 contenu/
   chapitre-1/
     seance-1/
-      s1-01.yaml … s1-34.yaml     25 exercices
+      s1-01.yaml … s1-34.yaml     34 exercices, dont 25 obligatoires
       lecons/
         c1-afficher.yaml
         c1-variables.yaml
         c1-types.yaml
         c1-saisie.yaml
     seance-2/
+      s2-01.yaml … s2-38.yaml     38 exercices, dont 26 obligatoires
+      lecons/
+        c2-reveil.yaml
+        c2-calculer.yaml
+        c2-comparer.yaml
+        c2-combiner.yaml
+        c2-decider.yaml
     seance-3/
 ```
 

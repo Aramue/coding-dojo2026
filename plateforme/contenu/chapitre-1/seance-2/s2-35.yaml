@@ -1,0 +1,39 @@
+id: s2-35
+concept: conditions
+notion: decider
+seance: 2
+niveau: normal
+type: debug
+titre: La variable née dans un if
+obligatoire: false
+enonce: |
+  Un club accorde 10 francs de rabais à ses membres. Pour un membre, le
+  programme marche. Pour quelqu'un qui n'est pas membre, il s'arrête sur une
+  erreur. Répare-le : un non-membre paie le prix normal.
+depart: |
+  prix = 40
+  membre = input("Membre du club ? (oui ou non) : ")
+  if membre == "oui":
+      rabais = 10
+  print("Prix à payer :", prix - rabais)
+indices:
+  - Pour un non-membre, la ligne 4 ne s'exécute jamais. Que vaut rabais quand Python arrive à la dernière ligne ?
+  - La variable rabais doit exister dans tous les cas. Donne-lui une valeur avant le if, celle qui convient à un non-membre.
+tests:
+  - type: sortie
+    entrees: ["oui"]
+    attendu: |-
+      Membre du club ? (oui ou non) : oui
+      Prix à payer : 30
+  - type: sortie
+    entrees: ["non"]
+    attendu: |-
+      Membre du club ? (oui ou non) : non
+      Prix à payer : 40
+solution: |
+  prix = 40
+  rabais = 0
+  membre = input("Membre du club ? (oui ou non) : ")
+  if membre == "oui":
+      rabais = 10
+  print("Prix à payer :", prix - rabais)

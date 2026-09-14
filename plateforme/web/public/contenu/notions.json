@@ -54,5 +54,12 @@
     "titre": "Combiner des conditions",
     "famille": "boucles",
     "chapitre": "decisions"
+  },
+  {
+    "id": "decider",
+    "ordre": 9,
+    "titre": "Décider",
+    "famille": "conditions",
+    "chapitre": "decisions"
   }
 ]
