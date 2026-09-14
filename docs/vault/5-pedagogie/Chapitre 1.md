@@ -4,7 +4,7 @@ tags:
   - moc
   - pedagogie
 statut: conçu
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-14
 ---
 
 # Chapitre 1 — Introduction à la programmation
@@ -64,6 +64,25 @@ Voir [[Types d'exercices]].
 > Les cinq autres travaillent un point isolé : `
 `, `5 = age`, la casse, l'échange de deux
 > variables, la lecture d'un appel imbriqué. Voir [[Bugs réels de la promotion 2025]].
+
+> [!info] Séance 2 en cours d'écriture — 14 septembre 2026
+> Écrite notion par notion. Chaque notion arrive avec sa leçon, validée par exécution et relue
+> dans l'aperçu du professeur. Publiée d'avance, la séance ne s'ouvre aux élèves que le
+> **23 septembre** — voir [[ADR-013 Une séance s'ouvre à sa date]].
+>
+> | Notion | Exercices | Leçon |
+> |---|---|---|
+> | Se remettre en route | `s2-01` à `s2-03` — 3 obligatoires | `c2-reveil` |
+>
+> Écarts assumés avec `progression-chapitre-1.json` :
+>
+> - Les trois exercices de réactivation forment **une notion à part**. La conception exige un
+>   créneau nommé, qu'on ne sacrifie pas quand la séance déborde : noyés en tête de « Calculer »,
+>   ils se liraient comme des exercices de calcul ratés. Leurs titres perdent le préfixe
+>   « Réveil : », que le menu dit déjà — et `s2-01` ne reprend pas le titre de `s1-12`, qu'il
+>   réactive : deux « Photo, pas formule » dans le même menu se confondraient.
+> - `s2-03` « la ligne de rapport » devient « La phrase au format exact » : le rapport venait du
+>   Quartier Général, abandonné avec [[ADR-010 Abandon de la fiction narrative]].
 
 ## Les trois séances
 

@@ -26,5 +26,12 @@
     "titre": "Demander une information",
     "famille": "operateurs",
     "chapitre": "bases"
+  },
+  {
+    "id": "reveil",
+    "ordre": 5,
+    "titre": "Se remettre en route",
+    "famille": "variables",
+    "chapitre": "decisions"
   }
 ]

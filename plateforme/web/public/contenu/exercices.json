@@ -1078,5 +1078,116 @@
       }
     ],
     "famille": "operateurs"
+  },
+  {
+    "id": "s2-01",
+    "concept": "reactivation",
+    "notion": "reveil",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La copie qui ne suit pas",
+    "obligatoire": true,
+    "enonce": "Un rappel de la séance 1 pour se remettre en route.\nAu début d'une nouvelle partie, ce programme met de côté le score de la\nprécédente, puis enregistre le nouveau. Déroule-le ligne par ligne.\n",
+    "depart": "score = 12\nancien = score\nscore = 20\nprint(score, ancien)\n",
+    "indices": [
+      "Arrête-toi juste après la ligne 2 et note ce que contient chaque boîte à cet instant.",
+      "La ligne 2 recopie dans ancien la valeur que score contient à ce moment-là. Si score change ensuite, ancien ne suit pas."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "20 12",
+          "20 20",
+          "12 12"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s2-02",
+    "concept": "reactivation",
+    "notion": "reveil",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La conversion oubliée",
+    "obligatoire": true,
+    "enonce": "Ce programme demande combien d'argent de poche tu as, puis il ajoute les\n10 francs offerts par ta grand-mère.\nIl pose la question, puis il s'arrête net avec une erreur.\nLis le message d'erreur, puis répare le programme.\n",
+    "depart": "argent = input(\"Ton argent de poche : \")\ntotal = argent + 10\nprint(\"Avec le cadeau, tu as :\", total)\n",
+    "indices": [
+      "Regarde ce que input() range dans la variable argent. Même quand tu tapes des chiffres, c'est du texte.",
+      "La fonction int() fabrique un nombre entier à partir d'un texte. Place-la autour de input(), comme à la séance 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "25"
+        ],
+        "attendu": "Ton argent de poche : 25\nAvec le cadeau, tu as : 35",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "0"
+        ],
+        "attendu": "Ton argent de poche : 0\nAvec le cadeau, tu as : 10",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s2-03",
+    "concept": "reactivation",
+    "notion": "reveil",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "La phrase au format exact",
+    "obligatoire": true,
+    "enonce": "Dernier échauffement avant les nouveautés.\n\nLe programme demande un prénom, puis un nombre de pages lues. Ajoute UNE ligne\nà la fin, qui affiche la phrase au format exact.\n\nSi on répond Léa, puis 42, l'écran doit montrer :\n\nPrénom : Léa\nPages lues : 42\nLéa a lu 42 pages\n\nTon programme sera relancé avec d'autres réponses : n'écris ni le prénom ni le\nnombre à la main.\n",
+    "depart": "prenom = input(\"Prénom : \")\npages = input(\"Pages lues : \")\n",
+    "indices": [
+      "Un f-string glisse une variable dans une phrase : un f collé devant les guillemets, et le nom de la variable entre accolades.",
+      "Il te faut un seul print(), avec les deux variables dans la même phrase."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "42"
+        ],
+        "attendu": "Prénom : Léa\nPages lues : 42\nLéa a lu 42 pages",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "7"
+        ],
+        "attendu": "Prénom : Noé\nPages lues : 7\nNoé a lu 7 pages",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Léa",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et les variables entre accolades. Ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "variables"
   }
 ]

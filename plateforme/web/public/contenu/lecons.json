@@ -215,5 +215,58 @@
       }
     ],
     "famille": "operateurs"
+  },
+  {
+    "id": "c2-reveil",
+    "notion": "reveil",
+    "ordre": 5,
+    "titre": "Se remettre en route",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une semaine a passé. Avant les nouveautés, trois règles de la séance 1 à garder en tête : ce sont celles qui ont fait trébucher le plus d'élèves."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Une variable garde une valeur, pas une formule.** Quand on écrit `hier = temperature`, Python recopie la valeur que `temperature` contient à cet instant. Si `temperature` change ensuite, `hier` ne bouge pas."
+      },
+      {
+        "type": "code",
+        "legende": "Une copie qui ne suit pas",
+        "python": "temperature = 18\nhier = temperature\ntemperature = 23\nprint(temperature, hier)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**`input()` rend toujours du texte**, même quand on tape des chiffres. Pour calculer avec la réponse, il faut la convertir en nombre entier avec `int()`, placé autour de `input()`."
+      },
+      {
+        "type": "code",
+        "legende": "Convertir avant de calculer",
+        "python": "billets = int(input(\"Nombre de billets : \"))\nprint(billets + 1)\n",
+        "executable": false,
+        "entrees": [
+          "3"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Un f-string glisse une variable dans une phrase** : un `f` collé devant les guillemets, et le nom de la variable entre accolades."
+      },
+      {
+        "type": "code",
+        "legende": "Une phrase avec deux variables",
+        "python": "prenom = \"Noé\"\nage = 15\nprint(f\"{prenom} a {age} ans\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "Ces trois règles reviennent partout dans la séance d'aujourd'hui. Si l'une d'elles te semble floue, relis la leçon correspondante de la séance 1 avant de continuer."
+      }
+    ],
+    "famille": "variables"
   }
 ]

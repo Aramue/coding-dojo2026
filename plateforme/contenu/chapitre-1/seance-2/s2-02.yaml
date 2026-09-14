@@ -1,0 +1,35 @@
+id: s2-02
+concept: reactivation
+notion: reveil
+seance: 2
+niveau: normal
+type: debug
+titre: La conversion oubliée
+obligatoire: true
+enonce: |
+  Ce programme demande combien d'argent de poche tu as, puis il ajoute les
+  10 francs offerts par ta grand-mère.
+  Il pose la question, puis il s'arrête net avec une erreur.
+  Lis le message d'erreur, puis répare le programme.
+depart: |
+  argent = input("Ton argent de poche : ")
+  total = argent + 10
+  print("Avec le cadeau, tu as :", total)
+indices:
+  - Regarde ce que input() range dans la variable argent. Même quand tu tapes des chiffres, c'est du texte.
+  - La fonction int() fabrique un nombre entier à partir d'un texte. Place-la autour de input(), comme à la séance 1.
+tests:
+  - type: sortie
+    entrees: ["25"]
+    attendu: |-
+      Ton argent de poche : 25
+      Avec le cadeau, tu as : 35
+  - type: sortie
+    entrees: ["0"]
+    attendu: |-
+      Ton argent de poche : 0
+      Avec le cadeau, tu as : 10
+solution: |
+  argent = int(input("Ton argent de poche : "))
+  total = argent + 10
+  print("Avec le cadeau, tu as :", total)

@@ -141,8 +141,8 @@ def charger_tous(racine: Path) -> list[Exercice]:
 
 MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
 
-# Les quatre notions de la seance 1. Une notion est l'unite de navigation :
-# elle porte une lecon et un groupe d'exercices.
+# Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
+# navigation : elle porte une lecon et un groupe d'exercices.
 #
 # SEULE SOURCE de cette table. Le schema la valide, construire_contenu.py
 # l'importe pour publier notions.json, et le front la lit dans ce
@@ -179,13 +179,32 @@ NOTIONS: dict[str, dict] = {
         "famille": "operateurs",
         "chapitre": "bases",
     },
+    # --- Seance 2 ---
+    # Une notion a part pour les trois exercices de reactivation : la conception
+    # exige un creneau NOMME, qu'on ne peut pas sacrifier quand la seance
+    # deborde. Noyes en tete de « Calculer », ils se liraient comme des
+    # exercices de calcul rates.
+    "reveil": {
+        "ordre": 5,
+        "titre": "Se remettre en route",
+        "famille": "variables",
+        "chapitre": "decisions",
+    },
 }
 
-# Un chapitre regroupe les notions d'un meme sujet. Il n'y en a qu'un pour
-# l'instant, mais c'est lui qui structure le menu : sans ce niveau, quatre
-# notions flottaient cote a cote sans dire de quoi elles parlaient ensemble.
+# Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
+# le menu : sans ce niveau, les notions flottaient cote a cote sans dire de quoi
+# elles parlaient ensemble. Un chapitre par seance.
 CHAPITRES: dict[str, dict] = {
     "bases": {"ordre": 1, "titre": "Les bases de Python", "seance": 1},
+    "decisions": {
+        "ordre": 2,
+        "titre": "Calculer, comparer, décider",
+        "seance": 2,
+        # Publiee d'avance, la seance 2 ne doit rien changer a la seance 1 : elle
+        # s'ouvre le matin de son cours. Voir ADR-013.
+        "ouverture": "2026-09-23",
+    },
 }
 
 

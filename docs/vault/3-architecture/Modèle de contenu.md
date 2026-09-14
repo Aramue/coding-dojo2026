@@ -152,6 +152,7 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | Identifiant | Titre affiché | Séance | Ouverture | Notions |
 |---|---|---|---|---|
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
+| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
@@ -172,6 +173,7 @@ que le front n'en garde aucune copie.
 | `variables` | Les variables | indigo | 6 |
 | `types` | Types et conversion | vert | 6 |
 | `saisie` | Demander une information | bleu | 6 |
+| `reveil` | Se remettre en route | indigo | 3 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour

@@ -96,7 +96,7 @@ def test_les_cles_sont_converties_en_camel_case(tmp_path):
 
 
 def test_la_notion_donne_la_famille_de_couleur(tmp_path):
-    """La couleur suit la notion, plus le concept : quatre notions, quatre couleurs."""
+    """La couleur suit la notion, plus le concept."""
     _ecrire(tmp_path / "seance-1", dict(BASE, notion="saisie"))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
