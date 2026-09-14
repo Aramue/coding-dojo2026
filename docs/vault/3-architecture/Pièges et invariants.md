@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-14
 ---
 
 # Pièges et invariants
@@ -277,6 +277,19 @@ haut et en bas de l'écran, et l'élève ne sait plus lequel parle de l'essai qu
 **Ce qui casse :** un appelant qui fournit moins d'exécutions que de tests fait planter
 `evaluerUn` sur un `undefined`. `EcranExercice` maintient l'alignement en poussant une exécution
 vide pour les tests qui n'exécutent rien (`interdit`, `contient`, `qcm`).
+
+### Tab indente dans l'éditeur, de quatre espaces
+
+`Editeur.tsx` ajoute `indentWithTab` au clavier et fixe `indentUnit` à quatre espaces.
+
+**Ce qui casse :** sans `indentWithTab`, CodeMirror laisse la touche Tab au navigateur, qui
+déplace le focus. L'élève qui voulait décaler le corps d'un `if` envoyait le focus sur le bouton
+Valider, et son code ne bougeait pas — constaté le 14 septembre 2026, en préparant la séance 2.
+Sans `indentUnit`, CodeMirror décale de deux espaces : une ligne indentée au clavier et une ligne
+tapée avec quatre espaces, comme la leçon le demande, ne s'alignent plus, et Python lève une
+`IndentationError` sur un bloc qui a l'air juste.
+
+Au clavier, on sort toujours de l'éditeur : Échap, puis Tab dans les deux secondes.
 
 ## Déploiement
 
