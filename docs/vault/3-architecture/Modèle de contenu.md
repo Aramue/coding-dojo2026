@@ -153,6 +153,13 @@ choix du motif sont dans [[Moteur de validation]].
 
 `maitrise` est refusé sur un `interdit` — un interdit disqualifie par définition.
 
+> [!warning] La seconde coche promet « plus court »
+> Le verdict bleu s'intitule *Ça marche. Il y a plus court.* C'est vrai du f-string, seul critère
+> de maîtrise de la séance 1. C'était faux du drapeau de `s2-28`, qui ajoute une ligne après
+> chaque question : l'élève lisait « plus court », puis un conseil qui allongeait son programme.
+> ==Un critère de maîtrise ne récompense qu'une méthode plus courte.== Quand la méthode attendue
+> est plus longue, le motif est exigé, sans `maitrise`.
+
 ## Le chapitre, unité de regroupement
 
 Un chapitre rassemble les notions d'un même sujet. C'est **le niveau que le menu déplie** : sans
@@ -161,7 +168,7 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | Identifiant | Titre affiché | Séance | Ouverture | Notions |
 |---|---|---|---|---|
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
-| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer` |
+| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
@@ -185,6 +192,7 @@ que le front n'en garde aucune copie.
 | `reveil` | Se remettre en route | indigo | 3 |
 | `calculer` | Calculer | bleu | 9 |
 | `comparer` | Comparer | vert | 9 |
+| `combiner` | Combiner des conditions | corail | 7 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour

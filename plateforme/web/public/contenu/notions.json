@@ -47,5 +47,12 @@
     "titre": "Comparer",
     "famille": "types",
     "chapitre": "decisions"
+  },
+  {
+    "id": "combiner",
+    "ordre": 8,
+    "titre": "Combiner des conditions",
+    "famille": "boucles",
+    "chapitre": "decisions"
   }
 ]

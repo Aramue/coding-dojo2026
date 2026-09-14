@@ -1,0 +1,59 @@
+id: c2-combiner
+notion: combiner
+ordre: 8
+titre: Combiner des conditions
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Une seule comparaison suffit rarement. Pour un stage, il faut souvent un
+      âge minimum **et** une autorisation. Trois mots combinent plusieurs
+      réponses `True` ou `False` en une seule.
+  - type: paragraphe
+    texte: >-
+      `and` vaut `True` seulement si **les deux côtés** sont vrais. `or` vaut
+      `True` si **au moins un** côté est vrai. `not` **inverse** la réponse qui
+      le suit.
+  - type: code
+    legende: Et, ou, non
+    executable: true
+    python: |
+      pluie = True
+      parapluie = False
+      print(pluie and parapluie)
+      print(pluie or parapluie)
+      print(not parapluie)
+  - type: paragraphe
+    texte: >-
+      Pour vérifier qu'une valeur se trouve **entre deux bornes**, Python
+      accepte l'écriture des mathématiques. `16 <= age <= 25` dit exactement la
+      même chose que `age >= 16 and age <= 25`.
+  - type: code
+    legende: Deux écritures, une seule question
+    executable: true
+    python: |
+      age = 19
+      print(16 <= age <= 25)
+      print(age >= 16 and age <= 25)
+  - type: attention
+    texte: >-
+      **Chaque côté d'un `and` est une question complète.** On dit « au moins
+      16 et au plus 25 », mais `age >= 16 and <= 25` ne veut rien dire pour
+      Python : le côté droit ne dit pas de quoi il parle, et le programme
+      refuse de démarrer.
+  - type: paragraphe
+    texte: >-
+      `not` se place aussi devant une question entière, entre parenthèses :
+      `not (16 <= age <= 25)` demande si l'âge est **en dehors** des bornes.
+  - type: code
+    legende: En dehors des bornes
+    executable: true
+    python: |
+      age = 30
+      print(not (16 <= age <= 25))
+  - type: paragraphe
+    texte: >-
+      Un `or` écrit à la place d'un `and` ne provoque aucune erreur : le
+      programme tourne, et il répond juste pour certaines valeurs. **Essaie
+      toujours plusieurs cas**, et surtout ceux où une seule des conditions est
+      remplie.

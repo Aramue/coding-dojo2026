@@ -1,0 +1,29 @@
+id: s2-27
+concept: logique
+notion: combiner
+seance: 2
+niveau: expert
+type: predire
+titre: Le court-circuit
+obligatoire: false
+enonce: |
+  Pour les curieux : Python lit un `and` de gauche à droite, et s'arrête dès
+  qu'il connaît la réponse.
+depart: |
+  eleves = 0
+  pizzas = 3
+  print(eleves > 0 and pizzas / eleves >= 1)
+indices:
+  - Commence par le côté gauche du and. S'il est faux, le and peut-il encore valoir True ?
+  - Dès que le côté gauche vaut False, Python connaît la réponse et ne calcule pas le côté droit. La division par zéro n'a jamais lieu.
+tests:
+  - type: qcm
+    options:
+      - "False"
+      - "Une erreur : division par zéro"
+      - "True"
+    bonne_reponse: 0
+solution: |
+  eleves = 0
+  pizzas = 3
+  print(eleves > 0 and pizzas / eleves >= 1)

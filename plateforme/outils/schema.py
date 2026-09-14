@@ -202,6 +202,12 @@ NOTIONS: dict[str, dict] = {
         "famille": "types",
         "chapitre": "decisions",
     },
+    "combiner": {
+        "ordre": 8,
+        "titre": "Combiner des conditions",
+        "famille": "boucles",
+        "chapitre": "decisions",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure

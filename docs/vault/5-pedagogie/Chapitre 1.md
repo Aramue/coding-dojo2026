@@ -75,6 +75,7 @@ Voir [[Types d'exercices]].
 > | Se remettre en route | `s2-01` à `s2-03` — 3 obligatoires | `c2-reveil` |
 > | Calculer | `s2-04` à `s2-12` — 6 obligatoires, 1 renfort, 2 experts | `c2-calculer` |
 > | Comparer | `s2-13` à `s2-21` — 6 obligatoires, 1 renfort, 2 experts | `c2-comparer` |
+> | Combiner des conditions | `s2-22` à `s2-28` — 4 obligatoires, 1 renfort, 2 experts | `c2-combiner` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -96,6 +97,11 @@ Voir [[Types d'exercices]].
 > - `s2-17` et `s2-21` se valident sur leur sortie, avec plusieurs réponses dont les bornes
 >   (140 cm pile, 10 ans et 130 cm pile), et non par inspection de variables : leurs programmes
 >   posent leurs questions avec `input()`.
+> - `s2-28`, le drapeau d'accès, se construit **sans `if`** lui aussi. La conception faisait passer
+>   `acces_autorise` à `False` dans trois `if`, qui n'arrivent qu'à la notion suivante. Le drapeau
+>   se met ici à jour avec `and` après chaque question : même idée, avec un outil déjà vu. Le
+>   motif `autorise and` est exigé : un seul `and` écrit à la fin marche, mais ne fait pas
+>   travailler le drapeau.
 
 ## Les trois séances
 

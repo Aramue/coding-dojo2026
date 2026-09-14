@@ -1,0 +1,34 @@
+id: s2-22
+concept: logique
+notion: combiner
+seance: 2
+niveau: normal
+type: predire
+titre: and, or, not
+obligatoire: true
+enonce: |
+  Trois mots pour combiner des réponses. `and` vaut True seulement si les deux
+  côtés sont vrais, `or` vaut True si au moins un côté est vrai, et `not`
+  inverse la réponse qui le suit.
+depart: |
+  soleil = True
+  week_end = False
+  print(soleil and week_end)
+  print(soleil or week_end)
+  print(not week_end)
+indices:
+  - Lis soleil and week_end comme « soleil ET week-end ». Faut-il que les deux soient vrais ?
+  - and demande que les deux côtés soient vrais, or se contente d'un seul. Et not False vaut True.
+tests:
+  - type: qcm
+    options:
+      - "False\nTrue\nTrue"
+      - "True\nFalse\nTrue"
+      - "False\nTrue\nFalse"
+    bonne_reponse: 0
+solution: |
+  soleil = True
+  week_end = False
+  print(soleil and week_end)
+  print(soleil or week_end)
+  print(not week_end)

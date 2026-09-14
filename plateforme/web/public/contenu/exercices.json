@@ -1783,5 +1783,288 @@
       }
     ],
     "famille": "types"
+  },
+  {
+    "id": "s2-22",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "and, or, not",
+    "obligatoire": true,
+    "enonce": "Trois mots pour combiner des réponses. `and` vaut True seulement si les deux\ncôtés sont vrais, `or` vaut True si au moins un côté est vrai, et `not`\ninverse la réponse qui le suit.\n",
+    "depart": "soleil = True\nweek_end = False\nprint(soleil and week_end)\nprint(soleil or week_end)\nprint(not week_end)\n",
+    "indices": [
+      "Lis soleil and week_end comme « soleil ET week-end ». Faut-il que les deux soient vrais ?",
+      "and demande que les deux côtés soient vrais, or se contente d'un seul. Et not False vaut True."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False\nTrue\nTrue",
+          "True\nFalse\nTrue",
+          "False\nTrue\nFalse"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-23",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Entre deux bornes",
+    "obligatoire": true,
+    "enonce": "Un club de randonnée accepte les membres de 12 à 70 ans, bornes comprises.\nComplète les deux trous. La ligne 2 écrit la condition sous forme\nd'encadrement, et la ligne 3 dit exactement la même chose avec `and`.\n\nTon programme sera essayé avec plusieurs âges, dont 12 et 70.\n",
+    "depart": "age = int(input(\"Âge : \"))\naccepte = _____\naccepte_aussi = age >= 12 _____ age <= 70\nprint(\"Accepté :\", accepte, accepte_aussi)\n",
+    "indices": [
+      "Un encadrement s'écrit comme en mathématiques, avec la valeur au milieu et une borne de chaque côté.",
+      "« De 12 à 70 ans, bornes comprises » veut dire 12 ou plus, et 70 ou moins. Le second trou attend le mot qui relie deux conditions qui doivent être vraies toutes les deux."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12"
+        ],
+        "attendu": "Âge : 12\nAccepté : True True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "11"
+        ],
+        "attendu": "Âge : 11\nAccepté : False False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "70"
+        ],
+        "attendu": "Âge : 70\nAccepté : True True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "71"
+        ],
+        "attendu": "Âge : 71\nAccepté : False False",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "<= age <=",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-24",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "not devant un encadrement",
+    "obligatoire": true,
+    "enonce": "`not` se place aussi devant un encadrement entier, entre parenthèses. Ce\nprogramme demande, pour deux âges, s'ils sont en dehors des limites du club\nde randonnée.\n",
+    "depart": "age = 75\nrefuse = not (12 <= age <= 70)\nprint(\"Refusé :\", refuse)\nage = 40\nrefuse = not (12 <= age <= 70)\nprint(\"Refusé :\", refuse)\n",
+    "indices": [
+      "Pour chaque âge, calcule d'abord ce qui est entre parenthèses. not ne vient qu'après.",
+      "Pour 75 ans, l'encadrement vaut False, et not False vaut True. Les bornes ne changent pas, seule la réponse est inversée."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Refusé : True\nRefusé : False",
+          "Refusé : False\nRefusé : True",
+          "Refusé : False\nRefusé : False"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-25",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le contrôle qui laisse passer",
+    "obligatoire": true,
+    "enonce": "Pour s'inscrire au stage d'escalade, il faut avoir au moins 12 ans ET une\nautorisation signée. Ce programme a été essayé avec un élève de 14 ans qui a\nson autorisation, puis avec une élève de 10 ans qui ne l'a pas : il a eu\nraison les deux fois.\n\nPourtant, il se trompe. Trouve le cas qu'il laisse passer, puis répare-le.\n",
+    "depart": "age = int(input(\"Âge : \"))\nautorisation = input(\"Autorisation signée (oui ou non) : \")\ninscrit = age >= 12 or autorisation == \"oui\"\nprint(\"Inscription :\", inscrit)\n",
+    "indices": [
+      "Imagine un élève de 15 ans sans autorisation. Que répond le programme ? Et que devrait-il répondre ?",
+      "or se contente d'une seule condition vraie. Pour ce stage, il faut que les deux le soient."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "14",
+          "oui"
+        ],
+        "attendu": "Âge : 14\nAutorisation signée (oui ou non) : oui\nInscription : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "10",
+          "non"
+        ],
+        "attendu": "Âge : 10\nAutorisation signée (oui ou non) : non\nInscription : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "non"
+        ],
+        "attendu": "Âge : 15\nAutorisation signée (oui ou non) : non\nInscription : False",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-26",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "« Au moins 12 et au plus 70 »",
+    "obligatoire": false,
+    "enonce": "En français, on dit « au moins 12 et au plus 70 ». Ce programme essaie de\nl'écrire exactement comme on le dit.\n",
+    "depart": "age = 40\naccepte = age >= 12 and <= 70\nprint(\"Accepté :\", accepte)\n",
+    "indices": [
+      "Chaque côté d'un and doit être une question complète. Que demande le côté droit, <= 70, et à propos de quoi ?",
+      "Python ne devine pas que <= 70 parle encore de age : il refuse de lancer le programme. Il aurait fallu écrire age >= 12 and age <= 70."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Une erreur : Python refuse de lancer le programme",
+          "Accepté : True",
+          "Accepté : False"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-27",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Le court-circuit",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : Python lit un `and` de gauche à droite, et s'arrête dès\nqu'il connaît la réponse.\n",
+    "depart": "eleves = 0\npizzas = 3\nprint(eleves > 0 and pizzas / eleves >= 1)\n",
+    "indices": [
+      "Commence par le côté gauche du and. S'il est faux, le and peut-il encore valoir True ?",
+      "Dès que le côté gauche vaut False, Python connaît la réponse et ne calcule pas le côté droit. La division par zéro n'a jamais lieu."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False",
+          "Une erreur : division par zéro",
+          "True"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-28",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le feu vert, question après question",
+    "obligatoire": false,
+    "enonce": "Défi : une salle d'escalade vérifie trois choses, une question après\nl'autre. Avoir au moins 12 ans, des chaussons à sa taille, et avoir lu le\nrèglement.\n\nLe programme range déjà True dans `autorise`, puis pose les trois questions.\nAprès chaque réponse, mets `autorise` à jour avec `and` : une seule réponse\nqui ne convient pas doit suffire à le faire passer à False, pour de bon.\nAffiche-le à la fin.\n\nPour 13 ans, « oui » puis « non », l'écran doit montrer :\n\nÂge : 13\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : non\nAutorisé : False\n\nTon programme sera relancé avec d'autres réponses.\n",
+    "depart": "autorise = True\nage = int(input(\"Âge : \"))\n\nchaussons = input(\"Chaussons à ta taille (oui ou non) : \")\n\nreglement = input(\"Règlement lu (oui ou non) : \")\n",
+    "indices": [
+      "Après la question sur l'âge, autorise doit rester True seulement s'il l'était déjà ET si l'âge suffit.",
+      "autorise = autorise and age >= 12 garde False pour de bon dès qu'une réponse ne convient pas. Fais de même après chacune des deux autres questions."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "13",
+          "oui",
+          "non"
+        ],
+        "attendu": "Âge : 13\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : non\nAutorisé : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "12",
+          "oui",
+          "oui"
+        ],
+        "attendu": "Âge : 12\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : oui\nAutorisé : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "11",
+          "oui",
+          "oui"
+        ],
+        "attendu": "Âge : 11\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : oui\nAutorisé : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "non",
+          "oui"
+        ],
+        "attendu": "Âge : 15\nChaussons à ta taille (oui ou non) : non\nRèglement lu (oui ou non) : oui\nAutorisé : False",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Autorisé : False",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "autorise and",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
   }
 ]
