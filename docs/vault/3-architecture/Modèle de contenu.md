@@ -260,6 +260,8 @@ la construction** plutôt que d'atteindre les élèves. Contrôles :
 - Une leçon n'utilise aucune notion enseignée après elle — une affectation dans « Afficher un
   message », un `int()` avant « Types et conversion », un `input()` avant « Demander une
   information » sont refusés
+- L'ordre d'une leçon est celui de sa notion : c'est lui qui décide des notions que ses exemples
+  ont le droit d'employer
 
 > [!tip] Le contrôle qui sauve le plus de temps
 > ==Exécuter la solution contre ses propres tests, à chaque construction.== C'est ce qui empêche

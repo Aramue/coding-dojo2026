@@ -301,7 +301,7 @@ class Lecon(BaseModel):
 
     id: str
     notion: Literal[tuple(NOTIONS)]  # type: ignore[valid-type]
-    ordre: int = Field(ge=1, le=9)
+    ordre: int
     titre: str = Field(min_length=1)
     duree_min: int = Field(ge=1, le=30)
     blocs: list[BlocLecon] = Field(min_length=1)
@@ -312,6 +312,18 @@ class Lecon(BaseModel):
         if not MOTIF_LECON.match(v):
             raise ValueError(f"identifiant de lecon invalide : {v!r} (attendu c1-variables)")
         return v
+
+    @model_validator(mode="after")
+    def ordre_de_sa_notion(self) -> "Lecon":
+        # L'ordre d'une lecon est celui de sa notion : c'est lui qui decide quelles
+        # notions ses exemples ont le droit d'employer. Une borne fixe a 9 ne
+        # garantissait rien de tel, et fermait la porte a la seance 3.
+        attendu = NOTIONS[self.notion]["ordre"]
+        if self.ordre != attendu:
+            raise ValueError(
+                f"la lecon de la notion {self.notion!r} a l'ordre {attendu}, pas {self.ordre}"
+            )
+        return self
 
 
 def charger_lecon(chemin: Path) -> Lecon:

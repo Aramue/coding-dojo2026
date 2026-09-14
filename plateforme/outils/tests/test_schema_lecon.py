@@ -101,7 +101,10 @@ def test_bloc_de_code_executable():
     assert lecon.blocs[0].executable is True
 
 
-def test_ordre_hors_bornes_rejete():
+def test_une_lecon_porte_l_ordre_de_sa_notion():
+    """L'ordre decide des notions qu'un exemple peut employer : il ne se choisit pas."""
+    with pytest.raises(ValidationError):
+        Lecon(**lecon_minimale(ordre=3))
     with pytest.raises(ValidationError):
         Lecon(**lecon_minimale(ordre=0))
 
@@ -138,8 +141,9 @@ def test_les_notions_d_un_meme_chapitre_ont_des_couleurs_distinctes():
 
 
 def test_chaque_notion_est_acceptee_comme_valeur():
-    for notion in NOTIONS:
-        assert Lecon(**lecon_minimale(id=f"c1-{notion}", notion=notion)).notion == notion
+    for notion, details in NOTIONS.items():
+        lecon = Lecon(**lecon_minimale(id=f"c1-{notion}", notion=notion, ordre=details["ordre"]))
+        assert lecon.notion == notion
 
 
 def _ecrire(dossier, donnees):
