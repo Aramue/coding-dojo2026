@@ -169,6 +169,7 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 |---|---|---|---|---|
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
 | `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner`, `decider` |
+| `boucles` | Répéter, parcourir, compter | 3 | 30 septembre 2026 | `rappels` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
@@ -194,6 +195,7 @@ que le front n'en garde aucune copie.
 | `comparer` | Comparer | vert | 9 |
 | `combiner` | Combiner des conditions | corail | 7 |
 | `decider` | Décider | ambre | 10 |
+| `rappels` | Rappels avant les boucles | indigo | 3 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour

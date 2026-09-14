@@ -61,5 +61,12 @@
     "titre": "Décider",
     "famille": "conditions",
     "chapitre": "decisions"
+  },
+  {
+    "id": "rappels",
+    "ordre": 10,
+    "titre": "Rappels avant les boucles",
+    "famille": "variables",
+    "chapitre": "boucles"
   }
 ]

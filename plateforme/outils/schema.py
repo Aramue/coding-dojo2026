@@ -214,6 +214,16 @@ NOTIONS: dict[str, dict] = {
         "famille": "conditions",
         "chapitre": "decisions",
     },
+    # --- Seance 3 ---
+    # Le creneau de reactivation a son propre titre : deux « Se remettre en
+    # route » se confondraient dans le tableau de bord, qui nomme la notion a
+    # cote de chaque exercice.
+    "rappels": {
+        "ordre": 10,
+        "titre": "Rappels avant les boucles",
+        "famille": "variables",
+        "chapitre": "boucles",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
@@ -228,6 +238,12 @@ CHAPITRES: dict[str, dict] = {
         # Publiee d'avance, la seance 2 ne doit rien changer a la seance 1 : elle
         # s'ouvre le matin de son cours. Voir ADR-013.
         "ouverture": "2026-09-23",
+    },
+    "boucles": {
+        "ordre": 3,
+        "titre": "Répéter, parcourir, compter",
+        "seance": 3,
+        "ouverture": "2026-09-30",
     },
 }
 

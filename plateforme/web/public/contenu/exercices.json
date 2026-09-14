@@ -2532,5 +2532,120 @@
       }
     ],
     "famille": "conditions"
+  },
+  {
+    "id": "s3-01",
+    "concept": "reactivation",
+    "notion": "rappels",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Dès 18 ans",
+    "obligatoire": true,
+    "enonce": "Un rappel de la séance 2 avant les boucles. En Suisse, on vote dès 18 ans.\nCe programme vérifie l'âge de Léa, qui a fêté ses 18 ans hier.\n",
+    "depart": "age = 18\nif age > 18:\n    print(\"Tu peux voter.\")\nelse:\n    print(\"Pas encore.\")\n",
+    "indices": [
+      "Remplace age par 18 dans la question du if. 18 est-il strictement plus grand que 18 ?",
+      "18 > 18 est faux, donc Python passe au else. Pour « dès 18 ans », il fallait écrire >=, qui inclut la borne."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Pas encore.",
+          "Tu peux voter.",
+          "Tu peux voter.\nPas encore."
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s3-02",
+    "concept": "reactivation",
+    "notion": "rappels",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le cas que personne n'a prévu",
+    "obligatoire": true,
+    "enonce": "Ce programme surveille un aquarium, dont l'eau doit rester entre 24 et 28\ndegrés. Il prévient quand l'eau est trop froide ou trop chaude. Mais essaie\navec 26 : il ne dit rien du tout.\n\nAjoute ce qui manque pour qu'à 26 degrés, l'écran montre :\n\nTempérature de l'eau : 26\nTempérature idéale.\n",
+    "depart": "temperature = int(input(\"Température de l'eau : \"))\nif temperature < 24:\n    print(\"Eau trop froide : allume le chauffage.\")\nelif temperature > 28:\n    print(\"Eau trop chaude : éteins la lampe.\")\n",
+    "indices": [
+      "Quand l'eau n'est ni trop froide ni trop chaude, aucune des deux conditions n'est vraie. Qu'est-ce qui prend alors le relais ?",
+      "Ajoute un else aligné sur le if et le elif, avec le message décalé juste en dessous."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "20"
+        ],
+        "attendu": "Température de l'eau : 20\nEau trop froide : allume le chauffage.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "24"
+        ],
+        "attendu": "Température de l'eau : 24\nTempérature idéale.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "26"
+        ],
+        "attendu": "Température de l'eau : 26\nTempérature idéale.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "28"
+        ],
+        "attendu": "Température de l'eau : 28\nTempérature idéale.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "31"
+        ],
+        "attendu": "Température de l'eau : 31\nEau trop chaude : éteins la lampe.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s3-03",
+    "concept": "reactivation",
+    "notion": "rappels",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Deux fois la même réponse",
+    "obligatoire": true,
+    "enonce": "Dernier rappel avant les boucles. On lance ce programme, et on tape 4 quand\nil pose sa question.\n",
+    "depart": "nombre = input(\"Un nombre : \")\nprint(nombre + nombre)\n",
+    "indices": [
+      "Que range input() dans la variable nombre quand on tape 4 ? Un nombre, ou un texte ?",
+      "input() rend toujours du texte. Entre deux textes, + colle bout à bout, il n'additionne pas."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Un nombre : 4\n44",
+          "Un nombre : 4\n8",
+          "Un nombre : 4\n4 4"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
   }
 ]

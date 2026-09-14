@@ -109,6 +109,23 @@ Voir [[Types d'exercices]].
 >   `(age * 37) % 1000` : entre 18 et 65 ans, `age * 7` ne dépasse jamais 1000, et aucun essai
 >   n'aurait distingué `% 1000` de `% 10000`. Voir [[Programme d'assemblage]].
 
+> [!info] Séance 3 en cours d'écriture — 14 septembre 2026
+> Même méthode que la séance 2 : notion par notion, chacune avec sa leçon, validée par exécution
+> et relue dans l'aperçu. Elle s'ouvre aux élèves le **30 septembre**.
+>
+> | Notion | Exercices | Leçon |
+> |---|---|---|
+> | Rappels avant les boucles | `s3-01` à `s3-03` — 3 obligatoires | `c3-rappels` |
+>
+> Écarts assumés avec `progression-chapitre-1.json` :
+>
+> - Le créneau de réactivation porte un **autre titre** que celui de la séance 2 : le tableau de
+>   bord nomme la notion à côté de chaque exercice, et deux « Se remettre en route » s'y
+>   confondraient.
+> - Avant les boucles, deux outils ont dû changer : une leçon prend désormais l'ordre de sa
+>   notion (la borne fixe à 9 bloquait la séance 3), et le validateur interrompt un programme
+>   qui ne s'arrête pas — sans quoi la boucle infinie de `s3-31` aurait bloqué la construction.
+
 ## Les trois séances
 
 ### Séance 1 — mercredi 16 septembre · *Le recrutement : dire, retenir, demander*

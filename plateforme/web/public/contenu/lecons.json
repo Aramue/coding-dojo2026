@@ -502,5 +502,54 @@
       }
     ],
     "famille": "conditions"
+  },
+  {
+    "id": "c3-rappels",
+    "notion": "rappels",
+    "ordre": 10,
+    "titre": "Rappels avant les boucles",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Dernière séance du chapitre : les boucles. Une boucle répète des lignes, et une erreur dans ces lignes se répète avec elles. Trois règles des séances précédentes valent donc la peine d'être revues avant de commencer."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**La borne compte.** `>` exclut la valeur limite, `>=` l'inclut : « dès 18 ans » s'écrit `age >= 18`."
+      },
+      {
+        "type": "code",
+        "legende": "18 ans pile",
+        "python": "age = 18\nprint(age > 18)\nprint(age >= 18)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Chaque cas doit avoir sa réponse.** Quand aucune condition n'est vraie, seul un `else` dit encore quelque chose. Sans lui, le programme se tait."
+      },
+      {
+        "type": "code",
+        "legende": "Trois cas, trois réponses",
+        "python": "note = 4\nif note >= 5:\n    print(\"Très bien\")\nelif note >= 4:\n    print(\"Suffisant\")\nelse:\n    print(\"Insuffisant\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**`input()` rend toujours du texte**, même quand on tape des chiffres. Pour calculer avec la réponse, il faut d'abord la convertir avec `int()`."
+      },
+      {
+        "type": "code",
+        "legende": "Coller, ou additionner",
+        "python": "reponse = input(\"Ton âge : \")\nprint(reponse + \"1\")\nprint(int(reponse) + 1)\n",
+        "executable": false,
+        "entrees": [
+          "15"
+        ]
+      }
+    ],
+    "famille": "variables"
   }
 ]
