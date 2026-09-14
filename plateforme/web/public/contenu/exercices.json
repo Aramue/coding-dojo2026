@@ -1466,5 +1466,322 @@
       }
     ],
     "famille": "operateurs"
+  },
+  {
+    "id": "s2-13",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le quatrième type : True et False",
+    "obligatoire": true,
+    "enonce": "Quand Python compare deux valeurs, il ne se contente pas de vérifier : il\nproduit une réponse. Cette réponse est une valeur d'un quatrième type, après\nles entiers, les nombres à virgule et le texte. Elle ne peut valoir que\n`True` (vrai) ou `False` (faux), et elle s'affiche comme les autres.\n",
+    "depart": "temperature = 24\nprint(temperature > 30)\nprint(temperature < 30)\n",
+    "indices": [
+      "Remplace temperature par sa valeur, puis lis chaque ligne comme une question : 24 est-il plus grand que 30 ?",
+      "Python n'affiche pas la question, il affiche sa réponse. True quand c'est vrai, False quand c'est faux."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False\nTrue",
+          "True\nFalse",
+          "temperature > 30\ntemperature < 30"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-14",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "= range, == compare",
+    "obligatoire": true,
+    "enonce": "Ce programme demande le code d'un casier, puis dit si le casier s'ouvre.\nIl s'arrête sur une erreur avant même de poser la question.\nLis le message, puis répare le programme.\n",
+    "depart": "code = int(input(\"Code du casier : \"))\nouvert = (code = 4321)\nprint(\"Casier ouvert :\", ouvert)\n",
+    "indices": [
+      "Le message parle de la ligne 2. Sur cette ligne, un signe = devrait poser une question, mais il essaie de ranger une valeur.",
+      "Un seul = range une valeur dans une boîte. Pour demander si deux valeurs sont égales, Python attend deux signes = collés."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "4321"
+        ],
+        "attendu": "Code du casier : 4321\nCasier ouvert : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "1234"
+        ],
+        "attendu": "Code du casier : 1234\nCasier ouvert : False",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-15",
+    "concept": "comparateurs",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les six comparateurs",
+    "obligatoire": true,
+    "enonce": "Deux nombres, six comparaisons, deux par ligne. Chaque ligne affiche deux\nréponses, séparées par un espace.\n",
+    "depart": "x = 7\ny = 12\nprint(x == y, x != y)\nprint(x < y, x > y)\nprint(x <= y, x >= y)\n",
+    "indices": [
+      "Traite les comparaisons une par une, en remplaçant x par 7 et y par 12. La première demande : 7 est-il égal à 12 ?",
+      "!= veut dire « différent de ». <= veut dire « plus petit ou égal », >= « plus grand ou égal » : 7 est plus petit que 12, donc il est aussi plus petit ou égal."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False True\nTrue False\nTrue False",
+          "True False\nFalse True\nFalse True",
+          "False True\nTrue False\nFalse True"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-16",
+    "concept": "comparateurs",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Dix-huit ans pile",
+    "obligatoire": true,
+    "enonce": "Pour s'inscrire seul à un stage d'escalade, il faut avoir au moins 18 ans.\nCe programme vérifie l'âge de Noé, qui fête justement ses 18 ans aujourd'hui.\n",
+    "depart": "age = 18\npeut_s_inscrire = age > 18\nprint(\"Inscription possible :\", peut_s_inscrire)\n",
+    "indices": [
+      "« Au moins 18 ans » veut dire 18 ou plus. Mais que demande exactement le signe > ?",
+      "Un nombre n'est jamais plus grand que lui-même, donc 18 > 18 est faux. Le programme refuse Noé alors qu'il a le droit de s'inscrire. Il aurait fallu >=, qui inclut la borne."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Inscription possible : False",
+          "Inscription possible : True",
+          "Inscription possible : 18"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-17",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Ranger une réponse dans une variable",
+    "obligatoire": true,
+    "enonce": "Le grand toboggan d'un parc aquatique est réservé aux personnes d'au moins\n140 cm. Complète le trou pour que la variable `autorise` contienne la réponse\nà la question « la taille atteint-elle 140 cm ? ».\n\nTon programme sera essayé avec plusieurs tailles, dont 140 cm pile.\n",
+    "depart": "taille = int(input(\"Ta taille en cm : \"))\nautorise = _____\nprint(\"Grand toboggan :\", autorise)\n",
+    "indices": [
+      "Le trou attend une comparaison, pas un texte. Sa réponse, True ou False, sera rangée dans autorise.",
+      "« Au moins 140 » veut dire 140 ou plus. Une personne qui mesure 140 cm pile doit avoir le droit de monter."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "140"
+        ],
+        "attendu": "Ta taille en cm : 140\nGrand toboggan : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "139"
+        ],
+        "attendu": "Ta taille en cm : 139\nGrand toboggan : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "175"
+        ],
+        "attendu": "Ta taille en cm : 175\nGrand toboggan : True",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-18",
+    "concept": "comparateurs",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La casse compte",
+    "obligatoire": true,
+    "enonce": "Le mot de passe du Wi-Fi de la bibliothèque est Lecture2026. Camille le tape\nsur son téléphone, qui a mis la première lettre en minuscule sans prévenir.\n",
+    "depart": "mot_de_passe = \"Lecture2026\"\nsaisie = \"lecture2026\"\nprint(\"Connexion :\", saisie == mot_de_passe)\n",
+    "indices": [
+      "Compare les deux textes caractère par caractère, en commençant par le premier.",
+      "Pour Python, L majuscule et l minuscule sont deux caractères différents. Deux textes ne sont égaux que s'ils sont identiques jusqu'au dernier caractère."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Connexion : False",
+          "Connexion : True",
+          "Connexion : lecture2026"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-19",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le mot de passe et le signe =",
+    "obligatoire": false,
+    "enonce": "Ce programme vérifie le mot de passe du Wi-Fi de la bibliothèque.\nIl s'arrête sur une erreur avant même de le demander. Répare-le.\n",
+    "depart": "saisie = input(\"Mot de passe : \")\ncorrect = (saisie = \"Lecture2026\")\nprint(\"Connexion :\", correct)\n",
+    "indices": [
+      "Sur la ligne 2, le signe = devrait demander si la saisie est égale au mot de passe. Que fait un seul = ?",
+      "Comparer deux textes s'écrit exactement comme comparer deux nombres, avec deux signes = collés."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Lecture2026"
+        ],
+        "attendu": "Mot de passe : Lecture2026\nConnexion : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "lecture2026"
+        ],
+        "attendu": "Mot de passe : lecture2026\nConnexion : False",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-20",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "True + True vaut 2",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : Python accepte d'additionner des booléens. Reste à savoir\nce que ça donne.\n",
+    "depart": "print(True + True)\nprint((3 > 1) + (2 > 5))\n",
+    "indices": [
+      "Pour Python, un booléen est aussi un nombre. Lequel, à ton avis, pour True ? Et pour False ?",
+      "True compte pour 1 et False pour 0. Sur la deuxième ligne, calcule d'abord chaque comparaison, puis additionne."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "2\n1",
+          "TrueTrue\nTrueFalse",
+          "True\nTrue"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-21",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Compter les conditions remplies",
+    "obligatoire": false,
+    "enonce": "Défi : une attraction de parc pose trois conditions. Avoir au moins 10 ans,\nmesurer au moins 130 cm, et venir accompagné.\n\nLe programme pose déjà les trois questions. Ajoute de quoi afficher combien\nde conditions sont remplies, en additionnant les réponses des comparaisons.\n\nPour 11 ans, 125 cm et « oui », l'écran doit montrer :\n\nÂge : 11\nTaille en cm : 125\nAccompagné (oui ou non) : oui\nConditions remplies : 2\n\nTon programme sera relancé avec d'autres réponses.\n",
+    "depart": "age = int(input(\"Âge : \"))\ntaille = int(input(\"Taille en cm : \"))\naccompagne = input(\"Accompagné (oui ou non) : \")\n",
+    "indices": [
+      "Chaque condition est une comparaison, qui vaut True ou False. Et True compte pour 1 quand on l'additionne.",
+      "Écris les trois comparaisons, chacune entre parenthèses, et relie-les par des +. La troisième compare deux textes."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "11",
+          "125",
+          "oui"
+        ],
+        "attendu": "Âge : 11\nTaille en cm : 125\nAccompagné (oui ou non) : oui\nConditions remplies : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "10",
+          "130",
+          "non"
+        ],
+        "attendu": "Âge : 10\nTaille en cm : 130\nAccompagné (oui ou non) : non\nConditions remplies : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "9",
+          "120",
+          "non"
+        ],
+        "attendu": "Âge : 9\nTaille en cm : 120\nAccompagné (oui ou non) : non\nConditions remplies : 0",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "160",
+          "oui"
+        ],
+        "attendu": "Âge : 15\nTaille en cm : 160\nAccompagné (oui ou non) : oui\nConditions remplies : 3",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "remplies : 2",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
   }
 ]

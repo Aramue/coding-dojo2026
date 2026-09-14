@@ -1,0 +1,31 @@
+id: s2-13
+concept: booleens
+notion: comparer
+seance: 2
+niveau: normal
+type: predire
+titre: "Le quatrième type : True et False"
+obligatoire: true
+enonce: |
+  Quand Python compare deux valeurs, il ne se contente pas de vérifier : il
+  produit une réponse. Cette réponse est une valeur d'un quatrième type, après
+  les entiers, les nombres à virgule et le texte. Elle ne peut valoir que
+  `True` (vrai) ou `False` (faux), et elle s'affiche comme les autres.
+depart: |
+  temperature = 24
+  print(temperature > 30)
+  print(temperature < 30)
+indices:
+  - "Remplace temperature par sa valeur, puis lis chaque ligne comme une question : 24 est-il plus grand que 30 ?"
+  - Python n'affiche pas la question, il affiche sa réponse. True quand c'est vrai, False quand c'est faux.
+tests:
+  - type: qcm
+    options:
+      - "False\nTrue"
+      - "True\nFalse"
+      - "temperature > 30\ntemperature < 30"
+    bonne_reponse: 0
+solution: |
+  temperature = 24
+  print(temperature > 30)
+  print(temperature < 30)

@@ -1,0 +1,27 @@
+id: s2-20
+concept: booleens
+notion: comparer
+seance: 2
+niveau: expert
+type: predire
+titre: True + True vaut 2
+obligatoire: false
+enonce: |
+  Pour les curieux : Python accepte d'additionner des booléens. Reste à savoir
+  ce que ça donne.
+depart: |
+  print(True + True)
+  print((3 > 1) + (2 > 5))
+indices:
+  - Pour Python, un booléen est aussi un nombre. Lequel, à ton avis, pour True ? Et pour False ?
+  - True compte pour 1 et False pour 0. Sur la deuxième ligne, calcule d'abord chaque comparaison, puis additionne.
+tests:
+  - type: qcm
+    options:
+      - "2\n1"
+      - "TrueTrue\nTrueFalse"
+      - "True\nTrue"
+    bonne_reponse: 0
+solution: |
+  print(True + True)
+  print((3 > 1) + (2 > 5))

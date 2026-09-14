@@ -40,5 +40,12 @@
     "titre": "Calculer",
     "famille": "operateurs",
     "chapitre": "decisions"
+  },
+  {
+    "id": "comparer",
+    "ordre": 7,
+    "titre": "Comparer",
+    "famille": "types",
+    "chapitre": "decisions"
   }
 ]

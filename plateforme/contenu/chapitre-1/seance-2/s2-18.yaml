@@ -1,0 +1,29 @@
+id: s2-18
+concept: comparateurs
+notion: comparer
+seance: 2
+niveau: normal
+type: predire
+titre: La casse compte
+obligatoire: true
+enonce: |
+  Le mot de passe du Wi-Fi de la bibliothèque est Lecture2026. Camille le tape
+  sur son téléphone, qui a mis la première lettre en minuscule sans prévenir.
+depart: |
+  mot_de_passe = "Lecture2026"
+  saisie = "lecture2026"
+  print("Connexion :", saisie == mot_de_passe)
+indices:
+  - Compare les deux textes caractère par caractère, en commençant par le premier.
+  - Pour Python, L majuscule et l minuscule sont deux caractères différents. Deux textes ne sont égaux que s'ils sont identiques jusqu'au dernier caractère.
+tests:
+  - type: qcm
+    options:
+      - "Connexion : False"
+      - "Connexion : True"
+      - "Connexion : lecture2026"
+    bonne_reponse: 0
+solution: |
+  mot_de_passe = "Lecture2026"
+  saisie = "lecture2026"
+  print("Connexion :", saisie == mot_de_passe)

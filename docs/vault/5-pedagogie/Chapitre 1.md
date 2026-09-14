@@ -74,6 +74,7 @@ Voir [[Types d'exercices]].
 > |---|---|---|
 > | Se remettre en route | `s2-01` à `s2-03` — 3 obligatoires | `c2-reveil` |
 > | Calculer | `s2-04` à `s2-12` — 6 obligatoires, 1 renfort, 2 experts | `c2-calculer` |
+> | Comparer | `s2-13` à `s2-21` — 6 obligatoires, 1 renfort, 2 experts | `c2-comparer` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -88,6 +89,13 @@ Voir [[Types d'exercices]].
 >   inspection de variables : le programme demande le nombre avec `input()`, et une inspection
 >   s'exécute sans entrée. Un second motif interdit, `[`, ferme le contournement par un f-string
 >   découpé — sans lui, le défi se résoudrait sans toucher à `//` ni à `%`.
+> - `s2-14` fait rencontrer le `=` à la place de `==` **sans `if`**. La conception l'écrivait
+>   `if age = 18`, mais `if` n'arrive que deux notions plus loin. Une comparaison rangée dans une
+>   variable, `ouvert = (code = 4321)`, produit exactement la même erreur — avant même que le
+>   programme pose sa première question.
+> - `s2-17` et `s2-21` se valident sur leur sortie, avec plusieurs réponses dont les bornes
+>   (140 cm pile, 10 ans et 130 cm pile), et non par inspection de variables : leurs programmes
+>   posent leurs questions avec `input()`.
 
 ## Les trois séances
 
