@@ -130,6 +130,17 @@ vert sans rien résoudre. ==Vérifié : `print("""Agent en poste : Merle""")` tr
 **Ce qui casse :** sans lui, la normalisation du verdict bleu absorbe l'erreur que l'exercice
 cherche justement à faire remarquer. L'exercice ne teste plus rien.
 
+### Le validateur compte les tours de boucle, il ne trace pas l'exécution
+
+`_executer` réécrit le programme avant de l'exécuter : un appel à `__tour__()` en tête de chaque
+boucle, qui lève `TimeoutError` au-delà de 100 000 tours.
+
+**Ce qui casse :** sans compteur, la boucle infinie d'un exercice `debug` de la séance 3 bloque la
+validation et la construction de l'image, sans un message. Et un compteur installé avec
+`sys.settrace` prend la place du traceur de coverage : la mesure des fonctions qui appellent
+`_executer` s'arrête net après chaque exécution. `generer_attendu.py` était tombé de 77 % à 65 %
+sans qu'une ligne de test ait changé.
+
 ## Serveur
 
 ### La validation vit côté serveur, jamais seulement côté navigateur

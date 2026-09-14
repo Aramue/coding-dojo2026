@@ -262,6 +262,8 @@ la construction** plutôt que d'atteindre les élèves. Contrôles :
   information » sont refusés
 - L'ordre d'une leçon est celui de sa notion : c'est lui qui décide des notions que ses exemples
   ont le droit d'employer
+- Un programme qui ne s'arrête pas est interrompu après 100 000 tours de boucle, et compte comme
+  un échec : la boucle infinie d'un exercice `debug` ne bloque pas la construction
 
 > [!tip] Le contrôle qui sauve le plus de temps
 > ==Exécuter la solution contre ses propres tests, à chaque construction.== C'est ce qui empêche

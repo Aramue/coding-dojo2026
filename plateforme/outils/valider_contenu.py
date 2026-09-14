@@ -8,6 +8,7 @@ panne la plus couteuse en seance parce qu'elle envoie toute la classe lever la m
 from __future__ import annotations
 
 import argparse
+import ast
 import io
 import re
 import sys
@@ -31,10 +32,34 @@ from schema import (
 )
 
 
+# Un programme qui ne s'arrete pas ne doit pas bloquer la construction : la
+# boucle infinie de la seance 3 est un exercice, pas un accident. Le navigateur
+# coupe au bout de 5 secondes ; ici, on compte les tours de boucle, ce qui rend
+# le meme verdict sans dependre de la vitesse de la machine.
+TOURS_MAX = 100_000
+
+
+class _CompteurDeTours(ast.NodeTransformer):
+    """Place un appel a __tour__() en tete du corps de chaque boucle.
+
+    Plutot qu'un traceur installe avec sys.settrace : il prenait la place de
+    celui de coverage, et la mesure des fonctions appelant _executer s'arretait
+    net apres chaque execution.
+    """
+
+    def _compter(self, boucle: ast.For | ast.While) -> ast.For | ast.While:
+        self.generic_visit(boucle)
+        boucle.body.insert(0, ast.Expr(ast.Call(ast.Name("__tour__", ast.Load()), [], [])))
+        return boucle
+
+    visit_For = visit_While = _compter
+
+
 def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
     """Exécute du code avec input() simulé. Miroir Python du harnais du worker."""
     restantes = list(entrees)
     sortie = io.StringIO()
+    tours = 0
 
     def _input(invite: str = "") -> str:
         sortie.write(str(invite))
@@ -44,10 +69,17 @@ def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
         sortie.write(valeur + "\n")
         return valeur
 
-    espace: dict = {"__name__": "__main__", "input": _input}
+    def _tour() -> None:
+        nonlocal tours
+        tours += 1
+        if tours > TOURS_MAX:
+            raise TimeoutError("le programme ne s'arrête pas")
+
+    espace: dict = {"__name__": "__main__", "input": _input, "__tour__": _tour}
     try:
+        arbre = ast.fix_missing_locations(_CompteurDeTours().visit(ast.parse(code, "<solution>")))
         with redirect_stdout(sortie):
-            exec(compile(code, "<solution>", "exec"), espace)
+            exec(compile(arbre, "<solution>", "exec"), espace)
     except BaseException as e:  # noqa: BLE001 — on rapporte, on ne relance pas
         return sortie.getvalue(), espace, f"{type(e).__name__}: {e}"
     return sortie.getvalue(), espace, None
