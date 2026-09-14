@@ -551,5 +551,56 @@
       }
     ],
     "famille": "variables"
+  },
+  {
+    "id": "c3-repeter",
+    "notion": "repeter",
+    "ordre": 11,
+    "titre": "Répéter avec for",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Afficher dix lignes avec dix `print`, c'est long, et facile à rater. Une **boucle** répète des lignes à ta place : `for` les répète une fois pour chaque valeur que lui donne `range()`."
+      },
+      {
+        "type": "code",
+        "legende": "Trois tours",
+        "python": "for i in range(3):\n    print(\"Tour numéro\", i)\nprint(\"La boucle est finie.\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Comme pour `if`, la ligne du `for` finit par **deux-points**, et les lignes répétées sont **décalées de quatre espaces**. La première ligne qui n'est plus décalée n'appartient plus à la boucle : elle s'exécute une seule fois, après le dernier tour."
+      },
+      {
+        "type": "attention",
+        "texte": "**`range(3)` commence à 0 et s'arrête avant 3** : il donne 0, 1 et 2. Trois valeurs, mais jamais le 3 lui-même."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Avec deux nombres, `range(début, fin)` part d'où tu veux. Avec trois, `range(début, fin, pas)` avance du pas à chaque tour. La fin, elle, n'est jamais atteinte."
+      },
+      {
+        "type": "code",
+        "legende": "Un début, une fin, un pas",
+        "python": "for n in range(1, 4):\n    print(n)\nfor n in range(10, 30, 5):\n    print(n)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "La variable de la boucle prend une nouvelle valeur à chaque tour. Elle se glisse dans un message comme n'importe quelle autre variable."
+      },
+      {
+        "type": "code",
+        "legende": "Numéroter des lignes",
+        "python": "for jour in range(1, 4):\n    print(f\"Jour {jour} : entraînement\")\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "boucles"
   }
 ]

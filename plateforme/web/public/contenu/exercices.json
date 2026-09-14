@@ -2647,5 +2647,255 @@
       }
     ],
     "famille": "variables"
+  },
+  {
+    "id": "s3-04",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les valeurs de range(5)",
+    "obligatoire": true,
+    "enonce": "`for` répète les lignes décalées en dessous de lui, une fois pour chaque\nvaleur que lui donne `range()`. À chaque tour, la variable `i` prend la\nvaleur suivante.\n",
+    "depart": "for i in range(5):\n    print(\"Tour numéro\", i)\n",
+    "indices": [
+      "Combien de fois la ligne s'affiche-t-elle ? Et quelle est la toute première valeur de i ?",
+      "range(5) commence à 0 et s'arrête juste avant 5. Il donne cinq valeurs, mais jamais le 5 lui-même."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Tour numéro 0\nTour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4",
+          "Tour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4\nTour numéro 5",
+          "Tour numéro 0\nTour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4\nTour numéro 5"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-05",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un début, une fin, un pas",
+    "obligatoire": true,
+    "enonce": "`range()` accepte aussi deux ou trois nombres : un début, une fin qui n'est\njamais atteinte, et un pas, qui dit de combien avancer à chaque tour.\n",
+    "depart": "for i in range(1, 4):\n    print(i)\nprint(\"---\")\nfor i in range(0, 10, 3):\n    print(i)\n",
+    "indices": [
+      "Traite les deux boucles séparément. La première part de 1. Jusqu'où va-t-elle ?",
+      "La seconde part de 0 et avance de 3 en 3. Elle s'arrête avant 10, mais 9 est encore plus petit que 10."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n2\n3\n---\n0\n3\n6\n9",
+          "1\n2\n3\n4\n---\n0\n3\n6\n9",
+          "1\n2\n3\n---\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-06",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Trois tours de piste",
+    "obligatoire": true,
+    "enonce": "Pour l'échauffement, ce programme doit afficher trois fois « Encore un tour\nde piste ! », puis une seule fois « Bravo, c'est fini. ». Complète le trou.\n",
+    "depart": "for i in range(_____):\n    print(\"Encore un tour de piste !\")\nprint(\"Bravo, c'est fini.\")\n",
+    "indices": [
+      "Le nombre entre les parenthèses de range() décide du nombre de tours.",
+      "range(3) donne trois valeurs, 0, 1 et 2. La boucle fait donc exactement trois tours."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Encore un tour de piste !\nEncore un tour de piste !\nEncore un tour de piste !\nBravo, c'est fini.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-07",
+    "concept": "indentation",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Dans la boucle ou après ?",
+    "obligatoire": true,
+    "enonce": "Deux `print` presque pareils, mais un seul est décalé sous le `for`.\n",
+    "depart": "for i in range(3):\n    print(\"Bip\")\nprint(\"Fin\")\n",
+    "indices": [
+      "Quelles lignes sont décalées sous le for ? Ce sont les seules qui se répètent.",
+      "La dernière ligne est alignée sur le for. Elle ne fait pas partie de la boucle, et s'exécute une seule fois, après le dernier tour."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bip\nBip\nBip\nFin",
+          "Bip\nFin\nBip\nFin\nBip\nFin",
+          "Bip\nBip\nBip\nFin\nFin\nFin"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-08",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La variable de la boucle",
+    "obligatoire": true,
+    "enonce": "La variable d'une boucle change à chaque tour, et elle s'affiche comme une\nautre. Complète le trou pour que le programme affiche exactement :\n\nÉtage 1\nÉtage 2\nÉtage 3\nÉtage 4\n",
+    "depart": "for etage in range(1, 5):\n    print(f\"Étage {_____}\")\n",
+    "indices": [
+      "Entre les accolades d'un f-string, on écrit le nom de la variable à afficher.",
+      "La variable qui prend les valeurs 1, 2, 3 puis 4 est celle écrite juste après for."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Étage 1\nÉtage 2\nÉtage 3\nÉtage 4",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "{etage}",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-09",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Il manque la dernière question",
+    "obligatoire": true,
+    "enonce": "Ce programme doit numéroter les cinq questions d'un quiz, de 1 à 5. Il tourne\nsans erreur, mais la dernière question manque à l'appel. Répare-le.\n",
+    "depart": "for numero in range(1, 5):\n    print(f\"Question {numero}\")\n",
+    "indices": [
+      "Quelles valeurs range(1, 5) donne-t-il exactement ? Compte-les.",
+      "La fin de range() n'est jamais atteinte. Pour que 5 soit la dernière valeur, la fin doit être juste après."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Question 1\nQuestion 2\nQuestion 3\nQuestion 4\nQuestion 5",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-10",
+    "concept": "indentation",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La boucle sans corps",
+    "obligatoire": false,
+    "enonce": "Ce programme doit souhaiter bon appétit trois fois. Python refuse de le\nlancer. Lis le message d'erreur, puis répare le programme.\n",
+    "depart": "for i in range(3):\nprint(\"Bon appétit !\")\n",
+    "indices": [
+      "Après le deux-points du for, Python attend au moins une ligne décalée. Il n'en trouve aucune.",
+      "Place le curseur au début de la ligne 2 et appuie sur Tab."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bon appétit !\nBon appétit !\nBon appétit !",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-11",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le compte à rebours",
+    "obligatoire": false,
+    "enonce": "Défi : le pas de `range()` peut être négatif. Écris une boucle qui affiche le\ncompte à rebours d'un décollage, puis le décollage lui-même :\n\n5\n4\n3\n2\n1\nDécollage !\n",
+    "depart": "",
+    "indices": [
+      "Avec un pas de -1, range() compte à l'envers. Le début est 5, et la fin n'est jamais atteinte.",
+      "Pour que 1 soit la dernière valeur, la fin doit être 0. Le message final s'affiche une seule fois, après la boucle."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "5\n4\n3\n2\n1\nDécollage !",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "print(5)",
+        "message": "Ce défi se résout avec une boucle : une seule ligne print() répétée, pas cinq.",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-12",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Une boucle dans une boucle",
+    "obligatoire": false,
+    "enonce": "Défi : une boucle peut en contenir une autre. Écris un programme qui affiche\nles tables de multiplication de 2 et de 3, de 1 à 4, dans cet ordre exact :\n\n2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n",
+    "depart": "",
+    "indices": [
+      "La boucle extérieure choisit la table, 2 puis 3. La boucle intérieure parcourt les nombres de 1 à 4.",
+      "Décale la boucle intérieure sous la première. Elle refait alors tous ses tours, à chaque tour de la boucle extérieure."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "= 12",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
   }
 ]

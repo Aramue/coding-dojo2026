@@ -1,0 +1,28 @@
+id: s3-07
+concept: indentation
+notion: repeter
+seance: 3
+niveau: normal
+type: predire
+titre: Dans la boucle ou après ?
+obligatoire: true
+enonce: |
+  Deux `print` presque pareils, mais un seul est décalé sous le `for`.
+depart: |
+  for i in range(3):
+      print("Bip")
+  print("Fin")
+indices:
+  - Quelles lignes sont décalées sous le for ? Ce sont les seules qui se répètent.
+  - La dernière ligne est alignée sur le for. Elle ne fait pas partie de la boucle, et s'exécute une seule fois, après le dernier tour.
+tests:
+  - type: qcm
+    options:
+      - "Bip\nBip\nBip\nFin"
+      - "Bip\nFin\nBip\nFin\nBip\nFin"
+      - "Bip\nBip\nBip\nFin\nFin\nFin"
+    bonne_reponse: 0
+solution: |
+  for i in range(3):
+      print("Bip")
+  print("Fin")

@@ -1,0 +1,35 @@
+id: s3-08
+concept: for
+notion: repeter
+seance: 3
+niveau: normal
+type: completer
+titre: La variable de la boucle
+obligatoire: true
+enonce: |
+  La variable d'une boucle change à chaque tour, et elle s'affiche comme une
+  autre. Complète le trou pour que le programme affiche exactement :
+
+  Étage 1
+  Étage 2
+  Étage 3
+  Étage 4
+depart: |
+  for etage in range(1, 5):
+      print(f"Étage {_____}")
+indices:
+  - Entre les accolades d'un f-string, on écrit le nom de la variable à afficher.
+  - La variable qui prend les valeurs 1, 2, 3 puis 4 est celle écrite juste après for.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Étage 1
+      Étage 2
+      Étage 3
+      Étage 4
+  - type: contient
+    motif: "{etage}"
+solution: |
+  for etage in range(1, 5):
+      print(f"Étage {etage}")

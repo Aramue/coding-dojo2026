@@ -68,5 +68,12 @@
     "titre": "Rappels avant les boucles",
     "famille": "variables",
     "chapitre": "boucles"
+  },
+  {
+    "id": "repeter",
+    "ordre": 11,
+    "titre": "Répéter avec for",
+    "famille": "boucles",
+    "chapitre": "boucles"
   }
 ]

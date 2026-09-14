@@ -224,6 +224,12 @@ NOTIONS: dict[str, dict] = {
         "famille": "variables",
         "chapitre": "boucles",
     },
+    "repeter": {
+        "ordre": 11,
+        "titre": "Répéter avec for",
+        "famille": "boucles",
+        "chapitre": "boucles",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure

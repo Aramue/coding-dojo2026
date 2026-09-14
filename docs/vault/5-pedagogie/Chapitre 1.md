@@ -116,6 +116,7 @@ Voir [[Types d'exercices]].
 > | Notion | Exercices | Leçon |
 > |---|---|---|
 > | Rappels avant les boucles | `s3-01` à `s3-03` — 3 obligatoires | `c3-rappels` |
+> | Répéter avec for | `s3-04` à `s3-12` — 6 obligatoires, 1 renfort, 2 experts | `c3-repeter` |
 >
 > Écarts assumés avec `progression-chapitre-1.json` :
 >
@@ -125,6 +126,11 @@ Voir [[Types d'exercices]].
 > - Avant les boucles, deux outils ont dû changer : une leçon prend désormais l'ordre de sa
 >   notion (la borne fixe à 9 bloquait la séance 3), et le validateur interrompt un programme
 >   qui ne s'arrête pas — sans quoi la boucle infinie de `s3-31` aurait bloqué la construction.
+> - Aucun titre ne donne la réponse de son QCM : « range(5) donne 0, 1, 2, 3, 4 » devient
+>   « Les valeurs de range(5) ». Et « Un tour de trop » devient « Il manque la dernière
+>   question », puisque `range(1, 5)` s'arrête un tour **trop tôt**.
+> - `s3-12`, « la grille de sécurité », quitte le Quartier Général pour les tables de
+>   multiplication : deux boucles imbriquées, et une sortie que chacun sait vérifier de tête.
 
 ## Les trois séances
 

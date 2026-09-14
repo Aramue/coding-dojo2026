@@ -1,0 +1,33 @@
+id: s3-05
+concept: for
+notion: repeter
+seance: 3
+niveau: normal
+type: predire
+titre: Un début, une fin, un pas
+obligatoire: true
+enonce: |
+  `range()` accepte aussi deux ou trois nombres : un début, une fin qui n'est
+  jamais atteinte, et un pas, qui dit de combien avancer à chaque tour.
+depart: |
+  for i in range(1, 4):
+      print(i)
+  print("---")
+  for i in range(0, 10, 3):
+      print(i)
+indices:
+  - Traite les deux boucles séparément. La première part de 1. Jusqu'où va-t-elle ?
+  - La seconde part de 0 et avance de 3 en 3. Elle s'arrête avant 10, mais 9 est encore plus petit que 10.
+tests:
+  - type: qcm
+    options:
+      - "1\n2\n3\n---\n0\n3\n6\n9"
+      - "1\n2\n3\n4\n---\n0\n3\n6\n9"
+      - "1\n2\n3\n---\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+    bonne_reponse: 0
+solution: |
+  for i in range(1, 4):
+      print(i)
+  print("---")
+  for i in range(0, 10, 3):
+      print(i)
