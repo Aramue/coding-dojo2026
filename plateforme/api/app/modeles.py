@@ -45,3 +45,15 @@ class Tentative(SQLModel, table=True):
     type_erreur: str | None = None  # "TypeError", "NameError", ...
     duree_ms: int = 0
     horodatage: datetime = Field(default_factory=maintenant, index=True)
+
+
+class Reglage(SQLModel, table=True):
+    """Ce que l'instance tire ou recoit une fois pour toutes.
+
+    La cle qui signe les jetons, tiree au premier besoin, et l'empreinte du
+    mot de passe professeur, ecrite a la creation du compte. Rien de tout cela
+    ne vient plus de l'environnement : voir ADR-014.
+    """
+
+    cle: str = Field(primary_key=True)
+    valeur: str

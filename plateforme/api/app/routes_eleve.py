@@ -84,10 +84,13 @@ class DemandeTentative(BaseModel):
         return valeur
 
 
-def eleve_courant(authorization: Annotated[str | None, Header()] = None) -> str:
+def eleve_courant(
+    session: Annotated[Session, Depends(obtenir_session)],
+    authorization: Annotated[str | None, Header()] = None,
+) -> str:
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(401, "Jeton absent")
-    code = lire_jeton(authorization.removeprefix("Bearer "))
+    code = lire_jeton(session, authorization.removeprefix("Bearer "))
     if not code:
         raise HTTPException(401, "Jeton invalide")
     return code
@@ -111,7 +114,7 @@ def ouvrir_session(
     session.add(eleve)
     session.commit()
     return ReponseSession(
-        jeton=creer_jeton(demande.code_acces),
+        jeton=creer_jeton(session, demande.code_acces),
         code_acces=demande.code_acces,
         prenom=eleve.prenom,
     )
