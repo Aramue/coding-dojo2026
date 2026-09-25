@@ -35,12 +35,18 @@ function accord(nombre: number, singulier: string, pluriel: string): string {
 }
 
 export function TableauDeBord({
-  codeProf,
+  jetonProf,
   onApercu,
+  onRefuse,
 }: {
-  codeProf: string
+  jetonProf: string
   /** Ouvre l'aperçu de l'espace élève sur une page précise. */
   onApercu?: (ou: Destination) => void
+  /**
+   * Le jeton est refusé : expiré après douze heures, ou le compte a été
+   * recréé. La porte dit quoi faire ; un « Accès refusé » ne le dirait pas.
+   */
+  onRefuse?: () => void
 }) {
   const [eleves, setEleves] = useState<LigneEleve[]>([])
   const [erreur, setErreur] = useState<string | null>(null)
@@ -60,7 +66,11 @@ export function TableauDeBord({
     let vivant = true
     async function rafraichir() {
       try {
-        const reponse = await fetch('/api/prof/seance', { headers: { 'X-Code-Prof': codeProf } })
+        const reponse = await fetch('/api/prof/seance', { headers: { 'X-Jeton-Prof': jetonProf } })
+        if (reponse.status === 401 && onRefuse) {
+          if (vivant) onRefuse()
+          return
+        }
         if (!reponse.ok) throw new Error('Accès refusé.')
         const donnees = await reponse.json()
         // Une réponse sans `eleves` mettait `undefined` dans l'état, et le
@@ -84,7 +94,7 @@ export function TableauDeBord({
       vivant = false
       clearInterval(minuteur)
     }
-  }, [codeProf])
+  }, [jetonProf, onRefuse])
 
   const titres = useMemo(
     () => (contenu ? reperes(contenu.exercices, contenu.notions) : new Map<string, Repere>()),

@@ -184,18 +184,34 @@ describe('App — tableau de bord professeur', () => {
   it("s'atteint sur /prof sans code eleve", async () => {
     // Le tableau de bord a sa propre porte : il doit rester joignable meme
     // quand personne n'est connecte cote eleve.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ existe: true }) })),
+    )
     history.pushState(null, '', '/prof')
     render(<App />)
-    expect(await screen.findByRole('heading', { name: /tableau de bord/i })).toBeInTheDocument()
-    expect(screen.getByLabelText(/code professeur/i)).toBeInTheDocument()
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /tableau de bord/i })).toBeInTheDocument()
   })
 
-  it('ne demande pas le code deux fois dans le meme onglet', async () => {
+  it("propose de créer le compte au premier lancement", async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ existe: false }) })),
+    )
+    history.pushState(null, '', '/prof')
+    render(<App />)
+    expect(
+      await screen.findByRole('heading', { name: 'Créer le compte professeur' }),
+    ).toBeInTheDocument()
+  })
+
+  it('ne demande pas le mot de passe deux fois dans le meme onglet', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => ({ ok: true, json: async () => ({ eleves: [] }) })),
     )
-    sessionStorage.setItem('dojo.code-prof', 'code-prof-test')
+    sessionStorage.setItem('dojo.jeton-prof', 'prof.4102444800.signature')
     history.pushState(null, '', '/prof')
     render(<App />)
     expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
@@ -207,20 +223,27 @@ describe('App — tableau de bord professeur', () => {
       'fetch',
       vi.fn(async () => ({ ok: true, json: async () => ({ pasCeQuOnAttend: true }) })),
     )
-    sessionStorage.setItem('dojo.code-prof', 'code-prof-test')
+    sessionStorage.setItem('dojo.jeton-prof', 'prof.4102444800.signature')
     history.pushState(null, '', '/prof')
     render(<App />)
     const alertes = await screen.findAllByRole('alert')
     expect(alertes.some((a) => /inattendue/i.test(a.textContent ?? ''))).toBe(true)
   })
 
-  it('affiche un refus quand le code professeur est faux', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 401, json: async () => ({}) })))
-    sessionStorage.setItem('dojo.code-prof', 'faux')
+  it('ramène à la porte quand le jeton professeur est refusé', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        url === '/api/prof/compte'
+          ? { ok: true, status: 200, json: async () => ({ existe: true }) }
+          : { ok: false, status: 401, json: async () => ({}) },
+      ),
+    )
+    sessionStorage.setItem('dojo.jeton-prof', 'prof.1.expire')
     history.pushState(null, '', '/prof')
     render(<App />)
-    const alertes = await screen.findAllByRole('alert')
-    expect(alertes.some((a) => /refus/i.test(a.textContent ?? ''))).toBe(true)
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+    expect(sessionStorage.getItem('dojo.jeton-prof')).toBeNull()
   })
 })
 

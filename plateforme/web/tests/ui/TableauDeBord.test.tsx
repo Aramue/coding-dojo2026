@@ -71,7 +71,7 @@ function poserLeReseau(eleves: unknown[], seance: { ok?: boolean } = {}) {
 
 async function rendre(eleves: unknown[]) {
   poserLeReseau(eleves)
-  render(<TableauDeBord codeProf="code-prof-test" />)
+  render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
   await screen.findByRole('heading', { name: /séance en cours/i })
 }
 
@@ -114,7 +114,7 @@ describe('TableauDeBord — ce que le professeur lit', () => {
         throw new Error('contenu indisponible')
       }),
     )
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     expect(await screen.findByText('s1-29')).toBeInTheDocument()
   })
 
@@ -223,7 +223,7 @@ describe('TableauDeBord — le pouls', () => {
 
   it('dit que la liaison est rompue plutot que de laisser croire au calme', async () => {
     poserLeReseau([], { ok: false })
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     expect(await screen.findByText('plus de données')).toBeInTheDocument()
   })
 })
@@ -304,7 +304,7 @@ describe("TableauDeBord — ouvrir l'exercice depuis le parcours", () => {
     // sans ce clic il ne peut pas relire ce que l'enonce demande.
     const onApercu = vi.fn()
     poserLeReseau([ligne({ prenom: 'Enzo', nom: 'Poupard', exercice_id: 's1-29' })])
-    render(<TableauDeBord codeProf="code-prof-test" onApercu={onApercu} />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" onApercu={onApercu} />)
 
     await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
     await userEvent.click(
@@ -317,7 +317,7 @@ describe("TableauDeBord — ouvrir l'exercice depuis le parcours", () => {
 
   it("n'offre pas le clic quand personne n'écoute", async () => {
     poserLeReseau([ligne({ prenom: 'Enzo', exercice_id: 's1-29' })])
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
     expect(
       screen.getByRole('button', { name: /L'âge qui refuse de s'additionner/ }),
@@ -404,7 +404,7 @@ describe("TableauDeBord — une séance à venir n'entre pas dans les comptes", 
         }
       }),
     )
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     // Trois obligatoires ouverts ; le quatrième appartient à la séance 2.
     expect(await screen.findByText(/médiane 1 \/ 3/)).toBeInTheDocument()
   })
