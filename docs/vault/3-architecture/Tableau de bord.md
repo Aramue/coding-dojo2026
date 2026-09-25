@@ -3,7 +3,7 @@ title: Tableau de bord
 tags:
   - architecture
   - professeur
-mis-a-jour: 2026-09-14
+mis-a-jour: 2026-09-25
 ---
 
 # Tableau de bord
@@ -227,10 +227,26 @@ Voir [[ADR-002 Identification par code d'agent]].
 
 ## La porte
 
-Le code professeur ne passe **jamais dans l'URL** : il finirait dans l'historique et dans les
-captures d'une projection en classe. Il se tape, et se garde le temps de l'onglet —
-`sessionStorage`, jamais `localStorage`, parce que la machine de la salle est partagée.
+Depuis le 25 septembre 2026, la porte n'attend plus un code écrit dans le `.env` : elle demande
+d'abord à l'API si le compte professeur existe ([[ADR-014 Le compte professeur se crée au premier lancement]]).
+
+| L'API répond | La porte montre |
+|---|---|
+| aucun compte | « Créer le compte professeur » : mot de passe, confirmation, 12 caractères au minimum |
+| un compte | « Tableau de bord » : le mot de passe, et la commande de secours s'il est perdu |
+| rien | « La plateforme ne répond pas », et un bouton « Réessayer » |
+
+Le mot de passe ne passe **jamais dans l'URL** : il finirait dans l'historique et dans les
+captures d'une projection en classe. Il ne se garde pas non plus : il s'échange une fois contre
+un **jeton de douze heures**, et c'est le jeton que l'onglet garde — `sessionStorage`, jamais
+`localStorage`, parce que la machine de la salle est partagée. Il accompagne chaque appel dans
+l'en-tête `X-Jeton-Prof`.
+
+> [!tip] Un jeton refusé ramène à la porte
+> Au bout de douze heures, ou si le compte a été recréé, `/prof/seance` répond 401. Le tableau de
+> bord se referme alors de lui-même et la porte redemande le mot de passe. Auparavant, un code
+> refusé laissait un « Accès refusé » en haut d'un tableau vide, sans dire quoi faire.
 
 ## Voir aussi
 
-[[Vue d'ensemble]] · [[Pièges et invariants]] · [[Bilan 2025-2026]] · [[ADR-004 Mode expert en bonus débloqué]]
+[[Vue d'ensemble]] · [[Pièges et invariants]] · [[Bilan 2025-2026]] · [[ADR-004 Mode expert en bonus débloqué]] · [[ADR-014 Le compte professeur se crée au premier lancement]]

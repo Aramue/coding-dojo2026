@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-14
+mis-a-jour: 2026-09-25
 ---
 
 # Pièges et invariants
@@ -150,12 +150,38 @@ Démontré en conditions réelles. Détail dans [[ADR-008 Validation serveur des
 
 ### Aucun secret n'a de valeur par défaut devinable
 
-`DOJO_SECRET` et `DOJO_CODE_PROF` : à défaut de configuration, un secret **aléatoire** est tiré et
-un avertissement est émis.
+La clé des jetons est **tirée au hasard** par l'instance, au premier besoin, et rangée dans la
+table `reglage`. Aucune valeur n'est écrite dans le dépôt, et depuis le 25 septembre 2026 aucune
+ne vient plus de l'environnement ([[ADR-014 Le compte professeur se crée au premier lancement]]).
 
 **Ce qui casse :** une valeur par défaut publiée dans le dépôt laisse forger un jeton pour
-n'importe quel élève, ou obtenir l'accès professeur. Un secret aléatoire échoue de façon visible
-et bénigne — les élèves se reconnectent. Une clé publiée échoue en silence et gravement.
+n'importe quel élève, ou obtenir l'accès professeur. Une clé publiée échoue en silence et
+gravement.
+
+### La clé se tire une seule fois, même sous deux requêtes simultanées
+
+`ecrire_reglage_neuf` n'écrit que si la clé manque, et la **clé primaire** tranche quand deux
+requêtes ont constaté l'absence en même temps : la seconde écriture échoue et relit la première.
+
+**Ce qui casse :** deux clés tirées au premier démarrage — un élève dont le jeton est signé avec la
+perdante est déconnecté au rafraîchissement suivant, sans raison visible.
+
+### Le compte professeur revient au premier qui ouvre `/prof`
+
+Tant qu'aucun compte n'existe, `POST /prof/compte` est ouvert à tous. C'est voulu : c'est ce qui
+permet de démarrer sans rien préparer.
+
+**Ce qui casse :** un serveur déployé et laissé sans compte. ==Créer le compte dans la minute qui
+suit chaque déploiement.== `python -m app.oublier_prof` le rend si quelqu'un l'a pris avant.
+
+### Le jeton professeur est signé avec l'empreinte du mot de passe
+
+La signature couvre `prof.<expiration>.<empreinte>`. Un compte effacé puis recréé change
+l'empreinte, et **toutes** les sessions ouvertes avec l'ancien mot de passe tombent — sans table
+de sessions à tenir.
+
+**Ce qui casse :** signer sans l'empreinte. Un mot de passe réinitialisé parce qu'il a fuité
+laisserait ouvertes, douze heures durant, les sessions de celui qui l'avait.
 
 ### Renommer une variable d'environnement casse le déploiement, pas les tests
 
@@ -163,8 +189,9 @@ Le 4 septembre 2026, `QG_SECRET`, `QG_CODE_PROF`, `QG_BDD` et `QG_DOMAINE` sont 
 `DOJO_*`. ==Aucun test n'aurait signalé un `.env` oublié== : le fichier est hors dépôt, et
 `docker compose` refuse alors de démarrer avec un message qui ne nomme que la nouvelle variable.
 
-**Ce qui casse :** un `.env` de production laissé sur les anciens noms. Le `.env` local a été mis
-à jour ; ==celui du serveur UNIGE doit l'être aussi avant le prochain déploiement==.
+Depuis le 25 septembre 2026, `DOJO_SECRET` et `DOJO_CODE_PROF` ne sont plus lues du tout, et
+`docker compose` n'exige plus aucune variable. Il n'en reste qu'une, `DOJO_DOMAINE`, facultative.
+Un `.env` de serveur qui les porte encore ne casse rien : les deux lignes sont simplement ignorées.
 
 ## Interface
 

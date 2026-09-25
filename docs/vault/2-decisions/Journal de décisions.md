@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-14
+mis-a-jour: 2026-09-25
 ---
 
 # Journal de décisions
@@ -51,6 +51,13 @@ Le 14 septembre 2026, en publiant la séance 2 avant que la séance 1 ait eu lie
 - **013** — [[ADR-013 Une séance s'ouvre à sa date]]
   Chaque chapitre porte sa date. Avant, il n'existe ni pour l'élève ni dans les comptes du
   professeur ; seul l'aperçu le montre, en le signalant.
+
+Le 25 septembre 2026, après une question simple restée sans réponse évidente — « c'est quoi le
+code professeur » :
+
+- **014** — [[ADR-014 Le compte professeur se crée au premier lancement]]
+  Plus aucun secret dans le `.env`. L'instance tire sa clé en base, et `/prof` propose de créer
+  le compte tant qu'il n'existe pas.
 
 ## Le fil conducteur
 

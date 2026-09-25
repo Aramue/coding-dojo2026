@@ -12,9 +12,9 @@ services:
     build:
       context: .
       dockerfile: deploiement/Dockerfile.api
-    environment:
-      DOJO_SECRET: ${DOJO_SECRET:?definir DOJO_SECRET dans .env}
-      DOJO_CODE_PROF: ${DOJO_CODE_PROF:?definir DOJO_CODE_PROF dans .env}
+    # Aucun secret ici : la cle des jetons est tiree au premier demarrage et
+    # rangee dans la base, avec le compte professeur, que l'on cree en ouvrant
+    # /prof. Tout vit dans le volume `donnees`. Voir ADR-014.
     volumes:
       - donnees:/app/donnees
     restart: unless-stopped
