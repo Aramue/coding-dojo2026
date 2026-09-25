@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-import hmac
-import os
-import secrets
-import warnings
 from datetime import datetime, timezone
 from typing import Annotated
 
@@ -14,32 +10,22 @@ from sqlmodel import Session, select
 
 from .bdd import obtenir_session
 from .modeles import Eleve, Tentative
+from .securite import jeton_prof_valide
 
 routeur = APIRouter(prefix="/prof")
-
-_code_fourni = os.environ.get("DOJO_CODE_PROF")
-if _code_fourni:
-    CODE_PROF = _code_fourni
-else:
-    # Meme raisonnement que pour DOJO_SECRET : un code par defaut devinable
-    # ("prof-dev") donnerait a n'importe quel eleve la progression de toute la
-    # classe. Un code aleatoire echoue de facon visible ; un code publie echoue
-    # en silence.
-    CODE_PROF = secrets.token_urlsafe(12)
-    warnings.warn(
-        "DOJO_CODE_PROF n'est pas defini : code professeur aleatoire pour cette "
-        f"execution -> {CODE_PROF}. Definis DOJO_CODE_PROF en production.",
-        stacklevel=2,
-    )
 
 ECHECS_POUR_BLOQUE = 3
 SECONDES_POUR_INACTIF = 600
 
 
-def verifier_prof(x_code_prof: Annotated[str | None, Header()] = None) -> None:
-    # compare_digest : comparaison a temps constant, comme pour les jetons eleve.
-    if not x_code_prof or not hmac.compare_digest(x_code_prof, CODE_PROF):
-        raise HTTPException(401, "Code professeur invalide")
+def verifier_prof(
+    session: Annotated[Session, Depends(obtenir_session)],
+    x_jeton_prof: Annotated[str | None, Header()] = None,
+) -> None:
+    # Le jeton rendu par /prof/connexion, jamais le mot de passe : il ne
+    # voyage qu'une fois. Voir ADR-014.
+    if not x_jeton_prof or not jeton_prof_valide(session, x_jeton_prof):
+        raise HTTPException(401, "Session professeur absente ou expiree")
 
 
 @routeur.get("/seance", dependencies=[Depends(verifier_prof)])

@@ -1,20 +1,13 @@
-import os
+import pytest
+from fastapi.testclient import TestClient
+from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel.pool import StaticPool
 
-# A positionner avant l'import de app.main : routes_prof.py lit DOJO_CODE_PROF au
-# chargement du module pour fixer CODE_PROF. Sans defaut ici, un code aleatoire
-# serait tire a chaque lancement et les tests ne pourraient pas le connaitre.
-# "prof-test" (9 caracteres) suffirait a distinguer la valeur de "prof-dev" mais
-# est trop court pour test_le_code_prof_par_defaut_n_est_pas_devinable, qui
-# exige au moins 12 caracteres : d'ou une valeur plus longue.
-os.environ.setdefault("DOJO_CODE_PROF", "code-prof-test")
+from app import bdd
+from app.main import application
 
-import pytest  # noqa: E402
-from fastapi.testclient import TestClient  # noqa: E402
-from sqlmodel import Session, SQLModel, create_engine  # noqa: E402
-from sqlmodel.pool import StaticPool  # noqa: E402
-
-from app import bdd  # noqa: E402
-from app.main import application  # noqa: E402
+# Le mot de passe du compte professeur que cree `entetes_prof`.
+MOT_DE_PASSE_TEST = "mot-de-passe-de-test"
 
 
 @pytest.fixture(name="client")
@@ -75,3 +68,10 @@ def fixture_session_test(client):
     session = next(generateur)
     yield session
     session.close()
+
+
+@pytest.fixture(name="entetes_prof")
+def fixture_entetes_prof(client):
+    """Cree le compte professeur, comme au premier lancement, et rend l'en-tete."""
+    reponse = client.post("/prof/compte", json={"mot_de_passe": MOT_DE_PASSE_TEST})
+    return {"X-Jeton-Prof": reponse.json()["jeton"]}
