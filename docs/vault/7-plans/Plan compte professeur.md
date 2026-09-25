@@ -3,7 +3,7 @@ title: Plan compte professeur
 tags:
   - plan
   - implementation
-statut: à exécuter
+statut: exécuté
 date: 2026-09-25
 ---
 
@@ -46,7 +46,7 @@ Décision de référence : [[ADR-014 Le compte professeur se crée au premier la
 **Interfaces:**
 - Produces: `Reglage(cle: str, valeur: str)` ; `lire_reglage(session, cle) -> str | None` ; `ecrire_reglage_neuf(session, cle, valeur) -> bool` ; `secret(session) -> bytes` ; `creer_jeton(session, code_acces) -> str` ; `lire_jeton(session, jeton) -> str | None` ; constantes `CLE_SECRET = "secret"`, `CLE_EMPREINTE = "empreinte_prof"`.
 
-- [ ] **Étape 1 : écrire les tests qui échouent** — `tests/test_securite.py`
+- [x] **Étape 1 : écrire les tests qui échouent** — `tests/test_securite.py`
 
 ```python
 """Les secrets de l'instance. Voir ADR-014."""
@@ -87,10 +87,10 @@ def test_la_cle_ne_vient_plus_de_l_environnement(monkeypatch, session_test):
     assert secret(session_test) != b"ceci-ne-doit-plus-servir"
 ```
 
-- [ ] **Étape 2 : les lancer** — `cd plateforme/api && python -m pytest tests/test_securite.py -q`
+- [x] **Étape 2 : les lancer** — `cd plateforme/api && python -m pytest tests/test_securite.py -q`
   Attendu : échec à l'import (`Reglage`, `ecrire_reglage_neuf` n'existent pas).
 
-- [ ] **Étape 3 : la table** — ajouter à la fin de `modeles.py` :
+- [x] **Étape 3 : la table** — ajouter à la fin de `modeles.py` :
 
 ```python
 class Reglage(SQLModel, table=True):
@@ -105,7 +105,7 @@ class Reglage(SQLModel, table=True):
     valeur: str
 ```
 
-- [ ] **Étape 4 : réécrire `securite.py`** (la partie jetons élèves ; le mot de passe arrive en tâche 2)
+- [x] **Étape 4 : réécrire `securite.py`** (la partie jetons élèves ; le mot de passe arrive en tâche 2)
 
 ```python
 """Les secrets de l'instance et les jetons de session.
@@ -178,7 +178,7 @@ def lire_jeton(session: Session, jeton: str) -> str | None:
     return code if hmac.compare_digest(signature, attendue) else None
 ```
 
-- [ ] **Étape 5 : `routes_eleve.py` passe la session** — `eleve_courant` reçoit la session et la transmet ; `ouvrir_session` appelle `creer_jeton(session, demande.code_acces)`.
+- [x] **Étape 5 : `routes_eleve.py` passe la session** — `eleve_courant` reçoit la session et la transmet ; `ouvrir_session` appelle `creer_jeton(session, demande.code_acces)`.
 
 ```python
 def eleve_courant(
@@ -193,9 +193,9 @@ def eleve_courant(
     return code
 ```
 
-- [ ] **Étape 6 : lancer toute la suite** — `python -m pytest -q`. Attendu : tout passe (les tests professeur utilisent encore `X-Code-Prof`, inchangé à ce stade).
+- [x] **Étape 6 : lancer toute la suite** — `python -m pytest -q`. Attendu : tout passe (les tests professeur utilisent encore `X-Code-Prof`, inchangé à ce stade).
 
-- [ ] **Étape 7 : commit** — `feat(api): la cle des jetons est tiree en base, plus lue dans l'environnement`
+- [x] **Étape 7 : commit** — `feat(api): la cle des jetons est tiree en base, plus lue dans l'environnement`
 
 ---
 
@@ -214,7 +214,7 @@ def eleve_courant(
 - Consumes: `lire_reglage`, `ecrire_reglage_neuf`, `secret`, `signer`, `CLE_EMPREINTE` (tâche 1).
 - Produces: `hacher(mot_de_passe) -> str` ; `verifier_mot_de_passe(mot_de_passe, empreinte) -> bool` ; `creer_jeton_prof(session, maintenant: float | None = None) -> str` ; `jeton_prof_valide(session, jeton, maintenant: float | None = None) -> bool` ; `DUREE_JETON_PROF_S = 12 * 3600` ; routes `GET /prof/compte -> {"existe": bool}`, `POST /prof/compte {mot_de_passe} -> 201 {"jeton"}` (409 si un compte existe), `POST /prof/connexion {mot_de_passe} -> {"jeton"}` (401 faux, 404 aucun compte) ; `verifier_prof` lit l'en-tête `X-Jeton-Prof` ; `oublier(session) -> bool`.
 
-- [ ] **Étape 1 : la fixture** — dans `conftest.py`, retirer le `os.environ.setdefault("DOJO_CODE_PROF", ...)` et son commentaire, et ajouter :
+- [x] **Étape 1 : la fixture** — dans `conftest.py`, retirer le `os.environ.setdefault("DOJO_CODE_PROF", ...)` et son commentaire, et ajouter :
 
 ```python
 MOT_DE_PASSE_TEST = "mot-de-passe-de-test"
@@ -227,7 +227,7 @@ def fixture_entetes_prof(client):
     return {"X-Jeton-Prof": reponse.json()["jeton"]}
 ```
 
-- [ ] **Étape 2 : les tests du compte** — `tests/test_compte.py`
+- [x] **Étape 2 : les tests du compte** — `tests/test_compte.py`
 
 ```python
 """Le compte professeur : premier lancement, connexion, oubli. Voir ADR-014."""
@@ -345,9 +345,9 @@ def test_oublier_laisse_les_eleves_en_place(client, session_test, inscrire, ente
     assert client.post("/session", json={"code_acces": "DOJO-K7M2"}).status_code == 200
 ```
 
-- [ ] **Étape 3 : les lancer** — `python -m pytest tests/test_compte.py -q`. Attendu : échec à l'import (`app.oublier_prof`, `hacher`…).
+- [x] **Étape 3 : les lancer** — `python -m pytest tests/test_compte.py -q`. Attendu : échec à l'import (`app.oublier_prof`, `hacher`…).
 
-- [ ] **Étape 4 : le mot de passe et le jeton professeur** — ajouter à `securite.py` (et `import time`) :
+- [x] **Étape 4 : le mot de passe et le jeton professeur** — ajouter à `securite.py` (et `import time`) :
 
 ```python
 # scrypt, fourni par hashlib : lent et gourmand en memoire expres. 2**14 et 8
@@ -401,7 +401,7 @@ def jeton_prof_valide(session: Session, jeton: str, maintenant: float | None = N
     return hmac.compare_digest(signature, attendue)
 ```
 
-- [ ] **Étape 5 : les routes** — `app/compte.py`
+- [x] **Étape 5 : les routes** — `app/compte.py`
 
 ```python
 """Le compte professeur : le creer au premier lancement, puis s'y connecter.
@@ -475,7 +475,7 @@ def se_connecter(
     return {"jeton": creer_jeton_prof(session)}
 ```
 
-- [ ] **Étape 6 : la commande de secours** — `app/oublier_prof.py`
+- [x] **Étape 6 : la commande de secours** — `app/oublier_prof.py`
 
 ```python
 """Efface le compte professeur. Les eleves et leur progression restent.
@@ -517,7 +517,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Étape 7 : la porte des routes professeur** — dans `routes_prof.py`, supprimer le bloc `CODE_PROF` et les imports `os`, `secrets`, `warnings`, `hmac`, puis :
+- [x] **Étape 7 : la porte des routes professeur** — dans `routes_prof.py`, supprimer le bloc `CODE_PROF` et les imports `os`, `secrets`, `warnings`, `hmac`, puis :
 
 ```python
 from .securite import jeton_prof_valide
@@ -533,11 +533,11 @@ def verifier_prof(
 
   Et dans `main.py` : `from .compte import routeur as routeur_compte` puis `application.include_router(routeur_compte)`.
 
-- [ ] **Étape 8 : les tests existants passent au jeton** — dans `test_eleves.py` et `test_routes_prof.py` : supprimer `ENTETES`, remplacer `headers=ENTETES` par `headers=entetes_prof`, ajouter `entetes_prof` aux paramètres de chaque test qui l'emploie ou qui appelle `creer(`, et donner au helper `creer` la signature `creer(client, entetes, prenom="Camille", **champs)` (appels : `creer(client, entetes_prof, ...)`). Remplacer `{"X-Code-Prof": "faux"}` par `{"X-Jeton-Prof": "prof.9999999999.faux"}`. Supprimer `test_le_code_prof_par_defaut_n_est_pas_devinable` : il n'y a plus de code par défaut.
+- [x] **Étape 8 : les tests existants passent au jeton** — dans `test_eleves.py` et `test_routes_prof.py` : supprimer `ENTETES`, remplacer `headers=ENTETES` par `headers=entetes_prof`, ajouter `entetes_prof` aux paramètres de chaque test qui l'emploie ou qui appelle `creer(`, et donner au helper `creer` la signature `creer(client, entetes, prenom="Camille", **champs)` (appels : `creer(client, entetes_prof, ...)`). Remplacer `{"X-Code-Prof": "faux"}` par `{"X-Jeton-Prof": "prof.9999999999.faux"}`. Supprimer `test_le_code_prof_par_defaut_n_est_pas_devinable` : il n'y a plus de code par défaut.
 
-- [ ] **Étape 9 : toute la suite** — `python -m pytest -q`. Attendu : tout passe.
+- [x] **Étape 9 : toute la suite** — `python -m pytest -q`. Attendu : tout passe.
 
-- [ ] **Étape 10 : commit** — `feat(api): le compte professeur se cree au premier lancement`
+- [x] **Étape 10 : commit** — `feat(api): le compte professeur se cree au premier lancement`
 
 ---
 
@@ -554,7 +554,7 @@ def verifier_prof(
 - Consumes: les routes de la tâche 2.
 - Produces: `compteExiste(): Promise<boolean>` ; `creerCompte(motDePasse): Promise<string>` ; `seConnecter(motDePasse): Promise<string>` ; `LONGUEUR_MIN = 12` ; `TableauDeBord({ jetonProf, onApercu?, onRefuse? })` ; `Classe({ jetonProf })`.
 
-- [ ] **Étape 1 : le client** — `src/prof/compte.ts`
+- [x] **Étape 1 : le client** — `src/prof/compte.ts`
 
 ```ts
 /**
@@ -602,20 +602,20 @@ export function seConnecter(motDePasse: string): Promise<string> {
 
   Tests `tests/prof/compte.test.ts` : un cas par statut (200 `existe` vrai/faux, réponse non booléenne, 500 ; pour `demanderJeton` : 201, 401, 404, 409, 422, 500, jeton absent), et le corps envoyé contient `mot_de_passe`.
 
-- [ ] **Étape 2 : la porte** — `EcranProf.tsx` : `CLE_PROF = 'dojo.jeton-prof'`. Sans jeton mémorisé, `compteExiste()` décide entre `FormulaireCreation` et `FormulaireConnexion` ; en échec, une carte « La plateforme ne répond pas » avec un bouton « Réessayer ». `fermer` est stable (`useCallback`) parce qu'il part dans les dépendances de l'effet du tableau de bord.
+- [x] **Étape 2 : la porte** — `EcranProf.tsx` : `CLE_PROF = 'dojo.jeton-prof'`. Sans jeton mémorisé, `compteExiste()` décide entre `FormulaireCreation` et `FormulaireConnexion` ; en échec, une carte « La plateforme ne répond pas » avec un bouton « Réessayer ». `fermer` est stable (`useCallback`) parce qu'il part dans les dépendances de l'effet du tableau de bord.
   - Création : titre « Créer le compte professeur », deux champs `type="password"` (`autoComplete="new-password"`), règle « 12 caractères au minimum », « Les deux mots de passe diffèrent » dès que la confirmation diverge, bouton « Créer le compte » désactivé tant que la règle ou l'égalité manque.
   - Connexion : titre « Tableau de bord », champ « Mot de passe » (`autoComplete="current-password"`), bouton « Ouvrir », erreur en `role="alert"`, aide « Mot de passe oublié ? » avec la commande `oublier_prof`.
   - L'onglet garde le **jeton**, jamais le mot de passe.
 
-- [ ] **Étape 3 : le refus ramène à la porte** — `TableauDeBord` : prop `onRefuse?: () => void` ; sur un 401 de `/api/prof/seance`, appeler `onRefuse` et ne rien afficher d'autre. `classe.ts` : sur 401, « Session professeur refusée ou expirée : reconnecte-toi. »
+- [x] **Étape 3 : le refus ramène à la porte** — `TableauDeBord` : prop `onRefuse?: () => void` ; sur un 401 de `/api/prof/seance`, appeler `onRefuse` et ne rien afficher d'autre. `classe.ts` : sur 401, « Session professeur refusée ou expirée : reconnecte-toi. »
 
-- [ ] **Étape 4 : les tests** — `EcranProf.test.tsx` réécrit : création proposée sans compte ; règle des 12 caractères ; confirmation différente ; création qui ouvre le tableau et mémorise le jeton ; connexion avec le bon mot de passe ; « Mot de passe incorrect » ; réouverture sur jeton mémorisé sans appeler `/compte` ; fermeture qui efface le jeton ; 401 du tableau qui ramène à la porte ; plateforme injoignable puis « Réessayer » ; stockage refusé en écriture et en lecture. `sessionStorage` ne contient jamais le mot de passe. `TableauDeBord`, `Classe`, `app` : renommer la prop et l'en-tête, adapter les tests de `/prof`.
+- [x] **Étape 4 : les tests** — `EcranProf.test.tsx` réécrit : création proposée sans compte ; règle des 12 caractères ; confirmation différente ; création qui ouvre le tableau et mémorise le jeton ; connexion avec le bon mot de passe ; « Mot de passe incorrect » ; réouverture sur jeton mémorisé sans appeler `/compte` ; fermeture qui efface le jeton ; 401 du tableau qui ramène à la porte ; plateforme injoignable puis « Réessayer » ; stockage refusé en écriture et en lecture. `sessionStorage` ne contient jamais le mot de passe. `TableauDeBord`, `Classe`, `app` : renommer la prop et l'en-tête, adapter les tests de `/prof`.
 
-- [ ] **Étape 5 : vérifier** — `pnpm exec tsc --noEmit`, `pnpm exec eslint .`, `pnpm exec vitest run --coverage`. Attendu : tout passe, seuils de couverture tenus.
+- [x] **Étape 5 : vérifier** — `pnpm exec tsc --noEmit`, `pnpm exec eslint .`, `pnpm exec vitest run --coverage`. Attendu : tout passe, seuils de couverture tenus.
 
-- [ ] **Étape 6 : vérifier dans le navigateur** — serveur de développement, `fetch` simulé pour `/api/prof/compte` : capture de l'écran de création et de l'écran de connexion. Aucun mot de passe tapé.
+- [x] **Étape 6 : vérifier dans le navigateur** — serveur de développement, `fetch` simulé pour `/api/prof/compte` : capture de l'écran de création et de l'écran de connexion. Aucun mot de passe tapé.
 
-- [ ] **Étape 7 : commit** — `feat(web): /prof propose de creer le compte professeur au premier lancement`
+- [x] **Étape 7 : commit** — `feat(web): /prof propose de creer le compte professeur au premier lancement`
 
 ---
 
@@ -628,19 +628,19 @@ export function seConnecter(motDePasse: string): Promise<string> {
 - Modify: `docs/vault/3-architecture/Déploiement UNIGE.md`, `Pièges et invariants.md`, `Tableau de bord.md`
 - Modify: `docs/vault/2-decisions/Journal de décisions.md`, `docs/vault/Accueil.md`
 
-- [ ] **Étape 1** — `docker-compose.yml` : supprimer `environment:` et ses deux lignes sous `api`, avec un commentaire qui renvoie à ADR-014.
-- [ ] **Étape 2** — `.env.example` : un seul réglage, `DOJO_DOMAINE=localhost`, facultatif, et une ligne qui dit qu'aucun secret ne s'écrit plus ici.
-- [ ] **Étape 3** — `README.md` : « Avant un déploiement » devient « Premier lancement » : `docker compose up -d --build`, puis ouvrir `/prof` **tout de suite** et créer le compte ; la commande `oublier_prof`.
-- [ ] **Étape 4** — coffre : ADR-014 au journal ; Déploiement UNIGE (section « Premier lancement », case « Créer le compte professeur juste après le déploiement ») ; Pièges et invariants (la clé tirée en base, le premier arrivé, le jeton signé avec l'empreinte) ; Tableau de bord (la porte) ; Accueil (état et nombres de tests).
-- [ ] **Étape 5** — `docker compose config` sans `.env` : aucune variable exigée.
-- [ ] **Étape 6 : commit** — `docs: plus aucun secret dans le .env, le compte professeur se cree dans l'application`
+- [x] **Étape 1** — `docker-compose.yml` : supprimer `environment:` et ses deux lignes sous `api`, avec un commentaire qui renvoie à ADR-014.
+- [x] **Étape 2** — `.env.example` : un seul réglage, `DOJO_DOMAINE=localhost`, facultatif, et une ligne qui dit qu'aucun secret ne s'écrit plus ici.
+- [x] **Étape 3** — `README.md` : « Avant un déploiement » devient « Premier lancement » : `docker compose up -d --build`, puis ouvrir `/prof` **tout de suite** et créer le compte ; la commande `oublier_prof`.
+- [x] **Étape 4** — coffre : ADR-014 au journal ; Déploiement UNIGE (section « Premier lancement », case « Créer le compte professeur juste après le déploiement ») ; Pièges et invariants (la clé tirée en base, le premier arrivé, le jeton signé avec l'empreinte) ; Tableau de bord (la porte) ; Accueil (état et nombres de tests).
+- [x] **Étape 5** — `docker compose config` sans `.env` : aucune variable exigée.
+- [x] **Étape 6 : commit** — `docs: plus aucun secret dans le .env, le compte professeur se cree dans l'application`
 
 ---
 
 ### Tâche 5 : remettre en route sur cet ordinateur
 
-- [ ] **Étape 1** — sauvegarder la base du conteneur (`docker compose cp api:/app/donnees/dojo.db` vers le scratchpad) avant toute reconstruction.
-- [ ] **Étape 2** — retirer `DOJO_SECRET` et `DOJO_CODE_PROF` du `.env` local, sans en afficher les valeurs.
-- [ ] **Étape 3** — `docker compose up -d --build` depuis la racine.
-- [ ] **Étape 4** — vérifier : `GET http://localhost/api/prof/compte` rend `{"existe": false}` ; `/contenu/exercices.json` contient 112 exercices ; la base garde ses 4 élèves.
-- [ ] **Étape 5** — ouvrir `http://localhost/prof` : l'écran de création s'affiche. Le professeur crée lui-même le compte.
+- [x] **Étape 1** — sauvegarder la base du conteneur (`docker compose cp api:/app/donnees/dojo.db` vers le scratchpad) avant toute reconstruction.
+- [x] **Étape 2** — retirer `DOJO_SECRET` et `DOJO_CODE_PROF` du `.env` local, sans en afficher les valeurs.
+- [x] **Étape 3** — `docker compose up -d --build` depuis la racine.
+- [x] **Étape 4** — vérifier : `GET http://localhost/api/prof/compte` rend `{"existe": false}` ; `/contenu/exercices.json` contient 112 exercices ; la base garde ses 4 élèves.
+- [x] **Étape 5** — ouvrir `http://localhost/prof` : l'écran de création s'affiche. Le professeur crée lui-même le compte.
