@@ -58,6 +58,8 @@ export class FluxQuiz<E extends Photographie> {
   private tentatives = 0
   private enCours = false
   private encore = false
+  /** L'envoi de la dernière action dont on a appliqué la réponse. */
+  private ecritureA = -Infinity
   private minuteurReleve: ReturnType<typeof setTimeout> | undefined
   private minuteurEcheance: ReturnType<typeof setTimeout> | undefined
   private minuteurReconnexion: ReturnType<typeof setTimeout> | undefined
@@ -110,7 +112,12 @@ export class FluxQuiz<E extends Photographie> {
         try {
           const etat = await this.options.lire()
           if (this.arrete) return
-          this.recevoir(etat, envoiA)
+          // Partie avant la dernière action, cette lecture peut rapporter
+          // l'état d'avant — le catalogue une seconde après la création de la
+          // partie. On l'écarte : la réponse de l'action est au moins aussi
+          // fraîche, et la relève suivante suivra.
+          if (envoiA <= this.ecritureA) continue
+          this.appliquer(etat, envoiA)
         } catch (erreur) {
           if (this.arrete) return
           this.options.onErreur(
@@ -125,10 +132,15 @@ export class FluxQuiz<E extends Photographie> {
   }
 
   /**
-   * Prend une photographie venue d'ailleurs — la réponse d'un POST, qui rend
-   * l'état à jour — comme si elle avait été relue.
+   * Prend la photographie rendue par une action — un POST rend l'état à jour —
+   * comme si elle avait été relue. `envoiA` : l'instant où l'action est partie.
    */
   recevoir(etat: E, envoiA: number): void {
+    this.ecritureA = Math.max(this.ecritureA, envoiA)
+    this.appliquer(etat, envoiA)
+  }
+
+  private appliquer(etat: E, envoiA: number): void {
     const ecartMs = ecart(etat.maintenant, envoiA, Date.now())
     this.options.onErreur(null)
     this.options.onEtat(etat, ecartMs)

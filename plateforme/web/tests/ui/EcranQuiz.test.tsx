@@ -14,7 +14,13 @@ async function monter() {
   fetchFactice = vi.fn(async (url: string, options?: RequestInit) => {
     if (url.endsWith('/session')) return reponse({ jeton: 'DOJO-K7M2.sig', code_acces: 'DOJO-K7M2' })
     if (url.endsWith('/quiz/etat')) return reponse(etat)
-    if (options?.method === 'POST') return apresAction as ReturnType<typeof reponse>
+    if (options?.method === 'POST') {
+      // Comme le serveur : une action acceptée change ce que la relecture rend.
+      const action = apresAction as ReturnType<typeof reponse>
+      const corps = await action.json()
+      if (action.ok) etat = corps as typeof etat
+      return reponse(corps, action.status)
+    }
     throw new Error(`appel inattendu : ${url}`)
   })
   const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)

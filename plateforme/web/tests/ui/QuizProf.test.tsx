@@ -22,7 +22,13 @@ function monter() {
     if (url === '/api/prof/eleves') return reponse({ eleves: INSCRITS })
     if (url === '/api/prof/quiz') return reponse({ quiz: catalogue })
     if (url === '/api/prof/quiz/partie') return reponse(etat)
-    if (options?.method === 'POST') return apresAction
+    if (options?.method === 'POST') {
+      // Comme le serveur : une action acceptée change ce que la relecture rend.
+      const action = apresAction as ReturnType<typeof reponse>
+      const corps = await action.json()
+      if (action.ok) etat = corps as typeof etat
+      return reponse(corps, action.status)
+    }
     throw new Error(`appel inattendu : ${url}`)
   })
   vi.stubGlobal('fetch', fetchFactice)

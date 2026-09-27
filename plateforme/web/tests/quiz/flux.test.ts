@@ -277,6 +277,28 @@ describe('FluxQuiz', () => {
     flux.arreter()
   })
 
+  it('écarte une lecture partie avant une action, qui rapporterait l état d avant', async () => {
+    let liberer: ((etat: Photographie) => void) | undefined
+    const lire = vi
+      .fn()
+      .mockResolvedValueOnce(photo({ phase: 'attente' }))
+      .mockImplementationOnce(() => new Promise((ok) => (liberer = ok)))
+      .mockResolvedValue(photo({ phase: 'question' }))
+    const { flux, onEtat } = monter({ lire })
+    flux.demarrer()
+    await vider()
+
+    // Une relecture part, puis l'élève agit : la réponse de l'action arrive d'abord.
+    void flux.relire()
+    vi.advanceTimersByTime(10)
+    flux.recevoir(photo({ phase: 'question' }), Date.now())
+    liberer!(photo({ phase: 'attente' }))
+    await vider()
+
+    expect(onEtat.mock.calls.map(([etat]) => etat.phase)).toEqual(['attente', 'question'])
+    flux.arreter()
+  })
+
   it('arrêté, ne lit plus, ferme la sonnette et ne la rebranche pas', async () => {
     const { flux, sonnettes, lire, onEtat } = monter()
     flux.demarrer()
