@@ -9,9 +9,11 @@ import {
 import { grouper, grouperParChapitre, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
 import { naviguer, useRoute, versChemin, type Destination } from './routage'
+import { BandeauQuiz } from './ui/BandeauQuiz'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
 import { EcranProf } from './ui/EcranProf'
+import { EcranQuiz } from './ui/EcranQuiz'
 import { Menu } from './ui/Menu'
 import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
@@ -140,6 +142,7 @@ export function App() {
   return (
     <div className="appli">
       <Entete identite={identite} groupes={groupes} />
+      <BandeauQuiz client={client} masque={destination.vue === 'quiz'} />
       <Menu chapitres={chapitres} destination={destination} />
       {alerte && (
         <p role="alert" className="alerte">
@@ -193,6 +196,8 @@ function Vue({
   onReussi,
   onAlerte,
 }: ProprietesVue) {
+  if (destination.vue === 'quiz') return <EcranQuiz client={client} />
+
   const groupe =
     'notion' in destination ? groupes.find((g) => g.id === destination.notion) : undefined
 

@@ -15,11 +15,16 @@
 .appli {
   min-height: 100vh;
   display: grid;
+  /*
+   * La rangée `bandeau` est vide la plupart du temps : une rangée `auto` sans
+   * contenu ne mesure rien. Elle ne se remplit que pendant un quiz.
+   */
   grid-template-areas:
     'entete entete'
+    'bandeau bandeau'
     'menu contenu';
   grid-template-columns: 272px minmax(0, 1fr);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   background: var(--ground);
 }
 
@@ -29,6 +34,7 @@
     'entete'
     'contenu';
   grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
 }
 
 .appli > main {
@@ -45,6 +51,7 @@
   .appli {
     grid-template-areas:
       'entete'
+      'bandeau'
       'menu'
       'contenu';
     /*
@@ -53,8 +60,38 @@
      * 12 rem) faisait alors deborder toute la page de 17 px vers la droite.
      */
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
   }
+}
+
+/* ---------- Bandeau du quiz ---------- */
+
+.bandeau-quiz {
+  grid-area: bandeau;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  padding: var(--e-1) var(--e-3);
+  background: var(--d-bg);
+  color: var(--d-fg);
+  font-size: var(--t-2);
+  animation: bandeau-arrivee 220ms ease-out;
+}
+
+.bandeau-quiz__texte span {
+  color: var(--d-label);
+}
+
+.bandeau-quiz .bouton {
+  min-height: 2.25rem;
+  padding-block: 0.35rem;
+}
+
+@keyframes bandeau-arrivee {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ---------- En-tête ---------- */

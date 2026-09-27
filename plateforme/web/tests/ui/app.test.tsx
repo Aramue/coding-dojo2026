@@ -64,6 +64,7 @@ function poserLeReseau() {
         if (url.includes('lecons')) return []
         if (url.includes('parcours')) return { reussis: [] }
         if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+        if (url.includes('quiz/etat')) return { partie: null, maintenant: new Date().toISOString() }
         return EXERCICES
       },
     })),
@@ -143,6 +144,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+        if (url.includes('quiz/etat')) return { partie: null, maintenant: new Date().toISOString() }
           return EXERCICES
         },
       })),
@@ -167,6 +169,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+        if (url.includes('quiz/etat')) return { partie: null, maintenant: new Date().toISOString() }
           return EXERCICES
         },
       })),
@@ -181,6 +184,15 @@ describe('App — le menu suit la progression', () => {
 })
 
 describe('App — tableau de bord professeur', () => {
+  it('ouvre la partie de quiz sur /quiz, dans la coquille de l eleve', async () => {
+    vi.stubGlobal('WebSocket', class { close() {} })
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/quiz')
+    render(<App />)
+    expect(await screen.findByRole('heading', { name: 'Aucun quiz en cours' })).toBeInTheDocument()
+    expect(screen.getByRole('navigation')).toBeInTheDocument()
+  })
+
   it("ouvre l'ecran projete du quiz sur /prof/quiz, derriere la porte du professeur", async () => {
     history.pushState(null, '', '/prof/quiz')
     render(<App />)
