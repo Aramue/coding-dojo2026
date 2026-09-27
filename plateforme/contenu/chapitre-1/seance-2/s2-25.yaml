@@ -1,0 +1,49 @@
+id: s2-25
+concept: logique
+notion: combiner
+seance: 2
+niveau: normal
+type: debug
+titre: Le contrôle qui laisse passer
+obligatoire: true
+enonce: |
+  Pour s'inscrire au stage d'escalade, il faut avoir au moins 12 ans ET une
+  autorisation signée. Ce programme a été essayé avec un élève de 14 ans qui a
+  son autorisation, puis avec une élève de 10 ans qui ne l'a pas : il a eu
+  raison les deux fois.
+
+  Pourtant, il se trompe. Trouve le cas qu'il laisse passer, puis répare-le.
+depart: |
+  age = int(input("Âge : "))
+  autorisation = input("Autorisation signée (oui ou non) : ")
+  inscrit = age >= 12 or autorisation == "oui"
+  print("Inscription :", inscrit)
+indices:
+  - Imagine un élève de 15 ans sans autorisation. Que répond le programme ? Et que devrait-il répondre ?
+  - or se contente d'une seule condition vraie. Pour ce stage, il faut que les deux le soient.
+tests:
+  - type: sortie
+    entrees: ["14", "oui"]
+    attendu: |-
+      Âge : 14
+      Autorisation signée (oui ou non) : oui
+      Inscription : True
+  - type: sortie
+    entrees: ["10", "non"]
+    attendu: |-
+      Âge : 10
+      Autorisation signée (oui ou non) : non
+      Inscription : False
+  # Le seul des trois essais qui revele le or : c'est la lecon de l'exercice,
+  # un programme juste sur deux cas favorables n'est pas un programme juste.
+  - type: sortie
+    entrees: ["15", "non"]
+    attendu: |-
+      Âge : 15
+      Autorisation signée (oui ou non) : non
+      Inscription : False
+solution: |
+  age = int(input("Âge : "))
+  autorisation = input("Autorisation signée (oui ou non) : ")
+  inscrit = age >= 12 and autorisation == "oui"
+  print("Inscription :", inscrit)

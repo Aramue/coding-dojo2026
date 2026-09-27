@@ -1,0 +1,33 @@
+id: s2-15
+concept: comparateurs
+notion: comparer
+seance: 2
+niveau: normal
+type: predire
+titre: Les six comparateurs
+obligatoire: true
+enonce: |
+  Deux nombres, six comparaisons, deux par ligne. Chaque ligne affiche deux
+  réponses, séparées par un espace.
+depart: |
+  x = 7
+  y = 12
+  print(x == y, x != y)
+  print(x < y, x > y)
+  print(x <= y, x >= y)
+indices:
+  - "Traite les comparaisons une par une, en remplaçant x par 7 et y par 12. La première demande : 7 est-il égal à 12 ?"
+  - "!= veut dire « différent de ». <= veut dire « plus petit ou égal », >= « plus grand ou égal » : 7 est plus petit que 12, donc il est aussi plus petit ou égal."
+tests:
+  - type: qcm
+    options:
+      - "False True\nTrue False\nTrue False"
+      - "True False\nFalse True\nFalse True"
+      - "False True\nTrue False\nFalse True"
+    bonne_reponse: 0
+solution: |
+  x = 7
+  y = 12
+  print(x == y, x != y)
+  print(x < y, x > y)
+  print(x <= y, x >= y)

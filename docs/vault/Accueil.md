@@ -3,7 +3,7 @@ title: Accueil
 tags:
   - moc
 statut: en-conception
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-25
 ---
 
 # Coding Dojo 2026-2027
@@ -43,18 +43,23 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Retrait de la fiction — 25 énoncés | ✅ livré |
 | Retrait de la fiction — vault | ✅ livré |
 | Tableau de bord professeur atteignable | ✅ livré — sur `/prof` |
+| Contenu du chapitre 1 | ✅ **écrit** — 112 exercices et 14 leçons, les trois séances, branche `contenu-seance-2` |
+| Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
+| Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Revue finale de branche | ⬜ à faire |
 
 ## Ce qui tourne aujourd'hui
 
-Le code vit dans `plateforme/`, sur la branche `palier-1`.
+Le code vit dans `plateforme/`, sur la branche `palier-1` ; le contenu des séances 2 et 3, et ce
+qu'il a demandé à la plateforme, sur `contenu-seance-2`, qui en part ; le compte professeur sur
+`compte-professeur`, qui part de `contenu-seance-2`.
 
 | Partie | État |
 |---|---|
-| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **168 tests**, couverture 82 % |
-| `api/` | FastAPI + SQLite, **30 tests** |
-| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **81 tests**, couverture 89 % |
-| `contenu/` | **34 exercices** de la séance 1 — 25 obligatoires, 4 renforts, 5 experts — et **4 leçons** |
+| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **412 tests**, couverture 93 % |
+| `api/` | FastAPI + SQLite, **94 tests** |
+| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **106 tests**, couverture 91 % |
+| `contenu/` | **112 exercices** des trois séances — 75 obligatoires, 14 renforts, 23 experts — et **14 leçons** |
 | `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
 
 Un parcours complet a été joué dans un navigateur : connexion par code d'accès, résolution des
@@ -81,10 +86,10 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 ## Cartes du coffre
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
-- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]]
+- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Tableau de bord]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
 - **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]]
-- **Plans** — [[Plan palier 1]] · [[Plan interface]]
+- **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]]

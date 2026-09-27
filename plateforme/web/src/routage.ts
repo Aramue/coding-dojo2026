@@ -11,7 +11,7 @@ export type Destination =
 
 // Le routeur valide la FORME d'un identifiant de notion, jamais son
 // vocabulaire : la liste des notions vit dans le contenu publié
-// (seance-1-notions.json), et la recopier ici la ferait diverger.
+// (notions.json), et la recopier ici la ferait diverger.
 const MOTIF_NOTION = /^[a-z]{2,20}$/
 const NUMERO_MAX = 99
 

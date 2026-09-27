@@ -1,0 +1,71 @@
+id: s3-35
+concept: while
+notion: tantque
+seance: 3
+niveau: expert
+type: ecrire
+titre: Trois essais, pas un de plus
+obligatoire: false
+enonce: |
+  Défi : un casier s'ouvre avec le mot de passe Piscine26, et laisse trois
+  essais. Écris un programme qui redemande le mot de passe tant qu'il est faux
+  et qu'il reste des essais, puis affiche le résultat.
+
+  Avec un mauvais mot de passe, puis le bon, l'écran doit montrer :
+
+  Mot de passe : piscine
+  Mot de passe faux.
+  Mot de passe : Piscine26
+  Casier ouvert.
+
+  Après trois mauvais essais, le programme affiche Casier bloqué.
+depart: ""
+indices:
+  - Il faut deux variables avant la boucle, le nombre d'essais et le dernier mot de passe tapé. La boucle continue tant que le mot de passe est faux ET qu'il reste des essais.
+  - Une fois la boucle finie, un if regarde pourquoi elle s'est arrêtée. Le mot de passe est-il le bon, ou les essais sont-ils épuisés ?
+tests:
+  - type: sortie
+    entrees: ["piscine", "Piscine26"]
+    attendu: |-
+      Mot de passe : piscine
+      Mot de passe faux.
+      Mot de passe : Piscine26
+      Casier ouvert.
+  - type: sortie
+    entrees: ["Piscine26"]
+    attendu: |-
+      Mot de passe : Piscine26
+      Casier ouvert.
+  - type: sortie
+    entrees: ["un", "deux", "Piscine26"]
+    attendu: |-
+      Mot de passe : un
+      Mot de passe faux.
+      Mot de passe : deux
+      Mot de passe faux.
+      Mot de passe : Piscine26
+      Casier ouvert.
+  - type: sortie
+    entrees: ["un", "deux", "trois"]
+    attendu: |-
+      Mot de passe : un
+      Mot de passe faux.
+      Mot de passe : deux
+      Mot de passe faux.
+      Mot de passe : trois
+      Mot de passe faux.
+      Casier bloqué.
+  - type: interdit
+    motif: piscine
+solution: |
+  essais = 0
+  mot_de_passe = ""
+  while mot_de_passe != "Piscine26" and essais < 3:
+      mot_de_passe = input("Mot de passe : ")
+      essais = essais + 1
+      if mot_de_passe != "Piscine26":
+          print("Mot de passe faux.")
+  if mot_de_passe == "Piscine26":
+      print("Casier ouvert.")
+  else:
+      print("Casier bloqué.")

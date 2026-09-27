@@ -1,0 +1,27 @@
+id: s2-11
+concept: modulo
+notion: calculer
+seance: 2
+niveau: expert
+type: predire
+titre: Le reste, hors des sentiers battus
+obligatoire: false
+enonce: |
+  Pour les curieux : le reste d'une division marche aussi avec des nombres
+  négatifs et des nombres à virgule, mais pas toujours comme on l'imagine.
+depart: |
+  print(-7 % 3)
+  print(7.5 % 2)
+indices:
+  - En Python, le reste d'une division par 3 est toujours compris entre 0 et 2, même quand le nombre de départ est négatif.
+  - Pour -7, cherche le multiple de 3 juste en dessous, c'est -9. Il faut ajouter 2 pour arriver à -7. Pour 7.5, enlève 2 autant de fois que possible.
+tests:
+  - type: qcm
+    options:
+      - "2\n1.5"
+      - "-1\n1.5"
+      - "1\n1"
+    bonne_reponse: 0
+solution: |
+  print(-7 % 3)
+  print(7.5 % 2)

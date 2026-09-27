@@ -3,7 +3,7 @@ title: Déploiement UNIGE
 tags:
   - architecture
   - exploitation
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-25
 ---
 
 # Déploiement UNIGE
@@ -52,8 +52,32 @@ Tout est servi depuis la machine UNIGE :
 Le fichier SQLite est copié chaque nuit et avant chaque déploiement. À 24 élèves, le volume est
 négligeable ; l'enjeu est de ne pas perdre la progression d'une séance.
 
+## Premier lancement — 25 septembre 2026
+
+Plus aucun secret à préparer ([[ADR-014 Le compte professeur se crée au premier lancement]]).
+`docker compose up -d --build` suffit, sur un poste neuf comme sur le serveur.
+
+1. **La clé des jetons** est tirée par l'API au premier besoin et rangée dans la table `reglage`
+   de la base SQLite, donc dans le volume `donnees`.
+2. **Le compte professeur** se crée en ouvrant `/prof` : tant qu'aucun compte n'existe, la page
+   propose de le créer. L'empreinte scrypt du mot de passe rejoint la clé dans `reglage`.
+
+> [!danger] Le compte revient au premier qui ouvre `/prof`
+> Sur un serveur joignable, ==ouvrir `/prof` et créer le compte dans la minute qui suit le
+> déploiement==. Si quelqu'un l'a pris avant, `oublier_prof` le rend : il faut un accès au
+> serveur, que l'intrus n'a pas.
+
+> [!tip] Mot de passe oublié
+> `docker compose exec api python -m app.oublier_prof` efface le compte ; `/prof` propose de
+> nouveau de le créer. Les élèves, leurs codes et leur progression ne bougent pas.
+
+> [!note] La sauvegarde nocturne emporte aussi le compte
+> La clé, l'empreinte et la progression vivent dans le même fichier. Restaurer la base restaure
+> les trois ; la perdre fait perdre les trois. Rien d'autre à sauvegarder.
+
 ## Points à vérifier avant la séance 1
 
+- [ ] Compte professeur créé sur `/prof` juste après le premier déploiement
 - [ ] Nom de domaine et certificat TLS en place
 - [ ] Cache long sur Pyodide et les polices, pour absorber les 24 chargements simultanés
 - [ ] Codes d'agent générés et imprimés — voir [[ADR-002 Identification par code d'agent]]
@@ -78,4 +102,6 @@ contenait le fichier, et ils s'appelaient `deploiement-*`.
 > arrivait cassée et `tsc` ne trouvait plus ses types. ==Le build dépendait de l'état du poste== :
 > il passait chez l'un, échouait chez l'autre.
 
-Les secrets vivent dans `.env` à la racine, hors dépôt, documenté par `.env.example`.
+Les secrets vivaient alors dans `.env` à la racine, hors dépôt, documenté par `.env.example`.
+Depuis le 25 septembre 2026, le `.env` ne porte plus que `DOJO_DOMAINE`, et il est facultatif —
+voir « Premier lancement » ci-dessus.

@@ -1,0 +1,31 @@
+id: s2-08
+concept: arithmetique
+notion: calculer
+seance: 2
+niveau: normal
+type: predire
+titre: Priorité et parenthèses
+obligatoire: true
+enonce: |
+  Comme en mathématiques, Python fait les multiplications avant les additions,
+  sauf si des parenthèses changent l'ordre.
+  `**` calcule une puissance : `3 ** 2` vaut 3 fois 3. La puissance passe même
+  avant la multiplication.
+depart: |
+  print(2 + 3 * 4)
+  print((2 + 3) * 4)
+  print(2 * 3 ** 2)
+indices:
+  - Traite chaque ligne séparément. Sur la première, quelle opération Python fait-il en premier ?
+  - L'ordre est le suivant. D'abord les parenthèses, puis la puissance, puis la multiplication et la division, et enfin l'addition et la soustraction. Sur la dernière ligne, 3 ** 2 est calculé avant d'être multiplié par 2.
+tests:
+  - type: qcm
+    options:
+      - "14\n20\n18"
+      - "20\n20\n36"
+      - "14\n20\n36"
+    bonne_reponse: 0
+solution: |
+  print(2 + 3 * 4)
+  print((2 + 3) * 4)
+  print(2 * 3 ** 2)

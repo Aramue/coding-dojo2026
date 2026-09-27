@@ -97,6 +97,31 @@ describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
     }
   })
 
+  it("explique qu'on ne parcourt pas un nombre, et nomme str()", () => {
+    // Rencontree expres en s3-14 : for sur un nombre entier.
+    const m = traduireErreur(erreur('TypeError', "'int' object is not iterable"))
+    expect(m.titre).toMatch(/nombre entier/)
+    expect(m.explication).toMatch(/caractère par caractère/)
+    expect(m.piste).toContain('str(')
+  })
+
+  it("nomme tel quel un type qu'un debutant n'a pas appris", () => {
+    const m = traduireErreur(erreur('TypeError', "'NoneType' object is not iterable"))
+    expect(m.titre).toContain('NoneType')
+  })
+
+  it('reconnait le = ecrit a la place de ==', () => {
+    // Python le devine depuis 3.10, mais en anglais. C'est l'erreur la plus
+    // frequente du debutant qui compare : s2-14, s2-19, puis chaque if.
+    const m = traduireErreur(
+      erreur('SyntaxError', "invalid syntax. Maybe you meant '==' or ':=' instead of '='?"),
+    )
+    expect(m.titre).toMatch(/comparaison/i)
+    expect(m.piste).toContain('==')
+    // La piste nomme le signe ; elle ne recrit pas la ligne de l'eleve.
+    expect(m.piste).not.toMatch(/\w+\s*==\s*\w+/)
+  })
+
   it('rappelle que la premiere position est 0 sur un IndexError', () => {
     const m = traduireErreur(erreur('IndexError', 'string index out of range'))
     expect(m.explication).toContain('0')
@@ -126,6 +151,8 @@ describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
     const cas = [
       erreur('NameError', "name 'x' is not defined"),
       erreur('TypeError', 'can only concatenate str (not "int") to str'),
+      erreur('SyntaxError', "invalid syntax. Maybe you meant '==' or ':=' instead of '='?"),
+      erreur('TypeError', "'int' object is not iterable"),
       erreur('ZeroDivisionError', 'division by zero'),
       erreur('IndexError', 'string index out of range'),
       erreur('AttributeError', "'int' object has no attribute 'upper'"),
@@ -135,7 +162,7 @@ describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
     for (const e of cas) {
       const m = traduireErreur(e)
       expect(`${m.titre} ${m.explication}`).not.toMatch(
-        /is not defined|unsupported|invalid literal|out of range|division by zero|no attribute/,
+        /is not defined|unsupported|invalid literal|invalid syntax|meant|not iterable|out of range|division by zero|no attribute/,
       )
     }
   })

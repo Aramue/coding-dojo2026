@@ -1,0 +1,34 @@
+id: s2-14
+concept: booleens
+notion: comparer
+seance: 2
+niveau: normal
+type: debug
+titre: "= range, == compare"
+obligatoire: true
+enonce: |
+  Ce programme demande le code d'un casier, puis dit si le casier s'ouvre.
+  Il s'arrête sur une erreur avant même de poser la question.
+  Lis le message, puis répare le programme.
+depart: |
+  code = int(input("Code du casier : "))
+  ouvert = (code = 4321)
+  print("Casier ouvert :", ouvert)
+indices:
+  - Le message parle de la ligne 2. Sur cette ligne, un signe = devrait poser une question, mais il essaie de ranger une valeur.
+  - Un seul = range une valeur dans une boîte. Pour demander si deux valeurs sont égales, Python attend deux signes = collés.
+tests:
+  - type: sortie
+    entrees: ["4321"]
+    attendu: |-
+      Code du casier : 4321
+      Casier ouvert : True
+  - type: sortie
+    entrees: ["1234"]
+    attendu: |-
+      Code du casier : 1234
+      Casier ouvert : False
+solution: |
+  code = int(input("Code du casier : "))
+  ouvert = (code == 4321)
+  print("Casier ouvert :", ouvert)

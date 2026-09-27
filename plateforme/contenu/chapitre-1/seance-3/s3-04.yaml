@@ -1,0 +1,28 @@
+id: s3-04
+concept: for
+notion: repeter
+seance: 3
+niveau: normal
+type: predire
+titre: Les valeurs de range(5)
+obligatoire: true
+enonce: |
+  `for` répète les lignes décalées en dessous de lui, une fois pour chaque
+  valeur que lui donne `range()`. À chaque tour, la variable `i` prend la
+  valeur suivante.
+depart: |
+  for i in range(5):
+      print("Tour numéro", i)
+indices:
+  - Combien de fois la ligne s'affiche-t-elle ? Et quelle est la toute première valeur de i ?
+  - range(5) commence à 0 et s'arrête juste avant 5. Il donne cinq valeurs, mais jamais le 5 lui-même.
+tests:
+  - type: qcm
+    options:
+      - "Tour numéro 0\nTour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4"
+      - "Tour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4\nTour numéro 5"
+      - "Tour numéro 0\nTour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4\nTour numéro 5"
+    bonne_reponse: 0
+solution: |
+  for i in range(5):
+      print("Tour numéro", i)

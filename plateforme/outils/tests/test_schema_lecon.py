@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from schema import NOTIONS, BlocCode, BlocParagraphe, Lecon
+from schema import CHAPITRES, NOTIONS, BlocCode, BlocParagraphe, Lecon
 
 
 def lecon_minimale(**remplacements):
@@ -101,7 +101,10 @@ def test_bloc_de_code_executable():
     assert lecon.blocs[0].executable is True
 
 
-def test_ordre_hors_bornes_rejete():
+def test_une_lecon_porte_l_ordre_de_sa_notion():
+    """L'ordre decide des notions qu'un exemple peut employer : il ne se choisit pas."""
+    with pytest.raises(ValidationError):
+        Lecon(**lecon_minimale(ordre=3))
     with pytest.raises(ValidationError):
         Lecon(**lecon_minimale(ordre=0))
 
@@ -111,17 +114,36 @@ def test_duree_hors_bornes_rejetee():
         Lecon(**lecon_minimale(duree_min=99))
 
 
-def test_les_quatre_notions_de_la_seance_1_sont_declarees():
-    """La table NOTIONS est l'unique source : le front la lit dans le JSON publie."""
-    assert list(NOTIONS) == ["afficher", "variables", "types", "saisie"]
-    assert [details["ordre"] for details in NOTIONS.values()] == [1, 2, 3, 4]
-    # Chaque notion porte une couleur distincte, sinon le menu est monotone.
-    assert len({details["famille"] for details in NOTIONS.values()}) == 4
+def test_les_notions_de_la_seance_1_restent_en_tete_et_dans_l_ordre():
+    """La table NOTIONS est l'unique source : le front la lit dans le JSON publie.
+
+    Ajouter la seance 2 ne doit rien deplacer de la seance 1 : un eleve qui a
+    commence retrouve son sommaire tel qu'il l'a laisse.
+    """
+    assert list(NOTIONS)[:4] == ["afficher", "variables", "types", "saisie"]
+
+
+def test_les_ordres_de_notion_se_suivent_sans_trou():
+    assert [d["ordre"] for d in NOTIONS.values()] == list(range(1, len(NOTIONS) + 1))
+
+
+def test_chaque_notion_appartient_a_un_chapitre_declare():
+    for notion, details in NOTIONS.items():
+        assert details["chapitre"] in CHAPITRES, notion
+
+
+def test_les_notions_d_un_meme_chapitre_ont_des_couleurs_distinctes():
+    # Deux notions voisines de la meme couleur se lisent comme une seule : le
+    # menu cesse d'orienter. D'un chapitre a l'autre, les couleurs se reprennent.
+    for chapitre in CHAPITRES:
+        familles = [d["famille"] for d in NOTIONS.values() if d["chapitre"] == chapitre]
+        assert len(familles) == len(set(familles)), chapitre
 
 
 def test_chaque_notion_est_acceptee_comme_valeur():
-    for notion in NOTIONS:
-        assert Lecon(**lecon_minimale(id=f"c1-{notion}", notion=notion)).notion == notion
+    for notion, details in NOTIONS.items():
+        lecon = Lecon(**lecon_minimale(id=f"c1-{notion}", notion=notion, ordre=details["ordre"]))
+        assert lecon.notion == notion
 
 
 def _ecrire(dossier, donnees):

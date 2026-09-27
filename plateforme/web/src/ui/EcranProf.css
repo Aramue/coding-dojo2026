@@ -77,6 +77,27 @@
   line-height: 1.5;
 }
 
+/* La règle des douze caractères, et l'écart de la confirmation. */
+.prof__regle {
+  margin: calc(var(--e-1) * -0.5) 0 var(--e-1);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.prof__regle--faux {
+  color: var(--ko);
+}
+
+.prof__erreur {
+  margin: var(--e-1) 0 0;
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--ko) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 35%, var(--surface));
+  color: var(--ko);
+  font-size: var(--t-2);
+}
+
 .prof__aide code {
   background: var(--ground-2);
   border-radius: var(--rayon-1);

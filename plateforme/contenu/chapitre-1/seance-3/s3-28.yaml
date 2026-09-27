@@ -1,0 +1,38 @@
+id: s3-28
+concept: accumulateur
+notion: compter
+seance: 3
+niveau: expert
+type: ecrire
+titre: Le chiffre de contrôle
+obligatoire: false
+enonce: |
+  Défi : beaucoup de numéros portent un chiffre de contrôle, qui repère les
+  fautes de frappe. Le calcul le plus simple additionne les chiffres du numéro,
+  puis garde le reste de la division par 9.
+
+  Complète le programme pour que la variable `controle` contienne ce chiffre
+  pour le numéro 58213, en additionnant ses chiffres dans une boucle.
+depart: |
+  numero = 58213
+indices:
+  - Commence par une somme qui part de 0, puis ajoute-lui chaque chiffre de str(numero), converti en nombre.
+  - Une fois la boucle finie, controle est le reste de la division de la somme par 9, avec le signe pourcent.
+tests:
+  - type: variable
+    nom: controle
+    valeur_attendue: "1"
+    type_attendu: int
+  - type: interdit
+    motif: controle = 1
+  # Le reste de la division du numero lui-meme par 9 donne le meme chiffre :
+  # c'est une propriete du calcul. Le defi est l'addition des chiffres.
+  - type: contient
+    motif: for
+solution: |
+  numero = 58213
+  somme = 0
+  for chiffre in str(numero):
+      somme = somme + int(chiffre)
+  controle = somme % 9
+  print("Chiffre de contrôle :", controle)

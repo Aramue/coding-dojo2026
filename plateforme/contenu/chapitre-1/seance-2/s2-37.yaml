@@ -1,0 +1,83 @@
+id: s2-37
+concept: conditions
+notion: decider
+seance: 2
+niveau: expert
+type: ecrire
+titre: Dire pourquoi c'est refusé
+obligatoire: false
+enonce: |
+  Défi : la salle de répétition du collège est réservée aux élèves de 12 à 20
+  ans, et sa porte s'ouvre avec le code Musique2026. Le programme pose déjà
+  les deux questions. Écris la suite, qui donne une raison précise à chaque
+  refus :
+
+  - moins de 12 ans : Refusé : il faut au moins 12 ans.
+  - plus de 20 ans : Refusé : il faut 20 ans au plus.
+  - mauvais code : Refusé : le code est faux.
+  - sinon : Bienvenue dans la salle.
+
+  L'âge se vérifie avant le code. Pour 25 ans et le bon code, l'écran doit
+  montrer :
+
+  Âge : 25
+  Code de la porte : Musique2026
+  Refusé : il faut 20 ans au plus.
+
+  Ton programme sera relancé avec d'autres réponses.
+depart: |
+  age = int(input("Âge : "))
+  code = input("Code de la porte : ")
+indices:
+  - Une seule chaîne de questions, if puis elif puis else. Chaque refus a sa propre branche, dans l'ordre de la liste.
+  - La troisième question compare deux textes avec !=. Elle n'est posée que si l'âge convient, puisqu'elle vient après les deux questions sur l'âge.
+tests:
+  - type: sortie
+    entrees: ["25", "Musique2026"]
+    attendu: |-
+      Âge : 25
+      Code de la porte : Musique2026
+      Refusé : il faut 20 ans au plus.
+  - type: sortie
+    entrees: ["11", "Musique2026"]
+    attendu: |-
+      Âge : 11
+      Code de la porte : Musique2026
+      Refusé : il faut au moins 12 ans.
+  - type: sortie
+    entrees: ["15", "musique2026"]
+    attendu: |-
+      Âge : 15
+      Code de la porte : musique2026
+      Refusé : le code est faux.
+  - type: sortie
+    entrees: ["9", "piano"]
+    attendu: |-
+      Âge : 9
+      Code de la porte : piano
+      Refusé : il faut au moins 12 ans.
+  - type: sortie
+    entrees: ["12", "Musique2026"]
+    attendu: |-
+      Âge : 12
+      Code de la porte : Musique2026
+      Bienvenue dans la salle.
+  - type: sortie
+    entrees: ["20", "Musique2026"]
+    attendu: |-
+      Âge : 20
+      Code de la porte : Musique2026
+      Bienvenue dans la salle.
+  - type: interdit
+    motif: "25"
+solution: |
+  age = int(input("Âge : "))
+  code = input("Code de la porte : ")
+  if age < 12:
+      print("Refusé : il faut au moins 12 ans.")
+  elif age > 20:
+      print("Refusé : il faut 20 ans au plus.")
+  elif code != "Musique2026":
+      print("Refusé : le code est faux.")
+  else:
+      print("Bienvenue dans la salle.")

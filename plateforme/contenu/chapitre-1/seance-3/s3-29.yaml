@@ -1,0 +1,28 @@
+id: s3-29
+concept: for
+notion: compter
+seance: 3
+niveau: expert
+type: predire
+titre: enumerate(), hors programme
+obligatoire: false
+enonce: |
+  Pour les curieux, et hors programme : on croise parfois `enumerate()` dans le
+  code des autres. À chaque tour, il donne deux valeurs à la fois, que la boucle
+  range dans deux variables.
+depart: |
+  for position, lettre in enumerate("ski"):
+      print(position, lettre)
+indices:
+  - enumerate() donne à chaque tour une position et un caractère, dans cet ordre. Par quelle position commence-t-il ?
+  - Comme range(), enumerate() compte à partir de 0. La première ligne associe donc 0 et s.
+tests:
+  - type: qcm
+    options:
+      - "0 s\n1 k\n2 i"
+      - "1 s\n2 k\n3 i"
+      - "s 0\nk 1\ni 2"
+    bonne_reponse: 0
+solution: |
+  for position, lettre in enumerate("ski"):
+      print(position, lettre)

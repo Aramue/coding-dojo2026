@@ -1,0 +1,45 @@
+id: c3-parcourir
+notion: parcourir
+ordre: 12
+titre: Parcourir un texte
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      `for` ne parcourt pas seulement les valeurs de `range()`. Donne-lui un
+      texte, et il le parcourt **caractère par caractère** : à chaque tour, la
+      variable prend le caractère suivant, du premier au dernier.
+  - type: code
+    legende: Lettre après lettre
+    executable: true
+    python: |
+      for lettre in "Genève":
+          print(lettre)
+  - type: paragraphe
+    texte: >-
+      Tout compte comme un caractère : les lettres accentuées, les chiffres, les
+      signes, et même les **espaces**.
+  - type: attention
+    texte: >-
+      **Un nombre ne se parcourt pas.** `for chiffre in 2026` arrête le
+      programme, parce qu'un nombre n'a pas de caractères à donner. Pour
+      parcourir ses chiffres, transforme-le d'abord en texte avec `str()`.
+  - type: code
+    legende: Les chiffres d'un nombre
+    executable: true
+    python: |
+      annee = 2026
+      for chiffre in str(annee):
+          print(chiffre)
+  - type: paragraphe
+    texte: >-
+      On peut aussi parcourir les **positions** d'un texte plutôt que ses
+      caractères : `len()` compte les caractères, et `range(len(mot))` donne
+      leurs positions, en commençant à 0.
+  - type: code
+    legende: Des positions, pas des lettres
+    executable: true
+    python: |
+      mot = "ski"
+      for position in range(len(mot)):
+          print(position)

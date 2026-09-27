@@ -131,3 +131,45 @@ def test_un_depart_deja_valide_est_signale_meme_sans_la_maitrise(tmp_path):
         dict(MAITRISE, depart='prenom = "Camille"\nprint("Bonjour " + prenom)'),
     )
     assert any("depart" in p for p in verifier_coherence(ex))
+
+
+def test_un_programme_qui_ne_s_arrete_pas_est_interrompu():
+    """La boucle infinie de la seance 3 est un exercice : elle ne doit rien bloquer."""
+    from valider_contenu import _executer
+
+    sortie, _, erreur = _executer("while True:\n    pass", [])
+    assert erreur is not None and erreur.startswith("TimeoutError")
+    assert sortie == ""
+
+
+def test_une_boucle_infinie_qui_affiche_est_interrompue_aussi():
+    from valider_contenu import _executer
+
+    sortie, _, erreur = _executer("compteur = 0\nwhile compteur < 3:\n    print(compteur)", [])
+    assert erreur is not None and erreur.startswith("TimeoutError")
+    assert sortie.startswith("0\n0\n")
+
+
+def test_un_depart_qui_boucle_sans_fin_ne_bloque_pas_la_validation(tmp_path):
+    ex = ecrire(
+        tmp_path,
+        dict(
+            BASE,
+            type="debug",
+            depart="compteur = 0\nwhile compteur < 3:\n    print(compteur)",
+            solution="compteur = 0\nwhile compteur < 3:\n    print(compteur)\n    compteur = compteur + 1",
+            tests=[{"type": "sortie", "entrees": [], "attendu": "0\n1\n2"}],
+        ),
+    )
+    assert verifier_coherence(ex) == []
+
+
+def test_l_input_simule_repond_toujours_avec_le_compteur_de_tours():
+    # Le compteur de tours reecrit le programme avant de l'executer : la saisie
+    # simulee doit fonctionner comme avant, echo de la reponse compris.
+    from valider_contenu import _executer
+
+    sortie, espace, erreur = _executer('nom = input("Nom : ")\nprint(nom)', ["Camille"])
+    assert erreur is None
+    assert sortie == "Nom : Camille\nCamille\n"
+    assert espace["nom"] == "Camille"

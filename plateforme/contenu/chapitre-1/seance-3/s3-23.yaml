@@ -1,0 +1,42 @@
+id: s3-23
+concept: compteur
+notion: compter
+seance: 3
+niveau: normal
+type: debug
+titre: La lettre numéro 0
+obligatoire: true
+enonce: |
+  Ce programme numérote les lettres d'un mot. Le compteur avance bien, mais la
+  première lettre porte le numéro 0, et personne ne compte comme ça. Répare-le
+  pour que la numérotation commence à 1.
+depart: |
+  mot = input("Un mot : ")
+  numero = 0
+  for lettre in mot:
+      print(f"Lettre {numero} : {lettre}")
+      numero = numero + 1
+indices:
+  - Au premier tour, que vaut numero au moment du print ?
+  - Deux façons de réparer. Faire partir numero de 1, ou lui ajouter 1 avant l'affichage plutôt qu'après.
+tests:
+  - type: sortie
+    entrees: ["ski"]
+    attendu: |-
+      Un mot : ski
+      Lettre 1 : s
+      Lettre 2 : k
+      Lettre 3 : i
+  - type: sortie
+    entrees: ["eau"]
+    attendu: |-
+      Un mot : eau
+      Lettre 1 : e
+      Lettre 2 : a
+      Lettre 3 : u
+solution: |
+  mot = input("Un mot : ")
+  numero = 1
+  for lettre in mot:
+      print(f"Lettre {numero} : {lettre}")
+      numero = numero + 1

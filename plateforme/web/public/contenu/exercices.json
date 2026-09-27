@@ -1,0 +1,3961 @@
+[
+  {
+    "id": "s1-01",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Ce que Python affiche vraiment",
+    "obligatoire": true,
+    "enonce": "Tu n'as rien à écrire ici.\nLis ce programme, puis choisis ce qui apparaît à l'écran quand on l'exécute.\n",
+    "depart": "print(\"Bonjour\")\n",
+    "indices": [
+      "Les guillemets servent à marquer le début et la fin du texte. Demande-toi s'ils font partie du message.",
+      "Le mot print et les parenthèses sont l'ordre donné à Python, pas le message. Seul ce qui se trouve à l'intérieur des guillemets arrive à l'écran."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bonjour",
+          "\"Bonjour\"",
+          "print(\"Bonjour\")"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-02",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Ton premier programme",
+    "obligatoire": true,
+    "enonce": "À toi d'écrire l'instruction, sur le modèle que tu viens de lire.\nTon programme doit afficher exactement cette ligne, et rien d'autre :\n\nBonjour tout le monde\n",
+    "depart": "",
+    "indices": [
+      "Une instruction qui affiche quelque chose commence par print, suivi d'une parenthèse ouvrante.",
+      "Le texte à afficher se place entre guillemets, à l'intérieur des parenthèses. Recopie-le exactement : Bonjour tout le monde."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bonjour tout le monde",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "input(",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-03",
+    "concept": "erreurs",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le guillemet manquant",
+    "obligatoire": true,
+    "enonce": "Ce programme a été tapé trop vite et refuse de démarrer.\nIl devait afficher exactement cette ligne :\n\nLa séance commence\n\nAu lieu de ça, Python affiche ce message d'erreur :\n\nSyntaxError: unterminated string literal (detected at line 1)\n\nTraduction : un texte a été ouvert, mais il n'a jamais été refermé.\nRépare la ligne pour que le message s'affiche enfin.\n",
+    "depart": "print(\"La séance commence)\n",
+    "indices": [
+      "Un texte s'ouvre et se ferme toujours par le même caractère. Compte les guillemets présents sur la ligne.",
+      "Le guillemet du début est bien là. C'est celui de la fin, juste avant la parenthèse fermante, qui manque."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "La séance commence",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-04",
+    "concept": "execution sequentielle",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Deux lignes, deux ordres",
+    "obligatoire": true,
+    "enonce": "Ce programme donne deux consignes coup sur coup.\nQu'apparaît-il à l'écran ?\nLes propositions décrivent la sortie ligne par ligne.\n",
+    "depart": "print(\"Bonne nuit\")\nprint(\"Bonjour\")\n",
+    "indices": [
+      "Python ne comprend pas le sens des messages. Il traite les instructions une par une.",
+      "Le premier print() rencontré est le premier affiché. Et chaque print() passe ensuite à la ligne suivante."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Ligne 1 : Bonne nuit / Ligne 2 : Bonjour",
+          "Ligne 1 : Bonjour / Ligne 2 : Bonne nuit",
+          "Une seule ligne : Bonne nuit Bonjour"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-05",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La virgule met un espace",
+    "obligatoire": true,
+    "enonce": "Cette fois, print() reçoit deux morceaux de texte séparés par une virgule.\nRegarde bien les espaces : chaque caractère compte.\nQu'est-ce qui apparaît exactement à l'écran ?\n",
+    "depart": "print(\"Bonjour\", \"Camille\")\n",
+    "indices": [
+      "La virgule ne s'affiche jamais à l'écran. Elle sert seulement à séparer les morceaux à l'intérieur de print().",
+      "Quand print() reçoit plusieurs morceaux séparés par des virgules, il les affiche l'un après l'autre en glissant un espace entre chacun."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bonjour Camille",
+          "BonjourCamille",
+          "Bonjour,Camille"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-06",
+    "concept": "format exact",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Le format exact",
+    "obligatoire": true,
+    "enonce": "Un espace en trop, et ce n'est plus le même texte.\n\nTon programme doit afficher exactement ces trois lignes :\n\n=== MENU ===\nPlat Lasagnes\nPrix : 12 francs\n\nLa première ligne est déjà écrite. Remplace chaque _____ pour obtenir les deux autres.\nCompte les espaces un par un.\n",
+    "depart": "print(\"=== MENU ===\")\nprint(\"Plat\", \"_____\")\nprint(\"Prix_____12 francs\")\n",
+    "indices": [
+      "La virgule de la deuxième ligne ajoute déjà quelque chose entre les deux morceaux. Regarde ce que cela donne avant d'écrire un espace de plus.",
+      "La troisième ligne ne contient aucune virgule. Tout ce qui doit apparaître à l'écran, espaces compris, se trouve donc à l'intérieur des guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "=== MENU ===\nPlat Lasagnes\nPrix : 12 francs",
+        "exigeExact": true
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-07",
+    "concept": "format exact",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'espace en trop",
+    "obligatoire": true,
+    "enonce": "Le programme doit afficher exactement ces deux lignes :\n\nListe du jour\nPain Lait Riz\n\nCelui-ci affiche presque cela. Presque : il glisse un espace en trop quelque part.\nTrouve-le et répare le programme.\n",
+    "depart": "print(\"Liste du jour\")\nprint(\"Pain\", \" Lait\", \"Riz\")\n",
+    "indices": [
+      "La première ligne est correcte. L'écart se trouve donc sur la seconde, et il tient en un seul caractère.",
+      "Rappelle-toi ce que fait la virgule dans un print() : elle place déjà un espace entre deux morceaux. Regarde maintenant comment commence chaque morceau."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Liste du jour\nPain Lait Riz",
+        "exigeExact": true
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-08",
+    "concept": "print",
+    "notion": "afficher",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Trois lignes, un seul print",
+    "obligatoire": false,
+    "enonce": "Tu sais afficher trois lignes avec trois print. Il existe plus court.\n\nÀ l'intérieur des guillemets, la suite de deux caractères \\n demande à Python\nde passer à la ligne. Elle ne s'affiche pas : elle agit.\n\nÉcris **un seul** print qui affiche exactement ces trois lignes :\n\nMenu du jour\nEntrée : soupe\nPlat : lasagnes\n",
+    "depart": "",
+    "indices": [
+      "Écris d'abord la première ligne entre guillemets. Puis, sans fermer les guillemets, colle \n et continue avec la deuxième.",
+      "Il faut deux \n dans le texte : un après « Menu du jour », un après « Entrée : soupe ». Le texte entier reste dans une seule paire de guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Menu du jour\nEntrée : soupe\nPlat : lasagnes",
+        "exigeExact": true
+      },
+      {
+        "type": "contient",
+        "motif": "\\n",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "input(",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s1-09",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La boîte et son étiquette",
+    "obligatoire": true,
+    "enonce": "Une information utile n'est pas toujours affichée tout de suite :\nelle est d'abord rangée dans une variable.\nUne variable, c'est une boîte avec une étiquette. L'étiquette est le nom de\nla boîte. À l'intérieur, il y a une valeur.\n\nLa première ligne range le texte Camille dans une boîte étiquetée prenom.\nLa deuxième ligne demande d'afficher prenom.\n\nQu'est-ce qui apparaît à l'écran quand on exécute ce programme ?\n",
+    "depart": "prenom = \"Camille\"\nprint(prenom)\n",
+    "indices": [
+      "Jusqu'ici, pour afficher du texte tel quel, on le mettait entre guillemets. Sur la deuxième ligne, il n'y a pas de guillemets.",
+      "Python va chercher ce qu'il y a à l'intérieur de la boîte, pas ce qui est écrit sur l'étiquette."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Camille",
+          "prenom",
+          "prenom = Camille"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-10",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Range un prénom",
+    "obligatoire": true,
+    "enonce": "Une variable est une boîte avec une étiquette.\nIci l'étiquette est déjà écrite : la boîte s'appelle prenom. Mais elle est vide.\nRange le texte Camille à l'intérieur.\nLe programme doit alors afficher exactement :\nBonjour Camille et bienvenue\n",
+    "depart": "prenom = _____\nprint(\"Bonjour\", prenom, \"et bienvenue\")\n",
+    "indices": [
+      "À droite du signe égal, on écrit la valeur que l'on range dans la boîte. Ici, cette valeur est du texte.",
+      "Un texte s'écrit toujours entre guillemets, exactement comme le texte que tu mets dans print()."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "prenom",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bonjour Camille et bienvenue",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-11",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "L'écrasement",
+    "obligatoire": true,
+    "enonce": "Le programme ci-dessous range deux valeurs l'une après l'autre dans la même\nboîte prenom.\nQu'est-ce qui apparaît à l'écran quand on l'exécute ?\n",
+    "depart": "prenom = \"Camille\"\nprenom = \"Alex\"\nprint(prenom)\n",
+    "indices": [
+      "Une variable, c'est une boîte avec une seule étiquette. Demande-toi ce que devient le premier contenu quand on en range un deuxième dedans.",
+      "La deuxième ligne remplace ce qu'il y avait dans la variable. Au moment du print, une seule valeur reste."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alex",
+          "Camille",
+          "Camille Alex"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-12",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Photo, pas formule",
+    "obligatoire": true,
+    "enonce": "Avant de changer le contenu d'une boîte, le programme en range une copie\ndans une deuxième boîte.\nDéroule le programme ligne par ligne. Qu'est-ce qui apparaît à l'écran ?\n",
+    "depart": "prenom = \"Camille\"\nsauvegarde = prenom\nprenom = \"Alex\"\nprint(prenom, sauvegarde)\n",
+    "indices": [
+      "Arrête-toi juste après la ligne 2 et note ce que contient chaque boîte à cet instant.",
+      "La ligne 2 recopie dans sauvegarde la valeur que prenom contient à ce moment-là. Ce n'est pas un lien qui se mettrait à jour plus tard."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alex Camille",
+          "Alex Alex",
+          "Camille Camille"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-13",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La boîte qui n'existe pas encore",
+    "obligatoire": true,
+    "enonce": "Ce programme doit annoncer qui est de service aujourd'hui.\nPython refuse de le lancer. Il affiche ce message :\nNameError: name 'responsable' is not defined\nCela veut dire : Python ne connaît pas encore la variable responsable.\nRépare le programme. Il doit afficher exactement :\nDe service : Camille\nGarde la variable : n'écris pas Camille à l'intérieur du print().\n",
+    "depart": "print(\"De service :\", responsable)\nresponsable = \"Camille\"\n",
+    "indices": [
+      "Python lit les lignes de haut en bas, une par une. Quand il arrive au print(), la boîte responsable a-t-elle déjà été remplie ?",
+      "Une boîte doit être remplie AVANT la ligne qui vient la lire. Regarde dans quel ordre tes deux lignes sont écrites."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "De service : Camille",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "De service : Camille",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-14",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "x = x + 1 n'est pas une équation",
+    "obligatoire": true,
+    "enonce": "Ce programme compte les points marqués pendant une partie.\nLis-le ligne par ligne, dans l'ordre où il est écrit.\nQu'affiche-t-il à l'écran ?\n",
+    "depart": "points = 3\npoints = points + 1\npoints = points + 1\nprint(points)\n",
+    "indices": [
+      "Le signe = ne veut pas dire \"est égal à\". Il veut dire \"range dans\".",
+      "Python calcule d'abord la partie à droite du signe =, avec la valeur que points a à ce moment-là, puis il range le résultat dans points. Fais-le une ligne après l'autre."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "5",
+          "4",
+          "Rien ne s'affiche, Python signale une erreur car points ne peut pas être égal à points + 1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-15",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'affectation à l'envers",
+    "obligatoire": false,
+    "enonce": "Ce programme devait ranger 5 dans une boîte nommée age, puis l'afficher.\nPython refuse de le lire, et s'arrête avant même de commencer :\n\nSyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?\n\nTraduction : on ne peut pas ranger quelque chose dans un nombre.\nRépare la première ligne.\n",
+    "depart": "5 = age\nprint(age)\n",
+    "indices": [
+      "Le signe = range la valeur de droite dans la boîte de gauche. Demande-toi ce qui, dans cette ligne, est la boîte et ce qui est la valeur.",
+      "Une boîte porte un nom, pas un nombre. Les deux morceaux de la première ligne sont dans le mauvais ordre."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "5",
+        "exigeExact": false
+      },
+      {
+        "type": "variable",
+        "nom": "age",
+        "valeurAttendue": "5",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-16",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "prenom, Prenom, PRENOM",
+    "obligatoire": false,
+    "enonce": "La boîte existe, elle est remplie, et pourtant Python dit qu'il ne la connaît\npas :\n\nNameError: name 'Prenom' is not defined\n\nRegarde les deux lignes de très près. Répare le programme sans changer la\npremière ligne.\n",
+    "depart": "prenom = \"Camille\"\nprint(Prenom)\n",
+    "indices": [
+      "Python distingue les majuscules des minuscules. Pour lui, deux noms qui ne s'écrivent pas exactement pareil sont deux boîtes différentes.",
+      "Compare caractère par caractère le nom écrit à la ligne 1 et celui écrit à la ligne 2. Un seul les sépare."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Camille",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "print(prenom)",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-17",
+    "concept": "variable",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "debug",
+    "titre": "La boîte recyclée",
+    "obligatoire": false,
+    "enonce": "Ce programme affiche le prix d'une place, puis le prix pour deux personnes.\nIl doit afficher exactement :\n\nPour deux : 40\nPour une : 20\n\nIl se trompe sur la deuxième ligne. Le problème n'est pas un calcul faux :\nc'est qu'une seule boîte sert à désigner deux choses différentes, et que la\nseconde efface la première.\n\nRépare le programme. Tu ne peux pas t'en sortir en changeant seulement\nl'ordre des lignes.\n",
+    "depart": "prix = 20\nprix = prix * 2\nprint(\"Pour deux :\", prix)\nprint(\"Pour une :\", prix)\n",
+    "indices": [
+      "Déroule le programme ligne par ligne et note ce que contient prix à chaque étape. À quel moment la valeur 20 disparaît-elle ?",
+      "Deux informations différentes demandent deux boîtes différentes. Garde prix pour le prix d'une place, et range le double ailleurs."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Pour deux : 40\nPour une : 20",
+        "exigeExact": false
+      },
+      {
+        "type": "variable",
+        "nom": "prix",
+        "valeurAttendue": "20",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-18",
+    "concept": "reaffectation",
+    "notion": "variables",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Échanger deux boîtes",
+    "obligatoire": false,
+    "enonce": "Deux boîtes, deux couleurs. Tu dois échanger leur contenu : gauche doit\nfinir avec bleu, et droite avec rouge.\n\nLe programme doit alors afficher exactement :\n\nbleu rouge\n\nNe change pas les deux premières lignes : elles remplissent les boîtes au\ndépart. Écris la suite en dessous, puis affiche.\n\nAttention : Python connaît une écriture qui fait l'échange en une seule\nligne. Elle est interdite ici — c'est justement le raisonnement qu'on\ntravaille.\n",
+    "depart": "gauche = \"rouge\"\ndroite = \"bleu\"\n",
+    "indices": [
+      "Si tu ranges droite dans gauche en premier, la valeur de gauche est perdue et tu ne peux plus la mettre dans droite.",
+      "Il te faut une troisième boîte pour mettre de côté la valeur que tu vas écraser, avant de l'écraser."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "gauche",
+        "valeurAttendue": "'bleu'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "droite",
+        "valeurAttendue": "'rouge'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "bleu rouge",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "gauche, droite = droite, gauche",
+        "message": "L'échange en une seule ligne est écarté ici : c'est justement le raisonnement que cet exercice fait travailler.",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "gauche = \"rouge\"",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "droite = \"bleu\"",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s1-19",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "2 + 2 ou 22 ?",
+    "obligatoire": true,
+    "enonce": "Voici deux calculs qui se ressemblent beaucoup.\nRegarde bien la différence : dans le premier, les 2 sont des nombres.\nDans le second, les 2 sont entourés de guillemets, c'est donc du texte.\nSouviens-toi aussi que la virgule dans print ajoute un espace.\nQu'apparaît-il à l'écran ?\n",
+    "depart": "nombres = 2 + 2\ntextes = \"2\" + \"2\"\nprint(nombres, textes)\n",
+    "indices": [
+      "Les guillemets changent tout : avec eux, 2 n'est plus un nombre, c'est du texte.",
+      "Le signe + ne fait pas le même travail dans les deux cas. Sur des nombres il additionne, sur du texte il met les deux morceaux bout à bout."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "4 22",
+          "4 4",
+          "22 22"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-20",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Trois familles",
+    "obligatoire": true,
+    "enonce": "Le même chiffre 7 est ici rangé de trois façons différentes.\nCe n'est pas une erreur : Python classe chaque valeur dans une famille.\n7 est un nombre entier, sa famille s'appelle int.\n7.0 est un nombre à virgule (Python écrit un point), sa famille s'appelle float.\n\"7\" est du texte, sa famille s'appelle str.\nLe programme applique le signe + entre chaque valeur et elle-même, puis affiche les trois résultats sur une seule ligne.\nQu'affiche-t-il à l'écran ?\n",
+    "depart": "places = 7\nnote = 7.0\nnumero = \"7\"\nprint(places + places, note + note, numero + numero)\n",
+    "indices": [
+      "Deux nombres reliés par + donnent un nombre. Deux textes reliés par + se collent bout à bout.",
+      "Un float garde toujours ce qui suit le point, même quand cette partie vaut zéro."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "14 14 77",
+          "14 14.0 77",
+          "14 14.0 14"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-21",
+    "concept": "conversion",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Impossible d'additionner du texte et un nombre",
+    "obligatoire": true,
+    "enonce": "Le programme devait afficher exactement cette ligne :\nBonjour Camille, tu as 17 ans\nMais il refuse de démarrer. Python s'arrête sur une erreur de type.\nLis le message d'erreur, puis répare la dernière ligne.\nGarde les signes + pour assembler la phrase, et ne change ni le prénom, ni l'âge.\n",
+    "depart": "prenom = \"Camille\"\nage = 17\nprint(\"Bonjour \" + prenom + \", tu as \" + age + \" ans\")\n",
+    "indices": [
+      "Le signe + sait coller deux textes, ou additionner deux nombres. Ici Python trouve du texte d'un côté et un nombre de l'autre, et il ne sait pas quoi en faire.",
+      "La fonction str() transforme un nombre en texte. Le nombre rangé dans age doit devenir du texte avant d'être collé au reste de la phrase."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bonjour Camille, tu as 17 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Bonjour Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "17 ans",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "str(",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-22",
+    "concept": "conversion",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "str() à la rescousse",
+    "obligatoire": true,
+    "enonce": "Le numéro d'un casier est un nombre, et le signe + refuse de coller un nombre\nà du texte.\nTu viens de voir cette erreur : voici le remède.\nRemplace _____ par la fonction qui transforme un nombre en texte.\nLe programme doit afficher exactement :\nCasier numéro 42\n",
+    "depart": "numero = 42\nmessage = \"Casier numéro \" + _____(numero)\nprint(message)\n",
+    "indices": [
+      "Le problème ne vient pas de la valeur de numero, mais de son type. Un nombre ne se colle pas à du texte.",
+      "Il existe une fonction qui fabrique du texte à partir d'un nombre. Elle porte le nom du type texte, en trois lettres."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'Casier numéro 42'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Casier numéro 42",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Casier numéro 42",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-23",
+    "concept": "f-string",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le f-string",
+    "obligatoire": true,
+    "enonce": "Il existe une deuxième façon d'assembler du texte et des variables.\nOn colle la lettre f juste avant les guillemets ouvrants.\nEnsuite, on écrit les noms des variables entre accolades, directement dans la phrase.\nLis ce programme. Qu'est-ce qui s'affiche à l'écran ?\n",
+    "depart": "prenom = \"Camille\"\nage = 17\nprint(f\"{prenom} a {age} ans\")\n",
+    "indices": [
+      "Le f collé aux guillemets n'est pas du texte à afficher. Il change ce que Python fait des accolades.",
+      "Dans un f-string, chaque paire d'accolades est remplacée par la valeur de la variable écrite dedans."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Camille a 17 ans",
+          "{prenom} a {age} ans",
+          "prenom a age ans"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-24",
+    "concept": "f-string",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Trois écritures, une seule sortie",
+    "obligatoire": true,
+    "enonce": "La même information est écrite ici de trois façons différentes.\nLa première colle les morceaux avec +, la deuxième sépare avec une virgule,\nla troisième utilise un f-string.\nQu'affiche ce programme à l'écran ?\n",
+    "depart": "prenom = \"Camille\"\nprint(\"Bonjour \" + prenom)\nprint(\"Bonjour\", prenom)\nprint(f\"Bonjour {prenom}\")\n",
+    "indices": [
+      "Traite chaque ligne l'une après l'autre, puis compare les trois résultats obtenus.",
+      "La virgule ajoute un espace toute seule, et le f devant les guillemets fait remplacer {prenom} par le contenu de la variable."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bonjour Camille\nBonjour Camille\nBonjour Camille",
+          "Bonjour Camille\nBonjourCamille\nBonjour Camille",
+          "Bonjour Camille\nBonjour Camille\nBonjour {prenom}"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-25",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Fiche signalétique",
+    "obligatoire": false,
+    "enonce": "Ici, c'est toi qui choisis les valeurs. La seule contrainte est leur type :\nnom doit contenir du texte, age un nombre entier.\n\nRemplace chaque _____ par la valeur de ton choix. Le programme affiche\nensuite la valeur et son type.\n\nRappel : ce qui est entre guillemets est du texte, même si ça ressemble à un\nnombre.\n",
+    "depart": "nom = _____\nage = _____\n\nprint(\"Nom :\", nom, \"(type :\", type(nom), \")\")\nprint(\"Âge :\", age, \"(type :\", type(age), \")\")\n",
+    "indices": [
+      "Un texte s'écrit entre guillemets : \"Camille\". Un nombre entier s'écrit sans rien autour : 16.",
+      "Si le type affiché est <class 'str'> alors que tu attendais <class 'int'>, c'est que tu as laissé des guillemets autour du nombre."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nom",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "age",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-26",
+    "concept": "types",
+    "notion": "types",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "La boîte qui change de nature",
+    "obligatoire": false,
+    "enonce": "Une boîte n'a pas de type à elle. C'est ce qu'elle contient qui en a un, et\nranger une nouvelle valeur dedans change donc aussi son type.\n\nLis ce programme. Qu'affiche-t-il à l'écran ?\n",
+    "depart": "x = 5\nprint(type(x))\nx = \"cinq\"\nprint(type(x))\n",
+    "indices": [
+      "Python ne demande jamais de déclarer le type d'une variable. Il le déduit de la valeur qu'on y range.",
+      "La deuxième affectation remplace la valeur ET ce qu'elle est : 5 est un nombre entier, \"cinq\" est du texte."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "<class 'int'>\n<class 'str'>",
+          "<class 'int'>\n<class 'int'>",
+          "Python signale une erreur : on ne peut pas mettre du texte dans une boîte qui contenait un nombre"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s1-27",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "input() rend toujours du texte",
+    "obligatoire": true,
+    "enonce": "La fonction input() pose une question, puis récupère ce que la personne tape\nau clavier.\nIci, elle tape 17, puis elle appuie sur Entrée.\nQu'affiche la ligne print() ?\n",
+    "depart": "age = input(\"Ton âge : \")\nprint(age + age)\n",
+    "indices": [
+      "Rappelle-toi le signe + : entre deux nombres il additionne, entre deux textes il colle bout à bout.",
+      "Ce que input() rend est toujours du texte, même quand on tape des chiffres."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1717",
+          "34",
+          "17 17"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-28",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Poser la question DANS input()",
+    "obligatoire": true,
+    "enonce": "Ce programme demande un prénom, puis salue la personne.\nLa question ne se pose pas dans un print séparé : elle s'écrit entre les\nparenthèses de input().\nComplète le programme pour que la question affichée soit exactement ce texte,\navec un espace après les deux-points :\nTon prénom :\n",
+    "depart": "prenom = input(_____)\nprint(\"Bonjour \" + prenom)\n",
+    "indices": [
+      "Ce que tu places entre les parenthèses de input() s'affiche à l'écran juste avant que la personne tape sa réponse.",
+      "L'invite est du texte : elle se met entre guillemets, à l'intérieur des parenthèses de input(). Ne perds pas l'espace de la fin."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille"
+        ],
+        "attendu": "Ton prénom : Camille\nBonjour Camille",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-29",
+    "concept": "conversion",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'âge qui refuse de s'additionner",
+    "obligatoire": true,
+    "enonce": "Ce petit programme calcule l'âge que tu auras dans 5 ans.\nIl démarre, il te pose la question, puis il s'arrête net avec une erreur.\nLis le message d'erreur, puis répare le programme.\nLe programme doit calculer le résultat, jamais l'écrire à la main.\n",
+    "depart": "print(\"Calcul rapide\")\nage = input(\"Ton âge : \")\nprint(\"Dans 5 ans, tu auras :\")\nprint(age + 5)\n",
+    "indices": [
+      "Regarde ce que input() range dans la variable age. Même quand tu tapes des chiffres, input() rend toujours du TEXTE.",
+      "Tu connais déjà str(), qui fabrique du texte à partir d'un nombre. La fonction int() fait l'inverse : elle fabrique un nombre entier à partir d'un texte."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "17"
+        ],
+        "attendu": "Calcul rapide\nTon âge : 17\nDans 5 ans, tu auras :\n22",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "22",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-30",
+    "concept": "conversion",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "int(input())",
+    "obligatoire": true,
+    "enonce": "Ce programme demande combien de livres tu as déjà lus cette année,\npuis il annonce le total une fois celui-ci terminé.\nProblème : input() rend toujours du TEXTE, jamais un nombre.\nTel quel, l'addition est impossible et le programme s'arrête.\nComplète le trou pour que livres contienne un vrai nombre entier.\n",
+    "depart": "livres = _____(input(\"Nombre de livres lus : \"))\nprint(\"Après celui-ci, tu en auras\", livres + 1)\n",
+    "indices": [
+      "Ce que input() te rend est du texte. Il faut le transformer en nombre avant de pouvoir l'additionner.",
+      "Souviens-toi des trois familles de valeurs : int, float et str. C'est celle des nombres entiers qu'il te faut, et son nom est aussi celui de la fonction qui convertit."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12"
+        ],
+        "attendu": "Nombre de livres lus : 12\nAprès celui-ci, tu en auras 13",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "3"
+        ],
+        "attendu": "Nombre de livres lus : 3\nAprès celui-ci, tu en auras 4",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-31",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Deux questions, une fiche",
+    "obligatoire": true,
+    "enonce": "À toi d'écrire un programme qui remplit une fiche d'inscription.\n\nIl pose deux questions, dans cet ordre : d'abord \"Ton prénom : \", puis \"Ton âge : \".\nIl affiche ensuite deux lignes : la création de la fiche, puis le prénom et l'âge.\n\nSi la personne répond Camille, puis 16, l'écran doit montrer exactement ceci :\n\nTon prénom : Camille\nTon âge : 16\nFiche créée au nom de Camille\nCamille a 16 ans\n\nLes deux premières lignes ne sont pas des print(). Ce sont les questions elles-mêmes :\nelles s'affichent toutes seules au moment où input() s'exécute.\n\nIci, on ne calcule rien avec l'âge, on le réaffiche tel quel. Pas besoin de le\nconvertir en nombre : il peut rester du texte.\n\nRecopie les textes exactement comme ils sont écrits ci-dessus.\n\nTon programme sera relancé avec une autre personne. Rien ne doit donc être écrit\nà la main. La première ligne est déjà en place.\n",
+    "depart": "prenom = input(\"Ton prénom : \")\n",
+    "indices": [
+      "Regarde la ligne déjà écrite. La question se met entre les parenthèses de input(), et la réponse se range dans une variable. Fais pareil pour l'âge.",
+      "Il te faut ensuite deux print(). Un f-string permet de glisser une variable entre accolades, et la même variable peut resservir dans les deux lignes."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "16"
+        ],
+        "attendu": "Ton prénom : Camille\nTon âge : 16\nFiche créée au nom de Camille\nCamille a 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "19"
+        ],
+        "attendu": "Ton prénom : Alex\nTon âge : 19\nFiche créée au nom de Alex\nAlex a 19 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-32",
+    "concept": "conversion",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "int(input()) se lit de l'intérieur",
+    "obligatoire": false,
+    "enonce": "Deux fonctions imbriquées, l'une dans les parenthèses de l'autre. Pour savoir\nce que fait cette ligne, il faut la lire de l'intérieur vers l'extérieur.\n\nage = int(input(\"Ton âge : \"))\n\nDans quel ordre Python fait-il les choses ?\n",
+    "depart": "age = int(input(\"Ton âge : \"))\nprint(age + 1)\n",
+    "indices": [
+      "Python ne peut pas convertir une réponse qu'il n'a pas encore reçue. Demande-toi ce qui doit forcément arriver en premier.",
+      "La fonction la plus à l'intérieur des parenthèses s'exécute la première. Son résultat devient ce que reçoit la fonction juste au-dessus."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Il affiche la question, attend la réponse tapée, transforme ce texte en nombre entier, puis range le nombre dans age",
+          "Il transforme d'abord la question en nombre entier, puis l'affiche et attend la réponse",
+          "Il attend la réponse, la range dans age, puis la transforme en nombre entier"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-33",
+    "concept": "input",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "expert",
+    "type": "debug",
+    "titre": "L'ordre des questions",
+    "obligatoire": false,
+    "enonce": "Ce programme calcule juste. Il est pourtant refusé, parce qu'il pose ses\nquestions dans le mauvais ordre — et l'ordre des questions fait partie de ce\nqu'on demande, au même titre que le texte affiché.\n\nIl doit demander d'abord le prénom, puis l'âge.\n\nSi la personne répond Camille, puis 16, l'écran doit montrer exactement ceci :\n\nTon prénom : Camille\nTon âge : 16\nCamille a 16 ans\n\nRépare le programme.\n",
+    "depart": "age = input(\"Ton âge : \")\nprenom = input(\"Ton prénom : \")\nprint(f\"{prenom} a {age} ans\")\n",
+    "indices": [
+      "Les deux premières lignes de l'écran ne sont pas des print. Ce sont les questions elles-mêmes, affichées au moment où input s'exécute.",
+      "Python exécute les lignes de haut en bas. La question posée en premier est donc celle écrite en premier."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "16"
+        ],
+        "attendu": "Ton prénom : Camille\nTon âge : 16\nCamille a 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "19"
+        ],
+        "attendu": "Ton prénom : Alex\nTon âge : 19\nAlex a 19 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s1-34",
+    "concept": "probleme narratif",
+    "notion": "saisie",
+    "seance": 1,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Ta carte de membre",
+    "obligatoire": true,
+    "enonce": "Dernier exercice de la séance : un programme complet, qui réunit tout ce que\ntu viens d'apprendre.\n\nIl doit faire quatre choses :\n1. demander le prénom, avec l'invite \"Ton prénom : \" ;\n2. demander l'âge, avec l'invite \"Ton âge : \", et le ranger sous forme de nombre entier ;\n3. ranger dans une variable l'âge que la personne aura l'an prochain ;\n4. afficher la carte sur quatre lignes.\n\nSi la personne répond Camille, puis 17, l'écran affiche ceci après les deux questions :\n\n=== CARTE DE MEMBRE ===\nNom : Camille\nAge : 17 ans\nL'an prochain : 18 ans\n\nRecopie ces textes au caractère près, espaces compris. Sur cette carte, le mot Age\ns'écrit sans accent : garde-le tel quel.\n\nAttention : les deux réponses écrites ici ne sont qu'un exemple. Ton programme doit\nfonctionner avec n'importe qui, donc Camille et 18 sont interdits dans ton code.\n\nLes lignes du code de départ qui commencent par # sont des remarques : Python les\nignore, elles sont là pour te guider. Écris ton code en dessous de chacune.\n",
+    "depart": "# 1. demander le prénom et le ranger dans une variable\n\n# 2. demander l'âge et le convertir en nombre entier\n\n# 3. calculer l'âge de l'an prochain\n\n# 4. afficher les quatre lignes de la carte\n",
+    "indices": [
+      "Commence par les deux questions. La question se met à l'intérieur des parenthèses de input(). Et souviens-toi, input() rend toujours du texte, même quand on tape un nombre.",
+      "L'âge doit donc être converti avant qu'on puisse lui ajouter 1. Ensuite, chaque ligne de la carte est un print() séparé, et un f-string permet de glisser une variable entre accolades."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "17"
+        ],
+        "attendu": "Ton prénom : Camille\nTon âge : 17\n=== CARTE DE MEMBRE ===\nNom : Camille\nAge : 17 ans\nL'an prochain : 18 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "15"
+        ],
+        "attendu": "Ton prénom : Alex\nTon âge : 15\n=== CARTE DE MEMBRE ===\nNom : Alex\nAge : 15 ans\nL'an prochain : 16 ans",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "18",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et la variable entre accolades. C'est ce que la leçon fait travailler, et ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-01",
+    "concept": "reactivation",
+    "notion": "reveil",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La copie qui ne suit pas",
+    "obligatoire": true,
+    "enonce": "Un rappel de la séance 1 pour se remettre en route.\nAu début d'une nouvelle partie, ce programme met de côté le score de la\nprécédente, puis enregistre le nouveau. Déroule-le ligne par ligne.\n",
+    "depart": "score = 12\nancien = score\nscore = 20\nprint(score, ancien)\n",
+    "indices": [
+      "Arrête-toi juste après la ligne 2 et note ce que contient chaque boîte à cet instant.",
+      "La ligne 2 recopie dans ancien la valeur que score contient à ce moment-là. Si score change ensuite, ancien ne suit pas."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "20 12",
+          "20 20",
+          "12 12"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s2-02",
+    "concept": "reactivation",
+    "notion": "reveil",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La conversion oubliée",
+    "obligatoire": true,
+    "enonce": "Ce programme demande combien d'argent de poche tu as, puis il ajoute les\n10 francs offerts par ta grand-mère.\nIl pose la question, puis il s'arrête net avec une erreur.\nLis le message d'erreur, puis répare le programme.\n",
+    "depart": "argent = input(\"Ton argent de poche : \")\ntotal = argent + 10\nprint(\"Avec le cadeau, tu as :\", total)\n",
+    "indices": [
+      "Regarde ce que input() range dans la variable argent. Même quand tu tapes des chiffres, c'est du texte.",
+      "La fonction int() fabrique un nombre entier à partir d'un texte. Place-la autour de input(), comme à la séance 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "25"
+        ],
+        "attendu": "Ton argent de poche : 25\nAvec le cadeau, tu as : 35",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "0"
+        ],
+        "attendu": "Ton argent de poche : 0\nAvec le cadeau, tu as : 10",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s2-03",
+    "concept": "reactivation",
+    "notion": "reveil",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "La phrase au format exact",
+    "obligatoire": true,
+    "enonce": "Dernier échauffement avant les nouveautés.\n\nLe programme demande un prénom, puis un nombre de pages lues. Ajoute UNE ligne\nà la fin, qui affiche la phrase au format exact.\n\nSi on répond Léa, puis 42, l'écran doit montrer :\n\nPrénom : Léa\nPages lues : 42\nLéa a lu 42 pages\n\nTon programme sera relancé avec d'autres réponses : n'écris ni le prénom ni le\nnombre à la main.\n",
+    "depart": "prenom = input(\"Prénom : \")\npages = input(\"Pages lues : \")\n",
+    "indices": [
+      "Un f-string glisse une variable dans une phrase : un f collé devant les guillemets, et le nom de la variable entre accolades.",
+      "Il te faut un seul print(), avec les deux variables dans la même phrase."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "42"
+        ],
+        "attendu": "Prénom : Léa\nPages lues : 42\nLéa a lu 42 pages",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "7"
+        ],
+        "attendu": "Prénom : Noé\nPages lues : 7\nNoé a lu 7 pages",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Léa",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "{",
+        "message": "L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et les variables entre accolades. Ça décroche la seconde coche.",
+        "maitrise": true
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s2-04",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les quatre opérations",
+    "obligatoire": true,
+    "enonce": "Python sait calculer comme une calculatrice : `+` pour additionner, `-` pour\nsoustraire, `*` pour multiplier et `/` pour diviser.\nAttention, la multiplication s'écrit avec une étoile, pas avec une croix.\n",
+    "depart": "a = 12\nb = 3\nprint(a + b, a - b, a * b)\n",
+    "indices": [
+      "Python calcule chaque expression avant de l'afficher. print reçoit trois résultats, pas trois formules.",
+      "L'étoile est le signe de la multiplication. a * b, c'est douze fois trois."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "15 9 36",
+          "15 9 4",
+          "a + b a - b a * b"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-05",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La division rend un nombre à virgule",
+    "obligatoire": true,
+    "enonce": "Trois amis partagent une addition de 60 francs au restaurant, et chacun paie\nla même part.\n",
+    "depart": "addition = 60\namis = 3\npart = addition / amis\nprint(part)\n",
+    "indices": [
+      "Regarde le signe utilisé pour diviser. En Python, / rend toujours un nombre à virgule, même quand la division tombe juste.",
+      "Un nombre à virgule s'affiche avec un point, pas avec une virgule, et il garde son .0 même quand il est rond."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "20.0",
+          "20",
+          "20,0"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-06",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "// coupe, % reste",
+    "obligatoire": true,
+    "enonce": "17 bonbons sont partagés entre 5 enfants, en parts égales.\n`//` donne le nombre de bonbons que reçoit chaque enfant, et `%` donne ce qui\nreste une fois le partage fait.\n",
+    "depart": "bonbons = 17\nenfants = 5\nprint(bonbons // enfants, bonbons % enfants)\n",
+    "indices": [
+      "Fais le partage à la main. Combien de fois 5 rentre-t-il dans 17 ?",
+      "// garde le nombre de parts entières, % garde ce qui ne rentre dans aucune part. 5 fois 3 font 15, il en reste 2."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "3 2",
+          "3.4 2",
+          "2 3"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-07",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Le reste de la division",
+    "obligatoire": true,
+    "enonce": "Une classe de 23 élèves forme des équipes de 4.\nComplète le trou pour que la variable `seuls` contienne le nombre d'élèves\nqui restent sans équipe complète.\n",
+    "depart": "eleves = 23\npar_equipe = 4\nseuls = eleves _____ par_equipe\nprint(\"Élèves sans équipe complète :\", seuls)\n",
+    "indices": [
+      "Tu cherches ce qui RESTE une fois formées toutes les équipes possibles.",
+      "L'opérateur qui donne le reste d'une division s'écrit avec le signe pourcent."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "seuls",
+        "valeurAttendue": "3",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "%",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-08",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Priorité et parenthèses",
+    "obligatoire": true,
+    "enonce": "Comme en mathématiques, Python fait les multiplications avant les additions,\nsauf si des parenthèses changent l'ordre.\n`**` calcule une puissance : `3 ** 2` vaut 3 fois 3. La puissance passe même\navant la multiplication.\n",
+    "depart": "print(2 + 3 * 4)\nprint((2 + 3) * 4)\nprint(2 * 3 ** 2)\n",
+    "indices": [
+      "Traite chaque ligne séparément. Sur la première, quelle opération Python fait-il en premier ?",
+      "L'ordre est le suivant. D'abord les parenthèses, puis la puissance, puis la multiplication et la division, et enfin l'addition et la soustraction. Sur la dernière ligne, 3 ** 2 est calculé avant d'être multiplié par 2."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "14\n20\n18",
+          "20\n20\n36",
+          "14\n20\n36"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-09",
+    "concept": "chaines",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "len() compte les caractères",
+    "obligatoire": true,
+    "enonce": "La fonction `len()` compte les caractères d'un texte, espaces et signes\ncompris. Complète le trou pour que la variable `longueur` contienne le nombre\nde caractères du pseudo.\n",
+    "depart": "pseudo = \"Léa_2026\"\nlongueur = _____(pseudo)\nprint(\"Ton pseudo fait\", longueur, \"caractères\")\n",
+    "indices": [
+      "Le nom de la fonction qui compte est écrit dans la phrase au-dessus du programme.",
+      "La fonction se place devant les parenthèses, et entre les parenthèses on met ce qu'on veut mesurer."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "longueur",
+        "valeurAttendue": "8",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "len(",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-10",
+    "concept": "arithmetique",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Les parenthèses oubliées",
+    "obligatoire": false,
+    "enonce": "Ce programme calcule la moyenne de trois notes.\nIl tourne sans erreur, mais il se trompe : il affiche 10.666666666666666 au\nlieu de 4.0.\nTrouve pourquoi, puis répare-le.\n",
+    "depart": "note1 = 6\nnote2 = 4\nnote3 = 2\nmoyenne = note1 + note2 + note3 / 3\nprint(\"Moyenne :\", moyenne)\n",
+    "indices": [
+      "Python ne lit pas cette ligne de gauche à droite comme une phrase. Il divise avant d'additionner. Qu'est-ce qui est vraiment divisé par 3 ici ?",
+      "Des parenthèses autour de la somme forcent Python à additionner d'abord."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Moyenne : 4.0",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "4.0",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-11",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Le reste, hors des sentiers battus",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : le reste d'une division marche aussi avec des nombres\nnégatifs et des nombres à virgule, mais pas toujours comme on l'imagine.\n",
+    "depart": "print(-7 % 3)\nprint(7.5 % 2)\n",
+    "indices": [
+      "En Python, le reste d'une division par 3 est toujours compris entre 0 et 2, même quand le nombre de départ est négatif.",
+      "Pour -7, cherche le multiple de 3 juste en dessous, c'est -9. Il faut ajouter 2 pour arriver à -7. Pour 7.5, enlève 2 autant de fois que possible."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "2\n1.5",
+          "-1\n1.5",
+          "1\n1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-12",
+    "concept": "modulo",
+    "notion": "calculer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Décomposer un nombre sans boucle",
+    "obligatoire": false,
+    "enonce": "Défi : sépare les trois chiffres d'un nombre, sans le transformer en texte.\nSeuls `//` et `%` sont permis.\n\nPour 472, ton programme doit afficher :\n\nUn nombre à trois chiffres : 472\nCentaines : 4\nDizaines : 7\nUnités : 2\n\nTon programme sera relancé avec un autre nombre.\n",
+    "depart": "nombre = int(input(\"Un nombre à trois chiffres : \"))\n",
+    "indices": [
+      "Commence par les unités. C'est le reste de la division par 10.",
+      "Pour les centaines, combien de fois 100 rentre-t-il dans le nombre ? Pour les dizaines, enlève d'abord les unités avec // 10, puis garde le reste de la division par 10."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "472"
+        ],
+        "attendu": "Un nombre à trois chiffres : 472\nCentaines : 4\nDizaines : 7\nUnités : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "905"
+        ],
+        "attendu": "Un nombre à trois chiffres : 905\nCentaines : 9\nDizaines : 0\nUnités : 5",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "str(",
+        "message": "Ce défi se résout sans transformer le nombre en texte : seuls // et % sont permis.",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "[",
+        "message": "Ce défi se résout sans transformer le nombre en texte : seuls // et % sont permis.",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s2-13",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le quatrième type : True et False",
+    "obligatoire": true,
+    "enonce": "Quand Python compare deux valeurs, il ne se contente pas de vérifier : il\nproduit une réponse. Cette réponse est une valeur d'un quatrième type, après\nles entiers, les nombres à virgule et le texte. Elle ne peut valoir que\n`True` (vrai) ou `False` (faux), et elle s'affiche comme les autres.\n",
+    "depart": "temperature = 24\nprint(temperature > 30)\nprint(temperature < 30)\n",
+    "indices": [
+      "Remplace temperature par sa valeur, puis lis chaque ligne comme une question : 24 est-il plus grand que 30 ?",
+      "Python n'affiche pas la question, il affiche sa réponse. True quand c'est vrai, False quand c'est faux."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False\nTrue",
+          "True\nFalse",
+          "temperature > 30\ntemperature < 30"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-14",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "= range, == compare",
+    "obligatoire": true,
+    "enonce": "Ce programme demande le code d'un casier, puis dit si le casier s'ouvre.\nIl s'arrête sur une erreur avant même de poser la question.\nLis le message, puis répare le programme.\n",
+    "depart": "code = int(input(\"Code du casier : \"))\nouvert = (code = 4321)\nprint(\"Casier ouvert :\", ouvert)\n",
+    "indices": [
+      "Le message parle de la ligne 2. Sur cette ligne, un signe = devrait poser une question, mais il essaie de ranger une valeur.",
+      "Un seul = range une valeur dans une boîte. Pour demander si deux valeurs sont égales, Python attend deux signes = collés."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "4321"
+        ],
+        "attendu": "Code du casier : 4321\nCasier ouvert : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "1234"
+        ],
+        "attendu": "Code du casier : 1234\nCasier ouvert : False",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-15",
+    "concept": "comparateurs",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les six comparateurs",
+    "obligatoire": true,
+    "enonce": "Deux nombres, six comparaisons, deux par ligne. Chaque ligne affiche deux\nréponses, séparées par un espace.\n",
+    "depart": "x = 7\ny = 12\nprint(x == y, x != y)\nprint(x < y, x > y)\nprint(x <= y, x >= y)\n",
+    "indices": [
+      "Traite les comparaisons une par une, en remplaçant x par 7 et y par 12. La première demande : 7 est-il égal à 12 ?",
+      "!= veut dire « différent de ». <= veut dire « plus petit ou égal », >= « plus grand ou égal » : 7 est plus petit que 12, donc il est aussi plus petit ou égal."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False True\nTrue False\nTrue False",
+          "True False\nFalse True\nFalse True",
+          "False True\nTrue False\nFalse True"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-16",
+    "concept": "comparateurs",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Dix-huit ans pile",
+    "obligatoire": true,
+    "enonce": "Pour s'inscrire seul à un stage d'escalade, il faut avoir au moins 18 ans.\nCe programme vérifie l'âge de Noé, qui fête justement ses 18 ans aujourd'hui.\n",
+    "depart": "age = 18\npeut_s_inscrire = age > 18\nprint(\"Inscription possible :\", peut_s_inscrire)\n",
+    "indices": [
+      "« Au moins 18 ans » veut dire 18 ou plus. Mais que demande exactement le signe > ?",
+      "Un nombre n'est jamais plus grand que lui-même, donc 18 > 18 est faux. Le programme refuse Noé alors qu'il a le droit de s'inscrire. Il aurait fallu >=, qui inclut la borne."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Inscription possible : False",
+          "Inscription possible : True",
+          "Inscription possible : 18"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-17",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Ranger une réponse dans une variable",
+    "obligatoire": true,
+    "enonce": "Le grand toboggan d'un parc aquatique est réservé aux personnes d'au moins\n140 cm. Complète le trou pour que la variable `autorise` contienne la réponse\nà la question « la taille atteint-elle 140 cm ? ».\n\nTon programme sera essayé avec plusieurs tailles, dont 140 cm pile.\n",
+    "depart": "taille = int(input(\"Ta taille en cm : \"))\nautorise = _____\nprint(\"Grand toboggan :\", autorise)\n",
+    "indices": [
+      "Le trou attend une comparaison, pas un texte. Sa réponse, True ou False, sera rangée dans autorise.",
+      "« Au moins 140 » veut dire 140 ou plus. Une personne qui mesure 140 cm pile doit avoir le droit de monter."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "140"
+        ],
+        "attendu": "Ta taille en cm : 140\nGrand toboggan : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "139"
+        ],
+        "attendu": "Ta taille en cm : 139\nGrand toboggan : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "175"
+        ],
+        "attendu": "Ta taille en cm : 175\nGrand toboggan : True",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-18",
+    "concept": "comparateurs",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La casse compte",
+    "obligatoire": true,
+    "enonce": "Le mot de passe du Wi-Fi de la bibliothèque est Lecture2026. Camille le tape\nsur son téléphone, qui a mis la première lettre en minuscule sans prévenir.\n",
+    "depart": "mot_de_passe = \"Lecture2026\"\nsaisie = \"lecture2026\"\nprint(\"Connexion :\", saisie == mot_de_passe)\n",
+    "indices": [
+      "Compare les deux textes caractère par caractère, en commençant par le premier.",
+      "Pour Python, L majuscule et l minuscule sont deux caractères différents. Deux textes ne sont égaux que s'ils sont identiques jusqu'au dernier caractère."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Connexion : False",
+          "Connexion : True",
+          "Connexion : lecture2026"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-19",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le mot de passe et le signe =",
+    "obligatoire": false,
+    "enonce": "Ce programme vérifie le mot de passe du Wi-Fi de la bibliothèque.\nIl s'arrête sur une erreur avant même de le demander. Répare-le.\n",
+    "depart": "saisie = input(\"Mot de passe : \")\ncorrect = (saisie = \"Lecture2026\")\nprint(\"Connexion :\", correct)\n",
+    "indices": [
+      "Sur la ligne 2, le signe = devrait demander si la saisie est égale au mot de passe. Que fait un seul = ?",
+      "Comparer deux textes s'écrit exactement comme comparer deux nombres, avec deux signes = collés."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Lecture2026"
+        ],
+        "attendu": "Mot de passe : Lecture2026\nConnexion : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "lecture2026"
+        ],
+        "attendu": "Mot de passe : lecture2026\nConnexion : False",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-20",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "True + True vaut 2",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : Python accepte d'additionner des booléens. Reste à savoir\nce que ça donne.\n",
+    "depart": "print(True + True)\nprint((3 > 1) + (2 > 5))\n",
+    "indices": [
+      "Pour Python, un booléen est aussi un nombre. Lequel, à ton avis, pour True ? Et pour False ?",
+      "True compte pour 1 et False pour 0. Sur la deuxième ligne, calcule d'abord chaque comparaison, puis additionne."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "2\n1",
+          "TrueTrue\nTrueFalse",
+          "True\nTrue"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-21",
+    "concept": "booleens",
+    "notion": "comparer",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Compter les conditions remplies",
+    "obligatoire": false,
+    "enonce": "Défi : une attraction de parc pose trois conditions. Avoir au moins 10 ans,\nmesurer au moins 130 cm, et venir accompagné.\n\nLe programme pose déjà les trois questions. Ajoute de quoi afficher combien\nde conditions sont remplies, en additionnant les réponses des comparaisons.\n\nPour 11 ans, 125 cm et « oui », l'écran doit montrer :\n\nÂge : 11\nTaille en cm : 125\nAccompagné (oui ou non) : oui\nConditions remplies : 2\n\nTon programme sera relancé avec d'autres réponses.\n",
+    "depart": "age = int(input(\"Âge : \"))\ntaille = int(input(\"Taille en cm : \"))\naccompagne = input(\"Accompagné (oui ou non) : \")\n",
+    "indices": [
+      "Chaque condition est une comparaison, qui vaut True ou False. Et True compte pour 1 quand on l'additionne.",
+      "Écris les trois comparaisons, chacune entre parenthèses, et relie-les par des +. La troisième compare deux textes."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "11",
+          "125",
+          "oui"
+        ],
+        "attendu": "Âge : 11\nTaille en cm : 125\nAccompagné (oui ou non) : oui\nConditions remplies : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "10",
+          "130",
+          "non"
+        ],
+        "attendu": "Âge : 10\nTaille en cm : 130\nAccompagné (oui ou non) : non\nConditions remplies : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "9",
+          "120",
+          "non"
+        ],
+        "attendu": "Âge : 9\nTaille en cm : 120\nAccompagné (oui ou non) : non\nConditions remplies : 0",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "160",
+          "oui"
+        ],
+        "attendu": "Âge : 15\nTaille en cm : 160\nAccompagné (oui ou non) : oui\nConditions remplies : 3",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "remplies : 2",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s2-22",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "and, or, not",
+    "obligatoire": true,
+    "enonce": "Trois mots pour combiner des réponses. `and` vaut True seulement si les deux\ncôtés sont vrais, `or` vaut True si au moins un côté est vrai, et `not`\ninverse la réponse qui le suit.\n",
+    "depart": "soleil = True\nweek_end = False\nprint(soleil and week_end)\nprint(soleil or week_end)\nprint(not week_end)\n",
+    "indices": [
+      "Lis soleil and week_end comme « soleil ET week-end ». Faut-il que les deux soient vrais ?",
+      "and demande que les deux côtés soient vrais, or se contente d'un seul. Et not False vaut True."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False\nTrue\nTrue",
+          "True\nFalse\nTrue",
+          "False\nTrue\nFalse"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-23",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Entre deux bornes",
+    "obligatoire": true,
+    "enonce": "Un club de randonnée accepte les membres de 12 à 70 ans, bornes comprises.\nComplète les deux trous. La ligne 2 écrit la condition sous forme\nd'encadrement, et la ligne 3 dit exactement la même chose avec `and`.\n\nTon programme sera essayé avec plusieurs âges, dont 12 et 70.\n",
+    "depart": "age = int(input(\"Âge : \"))\naccepte = _____\naccepte_aussi = age >= 12 _____ age <= 70\nprint(\"Accepté :\", accepte, accepte_aussi)\n",
+    "indices": [
+      "Un encadrement s'écrit comme en mathématiques, avec la valeur au milieu et une borne de chaque côté.",
+      "« De 12 à 70 ans, bornes comprises » veut dire 12 ou plus, et 70 ou moins. Le second trou attend le mot qui relie deux conditions qui doivent être vraies toutes les deux."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12"
+        ],
+        "attendu": "Âge : 12\nAccepté : True True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "11"
+        ],
+        "attendu": "Âge : 11\nAccepté : False False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "70"
+        ],
+        "attendu": "Âge : 70\nAccepté : True True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "71"
+        ],
+        "attendu": "Âge : 71\nAccepté : False False",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "<= age <=",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-24",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "not devant un encadrement",
+    "obligatoire": true,
+    "enonce": "`not` se place aussi devant un encadrement entier, entre parenthèses. Ce\nprogramme demande, pour deux âges, s'ils sont en dehors des limites du club\nde randonnée.\n",
+    "depart": "age = 75\nrefuse = not (12 <= age <= 70)\nprint(\"Refusé :\", refuse)\nage = 40\nrefuse = not (12 <= age <= 70)\nprint(\"Refusé :\", refuse)\n",
+    "indices": [
+      "Pour chaque âge, calcule d'abord ce qui est entre parenthèses. not ne vient qu'après.",
+      "Pour 75 ans, l'encadrement vaut False, et not False vaut True. Les bornes ne changent pas, seule la réponse est inversée."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Refusé : True\nRefusé : False",
+          "Refusé : False\nRefusé : True",
+          "Refusé : False\nRefusé : False"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-25",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le contrôle qui laisse passer",
+    "obligatoire": true,
+    "enonce": "Pour s'inscrire au stage d'escalade, il faut avoir au moins 12 ans ET une\nautorisation signée. Ce programme a été essayé avec un élève de 14 ans qui a\nson autorisation, puis avec une élève de 10 ans qui ne l'a pas : il a eu\nraison les deux fois.\n\nPourtant, il se trompe. Trouve le cas qu'il laisse passer, puis répare-le.\n",
+    "depart": "age = int(input(\"Âge : \"))\nautorisation = input(\"Autorisation signée (oui ou non) : \")\ninscrit = age >= 12 or autorisation == \"oui\"\nprint(\"Inscription :\", inscrit)\n",
+    "indices": [
+      "Imagine un élève de 15 ans sans autorisation. Que répond le programme ? Et que devrait-il répondre ?",
+      "or se contente d'une seule condition vraie. Pour ce stage, il faut que les deux le soient."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "14",
+          "oui"
+        ],
+        "attendu": "Âge : 14\nAutorisation signée (oui ou non) : oui\nInscription : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "10",
+          "non"
+        ],
+        "attendu": "Âge : 10\nAutorisation signée (oui ou non) : non\nInscription : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "non"
+        ],
+        "attendu": "Âge : 15\nAutorisation signée (oui ou non) : non\nInscription : False",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-26",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "« Au moins 12 et au plus 70 »",
+    "obligatoire": false,
+    "enonce": "En français, on dit « au moins 12 et au plus 70 ». Ce programme essaie de\nl'écrire exactement comme on le dit.\n",
+    "depart": "age = 40\naccepte = age >= 12 and <= 70\nprint(\"Accepté :\", accepte)\n",
+    "indices": [
+      "Chaque côté d'un and doit être une question complète. Que demande le côté droit, <= 70, et à propos de quoi ?",
+      "Python ne devine pas que <= 70 parle encore de age : il refuse de lancer le programme. Il aurait fallu écrire age >= 12 and age <= 70."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Une erreur : Python refuse de lancer le programme",
+          "Accepté : True",
+          "Accepté : False"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-27",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Le court-circuit",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : Python lit un `and` de gauche à droite, et s'arrête dès\nqu'il connaît la réponse.\n",
+    "depart": "eleves = 0\npizzas = 3\nprint(eleves > 0 and pizzas / eleves >= 1)\n",
+    "indices": [
+      "Commence par le côté gauche du and. S'il est faux, le and peut-il encore valoir True ?",
+      "Dès que le côté gauche vaut False, Python connaît la réponse et ne calcule pas le côté droit. La division par zéro n'a jamais lieu."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "False",
+          "Une erreur : division par zéro",
+          "True"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-28",
+    "concept": "logique",
+    "notion": "combiner",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le feu vert, question après question",
+    "obligatoire": false,
+    "enonce": "Défi : une salle d'escalade vérifie trois choses, une question après\nl'autre. Avoir au moins 12 ans, des chaussons à sa taille, et avoir lu le\nrèglement.\n\nLe programme range déjà True dans `autorise`, puis pose les trois questions.\nAprès chaque réponse, mets `autorise` à jour avec `and` : une seule réponse\nqui ne convient pas doit suffire à le faire passer à False, pour de bon.\nAffiche-le à la fin.\n\nPour 13 ans, « oui » puis « non », l'écran doit montrer :\n\nÂge : 13\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : non\nAutorisé : False\n\nTon programme sera relancé avec d'autres réponses.\n",
+    "depart": "autorise = True\nage = int(input(\"Âge : \"))\n\nchaussons = input(\"Chaussons à ta taille (oui ou non) : \")\n\nreglement = input(\"Règlement lu (oui ou non) : \")\n",
+    "indices": [
+      "Après la question sur l'âge, autorise doit rester True seulement s'il l'était déjà ET si l'âge suffit.",
+      "autorise = autorise and age >= 12 garde False pour de bon dès qu'une réponse ne convient pas. Fais de même après chacune des deux autres questions."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "13",
+          "oui",
+          "non"
+        ],
+        "attendu": "Âge : 13\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : non\nAutorisé : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "12",
+          "oui",
+          "oui"
+        ],
+        "attendu": "Âge : 12\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : oui\nAutorisé : True",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "11",
+          "oui",
+          "oui"
+        ],
+        "attendu": "Âge : 11\nChaussons à ta taille (oui ou non) : oui\nRèglement lu (oui ou non) : oui\nAutorisé : False",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "non",
+          "oui"
+        ],
+        "attendu": "Âge : 15\nChaussons à ta taille (oui ou non) : non\nRèglement lu (oui ou non) : oui\nAutorisé : False",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Autorisé : False",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "autorise and",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s2-29",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Une seule branche s'exécute",
+    "obligatoire": true,
+    "enonce": "`if` pose une question. Si la réponse est True, Python exécute les lignes\ndécalées juste en dessous. Sinon, il saute au `else` et exécute les siennes.\nLa dernière ligne, elle, n'est pas décalée.\n",
+    "depart": "age = 16\nif age >= 18:\n    print(\"Tu es majeur.\")\nelse:\n    print(\"Tu es mineur.\")\nprint(\"Fin du programme.\")\n",
+    "indices": [
+      "Commence par la question du if. 16 est-il plus grand ou égal à 18 ?",
+      "Une seule des deux branches s'exécute. La dernière ligne n'est pas décalée, elle ne dépend donc ni du if ni du else."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Tu es mineur.\nFin du programme.",
+          "Tu es majeur.\nTu es mineur.\nFin du programme.",
+          "Tu es mineur."
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-30",
+    "concept": "indentation",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le bloc qui n'est pas décalé",
+    "obligatoire": true,
+    "enonce": "Ce programme doit dire s'il faut prendre un parapluie. Python refuse de le\nlancer : il ne sait pas quelles lignes dépendent du `if` et du `else`.\nLis le message d'erreur, puis répare le programme.\n",
+    "depart": "pluie = input(\"Il pleut ? (oui ou non) : \")\nif pluie == \"oui\":\nprint(\"Prends ton parapluie.\")\nelse:\nprint(\"Pas besoin de parapluie.\")\n",
+    "indices": [
+      "Les lignes qui dépendent d'un if ou d'un else doivent être décalées vers la droite, juste en dessous de lui.",
+      "Place le curseur au début de la ligne 3 et appuie sur Tab. Fais de même pour la ligne 5."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "oui"
+        ],
+        "attendu": "Il pleut ? (oui ou non) : oui\nPrends ton parapluie.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "non"
+        ],
+        "attendu": "Il pleut ? (oui ou non) : non\nPas besoin de parapluie.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-31",
+    "concept": "indentation",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le message sorti du bloc",
+    "obligatoire": true,
+    "enonce": "Une attraction est réservée aux personnes d'au moins 120 cm. Le programme\ntourne sans erreur. Mais essaie avec 110 cm : il refuse, puis souhaite quand\nmême une bonne descente.\n\nRépare-le, pour que le souhait ne s'affiche qu'aux personnes acceptées.\n",
+    "depart": "taille = int(input(\"Ta taille en cm : \"))\nif taille >= 120:\n    print(\"C'est bon, tu peux monter.\")\nelse:\n    print(\"Pas encore : il faut au moins 120 cm.\")\nprint(\"Bonne descente !\")\n",
+    "indices": [
+      "Quelle ligne s'exécute dans tous les cas, quelle que soit la taille ? Regarde son décalage.",
+      "Une ligne qui n'est pas décalée ne dépend d'aucun bloc. Pour appartenir au if, elle doit être décalée comme les autres lignes du if, et placée avant le else."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "130"
+        ],
+        "attendu": "Ta taille en cm : 130\nC'est bon, tu peux monter.\nBonne descente !",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "110"
+        ],
+        "attendu": "Ta taille en cm : 110\nPas encore : il faut au moins 120 cm.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-32",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Trois branches",
+    "obligatoire": true,
+    "enonce": "Ce programme conseille une tenue selon la température. Complète les deux\ntrous pour obtenir trois branches : 25 degrés ou plus, puis 15 degrés ou\nplus, et tout le reste.\n\nTon programme sera essayé avec plusieurs températures, dont 25 et 15.\n",
+    "depart": "temperature = int(input(\"Température : \"))\nif temperature >= 25:\n    print(\"Short et t-shirt.\")\n_____ temperature >= 15:\n    print(\"Un pull suffit.\")\n_____:\n    print(\"Prends ta veste.\")\n",
+    "indices": [
+      "Le premier trou ajoute une deuxième question, qui n'est posée que si la première a répondu False.",
+      "Le second trou n'a pas de condition. Il prend tout ce que les deux questions ont refusé."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "30"
+        ],
+        "attendu": "Température : 30\nShort et t-shirt.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "25"
+        ],
+        "attendu": "Température : 25\nShort et t-shirt.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "20"
+        ],
+        "attendu": "Température : 20\nUn pull suffit.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15"
+        ],
+        "attendu": "Température : 15\nUn pull suffit.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "8"
+        ],
+        "attendu": "Température : 8\nPrends ta veste.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-33",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le cas oublié",
+    "obligatoire": true,
+    "enonce": "Pour s'inscrire au cours de plongée, il faut avoir au moins 16 ans. Ce\nprogramme accueille bien ceux qui ont l'âge. Mais essaie avec 14 ans : il ne\ndit rien du tout, et on ne sait pas si on est inscrit.\n\nAjoute ce qui manque pour que, à 14 ans, l'écran montre :\n\nÂge : 14\nRefusé : il faut au moins 16 ans.\n",
+    "depart": "age = int(input(\"Âge : \"))\nif age >= 16:\n    print(\"Inscription acceptée.\")\n",
+    "indices": [
+      "Le programme ne prévoit rien pour ceux que le if refuse. Quel mot prend en charge tous les autres cas ?",
+      "Ajoute un else aligné sur le if, avec son deux-points, et le message décalé juste en dessous."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "17"
+        ],
+        "attendu": "Âge : 17\nInscription acceptée.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "16"
+        ],
+        "attendu": "Âge : 16\nInscription acceptée.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "14"
+        ],
+        "attendu": "Âge : 14\nRefusé : il faut au moins 16 ans.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-34",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'ordre des elif",
+    "obligatoire": true,
+    "enonce": "Un cinéma est gratuit avant 6 ans, au tarif enfant avant 16 ans, et au plein\ntarif ensuite. Ce programme ne plante pas, et pourtant un enfant de 4 ans\npaie le tarif enfant. Trouve pourquoi, puis répare-le.\n",
+    "depart": "age = int(input(\"Âge : \"))\nif age < 16:\n    print(\"Tarif enfant : 10 francs\")\nelif age < 6:\n    print(\"Gratuit\")\nelse:\n    print(\"Plein tarif : 15 francs\")\n",
+    "indices": [
+      "Déroule le programme pour 4 ans. Quelle est la première question qui répond True ?",
+      "Python s'arrête à la première condition vraie. Une question plus précise doit donc être posée avant une question plus large."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "4"
+        ],
+        "attendu": "Âge : 4\nGratuit",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "6"
+        ],
+        "attendu": "Âge : 6\nTarif enfant : 10 francs",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15"
+        ],
+        "attendu": "Âge : 15\nTarif enfant : 10 francs",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "16"
+        ],
+        "attendu": "Âge : 16\nPlein tarif : 15 francs",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-35",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La variable née dans un if",
+    "obligatoire": false,
+    "enonce": "Un club accorde 10 francs de rabais à ses membres. Pour un membre, le\nprogramme marche. Pour quelqu'un qui n'est pas membre, il s'arrête sur une\nerreur. Répare-le : un non-membre paie le prix normal.\n",
+    "depart": "prix = 40\nmembre = input(\"Membre du club ? (oui ou non) : \")\nif membre == \"oui\":\n    rabais = 10\nprint(\"Prix à payer :\", prix - rabais)\n",
+    "indices": [
+      "Pour un non-membre, la ligne 4 ne s'exécute jamais. Que vaut rabais quand Python arrive à la dernière ligne ?",
+      "La variable rabais doit exister dans tous les cas. Donne-lui une valeur avant le if, celle qui convient à un non-membre."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "oui"
+        ],
+        "attendu": "Membre du club ? (oui ou non) : oui\nPrix à payer : 30",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "non"
+        ],
+        "attendu": "Membre du club ? (oui ou non) : non\nPrix à payer : 40",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-36",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "elif ou deux if ?",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : ce programme pose deux fois les mêmes questions. D'abord\navec deux `if` à la suite, puis avec un `if` et un `elif`.\n",
+    "depart": "points = 18\nif points >= 10:\n    print(\"Réussi\")\nif points >= 15:\n    print(\"Très bien\")\nprint(\"---\")\nif points >= 10:\n    print(\"Réussi\")\nelif points >= 15:\n    print(\"Très bien\")\n",
+    "indices": [
+      "Dans la première moitié, les deux if sont indépendants : Python pose les deux questions, quelle que soit la réponse à la première.",
+      "Dans la seconde moitié, le elif n'est examiné que si le if a répondu False. Or 18 est plus grand ou égal à 10."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Réussi\nTrès bien\n---\nRéussi",
+          "Réussi\nTrès bien\n---\nRéussi\nTrès bien",
+          "Réussi\n---\nRéussi"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-37",
+    "concept": "conditions",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Dire pourquoi c'est refusé",
+    "obligatoire": false,
+    "enonce": "Défi : la salle de répétition du collège est réservée aux élèves de 12 à 20\nans, et sa porte s'ouvre avec le code Musique2026. Le programme pose déjà\nles deux questions. Écris la suite, qui donne une raison précise à chaque\nrefus :\n\n- moins de 12 ans : Refusé : il faut au moins 12 ans.\n- plus de 20 ans : Refusé : il faut 20 ans au plus.\n- mauvais code : Refusé : le code est faux.\n- sinon : Bienvenue dans la salle.\n\nL'âge se vérifie avant le code. Pour 25 ans et le bon code, l'écran doit\nmontrer :\n\nÂge : 25\nCode de la porte : Musique2026\nRefusé : il faut 20 ans au plus.\n\nTon programme sera relancé avec d'autres réponses.\n",
+    "depart": "age = int(input(\"Âge : \"))\ncode = input(\"Code de la porte : \")\n",
+    "indices": [
+      "Une seule chaîne de questions, if puis elif puis else. Chaque refus a sa propre branche, dans l'ordre de la liste.",
+      "La troisième question compare deux textes avec !=. Elle n'est posée que si l'âge convient, puisqu'elle vient après les deux questions sur l'âge."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "25",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 25\nCode de la porte : Musique2026\nRefusé : il faut 20 ans au plus.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "11",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 11\nCode de la porte : Musique2026\nRefusé : il faut au moins 12 ans.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "15",
+          "musique2026"
+        ],
+        "attendu": "Âge : 15\nCode de la porte : musique2026\nRefusé : le code est faux.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "9",
+          "piano"
+        ],
+        "attendu": "Âge : 9\nCode de la porte : piano\nRefusé : il faut au moins 12 ans.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "12",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 12\nCode de la porte : Musique2026\nBienvenue dans la salle.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "20",
+          "Musique2026"
+        ],
+        "attendu": "Âge : 20\nCode de la porte : Musique2026\nBienvenue dans la salle.",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "25",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s2-38",
+    "concept": "probleme narratif",
+    "notion": "decider",
+    "seance": 2,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "L'abonnement de la piscine",
+    "obligatoire": true,
+    "enonce": "Dernier exercice de la séance : un programme complet, qui réunit ce que tu\nviens d'apprendre.\n\nLa piscine propose un abonnement adulte, de 18 à 65 ans, bornes comprises.\nChaque abonné reçoit un code de casier, calculé à partir de son âge.\n\nLe programme doit faire quatre choses :\n\n1. demander le prénom, avec l'invite \"Prénom : \" ;\n2. demander l'âge, avec l'invite \"Âge : \", et le ranger sous forme de nombre entier ;\n3. si l'âge est dans les bornes, souhaiter la bienvenue et afficher le code de casier, qui vaut `(age * 37) % 1000` ;\n4. sinon, afficher un refus.\n\nSi la personne répond Camille, puis 30, l'écran affiche ceci après les deux questions :\n\nBienvenue Camille !\nAbonnement accepté\nTon code de casier : 110\n\nSi elle répond Camille, puis 17 :\n\nAbonnement refusé pour Camille\n\nRecopie ces textes au caractère près : cet exercice exige le format exact. Ton\nprogramme sera essayé avec d'autres prénoms et d'autres âges, dont 18 et 65.\n",
+    "depart": "# 1. demander le prénom\n\n# 2. demander l'âge et le convertir en nombre entier\n\n# 3. si l'âge est entre 18 et 65 ans : bienvenue, et code de casier\n\n# 4. sinon : refus\n",
+    "indices": [
+      "Commence par les deux questions, comme à la séance 1. Ensuite, une seule condition, écrite comme un encadrement, choisit entre deux branches.",
+      "Dans la branche de l'abonnement accepté, calcule le code avant de l'afficher. Un f-string glisse le prénom et le code dans les phrases."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "30"
+        ],
+        "attendu": "Prénom : Camille\nÂge : 30\nBienvenue Camille !\nAbonnement accepté\nTon code de casier : 110",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "17"
+        ],
+        "attendu": "Prénom : Alex\nÂge : 17\nAbonnement refusé pour Alex",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "18"
+        ],
+        "attendu": "Prénom : Noé\nÂge : 18\nBienvenue Noé !\nAbonnement accepté\nTon code de casier : 666",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "65"
+        ],
+        "attendu": "Prénom : Léa\nÂge : 65\nBienvenue Léa !\nAbonnement accepté\nTon code de casier : 405",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Sam",
+          "66"
+        ],
+        "attendu": "Prénom : Sam\nÂge : 66\nAbonnement refusé pour Sam",
+        "exigeExact": true
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "110",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-01",
+    "concept": "reactivation",
+    "notion": "rappels",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Dès 18 ans",
+    "obligatoire": true,
+    "enonce": "Un rappel de la séance 2 avant les boucles. En Suisse, on vote dès 18 ans.\nCe programme vérifie l'âge de Léa, qui a fêté ses 18 ans hier.\n",
+    "depart": "age = 18\nif age > 18:\n    print(\"Tu peux voter.\")\nelse:\n    print(\"Pas encore.\")\n",
+    "indices": [
+      "Remplace age par 18 dans la question du if. 18 est-il strictement plus grand que 18 ?",
+      "18 > 18 est faux, donc Python passe au else. Pour « dès 18 ans », il fallait écrire >=, qui inclut la borne."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Pas encore.",
+          "Tu peux voter.",
+          "Tu peux voter.\nPas encore."
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s3-02",
+    "concept": "reactivation",
+    "notion": "rappels",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le cas que personne n'a prévu",
+    "obligatoire": true,
+    "enonce": "Ce programme surveille un aquarium, dont l'eau doit rester entre 24 et 28\ndegrés. Il prévient quand l'eau est trop froide ou trop chaude. Mais essaie\navec 26 : il ne dit rien du tout.\n\nAjoute ce qui manque pour qu'à 26 degrés, l'écran montre :\n\nTempérature de l'eau : 26\nTempérature idéale.\n",
+    "depart": "temperature = int(input(\"Température de l'eau : \"))\nif temperature < 24:\n    print(\"Eau trop froide : allume le chauffage.\")\nelif temperature > 28:\n    print(\"Eau trop chaude : éteins la lampe.\")\n",
+    "indices": [
+      "Quand l'eau n'est ni trop froide ni trop chaude, aucune des deux conditions n'est vraie. Qu'est-ce qui prend alors le relais ?",
+      "Ajoute un else aligné sur le if et le elif, avec le message décalé juste en dessous."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "20"
+        ],
+        "attendu": "Température de l'eau : 20\nEau trop froide : allume le chauffage.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "24"
+        ],
+        "attendu": "Température de l'eau : 24\nTempérature idéale.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "26"
+        ],
+        "attendu": "Température de l'eau : 26\nTempérature idéale.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "28"
+        ],
+        "attendu": "Température de l'eau : 28\nTempérature idéale.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "31"
+        ],
+        "attendu": "Température de l'eau : 31\nEau trop chaude : éteins la lampe.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s3-03",
+    "concept": "reactivation",
+    "notion": "rappels",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Deux fois la même réponse",
+    "obligatoire": true,
+    "enonce": "Dernier rappel avant les boucles. On lance ce programme, et on tape 4 quand\nil pose sa question.\n",
+    "depart": "nombre = input(\"Un nombre : \")\nprint(nombre + nombre)\n",
+    "indices": [
+      "Que range input() dans la variable nombre quand on tape 4 ? Un nombre, ou un texte ?",
+      "input() rend toujours du texte. Entre deux textes, + colle bout à bout, il n'additionne pas."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Un nombre : 4\n44",
+          "Un nombre : 4\n8",
+          "Un nombre : 4\n4 4"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s3-04",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les valeurs de range(5)",
+    "obligatoire": true,
+    "enonce": "`for` répète les lignes décalées en dessous de lui, une fois pour chaque\nvaleur que lui donne `range()`. À chaque tour, la variable `i` prend la\nvaleur suivante.\n",
+    "depart": "for i in range(5):\n    print(\"Tour numéro\", i)\n",
+    "indices": [
+      "Combien de fois la ligne s'affiche-t-elle ? Et quelle est la toute première valeur de i ?",
+      "range(5) commence à 0 et s'arrête juste avant 5. Il donne cinq valeurs, mais jamais le 5 lui-même."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Tour numéro 0\nTour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4",
+          "Tour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4\nTour numéro 5",
+          "Tour numéro 0\nTour numéro 1\nTour numéro 2\nTour numéro 3\nTour numéro 4\nTour numéro 5"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-05",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un début, une fin, un pas",
+    "obligatoire": true,
+    "enonce": "`range()` accepte aussi deux ou trois nombres : un début, une fin qui n'est\njamais atteinte, et un pas, qui dit de combien avancer à chaque tour.\n",
+    "depart": "for i in range(1, 4):\n    print(i)\nprint(\"---\")\nfor i in range(0, 10, 3):\n    print(i)\n",
+    "indices": [
+      "Traite les deux boucles séparément. La première part de 1. Jusqu'où va-t-elle ?",
+      "La seconde part de 0 et avance de 3 en 3. Elle s'arrête avant 10, mais 9 est encore plus petit que 10."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n2\n3\n---\n0\n3\n6\n9",
+          "1\n2\n3\n4\n---\n0\n3\n6\n9",
+          "1\n2\n3\n---\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-06",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Trois tours de piste",
+    "obligatoire": true,
+    "enonce": "Pour l'échauffement, ce programme doit afficher trois fois « Encore un tour\nde piste ! », puis une seule fois « Bravo, c'est fini. ». Complète le trou.\n",
+    "depart": "for i in range(_____):\n    print(\"Encore un tour de piste !\")\nprint(\"Bravo, c'est fini.\")\n",
+    "indices": [
+      "Le nombre entre les parenthèses de range() décide du nombre de tours.",
+      "range(3) donne trois valeurs, 0, 1 et 2. La boucle fait donc exactement trois tours."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Encore un tour de piste !\nEncore un tour de piste !\nEncore un tour de piste !\nBravo, c'est fini.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-07",
+    "concept": "indentation",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Dans la boucle ou après ?",
+    "obligatoire": true,
+    "enonce": "Deux `print` presque pareils, mais un seul est décalé sous le `for`.\n",
+    "depart": "for i in range(3):\n    print(\"Bip\")\nprint(\"Fin\")\n",
+    "indices": [
+      "Quelles lignes sont décalées sous le for ? Ce sont les seules qui se répètent.",
+      "La dernière ligne est alignée sur le for. Elle ne fait pas partie de la boucle, et s'exécute une seule fois, après le dernier tour."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Bip\nBip\nBip\nFin",
+          "Bip\nFin\nBip\nFin\nBip\nFin",
+          "Bip\nBip\nBip\nFin\nFin\nFin"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-08",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La variable de la boucle",
+    "obligatoire": true,
+    "enonce": "La variable d'une boucle change à chaque tour, et elle s'affiche comme une\nautre. Complète le trou pour que le programme affiche exactement :\n\nÉtage 1\nÉtage 2\nÉtage 3\nÉtage 4\n",
+    "depart": "for etage in range(1, 5):\n    print(f\"Étage {_____}\")\n",
+    "indices": [
+      "Entre les accolades d'un f-string, on écrit le nom de la variable à afficher.",
+      "La variable qui prend les valeurs 1, 2, 3 puis 4 est celle écrite juste après for."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Étage 1\nÉtage 2\nÉtage 3\nÉtage 4",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "{etage}",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-09",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Il manque la dernière question",
+    "obligatoire": true,
+    "enonce": "Ce programme doit numéroter les cinq questions d'un quiz, de 1 à 5. Il tourne\nsans erreur, mais la dernière question manque à l'appel. Répare-le.\n",
+    "depart": "for numero in range(1, 5):\n    print(f\"Question {numero}\")\n",
+    "indices": [
+      "Quelles valeurs range(1, 5) donne-t-il exactement ? Compte-les.",
+      "La fin de range() n'est jamais atteinte. Pour que 5 soit la dernière valeur, la fin doit être juste après."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Question 1\nQuestion 2\nQuestion 3\nQuestion 4\nQuestion 5",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-10",
+    "concept": "indentation",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La boucle sans corps",
+    "obligatoire": false,
+    "enonce": "Ce programme doit souhaiter bon appétit trois fois. Python refuse de le\nlancer. Lis le message d'erreur, puis répare le programme.\n",
+    "depart": "for i in range(3):\nprint(\"Bon appétit !\")\n",
+    "indices": [
+      "Après le deux-points du for, Python attend au moins une ligne décalée. Il n'en trouve aucune.",
+      "Place le curseur au début de la ligne 2 et appuie sur Tab."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Bon appétit !\nBon appétit !\nBon appétit !",
+        "exigeExact": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-11",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le compte à rebours",
+    "obligatoire": false,
+    "enonce": "Défi : le pas de `range()` peut être négatif. Écris une boucle qui affiche le\ncompte à rebours d'un décollage, puis le décollage lui-même :\n\n5\n4\n3\n2\n1\nDécollage !\n",
+    "depart": "",
+    "indices": [
+      "Avec un pas de -1, range() compte à l'envers. Le début est 5, et la fin n'est jamais atteinte.",
+      "Pour que 1 soit la dernière valeur, la fin doit être 0. Le message final s'affiche une seule fois, après la boucle."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "5\n4\n3\n2\n1\nDécollage !",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "print(5)",
+        "message": "Ce défi se résout avec une boucle : une seule ligne print() répétée, pas cinq.",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-12",
+    "concept": "for",
+    "notion": "repeter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Une boucle dans une boucle",
+    "obligatoire": false,
+    "enonce": "Défi : une boucle peut en contenir une autre. Écris un programme qui affiche\nles tables de multiplication de 2 et de 3, de 1 à 4, dans cet ordre exact :\n\n2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n",
+    "depart": "",
+    "indices": [
+      "La boucle extérieure choisit la table, 2 puis 3. La boucle intérieure parcourt les nombres de 1 à 4.",
+      "Décale la boucle intérieure sous la première. Elle refait alors tous ses tours, à chaque tour de la boucle extérieure."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "= 12",
+        "maitrise": false
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "s3-13",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un texte, lettre après lettre",
+    "obligatoire": true,
+    "enonce": "`for` sait aussi parcourir un texte. À chaque tour, la variable prend le\ncaractère suivant, du premier au dernier.\n",
+    "depart": "for lettre in \"Léa\":\n    print(lettre)\nprint(\"Fin du prénom\")\n",
+    "indices": [
+      "Combien de caractères le texte \"Léa\" contient-il ? C'est le nombre de tours de la boucle.",
+      "À chaque tour, lettre contient un seul caractère. La dernière ligne n'est pas décalée, elle s'affiche une seule fois."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "L\né\na\nFin du prénom",
+          "Léa\nFin du prénom",
+          "Léa\nLéa\nLéa\nFin du prénom"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-14",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "On ne parcourt pas un nombre",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher, un par ligne, les chiffres d'un code de casier.\nIl pose sa question, puis s'arrête sur une erreur au moment d'entrer dans la\nboucle. Lis le message, puis répare le programme.\n",
+    "depart": "code = int(input(\"Code du casier : \"))\nfor chiffre in code:\n    print(chiffre)\n",
+    "indices": [
+      "Que contient la variable code après la première ligne ? Un texte, ou un nombre ?",
+      "for parcourt les caractères d'un texte. Un nombre n'en a pas, il faut d'abord le transformer en texte."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "4721"
+        ],
+        "attendu": "Code du casier : 4721\n4\n7\n2\n1",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "905"
+        ],
+        "attendu": "Code du casier : 905\n9\n0\n5",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-15",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Transformer le nombre en texte",
+    "obligatoire": true,
+    "enonce": "Ce programme calcule le nombre de secondes dans une journée, puis doit en\nafficher les chiffres un par un. Complète le trou pour que la boucle puisse\nparcourir ce nombre.\n",
+    "depart": "secondes = 24 * 60 * 60\nfor chiffre in _____(secondes):\n    print(chiffre)\n",
+    "indices": [
+      "Une boucle for ne parcourt pas un nombre. Quelle fonction transforme un nombre en texte ?",
+      "La fonction qui transforme en texte s'écrit avec les trois lettres du type texte, que tu as vu à la séance 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "8\n6\n4\n0\n0",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "str(",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-16",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La lettre, ou sa position ?",
+    "obligatoire": true,
+    "enonce": "Deux façons de parcourir le même mot. Dans la première boucle, la variable\nprend les caractères. Dans la seconde, elle prend les valeurs de `range()`,\net `len()` compte les caractères du mot.\n",
+    "depart": "mot = \"vélo\"\nfor c in mot:\n    print(c)\nprint(\"---\")\nfor i in range(len(mot)):\n    print(i)\n",
+    "indices": [
+      "len(mot) vaut 4, puisque vélo a quatre caractères. Que donne alors range(4) ?",
+      "La seconde boucle ne touche jamais aux lettres. Elle affiche les positions, qui commencent à 0."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "v\né\nl\no\n---\n0\n1\n2\n3",
+          "v\né\nl\no\n---\nv\né\nl\no",
+          "v\né\nl\no\n---\n1\n2\n3\n4"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-17",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Chaque chiffre sur sa ligne",
+    "obligatoire": true,
+    "enonce": "Le programme demande un code. Ajoute une boucle qui en affiche les chiffres,\nun par ligne.\n\nSi on répond 3072, l'écran doit montrer :\n\nTon code : 3072\n3\n0\n7\n2\n\nTon programme sera relancé avec d'autres codes.\n",
+    "depart": "code = int(input(\"Ton code : \"))\n",
+    "indices": [
+      "La variable code contient un nombre. Avant de le parcourir avec for, il faut le transformer en texte.",
+      "Une boucle for sur str(code), et un print décalé dans la boucle, qui affiche le caractère du tour."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "3072"
+        ],
+        "attendu": "Ton code : 3072\n3\n0\n7\n2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "95"
+        ],
+        "attendu": "Ton code : 95\n9\n5",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "100"
+        ],
+        "attendu": "Ton code : 100\n1\n0\n0",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "3072",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-18",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les caractères qu'on ne voit pas",
+    "obligatoire": false,
+    "enonce": "Pour Python, un espace, un accent ou un chiffre sont des caractères comme les\nautres. Ce programme encadre chaque caractère de crochets, pour qu'on les voie\ntous.\n",
+    "depart": "for c in \"Noël 24\":\n    print(\"[\" + c + \"]\")\n",
+    "indices": [
+      "Compte les caractères de \"Noël 24\" un par un, sans en oublier aucun, pas même celui qu'on ne voit pas.",
+      "L'espace entre Noël et 24 est un caractère, et le ë reste un ë. Il y a donc sept tours."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "[N]\n[o]\n[ë]\n[l]\n[ ]\n[2]\n[4]",
+          "[N]\n[o]\n[e]\n[l]\n[2]\n[4]",
+          "[Noël]\n[24]"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-19",
+    "concept": "chaines",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Un caractère par sa position",
+    "obligatoire": false,
+    "enonce": "Défi : `mot[0]` donne le premier caractère d'un texte, `mot[1]` le deuxième,\net ainsi de suite. Combine-le avec `range(len(mot))` pour afficher chaque\nlettre du mot avec son numéro, en commençant à 1 :\n\n1 : v\n2 : é\n3 : l\n4 : o\n",
+    "depart": "mot = \"vélo\"\n",
+    "indices": [
+      "range(len(mot)) donne les positions 0, 1, 2 et 3. À chaque tour, mot[position] donne le caractère qui s'y trouve.",
+      "Le numéro affiché commence à 1, alors que la position commence à 0. Il suffit d'ajouter 1 à la position."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "1 : v\n2 : é\n3 : l\n4 : o",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "1 : v",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "mot[",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-20",
+    "concept": "accumulateur de chaine",
+    "notion": "parcourir",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le mot à l'envers",
+    "obligatoire": false,
+    "enonce": "Défi : un texte se construit aussi morceau par morceau. Complète le programme\npour que la variable `envers` contienne le mot écrit à l'envers. Parcours le\nmot, et range chaque lettre **devant** celles déjà rangées.\n",
+    "depart": "mot = \"Genève\"\nenvers = \"\"\n",
+    "indices": [
+      "À chaque tour, envers doit devenir la lettre du tour, suivie de ce qu'il contenait déjà.",
+      "Dans la boucle, envers = lettre + envers. Après G, envers vaut G ; après e, il vaut eG ; et ainsi de suite."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "envers",
+        "valeurAttendue": "'evèneG'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "interdit",
+        "motif": "evèneG",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "::-1",
+        "message": "Ce défi se résout avec une boucle, en rangeant les lettres une par une.",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s3-21",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Avant la boucle, et dedans",
+    "obligatoire": true,
+    "enonce": "Une variable qui compte les tours se crée avant la boucle, et se met à jour\ndedans. `tours += 1` est un raccourci pour `tours = tours + 1`.\n",
+    "depart": "tours = 0\nfor lettre in \"vélo\":\n    tours += 1\n    print(tours)\nprint(\"Total :\", tours)\n",
+    "indices": [
+      "Au premier tour, tours vaut 0 juste avant la ligne tours += 1. Que vaut-il juste après, au moment du print ?",
+      "La variable n'est créée qu'une fois, avant la boucle. À chaque tour elle gagne 1, et le print décalé affiche sa nouvelle valeur."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n2\n3\n4\nTotal : 4",
+          "0\n1\n2\n3\nTotal : 4",
+          "1\n1\n1\n1\nTotal : 1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-22",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le numéro qui ne bouge pas",
+    "obligatoire": true,
+    "enonce": "Ce programme doit numéroter les chiffres d'un code. Il tourne sans erreur,\nmais tous les chiffres portent le numéro 1. Répare-le.\n",
+    "depart": "code = input(\"Ton code : \")\nposition = 1\nfor chiffre in code:\n    print(f\"Position {position} : {chiffre}\")\n",
+    "indices": [
+      "La variable position est bien créée avant la boucle. Mais change-t-elle, à un moment, pendant la boucle ?",
+      "Un compteur doit être mis à jour dedans, à chaque tour. Ajoute-lui 1 dans la boucle, après l'affichage."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "472"
+        ],
+        "attendu": "Ton code : 472\nPosition 1 : 4\nPosition 2 : 7\nPosition 3 : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "90"
+        ],
+        "attendu": "Ton code : 90\nPosition 1 : 9\nPosition 2 : 0",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-23",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La lettre numéro 0",
+    "obligatoire": true,
+    "enonce": "Ce programme numérote les lettres d'un mot. Le compteur avance bien, mais la\npremière lettre porte le numéro 0, et personne ne compte comme ça. Répare-le\npour que la numérotation commence à 1.\n",
+    "depart": "mot = input(\"Un mot : \")\nnumero = 0\nfor lettre in mot:\n    print(f\"Lettre {numero} : {lettre}\")\n    numero = numero + 1\n",
+    "indices": [
+      "Au premier tour, que vaut numero au moment du print ?",
+      "Deux façons de réparer. Faire partir numero de 1, ou lui ajouter 1 avant l'affichage plutôt qu'après."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "ski"
+        ],
+        "attendu": "Un mot : ski\nLettre 1 : s\nLettre 2 : k\nLettre 3 : i",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "eau"
+        ],
+        "attendu": "Un mot : eau\nLettre 1 : e\nLettre 2 : a\nLettre 3 : u",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-24",
+    "concept": "compteur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Partir de 1, de deux façons",
+    "obligatoire": true,
+    "enonce": "Les deux boucles numérotent les lettres du même mot, à partir de 1. La\npremière ajoute 1 avant d'afficher, la seconde après. Complète les deux trous\navec la valeur de départ qui convient à chacune.\n",
+    "depart": "mot = input(\"Un mot : \")\nposition = _____\nfor lettre in mot:\n    position = position + 1\n    print(position, lettre)\nprint(\"---\")\nposition = _____\nfor lettre in mot:\n    print(position, lettre)\n    position = position + 1\n",
+    "indices": [
+      "Dans la première boucle, le compteur gagne 1 avant l'affichage. Quelle valeur doit-il avoir avant le premier tour, pour afficher 1 ?",
+      "Dans la seconde, l'affichage vient avant l'ajout. Le compteur doit donc déjà valoir 1 au premier tour."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "vélo"
+        ],
+        "attendu": "Un mot : vélo\n1 v\n2 é\n3 l\n4 o\n---\n1 v\n2 é\n3 l\n4 o",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "eau"
+        ],
+        "attendu": "Un mot : eau\n1 e\n2 a\n3 u\n---\n1 e\n2 a\n3 u",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-25",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le total qui repart de zéro",
+    "obligatoire": true,
+    "enonce": "Ce programme demande le prix de trois articles, puis affiche le total. Il\ntourne sans erreur, mais le total ne vaut que le prix du dernier article.\nRépare-le.\n",
+    "depart": "for article in range(1, 4):\n    total = 0\n    prix = int(input(f\"Prix de l'article {article} : \"))\n    total = total + prix\nprint(\"Total :\", total)\n",
+    "indices": [
+      "À quel endroit total est-il remis à 0 ? Combien de fois cette ligne s'exécute-t-elle ?",
+      "Une variable qui cumule se crée une seule fois, avant la boucle. Dans la boucle, elle ne fait que grandir."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "12",
+          "5",
+          "8"
+        ],
+        "attendu": "Prix de l'article 1 : 12\nPrix de l'article 2 : 5\nPrix de l'article 3 : 8\nTotal : 25",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "3",
+          "3",
+          "3"
+        ],
+        "attendu": "Prix de l'article 1 : 3\nPrix de l'article 2 : 3\nPrix de l'article 3 : 3\nTotal : 9",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-26",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La somme des chiffres",
+    "obligatoire": false,
+    "enonce": "Ce programme additionne les chiffres d'un code. Complète le trou pour que la\nvariable `somme` contienne bien la somme des chiffres, et non une erreur.\n",
+    "depart": "code = 4729\nsomme = 0\nfor chiffre in str(code):\n    somme = somme + _____(chiffre)\nprint(\"Somme des chiffres :\", somme)\n",
+    "indices": [
+      "Chaque chiffre du tour est un caractère, donc du texte. Peut-on additionner du texte à un nombre ?",
+      "La fonction qui transforme un texte en nombre entier est celle qu'on place autour de input()."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "somme",
+        "valeurAttendue": "22",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "int(",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-27",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le compteur qui n'existe pas",
+    "obligatoire": false,
+    "enonce": "Ce programme doit compter les lettres e d'une phrase. Il s'arrête sur une\nerreur dès la première lettre e. Lis le message, puis répare le programme.\n",
+    "depart": "phrase = input(\"Une phrase : \")\nfor lettre in phrase:\n    if lettre == \"e\":\n        nombre = nombre + 1\nprint(\"Nombre de e :\", nombre)\n",
+    "indices": [
+      "La première fois que Python arrive sur nombre = nombre + 1, que vaut nombre ?",
+      "La variable doit exister avant le premier tour. Crée-la avant la boucle, avec la valeur qui convient quand on n'a encore rien compté."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "le vélo de Léa"
+        ],
+        "attendu": "Une phrase : le vélo de Léa\nNombre de e : 2",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "abc"
+        ],
+        "attendu": "Une phrase : abc\nNombre de e : 0",
+        "exigeExact": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-28",
+    "concept": "accumulateur",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le chiffre de contrôle",
+    "obligatoire": false,
+    "enonce": "Défi : beaucoup de numéros portent un chiffre de contrôle, qui repère les\nfautes de frappe. Le calcul le plus simple additionne les chiffres du numéro,\npuis garde le reste de la division par 9.\n\nComplète le programme pour que la variable `controle` contienne ce chiffre\npour le numéro 58213, en additionnant ses chiffres dans une boucle.\n",
+    "depart": "numero = 58213\n",
+    "indices": [
+      "Commence par une somme qui part de 0, puis ajoute-lui chaque chiffre de str(numero), converti en nombre.",
+      "Une fois la boucle finie, controle est le reste de la division de la somme par 9, avec le signe pourcent."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "controle",
+        "valeurAttendue": "1",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "interdit",
+        "motif": "controle = 1",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "for",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-29",
+    "concept": "for",
+    "notion": "compter",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "enumerate(), hors programme",
+    "obligatoire": false,
+    "enonce": "Pour les curieux, et hors programme : on croise parfois `enumerate()` dans le\ncode des autres. À chaque tour, il donne deux valeurs à la fois, que la boucle\nrange dans deux variables.\n",
+    "depart": "for position, lettre in enumerate(\"ski\"):\n    print(position, lettre)\n",
+    "indices": [
+      "enumerate() donne à chaque tour une position et un caractère, dans cet ordre. Par quelle position commence-t-il ?",
+      "Comme range(), enumerate() compte à partir de 0. La première ligne associe donc 0 et s."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "0 s\n1 k\n2 i",
+          "1 s\n2 k\n3 i",
+          "s 0\nk 1\ni 2"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s3-30",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "La condition, avant chaque tour",
+    "obligatoire": true,
+    "enonce": "`while` répète les lignes décalées **tant que** sa condition vaut True. Il la\nvérifie avant chaque tour, y compris avant le tout premier.\n",
+    "depart": "compteur = 0\nwhile compteur < 3:\n    print(\"Compteur =\", compteur)\n    compteur = compteur + 1\nprint(\"---\")\nessais = 5\nwhile essais < 3:\n    print(\"Tour de la seconde boucle\")\nprint(\"Fin\")\n",
+    "indices": [
+      "Dans la première boucle, que vaut compteur quand la condition devient fausse ? Ce tour-là s'exécute-t-il ?",
+      "Dans la seconde, essais vaut 5 dès le départ. La condition est fausse avant même le premier tour, et la boucle ne tourne jamais."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Compteur = 0\nCompteur = 1\nCompteur = 2\n---\nFin",
+          "Compteur = 0\nCompteur = 1\nCompteur = 2\nCompteur = 3\n---\nFin",
+          "Compteur = 0\nCompteur = 1\nCompteur = 2\n---\nTour de la seconde boucle\nFin"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-31",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La boucle qui ne s'arrête jamais",
+    "obligatoire": true,
+    "enonce": "Ce programme doit annoncer les trois tours d'un échauffement, puis s'arrêter.\nIl ne s'arrête jamais : au bout de quelques secondes, la plateforme\nl'interrompt. Trouve pourquoi, puis répare-le.\n",
+    "depart": "tour = 1\nwhile tour <= 3:\n    print(\"Tour\", tour)\nprint(\"Échauffement terminé\")\n",
+    "indices": [
+      "La condition dépend de la variable tour. Que vaut tour au deuxième passage ? Et au centième ?",
+      "Rien ne change tour dans la boucle, donc la condition reste vraie pour toujours. Ajoute 1 à tour à chaque passage, dans la boucle."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Tour 1\nTour 2\nTour 3\nÉchauffement terminé",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-32",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Jusqu'au mot fin",
+    "obligatoire": true,
+    "enonce": "Ce programme note les courses à faire, une par une, jusqu'à ce qu'on tape fin.\nComplète le trou pour que la boucle continue tant que la réponse n'est pas\nfin.\n\nTon programme sera aussi essayé avec quelqu'un qui tape fin tout de suite.\n",
+    "depart": "article = input(\"Article (ou fin) : \")\nwhile _____:\n    print(\"Ajouté :\", article)\n    article = input(\"Article (ou fin) : \")\nprint(\"Liste terminée.\")\n",
+    "indices": [
+      "La boucle doit tourner tant que article est différent du texte fin. Quel comparateur veut dire « différent de » ?",
+      "La condition compare la variable article au texte \"fin\", avec !=. Le texte s'écrit entre guillemets."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "pain",
+          "lait",
+          "fin"
+        ],
+        "attendu": "Article (ou fin) : pain\nAjouté : pain\nArticle (ou fin) : lait\nAjouté : lait\nArticle (ou fin) : fin\nListe terminée.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "fin"
+        ],
+        "attendu": "Article (ou fin) : fin\nListe terminée.",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-33",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "for ou while ?",
+    "obligatoire": true,
+    "enonce": "Quand on sait d'avance combien de tours faire, `for` suffit, et `range()`\ncompte à ta place. Quand on ne le sait pas, comme pour « jusqu'à ce qu'on tape\nfin », il faut `while`, et compter soi-même si besoin. Ces deux boucles-ci\nfont le même travail.\n",
+    "depart": "for i in range(1, 4):\n    print(i)\nprint(\"---\")\ni = 1\nwhile i < 4:\n    print(i)\n    i = i + 1\n",
+    "indices": [
+      "La première boucle prend les valeurs de range(1, 4). La seconde part de 1 et avance d'un à chaque tour.",
+      "La seconde s'arrête dès que i vaut 4, puisque 4 < 4 est faux. Le 4 n'est donc jamais affiché, pas plus que dans range(1, 4)."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n2\n3\n---\n1\n2\n3",
+          "1\n2\n3\n---\n1\n2\n3\n4",
+          "1\n2\n3\n4\n---\n1\n2\n3"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-34",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "L'étage oublié",
+    "obligatoire": false,
+    "enonce": "L'ascenseur annonce chaque étage en descendant, du 4e jusqu'au rez-de-chaussée,\nqui est l'étage 0. Le programme tourne, mais l'étage 0 n'est jamais annoncé.\nRépare-le.\n",
+    "depart": "etage = 4\nwhile etage > 0:\n    print(\"Étage\", etage)\n    etage = etage - 1\nprint(\"Portes ouvertes\")\n",
+    "indices": [
+      "Quand etage vaut 0, la condition etage > 0 est-elle vraie ? Le tour de l'étage 0 a-t-il lieu ?",
+      "Pour que l'étage 0 soit annoncé, la condition doit rester vraie quand etage vaut 0. C'est la borne comprise, comme à la séance 2."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Étage 4\nÉtage 3\nÉtage 2\nÉtage 1\nÉtage 0\nPortes ouvertes",
+        "exigeExact": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-35",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Trois essais, pas un de plus",
+    "obligatoire": false,
+    "enonce": "Défi : un casier s'ouvre avec le mot de passe Piscine26, et laisse trois\nessais. Écris un programme qui redemande le mot de passe tant qu'il est faux\net qu'il reste des essais, puis affiche le résultat.\n\nAvec un mauvais mot de passe, puis le bon, l'écran doit montrer :\n\nMot de passe : piscine\nMot de passe faux.\nMot de passe : Piscine26\nCasier ouvert.\n\nAprès trois mauvais essais, le programme affiche Casier bloqué.\n",
+    "depart": "",
+    "indices": [
+      "Il faut deux variables avant la boucle, le nombre d'essais et le dernier mot de passe tapé. La boucle continue tant que le mot de passe est faux ET qu'il reste des essais.",
+      "Une fois la boucle finie, un if regarde pourquoi elle s'est arrêtée. Le mot de passe est-il le bon, ou les essais sont-ils épuisés ?"
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "piscine",
+          "Piscine26"
+        ],
+        "attendu": "Mot de passe : piscine\nMot de passe faux.\nMot de passe : Piscine26\nCasier ouvert.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Piscine26"
+        ],
+        "attendu": "Mot de passe : Piscine26\nCasier ouvert.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "un",
+          "deux",
+          "Piscine26"
+        ],
+        "attendu": "Mot de passe : un\nMot de passe faux.\nMot de passe : deux\nMot de passe faux.\nMot de passe : Piscine26\nCasier ouvert.",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "un",
+          "deux",
+          "trois"
+        ],
+        "attendu": "Mot de passe : un\nMot de passe faux.\nMot de passe : deux\nMot de passe faux.\nMot de passe : trois\nMot de passe faux.\nCasier bloqué.",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "piscine",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-36",
+    "concept": "while",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le nombre mystère",
+    "obligatoire": false,
+    "enonce": "Défi : le programme cache le nombre 37 dans la variable `secret`. Écris la\nsuite. Redemande une proposition tant qu'elle n'est pas le bon nombre, en\ndisant chaque fois s'il faut viser plus grand ou plus petit, puis annonce en\ncombien d'essais le nombre a été trouvé.\n\nPour 50, puis 25, puis 37, l'écran doit montrer :\n\nTa proposition : 50\nPlus petit.\nTa proposition : 25\nPlus grand.\nTa proposition : 37\nTrouvé en 3 essais !\n",
+    "depart": "secret = 37\n",
+    "indices": [
+      "Pose une première question avant la boucle, et compte cet essai. La boucle tourne tant que la proposition est différente de secret.",
+      "Dans la boucle, un if choisit entre Plus petit et Plus grand, puis la question est reposée et le compteur d'essais augmente de 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "50",
+          "25",
+          "37"
+        ],
+        "attendu": "Ta proposition : 50\nPlus petit.\nTa proposition : 25\nPlus grand.\nTa proposition : 37\nTrouvé en 3 essais !",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "40",
+          "37"
+        ],
+        "attendu": "Ta proposition : 40\nPlus petit.\nTa proposition : 37\nTrouvé en 2 essais !",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "10",
+          "20",
+          "30",
+          "36",
+          "38",
+          "37"
+        ],
+        "attendu": "Ta proposition : 10\nPlus grand.\nTa proposition : 20\nPlus grand.\nTa proposition : 30\nPlus grand.\nTa proposition : 36\nPlus grand.\nTa proposition : 38\nPlus petit.\nTa proposition : 37\nTrouvé en 6 essais !",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "!= 37",
+        "message": "Compare la proposition à la variable secret, pas au nombre écrit en dur : le programme doit marcher si le secret change.",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "== 37",
+        "message": "Compare la proposition à la variable secret, pas au nombre écrit en dur : le programme doit marcher si le secret change.",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-37",
+    "concept": "import math",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La boîte à outils math",
+    "obligatoire": false,
+    "enonce": "Python range des outils supplémentaires dans des modules. Pour se servir de\nceux du module math, on écrit d'abord `import math`, puis `math.` devant\nl'outil : `math.sqrt()` calcule une racine carrée, et `math.pi` vaut 3,14159…\n\nComplète les deux trous.\n",
+    "depart": "import math\nracine = math._____(81)\naire = math._____ * 2 * 2\nprint(\"Racine carrée de 81 :\", racine)\nprint(\"Aire d'un disque de rayon 2 :\", aire)\n",
+    "indices": [
+      "Le premier trou attend le nom de l'outil qui calcule une racine carrée, le second celui qui vaut 3,14159.",
+      "Après math. on écrit sqrt pour la racine carrée, et pi pour le nombre pi, sans parenthèses puisque ce n'est pas une fonction."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "racine",
+        "valeurAttendue": "9.0",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "variable",
+        "nom": "aire",
+        "valeurAttendue": "12.566370614359172",
+        "typeAttendu": "float"
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-38",
+    "concept": "import math",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "À vol d'oiseau",
+    "obligatoire": false,
+    "enonce": "Défi : sur un plan quadrillé, l'école est au point (1, 2) et la piscine au\npoint (7, 10). La distance à vol d'oiseau se calcule avec Pythagore : c'est la\nracine carrée de la somme des carrés des deux écarts.\n\nComplète le programme pour que la variable `distance` contienne cette\ndistance.\n",
+    "depart": "import math\nx1 = 1\ny1 = 2\nx2 = 7\ny2 = 10\n",
+    "indices": [
+      "L'écart horizontal est x2 - x1, l'écart vertical y2 - y1. Un carré se calcule avec la double étoile, ou en multipliant un nombre par lui-même.",
+      "Additionne les deux carrés, puis donne la somme à math.sqrt(). Des parenthèses gardent chaque écart entier avant qu'on le mette au carré."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "distance",
+        "valeurAttendue": "10.0",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "interdit",
+        "motif": "distance = 10",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-39",
+    "concept": "probleme narratif",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "La carte jeune du cinéma",
+    "obligatoire": true,
+    "enonce": "Dernier exercice obligatoire du chapitre : un programme complet, qui réunit ce\nque tu as appris pendant les trois séances.\n\nLe cinéma propose une carte jeune de 15 à 25 ans, bornes comprises. Chaque\ncarte porte un code, calculé à partir de l'âge.\n\nLe programme doit faire quatre choses :\n\n1. demander le prénom, avec l'invite \"Prénom : \", puis l'âge, avec l'invite \"Âge : \", en nombre entier ;\n2. si l'âge est dans les bornes, souhaiter la bienvenue, puis afficher le code de la carte, qui vaut `(age * 43) % 1000` ;\n3. afficher ensuite chaque chiffre du code sur sa propre ligne, numéroté à partir de 1 ;\n4. sinon, afficher un refus.\n\nSi la personne répond Camille, puis 19, l'écran affiche ceci après les deux questions :\n\nBienvenue Camille !\nCode de la carte : 817\nChiffre 1 : 8\nChiffre 2 : 1\nChiffre 3 : 7\n\nSi elle répond Camille, puis 14 :\n\nCarte jeune refusée pour Camille\n\nRecopie ces textes au caractère près : cet exercice exige le format exact. Ton\nprogramme sera essayé avec d'autres prénoms et d'autres âges, dont 15 et 25.\n",
+    "depart": "# 1. demander le prénom, puis l'âge en nombre entier\n\n# 2. si l'âge est entre 15 et 25 ans : bienvenue, et code de la carte\n\n# 3. chaque chiffre du code sur sa ligne, numéroté à partir de 1\n\n# 4. sinon : refus\n",
+    "indices": [
+      "Les deux questions, puis un if avec un encadrement. Dans la branche acceptée, calcule le code avant de l'afficher.",
+      "Pour les chiffres, une boucle for sur str(code), avec un compteur créé avant la boucle et augmenté dedans. Tout ce bloc reste décalé sous le if."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "19"
+        ],
+        "attendu": "Prénom : Camille\nÂge : 19\nBienvenue Camille !\nCode de la carte : 817\nChiffre 1 : 8\nChiffre 2 : 1\nChiffre 3 : 7",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "14"
+        ],
+        "attendu": "Prénom : Alex\nÂge : 14\nCarte jeune refusée pour Alex",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "15"
+        ],
+        "attendu": "Prénom : Noé\nÂge : 15\nBienvenue Noé !\nCode de la carte : 645\nChiffre 1 : 6\nChiffre 2 : 4\nChiffre 3 : 5",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "25"
+        ],
+        "attendu": "Prénom : Léa\nÂge : 25\nBienvenue Léa !\nCode de la carte : 75\nChiffre 1 : 7\nChiffre 2 : 5",
+        "exigeExact": true
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Sam",
+          "26"
+        ],
+        "attendu": "Prénom : Sam\nÂge : 26\nCarte jeune refusée pour Sam",
+        "exigeExact": true
+      },
+      {
+        "type": "interdit",
+        "motif": "Camille",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "817",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "s3-40",
+    "concept": "probleme narratif",
+    "notion": "tantque",
+    "seance": 3,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "La carte jeune, en double contrôle",
+    "obligatoire": false,
+    "enonce": "Défi de fin de chapitre : la carte jeune, avec trois contrôles au lieu d'un.\n\nLe programme demande quatre choses, dans cet ordre : le prénom (\"Prénom : \"),\nl'âge (\"Âge : \"), le mot de passe (\"Mot de passe : \") et le numéro de membre\n(\"Numéro de membre : \"), ces deux nombres en entiers. L'accès est accordé\nseulement si les trois contrôles passent :\n\n- l'âge est entre 15 et 25 ans, bornes comprises ;\n- le mot de passe est exactement Popcorn26 ;\n- le numéro de membre est pair.\n\nSi l'accès est accordé, le programme souhaite la bienvenue, calcule le code\n`(age * numero + len(prenom) * 42) % 10000`, l'affiche, puis le transmet\nchiffre par chiffre. Pour Camille, 19 ans, Popcorn26 et le numéro 26 :\n\nBienvenue Camille !\nCode d'accès : 788\nTransmission :\nPosition 1 : 7\nPosition 2 : 8\nPosition 3 : 8\n\nSinon, il affiche Accès refusé pour Camille.\n",
+    "depart": "",
+    "indices": [
+      "Range True dans une variable avant les contrôles, et fais-la passer à False dans un if par contrôle qui échoue. Un seul if final décide ensuite.",
+      "Le code a jusqu'à quatre chiffres. Parcours str(code) avec un compteur créé avant la boucle, qui numérote les positions à partir de 1."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "Camille",
+          "19",
+          "Popcorn26",
+          "26"
+        ],
+        "attendu": "Prénom : Camille\nÂge : 19\nMot de passe : Popcorn26\nNuméro de membre : 26\nBienvenue Camille !\nCode d'accès : 788\nTransmission :\nPosition 1 : 7\nPosition 2 : 8\nPosition 3 : 8",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Léa",
+          "24",
+          "Popcorn26",
+          "100"
+        ],
+        "attendu": "Prénom : Léa\nÂge : 24\nMot de passe : Popcorn26\nNuméro de membre : 100\nBienvenue Léa !\nCode d'accès : 2526\nTransmission :\nPosition 1 : 2\nPosition 2 : 5\nPosition 3 : 2\nPosition 4 : 6",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Noé",
+          "15",
+          "Popcorn26",
+          "40"
+        ],
+        "attendu": "Prénom : Noé\nÂge : 15\nMot de passe : Popcorn26\nNuméro de membre : 40\nBienvenue Noé !\nCode d'accès : 726\nTransmission :\nPosition 1 : 7\nPosition 2 : 2\nPosition 3 : 6",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Sam",
+          "20",
+          "Popcorn26",
+          "7"
+        ],
+        "attendu": "Prénom : Sam\nÂge : 20\nMot de passe : Popcorn26\nNuméro de membre : 7\nAccès refusé pour Sam",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Alex",
+          "20",
+          "popcorn26",
+          "8"
+        ],
+        "attendu": "Prénom : Alex\nÂge : 20\nMot de passe : popcorn26\nNuméro de membre : 8\nAccès refusé pour Alex",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "Zoé",
+          "26",
+          "Popcorn26",
+          "2"
+        ],
+        "attendu": "Prénom : Zoé\nÂge : 26\nMot de passe : Popcorn26\nNuméro de membre : 2\nAccès refusé pour Zoé",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "788",
+        "maitrise": false
+      }
+    ],
+    "famille": "conditions"
+  }
+]

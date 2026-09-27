@@ -5,6 +5,7 @@ import pytest
 import yaml
 
 from construire_contenu import construire
+from schema import CHAPITRES, NOTIONS
 
 BASE = dict(
     id="s1-01",
@@ -33,13 +34,26 @@ def _ecrire(dossier: Path, donnees: dict) -> None:
     )
 
 
-def test_construit_le_json_de_la_seance(tmp_path):
+def _lire(sortie: Path, fichier: str):
+    return json.loads((sortie / fichier).read_text(encoding="utf-8"))
+
+
+def test_construit_le_json_des_exercices(tmp_path):
     _ecrire(tmp_path / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     assert construire(tmp_path, sortie) == 1
 
-    exercices = json.loads((sortie / "seance-1.json").read_text(encoding="utf-8"))
-    assert exercices[0]["id"] == "s1-01"
+    assert _lire(sortie, "exercices.json")[0]["id"] == "s1-01"
+
+
+def test_les_exercices_de_toutes_les_seances_partent_dans_un_seul_fichier(tmp_path):
+    """Le front n'a pas a savoir combien de seances existent."""
+    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(tmp_path / "seance-2", dict(BASE, id="s2-01", seance=2))
+    sortie = tmp_path / "sortie"
+    assert construire(tmp_path, sortie) == 2
+
+    assert [e["id"] for e in _lire(sortie, "exercices.json")] == ["s1-01", "s2-01"]
 
 
 def test_la_solution_n_est_jamais_publiee(tmp_path):
@@ -48,7 +62,7 @@ def test_la_solution_n_est_jamais_publiee(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    brut = (sortie / "seance-1.json").read_text(encoding="utf-8")
+    brut = (sortie / "exercices.json").read_text(encoding="utf-8")
     assert "solution" not in brut
     assert "Camille" in brut  # l'attendu, lui, est bien present
 
@@ -75,19 +89,19 @@ def test_les_cles_sont_converties_en_camel_case(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    exercice = json.loads((sortie / "seance-1.json").read_text(encoding="utf-8"))[0]
+    exercice = _lire(sortie, "exercices.json")[0]
     assert exercice["tests"][0]["typeAttendu"] == "int"
     assert exercice["tests"][1]["exigeExact"] is True
     assert "type_attendu" not in exercice["tests"][0]
 
 
 def test_la_notion_donne_la_famille_de_couleur(tmp_path):
-    """La couleur suit la notion, plus le concept : quatre notions, quatre couleurs."""
+    """La couleur suit la notion, plus le concept."""
     _ecrire(tmp_path / "seance-1", dict(BASE, notion="saisie"))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    exercice = json.loads((sortie / "seance-1.json").read_text(encoding="utf-8"))[0]
+    exercice = _lire(sortie, "exercices.json")[0]
     assert exercice["notion"] == "saisie"
     assert exercice["famille"] == "operateurs"
 
@@ -98,8 +112,8 @@ def test_la_table_des_notions_est_publiee(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    notions = json.loads((sortie / "seance-1-notions.json").read_text(encoding="utf-8"))
-    assert [n["id"] for n in notions] == ["afficher", "variables", "types", "saisie"]
+    notions = _lire(sortie, "notions.json")
+    assert [n["id"] for n in notions] == list(NOTIONS)
     assert notions[2] == {
         "id": "types",
         "ordre": 3,
@@ -132,13 +146,26 @@ def test_les_lecons_sont_publiees(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    lecons = json.loads((sortie / "seance-1-lecons.json").read_text(encoding="utf-8"))
+    lecons = _lire(sortie, "lecons.json")
     assert len(lecons) == 1
     assert lecons[0]["titre"] == "Les variables"
     assert lecons[0]["famille"] == "variables"
     assert lecons[0]["blocs"][0]["type"] == "paragraphe"
     # snake_case -> camelCase, comme pour les exercices
     assert lecons[0]["dureeMin"] == 3
+
+
+def test_les_lecons_de_toutes_les_seances_partent_dans_un_seul_fichier(tmp_path):
+    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire_lecon(
+        tmp_path / "seance-1" / "lecons",
+        {**LECON, "id": "c1-afficher", "notion": "afficher", "ordre": 1},
+    )
+    _ecrire_lecon(tmp_path / "seance-2" / "lecons", {**LECON, "id": "c2-variables"})
+    sortie = tmp_path / "sortie"
+    construire(tmp_path, sortie)
+
+    assert [l["id"] for l in _lire(sortie, "lecons.json")] == ["c1-afficher", "c2-variables"]
 
 
 def test_une_lecon_dont_l_exemple_plante_arrete_la_construction(tmp_path):
@@ -151,11 +178,12 @@ def test_une_lecon_dont_l_exemple_plante_arrete_la_construction(tmp_path):
         construire(tmp_path, tmp_path / "sortie")
 
 
-def test_une_seance_sans_lecons_se_construit(tmp_path):
+def test_sans_lecon_le_fichier_des_lecons_est_publie_vide(tmp_path):
+    """Absent, il repondrait 404 au navigateur et la connexion echouerait."""
     _ecrire(tmp_path / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
-    assert not (sortie / "seance-1-lecons.json").exists()
+    assert _lire(sortie, "lecons.json") == []
 
 
 def test_la_table_des_chapitres_est_publiee(tmp_path):
@@ -164,8 +192,9 @@ def test_la_table_des_chapitres_est_publiee(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    chapitres = json.loads((sortie / "seance-1-chapitres.json").read_text(encoding="utf-8"))
-    assert chapitres == [{"id": "bases", "ordre": 1, "titre": "Les bases de Python", "seance": 1}]
+    chapitres = _lire(sortie, "chapitres.json")
+    assert [c["id"] for c in chapitres] == list(CHAPITRES)
+    assert chapitres[0] == {"id": "bases", "ordre": 1, "titre": "Les bases de Python", "seance": 1}
 
 
 def test_chaque_notion_declare_son_chapitre(tmp_path):
@@ -173,5 +202,5 @@ def test_chaque_notion_declare_son_chapitre(tmp_path):
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
-    notions = json.loads((sortie / "seance-1-notions.json").read_text(encoding="utf-8"))
-    assert {n["chapitre"] for n in notions} == {"bases"}
+    notions = _lire(sortie, "notions.json")
+    assert {n["chapitre"] for n in notions} == set(CHAPITRES)

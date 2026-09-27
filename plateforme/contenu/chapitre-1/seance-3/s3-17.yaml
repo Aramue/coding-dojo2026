@@ -1,0 +1,54 @@
+id: s3-17
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: normal
+type: ecrire
+titre: Chaque chiffre sur sa ligne
+obligatoire: true
+enonce: |
+  Le programme demande un code. Ajoute une boucle qui en affiche les chiffres,
+  un par ligne.
+
+  Si on répond 3072, l'écran doit montrer :
+
+  Ton code : 3072
+  3
+  0
+  7
+  2
+
+  Ton programme sera relancé avec d'autres codes.
+depart: |
+  code = int(input("Ton code : "))
+indices:
+  - La variable code contient un nombre. Avant de le parcourir avec for, il faut le transformer en texte.
+  - Une boucle for sur str(code), et un print décalé dans la boucle, qui affiche le caractère du tour.
+tests:
+  - type: sortie
+    entrees: ["3072"]
+    attendu: |-
+      Ton code : 3072
+      3
+      0
+      7
+      2
+  - type: sortie
+    entrees: ["95"]
+    attendu: |-
+      Ton code : 95
+      9
+      5
+  - type: sortie
+    entrees: ["100"]
+    attendu: |-
+      Ton code : 100
+      1
+      0
+      0
+  - type: interdit
+    motif: "3072"
+solution: |
+  code = int(input("Ton code : "))
+  for chiffre in str(code):
+      print(chiffre)

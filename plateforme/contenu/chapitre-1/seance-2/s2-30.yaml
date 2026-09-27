@@ -1,0 +1,38 @@
+id: s2-30
+concept: indentation
+notion: decider
+seance: 2
+niveau: normal
+type: debug
+titre: Le bloc qui n'est pas décalé
+obligatoire: true
+enonce: |
+  Ce programme doit dire s'il faut prendre un parapluie. Python refuse de le
+  lancer : il ne sait pas quelles lignes dépendent du `if` et du `else`.
+  Lis le message d'erreur, puis répare le programme.
+depart: |
+  pluie = input("Il pleut ? (oui ou non) : ")
+  if pluie == "oui":
+  print("Prends ton parapluie.")
+  else:
+  print("Pas besoin de parapluie.")
+indices:
+  - Les lignes qui dépendent d'un if ou d'un else doivent être décalées vers la droite, juste en dessous de lui.
+  - Place le curseur au début de la ligne 3 et appuie sur Tab. Fais de même pour la ligne 5.
+tests:
+  - type: sortie
+    entrees: ["oui"]
+    attendu: |-
+      Il pleut ? (oui ou non) : oui
+      Prends ton parapluie.
+  - type: sortie
+    entrees: ["non"]
+    attendu: |-
+      Il pleut ? (oui ou non) : non
+      Pas besoin de parapluie.
+solution: |
+  pluie = input("Il pleut ? (oui ou non) : ")
+  if pluie == "oui":
+      print("Prends ton parapluie.")
+  else:
+      print("Pas besoin de parapluie.")

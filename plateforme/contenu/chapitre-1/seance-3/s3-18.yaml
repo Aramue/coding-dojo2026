@@ -1,0 +1,28 @@
+id: s3-18
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: normal
+type: predire
+titre: Les caractères qu'on ne voit pas
+obligatoire: false
+enonce: |
+  Pour Python, un espace, un accent ou un chiffre sont des caractères comme les
+  autres. Ce programme encadre chaque caractère de crochets, pour qu'on les voie
+  tous.
+depart: |
+  for c in "Noël 24":
+      print("[" + c + "]")
+indices:
+  - Compte les caractères de "Noël 24" un par un, sans en oublier aucun, pas même celui qu'on ne voit pas.
+  - L'espace entre Noël et 24 est un caractère, et le ë reste un ë. Il y a donc sept tours.
+tests:
+  - type: qcm
+    options:
+      - "[N]\n[o]\n[ë]\n[l]\n[ ]\n[2]\n[4]"
+      - "[N]\n[o]\n[e]\n[l]\n[2]\n[4]"
+      - "[Noël]\n[24]"
+    bonne_reponse: 0
+solution: |
+  for c in "Noël 24":
+      print("[" + c + "]")

@@ -1,0 +1,79 @@
+id: s3-36
+concept: while
+notion: tantque
+seance: 3
+niveau: expert
+type: ecrire
+titre: Le nombre mystère
+obligatoire: false
+enonce: |
+  Défi : le programme cache le nombre 37 dans la variable `secret`. Écris la
+  suite. Redemande une proposition tant qu'elle n'est pas le bon nombre, en
+  disant chaque fois s'il faut viser plus grand ou plus petit, puis annonce en
+  combien d'essais le nombre a été trouvé.
+
+  Pour 50, puis 25, puis 37, l'écran doit montrer :
+
+  Ta proposition : 50
+  Plus petit.
+  Ta proposition : 25
+  Plus grand.
+  Ta proposition : 37
+  Trouvé en 3 essais !
+depart: |
+  secret = 37
+indices:
+  - Pose une première question avant la boucle, et compte cet essai. La boucle tourne tant que la proposition est différente de secret.
+  - Dans la boucle, un if choisit entre Plus petit et Plus grand, puis la question est reposée et le compteur d'essais augmente de 1.
+tests:
+  - type: sortie
+    entrees: ["50", "25", "37"]
+    attendu: |-
+      Ta proposition : 50
+      Plus petit.
+      Ta proposition : 25
+      Plus grand.
+      Ta proposition : 37
+      Trouvé en 3 essais !
+  - type: sortie
+    entrees: ["40", "37"]
+    attendu: |-
+      Ta proposition : 40
+      Plus petit.
+      Ta proposition : 37
+      Trouvé en 2 essais !
+  - type: sortie
+    entrees: ["10", "20", "30", "36", "38", "37"]
+    attendu: |-
+      Ta proposition : 10
+      Plus grand.
+      Ta proposition : 20
+      Plus grand.
+      Ta proposition : 30
+      Plus grand.
+      Ta proposition : 36
+      Plus grand.
+      Ta proposition : 38
+      Plus petit.
+      Ta proposition : 37
+      Trouvé en 6 essais !
+  - type: interdit
+    motif: "!= 37"
+    message: >-
+      Compare la proposition à la variable secret, pas au nombre écrit en dur : le programme doit marcher si le secret change.
+  - type: interdit
+    motif: "== 37"
+    message: >-
+      Compare la proposition à la variable secret, pas au nombre écrit en dur : le programme doit marcher si le secret change.
+solution: |
+  secret = 37
+  essais = 1
+  proposition = int(input("Ta proposition : "))
+  while proposition != secret:
+      if proposition > secret:
+          print("Plus petit.")
+      else:
+          print("Plus grand.")
+      proposition = int(input("Ta proposition : "))
+      essais = essais + 1
+  print(f"Trouvé en {essais} essais !")

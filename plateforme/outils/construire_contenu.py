@@ -1,6 +1,6 @@
 """Transforme le contenu YAML en JSON servi au navigateur.
 
-Deux garanties : la construction echoue si un exercice est incoherent, et
+Deux garanties : la construction echoue si le contenu est incoherent, et
 la solution de reference n'est jamais publiee.
 """
 
@@ -11,8 +11,8 @@ import json
 import sys
 from pathlib import Path
 
-from schema import CHAPITRES, NOTIONS, charger_lecons, charger_tous
-from valider_contenu import verifier_coherence, verifier_lecon
+from schema import CHAPITRES, NOTIONS
+from valider_contenu import verifier_racine
 
 def _en_camel(nom: str) -> str:
     tete, *reste = nom.split("_")
@@ -33,12 +33,22 @@ def _convertir_cles(valeur):
     return valeur
 
 
-def construire(racine: Path, sortie: Path) -> int:
-    exercices = charger_tous(racine)
+def _table(registre: dict[str, dict]) -> list[dict]:
+    """Une table du schema, triee par ordre, chaque entree avec son identifiant."""
+    return [
+        {"id": identifiant, **details}
+        for identifiant, details in sorted(registre.items(), key=lambda paire: paire[1]["ordre"])
+    ]
 
-    problemes: list[str] = []
-    for ex in exercices:
-        problemes += verifier_coherence(ex)
+
+def _publier(chemin: Path, donnees: list) -> None:
+    chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def construire(racine: Path, sortie: Path) -> int:
+    # Les controles de valider_contenu.py, appeles et non recopies : un contenu
+    # que le validateur refuse ne doit jamais pouvoir se publier.
+    exercices, lecons, problemes = verifier_racine(racine)
     if problemes:
         for p in problemes:
             print(f"  PROBLEME  {p}", file=sys.stderr)
@@ -46,39 +56,19 @@ def construire(racine: Path, sortie: Path) -> int:
 
     sortie.mkdir(parents=True, exist_ok=True)
 
+    # Un fichier par nature de contenu, toutes seances confondues : le front
+    # n'a pas a savoir combien de seances existent, ni a les demander une a une.
+
     # Le chapitre est le niveau de regroupement du menu.
-    (sortie / "seance-1-chapitres.json").write_text(
-        json.dumps(
-            [
-                {"id": identifiant, **details}
-                for identifiant, details in sorted(
-                    CHAPITRES.items(), key=lambda paire: paire[1]["ordre"]
-                )
-            ],
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
+    _publier(sortie / "chapitres.json", _table(CHAPITRES))
 
     # Publiee telle quelle pour que le front n'ait pas a la recopier : le titre
     # affiche et la couleur du menu viennent d'ici, et de nulle part ailleurs.
-    (sortie / "seance-1-notions.json").write_text(
-        json.dumps(
-            [
-                {"id": identifiant, **details}
-                for identifiant, details in sorted(
-                    NOTIONS.items(), key=lambda paire: paire[1]["ordre"]
-                )
-            ],
-            ensure_ascii=False,
-            indent=2,
-        ),
-        encoding="utf-8",
-    )
+    _publier(sortie / "notions.json", _table(NOTIONS))
 
-    for seance in (1, 2, 3):
-        publiables = [
+    _publier(
+        sortie / "exercices.json",
+        [
             {
                 # exclude_none : un champ optionnel absent (valeur_attendue, expert...)
                 # doit rester absent du JSON, pas devenir `null`. Le TypeScript le
@@ -89,39 +79,18 @@ def construire(racine: Path, sortie: Path) -> int:
                 "famille": NOTIONS[ex.notion]["famille"],
             }
             for ex in exercices
-            if ex.seance == seance
-        ]
-        if publiables:
-            (sortie / f"seance-{seance}.json").write_text(
-                json.dumps(publiables, ensure_ascii=False, indent=2), encoding="utf-8"
-            )
+        ],
+    )
 
-        dossier_lecons = racine / f"seance-{seance}" / "lecons"
-        if not dossier_lecons.is_dir():
-            continue
-        lecons = charger_lecons(dossier_lecons)
-        problemes_lecons: list[str] = []
-        for lecon in lecons:
-            problemes_lecons += verifier_lecon(lecon)
-        if problemes_lecons:
-            for p in problemes_lecons:
-                print(f"  PROBLEME  {p}", file=sys.stderr)
-            raise SystemExit(f"{len(problemes_lecons)} probleme(s) de lecon.")
-        if lecons:
-            (sortie / f"seance-{seance}-lecons.json").write_text(
-                json.dumps(
-                    [
-                        {
-                            **_convertir_cles(l.model_dump()),
-                            "famille": NOTIONS[l.notion]["famille"],
-                        }
-                        for l in lecons
-                    ],
-                    ensure_ascii=False,
-                    indent=2,
-                ),
-                encoding="utf-8",
-            )
+    # Ecrit meme vide : un fichier absent repond 404 au navigateur, et la
+    # connexion de l'eleve echouerait pour une seance qui n'a pas encore de lecon.
+    _publier(
+        sortie / "lecons.json",
+        [
+            {**_convertir_cles(l.model_dump()), "famille": NOTIONS[l.notion]["famille"]}
+            for l in lecons
+        ],
+    )
 
     return len(exercices)
 

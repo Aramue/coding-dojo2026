@@ -141,11 +141,11 @@ def charger_tous(racine: Path) -> list[Exercice]:
 
 MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
 
-# Les quatre notions de la seance 1. Une notion est l'unite de navigation :
-# elle porte une lecon et un groupe d'exercices.
+# Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
+# navigation : elle porte une lecon et un groupe d'exercices.
 #
 # SEULE SOURCE de cette table. Le schema la valide, construire_contenu.py
-# l'importe pour publier seance-1-notions.json, et le front la lit dans ce
+# l'importe pour publier notions.json, et le front la lit dans ce
 # JSON. Personne ne la recopie — une copie TypeScript divergerait au premier
 # changement de libelle.
 #
@@ -179,13 +179,96 @@ NOTIONS: dict[str, dict] = {
         "famille": "operateurs",
         "chapitre": "bases",
     },
+    # --- Seance 2 ---
+    # Une notion a part pour les trois exercices de reactivation : la conception
+    # exige un creneau NOMME, qu'on ne peut pas sacrifier quand la seance
+    # deborde. Noyes en tete de « Calculer », ils se liraient comme des
+    # exercices de calcul rates.
+    "reveil": {
+        "ordre": 5,
+        "titre": "Se remettre en route",
+        "famille": "variables",
+        "chapitre": "decisions",
+    },
+    "calculer": {
+        "ordre": 6,
+        "titre": "Calculer",
+        "famille": "operateurs",
+        "chapitre": "decisions",
+    },
+    "comparer": {
+        "ordre": 7,
+        "titre": "Comparer",
+        "famille": "types",
+        "chapitre": "decisions",
+    },
+    "combiner": {
+        "ordre": 8,
+        "titre": "Combiner des conditions",
+        "famille": "boucles",
+        "chapitre": "decisions",
+    },
+    "decider": {
+        "ordre": 9,
+        "titre": "Décider",
+        "famille": "conditions",
+        "chapitre": "decisions",
+    },
+    # --- Seance 3 ---
+    # Le creneau de reactivation a son propre titre : deux « Se remettre en
+    # route » se confondraient dans le tableau de bord, qui nomme la notion a
+    # cote de chaque exercice.
+    "rappels": {
+        "ordre": 10,
+        "titre": "Rappels avant les boucles",
+        "famille": "variables",
+        "chapitre": "boucles",
+    },
+    "repeter": {
+        "ordre": 11,
+        "titre": "Répéter avec for",
+        "famille": "boucles",
+        "chapitre": "boucles",
+    },
+    "parcourir": {
+        "ordre": 12,
+        "titre": "Parcourir un texte",
+        "famille": "types",
+        "chapitre": "boucles",
+    },
+    "compter": {
+        "ordre": 13,
+        "titre": "Compter et cumuler",
+        "famille": "operateurs",
+        "chapitre": "boucles",
+    },
+    "tantque": {
+        "ordre": 14,
+        "titre": "Répéter tant que",
+        "famille": "conditions",
+        "chapitre": "boucles",
+    },
 }
 
-# Un chapitre regroupe les notions d'un meme sujet. Il n'y en a qu'un pour
-# l'instant, mais c'est lui qui structure le menu : sans ce niveau, quatre
-# notions flottaient cote a cote sans dire de quoi elles parlaient ensemble.
+# Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
+# le menu : sans ce niveau, les notions flottaient cote a cote sans dire de quoi
+# elles parlaient ensemble. Un chapitre par seance.
 CHAPITRES: dict[str, dict] = {
     "bases": {"ordre": 1, "titre": "Les bases de Python", "seance": 1},
+    "decisions": {
+        "ordre": 2,
+        "titre": "Calculer, comparer, décider",
+        "seance": 2,
+        # Publiee d'avance, la seance 2 ne doit rien changer a la seance 1 : elle
+        # s'ouvre le matin de son cours. Voir ADR-013.
+        "ouverture": "2026-09-23",
+    },
+    "boucles": {
+        "ordre": 3,
+        "titre": "Répéter, parcourir, compter",
+        "seance": 3,
+        "ouverture": "2026-09-30",
+    },
 }
 
 
@@ -258,7 +341,7 @@ class Lecon(BaseModel):
 
     id: str
     notion: Literal[tuple(NOTIONS)]  # type: ignore[valid-type]
-    ordre: int = Field(ge=1, le=9)
+    ordre: int
     titre: str = Field(min_length=1)
     duree_min: int = Field(ge=1, le=30)
     blocs: list[BlocLecon] = Field(min_length=1)
@@ -269,6 +352,18 @@ class Lecon(BaseModel):
         if not MOTIF_LECON.match(v):
             raise ValueError(f"identifiant de lecon invalide : {v!r} (attendu c1-variables)")
         return v
+
+    @model_validator(mode="after")
+    def ordre_de_sa_notion(self) -> "Lecon":
+        # L'ordre d'une lecon est celui de sa notion : c'est lui qui decide quelles
+        # notions ses exemples ont le droit d'employer. Une borne fixe a 9 ne
+        # garantissait rien de tel, et fermait la porte a la seance 3.
+        attendu = NOTIONS[self.notion]["ordre"]
+        if self.ordre != attendu:
+            raise ValueError(
+                f"la lecon de la notion {self.notion!r} a l'ordre {attendu}, pas {self.ordre}"
+            )
+        return self
 
 
 def charger_lecon(chemin: Path) -> Lecon:

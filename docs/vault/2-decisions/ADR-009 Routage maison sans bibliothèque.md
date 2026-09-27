@@ -37,7 +37,7 @@ doit arrêter un élève plus de quelques minutes.
 fonction pure== : elle se teste sans DOM, et le hook n'est qu'un abonnement à `popstate`.
 
 Le routeur valide la **forme** d'un identifiant de notion (`/^[a-z]{2,20}$/`), jamais son
-vocabulaire. La liste des notions vit dans le contenu publié (`seance-1-notions.json`) ; la
+vocabulaire. La liste des notions vit dans le contenu publié (`notions.json`) ; la
 recopier dans le TypeScript la ferait diverger de la table Python au premier changement de
 libellé. Une notion absente du contenu donne une page « cette page n'existe pas ».
 

@@ -1,0 +1,36 @@
+id: s2-24
+concept: logique
+notion: combiner
+seance: 2
+niveau: normal
+type: predire
+titre: not devant un encadrement
+obligatoire: true
+enonce: |
+  `not` se place aussi devant un encadrement entier, entre parenthèses. Ce
+  programme demande, pour deux âges, s'ils sont en dehors des limites du club
+  de randonnée.
+depart: |
+  age = 75
+  refuse = not (12 <= age <= 70)
+  print("Refusé :", refuse)
+  age = 40
+  refuse = not (12 <= age <= 70)
+  print("Refusé :", refuse)
+indices:
+  - Pour chaque âge, calcule d'abord ce qui est entre parenthèses. not ne vient qu'après.
+  - Pour 75 ans, l'encadrement vaut False, et not False vaut True. Les bornes ne changent pas, seule la réponse est inversée.
+tests:
+  - type: qcm
+    options:
+      - "Refusé : True\nRefusé : False"
+      - "Refusé : False\nRefusé : True"
+      - "Refusé : False\nRefusé : False"
+    bonne_reponse: 0
+solution: |
+  age = 75
+  refuse = not (12 <= age <= 70)
+  print("Refusé :", refuse)
+  age = 40
+  refuse = not (12 <= age <= 70)
+  print("Refusé :", refuse)

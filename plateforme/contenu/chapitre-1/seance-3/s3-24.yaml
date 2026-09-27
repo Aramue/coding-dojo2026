@@ -1,0 +1,62 @@
+id: s3-24
+concept: compteur
+notion: compter
+seance: 3
+niveau: normal
+type: completer
+titre: Partir de 1, de deux façons
+obligatoire: true
+enonce: |
+  Les deux boucles numérotent les lettres du même mot, à partir de 1. La
+  première ajoute 1 avant d'afficher, la seconde après. Complète les deux trous
+  avec la valeur de départ qui convient à chacune.
+depart: |
+  mot = input("Un mot : ")
+  position = _____
+  for lettre in mot:
+      position = position + 1
+      print(position, lettre)
+  print("---")
+  position = _____
+  for lettre in mot:
+      print(position, lettre)
+      position = position + 1
+indices:
+  - Dans la première boucle, le compteur gagne 1 avant l'affichage. Quelle valeur doit-il avoir avant le premier tour, pour afficher 1 ?
+  - Dans la seconde, l'affichage vient avant l'ajout. Le compteur doit donc déjà valoir 1 au premier tour.
+tests:
+  - type: sortie
+    entrees: ["vélo"]
+    attendu: |-
+      Un mot : vélo
+      1 v
+      2 é
+      3 l
+      4 o
+      ---
+      1 v
+      2 é
+      3 l
+      4 o
+  - type: sortie
+    entrees: ["eau"]
+    attendu: |-
+      Un mot : eau
+      1 e
+      2 a
+      3 u
+      ---
+      1 e
+      2 a
+      3 u
+solution: |
+  mot = input("Un mot : ")
+  position = 0
+  for lettre in mot:
+      position = position + 1
+      print(position, lettre)
+  print("---")
+  position = 1
+  for lettre in mot:
+      print(position, lettre)
+      position = position + 1

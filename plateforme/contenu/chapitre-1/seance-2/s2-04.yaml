@@ -1,0 +1,27 @@
+id: s2-04
+concept: arithmetique
+notion: calculer
+seance: 2
+niveau: normal
+type: predire
+titre: Les quatre opérations
+obligatoire: true
+enonce: |
+  Python sait calculer comme une calculatrice : `+` pour additionner, `-` pour
+  soustraire, `*` pour multiplier et `/` pour diviser.
+  Attention, la multiplication s'écrit avec une étoile, pas avec une croix.
+depart: |
+  a = 12
+  b = 3
+  print(a + b, a - b, a * b)
+indices:
+  - Python calcule chaque expression avant de l'afficher. print reçoit trois résultats, pas trois formules.
+  - L'étoile est le signe de la multiplication. a * b, c'est douze fois trois.
+tests:
+  - type: qcm
+    options: ["15 9 36", "15 9 4", "a + b a - b a * b"]
+    bonne_reponse: 0
+solution: |
+  a = 12
+  b = 3
+  print(a + b, a - b, a * b)

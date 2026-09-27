@@ -1,0 +1,82 @@
+id: s2-28
+concept: logique
+notion: combiner
+seance: 2
+niveau: expert
+type: ecrire
+titre: Le feu vert, question après question
+obligatoire: false
+enonce: |
+  Défi : une salle d'escalade vérifie trois choses, une question après
+  l'autre. Avoir au moins 12 ans, des chaussons à sa taille, et avoir lu le
+  règlement.
+
+  Le programme range déjà True dans `autorise`, puis pose les trois questions.
+  Après chaque réponse, mets `autorise` à jour avec `and` : une seule réponse
+  qui ne convient pas doit suffire à le faire passer à False, pour de bon.
+  Affiche-le à la fin.
+
+  Pour 13 ans, « oui » puis « non », l'écran doit montrer :
+
+  Âge : 13
+  Chaussons à ta taille (oui ou non) : oui
+  Règlement lu (oui ou non) : non
+  Autorisé : False
+
+  Ton programme sera relancé avec d'autres réponses.
+depart: |
+  autorise = True
+  age = int(input("Âge : "))
+
+  chaussons = input("Chaussons à ta taille (oui ou non) : ")
+
+  reglement = input("Règlement lu (oui ou non) : ")
+
+indices:
+  - Après la question sur l'âge, autorise doit rester True seulement s'il l'était déjà ET si l'âge suffit.
+  - autorise = autorise and age >= 12 garde False pour de bon dès qu'une réponse ne convient pas. Fais de même après chacune des deux autres questions.
+tests:
+  - type: sortie
+    entrees: ["13", "oui", "non"]
+    attendu: |-
+      Âge : 13
+      Chaussons à ta taille (oui ou non) : oui
+      Règlement lu (oui ou non) : non
+      Autorisé : False
+  - type: sortie
+    entrees: ["12", "oui", "oui"]
+    attendu: |-
+      Âge : 12
+      Chaussons à ta taille (oui ou non) : oui
+      Règlement lu (oui ou non) : oui
+      Autorisé : True
+  - type: sortie
+    entrees: ["11", "oui", "oui"]
+    attendu: |-
+      Âge : 11
+      Chaussons à ta taille (oui ou non) : oui
+      Règlement lu (oui ou non) : oui
+      Autorisé : False
+  - type: sortie
+    entrees: ["15", "non", "oui"]
+    attendu: |-
+      Âge : 15
+      Chaussons à ta taille (oui ou non) : non
+      Règlement lu (oui ou non) : oui
+      Autorisé : False
+  - type: interdit
+    motif: "Autorisé : False"
+  # Exige, et non critere de maitrise : le verdict bleu annonce « Il y a plus
+  # court », alors que le drapeau ajoute une ligne apres chaque question. Un
+  # seul and ecrit a la fin marche, mais ce n'est pas ce que l'enonce demande.
+  - type: contient
+    motif: "autorise and"
+solution: |
+  autorise = True
+  age = int(input("Âge : "))
+  autorise = autorise and age >= 12
+  chaussons = input("Chaussons à ta taille (oui ou non) : ")
+  autorise = autorise and chaussons == "oui"
+  reglement = input("Règlement lu (oui ou non) : ")
+  autorise = autorise and reglement == "oui"
+  print("Autorisé :", autorise)

@@ -1,0 +1,41 @@
+id: s2-17
+concept: booleens
+notion: comparer
+seance: 2
+niveau: normal
+type: completer
+titre: Ranger une réponse dans une variable
+obligatoire: true
+enonce: |
+  Le grand toboggan d'un parc aquatique est réservé aux personnes d'au moins
+  140 cm. Complète le trou pour que la variable `autorise` contienne la réponse
+  à la question « la taille atteint-elle 140 cm ? ».
+
+  Ton programme sera essayé avec plusieurs tailles, dont 140 cm pile.
+depart: |
+  taille = int(input("Ta taille en cm : "))
+  autorise = _____
+  print("Grand toboggan :", autorise)
+indices:
+  - Le trou attend une comparaison, pas un texte. Sa réponse, True ou False, sera rangée dans autorise.
+  - « Au moins 140 » veut dire 140 ou plus. Une personne qui mesure 140 cm pile doit avoir le droit de monter.
+tests:
+  - type: sortie
+    entrees: ["140"]
+    attendu: |-
+      Ta taille en cm : 140
+      Grand toboggan : True
+  - type: sortie
+    entrees: ["139"]
+    attendu: |-
+      Ta taille en cm : 139
+      Grand toboggan : False
+  - type: sortie
+    entrees: ["175"]
+    attendu: |-
+      Ta taille en cm : 175
+      Grand toboggan : True
+solution: |
+  taille = int(input("Ta taille en cm : "))
+  autorise = taille >= 140
+  print("Grand toboggan :", autorise)

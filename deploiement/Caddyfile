@@ -19,7 +19,7 @@ http://{$DOJO_DOMAINE:localhost}, https://{$DOJO_DOMAINE:localhost} {
 		header @immuables Cache-Control "public, max-age=31536000, immutable"
 
 		# Le contenu, lui, change sans changer de nom de fichier : il est
-		# reconstruit a chaque `docker compose build`, mais /contenu/seance-1.json
+		# reconstruit a chaque `docker compose build`, mais /contenu/exercices.json
 		# garde son chemin. Sans revalidation, une correction faite en seance
 		# n'atteindrait pas les navigateurs qui ont deja charge la page — et
 		# personne ne comprendrait pourquoi.

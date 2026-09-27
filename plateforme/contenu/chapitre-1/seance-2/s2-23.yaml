@@ -1,0 +1,52 @@
+id: s2-23
+concept: logique
+notion: combiner
+seance: 2
+niveau: normal
+type: completer
+titre: Entre deux bornes
+obligatoire: true
+enonce: |
+  Un club de randonnée accepte les membres de 12 à 70 ans, bornes comprises.
+  Complète les deux trous. La ligne 2 écrit la condition sous forme
+  d'encadrement, et la ligne 3 dit exactement la même chose avec `and`.
+
+  Ton programme sera essayé avec plusieurs âges, dont 12 et 70.
+depart: |
+  age = int(input("Âge : "))
+  accepte = _____
+  accepte_aussi = age >= 12 _____ age <= 70
+  print("Accepté :", accepte, accepte_aussi)
+indices:
+  - Un encadrement s'écrit comme en mathématiques, avec la valeur au milieu et une borne de chaque côté.
+  - « De 12 à 70 ans, bornes comprises » veut dire 12 ou plus, et 70 ou moins. Le second trou attend le mot qui relie deux conditions qui doivent être vraies toutes les deux.
+tests:
+  - type: sortie
+    entrees: ["12"]
+    attendu: |-
+      Âge : 12
+      Accepté : True True
+  - type: sortie
+    entrees: ["11"]
+    attendu: |-
+      Âge : 11
+      Accepté : False False
+  - type: sortie
+    entrees: ["70"]
+    attendu: |-
+      Âge : 70
+      Accepté : True True
+  - type: sortie
+    entrees: ["71"]
+    attendu: |-
+      Âge : 71
+      Accepté : False False
+  # Sans ce motif, la ligne 2 passerait aussi avec un and : elle validerait
+  # sans que l'encadrement, qui est la notion, ait jamais ete ecrit.
+  - type: contient
+    motif: "<= age <="
+solution: |
+  age = int(input("Âge : "))
+  accepte = 12 <= age <= 70
+  accepte_aussi = age >= 12 and age <= 70
+  print("Accepté :", accepte, accepte_aussi)

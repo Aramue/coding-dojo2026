@@ -1,0 +1,42 @@
+id: s3-12
+concept: for
+notion: repeter
+seance: 3
+niveau: expert
+type: ecrire
+titre: Une boucle dans une boucle
+obligatoire: false
+enonce: |
+  Défi : une boucle peut en contenir une autre. Écris un programme qui affiche
+  les tables de multiplication de 2 et de 3, de 1 à 4, dans cet ordre exact :
+
+  2 x 1 = 2
+  2 x 2 = 4
+  2 x 3 = 6
+  2 x 4 = 8
+  3 x 1 = 3
+  3 x 2 = 6
+  3 x 3 = 9
+  3 x 4 = 12
+depart: ""
+indices:
+  - La boucle extérieure choisit la table, 2 puis 3. La boucle intérieure parcourt les nombres de 1 à 4.
+  - Décale la boucle intérieure sous la première. Elle refait alors tous ses tours, à chaque tour de la boucle extérieure.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      2 x 1 = 2
+      2 x 2 = 4
+      2 x 3 = 6
+      2 x 4 = 8
+      3 x 1 = 3
+      3 x 2 = 6
+      3 x 3 = 9
+      3 x 4 = 12
+  - type: interdit
+    motif: "= 12"
+solution: |
+  for table in range(2, 4):
+      for nombre in range(1, 5):
+          print(f"{table} x {nombre} = {table * nombre}")

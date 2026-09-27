@@ -1,0 +1,30 @@
+id: s2-09
+concept: chaines
+notion: calculer
+seance: 2
+niveau: normal
+type: completer
+titre: len() compte les caractères
+obligatoire: true
+enonce: |
+  La fonction `len()` compte les caractères d'un texte, espaces et signes
+  compris. Complète le trou pour que la variable `longueur` contienne le nombre
+  de caractères du pseudo.
+depart: |
+  pseudo = "Léa_2026"
+  longueur = _____(pseudo)
+  print("Ton pseudo fait", longueur, "caractères")
+indices:
+  - Le nom de la fonction qui compte est écrit dans la phrase au-dessus du programme.
+  - La fonction se place devant les parenthèses, et entre les parenthèses on met ce qu'on veut mesurer.
+tests:
+  - type: variable
+    nom: longueur
+    valeur_attendue: "8"
+    type_attendu: int
+  - type: contient
+    motif: len(
+solution: |
+  pseudo = "Léa_2026"
+  longueur = len(pseudo)
+  print("Ton pseudo fait", longueur, "caractères")

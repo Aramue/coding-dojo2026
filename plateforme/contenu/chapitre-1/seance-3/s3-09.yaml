@@ -1,0 +1,29 @@
+id: s3-09
+concept: for
+notion: repeter
+seance: 3
+niveau: normal
+type: debug
+titre: Il manque la dernière question
+obligatoire: true
+enonce: |
+  Ce programme doit numéroter les cinq questions d'un quiz, de 1 à 5. Il tourne
+  sans erreur, mais la dernière question manque à l'appel. Répare-le.
+depart: |
+  for numero in range(1, 5):
+      print(f"Question {numero}")
+indices:
+  - Quelles valeurs range(1, 5) donne-t-il exactement ? Compte-les.
+  - La fin de range() n'est jamais atteinte. Pour que 5 soit la dernière valeur, la fin doit être juste après.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Question 1
+      Question 2
+      Question 3
+      Question 4
+      Question 5
+solution: |
+  for numero in range(1, 6):
+      print(f"Question {numero}")

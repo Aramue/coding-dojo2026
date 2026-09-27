@@ -1,0 +1,33 @@
+id: s3-01
+concept: reactivation
+notion: rappels
+seance: 3
+niveau: normal
+type: predire
+titre: Dès 18 ans
+obligatoire: true
+enonce: |
+  Un rappel de la séance 2 avant les boucles. En Suisse, on vote dès 18 ans.
+  Ce programme vérifie l'âge de Léa, qui a fêté ses 18 ans hier.
+depart: |
+  age = 18
+  if age > 18:
+      print("Tu peux voter.")
+  else:
+      print("Pas encore.")
+indices:
+  - Remplace age par 18 dans la question du if. 18 est-il strictement plus grand que 18 ?
+  - 18 > 18 est faux, donc Python passe au else. Pour « dès 18 ans », il fallait écrire >=, qui inclut la borne.
+tests:
+  - type: qcm
+    options:
+      - "Pas encore."
+      - "Tu peux voter."
+      - "Tu peux voter.\nPas encore."
+    bonne_reponse: 0
+solution: |
+  age = 18
+  if age > 18:
+      print("Tu peux voter.")
+  else:
+      print("Pas encore.")

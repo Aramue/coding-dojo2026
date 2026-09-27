@@ -1,0 +1,41 @@
+id: s3-30
+concept: while
+notion: tantque
+seance: 3
+niveau: normal
+type: predire
+titre: La condition, avant chaque tour
+obligatoire: true
+enonce: |
+  `while` répète les lignes décalées **tant que** sa condition vaut True. Il la
+  vérifie avant chaque tour, y compris avant le tout premier.
+depart: |
+  compteur = 0
+  while compteur < 3:
+      print("Compteur =", compteur)
+      compteur = compteur + 1
+  print("---")
+  essais = 5
+  while essais < 3:
+      print("Tour de la seconde boucle")
+  print("Fin")
+indices:
+  - Dans la première boucle, que vaut compteur quand la condition devient fausse ? Ce tour-là s'exécute-t-il ?
+  - Dans la seconde, essais vaut 5 dès le départ. La condition est fausse avant même le premier tour, et la boucle ne tourne jamais.
+tests:
+  - type: qcm
+    options:
+      - "Compteur = 0\nCompteur = 1\nCompteur = 2\n---\nFin"
+      - "Compteur = 0\nCompteur = 1\nCompteur = 2\nCompteur = 3\n---\nFin"
+      - "Compteur = 0\nCompteur = 1\nCompteur = 2\n---\nTour de la seconde boucle\nFin"
+    bonne_reponse: 0
+solution: |
+  compteur = 0
+  while compteur < 3:
+      print("Compteur =", compteur)
+      compteur = compteur + 1
+  print("---")
+  essais = 5
+  while essais < 3:
+      print("Tour de la seconde boucle")
+  print("Fin")

@@ -1,0 +1,40 @@
+id: s3-19
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: expert
+type: ecrire
+titre: Un caractère par sa position
+obligatoire: false
+enonce: |
+  Défi : `mot[0]` donne le premier caractère d'un texte, `mot[1]` le deuxième,
+  et ainsi de suite. Combine-le avec `range(len(mot))` pour afficher chaque
+  lettre du mot avec son numéro, en commençant à 1 :
+
+  1 : v
+  2 : é
+  3 : l
+  4 : o
+depart: |
+  mot = "vélo"
+indices:
+  - range(len(mot)) donne les positions 0, 1, 2 et 3. À chaque tour, mot[position] donne le caractère qui s'y trouve.
+  - Le numéro affiché commence à 1, alors que la position commence à 0. Il suffit d'ajouter 1 à la position.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      1 : v
+      2 : é
+      3 : l
+      4 : o
+  - type: interdit
+    motif: "1 : v"
+  # Le defi est l'acces par position : sans ce motif, un for sur les lettres
+  # avec un compteur passerait, sans que mot[...] ait jamais ete ecrit.
+  - type: contient
+    motif: mot[
+solution: |
+  mot = "vélo"
+  for position in range(len(mot)):
+      print(f"{position + 1} : {mot[position]}")
