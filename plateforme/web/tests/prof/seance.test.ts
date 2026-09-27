@@ -362,3 +362,49 @@ describe('parcoursEleve — parité avec la numérotation élève', () => {
     )
   })
 })
+
+describe('blocagesCollectifs — les departages', () => {
+  function bloque(exercice: string, erreur: string | null = null, code = 'DOJO-AAAA') {
+    return {
+      code_acces: code,
+      prenom: '',
+      nom: '',
+      exercice_id: exercice,
+      statut: 'bloque' as const,
+      echecs_consecutifs: 3,
+      inactif_depuis_s: 0,
+      dernier_type_erreur: erreur,
+      reussis: [],
+    }
+  }
+
+  it("classe par identifiant quand deux exercices bloquent autant de monde", () => {
+    // Sans ce départage, l'ordre dépendrait de l'ordre d'arrivée des élèves :
+    // le bandeau du professeur changerait de place à chaque rafraîchissement.
+    const blocages = blocagesCollectifs([
+      bloque('s1-29', null, 'DOJO-A'),
+      bloque('s1-29', null, 'DOJO-B'),
+      bloque('s1-04', null, 'DOJO-C'),
+      bloque('s1-04', null, 'DOJO-D'),
+    ])
+    expect(blocages.map((b) => b.exerciceId)).toEqual(['s1-04', 's1-29'])
+  })
+
+  it("classe les erreurs par frequence, puis par nom", () => {
+    const [blocage] = blocagesCollectifs([
+      bloque('s1-29', 'TypeError', 'DOJO-A'),
+      bloque('s1-29', 'NameError', 'DOJO-B'),
+      bloque('s1-29', 'TypeError', 'DOJO-C'),
+      bloque('s1-29', 'SyntaxError', 'DOJO-D'),
+    ])
+    expect(blocage!.erreurs).toEqual(['TypeError', 'NameError', 'SyntaxError'])
+  })
+
+  it("ignore un bloque dont on ne connait pas l erreur", () => {
+    const [blocage] = blocagesCollectifs([
+      bloque('s1-29', null, 'DOJO-A'),
+      bloque('s1-29', null, 'DOJO-B'),
+    ])
+    expect(blocage!.erreurs).toEqual([])
+  })
+})

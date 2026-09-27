@@ -98,3 +98,80 @@ describe('ClientApi — identite', () => {
     ).rejects.toThrow(/n'existe pas/)
   })
 })
+
+describe('ClientApi — les pannes de la plateforme', () => {
+  beforeEach(() => vi.restoreAllMocks())
+
+  it('distingue une panne serveur d un code refuse', async () => {
+    // 422 dit « ton code est faux », 500 dit « ce n'est pas toi ». Confondre
+    // les deux envoie l'élève vérifier un code parfaitement valide.
+    const fetchFactice = vi.fn().mockResolvedValue({ ok: false, status: 500, json: async () => ({}) })
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await expect(client.ouvrirSession('DOJO-K7M2')).rejects.toThrow(/plateforme a un problème/i)
+  })
+
+  it('dit quand une tentative n a pas ete enregistree', async () => {
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'j', code_acces: 'a' }) })
+      .mockResolvedValueOnce({ ok: false, status: 503, json: async () => ({}) })
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('DOJO-K7M2')
+
+    await expect(
+      client.enregistrerTentative({ exerciceId: 's1-01', verdict: 'vert', typeErreur: null, dureeMs: 12 }),
+    ).rejects.toThrow(/erreur 503/)
+  })
+})
+
+describe('ClientApi — le reseau qui tombe pendant une tentative', () => {
+  beforeEach(() => vi.restoreAllMocks())
+
+  it('distingue le reseau muet d un refus du serveur', async () => {
+    // Deux messages différents pour deux causes différentes : « ça n'est pas
+    // parti » n'appelle pas la même réaction que « le serveur a dit non ».
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'j', code_acces: 'a' }) })
+      .mockRejectedValueOnce(new Error('réseau coupé'))
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('DOJO-K7M2')
+
+    await expect(
+      client.enregistrerTentative({ exerciceId: 's1-01', verdict: 'vert', typeErreur: null, dureeMs: 12 }),
+    ).rejects.toThrow(/ne répond pas/)
+  })
+})
+
+describe('ClientApi — sans session ouverte', () => {
+  beforeEach(() => vi.restoreAllMocks())
+
+  it('refuse de lire un parcours avant d avoir un jeton', async () => {
+    // Sans cette garde, la requête partirait sans en-tête et le serveur
+    // répondrait 401 : un aller-retour pour dire ce qu'on savait déjà.
+    const client = new ClientApi('/api', vi.fn() as unknown as typeof fetch)
+    await expect(client.lireParcours()).rejects.toThrow('Session non ouverte.')
+  })
+
+  it('dit quand le parcours revient dans une forme inattendue', async () => {
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'j', code_acces: 'a' }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ reussis: 'pas un tableau' }) })
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('DOJO-K7M2')
+
+    await expect(client.lireParcours()).rejects.toThrow('Progression indisponible.')
+  })
+
+  it('dit quand le parcours est refuse', async () => {
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'j', code_acces: 'a' }) })
+      .mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({}) })
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('DOJO-K7M2')
+
+    await expect(client.lireParcours()).rejects.toThrow('Progression indisponible.')
+  })
+})

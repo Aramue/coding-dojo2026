@@ -1,5 +1,10 @@
-import { describe, expect, it } from 'vitest'
-import { decouperListe } from '../../src/prof/classe'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  creerEleve,
+  decouperListe,
+  listerEleves,
+  retirerEleve,
+} from '../../src/prof/classe'
 
 describe('decouperListe', () => {
   it('lit une colonne par tabulation', () => {
@@ -65,5 +70,66 @@ describe('decouperListe', () => {
       nom: 'Rey',
       etablissement: '',
     })
+  })
+})
+
+describe('decouperListe — les lignes tordues', () => {
+  it('accepte une colonne manquante apres un separateur', () => {
+    // Un tableur exporte souvent « Prénom;Nom » sans la colonne établissement.
+    expect(decouperListe('Camille;Rey')).toEqual([
+      { prenom: 'Camille', nom: 'Rey', etablissement: '' },
+    ])
+    expect(decouperListe('Camille;')).toEqual([
+      { prenom: 'Camille', nom: '', etablissement: '' },
+    ])
+  })
+
+  it('ignore une ligne qui ne porte aucun prenom', () => {
+    // Une ligne de séparateurs seuls, laissée par un copier-coller de tableur.
+    expect(decouperListe(';;\nCamille;Rey;Calvin')).toEqual([
+      { prenom: 'Camille', nom: 'Rey', etablissement: 'Calvin' },
+    ])
+  })
+
+  it('rend un prenom seul sans separateur ni nom', () => {
+    expect(decouperListe('Camille')).toEqual([
+      { prenom: 'Camille', nom: '', etablissement: '' },
+    ])
+  })
+})
+
+describe('appeler — chaque refus a son message', () => {
+  function repondre(status: number) {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: status < 400, status, json: async () => ({}) })))
+  }
+
+  beforeEach(() => vi.unstubAllGlobals())
+
+  it('traduit un prenom manquant', async () => {
+    repondre(422)
+    await expect(creerEleve('jeton', { prenom: '', nom: '', etablissement: '' })).rejects.toThrow(
+      'Le prénom est obligatoire.',
+    )
+  })
+
+  it("traduit un eleve deja retire", async () => {
+    // Deux onglets ouverts sur la classe : l'un supprime, l'autre modifie.
+    repondre(404)
+    await expect(retirerEleve('jeton', 'DOJO-K7M2')).rejects.toThrow("Cet élève n'existe plus.")
+  })
+
+  it('nomme le code des refus qu il ne connait pas', async () => {
+    repondre(500)
+    await expect(listerEleves('jeton')).rejects.toThrow('erreur 500')
+  })
+})
+
+describe('decouperListe — la colonne vide en tete', () => {
+  it("ne perd pas l eleve quand la ligne commence par un separateur", () => {
+    // Un copier-coller de tableur amène souvent une colonne vide devant.
+    // Sans le retrait, le prénom serait vide et la ligne silencieusement ignorée.
+    expect(decouperListe(';Camille')).toEqual([
+      { prenom: 'Camille', nom: '', etablissement: '' },
+    ])
   })
 })
