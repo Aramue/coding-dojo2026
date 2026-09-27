@@ -326,6 +326,15 @@ après les deux normaliseurs.
 plus tôt revient **après** la réponse de la création, et remet le catalogue à l'écran. Trouvé par
 un test qui échouait une fois sur quatre, pas en classe.
 
+### L'écran projeté ne retombe jamais sur le code d'accès
+
+`nommer()` du tableau de bord affiche le code d'accès d'un élève sans prénom — utile au
+professeur seul. L'écran du quiz utilise `nomProjete()`, dont le repli est « Élève », et l'API
+fait de même (`nom_affiche`) pour la salle d'attente des élèves.
+
+**Ce qui casse :** le code d'accès est le secret de l'élève. Projeté au mur, ou envoyé dans la
+salle d'attente d'un autre, il donne sa progression à qui le recopie.
+
 ### Le jeton ne passe jamais dans l'URL de la sonnette
 
 Le WebSocket se présente par son premier message, `{"jeton": ...}` ou `{"code_prof": ...}`.

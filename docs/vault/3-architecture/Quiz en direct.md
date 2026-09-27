@@ -4,7 +4,7 @@ tags:
   - architecture
   - quiz
   - professeur
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-09-28
 ---
 
 # Quiz en direct
@@ -38,13 +38,35 @@ redémarrage.
 | | Pendant la question | À la correction | En fin de partie |
 |---|---|---|---|
 | **Élève** | la question, son choix | la bonne réponse, juste ou pas, ses points, **son** rang | son bilan : bonnes réponses, points, rang |
+| **Élève, en salle d'attente** | qui est prêt : un rond et un « Prénom N. » par joueur, le sien marqué « toi » | | |
 | **Écran projeté** | la question, le nombre de réponses reçues | la bonne réponse, la répartition, l'explication, les cinq premiers | le podium, le bilan anonyme question par question |
 
-Ce que personne ne reçoit : la bonne réponse avant la correction — ni l'élève, ni l'écran projeté,
+Ce que personne ne reçoit : un code d'accès d'un autre élève — le repli d'un élève sans prénom
+est « Élève », à l'écran projeté comme chez l'élève. La bonne réponse avant la correction — ni l'élève, ni l'écran projeté,
 qui est au mur. Des points qui trahiraient une réponse juste avant la correction. Le nom d'un
 autre élève, côté élève. Un classement au-delà de cinq, ou quelqu'un à zéro point. Tout cela est
 tenu **par le serveur**, dans `api/app/quiz.py` : `vue_eleve` et `vue_prof` sont les seules
 fonctions qui fabriquent ce qu'un écran reçoit, et des tests de fuite les vérifient.
+
+## Côté élève, hors de la page du quiz
+
+La coquille de l'élève garde sa propre sonnette sur toutes les pages. Dès que le professeur crée
+une partie, deux choses s'allument dans la seconde : le **bandeau** « Un quiz a commencé »,
+collé sous l'en-tête même au fond d'un long exercice, et l'entrée **Quiz en direct**, toujours
+en tête du sommaire, grisée tant qu'aucune partie n'est ouverte. Les deux s'éteignent dès que la
+partie se termine. Sans WebSocket, elles relisent toutes les dix secondes — pas chaque seconde :
+elles n'ont qu'à savoir si une partie existe.
+
+Les arrivées sonnent chez tout le monde **en salle d'attente**, où chacun voit les autres
+arriver ; en cours de partie, chez le professeur seulement.
+
+## Les derniers résultats
+
+Depuis le catalogue, le professeur lit pour chaque quiz le taux de bonnes réponses de sa
+dernière partie jouée (« 68 % de bonnes réponses, 21 élèves »), et l'ouvre en entier avec
+**Derniers résultats** : le même bilan anonyme qu'en fin de partie. Une partie sans réponse —
+annulée en salle d'attente, ou celle du test de charge — est ignorée : elle ne masque pas la
+précédente.
 
 ## Le barème
 
@@ -68,7 +90,9 @@ web/src/
   quiz/useFluxQuiz.ts            le même, branché sur React
   ui/EcranQuiz.tsx               l'élève, sur /quiz
   ui/QuizProf.tsx                l'écran projeté, sur /prof/quiz
-  ui/BandeauQuiz.tsx             « Un quiz a commencé », dans l'espace élève
+  ui/BandeauQuiz.tsx             « Un quiz a commencé », collé sous l'en-tête
+  ui/Menu.tsx                    « Quiz en direct » en tête du sommaire, grisé sans partie
+  ui/PastillesJoueurs.tsx        les élèves prêts, un rond chacun, des deux côtés
   ui/OptionsQuiz.tsx             les quatre options, une famille chacune
 deploiement/charge_quiz.py       le test de charge
 ```
@@ -80,7 +104,8 @@ deploiement/charge_quiz.py       le test de charge
 | `GET /quiz/etat` | élève | la partie vue par lui ; une partie finie seulement s'il l'a jouée, un quart d'heure |
 | `POST /quiz/rejoindre` | élève | entrer dans la partie en cours |
 | `POST /quiz/reponse` | élève | `{partie, question, choix}` — répondre vaut rejoindre |
-| `GET /prof/quiz` | prof | le catalogue |
+| `GET /prof/quiz` | prof | le catalogue, et pour chaque quiz le taux de réussite de sa dernière partie |
+| `GET /prof/quiz/{id}/resultats` | prof | le bilan anonyme de la dernière partie jouée de ce quiz |
 | `POST /prof/quiz/parties` | prof | une partie à la fois, sinon 409 |
 | `GET /prof/quiz/partie` | prof | la dernière partie, même terminée : son bilan reste lisible |
 | `POST /prof/quiz/partie/suivante` · `corriger` | prof | portent le rang que l'écran croit courant : un double clic est refusé |

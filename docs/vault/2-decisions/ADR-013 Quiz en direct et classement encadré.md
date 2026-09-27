@@ -14,6 +14,17 @@ date: 2026-09-27
 > Elle **déroge** à [[ADR-011 Trois niveaux de réussite]] sur un point précis — le classement —
 > et seulement à l'intérieur d'une partie de quiz. Tout le reste d'ADR-011 tient.
 
+> [!warning] Précisée le 28 septembre 2026, après le premier essai du professeur
+> **En salle d'attente, l'élève voit qui est prêt** : un rond et un « Prénom N. » par joueur, les
+> mêmes que sur l'écran projeté au même moment — le professeur voulait voir la salle se remplir
+> des deux côtés, pas un simple nombre. Rien de plus ne circule : ni nom de famille complet, ni
+> code d'accès (le repli d'un élève sans prénom est « Élève »), et dès que la première question
+> part, les noms ne circulent plus. Scores et rangs des autres restent invisibles à l'élève.
+>
+> **Le professeur relit les derniers résultats d'un quiz** depuis le catalogue : le taux de
+> bonnes réponses de la dernière partie jouée, et son bilan anonyme. C'est le bilan de la partie
+> — une répartition par question —, pas un classement : la règle 4 ci-dessous tient.
+
 ## Contexte
 
 Le professeur veut un moment collectif en séance, sur le modèle de Kahoot : il lance une partie,
