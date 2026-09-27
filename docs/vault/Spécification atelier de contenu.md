@@ -65,7 +65,9 @@ même raison.
 - `NOTIONS` et `CHAPITRES` déplacées de `schema.py` vers des fichiers YAML de contenu
 - `construire_contenu.py` prenant `contenu/` pour racine et parcourant les chapitres
 - Le schéma publié en JSON, produit par Pydantic lui-même
-- Une page `/prof/atelier` : composition, glisser-déposer, essais, aperçu, export
+- Une **barre d'onglets** dans l'espace professeur — Séance, Ma classe, Atelier — et le
+  routage qui va avec
+- L'onglet `/prof/atelier` : composition, glisser-déposer, essais, aperçu, export
 - Les exercices **et** les leçons
 - Un émetteur YAML au style de la maison, verrouillé par un test de tour complet
 - ADR-015, et les notes du coffre qui en dépendent
@@ -196,9 +198,44 @@ exactement le traitement déjà réservé à `notions.json`.
 
 ### 5.1 Où, et comment on y entre
 
-`/prof/atelier`, derrière le compte professeur ([[ADR-014 Le compte professeur se crée au premier lancement]]).
-`routage.ts` gagne une destination `{ vue: 'atelier' }` ; c'est une fonction pure tenue à 100 % de
-couverture, donc les quatre formes de chemin sont à couvrir.
+**L'espace professeur passe à trois onglets**, derrière le compte
+([[ADR-014 Le compte professeur se crée au premier lancement]]) :
+
+| Onglet | Chemin | Ce qu'il porte |
+|---|---|---|
+| **Séance** | `/prof` | Le tableau de bord, et le bouton « Voir l'espace élève » |
+| **Ma classe** | `/prof/classe` | La liste des élèves et leurs codes |
+| **Atelier** | `/prof/atelier` | Ce que décrit la suite de ce document |
+
+Aujourd'hui, `/prof` empile le tableau de bord **puis** « Ma classe » sur une seule page. Une
+troisième section empilée rendrait la page interminable, et l'atelier a besoin de toute la
+hauteur. Les deux existantes deviennent donc des onglets en même temps que la troisième arrive.
+
+`routage.ts` gagne l'onglet dans sa destination : `{ vue: 'prof', onglet: 'seance' | 'classe' | 'atelier' }`.
+C'est une fonction pure tenue à 100 % de couverture, donc les quatre formes de chemin sont à
+couvrir, `/prof` seul compris — il vaut `seance`.
+
+> [!important] Les onglets sont de vrais chemins, pas un état local
+> Un rechargement en pleine composition doit rouvrir l'atelier, pas le tableau de bord. Et le
+> professeur qui garde `/prof/classe` en signet y revient directement. Ce sont donc des liens,
+> pas des boutons — ==Ctrl+clic ouvre un onglet du navigateur==, comme partout ailleurs dans
+> cette interface ([[ADR-009 Routage maison sans bibliothèque]]).
+
+> [!warning] Deux `tablist` sur la même page, et il faut les distinguer
+> « Ma classe » porte déjà ses propres onglets, « Un élève » et « Coller une liste », annoncés
+> `aria-label="Façon d'ajouter"`. La barre de l'espace professeur en est une seconde. Sans deux
+> noms distincts, un lecteur d'écran annonce deux fois « groupe d'onglets » sans dire lesquels,
+> et les tests ne savent plus de quel `role="tab"` ils parlent.
+
+> [!note] Ce qui ne bouge pas
+> L'aperçu de l'espace élève reste une **fenêtre par-dessus tout**, au-dessus des onglets comme
+> du tableau. « Fermer la session professeur » reste en pied, hors des onglets : c'est une sortie,
+> pas une quatrième activité.
+
+**Un onglet inactif est démonté.** Le tableau de bord cesse donc d'interroger l'API toutes les dix
+secondes pendant qu'on écrit un exercice, et repart à neuf en revenant — ce qui est de toute façon
+ce qu'on veut lire. Conséquence assumée : un jeton qui expire pendant qu'on est dans l'atelier ne
+renvoie à la porte qu'au retour sur « Séance ».
 
 L'atelier est ==entièrement client== : il ne parle à l'API pour rien. Il lit `schema.json` et
 `notions.json` comme le reste de l'interface lit le contenu publié.
@@ -340,7 +377,7 @@ faible.
 | Palier | Épreuves |
 |---|---|
 | 1 | **Les quatre fichiers déjà publiés — `exercices`, `lecons`, `notions`, `chapitres` — sont identiques octet pour octet avant et après le déplacement des tables** ; les bornes acceptent `s99-01` et refusent `s0-01` et `s01-01` ; deux notions de même famille dans un chapitre échouent ; deux identifiants en double échouent ; un `seance` qui contredit son identifiant échoue ; `schema.json`, le cinquième, décrit les quatre types de tests ; l'API accepte une tentative sur `s4-01` |
-| 2 | Le tour complet sur les 112 fichiers ; l'émetteur et les contrôles à **100 % de couverture**, comme toute logique pure de ce dépôt ; le lanceur d'essais avec un exécuteur simulé, y compris le cas du départ qui passe déjà ; le glisser-déposer d'un fichier cassé, d'un fichier étranger, d'un fichier à champs inconnus ; l'export refusé quand un champ requis manque |
+| 2 | Les trois onglets ont chacun leur chemin, et un rechargement revient sur le bon ; `/prof` seul vaut « Séance » ; Ctrl+clic sur un onglet ne change pas de page ; les deux `tablist` de la page portent des noms distincts ; le tour complet sur les 112 fichiers ; l'émetteur et les contrôles à **100 % de couverture**, comme toute logique pure de ce dépôt ; le lanceur d'essais avec un exécuteur simulé, y compris le cas du départ qui passe déjà ; le glisser-déposer d'un fichier cassé, d'un fichier étranger, d'un fichier à champs inconnus ; l'export refusé quand un champ requis manque |
 | 3 | Les trois types de blocs ; l'exemple qui plante est signalé et nommé ; entrées et exécutable sont incompatibles |
 
 `src/atelier/**` rejoint les seuils à 100 % de `vitest.config.ts`, aux côtés de `validation/`,
