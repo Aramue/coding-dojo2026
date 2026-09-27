@@ -7,17 +7,20 @@ lit la base, appelle la regle, ecrit le resultat, et fait sonner.
 
 from __future__ import annotations
 
+import asyncio
+import json
+from contextlib import suppress
 from datetime import datetime, timedelta
 from typing import Annotated, Callable
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, WebSocket
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from .bdd import obtenir_session
 from .catalogue import obtenir_catalogue
-from .diffuseur import diffuseur
+from .diffuseur import Role, diffuseur
 from .modeles import Eleve, ParticipantQuiz, PartieQuiz, ReponseQuiz, maintenant
 from .quiz import (
     Invalide,
@@ -35,7 +38,8 @@ from .quiz import (
     vue_prof,
 )
 from .routes_eleve import eleve_courant
-from .routes_prof import verifier_prof
+from .routes_prof import code_prof_valide, verifier_prof
+from .securite import lire_jeton
 
 routeur = APIRouter()
 routeur_prof = APIRouter(prefix="/prof/quiz", dependencies=[Depends(verifier_prof)])
@@ -45,6 +49,11 @@ MOTIF_QUIZ = r"^q[123]-[a-z]+(-[a-z]+)*$"
 # Une partie terminee reste visible un quart d'heure : le temps pour chacun de
 # lire son resultat, pas celui de le retrouver la semaine suivante.
 VISIBLE_APRES_FIN = timedelta(minutes=15)
+
+# La sonnette attend son premier message — l'authentification — cinq secondes,
+# pas plus, et jamais plus de 512 caracteres.
+DELAI_AUTHENTIFICATION_S = 5
+LONGUEUR_MAX_MESSAGE = 512
 
 SessionBdd = Annotated[Session, Depends(obtenir_session)]
 Catalogue = Annotated[dict[str, QuizPublie], Depends(obtenir_catalogue)]
@@ -370,3 +379,61 @@ def terminer_partie(
         session, catalogue, quand, taches, None,
         lambda partie, _quiz: terminer(partie, quand),
     )
+
+
+# --- La sonnette ------------------------------------------------------------
+
+
+async def _fermer(ws: WebSocket, code: int) -> None:
+    # Le client a pu partir le premier : fermer une connexion deja close leve
+    # RuntimeError, et il n'y a plus rien a lui dire de toute facon.
+    with suppress(RuntimeError):
+        await ws.close(code=code)
+
+
+async def _authentifier(ws: WebSocket) -> Role | None:
+    """Le premier message dit qui ouvre la connexion. Jamais l'URL.
+
+    Une URL finit dans les journaux du proxy et du serveur : un jeton ou un
+    code professeur n'a rien a y faire. Voir ADR-014.
+    """
+    try:
+        message = await asyncio.wait_for(ws.receive(), DELAI_AUTHENTIFICATION_S)
+    except asyncio.TimeoutError:
+        return None
+    texte = message.get("text")
+    if not isinstance(texte, str) or len(texte) > LONGUEUR_MAX_MESSAGE:
+        return None
+    try:
+        donnees = json.loads(texte)
+    except ValueError:
+        return None
+    if not isinstance(donnees, dict):
+        return None
+
+    code_prof, jeton = donnees.get("code_prof"), donnees.get("jeton")
+    if isinstance(code_prof, str) and code_prof_valide(code_prof):
+        return "prof"
+    if isinstance(jeton, str) and lire_jeton(jeton):
+        return "eleve"
+    return None
+
+
+@routeur.websocket("/quiz/flux")
+async def flux(ws: WebSocket) -> None:
+    await ws.accept()
+    role = await _authentifier(ws)
+    if role is None:
+        await _fermer(ws, 4401)
+        return
+    if not diffuseur.inscrire(ws, role):
+        await _fermer(ws, 1013)  # « reessaie plus tard » : le client relit en attendant
+        return
+    try:
+        await ws.send_json({"type": "pret"})
+        # Le client ne dit plus rien apres s'etre presente : on attend son
+        # depart pour l'oublier. Tout message suivant est ignore.
+        while (await ws.receive())["type"] != "websocket.disconnect":
+            pass
+    finally:
+        diffuseur.retirer(ws)
