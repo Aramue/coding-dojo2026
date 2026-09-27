@@ -4,7 +4,7 @@ tags:
   - moc
   - direction-artistique
 statut: validée
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-27
 ---
 
 # Charte visuelle
@@ -118,9 +118,44 @@ Deux corollaires, appris sur le même écran :
 > exactement ce qu'on lui demande. ==Le problème n'était pas la gélule, c'était le graphique
 > qu'elle voisinait.== Un remède ne se généralise pas au voisinage de la maladie.
 
+## Amendement du 27 septembre 2026 — les écrans du quiz
+
+> [!warning] Quatre familles sur un même écran, et nulle part ailleurs
+> Le [[Quiz en direct]] est la seule exception à la règle 3, « un écran, une famille ». Les
+> quatre options d'une question portent chacune une famille de la palette, ==parce qu'ici la
+> couleur porte une information== : elle relie l'option projetée au mur au bouton que l'élève a
+> sous les doigts, et la barre de répartition à l'option qu'elle compte.
+>
+> Choix validé par le professeur le 27 septembre 2026, parmi trois propositions (quatre
+> familles, neutre et formes, écran sombre).
+
+| Option | Famille | Fond | Encre | Forme |
+|---|---|---|---|---|
+| A | variables | `--var-tint` | `--var-ink` | triangle |
+| B | types | `--typ-tint` | `--typ-ink` | losange |
+| C | opérateurs | `--ope-tint` | `--ope-ink` | cercle |
+| D | conditions | `--con-tint` | `--con-ink` | carré |
+
+Ce sont les paires pastel et encre déjà vérifiées pour les notions ([[Palette]]) : aucune
+couleur nouvelle, aucun contraste à revérifier. La famille « boucles » reste hors du quiz — son
+pastel est trop proche de celui des conditions pour se distinguer d'un coup d'œil au fond d'une
+salle.
+
+**La couleur ne parle jamais seule.** Chaque option porte aussi une forme SVG tracée à la main
+et sa lettre : un élève qui ne distingue pas le violet du bleu lit un triangle et un cercle.
+
+**À la correction**, la bonne réponse garde sa couleur et reçoit un filet `--ok` et une coche
+SVG ; les autres perdent leur pastel et passent sur `--surface-doux`. La réponse fausse d'un
+élève, sur son écran seulement, reçoit un filet `--ko` et la mention « Ta réponse ».
+
+**Tout le reste de l'écran reste neutre** : canevas `--ground`, contenu sur `--surface`, code
+dans la carte Dracula. L'écran projeté reste clair — un fond sombre se lit mal au projecteur
+dans une salle éclairée.
+
 ## Le mouvement, et ses quatre usages
 
-Rien ne bouge sans raison, et rien ne dure plus de 400 ms. Quatre usages, pas un de plus :
+Rien ne bouge sans raison, et rien ne dure plus de 400 ms — sauf une horloge. Cinq usages, pas
+un de plus :
 
 | Quoi | Durée | Pourquoi |
 |---|---|---|
@@ -128,6 +163,7 @@ Rien ne bouge sans raison, et rien ne dure plus de 400 ms. Quatre usages, pas un
 | Le repli d'un chapitre | 260 ms | rend le pliage lisible ; sans lui le sommaire saute |
 | L'apparition du verdict | 180 ms | c'est le seul retour que l'élève attend, il doit arriver et non surgir |
 | L'avancement d'une jauge | 400 ms | rend le gain visible au moment où il est acquis |
+| Le compte à rebours du quiz | la durée de la question | c'est une horloge : le temps qui passe **est** l'information |
 
 > [!important] Deux règles techniques
 > Le repli s'anime sur `grid-template-rows: 1fr → 0fr`, jamais sur `height` : c'est la seule
@@ -137,4 +173,10 @@ Rien ne bouge sans raison, et rien ne dure plus de 400 ms. Quatre usages, pas un
 > composée par le GPU, la seconde relance la mise en page à chaque pixel de défilement — et
 > ==les machines des huit établissements ne sont pas des machines de développeur==.
 
-`prefers-reduced-motion: reduce` désactive les quatre.
+Le compte à rebours du quiz (27 septembre 2026) est le seul mouvement qui dépasse 400 ms, parce
+qu'il ne décore rien : il **mesure**. Les secondes s'affichent en grand, et une barre fine se
+vide par `transform: scaleX()`, recalée sur l'heure du serveur à chaque quart de seconde. Les
+barres de répartition et le podium du quiz sont des jauges : 400 ms, comme les autres.
+
+`prefers-reduced-motion: reduce` désactive les cinq ; le compte à rebours garde alors ses
+secondes et perd sa barre.
