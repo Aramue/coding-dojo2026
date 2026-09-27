@@ -49,8 +49,30 @@ def test_type_inconnu_rejete():
 
 
 def test_seance_hors_bornes_rejetee():
+    # La borne est passee de 3 a 99 le 27 septembre 2026 : une seance 4 est
+    # desormais legitime, c'est tout l'objet du chapitre 2.
     with pytest.raises(ValidationError):
-        Exercice(**exercice_minimal(seance=4))
+        Exercice(**exercice_minimal(seance=100))
+
+
+@pytest.mark.parametrize("identifiant, seance", [("s1-01", 1), ("s9-01", 9), ("s99-01", 99)])
+def test_une_seance_au_dela_de_trois_est_acceptee(identifiant, seance):
+    ex = Exercice(**exercice_minimal(id=identifiant, seance=seance))
+    assert ex.id == identifiant
+
+
+@pytest.mark.parametrize("identifiant", ["s0-01", "s01-01", "s100-01", "s1-1", "x1-01"])
+def test_un_identifiant_mal_forme_reste_refuse(identifiant):
+    with pytest.raises(ValidationError):
+        Exercice(**exercice_minimal(id=identifiant))
+
+
+def test_une_lecon_de_la_seance_dix_est_acceptee():
+    from schema import MOTIF_LECON
+
+    assert MOTIF_LECON.match("c10-variables")
+    assert not MOTIF_LECON.match("c0-variables")
+    assert not MOTIF_LECON.match("c01-variables")
 
 
 def test_identifiant_mal_forme_rejete():

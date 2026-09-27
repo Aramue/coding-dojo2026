@@ -13,7 +13,10 @@ from .securite import creer_jeton, lire_jeton
 
 routeur = APIRouter()
 MOTIF_CODE = re.compile(r"^DOJO-[A-Z0-9]{4}$")
-MOTIF_EXERCICE = re.compile(r"^s[123]-[0-9]{2}(-expert)?$")
+# Miroir de outils/schema.py::MOTIF_ID. L'image de l'API ne contient pas
+# `outils/`, donc les deux expressions ne peuvent pas s'importer : elles se
+# recopient, et les deux suites de tests fixent les memes cas limites.
+MOTIF_EXERCICE = re.compile(r"^s([1-9][0-9]?)-[0-9]{2}(-expert)?$")
 
 # Liste blanche des types d'erreur acceptés. Elle double celle du navigateur
 # (web/src/execution/exceptions.ts) — et c'est CELLE-CI qui protège.

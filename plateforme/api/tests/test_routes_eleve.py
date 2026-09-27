@@ -250,3 +250,23 @@ def test_la_date_est_celle_de_la_premiere_reussite(client, jeton):
 def test_une_tentative_rouge_n_apparait_pas(client, jeton):
     _valider(client, jeton, "s1-01", "rouge")
     assert client.get("/parcours", headers=entetes(jeton)).json()["reussis"] == []
+
+
+def test_une_tentative_sur_une_seance_au_dela_de_trois_est_acceptee(client, jeton):
+    """Le chapitre 2 commence a la seance 4. Miroir de outils/schema.py::MOTIF_ID."""
+    reponse = client.post(
+        "/tentative",
+        headers={"Authorization": f"Bearer {jeton}"},
+        json={"exercice_id": "s4-01", "verdict": "vert", "duree_ms": 42},
+    )
+    assert reponse.status_code == 200
+
+
+def test_un_identifiant_d_exercice_mal_forme_reste_refuse(client, jeton):
+    for faux in ("s0-01", "s01-01", "s100-01", "s1-1", "x1-01"):
+        reponse = client.post(
+            "/tentative",
+            headers={"Authorization": f"Bearer {jeton}"},
+            json={"exercice_id": faux, "verdict": "vert", "duree_ms": 42},
+        )
+        assert reponse.status_code == 422, faux

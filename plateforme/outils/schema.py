@@ -9,7 +9,11 @@ from typing import Annotated, Literal, Union
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-MOTIF_ID = re.compile(r"^s[123]-[0-9]{2}(-expert)?$")
+# Une a 99 seances. La borne ne commande plus le calendrier : elle n'est la que
+# pour attraper une faute de frappe. Pas de zero en tete, sinon `s01-01` et
+# `s1-01` designeraient le meme exercice sous deux noms.
+# Miroir dans api/app/routes_eleve.py::MOTIF_EXERCICE.
+MOTIF_ID = re.compile(r"^s([1-9][0-9]?)-[0-9]{2}(-expert)?$")
 
 # Construit a partir de points de code explicites plutot que recopie depuis des
 # emoji litteraux : un selecteur de variation invisible (U+FE0F) s'etait glisse
@@ -84,7 +88,7 @@ class Exercice(BaseModel):
     # d'exercices et une couleur. Le concept, lui, reste libre et sert au
     # regroupement pedagogique fin. Voir NOTIONS plus bas.
     notion: str
-    seance: int = Field(ge=1, le=3)
+    seance: int = Field(ge=1, le=99)
     niveau: Literal["normal", "expert"]
     type: Literal["predire", "debug", "completer", "ecrire"]
     titre: str
@@ -139,7 +143,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     ]
 
 
-MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
+MOTIF_LECON = re.compile(r"^c([1-9][0-9]?)-[a-z]+$")
 
 # Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
 # navigation : elle porte une lecon et un groupe d'exercices.
