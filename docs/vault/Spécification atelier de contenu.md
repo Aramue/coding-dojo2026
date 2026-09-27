@@ -356,8 +356,8 @@ faible.
 > [!warning] Le palier 1 touche à la seule source
 > Déplacer `NOTIONS` et `CHAPITRES`, c'est toucher ce dont dépendent le schéma, le validateur, le
 > constructeur, le tableau de bord et le calendrier. L'épreuve qui compte est celle du tableau
-> ci-dessus : **le contenu publié doit être identique avant et après**, sans quoi le déplacement a
-> changé autre chose que son adresse.
+> ci-dessus : **les quatre fichiers publiés doivent être identiques avant et après**, sans quoi le
+> déplacement a changé autre chose que l'adresse des tables.
 
 > [!note] L'API d'accès au système de fichiers n'existe pas partout
 > Elle est absente de Firefox et de Safari. Le téléchargement reste le chemin par défaut, et rien
