@@ -45,7 +45,10 @@ docs/vault/               la documentation, sous forme de coffre Obsidian
 ## Développer
 
 ```bash
-# Interface
+# Tout le dojo, qui se recharge tout seul à chaque enregistrement
+docker compose -f docker-compose.dev.yml up --build
+
+# Interface seule, sur la machine
 cd plateforme/web
 pnpm install
 pnpm dev                 # serveur de développement
@@ -80,6 +83,26 @@ markdown ordinaire. Points d'entrée :
   ==les choix qui ont l'air arbitraires et ne le sont pas==, chacun payé par un
   défaut réel
 - [Journal de décisions](docs/vault/2-decisions/Journal%20de%20décisions.md) — les ADR
+
+## Développer dans Docker
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+L'adresse reste <http://localhost>. Le front passe par Vite et se recharge à
+chaud ; l'API tourne en `--reload`. Enregistrer un fichier suffit, il n'y a
+rien à reconstruire.
+
+Trois choses à savoir :
+
+- **Les deux piles se disputent le port 80.** `docker compose down` avant.
+- **Le développement a sa propre base**, donc sa propre classe et son propre
+  compte professeur, à créer au premier lancement. La production n'est jamais
+  touchée.
+- **Le contenu publié n'est pas reconstruit** : après avoir modifié un YAML,
+  relancer `construire_contenu.py` comme ci-dessus. Le JSON est versionné, le
+  navigateur le prend au rechargement suivant.
 
 ## Déployer
 

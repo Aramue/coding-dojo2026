@@ -1,0 +1,21 @@
+# Caddy de DEVELOPPEMENT. Il ne sert aucun fichier : il relaie tout vers le
+# serveur de Vite, qui recompile a chaque enregistrement. Voir
+# docker-compose.dev.yml.
+#
+# Pourquoi garder Caddy en developpement plutot que d'exposer Vite : l'adresse
+# reste http://localhost, la meme qu'en production, et le port 5173 n'a pas a
+# etre libre — il a deja ete pris par un autre projet sur cette machine.
+http://{$DOJO_DOMAINE:localhost} {
+	encode zstd gzip
+
+	handle_path /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		# reverse_proxy relaie l'Upgrade de lui-meme depuis Caddy 2 : c'est ce
+		# qui fait passer le websocket de rechargement a chaud de Vite. Sans
+		# lui, la page se charge mais ne se rafraichit jamais.
+		reverse_proxy web:5173
+	}
+}

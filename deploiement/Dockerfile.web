@@ -5,6 +5,20 @@ COPY plateforme/contenu ./contenu
 RUN pip install --no-cache-dir -r outils/requirements.txt \
  && cd outils && python construire_contenu.py ../contenu /build/public-contenu
 
+# Etage de DEVELOPPEMENT : node et les dependances, rien d'autre. Les sources
+# arrivent par un montage depuis l'hote, et Vite les surveille.
+#
+# ATTENTION : cet etage doit rester AVANT le dernier. `docker build` sans
+# `--target` prend le dernier etage du fichier — le mettre en fin donnerait une
+# image de developpement a la production, sans que rien ne le signale.
+FROM node:22-slim AS developpement
+WORKDIR /app
+RUN npm install -g pnpm@11.25.0
+COPY plateforme/web/package.json plateforme/web/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+EXPOSE 5173
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]
+
 FROM node:22-slim AS construction
 WORKDIR /build
 # corepack plante ici, meme epingle : son shim relit devEngines.packageManager

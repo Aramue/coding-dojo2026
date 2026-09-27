@@ -1,0 +1,63 @@
+# Le meme dojo, mais qui se recharge tout seul quand on enregistre un fichier.
+#
+#   docker compose -f docker-compose.dev.yml up --build
+#
+# L'adresse reste http://localhost, comme en production. Ce fichier se lit
+# seul, sans fusion mentale avec docker-compose.yml : les deux services y font
+# des choses franchement differentes, et un fichier de surcharge aurait cache
+# lesquelles.
+#
+# `name` distinct : ce sont d'autres conteneurs et un AUTRE volume de donnees.
+# Le developpement ne touche donc jamais la base de la production — mais il a
+# sa propre classe, et son propre compte professeur a creer au premier
+# lancement (voir ADR-014).
+#
+# Les deux piles se disputent le port 80 : arreter l'autre avant.
+name: coding-dojo-dev
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: deploiement/Dockerfile.api
+    # --reload : uvicorn surveille /app/app, monte juste en dessous.
+    command: ["uvicorn", "app.main:application", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./plateforme/api/app:/app/app:ro
+      - donnees:/app/donnees
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: deploiement/Dockerfile.web
+      target: developpement
+    environment:
+      # Fait passer Vite en sondage de fichiers et lui dit sur quel port le
+      # navigateur le joint. Les deux sont indispensables derriere Docker et
+      # derriere Caddy — voir plateforme/web/vite.config.ts.
+      DOJO_DOCKER: "1"
+    volumes:
+      - ./plateforme/web:/app
+      # Volume anonyme PAR-DESSUS le montage : sans lui, le node_modules de
+      # l'hote recouvrirait celui de l'image. Sous Windows c'est fatal — pnpm
+      # y construit une foret de liens symboliques que Linux ne sait pas
+      # suivre, et tsc ne trouve plus ses types.
+      - /app/node_modules
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      DOJO_DOMAINE: ${DOJO_DOMAINE:-localhost}
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploiement/Caddyfile.dev:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
+
+volumes:
+  donnees:

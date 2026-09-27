@@ -47,6 +47,45 @@ Tout est servi depuis la machine UNIGE :
 > ==purement esthétique==, puisque aucune piste ne coûtait plus cher qu'une autre.
 > Voir [[ADR-005 Typographie General Sans]].
 
+## Développer dans Docker — 27 septembre 2026
+
+`docker-compose.dev.yml` monte le même dojo, mais qui se recharge tout seul :
+Vite à la place du front statique, `uvicorn --reload` à la place d'uvicorn.
+==L'adresse reste `http://localhost`== — Caddy reste devant et relaie vers Vite,
+websocket de rechargement compris.
+
+Le fichier **se lit seul**, il ne surcharge pas `docker-compose.yml` : les deux
+services y font des choses franchement différentes, et une fusion aurait caché
+lesquelles.
+
+> [!warning] Trois pièges, tous payés à l'essai
+> **Le sondage.** Un montage depuis Windows ne transmet pas les événements
+> d'inotify au conteneur. Sans `usePolling`, la page se charge et plus rien ne
+> bouge — ==sans le moindre message==.
+>
+> **Le port du client.** Le navigateur joint Vite à travers Caddy, sur le port
+> 80 ; son client de rechargement viserait 5173 par défaut et n'ouvrirait
+> jamais son websocket. D'où `hmr.clientPort`.
+>
+> **Le `node_modules` de l'hôte.** Monter `plateforme/web` recouvre celui de
+> l'image. Sous Windows c'est fatal : pnpm y construit une forêt de liens
+> symboliques que Linux ne sait pas suivre. Un volume anonyme par-dessus le
+> montage le protège.
+
+> [!danger] L'étage `developpement` doit rester avant le dernier
+> `docker build` sans `--target` prend le **dernier** étage du Dockerfile. Le
+> mettre en fin donnerait une image de développement à la production, sans que
+> rien ne le signale.
+
+Le développement a son propre `name`, donc ses propres conteneurs et **son
+propre volume de données** : il ne touche jamais la base de la production, mais
+il a sa propre classe et son propre compte professeur. Les deux piles se
+disputent le port 80 : arrêter l'autre avant.
+
+Ce que le mode développement ne fait pas : **reconstruire le contenu**. Après
+avoir modifié un YAML, relancer `construire_contenu.py` — le JSON publié est
+versionné, et Vite le sert au rechargement suivant.
+
 ## Sauvegardes
 
 Le fichier SQLite est copié chaque nuit et avant chaque déploiement. À 24 élèves, le volume est
