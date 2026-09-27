@@ -15,6 +15,7 @@
 # Sorties de construction : refaites dans l'image.
 **/dist
 plateforme/web/public/contenu
+plateforme/api/quiz
 
 # Bases locales et couverture.
 **/donnees/*.db
