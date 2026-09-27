@@ -1,0 +1,15 @@
+# Fichier separe de pytest.ini : coverage.py ne lit PAS les sections
+# [coverage:*] depuis pytest.ini — seulement depuis .coveragerc, setup.cfg,
+# tox.ini ou pyproject.toml. Les y ecrire les rendrait silencieusement inertes.
+[run]
+omit =
+    tests/*
+    .venv/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    # Jamais executee sous pytest, par construction : la garde n'est vraie que
+    # quand le fichier est lance comme script. La fonction main() qu'elle
+    # appelle, elle, reste mesuree — c'est le cas d'oublier_prof.
+    if __name__ == .__main__.:
