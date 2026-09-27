@@ -8,15 +8,21 @@ import './Menu.css'
  * ses deux pages. C'est la carte du parcours — depuis n'importe où, l'élève
  * atteint n'importe quelle page et voit où il en est.
  */
+/** Où en est le quiz, pour l'entrée du sommaire. */
+export type QuizDuMenu = { ouvert: boolean; titre?: string }
+
 export function Menu({
   chapitres,
   destination,
+  quiz = { ouvert: false },
 }: {
   chapitres: GroupeChapitre[]
   destination: Destination
+  quiz?: QuizDuMenu
 }) {
   return (
     <nav className="menu" aria-label="Sommaire du cours">
+      <EntreeQuiz quiz={quiz} destination={destination} />
       {chapitres.map((chapitre) => (
         <Chapitre key={chapitre.id} chapitre={chapitre} destination={destination} />
       ))}
@@ -128,6 +134,42 @@ function Notion({
   )
 }
 
+/**
+ * Le quiz, tout en haut du sommaire, toujours à la même place.
+ *
+ * Grisé tant qu'aucune partie n'est ouverte : l'élève sait qu'il existe et où
+ * il apparaîtra, sans pouvoir ouvrir une page vide. Dès que le professeur
+ * crée une partie, l'entrée s'allume — en même temps que le bandeau.
+ */
+function EntreeQuiz({ quiz, destination }: { quiz: QuizDuMenu; destination: Destination }) {
+  const ici = destination.vue === 'quiz'
+  const contenu = (
+    <>
+      <Chrono />
+      <span className="menu-quiz__texte">
+        <span className="menu-quiz__titre">Quiz en direct</span>
+        <span className="menu-quiz__etat">
+          {quiz.ouvert ? (quiz.titre ?? 'Partie en cours') : ici ? 'Aucune partie' : 'Pas de quiz lancé'}
+        </span>
+      </span>
+      {quiz.ouvert && <span className="menu-quiz__direct" aria-hidden="true" />}
+    </>
+  )
+
+  if (!quiz.ouvert && !ici) {
+    return (
+      <div className="menu-quiz" aria-disabled="true">
+        {contenu}
+      </div>
+    )
+  }
+  return (
+    <Lien cible={{ vue: 'quiz' }} destination={destination} className="menu-quiz">
+      {contenu}
+    </Lien>
+  )
+}
+
 /** Un exercice ouvert appartient à la liste d'exercices de sa notion. */
 function memeEndroit(cible: Destination, destination: Destination): boolean {
   if (
@@ -149,10 +191,12 @@ function Lien({
   cible,
   destination,
   children,
+  className = 'menu__lien',
 }: {
   cible: Destination
   destination: Destination
   children: ReactNode
+  className?: string
 }) {
   const chemin = versChemin(cible)
 
@@ -165,7 +209,7 @@ function Lien({
 
   return (
     <a
-      className="menu__lien"
+      className={className}
       href={chemin}
       onClick={cliquer}
       aria-current={memeEndroit(cible, destination) ? 'page' : undefined}
@@ -176,6 +220,20 @@ function Lien({
 }
 
 /* SVG tracés à la main, trait 1,8 : la charte interdit emoji et icônes importées. */
+
+function Chrono() {
+  return (
+    <svg className="menu-quiz__icone" viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+      <circle cx="12" cy="13.5" r="7" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M12 13.5V10M10 3.5h4M12 3.5v3"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
 
 function Chevron({ ouvert }: { ouvert: boolean }) {
   return (

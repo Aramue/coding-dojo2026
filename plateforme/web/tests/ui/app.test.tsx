@@ -53,6 +53,8 @@ const EXERCICES = [
   },
 ]
 
+let etatDuQuiz: unknown
+
 function poserLeReseau() {
   vi.stubGlobal(
     'fetch',
@@ -64,7 +66,7 @@ function poserLeReseau() {
         if (url.includes('lecons')) return []
         if (url.includes('parcours')) return { reussis: [] }
         if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
-        if (url.includes('quiz/etat')) return { partie: null, maintenant: new Date().toISOString() }
+        if (url.includes('quiz/etat')) return etatDuQuiz
         return EXERCICES
       },
     })),
@@ -74,6 +76,7 @@ function poserLeReseau() {
 beforeEach(() => {
   history.pushState(null, '', '/')
   sessionStorage.clear()
+  etatDuQuiz = { partie: null, maintenant: new Date().toISOString() }
   poserLeReseau()
 })
 
@@ -144,7 +147,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
-        if (url.includes('quiz/etat')) return { partie: null, maintenant: new Date().toISOString() }
+        if (url.includes('quiz/etat')) return etatDuQuiz
           return EXERCICES
         },
       })),
@@ -169,7 +172,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
-        if (url.includes('quiz/etat')) return { partie: null, maintenant: new Date().toISOString() }
+        if (url.includes('quiz/etat')) return etatDuQuiz
           return EXERCICES
         },
       })),
@@ -184,8 +187,36 @@ describe('App — le menu suit la progression', () => {
 })
 
 describe('App — tableau de bord professeur', () => {
+  it('garde le quiz tout en haut du sommaire, grisé tant qu aucune partie n est ouverte', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    render(<App />)
+    const entree = await screen.findByText('Pas de quiz lancé')
+    expect(entree.closest('[aria-disabled="true"]')).not.toBeNull()
+    expect(screen.queryByRole('link', { name: /Quiz en direct/ })).toBeNull()
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('allume le bandeau et l entrée du sommaire quand une partie est créée', async () => {
+    etatDuQuiz = {
+      partie: 1,
+      titre: 'Les bases de la séance 1',
+      phase: 'attente',
+      maintenant: new Date().toISOString(),
+      rejoint: false,
+      question: null,
+      ma_reponse: null,
+      moi: null,
+      joueurs: [],
+    }
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    render(<App />)
+    expect(await screen.findByRole('status')).toHaveTextContent('Un quiz a commencé')
+    const entree = screen.getByRole('link', { name: /Quiz en direct/ })
+    expect(entree).toHaveAttribute('href', '/quiz')
+    expect(entree).toHaveTextContent('Les bases de la séance 1')
+  })
+
   it('ouvre la partie de quiz sur /quiz, dans la coquille de l eleve', async () => {
-    vi.stubGlobal('WebSocket', class { close() {} })
     sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
     history.pushState(null, '', '/quiz')
     render(<App />)

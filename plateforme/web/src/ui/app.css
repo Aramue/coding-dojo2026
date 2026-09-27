@@ -66,8 +66,15 @@
 
 /* ---------- Bandeau du quiz ---------- */
 
+/*
+ * Collé sous l'en-tête (3,5 rem), au-dessus du contenu qui défile : l'élève
+ * plongé dans un long exercice le voit sans remonter.
+ */
 .bandeau-quiz {
   grid-area: bandeau;
+  position: sticky;
+  top: 3.5rem;
+  z-index: 9;
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -44,6 +44,7 @@ export function etatEleve(surcharge: Partial<Extract<EtatEleve, { partie: number
     question: null,
     ma_reponse: null,
     moi: { points: 0, bonnes: 0, questions_closes: 0, rang: null, participants: 3 },
+    joueurs: [],
     ...surcharge,
   }
 }

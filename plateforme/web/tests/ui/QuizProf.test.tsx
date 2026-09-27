@@ -10,17 +10,29 @@ const INSCRITS = [
   { code_acces: 'DOJO-M3QP', prenom: 'Alex', nom: 'Morel' },
   { code_acces: 'DOJO-BZUH', prenom: 'Noa', nom: '' },
 ]
-const CATALOGUE = [{ id: 'q1-bases', titre: 'Les bases de la séance 1', seance: 1, questions: 12, duree_s: 280 }]
+const CATALOGUE = [
+  { id: 'q1-bases', titre: 'Les bases de la séance 1', seance: 1, questions: 12, duree_s: 280, derniere: null },
+]
+
+const DERNIERE = {
+  partie: 4,
+  terminee_le: '2026-09-30T14:40:00+00:00',
+  joueurs: 21,
+  reponses: 240,
+  reussite: 0.675,
+}
 
 let etat: EtatProf
 let apresAction: ReturnType<typeof reponse>
 let catalogue: unknown
+let resultats: ReturnType<typeof reponse>
 let fetchFactice: ReturnType<typeof vi.fn>
 
 function monter() {
   fetchFactice = vi.fn(async (url: string, options?: RequestInit) => {
     if (url === '/api/prof/eleves') return reponse({ eleves: INSCRITS })
     if (url === '/api/prof/quiz') return reponse({ quiz: catalogue })
+    if (url === '/api/prof/quiz/q1-bases/resultats') return resultats
     if (url === '/api/prof/quiz/partie') return reponse(etat)
     if (options?.method === 'POST') {
       // Comme le serveur : une action acceptée change ce que la relecture rend.
@@ -61,7 +73,7 @@ describe('QuizProf', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Lancer' }))
     expect(postes()).toEqual([['/api/prof/quiz/parties', '{"quiz_id":"q1-bases"}']])
     expect(await screen.findByText("Salle d'attente")).toBeInTheDocument()
-    expect(screen.getByText(/0 élève\s+sur 3 dans la partie/)).toBeInTheDocument()
+    expect(screen.getByText(/élève prêt\s+sur 3/)).toHaveTextContent('0 élève prêt sur 3')
   })
 
   it('dit comment ajouter un quiz quand le catalogue est vide', async () => {
@@ -77,10 +89,11 @@ describe('QuizProf', () => {
     monter()
 
     const joueurs = await screen.findByRole('list', { name: 'Élèves dans la partie' })
-    expect(within(joueurs).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
-      'Camille R.',
-      'Alex M.',
-    ])
+    const noms = within(joueurs)
+      .getAllByRole('listitem')
+      .map((li) => li.querySelector('.pastille__nom')?.textContent)
+    expect(noms).toEqual(['Camille R.', 'Alex M.'])
+    expect(screen.getByText(/élèves prêts\s+sur 3/)).toHaveTextContent('2 élèves prêts sur 3')
     await userEvent.click(screen.getByRole('button', { name: 'Lancer la première question' }))
     expect(postes()).toEqual([['/api/prof/quiz/partie/suivante', '{"question":-1}']])
     expect(await screen.findByRole('timer')).toBeInTheDocument()
@@ -198,6 +211,66 @@ describe('QuizProf', () => {
     monter()
     await userEvent.click(await screen.findByRole('button', { name: 'Lancer la première question' }))
     expect(await screen.findByRole('alert')).toHaveTextContent('La partie a déjà avancé.')
+  })
+
+  it('ne projette jamais un code d accès, même pour un élève sans prénom', async () => {
+    etat = etatProf({
+      participants: [{ code_acces: 'DOJO-ZZ99', prenom: '', nom: '' }],
+      phase: 'correction',
+      question: question({ bonne_reponse: 1 }),
+      podium: [{ code_acces: 'DOJO-ZZ99', prenom: '', nom: '', points: 900, rang: 1 }],
+    })
+    monter()
+    expect(await screen.findByText('Élève')).toBeInTheDocument()
+    expect(document.body.textContent).not.toContain('DOJO-ZZ99')
+  })
+
+  it('montre le résultat de la dernière partie, et l ouvre en entier', async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    catalogue = [{ ...CATALOGUE[0], derniere: DERNIERE }]
+    resultats = reponse({
+      ...DERNIERE,
+      quiz_id: 'q1-bases',
+      titre: 'Les bases de la séance 1',
+      bilan: [
+        { rang: 0, enonce: 'Q piège', code: '', options: ['a', 'b'], bonne_reponse: 1, repartition: [15, 6], reponses: 21 },
+      ],
+    })
+    monter()
+
+    const ligne = (await screen.findByText('Les bases de la séance 1')).closest('li')!
+    expect(ligne).toHaveTextContent('Dernière partie le 30 septembre : 68 % de bonnes réponses, 21 élèves')
+    const boutons = within(ligne).getAllByRole('button').map((b) => b.textContent)
+    // Juste à gauche de « Lancer ».
+    expect(boutons).toEqual(['Derniers résultats', 'Lancer'])
+
+    await userEvent.click(within(ligne).getByRole('button', { name: 'Derniers résultats' }))
+    expect(await screen.findByText('68 %')).toBeInTheDocument()
+    expect(screen.getByText(/21 élèves, 240 réponses/)).toBeInTheDocument()
+    expect(screen.getByText('Q piège').closest('li')).toHaveTextContent('À reprendre')
+    // Rien n'a été lancé pour les lire.
+    expect(postes()).toEqual([])
+
+    await userEvent.click(screen.getByRole('button', { name: 'Revenir aux quiz' }))
+    expect(screen.getByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+  })
+
+  it('dit qu un quiz n a pas encore été joué, sans bouton de résultats', async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    monter()
+    expect(await screen.findByText('Pas encore joué')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Derniers résultats' })).toBeNull()
+  })
+
+  it('dit pourquoi les résultats ne viennent pas', async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    catalogue = [{ ...CATALOGUE[0], derniere: { ...DERNIERE, reussite: null } }]
+    resultats = reponse({ detail: "Ce quiz n'a pas encore été joué." }, 404)
+    monter()
+    const ligne = (await screen.findByText('Les bases de la séance 1')).closest('li')!
+    expect(ligne).toHaveTextContent('— de bonnes réponses')
+    await userEvent.click(screen.getByRole('button', { name: 'Derniers résultats' }))
+    expect(await screen.findByText("Ce quiz n'a pas encore été joué.")).toBeInTheDocument()
   })
 
   it('ramène au tableau de bord', async () => {

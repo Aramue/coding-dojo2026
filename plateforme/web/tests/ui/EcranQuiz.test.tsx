@@ -49,14 +49,25 @@ describe('EcranQuiz', () => {
     expect(screen.getByText(/continuer tes exercices/)).toBeInTheDocument()
   })
 
-  it('invite à rejoindre une partie, puis attend la première question', async () => {
-    etat = etatEleve({ rejoint: false, moi: null })
-    apresAction = reponse(etatEleve())
+  it('invite à rejoindre une partie, montre qui est déjà là, puis attend la première question', async () => {
+    etat = etatEleve({ rejoint: false, moi: null, joueurs: [{ nom: 'Alex M.', moi: false }] })
+    apresAction = reponse(
+      etatEleve({
+        joueurs: [
+          { nom: 'Alex M.', moi: false },
+          { nom: 'Camille R.', moi: true },
+        ],
+      }),
+    )
     await monter()
 
-    await userEvent.click(await screen.findByRole('button', { name: 'Rejoindre la partie' }))
+    expect(await screen.findByText('Alex M.')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Rejoindre la partie' }))
     expect(await screen.findByText(/Tu es dans la partie/)).toBeInTheDocument()
-    expect(screen.getByText('3 élèves prêts')).toBeInTheDocument()
+    const prets = screen.getByRole('list', { name: 'Élèves prêts' })
+    expect(within(prets).getAllByRole('listitem')).toHaveLength(2)
+    expect(screen.getByText('Camille R.').closest('li')).toHaveAttribute('data-moi', 'true')
+    expect(screen.getByText(/élèves prêts/)).toHaveTextContent('2 élèves prêts')
     expect(fetchFactice.mock.calls.some(([url]) => String(url).endsWith('/quiz/rejoindre'))).toBe(true)
   })
 

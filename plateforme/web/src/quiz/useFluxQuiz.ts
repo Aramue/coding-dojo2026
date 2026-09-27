@@ -4,13 +4,18 @@ import { FluxQuiz, type Photographie } from './flux'
 /**
  * Branche un écran sur la sonnette et sa relève.
  *
- * `lire` et `presentation` sont lus une fois, au montage : ils ne dépendent
- * que de la session (le client de l'élève, le code du professeur), qui ne
- * change pas sans remonter l'écran.
+ * `lire`, `presentation` et `repliMs` sont lus une fois, au montage : ils ne
+ * dépendent que de la session (le client de l'élève, le code du professeur),
+ * qui ne change pas sans remonter l'écran.
+ *
+ * `actif` à faux suspend tout — sonnette fermée, relève arrêtée — et garde la
+ * dernière photographie. Le bandeau de l'élève se suspend ainsi sur /quiz, où
+ * l'écran de la partie a sa propre sonnette.
  */
 export function useFluxQuiz<E extends Photographie>(
   lire: () => Promise<E>,
   presentation: () => Record<string, string>,
+  { actif = true, repliMs }: { actif?: boolean; repliMs?: number } = {},
 ) {
   const [etat, setEtat] = useState<E | null>(null)
   const [ecartMs, setEcartMs] = useState(0)
@@ -26,6 +31,7 @@ export function useFluxQuiz<E extends Photographie>(
           setEcartMs(ecart)
         },
         onErreur: setErreur,
+        repliMs,
       }),
     // Volontairement au montage seulement : voir plus haut.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -33,9 +39,10 @@ export function useFluxQuiz<E extends Photographie>(
   )
 
   useEffect(() => {
+    if (!actif) return
     flux.demarrer()
     return () => flux.arreter()
-  }, [flux])
+  }, [flux, actif])
 
   return { etat, ecartMs, erreur, flux }
 }

@@ -366,3 +366,74 @@ button.options-quiz__bouton:disabled {
     padding: var(--e-3) var(--e-2) var(--e-5);
   }
 }
+
+/* ---------- Les élèves prêts ---------- */
+
+.pastilles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  width: 100%;
+}
+
+.pastilles__compte {
+  margin: 0;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.pastilles__compte b {
+  font-size: var(--t-5);
+  color: var(--ink);
+}
+
+.pastilles__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1);
+}
+
+.pastille {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.3rem;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: 999px;
+  animation: quiz-arrivee 180ms ease-out;
+}
+
+.pastille__rond {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--ground-2);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: var(--t-2);
+}
+
+.pastille__nom {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.pastille[data-moi] {
+  border-color: var(--ink);
+}
+
+.pastille[data-moi] .pastille__rond {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.pastille__toi {
+  font-weight: 400;
+  color: var(--ink-soft);
+}

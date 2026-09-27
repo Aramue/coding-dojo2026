@@ -96,6 +96,17 @@ describe('FluxQuiz', () => {
     flux.arreter()
   })
 
+  it('sans sonnette, relit au rythme demandé quand on n attend pas de question', async () => {
+    const { flux, lire } = monter({ repliMs: 10_000 })
+    flux.demarrer()
+    await vider()
+    await vi.advanceTimersByTimeAsync(9_000)
+    expect(lire).toHaveBeenCalledTimes(1)
+    await vi.advanceTimersByTimeAsync(1_000)
+    expect(lire).toHaveBeenCalledTimes(2)
+    flux.arreter()
+  })
+
   it('sonnette branchée, relit à chaque sonnerie et toutes les dix secondes par sûreté', async () => {
     const { flux, sonnettes, lire } = monter()
     flux.demarrer()

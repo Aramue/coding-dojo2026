@@ -1,5 +1,5 @@
 import { estPhotographie, messageRefus } from '../api/client'
-import type { EtatProf, ResumeQuiz } from '../quiz/types'
+import type { EtatProf, ResultatsQuiz, ResumeQuiz } from '../quiz/types'
 
 /**
  * Le client des routes du quiz côté professeur. Toutes portent le code
@@ -36,6 +36,13 @@ export async function listerQuiz(codeProf: string): Promise<ResumeQuiz[]> {
   const donnees = (await appeler(codeProf, '')) as { quiz?: unknown }
   if (!Array.isArray(donnees?.quiz)) throw new Error('Réponse inattendue de la plateforme.')
   return donnees.quiz as ResumeQuiz[]
+}
+
+/** Le bilan de la dernière partie jouée de ce quiz. */
+export async function lireResultats(codeProf: string, quizId: string): Promise<ResultatsQuiz> {
+  const donnees = (await appeler(codeProf, `/${quizId}/resultats`)) as ResultatsQuiz | null
+  if (!Array.isArray(donnees?.bilan)) throw new Error('Réponse inattendue de la plateforme.')
+  return donnees
 }
 
 export function lirePartie(codeProf: string): Promise<EtatProf> {

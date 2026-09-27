@@ -4,18 +4,28 @@ import {
   corriger,
   creerPartie,
   lirePartie,
+  lireResultats,
   listerQuiz,
   questionSuivante,
   terminerPartie,
 } from '../prof/quiz'
 import { nommer } from '../prof/seance'
-import type { EtatProf, LigneBilan, PlaceProjetee, ResumeQuiz } from '../quiz/types'
+import type {
+  DernierePartie,
+  EtatProf,
+  LigneBilan,
+  Participant,
+  PlaceProjetee,
+  ResultatsQuiz,
+  ResumeQuiz,
+} from '../quiz/types'
 import { useFluxQuiz } from '../quiz/useFluxQuiz'
 import { naviguer } from '../routage'
 import { CarteCode } from './CarteCode'
 import { CompteARebours } from './CompteARebours'
 import { LETTRES } from './FormeOption'
 import { OptionsQuiz } from './OptionsQuiz'
+import { PastillesJoueurs } from './PastillesJoueurs'
 import './Quiz.css'
 import './QuizProf.css'
 
@@ -26,6 +36,23 @@ const SEUIL_A_REPRENDRE = 0.5
 
 function accord(n: number, un: string, plusieurs: string): string {
   return `${n.toLocaleString('fr-CH')} ${n <= 1 ? un : plusieurs}`
+}
+
+/**
+ * Le nom qu'on projette. Comme `nommer`, sauf le repli : sans prénom, le
+ * tableau de bord montre le code d'accès — utile au professeur seul — mais
+ * cet écran est au mur, et le code est le secret de l'élève.
+ */
+function nomProjete(eleve: Participant): string {
+  return eleve.prenom?.trim() ? nommer(eleve) : 'Élève'
+}
+
+function pourcent(part: number | null): string {
+  return part === null ? '—' : `${Math.round(part * 100)} %`
+}
+
+function date(iso: string): string {
+  return new Date(iso).toLocaleDateString('fr-CH', { day: 'numeric', month: 'long' })
 }
 
 /**
@@ -46,6 +73,7 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
   const [envoi, setEnvoi] = useState(false)
   const [nouvelle, setNouvelle] = useState(false)
   const [inscrits, setInscrits] = useState<number | null>(null)
+  const [resultatsDe, setResultatsDe] = useState<string | null>(null)
 
   useEffect(() => {
     // Le nombre d'inscrits, pour lire « 18 sur 24 » plutôt que « 18 ». Sans
@@ -76,7 +104,12 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
   return (
     <main className="quiz-prof">
       <div className="quiz-prof__fil">
-        <button type="button" className="bouton bouton--menu" onClick={() => naviguer({ vue: 'prof' })}>
+        <button
+          type="button"
+          className="bouton quiz-prof__retour"
+          onClick={() => naviguer({ vue: 'prof' })}
+        >
+          <FlecheRetour />
           Retour au tableau de bord
         </button>
       </div>
@@ -88,11 +121,15 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
       )}
 
       {!etat && <p className="quiz__attente">Chargement…</p>}
-      {choisir && (
+      {choisir && resultatsDe && (
+        <Resultats codeProf={codeProf} quizId={resultatsDe} onRetour={() => setResultatsDe(null)} />
+      )}
+      {choisir && !resultatsDe && (
         <Catalogue
           codeProf={codeProf}
           envoi={envoi}
           onLancer={(id) => void agir(() => creerPartie(codeProf, id))}
+          onResultats={setResultatsDe}
           onAnnuler={partie ? () => setNouvelle(false) : undefined}
         />
       )}
@@ -116,11 +153,13 @@ function Catalogue({
   codeProf,
   envoi,
   onLancer,
+  onResultats,
   onAnnuler,
 }: {
   codeProf: string
   envoi: boolean
   onLancer: (id: string) => void
+  onResultats: (id: string) => void
   onAnnuler?: () => void
 }) {
   const [quiz, setQuiz] = useState<ResumeQuiz[] | null>(null)
@@ -157,7 +196,15 @@ function Catalogue({
                   {accord(q.questions, 'question', 'questions')} · environ{' '}
                   {Math.max(1, Math.round(q.duree_s / 60))} min de réponse
                 </span>
+                <span className="quiz-prof__derniere">
+                  {q.derniere ? <ResumeDerniere derniere={q.derniere} /> : 'Pas encore joué'}
+                </span>
               </span>
+              {q.derniere && (
+                <button type="button" className="bouton" onClick={() => onResultats(q.id)}>
+                  Derniers résultats
+                </button>
+              )}
               <button
                 type="button"
                 className="bouton bouton--primaire"
@@ -175,6 +222,67 @@ function Catalogue({
           Revenir à la dernière partie
         </button>
       )}
+    </section>
+  )
+}
+
+function ResumeDerniere({ derniere }: { derniere: DernierePartie }) {
+  return (
+    <>
+      Dernière partie le {date(derniere.terminee_le)} :{' '}
+      <b>{pourcent(derniere.reussite)}</b> de bonnes réponses,{' '}
+      {accord(derniere.joueurs, 'élève', 'élèves')}
+    </>
+  )
+}
+
+/**
+ * Les résultats de la dernière partie jouée d'un quiz, relus après coup.
+ *
+ * Le taux de réussite d'abord — c'est le chiffre qu'on compare d'une partie à
+ * l'autre —, puis le bilan anonyme, question par question.
+ */
+function Resultats({
+  codeProf,
+  quizId,
+  onRetour,
+}: {
+  codeProf: string
+  quizId: string
+  onRetour: () => void
+}) {
+  const [resultats, setResultats] = useState<ResultatsQuiz | null>(null)
+  const [erreur, setErreur] = useState<string | null>(null)
+
+  useEffect(() => {
+    lireResultats(codeProf, quizId)
+      .then(setResultats)
+      .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Résultats indisponibles.'))
+  }, [codeProf, quizId])
+
+  return (
+    <section className="quiz-prof__resultats" aria-labelledby="titre-resultats">
+      <p className="quiz__surtitre">Derniers résultats</p>
+      <h1 id="titre-resultats">{resultats?.titre ?? 'Résultats'}</h1>
+      {erreur && <p className="quiz__aide">{erreur}</p>}
+      {resultats && (
+        <>
+          <p className="quiz-prof__taux">
+            <b>{pourcent(resultats.reussite)}</b>
+            <span>
+              de bonnes réponses, le {date(resultats.terminee_le)} ·{' '}
+              {accord(resultats.joueurs, 'élève', 'élèves')},{' '}
+              {accord(resultats.reponses, 'réponse', 'réponses')}
+            </span>
+          </p>
+          <Bilan lignes={resultats.bilan} />
+        </>
+      )}
+      <div className="quiz-prof__actions">
+        <button type="button" className="bouton" onClick={onRetour}>
+          Revenir aux quiz
+        </button>
+      </div>
     </section>
   )
 }
@@ -209,15 +317,11 @@ function Deroule({
       <section className="quiz-prof__attente" aria-labelledby="titre-partie">
         <p className="quiz__surtitre">Salle d'attente</p>
         <h1 id="titre-partie">{partie.titre}</h1>
-        <p className="quiz-prof__effectif">
-          {accord(partie.participants.length, 'élève', 'élèves')}
-          {inscrits !== null && <> sur {inscrits}</>} dans la partie
-        </p>
-        <ul className="quiz-prof__joueurs" aria-label="Élèves dans la partie">
-          {partie.participants.map((p) => (
-            <li key={p.code_acces}>{nommer(p)}</li>
-          ))}
-        </ul>
+        <PastillesJoueurs
+          titre="Élèves dans la partie"
+          sur={inscrits}
+          joueurs={partie.participants.map((p) => ({ cle: p.code_acces, nom: nomProjete(p) }))}
+        />
         <p className="quiz__aide">
           Un bandeau « Un quiz a commencé » est apparu dans l'espace de chaque élève. On peut aussi
           rejoindre en cours de partie.
@@ -324,13 +428,27 @@ function Deroule({
   )
 }
 
+function FlecheRetour() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+      <path
+        d="M19 12H5M11 6l-6 6 6 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 function Podium({ places }: { places: PlaceProjetee[] }) {
   return (
     <ol className="podium">
       {places.map((place) => (
         <li key={place.code_acces} className="podium__place">
           <span className="podium__rang">{place.rang}</span>
-          <span className="podium__nom">{nommer(place)}</span>
+          <span className="podium__nom">{nomProjete(place)}</span>
           <span className="podium__points">{place.points.toLocaleString('fr-CH')}</span>
         </li>
       ))}

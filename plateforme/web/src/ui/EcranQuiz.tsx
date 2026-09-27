@@ -6,6 +6,7 @@ import { useFluxQuiz } from '../quiz/useFluxQuiz'
 import { CarteCode } from './CarteCode'
 import { CompteARebours } from './CompteARebours'
 import { OptionsQuiz } from './OptionsQuiz'
+import { PastillesJoueurs } from './PastillesJoueurs'
 import './Quiz.css'
 
 type Partie = Exclude<EtatEleve, { partie: null }>
@@ -173,6 +174,9 @@ function Partie({
         >
           Rejoindre la partie
         </button>
+        {partie.phase === 'attente' && partie.joueurs.length > 0 && (
+          <SalleDAttente partie={partie} />
+        )}
       </section>
     )
   }
@@ -185,11 +189,7 @@ function Partie({
         <p className="quiz__aide">
           Tu es dans la partie. La première question arrive quand le professeur la lance.
         </p>
-        {partie.moi && (
-          <p className="quiz__detail">
-            {accord(partie.moi.participants, 'élève prêt', 'élèves prêts')}
-          </p>
-        )}
+        <SalleDAttente partie={partie} />
       </section>
     )
   }
@@ -242,6 +242,19 @@ function Partie({
 
       {corrigee && <Correction partie={partie} />}
     </section>
+  )
+}
+
+/** Qui est déjà là : les mêmes ronds et les mêmes noms qu'au mur. */
+function SalleDAttente({ partie }: { partie: Partie }) {
+  return (
+    <PastillesJoueurs
+      joueurs={partie.joueurs.map((joueur, rang) => ({
+        cle: `${rang}-${joueur.nom}`,
+        nom: joueur.nom,
+        moi: joueur.moi,
+      }))}
+    />
   )
 }
 

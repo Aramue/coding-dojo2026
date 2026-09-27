@@ -19,6 +19,46 @@
   display: flex;
 }
 
+/* Une vraie sortie, lisible au premier coup d'œil : le professeur y revient souvent. */
+.quiz-prof__retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--t-3);
+}
+
+.quiz-prof__derniere {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.quiz-prof__derniere b {
+  color: var(--ink);
+}
+
+.quiz-prof__resultats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-2);
+}
+
+.quiz-prof__taux {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  color: var(--ink-soft);
+}
+
+.quiz-prof__taux b {
+  font-size: var(--t-7);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
 .quiz-prof h1 {
   font-size: var(--t-6);
   color: var(--ink);
@@ -80,25 +120,6 @@
   font-weight: 500;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
-}
-
-.quiz-prof__joueurs {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-1);
-}
-
-.quiz-prof__joueurs li {
-  padding: 0.35rem 0.8rem;
-  background: var(--surface);
-  border: 1px solid var(--rule-doux);
-  border-radius: 999px;
-  font-size: var(--t-3);
-  font-weight: 500;
-  color: var(--ink);
 }
 
 /* ---------- Question et correction ---------- */

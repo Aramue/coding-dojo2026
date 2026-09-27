@@ -1,46 +1,23 @@
-import { useEffect, useState } from 'react'
-import type { ClientApi } from '../api/client'
 import type { EtatEleve } from '../quiz/types'
 import { naviguer } from '../routage'
 
-/**
- * Une relecture toutes les dix secondes, comme le tableau de bord : le
- * bandeau n'a pas besoin de la sonnette, il suffit qu'il apparaisse avant
- * que le professeur ait fini de dire « allez sur le quiz ».
- */
-export const PERIODE_BANDEAU_MS = 10_000
+/** Le bandeau montre une partie ouverte : pas avant sa création, plus après sa fin. */
+export function partieOuverte(etat: EtatEleve | null): etat is Extract<EtatEleve, { partie: number }> {
+  return etat !== null && etat.partie !== null && etat.phase !== 'terminee'
+}
 
 /**
  * Le bandeau qui invite l'élève dans une partie en cours.
  *
  * C'est la porte d'entrée du quiz : pas de code de partie à recopier, l'élève
  * est déjà connecté et une instance ne sert qu'une classe. Voir ADR-013.
+ *
+ * Il colle sous l'en-tête pendant le défilement : un élève au milieu d'un long
+ * exercice doit le voir sans remonter. Il suit la sonnette de la coquille —
+ * il apparaît à la création de la partie et disparaît à sa fin, sans attendre.
  */
-export function BandeauQuiz({ client, masque }: { client: ClientApi; masque: boolean }) {
-  const [etat, setEtat] = useState<EtatEleve | null>(null)
-
-  useEffect(() => {
-    if (masque) return
-    let vivant = true
-    async function lire() {
-      try {
-        const nouvel = await client.lireQuiz()
-        if (vivant) setEtat(nouvel)
-      } catch {
-        // Silencieux : un bandeau absent n'empêche personne de travailler, et
-        // l'alerte de l'application signale déjà une plateforme muette.
-        if (vivant) setEtat(null)
-      }
-    }
-    void lire()
-    const minuteur = setInterval(lire, PERIODE_BANDEAU_MS)
-    return () => {
-      vivant = false
-      clearInterval(minuteur)
-    }
-  }, [client, masque])
-
-  if (masque || !etat || etat.partie === null || etat.phase === 'terminee') return null
+export function BandeauQuiz({ etat }: { etat: EtatEleve | null }) {
+  if (!partieOuverte(etat)) return null
 
   return (
     <div className="bandeau-quiz" role="status">
@@ -51,7 +28,10 @@ export function BandeauQuiz({ client, masque }: { client: ClientApi; masque: boo
       <button
         type="button"
         className="bouton bouton--primaire"
-        onClick={() => naviguer({ vue: 'quiz' })}
+        onClick={() => {
+          naviguer({ vue: 'quiz' })
+          scrollTo({ top: 0 })
+        }}
       >
         {etat.rejoint ? 'Revenir au quiz' : 'Rejoindre'}
       </button>

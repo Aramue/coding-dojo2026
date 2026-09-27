@@ -52,7 +52,14 @@ export type EtatEleve =
       question: QuestionVue | null
       ma_reponse: MaReponse | null
       moi: Moi | null
+      /**
+       * En salle d'attente seulement : qui est déjà là, en « Prénom N. », comme
+       * sur l'écran projeté. Vide dès que la partie commence.
+       */
+      joueurs: Joueur[]
     }
+
+export type Joueur = { nom: string; moi: boolean }
 
 export type Participant = { code_acces: string; prenom: string; nom: string }
 
@@ -87,10 +94,27 @@ export type EtatProf =
       bilan: LigneBilan[] | null
     }
 
+/** Ce qu'a laissé la dernière partie jouée d'un quiz. */
+export type DernierePartie = {
+  partie: number
+  terminee_le: string
+  joueurs: number
+  reponses: number
+  /** Réponses justes sur réponses données, de 0 à 1 ; nul sans réponse. */
+  reussite: number | null
+}
+
 export type ResumeQuiz = {
   id: string
   titre: string
   seance: number
   questions: number
   duree_s: number
+  derniere: DernierePartie | null
+}
+
+export type ResultatsQuiz = DernierePartie & {
+  quiz_id: string
+  titre: string
+  bilan: LigneBilan[]
 }

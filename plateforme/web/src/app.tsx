@@ -8,8 +8,10 @@ import {
 } from './contenu/chargeur'
 import { grouper, grouperParChapitre, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
+import type { EtatEleve } from './quiz/types'
+import { useFluxQuiz } from './quiz/useFluxQuiz'
 import { naviguer, useRoute, versChemin, type Destination } from './routage'
-import { BandeauQuiz } from './ui/BandeauQuiz'
+import { BandeauQuiz, partieOuverte } from './ui/BandeauQuiz'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
 import { EcranProf } from './ui/EcranProf'
@@ -30,6 +32,13 @@ import type { Reussite, ResultatTest } from './validation/types'
  * séance. Voir ADR-002.
  */
 const CLE_SESSION = 'dojo.code-acces'
+
+/**
+ * Hors de la page du quiz, le bandeau et le menu relisent toutes les dix
+ * secondes quand la sonnette ne passe pas : ils n'ont qu'à savoir si une
+ * partie existe, pas à suivre une question à la seconde.
+ */
+const RELEVE_HORS_PARTIE_MS = 10_000
 
 function lireCodeMemorise(): string | null {
   try {
@@ -72,6 +81,17 @@ export function App() {
   }>({ chapitres: [], notions: [], exercices: [], lecons: [] })
   const [reussis, setReussis] = useState<Reussite[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
+
+  // La sonnette de la coquille : c'est elle qui allume le bandeau et l'entrée
+  // du menu à la création d'une partie, et les éteint à sa fin. Suspendue sur
+  // /quiz, où l'écran de la partie a la sienne.
+  const surLeQuiz = destination.vue === 'quiz'
+  const quiz = useFluxQuiz<EtatEleve>(
+    () => client.lireQuiz(),
+    () => client.presentationQuiz(),
+    { actif: identite !== null && !surLeQuiz, repliMs: RELEVE_HORS_PARTIE_MS },
+  )
+  const quizOuvert = partieOuverte(quiz.etat)
 
   // Derive, jamais stocke : sans cela, le compteur du menu resterait fige sur
   // sa valeur du moment de la connexion, et valider un exercice ne se verrait
@@ -142,8 +162,15 @@ export function App() {
   return (
     <div className="appli">
       <Entete identite={identite} groupes={groupes} />
-      <BandeauQuiz client={client} masque={destination.vue === 'quiz'} />
-      <Menu chapitres={chapitres} destination={destination} />
+      {!surLeQuiz && <BandeauQuiz etat={quiz.etat} />}
+      <Menu
+        chapitres={chapitres}
+        destination={destination}
+        quiz={{
+          ouvert: quizOuvert,
+          titre: quizOuvert && quiz.etat?.partie !== null ? quiz.etat?.titre : undefined,
+        }}
+      />
       {alerte && (
         <p role="alert" className="alerte">
           {alerte}

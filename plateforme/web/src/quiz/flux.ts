@@ -44,6 +44,12 @@ export type OptionsFlux<E extends Photographie> = {
   onErreur: (message: string | null) => void
   /** Injecté par les tests ; par défaut, un vrai WebSocket vers `/api/quiz/flux`. */
   ouvrirSocket?: () => WebSocket
+  /**
+   * La relève sans sonnette. Une seconde pendant une partie ; le bandeau et le
+   * menu de l'élève, eux, se contentent de dix : sur un réseau qui refuse le
+   * WebSocket, vingt-quatre onglets ne relisent pas chaque seconde pour rien.
+   */
+  repliMs?: number
 }
 
 export function urlSonnette(ou: Pick<Location, 'protocol' | 'host'> = location): string {
@@ -152,7 +158,7 @@ export class FluxQuiz<E extends Photographie> {
     if (this.arrete) return
     this.minuteurReleve = setTimeout(
       () => void this.relire(),
-      this.branche ? SURETE_MS : REPLI_MS,
+      this.branche ? SURETE_MS : (this.options.repliMs ?? REPLI_MS),
     )
   }
 
