@@ -27,6 +27,9 @@ export function Editeur({
   const compartimentHistorique = useRef(new Compartment())
 
   useEffect(() => {
+    // Inatteignable : un effet ne s'exécute qu'après le rendu, et la `ref` est
+    // posée sur un élément que ce composant rend toujours.
+    /* v8 ignore next */
     if (!conteneur.current) return
     const etat = EditorState.create({
       doc: valeur,

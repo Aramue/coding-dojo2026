@@ -44,3 +44,44 @@ describe('Editeur — le clavier du débutant', () => {
     expect(vue.state.doc.toString()).toBe('if pluie:\n    ')
   })
 })
+
+describe("Editeur — changer d'exercice", () => {
+  it('remplace le document quand la valeur change de l exterieur', () => {
+    // Passer à l'exercice suivant sans ce remplacement laisserait le code du
+    // précédent dans l'éditeur.
+    const onChange = vi.fn()
+    const { container, rerender } = render(
+      <Editeur valeur={'print("Bonjour")'} onChange={onChange} />,
+    )
+    rerender(<Editeur valeur={'age = 17'} onChange={onChange} />)
+
+    const vue = EditorView.findFromDOM(container.querySelector('.cm-editor') as HTMLElement)
+    expect(vue!.state.doc.toString()).toBe('age = 17')
+  })
+
+  it("ne retouche pas le document quand la valeur n a pas change", () => {
+    // Le composant se redessine à chaque frappe : réécrire le document à
+    // chaque fois replacerait le curseur au début.
+    const onChange = vi.fn()
+    const { container, rerender } = render(<Editeur valeur={'age = 17'} onChange={onChange} />)
+    const vue = EditorView.findFromDOM(container.querySelector('.cm-editor') as HTMLElement)
+    vue!.dispatch({ selection: { anchor: 3 } })
+
+    rerender(<Editeur valeur={'age = 17'} onChange={onChange} />)
+    expect(vue!.state.selection.main.anchor).toBe(3)
+  })
+
+  it("vide l'historique, pour que Ctrl+Z ne ramene pas l'exercice precedent", () => {
+    const onChange = vi.fn()
+    const { container, rerender } = render(
+      <Editeur valeur={'print("Bonjour")'} onChange={onChange} />,
+    )
+    rerender(<Editeur valeur={'age = 17'} onChange={onChange} />)
+
+    const vue = EditorView.findFromDOM(container.querySelector('.cm-editor') as HTMLElement)
+    vue!.focus()
+    vue!.contentDOM.dispatchEvent(touche('z'))
+    runScopeHandlers(vue!, new KeyboardEvent('keydown', { key: 'z', ctrlKey: true }), 'editor')
+    expect(vue!.state.doc.toString()).toBe('age = 17')
+  })
+})

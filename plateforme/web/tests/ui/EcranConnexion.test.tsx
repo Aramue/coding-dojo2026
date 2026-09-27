@@ -44,3 +44,14 @@ describe('EcranConnexion', () => {
     expect(container.textContent).not.toMatch(/agent|mission|quartier/i)
   })
 })
+
+describe('EcranConnexion — quand ce qui est lancé n est pas une Error', () => {
+  it('affiche un message de repli plutôt que « undefined »', async () => {
+    render(<EcranConnexion onConnecte={async () => { throw 'coupure' }} />)
+
+    await userEvent.type(screen.getByLabelText(/code/i), 'DOJO-K7M2')
+    await userEvent.click(screen.getByRole('button', { name: 'Commencer' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Connexion impossible.')
+  })
+})

@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Classe } from '../../src/ui/Classe'
@@ -254,5 +254,101 @@ describe('Classe — la porte reste fermée', () => {
     poserLeReseau([inscrit()])
     const { container } = render(<Classe jetonProf="prof.4102444800.signature" />)
     expect(within(container).queryByText('Camille Rey')).toBeNull()
+  })
+})
+
+describe('Classe — revenir de la liste collée au formulaire', () => {
+  it("rebascule sur « Un élève » apres avoir ouvert « Plusieurs »", async () => {
+    poserLeReseau([])
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+    await screen.findByText(/Aucun élève pour l'instant/)
+
+    const unSeul = screen.getByRole('tab', { name: 'Un élève' })
+    await userEvent.click(screen.getByRole('tab', { name: 'Coller une liste' }))
+    expect(unSeul).toHaveAttribute('aria-selected', 'false')
+
+    await userEvent.click(unSeul)
+    expect(unSeul).toHaveAttribute('aria-selected', 'true')
+  })
+})
+
+describe("Classe — les formulaires refusent le vide", () => {
+  it("n'envoie rien quand le prénom est vide", async () => {
+    const { ecritures } = poserLeReseau([])
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+    await screen.findByText(/Aucun élève pour l'instant/)
+
+    // Le bouton est actif : c'est la soumission qui garde, parce que la
+    // touche Entrée dans un champ soumet aussi.
+    fireEvent.submit(screen.getByRole('button', { name: /Ajouter/ }).closest('form')!)
+
+    await waitFor(() => expect(ecritures).toEqual([]))
+  })
+
+  it("n'envoie rien quand la liste collée ne donne aucune fiche", async () => {
+    const { ecritures } = poserLeReseau([])
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+    await screen.findByText(/Aucun élève pour l'instant/)
+    await userEvent.click(screen.getByRole('tab', { name: 'Coller une liste' }))
+
+    fireEvent.submit(document.querySelector('form.lot')!)
+
+    await waitFor(() => expect(ecritures).toEqual([]))
+  })
+})
+
+describe("Classe — quand ce qui est lancé n'est pas une Error", () => {
+  it('affiche un message de repli plutôt que « undefined »', async () => {
+    // `fetch` peut rejeter avec autre chose qu'une Error — une chaîne, un
+    // objet DOMException dans un cas de coupure. Sans repli, l'écran dirait
+    // « undefined » au professeur.
+    vi.stubGlobal('fetch', vi.fn(async () => { throw 'coupure' }))
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Liste indisponible.')
+  })
+
+  it("dit « Action impossible » quand un ajout rejette sans Error", async () => {
+    let premier = true
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        if (premier) {
+          premier = false
+          return { ok: true, status: 200, json: async () => ({ eleves: [] }) }
+        }
+        throw 'coupure'
+      }),
+    )
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+    await screen.findByText(/Aucun élève pour l'instant/)
+
+    await userEvent.type(screen.getByLabelText(/prénom/i), 'Camille')
+    await userEvent.click(screen.getByRole('button', { name: /Ajouter/ }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Action impossible.')
+  })
+})
+
+describe('Classe — les accords', () => {
+  it('accorde le pluriel des tentatives', async () => {
+    poserLeReseau([inscrit({ tentatives: 1 }), inscrit({ code_acces: 'DOJO-A3B9', tentatives: 4 })])
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+    expect(await screen.findByText('1 tentative')).toBeInTheDocument()
+    expect(screen.getByText('4 tentatives')).toBeInTheDocument()
+  })
+
+  it("abrège l'aperçu d'une liste collée au-delà de trois noms", async () => {
+    poserLeReseau([])
+    render(<Classe jetonProf="prof.4102444800.signature" />)
+    await screen.findByText(/Aucun élève pour l'instant/)
+    await userEvent.click(screen.getByRole('tab', { name: 'Coller une liste' }))
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /Une ligne par élève/ }),
+      'Camille\nEnzo\nIziz\nMarie\nJean',
+    )
+
+    expect(screen.getByText(/Camille, Enzo, Iziz…/)).toBeInTheDocument()
   })
 })

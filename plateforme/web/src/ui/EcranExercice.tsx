@@ -127,6 +127,11 @@ export function EcranExercice({
             onSortie: (morceau) =>
               setPassages((liste) => {
                 const dernier = liste[liste.length - 1]
+                // Inatteignable : un passage est ouvert juste avant chaque
+                // exécution, donc la liste n'est jamais vide quand la sortie
+                // arrive. La garde existe parce que TypeScript rend `dernier`
+                // possiblement `undefined`.
+                /* v8 ignore next */
                 if (!dernier) return liste
                 return [...liste.slice(0, -1), { ...dernier, texte: dernier.texte + morceau }]
               }),

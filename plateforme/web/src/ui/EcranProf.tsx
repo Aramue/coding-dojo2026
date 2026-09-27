@@ -247,6 +247,9 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
   // Un seul exécuteur pour tout l'aperçu, détruit en sortant : sans lui, les
   // exemples exécutables des leçons et le bouton « Valider » ne feraient rien.
   const executeur = useMemo(
+    // Même remarque que dans app.tsx : la fabrique n'est appelée qu'à la
+    // première exécution, et aucun Worker Pyodide ne démarre sous jsdom.
+    /* v8 ignore next */
     () => new Executeur(() => new Worker(new URL('../execution/worker.ts', import.meta.url))),
     [],
   )

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { EcranExercice } from '../../src/ui/EcranExercice'
@@ -249,5 +249,158 @@ describe('EcranExercice — console', () => {
       <EcranExercice exercice={qcm} executeur={executeurFactice([])} onTentative={vi.fn()} />,
     )
     expect(container.querySelector('.console')).toBeNull()
+  })
+})
+
+describe("EcranExercice — l'énoncé et ses formes", () => {
+  it('rend un bloc de sortie en chasse fixe, sans le reformater', () => {
+    // Un résultat attendu se lit aligné : passé en paragraphe, les colonnes
+    // se décalent et l'élève ne sait plus ce qu'il doit produire.
+    const { container } = render(
+      <EcranExercice
+        exercice={exercice({
+          enonce: 'Ton programme doit afficher :\n\n=== CARTE ===\nNom : Camille',
+        })}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    const bloc = container.querySelector('.enonce__sortie')
+    expect(bloc?.textContent).toContain('=== CARTE ===')
+  })
+
+  it('rend une liste comme une liste', () => {
+    const { container } = render(
+      <EcranExercice
+        exercice={exercice({ enonce: 'Trois choses :\n- demande le prénom\n- affiche-le' })}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    expect(container.querySelectorAll('.enonce__liste').length).toBeGreaterThan(0)
+  })
+
+  it('numérote les indices et annonce celui qui reste verrouillé', () => {
+    // Le premier indice est offert d'emblée ; le second se débloque après
+    // deux essais infructueux, et on le dit plutôt que de le cacher.
+    render(
+      <EcranExercice
+        exercice={exercice({ indices: ['Regarde la ligne 2.', 'Un seul = range une valeur.'] })}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    expect(screen.getByText('Regarde la ligne 2.')).toBeInTheDocument()
+    expect(screen.getByText('Encore un essai avant de le débloquer.')).toBeInTheDocument()
+    expect(screen.queryByText('Un seul = range une valeur.')).toBeNull()
+  })
+})
+
+describe('EcranExercice — un exercice à prédire', () => {
+  const aPredire = exercice({
+    type: 'predire',
+    enonce: 'Que produit ce programme ?',
+    depart: 'print(2 + 3)',
+    tests: [{ type: 'qcm', options: ['5', '23'], bonneReponse: 0 }] as unknown as Test[],
+  })
+
+  it("n'exécute rien : l'élève prédit, il ne lance pas", async () => {
+    // Exécuter donnerait la réponse. Tout l'exercice est de la deviner.
+    const executeur = executeurFactice([])
+    render(<EcranExercice exercice={aPredire} executeur={executeur} onTentative={vi.fn()} />)
+
+    await userEvent.click(screen.getByRole('radio', { name: '5' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Valider' }))
+
+    expect(await screen.findByText(/juste/i)).toBeInTheDocument()
+  })
+
+  it('ne laisse pas valider avant d avoir choisi', () => {
+    render(<EcranExercice exercice={aPredire} executeur={executeurFactice([])} onTentative={vi.fn()} />)
+    expect(screen.getByRole('button', { name: 'Valider' })).toBeDisabled()
+  })
+})
+
+describe('EcranExercice — le retour aux exercices', () => {
+  it('navigue sans recharger la page', async () => {
+    render(
+      <EcranExercice
+        exercice={exercice()}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    await userEvent.click(screen.getByRole('link', { name: /retour aux exercices/i }))
+    expect(location.pathname).toBe('/variables/exercices')
+  })
+
+  it("laisse Ctrl+clic ouvrir un onglet, comme n'importe quel lien", () => {
+    history.pushState(null, '', '/depart')
+    render(
+      <EcranExercice
+        exercice={exercice()}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    fireEvent.click(screen.getByRole('link', { name: /retour aux exercices/i }), {
+      ctrlKey: true,
+    })
+
+    expect(location.pathname).toBe('/depart')
+  })
+})
+
+describe("EcranExercice — les tests qui n'ont pas d'entrées", () => {
+  it("relit l'espace de noms sans rien saisir pour un test de variable", async () => {
+    // Miroir de valider_contenu.py::_passe : un test 'variable' s'exécute
+    // sans entrée, et n'a pas à solliciter deux fois Pyodide.
+    const executeur = {
+      executer: async (): Promise<ResultatExecution> => ({
+        stdout: '',
+        erreur: null,
+        variables: { age: { valeur: '17', type: 'int' } },
+        dureeMs: 3,
+        timeout: false,
+      }),
+      detruire: vi.fn(),
+    } as unknown as Executeur
+    render(
+      <EcranExercice
+        exercice={exercice({
+          type: 'completer',
+          depart: 'age = 17',
+          tests: [{ type: 'variable', nom: 'age', valeurAttendue: '17' }] as unknown as Test[],
+        })}
+        executeur={executeur}
+        onTentative={vi.fn()}
+      />,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Valider' }))
+    expect(await screen.findByText(/juste/i)).toBeInTheDocument()
+  })
+
+  it('traduit un programme qui tourne en rond', async () => {
+    const executeur = {
+      executer: async (): Promise<ResultatExecution> => ({
+        stdout: '',
+        erreur: null,
+        variables: {},
+        dureeMs: 5000,
+        timeout: true,
+      }),
+      detruire: vi.fn(),
+    } as unknown as Executeur
+
+    render(
+      <EcranExercice
+        exercice={exercice({ depart: 'while True:\n    pass' })}
+        executeur={executeur}
+        onTentative={vi.fn()}
+      />,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Valider' }))
+
+    expect(await screen.findByText(/tourne en rond/i)).toBeInTheDocument()
   })
 })

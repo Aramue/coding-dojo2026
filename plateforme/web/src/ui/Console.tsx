@@ -24,6 +24,9 @@ export function Console({ passages, enCours }: { passages: Passage[]; enCours: b
   // Suivre la sortie qui s'écrit. `passages` change à chaque morceau reçu.
   useEffect(() => {
     const element = corps.current
+    // Toujours défini : l'effet ne tourne qu'après le rendu, et la `ref` est
+    // posée sur un élément que ce composant rend toujours.
+    /* v8 ignore next */
     if (element) element.scrollTop = element.scrollHeight
   }, [passages])
 

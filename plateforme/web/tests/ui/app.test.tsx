@@ -1,4 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '../../src/app'
 
@@ -323,5 +324,237 @@ describe('App — une séance s’ouvre à sa date', () => {
     render(<App />)
     expect(await screen.findByText('Calculer')).toBeInTheDocument()
     expect(screen.getByText('Séance 2 — Calculer, comparer, décider')).toBeInTheDocument()
+  })
+})
+
+describe("App — quand le navigateur refuse de retenir la session", () => {
+  it('retombe sur la saisie du code au lieu de planter', () => {
+    // Navigation privée, cookies bloqués : sans ce filet, l'élève tombe sur
+    // un écran blanc et n'a aucun moyen de comprendre pourquoi.
+    const lire = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('refus')
+    })
+    render(<App />)
+    expect(screen.getByRole('button', { name: 'Commencer' })).toBeInTheDocument()
+    lire.mockRestore()
+  })
+})
+
+describe("App — la page « exercices » d'une notion", () => {
+  it("liste les exercices de la notion demandée", async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices')
+    render(<App />)
+    expect(await screen.findByRole('link', { name: /Dire bonjour/ })).toBeInTheDocument()
+  })
+})
+
+describe('App — enregistrer une tentative', () => {
+  /** Le réseau de l'élève, avec le sort réservé à POST /tentative. */
+  function reseau(options: { tentativeEchoue?: boolean } = {}) {
+    const envois: unknown[] = []
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (url.includes('tentative')) {
+          envois.push(JSON.parse(String(init?.body)))
+          if (options.tentativeEchoue) return { ok: false, status: 503, json: async () => ({}) }
+          return { ok: true, json: async () => ({ expert_debloque: null }) }
+        }
+        return {
+          ok: true,
+          json: async () => {
+            if (url.includes('chapitres')) return CHAPITRES
+            if (url.includes('notions')) return NOTIONS
+            if (url.includes('lecons')) return []
+            if (url.includes('parcours')) return { reussis: [] }
+            if (url.includes('session')) return { jeton: 'j', code_acces: 'DOJO-TEST' }
+            return [{ ...EXERCICES[0], depart: 'print("Bonjour")' }]
+          },
+        }
+      }),
+    )
+    return envois
+  }
+
+  it("enregistre la réussite et fait avancer la jauge", async () => {
+    const envois = reseau()
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/1')
+    render(<App />)
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Valider' }))
+
+    await waitFor(() => expect(envois).toHaveLength(1))
+    expect(envois[0]).toMatchObject({ exercice_id: 's1-01', verdict: 'vert' })
+    // La jauge de l'en-tête compte désormais cette réussite.
+    await waitFor(() => expect(screen.getByText('1 / 1')).toBeInTheDocument())
+  })
+
+  it("n'envoie jamais le code de l'élève avec sa tentative", async () => {
+    const envois = reseau()
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/1')
+    render(<App />)
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Valider' }))
+
+    await waitFor(() => expect(envois).toHaveLength(1))
+    expect(JSON.stringify(envois[0])).not.toContain('print')
+  })
+
+  it("prévient et ne fait PAS avancer quand l'enregistrement échoue", async () => {
+    // Sans cela l'élève croit la réussite acquise, et la perd au rechargement.
+    reseau({ tentativeEchoue: true })
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/1')
+    render(<App />)
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Valider' }))
+
+    const alertes = await screen.findAllByRole('alert')
+    expect(alertes.some((a) => /n'a pas pu être enregistrée/.test(a.textContent ?? ''))).toBe(true)
+    expect(screen.getByText('0 / 1')).toBeInTheDocument()
+  })
+})
+
+describe('App — rejouer un exercice déjà réussi', () => {
+  it('garde la meilleure coche : rejouer moins bien n en retire pas une', async () => {
+    // ADR-011 : la seconde coche récompense la méthode. La perdre parce qu'on
+    // a refait l'exercice autrement serait une punition pour avoir réessayé.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('chapitres')) return CHAPITRES
+          if (url.includes('notions')) return NOTIONS
+          if (url.includes('lecons')) return []
+          if (url.includes('parcours')) {
+            return { reussis: [{ exercice_id: 's1-01', verdict: 'vert', le: '2026-09-16T12:00:00Z' }] }
+          }
+          if (url.includes('session')) return { jeton: 'j', code_acces: 'DOJO-TEST' }
+          if (url.includes('tentative')) return { expert_debloque: null }
+          return [{ ...EXERCICES[0], depart: 'print("Bonjour")' }]
+        },
+      })),
+    )
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/1')
+    render(<App />)
+
+    await screen.findByText('1 / 1')
+    await userEvent.click(screen.getByRole('button', { name: 'Valider' }))
+
+    // La jauge ne double pas l'entrée, et la réussite reste acquise.
+    await waitFor(() => expect(screen.getByText('1 / 1')).toBeInTheDocument())
+  })
+})
+
+describe('App — les voisins d un exercice', () => {
+  function reseauDeuxExercices() {
+    const second = { ...EXERCICES[0]!, id: 's1-02', titre: 'Dire au revoir' }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('chapitres')) return CHAPITRES
+          if (url.includes('notions')) return NOTIONS
+          if (url.includes('lecons')) return []
+          if (url.includes('parcours')) return { reussis: [] }
+          if (url.includes('session')) return { jeton: 'j', code_acces: 'DOJO-TEST' }
+          return [EXERCICES[0], second]
+        },
+      })),
+    )
+  }
+
+  it('renvoie à la liste depuis le premier, et au suivant nommé', async () => {
+    reseauDeuxExercices()
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/1')
+    render(<App />)
+
+    expect(await screen.findByRole('link', { name: /Dire au revoir/ })).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: /Liste des exercices/ }).length).toBeGreaterThan(0)
+  })
+
+  it('nomme le précédent depuis le dernier', async () => {
+    reseauDeuxExercices()
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/2')
+    render(<App />)
+
+    expect(await screen.findByRole('link', { name: /Dire bonjour/ })).toBeInTheDocument()
+  })
+})
+
+describe('App — une classe qui a tout fini', () => {
+  it("ne redirige nulle part quand il n'y a aucune notion ouverte", async () => {
+    // Sans la garde, `premiereOuverte` rendant `undefined` ferait naviguer
+    // vers une notion inexistante et l'élève tomberait sur « page inconnue ».
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('session')) return { jeton: 'j', code_acces: 'DOJO-TEST' }
+          if (url.includes('parcours')) return { reussis: [] }
+          return []
+        },
+      })),
+    )
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/')
+    render(<App />)
+
+    await new Promise((r) => setTimeout(r, 20))
+    expect(location.pathname).toBe('/')
+  })
+})
+
+describe('App — une tentative ratée', () => {
+  it("enregistre l'échec sans faire avancer la jauge", async () => {
+    // Le professeur doit voir l'échec dans son tableau ; l'élève ne doit pas
+    // voir sa jauge bouger pour autant.
+    const envois: unknown[] = []
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (url.includes('tentative')) {
+          envois.push(JSON.parse(String(init?.body)))
+          return { ok: true, json: async () => ({ expert_debloque: null }) }
+        }
+        return {
+          ok: true,
+          json: async () => {
+            if (url.includes('chapitres')) return CHAPITRES
+            if (url.includes('notions')) return NOTIONS
+            if (url.includes('lecons')) return []
+            if (url.includes('parcours')) return { reussis: [] }
+            if (url.includes('session')) return { jeton: 'j', code_acces: 'DOJO-TEST' }
+            // Un motif interdit que le code de départ viole : le verdict est
+            // rouge sans solliciter Pyodide, que ce fichier simule.
+            return [
+              {
+                ...EXERCICES[0],
+                depart: 'print("Bonjour")',
+                tests: [{ type: 'interdit', motif: 'print' }],
+              },
+            ]
+          },
+        }
+      }),
+    )
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/exercices/1')
+    render(<App />)
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Valider' }))
+
+    await waitFor(() => expect(envois).toHaveLength(1))
+    expect(envois[0]).toMatchObject({ verdict: 'rouge' })
+    expect(screen.getByText('0 / 1')).toBeInTheDocument()
   })
 })

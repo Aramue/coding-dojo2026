@@ -187,6 +187,9 @@ function Vue({
     return <PageExercices groupe={groupe} reussis={[]} suivante={groupes[rang + 1]} />
   }
 
+  // Toujours vrai à ce point, pour la même raison que dans app.tsx : le test
+  // sert à resserrer le type, pas à trier.
+  /* v8 ignore next */
   if (destination.vue === 'exercice') {
     const exercice = groupe.exercices[destination.numero - 1]
     if (!exercice) return <p className="apercu__vide">Cet exercice n'existe pas.</p>
@@ -222,5 +225,10 @@ function Vue({
     )
   }
 
+  // Garde d'exhaustivite, inatteignable : les seules destinations qui portent
+  // une `notion` sont `cours`, `exercices` et `exercice`, toutes traitees
+  // au-dessus. Si `groupe` existe, l'une des trois a deja repondu. TypeScript
+  // exige quand meme un retour, et aucun test ne peut l'atteindre.
+  /* v8 ignore next */
   return <p className="apercu__vide">Cette page n'existe pas.</p>
 }

@@ -53,6 +53,10 @@ function oublierCode(): void {
 export function App() {
   const client = useMemo(() => new ClientApi(), [])
   const executeur = useMemo(
+    // La fabrique n'est appelée qu'au premier `executer`, donc jamais sous
+    // jsdom : les tests fournissent un exécuteur factice, et un vrai Worker
+    // Pyodide ne démarre pas hors navigateur. Voir ADR-007.
+    /* v8 ignore next */
     () => new Executeur(() => new Worker(new URL('./execution/worker.ts', import.meta.url))),
     [],
   )
@@ -206,6 +210,10 @@ function Vue({
     )
   }
 
+  // Toujours vrai à ce point : les trois destinations qui portent une
+  // `notion` sont traitées dans l'ordre, et les deux autres sont sorties
+  // au-dessus. Le test reste pour que TypeScript resserre le type.
+  /* v8 ignore next */
   if (destination.vue === 'exercice') {
     const exercice = groupe.exercices[destination.numero - 1]
     if (!exercice) return <Introuvable />
@@ -267,6 +275,10 @@ function Vue({
     )
   }
 
+  // Garde d'exhaustivité, inatteignable : les seules destinations qui portent
+  // une `notion` sont `cours`, `exercices` et `exercice`, toutes traitées
+  // au-dessus. TypeScript exige quand même un retour.
+  /* v8 ignore next */
   return <Introuvable />
 }
 

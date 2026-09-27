@@ -16,20 +16,22 @@ export default defineConfig({
       // aucune instruction exécutable.
       exclude: ['src/main.tsx', 'src/execution/worker.ts', 'src/**/types.ts'],
       thresholds: {
-        // Logique pure : rien ne justifie une ligne non couverte.
-        'src/validation/**': { statements: 100, branches: 100, functions: 100, lines: 100 },
-        'src/routage.ts': { statements: 100, branches: 100, functions: 100, lines: 100 },
-        'src/ui/texte.tsx': { statements: 100, branches: 100, functions: 100, lines: 100 },
-        'src/contenu/calendrier.ts': { statements: 100, branches: 100, functions: 100, lines: 100 },
-        // Plancher global : la mesure du 4 septembre 2026 apres la coquille,
-        // arrondie a l'entier inferieur. C'est un cliquet, pas un objectif —
-        // il ne descend jamais. Les composants sont testes sur leur
-        // comportement, pas ligne a ligne : viser 100 % ici se gagnerait en
-        // ecrivant des tests qui montent un composant et n'affirment rien.
-        statements: 78,
-        branches: 78,
-        functions: 78,
-        lines: 78,
+        // 100 partout depuis le 27 septembre 2026. Le plancher global etait a
+        // 78 : il valait pour des composants qu'on ne testait que sur leurs
+        // chemins heureux. Ce qui manquait n'etait pas du remplissage — les
+        // accords, les messages de repli, les courses au demontage et les
+        // verdicts rouges sont exactement ce qui se voit en seance.
+        //
+        // Les quelques lignes qu'aucun test ne peut atteindre portent un
+        // `/* v8 ignore next */` et disent pourquoi : une fabrique de Worker
+        // Pyodide, qui ne demarre pas sous jsdom, et des gardes que TypeScript
+        // exige sur des cas que le type a deja exclus.
+        //
+        // C'est un cliquet : il ne redescend pas.
+        statements: 100,
+        branches: 100,
+        functions: 100,
+        lines: 100,
       },
     },
   },

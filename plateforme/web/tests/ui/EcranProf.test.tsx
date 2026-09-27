@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { EcranProf } from '../../src/ui/EcranProf'
@@ -13,7 +13,39 @@ type Reseau = {
   creation?: number
   connexion?: number
   seance?: number
+  /** Sert le contenu publié : sans lui, aucun exercice n'est cliquable. */
+  contenu?: boolean
+  /** Les élèves que rend /prof/seance. */
+  eleves?: unknown[]
 }
+
+const CHAPITRES = [{ id: 'bases', ordre: 1, titre: 'Les bases de Python', seance: 1 }]
+const NOTIONS = [
+  {
+    id: 'saisie',
+    ordre: 1,
+    titre: 'Demander une information',
+    famille: 'operateurs',
+    chapitre: 'bases',
+  },
+]
+const EXERCICES = [
+  {
+    id: 's1-29',
+    concept: 'input',
+    notion: 'saisie',
+    famille: 'operateurs',
+    seance: 1,
+    niveau: 'normal',
+    type: 'debug',
+    titre: "L'âge qui refuse de s'additionner",
+    obligatoire: true,
+    enonce: 'Répare le programme.',
+    depart: 'age = input()',
+    indices: [],
+    tests: [{ type: 'interdit', motif: 'xyzzy' }],
+  },
+]
 
 function reponse(status: number, corps: unknown) {
   return { ok: status < 400, status, json: async () => corps }
@@ -28,8 +60,11 @@ function poserLeReseau(r: Reseau = {}) {
     }
     if (url === '/api/prof/compte') return reponse(r.creation ?? 201, { jeton: JETON })
     if (url === '/api/prof/connexion') return reponse(r.connexion ?? 200, { jeton: JETON })
-    if (url.includes('prof/seance')) return reponse(r.seance ?? 200, { eleves: [] })
+    if (url.includes('prof/seance')) return reponse(r.seance ?? 200, { eleves: r.eleves ?? [] })
     if (url.includes('prof/eleves')) return reponse(200, { eleves: [] })
+    if (url.includes('chapitres')) return reponse(200, r.contenu ? CHAPITRES : [])
+    if (url.includes('notions')) return reponse(200, r.contenu ? NOTIONS : [])
+    if (url.includes('exercices')) return reponse(200, r.contenu ? EXERCICES : [])
     return reponse(200, [])
   })
   vi.stubGlobal('fetch', appel)
@@ -235,5 +270,153 @@ describe('EcranProf — ce qui peut mal tourner', () => {
     render(<EcranProf />)
     await waitFor(() => expect(screen.getByLabelText(/^mot de passe$/i)).toBeInTheDocument())
     lire.mockRestore()
+  })
+})
+
+describe("EcranProf — l'aperçu de l'espace élève", () => {
+  it("s'ouvre par-dessus le tableau, qui attend derrière", async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+
+    await userEvent.click(screen.getByRole('button', { name: /voir l'espace élève/i }))
+
+    const fenetre = await screen.findByRole('dialog', { name: /aperçu de l'espace élève/i })
+    expect(fenetre).toBeInTheDocument()
+    // Le tableau n'est pas démonté : il est simplement derrière.
+    expect(screen.getByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+  })
+
+  it('se referme et rend la main au tableau', async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+    await userEvent.click(screen.getByRole('button', { name: /voir l'espace élève/i }))
+    await screen.findByRole('dialog')
+
+    await userEvent.keyboard('{Escape}')
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(screen.getByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+  })
+
+  it("dit que rien n'est enregistré dans l'aperçu", async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+    expect(screen.getByText(/Rien n'y est enregistré/)).toBeInTheDocument()
+  })
+})
+
+describe("EcranProf — l'aperçu s'ouvre sur l'exercice cliqué", () => {
+  it("relaie au tableau de bord la page que le professeur demande", async () => {
+    // Le tableau sait sur quoi un élève bute ; c'est l'aperçu qui sait le
+    // montrer. Sans ce relais, le clic dans le parcours ne ferait rien.
+    poserLeReseau({
+      contenu: true,
+      eleves: [
+        {
+          code_acces: 'DOJO-K7M2',
+          prenom: 'Enzo',
+          nom: 'Poupard',
+          exercice_id: 's1-29',
+          statut: 'en_cours',
+          echecs_consecutifs: 0,
+          inactif_depuis_s: 0,
+          dernier_type_erreur: null,
+          reussis: [],
+        },
+      ],
+    })
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+
+    await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
+    await userEvent.click(
+      screen.getByRole('button', { name: /L'âge qui refuse de s'additionner/ }),
+    )
+
+    expect(await screen.findByRole('dialog', { name: /aperçu/i })).toBeInTheDocument()
+  })
+})
+
+describe("EcranProf — les formulaires de la porte refusent le vide", () => {
+  it("n'appelle pas la création tant que les deux mots de passe ne concordent pas", async () => {
+    const appel = poserLeReseau({ existe: false })
+    render(<EcranProf />)
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
+
+    // La confirmation est vide : la touche Entrée ne doit rien déclencher.
+    fireEvent.submit(document.querySelector('form.prof__carte')!)
+
+    await new Promise((r) => setTimeout(r, 10))
+    expect(appel.mock.calls.some(([u, i]) => u === '/api/prof/compte' && i?.method === 'POST')).toBe(
+      false,
+    )
+  })
+
+  it("n'appelle pas la connexion sur un mot de passe vide", async () => {
+    const appel = poserLeReseau()
+    render(<EcranProf />)
+    await screen.findByLabelText(/^mot de passe$/i)
+
+    fireEvent.submit(document.querySelector('form.prof__carte')!)
+
+    await new Promise((r) => setTimeout(r, 10))
+    expect(appel.mock.calls.some(([u]) => u === '/api/prof/connexion')).toBe(false)
+  })
+})
+
+describe("EcranProf — quand ce qui est lancé n'est pas une Error", () => {
+  it('replie sur « Création impossible »', async () => {
+    poserLeReseau({ existe: false })
+    render(<EcranProf />)
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
+    await userEvent.type(screen.getByLabelText(/confirme/i), MOT_DE_PASSE)
+
+    vi.stubGlobal('fetch', vi.fn(async () => { throw 'coupure' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Créer le compte' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Création impossible.')
+  })
+
+  it('replie sur « Connexion impossible »', async () => {
+    poserLeReseau()
+    render(<EcranProf />)
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
+
+    vi.stubGlobal('fetch', vi.fn(async () => { throw 'coupure' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Ouvrir' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Connexion impossible.')
+  })
+})
+
+describe('EcranProf — démonté pendant la question au serveur', () => {
+  function reseauLent(reponse: () => unknown) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        await new Promise((r) => setTimeout(r, 15))
+        return reponse()
+      }),
+    )
+  }
+
+  it("n'ouvre pas la porte d'un écran déjà parti", async () => {
+    reseauLent(() => ({ ok: true, status: 200, json: async () => ({ existe: true }) }))
+    const { unmount } = render(<EcranProf />)
+    unmount()
+    await new Promise((r) => setTimeout(r, 40))
+  })
+
+  it("ne signale pas une plateforme injoignable après le démontage", async () => {
+    reseauLent(() => { throw new Error('coupure') })
+    const { unmount } = render(<EcranProf />)
+    unmount()
+    await new Promise((r) => setTimeout(r, 40))
   })
 })

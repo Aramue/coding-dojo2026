@@ -152,3 +152,19 @@ describe('Menu', () => {
     expect(screen.getByRole('navigation', { name: /sommaire/i })).toBeInTheDocument()
   })
 })
+
+describe('Menu — déplier une notion', () => {
+  it('ouvre et referme une notion au clic sur son titre', async () => {
+    // La notion de la page courante est ouverte, les autres fermées. Un élève
+    // qui veut jeter un œil ailleurs doit pouvoir les ouvrir sans naviguer.
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'connexion' }} />)
+    const tete = screen.getByRole('button', { name: /Les variables/ })
+    expect(tete).toHaveAttribute('aria-expanded', 'false')
+
+    await userEvent.click(tete)
+    expect(tete).toHaveAttribute('aria-expanded', 'true')
+
+    await userEvent.click(tete)
+    expect(tete).toHaveAttribute('aria-expanded', 'false')
+  })
+})

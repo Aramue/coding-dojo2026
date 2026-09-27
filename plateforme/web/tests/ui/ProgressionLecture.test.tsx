@@ -69,3 +69,28 @@ describe('ProgressionLecture — dans un cadre', () => {
     expect(oublier).toHaveBeenCalledWith('scroll', expect.any(Function))
   })
 })
+
+describe('ProgressionLecture — elle suit le défilement', () => {
+  it('se remesure quand la page défile, une fois par image', async () => {
+    // Sans le passage par requestAnimationFrame, un défilement rapide
+    // déclenche une mesure par pixel parcouru.
+    const images: FrameRequestCallback[] = []
+    vi.stubGlobal('requestAnimationFrame', (rappel: FrameRequestCallback) => {
+      images.push(rappel)
+      return images.length
+    })
+    vi.stubGlobal('cancelAnimationFrame', vi.fn())
+
+    render(<ProgressionLecture />)
+    dispatchEvent(new Event('scroll'))
+    dispatchEvent(new Event('scroll'))
+
+    // Deux défilements, une seule image demandée tant qu'elle n'a pas tourné.
+    expect(images).toHaveLength(1)
+    images[0]!(0)
+    dispatchEvent(new Event('scroll'))
+    expect(images).toHaveLength(2)
+
+    vi.unstubAllGlobals()
+  })
+})

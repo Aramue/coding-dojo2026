@@ -238,3 +238,17 @@ describe('PageExercices — les deux niveaux de réussite', () => {
     expect(screen.getByText('1 / 2')).toBeInTheDocument()
   })
 })
+
+describe('PageExercices — une notion qui n a que des bonus', () => {
+  it("n'ouvre pas de liste obligatoire vide au-dessus des bonus", () => {
+    // Une liste vide laisserait une carte blanche au-dessus de
+    // « Pour aller plus loin », qu'on prendrait pour un chargement raté.
+    const bonus = { ...ex('s1-90', 'Un défi', 'ecrire'), obligatoire: false }
+    const { container } = render(
+      <PageExercices groupe={{ ...GROUPE, exercices: [bonus] }} reussis={[]} />,
+    )
+
+    expect(container.querySelectorAll('.exercices__liste')).toHaveLength(1)
+    expect(screen.getByText('Pour aller plus loin')).toBeInTheDocument()
+  })
+})

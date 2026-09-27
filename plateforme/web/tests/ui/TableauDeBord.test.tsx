@@ -409,3 +409,120 @@ describe("TableauDeBord — une séance à venir n'entre pas dans les comptes", 
     expect(await screen.findByText(/médiane 1 \/ 3/)).toBeInTheDocument()
   })
 })
+
+describe('TableauDeBord — le pouls', () => {
+  it("vieillit tout seul, pour qu'un tableau fige se voie", async () => {
+    // Un tableau qui a cessé de se rafraîchir affiche les mêmes chiffres
+    // qu'un tableau à jour. Le pouls est le seul indice.
+    vi.useFakeTimers()
+    try {
+      poserLeReseau([ligne()])
+      render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(3000)
+      expect(screen.getByText(/il y a/i)).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+})
+
+describe('TableauDeBord — ce que dit une ligne selon son état', () => {
+  it("distingue un code jamais utilisé d'un code créé à l'instant", async () => {
+    // « jamais utilisé depuis 40 min » se corrige en allant voir l'élève ;
+    // « créé à l'instant » ne veut rien dire d'autre que « attends ».
+    await rendre([
+      ligne({ code_acces: 'DOJO-VIEU', statut: 'pas_commence', inactif_depuis_s: 2400 }),
+      ligne({ code_acces: 'DOJO-NEUF', statut: 'pas_commence', inactif_depuis_s: 5 }),
+    ])
+    expect(screen.getByText(/code créé, jamais utilisé depuis 40 min/)).toBeInTheDocument()
+    expect(screen.getByText(/code créé à l’instant/)).toBeInTheDocument()
+  })
+
+  it("dit « moins d'une minute » plutôt que « 0 min » pour un inactif tout frais", async () => {
+    await rendre([ligne({ statut: 'inactif', inactif_depuis_s: 20 })])
+    expect(screen.getByText(/aucune soumission depuis moins d'une minute/)).toBeInTheDocument()
+  })
+
+  it("annonce « aucune soumission » quand l'élève n'a rien envoyé", async () => {
+    await rendre([ligne({ statut: 'pas_commence', exercice_id: null })])
+    expect(screen.getByText('aucune soumission')).toBeInTheDocument()
+  })
+
+  it("dit que le parcours charge tant que le contenu n'est pas là", async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url.includes('prof/seance')) {
+          return { ok: true, status: 200, json: async () => ({ eleves: [ligne()] }) }
+        }
+        return { ok: false, status: 404, json: async () => [] }
+      }),
+    )
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+
+    await userEvent.click(screen.getByRole('button', { name: /Déplier le parcours/ }))
+    expect(screen.getByText(/Chargement/)).toBeInTheDocument()
+  })
+
+  it("retombe sur l'identifiant quand le bandeau ne connaît pas le titre", async () => {
+    // Un exercice publié après le chargement du contenu : mieux vaut « s9-99 »
+    // qu'une ligne vide au milieu du bandeau de blocages.
+    await rendre([
+      ligne({ code_acces: 'DOJO-A', statut: 'bloque', echecs_consecutifs: 3, exercice_id: 's9-99' }),
+      ligne({ code_acces: 'DOJO-B', statut: 'bloque', echecs_consecutifs: 3, exercice_id: 's9-99' }),
+    ])
+    expect(screen.getAllByText('s9-99').length).toBeGreaterThan(0)
+  })
+})
+
+describe('TableauDeBord — les pannes hors Error', () => {
+  it('affiche un message de repli quand le réseau rejette sans Error', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => { throw 'coupure' }))
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
+
+    const alertes = await screen.findAllByRole('alert')
+    expect(alertes.some((a) => /Erreur réseau/.test(a.textContent ?? ''))).toBe(true)
+  })
+})
+
+describe('TableauDeBord — démonté avant la réponse', () => {
+  /** Un réseau qui prend son temps : le composant part avant qu'il revienne. */
+  function reseauLent(reponse: () => unknown) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        await new Promise((r) => setTimeout(r, 15))
+        return reponse()
+      }),
+    )
+  }
+
+  it("n'écrit plus dans l'état après un démontage", async () => {
+    // Le professeur ferme sa session pendant un rafraîchissement : sans la
+    // garde, React reçoit une écriture dans un composant démonté.
+    reseauLent(() => ({ ok: true, status: 200, json: async () => ({ eleves: [] }) }))
+    const { unmount } = render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
+    unmount()
+    await new Promise((r) => setTimeout(r, 40))
+  })
+
+  it("ne signale pas une panne survenue après le démontage", async () => {
+    reseauLent(() => { throw new Error('coupure') })
+    const { unmount } = render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
+    unmount()
+    await new Promise((r) => setTimeout(r, 40))
+  })
+
+  it("ne renvoie pas à la porte après le démontage", async () => {
+    const onRefuse = vi.fn()
+    reseauLent(() => ({ ok: false, status: 401, json: async () => ({}) }))
+    const { unmount } = render(
+      <TableauDeBord jetonProf="prof.4102444800.signature" onRefuse={onRefuse} />,
+    )
+    unmount()
+    await new Promise((r) => setTimeout(r, 40))
+    expect(onRefuse).not.toHaveBeenCalled()
+  })
+})
