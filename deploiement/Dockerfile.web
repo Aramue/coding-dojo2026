@@ -3,7 +3,7 @@ WORKDIR /build
 COPY plateforme/outils ./outils
 COPY plateforme/contenu ./contenu
 RUN pip install --no-cache-dir -r outils/requirements.txt \
- && cd outils && python construire_contenu.py ../contenu/chapitre-1 /build/public-contenu
+ && cd outils && python construire_contenu.py ../contenu /build/public-contenu
 
 FROM node:22-slim AS construction
 WORKDIR /build

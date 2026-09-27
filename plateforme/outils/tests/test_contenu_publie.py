@@ -19,7 +19,7 @@ PUBLIES = ("chapitres.json", "notions.json", "exercices.json", "lecons.json")
 
 
 def test_les_quatre_fichiers_publies_ne_bougent_pas(tmp_path):
-    construire(CONTENU / "chapitre-1", tmp_path)
+    construire(CONTENU, tmp_path)
     for nom in PUBLIES:
         attendu = (REFERENCE / nom).read_text(encoding="utf-8")
         obtenu = (tmp_path / nom).read_text(encoding="utf-8")

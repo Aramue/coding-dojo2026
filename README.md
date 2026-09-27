@@ -59,8 +59,8 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 
 # Contenu
 cd plateforme/outils
-.venv/Scripts/python valider_contenu.py ../contenu/chapitre-1
-.venv/Scripts/python construire_contenu.py ../contenu/chapitre-1 ../web/public/contenu
+.venv/Scripts/python valider_contenu.py ../contenu
+.venv/Scripts/python construire_contenu.py ../contenu ../web/public/contenu
 ```
 
 > [!IMPORTANT]

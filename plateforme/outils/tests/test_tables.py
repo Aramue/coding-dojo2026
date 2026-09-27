@@ -8,31 +8,14 @@ from pathlib import Path
 
 import pytest
 
-from schema import CHAPITRES, NOTIONS, charger_table, charger_tous
+from schema import charger_table, charger_tous
 
 CHAPITRE_1 = Path(__file__).parent.parent.parent / "contenu" / "chapitre-1"
 
-
-def test_les_notions_yaml_disent_la_meme_chose_que_la_table_python():
-    """L'epreuve de fidelite de la recopie. Elle disparait avec la table Python."""
-    lues = charger_table(CHAPITRE_1 / "notions.yaml")
-    sans_motif = {
-        identifiant: {cle: v for cle, v in details.items() if cle != "motif"}
-        for identifiant, details in lues.items()
-    }
-    assert sans_motif == NOTIONS
-
-
-def test_les_chapitres_yaml_disent_la_meme_chose_que_la_table_python():
-    assert charger_table(CHAPITRE_1 / "chapitres.yaml") == CHAPITRES
-
-
-def test_les_motifs_yaml_disent_la_meme_chose_que_le_dictionnaire_python():
-    from valider_contenu import MOTIFS_NOTION
-
-    lues = charger_table(CHAPITRE_1 / "notions.yaml")
-    motifs = {i: d["motif"] for i, d in lues.items() if "motif" in d}
-    assert motifs == {i: m.pattern for i, m in MOTIFS_NOTION.items()}
+# Les trois epreuves de fidelite — « le YAML dit la meme chose que la table
+# Python » — sont tombees avec les tables Python qu'elles comparaient. Ce
+# qu'elles protegeaient l'est desormais par test_contenu_publie.py, qui compare
+# la sortie reelle a une reference figee avant le deplacement.
 
 
 def test_une_date_d_ouverture_reste_une_chaine():
@@ -60,3 +43,51 @@ def test_les_tables_ne_sont_pas_chargees_comme_des_exercices():
     """`charger_tous` fait un rglob sur *.yaml : sans exclusion, il essaierait
     de lire notions.yaml comme un exercice et echouerait sur un fichier sain."""
     assert len(charger_tous(CHAPITRE_1)) == 112
+
+
+def test_charger_tables_remplit_les_deux_registres():
+    import schema
+
+    schema.charger_tables(CHAPITRE_1.parent)
+    assert len(schema.NOTIONS) == 14
+    assert set(schema.CHAPITRES) == {"bases", "decisions", "boucles"}
+
+
+def test_charger_tables_remplace_au_lieu_d_accumuler():
+    """Deux appels de suite donnent le meme etat : les tests en dependent."""
+    import schema
+
+    schema.charger_tables(CHAPITRE_1.parent)
+    schema.charger_tables(CHAPITRE_1.parent)
+    assert len(schema.NOTIONS) == 14
+
+
+def test_une_notion_declaree_dans_deux_chapitres_est_refusee(tmp_path):
+    import schema
+
+    for numero in (1, 2):
+        dossier = tmp_path / f"chapitre-{numero}"
+        dossier.mkdir()
+        (dossier / "notions.yaml").write_text(
+            "- id: variables\n  ordre: 1\n  titre: T\n  famille: variables\n  chapitre: c\n",
+            encoding="utf-8",
+        )
+    with pytest.raises(ValueError, match="deja declare"):
+        schema.charger_tables(tmp_path)
+
+
+def test_une_lecon_sur_une_notion_inconnue_est_refusee():
+    from pydantic import ValidationError
+
+    import schema
+
+    schema.charger_tables(CHAPITRE_1.parent)
+    with pytest.raises(ValidationError, match="notion inconnue"):
+        schema.Lecon(
+            id="c1-fantome",
+            notion="fantome",
+            ordre=1,
+            titre="T",
+            duree_min=5,
+            blocs=[{"type": "paragraphe", "texte": "Bonjour."}],
+        )

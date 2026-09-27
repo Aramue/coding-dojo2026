@@ -1,4 +1,5 @@
 from schema import Lecon
+from conftest import chapitre_temporaire
 from valider_contenu import verifier_lecon
 
 
@@ -166,7 +167,7 @@ def test_verifier_racine_charge_exercices_et_lecons(tmp_path):
 
     from valider_contenu import verifier_racine
 
-    seance = tmp_path / "seance-1"
+    seance = chapitre_temporaire(tmp_path) / "seance-1"
     seance.mkdir(parents=True)
     (seance / "s1-01.yaml").write_text(yaml.safe_dump(EXERCICE, allow_unicode=True), encoding="utf-8")
     _ecrire_lecon(
@@ -192,7 +193,7 @@ def test_verifier_racine_remonte_le_probleme_d_une_lecon(tmp_path):
 
     from valider_contenu import verifier_racine
 
-    seance = tmp_path / "seance-1"
+    seance = chapitre_temporaire(tmp_path) / "seance-1"
     seance.mkdir(parents=True)
     (seance / "s1-01.yaml").write_text(yaml.safe_dump(EXERCICE, allow_unicode=True), encoding="utf-8")
     _ecrire_lecon(
@@ -218,7 +219,7 @@ def test_verifier_racine_sans_dossier_de_lecons(tmp_path):
 
     from valider_contenu import verifier_racine
 
-    seance = tmp_path / "seance-1"
+    seance = chapitre_temporaire(tmp_path) / "seance-1"
     seance.mkdir(parents=True)
     (seance / "s1-01.yaml").write_text(yaml.safe_dump(EXERCICE, allow_unicode=True), encoding="utf-8")
 

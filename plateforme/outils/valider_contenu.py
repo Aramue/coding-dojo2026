@@ -28,6 +28,7 @@ from schema import (
     TestSortie,
     TestVariable,
     charger_lecons,
+    charger_tables,
     charger_tous,
 )
 
@@ -186,22 +187,6 @@ def verifier_coherence(ex: Exercice) -> list[str]:
     return problemes
 
 
-# Ce qui trahit une notion dans un exemple de code. Une lecon d'ordre N ne peut
-# utiliser que les notions d'ordre <= N : montrer une variable dans la lecon
-# « Afficher un message » demande a l'eleve de comprendre ce qu'il n'a pas
-# encore vu. Le motif est volontairement grossier — il attrape les cas
-# evidents, ce qui suffit pour quatre lecons relues a la main.
-#
-# 'afficher' n'y figure pas : etant d'ordre 1, sa condition ordre > lecon.ordre
-# ne peut jamais etre vraie. Une entree pour elle serait du code mort.
-MOTIFS_NOTION = {
-    # Une affectation en debut de ligne, mais pas une comparaison `==`.
-    "variables": re.compile(r"^\s*[a-z_][a-z0-9_]*\s*=(?!=)", re.MULTILINE),
-    "types": re.compile(r"\b(?:int|float|str)\s*\(|\bf[\"']"),
-    "saisie": re.compile(r"\binput\s*\("),
-}
-
-
 def verifier_lecon(lecon: Lecon) -> list[str]:
     """Chaque exemple d'une lecon doit tourner, et rester dans sa notion.
 
@@ -214,8 +199,17 @@ def verifier_lecon(lecon: Lecon) -> list[str]:
         if not isinstance(bloc, BlocCode):
             continue
 
-        for notion, motif in MOTIFS_NOTION.items():
-            if NOTIONS[notion]["ordre"] > lecon.ordre and motif.search(bloc.python):
+        for notion, details in sorted(NOTIONS.items()):
+            # Ce qui trahit une notion dans un exemple de code : une lecon
+            # d'ordre N ne peut utiliser que les notions d'ordre <= N. Montrer
+            # une variable dans la lecon « Afficher un message » demande a
+            # l'eleve de comprendre ce qu'il n'a pas encore vu. Le motif est
+            # volontairement grossier — il attrape les cas evidents.
+            #
+            # MULTILINE toujours : un seul motif en a besoin (l'affectation en
+            # debut de ligne), et il est inoffensif pour les autres.
+            motif = details.get("motif")
+            if motif and details["ordre"] > lecon.ordre and re.search(motif, bloc.python, re.MULTILINE):
                 problemes.append(
                     f"{lecon.id} : l'exemple {bloc.legende!r} utilise la notion "
                     f"{notion!r}, enseignee apres celle-ci"
@@ -261,6 +255,11 @@ def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str
     Separee de principal() pour etre testable : c'est cette fonction qui decide
     si la construction passe, et une regression ici publierait du contenu casse.
     """
+    # Avant tout chargement : les modeles valident contre ces registres, et un
+    # registre vide refuserait toutes les lecons. La racine est `contenu/`,
+    # qui contient les dossiers `chapitre-*`, chacun avec ses deux tables.
+    charger_tables(racine)
+
     exercices = charger_tous(racine)
     identifiants = {ex.id for ex in exercices}
     problemes: list[str] = verifier_chapitres(CHAPITRES)
@@ -271,7 +270,7 @@ def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str
             problemes.append(f"{ex.id} : renvoie vers un expert inexistant {ex.expert!r}")
 
     lecons: list[Lecon] = []
-    for dossier in sorted(racine.glob("seance-*/lecons")):
+    for dossier in sorted(racine.glob("chapitre-*/seance-*/lecons")):
         lecons += charger_lecons(dossier)
     for lecon in lecons:
         problemes += verifier_lecon(lecon)
@@ -281,7 +280,7 @@ def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str
 
 def principal() -> int:
     parseur = argparse.ArgumentParser(description="Valide tout le contenu du dojo.")
-    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../../contenu"))
+    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../contenu"))
     arguments = parseur.parse_args()
 
     exercices, lecons, problemes = verifier_racine(arguments.racine)

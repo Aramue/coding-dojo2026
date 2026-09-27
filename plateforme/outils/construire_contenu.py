@@ -33,10 +33,19 @@ def _convertir_cles(valeur):
     return valeur
 
 
+# Ce qui vit dans une table de contenu mais ne sort jamais vers le navigateur.
+# `motif` sert au validateur a reperer une notion employee trop tot dans une
+# lecon : c'est un outil d'auteur, il n'a rien a faire dans le menu de l'eleve.
+CHAMPS_PRIVES = {"motif"}
+
+
 def _table(registre: dict[str, dict]) -> list[dict]:
     """Une table du schema, triee par ordre, chaque entree avec son identifiant."""
     return [
-        {"id": identifiant, **details}
+        {
+            "id": identifiant,
+            **{cle: v for cle, v in details.items() if cle not in CHAMPS_PRIVES},
+        }
         for identifiant, details in sorted(registre.items(), key=lambda paire: paire[1]["ordre"])
     ]
 
@@ -97,7 +106,7 @@ def construire(racine: Path, sortie: Path) -> int:
 
 def principal() -> int:
     parseur = argparse.ArgumentParser(description="Construit le contenu publiable.")
-    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../../contenu/chapitre-1"))
+    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../contenu"))
     parseur.add_argument("sortie", type=Path, nargs="?", default=Path("../web/public/contenu"))
     arguments = parseur.parse_args()
     total = construire(arguments.racine, arguments.sortie)

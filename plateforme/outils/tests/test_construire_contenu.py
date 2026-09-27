@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+from conftest import chapitre_temporaire
 from construire_contenu import construire
 from schema import CHAPITRES, NOTIONS
 
@@ -39,7 +40,7 @@ def _lire(sortie: Path, fichier: str):
 
 
 def test_construit_le_json_des_exercices(tmp_path):
-    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     assert construire(tmp_path, sortie) == 1
 
@@ -48,8 +49,8 @@ def test_construit_le_json_des_exercices(tmp_path):
 
 def test_les_exercices_de_toutes_les_seances_partent_dans_un_seul_fichier(tmp_path):
     """Le front n'a pas a savoir combien de seances existent."""
-    _ecrire(tmp_path / "seance-1", dict(BASE))
-    _ecrire(tmp_path / "seance-2", dict(BASE, id="s2-01", seance=2))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-2", dict(BASE, id="s2-01", seance=2))
     sortie = tmp_path / "sortie"
     assert construire(tmp_path, sortie) == 2
 
@@ -58,7 +59,7 @@ def test_les_exercices_de_toutes_les_seances_partent_dans_un_seul_fichier(tmp_pa
 
 def test_la_solution_n_est_jamais_publiee(tmp_path):
     """La solution ne doit pas partir dans le navigateur de l'eleve."""
-    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -68,7 +69,7 @@ def test_la_solution_n_est_jamais_publiee(tmp_path):
 
 
 def test_un_contenu_incoherent_fait_echouer_la_construction(tmp_path):
-    _ecrire(tmp_path / "seance-1", dict(BASE, solution='print("Faucon")'))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE, solution='print("Faucon")'))
     with pytest.raises(SystemExit):
         construire(tmp_path, tmp_path / "sortie")
 
@@ -85,7 +86,7 @@ def test_les_cles_sont_converties_en_camel_case(tmp_path):
     # l'exige) : elle doit donc aussi definir `age`, sans quoi la construction
     # echoue avant meme d'atteindre la conversion camelCase que ce test vise.
     donnees["solution"] = 'age = 12\nprint("Camille")'
-    _ecrire(tmp_path / "seance-1", donnees)
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", donnees)
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -97,7 +98,7 @@ def test_les_cles_sont_converties_en_camel_case(tmp_path):
 
 def test_la_notion_donne_la_famille_de_couleur(tmp_path):
     """La couleur suit la notion, plus le concept."""
-    _ecrire(tmp_path / "seance-1", dict(BASE, notion="saisie"))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE, notion="saisie"))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -108,7 +109,7 @@ def test_la_notion_donne_la_famille_de_couleur(tmp_path):
 
 def test_la_table_des_notions_est_publiee(tmp_path):
     """Publiee pour que le front n'ait pas a la recopier — zero duplication."""
-    _ecrire(tmp_path / "seance-1", dict(BASE, notion="types"))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE, notion="types"))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -141,8 +142,8 @@ LECON = {
 
 
 def test_les_lecons_sont_publiees(tmp_path):
-    _ecrire(tmp_path / "seance-1", dict(BASE, notion="variables"))
-    _ecrire_lecon(tmp_path / "seance-1" / "lecons", LECON)
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE, notion="variables"))
+    _ecrire_lecon(chapitre_temporaire(tmp_path) / "seance-1" / "lecons", LECON)
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -156,12 +157,12 @@ def test_les_lecons_sont_publiees(tmp_path):
 
 
 def test_les_lecons_de_toutes_les_seances_partent_dans_un_seul_fichier(tmp_path):
-    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
     _ecrire_lecon(
-        tmp_path / "seance-1" / "lecons",
+        chapitre_temporaire(tmp_path) / "seance-1" / "lecons",
         {**LECON, "id": "c1-afficher", "notion": "afficher", "ordre": 1},
     )
-    _ecrire_lecon(tmp_path / "seance-2" / "lecons", {**LECON, "id": "c2-variables"})
+    _ecrire_lecon(chapitre_temporaire(tmp_path) / "seance-2" / "lecons", {**LECON, "id": "c2-variables"})
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -169,9 +170,9 @@ def test_les_lecons_de_toutes_les_seances_partent_dans_un_seul_fichier(tmp_path)
 
 
 def test_une_lecon_dont_l_exemple_plante_arrete_la_construction(tmp_path):
-    _ecrire(tmp_path / "seance-1", dict(BASE, notion="variables"))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE, notion="variables"))
     _ecrire_lecon(
-        tmp_path / "seance-1" / "lecons",
+        chapitre_temporaire(tmp_path) / "seance-1" / "lecons",
         {**LECON, "blocs": [{"type": "code", "legende": "x", "python": "print(pasla)"}]},
     )
     with pytest.raises(SystemExit):
@@ -180,7 +181,7 @@ def test_une_lecon_dont_l_exemple_plante_arrete_la_construction(tmp_path):
 
 def test_sans_lecon_le_fichier_des_lecons_est_publie_vide(tmp_path):
     """Absent, il repondrait 404 au navigateur et la connexion echouerait."""
-    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
     assert _lire(sortie, "lecons.json") == []
@@ -188,7 +189,7 @@ def test_sans_lecon_le_fichier_des_lecons_est_publie_vide(tmp_path):
 
 def test_la_table_des_chapitres_est_publiee(tmp_path):
     """Le chapitre est le niveau de regroupement du menu."""
-    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 
@@ -198,7 +199,7 @@ def test_la_table_des_chapitres_est_publiee(tmp_path):
 
 
 def test_chaque_notion_declare_son_chapitre(tmp_path):
-    _ecrire(tmp_path / "seance-1", dict(BASE))
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
     sortie = tmp_path / "sortie"
     construire(tmp_path, sortie)
 

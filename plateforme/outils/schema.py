@@ -177,135 +177,37 @@ def charger_table(chemin: Path) -> dict[str, dict]:
 
 MOTIF_LECON = re.compile(r"^c([1-9][0-9]?)-[a-z]+$")
 
-# Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
-# navigation : elle porte une lecon et un groupe d'exercices.
+# Les tables de contenu, remplies par `charger_tables`. Vides au chargement du
+# module : elles vivent desormais dans contenu/chapitre-*/notions.yaml et
+# chapitres.yaml, et c'est la leur SEULE source.
 #
-# SEULE SOURCE de cette table. Le schema la valide, construire_contenu.py
-# l'importe pour publier notions.json, et le front la lit dans ce
-# JSON. Personne ne la recopie — une copie TypeScript divergerait au premier
-# changement de libelle.
-#
-# La couleur suit la NOTION, pas le concept : la seance 1 ne couvre que deux
-# concepts (print et input), ce qui donnerait deux couleurs pour quatre
-# notions, et un menu ou la couleur n'oriente plus. Les noms de famille sont
-# ceux de la palette (variables, types, operateurs, conditions) : ce sont des
-# noms de couleur, pas de sens.
-NOTIONS: dict[str, dict] = {
-    "afficher": {
-        "ordre": 1,
-        "titre": "Afficher un message",
-        "famille": "conditions",
-        "chapitre": "bases",
-    },
-    "variables": {
-        "ordre": 2,
-        "titre": "Les variables",
-        "famille": "variables",
-        "chapitre": "bases",
-    },
-    "types": {
-        "ordre": 3,
-        "titre": "Types et conversion",
-        "famille": "types",
-        "chapitre": "bases",
-    },
-    "saisie": {
-        "ordre": 4,
-        "titre": "Demander une information",
-        "famille": "operateurs",
-        "chapitre": "bases",
-    },
-    # --- Seance 2 ---
-    # Une notion a part pour les trois exercices de reactivation : la conception
-    # exige un creneau NOMME, qu'on ne peut pas sacrifier quand la seance
-    # deborde. Noyes en tete de « Calculer », ils se liraient comme des
-    # exercices de calcul rates.
-    "reveil": {
-        "ordre": 5,
-        "titre": "Se remettre en route",
-        "famille": "variables",
-        "chapitre": "decisions",
-    },
-    "calculer": {
-        "ordre": 6,
-        "titre": "Calculer",
-        "famille": "operateurs",
-        "chapitre": "decisions",
-    },
-    "comparer": {
-        "ordre": 7,
-        "titre": "Comparer",
-        "famille": "types",
-        "chapitre": "decisions",
-    },
-    "combiner": {
-        "ordre": 8,
-        "titre": "Combiner des conditions",
-        "famille": "boucles",
-        "chapitre": "decisions",
-    },
-    "decider": {
-        "ordre": 9,
-        "titre": "Décider",
-        "famille": "conditions",
-        "chapitre": "decisions",
-    },
-    # --- Seance 3 ---
-    # Le creneau de reactivation a son propre titre : deux « Se remettre en
-    # route » se confondraient dans le tableau de bord, qui nomme la notion a
-    # cote de chaque exercice.
-    "rappels": {
-        "ordre": 10,
-        "titre": "Rappels avant les boucles",
-        "famille": "variables",
-        "chapitre": "boucles",
-    },
-    "repeter": {
-        "ordre": 11,
-        "titre": "Répéter avec for",
-        "famille": "boucles",
-        "chapitre": "boucles",
-    },
-    "parcourir": {
-        "ordre": 12,
-        "titre": "Parcourir un texte",
-        "famille": "types",
-        "chapitre": "boucles",
-    },
-    "compter": {
-        "ordre": 13,
-        "titre": "Compter et cumuler",
-        "famille": "operateurs",
-        "chapitre": "boucles",
-    },
-    "tantque": {
-        "ordre": 14,
-        "titre": "Répéter tant que",
-        "famille": "conditions",
-        "chapitre": "boucles",
-    },
-}
+# Rien ne doit donc les lire au moment de DEFINIR une classe — seulement au
+# moment de valider une instance. `Lecon.notion` etait un
+# `Literal[tuple(NOTIONS)]`, evalue a la definition : sur une table vide, il
+# refusait toutes les lecons.
+NOTIONS: dict[str, dict] = {}
+CHAPITRES: dict[str, dict] = {}
 
-# Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
-# le menu : sans ce niveau, les notions flottaient cote a cote sans dire de quoi
-# elles parlaient ensemble. Un chapitre par seance.
-CHAPITRES: dict[str, dict] = {
-    "bases": {"ordre": 1, "titre": "Les bases de Python", "seance": 1},
-    "decisions": {
-        "ordre": 2,
-        "titre": "Calculer, comparer, décider",
-        "seance": 2,
-        # Publiee d'avance, la seance 2 ne doit rien changer a la seance 1 : elle
-        # s'ouvre le matin de son cours. Voir ADR-013.
-        "ouverture": "2026-09-23",
-    },
-    "boucles": {
-        "ordre": 3,
-        "titre": "Répéter, parcourir, compter",
-        "seance": 3,
-        "ouverture": "2026-09-30",
-    },
-}
+
+def charger_tables(racine: Path) -> None:
+    """Remplit les registres depuis tous les chapitres sous `racine`.
+
+    Remplace le contenu au lieu de l'accumuler : deux appels de suite donnent
+    le meme etat, ce dont les tests dependent.
+    """
+    NOTIONS.clear()
+    CHAPITRES.clear()
+    for dossier in sorted(racine.glob("chapitre-*")):
+        for nom, registre in (("notions.yaml", NOTIONS), ("chapitres.yaml", CHAPITRES)):
+            chemin = dossier / nom
+            if not chemin.exists():
+                continue
+            for identifiant, details in charger_table(chemin).items():
+                if identifiant in registre:
+                    raise ValueError(
+                        f"{chemin} : {identifiant!r} est deja declare dans un autre chapitre"
+                    )
+                registre[identifiant] = details
 
 
 def _texte_utilisable(valeur: str, quoi: str) -> str:
@@ -376,11 +278,21 @@ class Lecon(BaseModel):
     """Une lecon : ce que l'eleve lit avant d'attaquer les exercices d'une notion."""
 
     id: str
-    notion: Literal[tuple(NOTIONS)]  # type: ignore[valid-type]
+    notion: str
     ordre: int
     titre: str = Field(min_length=1)
     duree_min: int = Field(ge=1, le=30)
     blocs: list[BlocLecon] = Field(min_length=1)
+
+    @field_validator("notion")
+    @classmethod
+    def notion_connue(cls, v: str) -> str:
+        # Etait un Literal[tuple(NOTIONS)], evalue a la definition de la
+        # classe. Les notions se chargent maintenant a l'execution : un
+        # Literal serait fige sur une table vide, et refuserait tout.
+        if v not in NOTIONS:
+            raise ValueError(f"notion inconnue : {v!r}")
+        return v
 
     @field_validator("id")
     @classmethod
