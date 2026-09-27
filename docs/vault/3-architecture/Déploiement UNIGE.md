@@ -3,7 +3,7 @@ title: Déploiement UNIGE
 tags:
   - architecture
   - exploitation
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-27
 ---
 
 # Déploiement UNIGE
@@ -79,3 +79,24 @@ contenait le fichier, et ils s'appelaient `deploiement-*`.
 > il passait chez l'un, échouait chez l'autre.
 
 Les secrets vivent dans `.env` à la racine, hors dépôt, documenté par `.env.example`.
+
+## Le quiz en direct — 27 septembre 2026
+
+- Les quiz sont **construits dans l'image de l'API** (première étape de `Dockerfile.api`), jamais
+  dans l'image web : leurs bonnes réponses ne doivent pas être lisibles par les élèves. Un quiz
+  incohérent fait échouer `docker compose build`.
+- L'API reste **un seul processus** uvicorn : la sonnette du quiz tient son registre en mémoire.
+- Caddy relaie le WebSocket `/api/quiz/flux` sans configuration de plus.
+- **Avant la première séance avec quiz**, hors séance :
+
+  ```bash
+  python deploiement/charge_quiz.py --url https://<domaine>/api --code-prof <DOJO_CODE_PROF>
+  ```
+
+  Il inscrit 24 élèves d'essai, les fait jouer, puis les retire avec leurs réponses. Il refuse de
+  démarrer si une partie est en cours. La dernière partie affichée côté professeur sera alors la
+  sienne, vide, jusqu'à la suivante.
+- **Depuis une vraie salle**, vérifier que le WebSocket passe le réseau de l'établissement. S'il
+  ne passe pas, le quiz fonctionne quand même, en relisant chaque seconde.
+
+Voir [[Quiz en direct]].

@@ -3,7 +3,7 @@ title: Accueil
 tags:
   - moc
 statut: en-conception
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-27
 ---
 
 # Coding Dojo 2026-2027
@@ -38,6 +38,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Implémentation du palier 1 | ✅ **livrée** — 14 tâches, branche `palier-1` |
 | Spécification de l'interface | ✅ écrite — [[Spécification interface]] |
 | Plan de l'interface | ✅ écrit — [[Plan interface]], 16 tâches |
+| Quiz en direct | ✅ développé — [[Quiz en direct]], [[Plan quiz]], branche `quiz-en-direct` |
 | Implémentation de l'interface | ✅ **livrée** — tâches 1 à 14, branche `palier-1` |
 | Retrait de la fiction — code et base | ✅ livré |
 | Retrait de la fiction — 25 énoncés | ✅ livré |

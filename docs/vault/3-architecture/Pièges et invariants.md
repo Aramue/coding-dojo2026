@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-27
 ---
 
 # Pièges et invariants
@@ -277,6 +277,62 @@ haut et en bas de l'écran, et l'élève ne sait plus lequel parle de l'essai qu
 **Ce qui casse :** un appelant qui fournit moins d'exécutions que de tests fait planter
 `evaluerUn` sur un `undefined`. `EcranExercice` maintient l'alignement en poussant une exécution
 vide pour les tests qui n'exécutent rien (`interdit`, `contient`, `qcm`).
+
+## Quiz
+
+### Un quiz n'entre jamais dans `web/public`
+
+Les quiz sont construits par `construire_quiz.py`, dans l'image de l'API seulement.
+`construire_quiz.py` refuse d'écrire sous un dossier `public` ou `contenu`.
+
+**Ce qui casse :** tout ce que sert Caddy est lisible par n'importe quel élève. Un quiz publié là
+donne les bonnes réponses à qui ouvre l'onglet réseau — dans une partie avec un classement. Les
+exercices, eux, y sont à leur place : on s'y entraîne seul.
+
+### L'API reste un seul processus
+
+`Dockerfile.api` lance uvicorn sans `--workers`.
+
+**Ce qui casse :** le registre des WebSocket de la sonnette vit en mémoire. Avec deux processus,
+une réponse reçue par l'un ne fait pas sonner l'écran du professeur branché sur l'autre : le
+compteur « 18 réponses sur 21 » reste figé jusqu'à la relecture de sûreté, dix secondes plus
+tard. Rien ne plante — c'est ce qui le rend difficile à voir. Voir
+[[ADR-014 Temps réel par sonnette WebSocket]].
+
+### La correction ne s'écrit pas
+
+`PartieQuiz.phase` ne vaut que `attente`, `question` ou `terminee`. `phase_effective` déduit la
+correction de `fin_a` et de l'heure de la lecture ; « Corriger maintenant » recule `fin_a`.
+
+**Ce qui casse :** une phase `correction` écrite par un minuteur serveur serait perdue au
+redémarrage du conteneur en pleine question, et la partie resterait bloquée sur une question
+close. Deux façons d'entrer en correction divergeraient au premier changement.
+
+### La tolérance de 500 ms existe deux fois
+
+`TOLERANCE` dans `api/app/quiz.py`, `TOLERANCE_MS` dans `web/src/quiz/horloge.ts`.
+`api/tests/test_parite_tolerance.py` vérifie qu'elles sont égales.
+
+**Ce qui casse :** l'écran relit à l'échéance plus sa tolérance pour trouver la correction. Trop
+tôt, il retombe sur une question close et attend la relecture suivante ; trop tard, la correction
+arrive en retard sur tous les écrans à la fois. C'est la seconde duplication délibérée du projet,
+après les deux normaliseurs.
+
+### Une lecture partie avant une action est écartée
+
+`FluxQuiz` retient l'envoi de la dernière action appliquée, et ignore toute lecture partie avant.
+
+**Ce qui casse :** le professeur crée une partie, une relecture partie une fraction de seconde
+plus tôt revient **après** la réponse de la création, et remet le catalogue à l'écran. Trouvé par
+un test qui échouait une fois sur quatre, pas en classe.
+
+### Le jeton ne passe jamais dans l'URL de la sonnette
+
+Le WebSocket se présente par son premier message, `{"jeton": ...}` ou `{"code_prof": ...}`.
+
+**Ce qui casse :** une URL finit dans les journaux du proxy et du serveur, et le code professeur
+ouvre la progression de toute la classe. C'est aussi pourquoi le quiz n'utilise pas les
+Server-Sent Events : `EventSource` ne sait pas envoyer d'en-tête.
 
 ## Déploiement
 

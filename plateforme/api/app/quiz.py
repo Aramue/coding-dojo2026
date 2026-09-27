@@ -28,6 +28,8 @@ Phase = Literal["attente", "question", "correction", "terminee"]
 
 # Une reponse partie a temps traverse le reseau. Sans cette marge, l'eleve qui
 # clique a la derniere seconde serait refuse pour la latence de sa salle.
+# Recopiee dans web/src/quiz/horloge.ts : tests/test_parite_tolerance.py garde
+# les deux egales.
 TOLERANCE = timedelta(milliseconds=500)
 
 POINTS_MAX = 1000

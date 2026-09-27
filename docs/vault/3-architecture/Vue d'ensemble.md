@@ -2,7 +2,7 @@
 title: Vue d'ensemble
 tags:
   - architecture
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-27
 ---
 
 # Vue d'ensemble
@@ -50,6 +50,7 @@ graph LR
 - [[Déploiement UNIGE]] — conteneurs, sauvegardes, dossier de sécurité
 - [[Pièges et invariants]] — ce qui a l'air arbitraire et ne l'est pas
 - [[ADR-009 Routage maison sans bibliothèque]] — les quatre formes d'adresse
+- [[Quiz en direct]] — la partie, la sonnette, ce que chacun a le droit de voir
 
 ## Les pièces du front
 
@@ -87,7 +88,13 @@ Volontairement minimal — chaque point d'entrée supplémentaire est du code à
 | `GET /prof/eleves` | La liste de la classe, avec le nombre de tentatives de chacun |
 | `POST /prof/eleves` | Inscrit un élève ; **le serveur tire le code**, jamais l'appelant |
 | `PATCH /prof/eleves/{code}` | Corrige prénom, nom, établissement — jamais le code |
-| `DELETE /prof/eleves/{code}` | Retire un élève **et ses tentatives** |
+| `DELETE /prof/eleves/{code}` | Retire un élève **et ses tentatives**, ses participations et ses réponses au quiz |
+| `/quiz/*`, `/prof/quiz/*`, `WS /quiz/flux` | Le [[Quiz en direct]] : neuf routes et une sonnette |
+
+> [!note] Le seul temps réel de la plateforme
+> Le quiz ajoute un WebSocket, qui ne transporte jamais de données : il dit « relis ». Sans lui,
+> chaque écran relit toutes les secondes. L'API doit rester **un seul processus** uvicorn. Voir
+> [[ADR-014 Temps réel par sonnette WebSocket]].
 
 > [!note] Ce que l'API ne reçoit jamais
 > Le code source écrit par l'élève. Seuls le verdict et le **type** d'erreur remontent

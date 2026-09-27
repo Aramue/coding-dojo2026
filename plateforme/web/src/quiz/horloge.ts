@@ -8,7 +8,7 @@
  * une fois par photographie, et on décompte sur l'heure du serveur.
  */
 
-/** Doit rester égale à `TOLERANCE` dans `api/app/quiz.py`. */
+/** Égale à `TOLERANCE` dans `api/app/quiz.py` — verrouillé par `api/tests/test_parite_tolerance.py`. */
 export const TOLERANCE_MS = 500
 
 /** Marge après la tolérance avant de relire : la correction doit être là. */

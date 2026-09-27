@@ -4,7 +4,7 @@ tags:
   - plan
   - implementation
   - quiz
-statut: en cours
+statut: développé
 date: 2026-09-27
 ---
 
@@ -85,90 +85,93 @@ deploiement/Dockerfile.api        # + etape de construction des quiz
 
 ## Tâche 2 : Schéma et validation des quiz
 
-- [ ] `QuestionQuiz` : `enonce`, `code` facultatif, `entrees`, 2 à 4 `options` distinctes et
+- [x] `QuestionQuiz` : `enonce`, `code` facultatif, `entrees`, 2 à 4 `options` distinctes et
   non vides, `bonne_reponse` dans les bornes, `duree_s` de 10 à 60 (20 par défaut),
   `explication` facultative, `sortie: true` (la bonne réponse est ce que le code affiche) ou
   `erreur: NomDeLException` (le code doit lever cette exception). Pas d'emoji, pas de `getpass`.
-- [ ] `Quiz` : `id` de la forme `q1-bases`, `titre`, `seance`, 1 à 30 questions.
-- [ ] `charger_tous` ignore `quiz/` comme il ignore `lecons/`.
-- [ ] `verifier_quiz` : tout code s'exécute sans erreur sauf s'il déclare `erreur` ; `sortie`
+- [x] `Quiz` : `id` de la forme `q1-bases`, `titre`, `seance`, 1 à 30 questions.
+- [x] `charger_tous` ignore `quiz/` comme il ignore `lecons/`.
+- [x] `verifier_quiz` : tout code s'exécute sans erreur sauf s'il déclare `erreur` ; `sortie`
   compare la sortie réelle à `options[bonne_reponse]` ; `erreur` compare le nom de l'exception.
-- [ ] `verifier_racine` valide aussi les quiz.
-- [ ] `construire_quiz.py racine sortie` : un JSON par quiz, en snake_case, et refuse d'écrire
+- [x] `verifier_racine` valide aussi les quiz.
+- [x] `construire_quiz.py racine sortie` : un JSON par quiz, en snake_case, et refuse d'écrire
   dans un dossier `contenu` publié.
-- [ ] Tests, puis commit `feat: ...`
+- [x] Tests, puis commit `feat: ...`
 
 ## Tâche 3 : Le premier quiz
 
-- [ ] `q1-bases.yaml`, tiré des notions de la séance 1, bonnes réponses réparties sur toutes les
+- [x] `q1-bases.yaml`, tiré des notions de la séance 1, bonnes réponses réparties sur toutes les
   positions, chaque question vérifiée par exécution quand elle montre du code.
-- [ ] Commit `content: ...`
+- [x] Commit `content: ...`
 
 ## Tâche 4 : Construction dans l'image de l'API
 
-- [ ] `Dockerfile.api` : une étape valide et construit les quiz, copiés dans `/app/quiz`.
-- [ ] `api/.gitignore` et `.dockerignore` : `plateforme/api/quiz` est un artefact local.
-- [ ] Commit `chore: ...`
+- [x] `Dockerfile.api` : une étape valide et construit les quiz, copiés dans `/app/quiz`.
+- [x] `api/.gitignore` et `.dockerignore` : `plateforme/api/quiz` est un artefact local.
+- [x] Commit `chore: ...`
 
 ## Tâche 5 : Modèle de données et logique pure
 
-- [ ] Tables `PartieQuiz`, `ParticipantQuiz`, `ReponseQuiz` (une réponse par élève et par
+- [x] Tables `PartieQuiz`, `ParticipantQuiz`, `ReponseQuiz` (une réponse par élève et par
   question : contrainte d'unicité).
-- [ ] `quiz.py` : `phase_effective` (la correction se déduit de `fin_a`), `points` (barème de
+- [x] `quiz.py` : `phase_effective` (la correction se déduit de `fin_a`), `points` (barème de
   1000 à 500), `classement` (ex æquo au même rang), `vue_eleve`, `vue_prof`, `bilan`.
-- [ ] Tests à 100 %, puis commit `feat: ...`
+- [x] Tests à 100 %, puis commit `feat: ...`
 
 ## Tâche 6 : Catalogue et routes
 
-- [ ] `catalogue.py` lit `DOJO_QUIZ` (par défaut `api/quiz`), injecté par dépendance pour les
+- [x] `catalogue.py` lit `DOJO_QUIZ` (par défaut `api/quiz`), injecté par dépendance pour les
   tests.
-- [ ] Routes élève : `GET /quiz/etat`, `POST /quiz/rejoindre`, `POST /quiz/reponse`.
-- [ ] Routes prof : `GET /prof/quiz`, `POST /prof/quiz/parties`, `GET /prof/quiz/partie`,
+- [x] Routes élève : `GET /quiz/etat`, `POST /quiz/rejoindre`, `POST /quiz/reponse`.
+- [x] Routes prof : `GET /prof/quiz`, `POST /prof/quiz/parties`, `GET /prof/quiz/partie`,
   `POST /prof/quiz/partie/suivante`, `.../corriger`, `.../terminer`. Chaque action porte le rang
   de la question qu'elle croit courante : un double clic ne saute pas une question.
-- [ ] Clôture automatique quand tous les participants ont répondu.
-- [ ] `retirer()` emporte les participations et réponses de l'élève.
-- [ ] Tests, dont le test de fuite, puis commit `feat: ...`
+- [x] Clôture automatique quand tous les participants ont répondu.
+- [x] `retirer()` emporte les participations et réponses de l'élève.
+- [x] Tests, dont le test de fuite, puis commit `feat: ...`
 
 ## Tâche 7 : La sonnette WebSocket
 
-- [ ] `diffuseur.py` : inscrire, retirer, sonner (tous, ou le professeur seul), plafond de
+- [x] `diffuseur.py` : inscrire, retirer, sonner (tous, ou le professeur seul), plafond de
   connexions.
-- [ ] `WS /quiz/flux` : authentification dans le premier message, fermeture 4401 sinon.
-- [ ] Chaque écriture sonne après sa réponse (tâche de fond).
-- [ ] Tests avec `websocket_connect`, puis commit `feat: ...`
+- [x] `WS /quiz/flux` : authentification dans le premier message, fermeture 4401 sinon.
+- [x] Chaque écriture sonne après sa réponse (tâche de fond).
+- [x] Tests avec `websocket_connect`, puis commit `feat: ...`
 
 ## Tâche 8 : Le front sans interface
 
-- [ ] `routage.ts` : `/quiz` et `/prof/quiz`, couverts à 100 %.
-- [ ] `quiz/horloge.ts`, `quiz/flux.ts`, clients élève et prof, avec leurs tests.
-- [ ] Vite : `ws: true` sur le proxy `/api`.
-- [ ] Commit `feat: ...`
+- [x] `routage.ts` : `/quiz` et `/prof/quiz`, couverts à 100 %.
+- [x] `quiz/horloge.ts`, `quiz/flux.ts`, clients élève et prof, avec leurs tests.
+- [x] Vite : `ws: true` sur le proxy `/api`.
+- [x] Commit `feat: ...`
 
 ## Tâche 9 : Charte des écrans de quiz
 
-- [ ] Proposer au professeur les couleurs des quatre options et les mouvements nouveaux
+- [x] Proposer au professeur les couleurs des quatre options et les mouvements nouveaux
   (compte à rebours, podium) ; les consigner en amendement de la [[Charte visuelle]].
 
 ## Tâche 10 : L'écran du professeur
 
-- [ ] Choix du quiz, salle d'attente, question, correction avec répartition et cinq premiers,
+- [x] Choix du quiz, salle d'attente, question, correction avec répartition et cinq premiers,
   podium, bilan anonyme par question. Lien depuis le tableau de bord.
-- [ ] Tests, puis commit `feat: ...`
+- [x] Tests, puis commit `feat: ...`
 
 ## Tâche 11 : L'écran de l'élève
 
-- [ ] Bandeau « Un quiz a commencé » dans l'espace élève.
-- [ ] `/quiz` : attente, question (touches 1 à 4), réponse enregistrée, correction avec points
+- [x] Bandeau « Un quiz a commencé » dans l'espace élève.
+- [x] `/quiz` : attente, question (touches 1 à 4), réponse enregistrée, correction avec points
   et rang personnel, bilan final. Reprise transparente après un rechargement.
-- [ ] Tests, puis commit `feat: ...`
+- [x] Tests, puis commit `feat: ...`
 
 ## Tâche 12 : Vérification
 
-- [ ] Script de charge : 24 élèves simulés rejoignent et répondent en même temps.
-- [ ] Parcours complet à la main, professeur et élèves, dans `docker compose`.
+- [x] Script de charge : 24 élèves simulés rejoignent et répondent en même temps
+  (`deploiement/charge_quiz.py` ; à travers Caddy : 75 ms de médiane, aucune erreur).
+- [x] Parcours complet à la main, professeur et élève, sur le serveur de développement ; image
+  de l'API et pile `docker compose` construites et essayées.
 - [ ] À faire en salle : vérifier que le WebSocket passe le réseau d'un établissement.
 
 ## Tâche 13 : Documentation
 
-- [ ] Note [[Quiz en direct]], [[Vue d'ensemble]], [[Pièges et invariants]], README, [[Accueil]].
+- [x] Note [[Quiz en direct]], [[Vue d'ensemble]], [[Pièges et invariants]], [[Déploiement UNIGE]],
+  README, [[Accueil]].

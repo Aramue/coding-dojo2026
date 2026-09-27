@@ -21,6 +21,8 @@ L'application est servie sur <http://localhost>.
 |---|---|
 | `/` | l'élève entre son code d'accès (`DOJO-XXXX`) |
 | `/prof` | le tableau de bord professeur : qui avance, qui bloque, sur quoi |
+| `/prof/quiz` | l'écran projeté du quiz en direct : le professeur lance et mène une partie |
+| `/quiz` | la partie de quiz côté élève ; un bandeau y mène dès qu'une partie est créée |
 
 Les codes d'accès n'ont pas besoin d'être créés à l'avance : le premier usage
 d'un code bien formé ouvre le compte. Il suffit de les distribuer en séance.
@@ -34,7 +36,7 @@ plateforme/
   web/                    interface élève et professeur — React 19 + TypeScript
   api/                    progression et tableau de bord — FastAPI + SQLite
   outils/                 schéma, validation et construction du contenu — Python
-  contenu/                les exercices et les leçons, en YAML versionné
+  contenu/                les exercices, les leçons et les quiz, en YAML versionné
 docs/vault/               la documentation, sous forme de coffre Obsidian
 ```
 
@@ -45,7 +47,7 @@ docs/vault/               la documentation, sous forme de coffre Obsidian
 cd plateforme/web
 pnpm install
 pnpm dev                 # serveur de développement
-pnpm test                # 196 tests
+pnpm test                # 455 tests
 pnpm test:couverture     # avec les seuils qui font échouer la construction
 
 # API
@@ -57,7 +59,13 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 cd plateforme/outils
 .venv/Scripts/python valider_contenu.py ../contenu/chapitre-1
 .venv/Scripts/python construire_contenu.py ../contenu/chapitre-1 ../web/public/contenu
+.venv/Scripts/python construire_quiz.py     # les quiz, pour l'API seulement -> ../api/quiz
 ```
+
+> [!WARNING]
+> Les quiz ne vont **jamais** dans `web/public` : leurs bonnes réponses y seraient lisibles par
+> toute la classe. Ils sont construits dans l'image de l'API. Voir
+> [Quiz en direct](docs/vault/3-architecture/Quiz%20en%20direct.md).
 
 > [!IMPORTANT]
 > `valider_contenu.py` **exécute la solution de référence de chaque exercice
