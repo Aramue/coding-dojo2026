@@ -223,7 +223,7 @@ describe("Apercu — les destinations qui ne menent nulle part", () => {
     // Le tableau de bord peut demander une destination que l'aperçu ne sait
     // pas montrer — la connexion, sa propre page. Un cadre vide laisserait le
     // professeur croire à un chargement qui n'arrive jamais.
-    render(<Apercu depart={{ vue: 'prof' }} executeur={EXECUTEUR} onFermer={() => {}} />)
+    render(<Apercu depart={{ vue: 'prof', onglet: 'seance' }} executeur={EXECUTEUR} onFermer={() => {}} />)
     expect(await screen.findByText("Cette page n'existe pas.")).toBeInTheDocument()
   })
 

@@ -7,13 +7,26 @@ describe('analyser', () => {
     expect(analyser('')).toEqual({ vue: 'connexion' })
   })
 
-  it('reconnait le tableau de bord professeur', () => {
-    expect(analyser('/prof')).toEqual({ vue: 'prof' })
-    expect(analyser('/prof/')).toEqual({ vue: 'prof' })
+  it('reconnait le tableau de bord professeur, qui est son premier onglet', () => {
+    expect(analyser('/prof')).toEqual({ vue: 'prof', onglet: 'seance' })
+    expect(analyser('/prof/')).toEqual({ vue: 'prof', onglet: 'seance' })
+  })
+
+  it('reconnait les deux autres onglets de l espace professeur', () => {
+    expect(analyser('/prof/classe')).toEqual({ vue: 'prof', onglet: 'classe' })
+    expect(analyser('/prof/atelier')).toEqual({ vue: 'prof', onglet: 'atelier' })
+  })
+
+  it('ne prend pas n importe quoi apres /prof pour un onglet', () => {
+    expect(analyser('/prof/seance')).toEqual({ vue: 'inconnue' })
+    expect(analyser('/prof/classe/encore')).toEqual({ vue: 'inconnue' })
   })
 
   it('ne confond pas /prof avec une notion', () => {
+    // Seuls `classe` et `atelier` sont interceptes : une notion qui
+    // s'appellerait « prof » garde ses deux pages.
     expect(analyser('/prof/cours')).toEqual({ vue: 'cours', notion: 'prof' })
+    expect(analyser('/prof/exercices')).toEqual({ vue: 'exercices', notion: 'prof' })
   })
 
   it('reconnait une page de cours', () => {
@@ -78,12 +91,22 @@ describe('versChemin', () => {
     expect(versChemin({ vue: 'exercice', notion: 'saisie', numero: 12 })).toBe(
       '/saisie/exercices/12',
     )
-    expect(versChemin({ vue: 'prof' })).toBe('/prof')
+    expect(versChemin({ vue: 'prof', onglet: 'seance' })).toBe('/prof')
+    expect(versChemin({ vue: 'prof', onglet: 'classe' })).toBe('/prof/classe')
+    expect(versChemin({ vue: 'prof', onglet: 'atelier' })).toBe('/prof/atelier')
     expect(versChemin({ vue: 'inconnue' })).toBe('/')
   })
 
   it('fait l aller-retour sans perte', () => {
-    for (const chemin of ['/', '/prof', '/variables/cours', '/types/exercices', '/saisie/exercices/12']) {
+    for (const chemin of [
+      '/',
+      '/prof',
+      '/prof/classe',
+      '/prof/atelier',
+      '/variables/cours',
+      '/types/exercices',
+      '/saisie/exercices/12',
+    ]) {
       expect(versChemin(analyser(chemin))).toBe(chemin)
     }
   })

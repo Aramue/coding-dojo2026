@@ -122,7 +122,7 @@ export function App() {
     return (
       <div className="appli appli--seul">
         <Entete />
-        <EcranProf />
+        <EcranProf onglet={destination.onglet} />
       </div>
     )
   }

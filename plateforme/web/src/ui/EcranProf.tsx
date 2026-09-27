@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Executeur } from '../execution/executeur'
 import { compteExiste, creerCompte, LONGUEUR_MIN, seConnecter } from '../prof/compte'
-import type { Destination } from '../routage'
+import { naviguer, versChemin, type Destination, type OngletProf } from '../routage'
 import { Apercu } from './Apercu'
 import { Classe } from './Classe'
 import { TableauDeBord } from './TableauDeBord'
@@ -30,7 +30,13 @@ function lireJetonMemorise(): string | null {
 
 type Porte = 'verification' | 'creation' | 'connexion' | 'injoignable'
 
-export function EcranProf() {
+export function EcranProf({
+  // « Séance » par défaut : c'est ce que vaut `/prof` tout court, et la porte
+  // elle-même ne dépend d'aucun onglet.
+  onglet = 'seance',
+}: {
+  onglet?: OngletProf
+}) {
   const [jeton, setJeton] = useState<string | null>(() => lireJetonMemorise())
   const [porte, setPorte] = useState<Porte>('verification')
   // Relance la question « le compte existe-t-il ? » après une panne.
@@ -73,7 +79,7 @@ export function EcranProf() {
   }, [])
 
   if (jeton) {
-    return <SessionProf jeton={jeton} onFermer={fermer} />
+    return <SessionProf jeton={jeton} onglet={onglet} onFermer={fermer} />
   }
 
   return (
@@ -240,10 +246,63 @@ function Connexion({ onOuvert }: { onOuvert: (jeton: string) => void }) {
 }
 
 /**
+ * Les onglets de l'espace professeur, dans l'ordre où on s'en sert.
+ *
+ * Ce sont des LIENS, pas des boutons : chacun a son chemin, un rechargement
+ * revient là où on était, et Ctrl+clic ouvre un onglet du navigateur comme
+ * partout ailleurs. Voir ADR-009.
+ */
+const ONGLETS: { id: OngletProf; libelle: string }[] = [
+  { id: 'seance', libelle: 'Séance' },
+  { id: 'classe', libelle: 'Ma classe' },
+]
+
+function BarreOnglets({ courant }: { courant: OngletProf }) {
+  // « Espace professeur » : il y a une SECONDE barre d'onglets sur cette page,
+  // celle de « Ma classe » (« Façon d'ajouter »). Sans deux noms distincts, un
+  // lecteur d'écran annonce deux fois « groupe d'onglets » sans dire lesquels.
+  return (
+    <nav className="prof__onglets" role="tablist" aria-label="Espace professeur">
+      {ONGLETS.map(({ id, libelle }) => {
+        const cible: Destination = { vue: 'prof', onglet: id }
+        return (
+          <a
+            key={id}
+            role="tab"
+            aria-selected={id === courant}
+            className="prof__onglet"
+            href={versChemin(cible)}
+            onClick={(evenement) => {
+              if (evenement.metaKey || evenement.ctrlKey || evenement.shiftKey) return
+              evenement.preventDefault()
+              naviguer(cible)
+            }}
+          >
+            {libelle}
+          </a>
+        )
+      })}
+    </nav>
+  )
+}
+
+/**
  * Ce que le professeur voit une fois entré : la séance, sa classe, et l'aperçu
  * de l'espace élève quand il l'ouvre.
+ *
+ * Un seul onglet est monté à la fois. Le tableau de bord cesse donc
+ * d'interroger l'API pendant qu'on est ailleurs, et repart à neuf en
+ * revenant — ce qui est de toute façon ce qu'on veut lire.
  */
-function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void }) {
+function SessionProf({
+  jeton,
+  onglet,
+  onFermer,
+}: {
+  jeton: string
+  onglet: OngletProf
+  onFermer: () => void
+}) {
   // Un seul exécuteur pour tout l'aperçu, détruit en sortant : sans lui, les
   // exemples exécutables des leçons et le bouton « Valider » ne feraient rien.
   const executeur = useMemo(
@@ -261,23 +320,30 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
 
   return (
     <main className="prof">
-      <TableauDeBord
-        jetonProf={jeton}
-        onApercu={(ou) => setApercu({ ou })}
-        onRefuse={onFermer}
-      />
+      <BarreOnglets courant={onglet} />
 
-      <div className="prof__actions">
-        <button type="button" className="bouton" onClick={() => setApercu({})}>
-          Voir l'espace élève
-        </button>
-        <span className="prof__note">
-          Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
-        </span>
-      </div>
+      {onglet === 'seance' && (
+        <>
+          <TableauDeBord
+            jetonProf={jeton}
+            onApercu={(ou) => setApercu({ ou })}
+            onRefuse={onFermer}
+          />
 
-      <Classe jetonProf={jeton} />
+          <div className="prof__actions">
+            <button type="button" className="bouton" onClick={() => setApercu({})}>
+              Voir l'espace élève
+            </button>
+            <span className="prof__note">
+              Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
+            </span>
+          </div>
+        </>
+      )}
 
+      {onglet === 'classe' && <Classe jetonProf={jeton} />}
+
+      {/* La sortie reste hors des onglets : ce n'est pas une activité. */}
       <div className="prof__pied">
         <button type="button" className="bouton" onClick={onFermer}>
           Fermer la session professeur

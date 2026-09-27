@@ -225,6 +225,34 @@ Voir [[ADR-002 Identification par code d'agent]].
 > bonus, qui n'entrent dans aucune progression. C'est ce qui a motivé le passage de `reussis`
 > d'un entier à une liste.
 
+## Trois onglets, trois chemins
+
+L'espace professeur s'ouvre sur une barre d'onglets. **Séance** porte le tableau de bord et
+l'accès à l'aperçu ; **Ma classe** la liste des élèves ; **Atelier** viendra avec le palier 2 de
+[[Spécification atelier de contenu]].
+
+| Onglet | Chemin |
+|---|---|
+| Séance | `/prof` |
+| Ma classe | `/prof/classe` |
+
+Jusqu'au 27 septembre 2026, les deux premières sections s'empilaient sur une seule page. Une
+troisième l'aurait rendue interminable, et l'atelier a besoin de toute la hauteur.
+
+> [!important] Ce sont des liens, pas des boutons
+> Un rechargement revient là où on était, `/prof/classe` se garde en signet, et ==Ctrl+clic ouvre
+> un onglet du navigateur== comme partout ailleurs ([[ADR-009 Routage maison sans bibliothèque]]).
+> Seuls `classe` et `atelier` sont interceptés après `/prof` : une notion qui s'appellerait
+> « prof » garde ses pages `/prof/cours` et `/prof/exercices`.
+
+> [!note] Un onglet inactif est démonté
+> Le tableau cesse donc d'interroger l'API pendant qu'on est ailleurs, et repart à neuf en
+> revenant. Contrepartie assumée : un jeton qui expire pendant ce temps ne renvoie à la porte
+> qu'au retour sur « Séance ».
+
+« Fermer la session professeur » reste **hors** des onglets, en pied : c'est une sortie, pas une
+quatrième activité. L'aperçu, lui, reste une fenêtre par-dessus tout.
+
 ## La porte
 
 Depuis le 25 septembre 2026, la porte n'attend plus un code écrit dans le `.env` : elle demande

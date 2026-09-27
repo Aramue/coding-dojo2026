@@ -420,3 +420,73 @@ describe('EcranProf — démonté pendant la question au serveur', () => {
     await new Promise((r) => setTimeout(r, 40))
   })
 })
+
+describe("EcranProf — les onglets de l'espace professeur", () => {
+  it("ouvre sur la séance, et n'affiche pas la classe en même temps", async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="seance" />)
+
+    expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /ma classe/i })).toBeNull()
+    expect(screen.getByRole('tab', { name: 'Séance' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('ouvre directement sur la classe quand le chemin le demande', async () => {
+    // Un rechargement sur /prof/classe doit y revenir, pas retomber sur la
+    // séance : c'est tout l'intérêt d'avoir des chemins plutôt qu'un état.
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="classe" />)
+
+    expect(await screen.findByRole('heading', { name: /ma classe/i })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /séance en cours/i })).toBeNull()
+  })
+
+  it('change de chemin en changeant d onglet', async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="seance" />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Ma classe' }))
+
+    expect(location.pathname).toBe('/prof/classe')
+  })
+
+  it("laisse Ctrl+clic ouvrir un onglet du navigateur", async () => {
+    history.pushState(null, '', '/prof')
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="seance" />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Ma classe' }), { ctrlKey: true })
+
+    expect(location.pathname).toBe('/prof')
+  })
+
+  it("distingue sa barre d'onglets de celle de « Ma classe »", async () => {
+    // Deux tablist sur la même page : sans deux noms, un lecteur d'écran
+    // annonce deux fois « groupe d'onglets » sans dire lesquels.
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="classe" />)
+    await screen.findByRole('heading', { name: /ma classe/i })
+
+    const barres = screen.getAllByRole('tablist')
+    const noms = barres.map((b) => b.getAttribute('aria-label'))
+    expect(new Set(noms).size).toBe(noms.length)
+    expect(noms).toContain("Espace professeur")
+  })
+
+  it("garde la sortie et l'aperçu hors des onglets", async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="classe" />)
+    await screen.findByRole('heading', { name: /ma classe/i })
+
+    // Fermer la session est une sortie, pas une quatrième activité.
+    expect(screen.getByRole('button', { name: /fermer la session/i })).toBeInTheDocument()
+  })
+})

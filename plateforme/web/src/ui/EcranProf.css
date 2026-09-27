@@ -105,6 +105,48 @@
 }
 
 /*
+ * La barre d'onglets, en tete de l'espace professeur. Des LIENS, pas des
+ * boutons : chacun a son chemin, un rechargement revient au meme endroit, et
+ * Ctrl+clic ouvre un onglet du navigateur.
+ */
+.prof__onglets {
+  display: flex;
+  gap: var(--e-1);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--e-3) var(--e-3) 0;
+  border-bottom: 1px solid var(--rule-doux);
+}
+
+.prof__onglet {
+  padding: var(--e-1) var(--e-2);
+  font-size: var(--t-2);
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-radius: var(--rayon-2) var(--rayon-2) 0 0;
+  /* Le trait de l'onglet actif mord sur celui de la barre, pour que la page
+     se lise comme la continuation de l'onglet et non comme un bloc en dessous. */
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.prof__onglet:hover {
+  color: var(--ink);
+  background: var(--ground-2);
+}
+
+.prof__onglet[aria-selected='true'] {
+  color: var(--ink);
+  border-bottom-color: var(--py-blue);
+}
+
+.prof__onglet:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: -2px;
+}
+
+/*
  * Fermer la session est une SORTIE, pas une action de la page : elle se detache
  * du contenu par un filet et une vraie respiration. Collee sous la liste de la
  * classe, elle se lisait comme le dernier bouton du tableau — et un bouton de
