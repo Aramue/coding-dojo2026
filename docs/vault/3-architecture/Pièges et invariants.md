@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-25
+mis-a-jour: 2026-09-27
 ---
 
 # Pièges et invariants
@@ -140,6 +140,45 @@ validation et la construction de l'image, sans un message. Et un compteur instal
 `sys.settrace` prend la place du traceur de coverage : la mesure des fonctions qui appellent
 `_executer` s'arrête net après chaque exécution. `generer_attendu.py` était tombé de 77 % à 65 %
 sans qu'une ligne de test ait changé.
+
+### Rien ne doit lire `NOTIONS` au moment de DÉFINIR une classe
+
+`Lecon.notion` était déclaré `Literal[tuple(NOTIONS)]`. C'est évalué à la **définition de la
+classe**, donc au chargement du module — or les notions se chargent désormais depuis
+`contenu/chapitre-*/notions.yaml`, à l'exécution. Le `Literal` se figeait sur une table vide.
+
+**Ce qui casse :** ==toutes les leçons refusées==, avec un message qui parle d'une valeur qui
+n'est dans aucune liste. La règle d'appartenance vit maintenant dans un `field_validator`, qui
+lit le registre au moment de valider une instance, pas de définir la classe.
+
+### Une date d'ouverture non quotée n'est plus une chaîne
+
+Dans `chapitres.yaml`, `ouverture: 2026-09-23` sans guillemets devient un objet `date` Python, pas
+une chaîne. `verifier_chapitres` attend une chaîne et la compare à une expression régulière.
+
+**Ce qui casse :** le contrôle de format ne voit jamais rien passer, et une date mal écrite
+atteint le navigateur — où elle se comparerait quand même, en laissant ==la séance fermée en
+silence==. Voir [[ADR-013 Une séance s'ouvre à sa date]].
+
+### Le champ `motif` d'une notion ne sort jamais vers le navigateur
+
+Il sert au validateur à repérer une notion employée trop tôt dans un exemple de leçon. C'est un
+outil d'auteur. `construire_contenu.py` le retire de `notions.json` par la liste `CHAMPS_PRIVES`.
+
+**Ce qui casse :** rien de visible — et c'est bien le problème. Le 27 septembre 2026, le motif a
+fuité dans `notions.json` dès la première construction après le déplacement des tables. ==C'est
+l'épreuve qui compare les fichiers publiés à une référence figée qui l'a attrapé==, pas une
+relecture.
+
+### Deux sens du mot « chapitre », et on ne renomme pas
+
+Dans `CHAPITRES`, un « chapitre » vaut **une séance** : `bases` est la séance 1, `decisions` la
+séance 2. Le dossier `contenu/chapitre-1/`, lui, désigne le chapitre du cours, qui en contient
+trois.
+
+**Ce qui casse :** un renommage ferait bouger `chapitres.json`, le calendrier d'ouverture et tout
+[[ADR-013 Une séance s'ouvre à sa date]], pour un gain de clarté dans un seul fichier. On garde
+les noms.
 
 ## Serveur
 

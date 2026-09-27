@@ -4,7 +4,7 @@ tags:
   - plan
   - implementation
   - contenu
-statut: à exécuter
+statut: exécuté
 date: 2026-09-27
 ---
 
@@ -54,7 +54,7 @@ Spécification de référence : [[Spécification atelier de contenu]], sections 
 **Interfaces:**
 - Produces: `MOTIF_ID` et `MOTIF_EXERCICE`, deux expressions identiques dans deux dépôts de code qui ne se voient pas.
 
-- [ ] **Étape 1 : écrire les tests qui échouent** — ajouter à `outils/tests/test_schema.py` :
+- [x] **Étape 1 : écrire les tests qui échouent** — ajouter à `outils/tests/test_schema.py` :
 
 Le fichier possède déjà `exercice_minimal(**remplacements)`, qui rend un exercice valide ; c'est
 lui qu'on emploie, il n'y a pas de `BASE` ici.
@@ -102,10 +102,10 @@ def test_un_identifiant_d_exercice_mal_forme_reste_refuse(client, jeton):
         assert reponse.status_code == 422, faux
 ```
 
-- [ ] **Étape 2 : les lancer** — depuis `plateforme/outils` : `.venv/Scripts/python -m pytest tests/test_schema.py -q`, puis depuis `plateforme/api` : `.venv/Scripts/python -m pytest tests/test_routes_eleve.py -q`.
+- [x] **Étape 2 : les lancer** — depuis `plateforme/outils` : `.venv/Scripts/python -m pytest tests/test_schema.py -q`, puis depuis `plateforme/api` : `.venv/Scripts/python -m pytest tests/test_routes_eleve.py -q`.
   Attendu : échec sur `s9-01`, `s99-01`, `c10-variables` et `s4-01`.
 
-- [ ] **Étape 3 : élargir le schéma** — dans `schema.py` :
+- [x] **Étape 3 : élargir le schéma** — dans `schema.py` :
 
 ```python
 # Une a 99 seances. La borne ne commande plus le calendrier : elle n'est la
@@ -120,7 +120,7 @@ MOTIF_ID = re.compile(r"^s([1-9][0-9]?)-[0-9]{2}(-expert)?$")
 MOTIF_LECON = re.compile(r"^c([1-9][0-9]?)-[a-z]+$")
 ```
 
-- [ ] **Étape 4 : élargir la liste blanche de l'API** — dans `routes_eleve.py` :
+- [x] **Étape 4 : élargir la liste blanche de l'API** — dans `routes_eleve.py` :
 
 ```python
 # Miroir de outils/schema.py::MOTIF_ID. L'image de l'API ne contient pas
@@ -131,9 +131,9 @@ MOTIF_EXERCICE = re.compile(r"^s([1-9][0-9]?)-[0-9]{2}(-expert)?$")
 
   Et dans `schema.py`, au-dessus de `MOTIF_ID`, la réciproque : `# Miroir dans api/app/routes_eleve.py::MOTIF_EXERCICE.`
 
-- [ ] **Étape 5 : les deux suites entières** — `outils` puis `api`. Attendu : tout passe.
+- [x] **Étape 5 : les deux suites entières** — `outils` puis `api`. Attendu : tout passe.
 
-- [ ] **Étape 6 : commit**
+- [x] **Étape 6 : commit**
 
 ```bash
 git add plateforme/outils/schema.py plateforme/outils/tests/test_schema.py plateforme/api/app/routes_eleve.py plateforme/api/tests/test_routes_eleve.py
@@ -158,7 +158,7 @@ et chaque suite fixe les memes cas limites."
 - Consumes: `MOTIF_ID` élargi (tâche 1).
 - Produces: `Exercice.seance_accordee_a_l_identifiant`, un `model_validator(mode="after")`.
 
-- [ ] **Étape 1 : écrire les tests qui échouent**
+- [x] **Étape 1 : écrire les tests qui échouent**
 
 ```python
 def test_la_seance_doit_suivre_l_identifiant():
@@ -181,9 +181,9 @@ def test_les_112_exercices_du_depot_sont_deja_accordes():
     assert len(charger_tous(racine)) == 112
 ```
 
-- [ ] **Étape 2 : les lancer** — `.venv/Scripts/python -m pytest tests/test_schema.py -q`. Attendu : le premier échoue, aucune exception n'est levée.
+- [x] **Étape 2 : les lancer** — `.venv/Scripts/python -m pytest tests/test_schema.py -q`. Attendu : le premier échoue, aucune exception n'est levée.
 
-- [ ] **Étape 3 : la règle** — dans `Exercice`, après `identifiant_bien_forme` :
+- [x] **Étape 3 : la règle** — dans `Exercice`, après `identifiant_bien_forme` :
 
 ```python
     @model_validator(mode="after")
@@ -197,9 +197,9 @@ def test_les_112_exercices_du_depot_sont_deja_accordes():
         return self
 ```
 
-- [ ] **Étape 4 : la suite entière de `outils`.** Attendu : tout passe, les 112 exercices compris.
+- [x] **Étape 4 : la suite entière de `outils`.** Attendu : tout passe, les 112 exercices compris.
 
-- [ ] **Étape 5 : commit**
+- [x] **Étape 5 : commit**
 
 ```bash
 git add plateforme/outils/schema.py plateforme/outils/tests/test_schema.py
@@ -224,7 +224,7 @@ cours. Les 112 fichiers du depot sont deja accordes."
 - Consumes: `construire(racine: Path, sortie: Path) -> int` de `construire_contenu.py`.
 - Produces: `test_contenu_publie.py`, qui reconstruit et compare octet pour octet.
 
-- [ ] **Étape 1 : geler la sortie actuelle** — depuis `plateforme/outils`, **sur le code d'aujourd'hui, avant tout changement de tâche 4** :
+- [x] **Étape 1 : geler la sortie actuelle** — depuis `plateforme/outils`, **sur le code d'aujourd'hui, avant tout changement de tâche 4** :
 
 ```bash
 .venv/Scripts/python -c "from pathlib import Path; from construire_contenu import construire; print(construire(Path('../contenu/chapitre-1'), Path('tests/reference')))"
@@ -232,7 +232,7 @@ cours. Les 112 fichiers du depot sont deja accordes."
 
   Attendu : `112`, et quatre fichiers dans `tests/reference/`.
 
-- [ ] **Étape 2 : écrire l'épreuve**
+- [x] **Étape 2 : écrire l'épreuve**
 
 ```python
 """Le filet du palier 1 : deplacer les tables ne change pas ce qui est publie.
@@ -260,9 +260,9 @@ def test_les_quatre_fichiers_publies_ne_bougent_pas(tmp_path):
         assert obtenu == attendu, f"{nom} a change"
 ```
 
-- [ ] **Étape 3 : la lancer** — `.venv/Scripts/python -m pytest tests/test_contenu_publie.py -q`. Attendu : PASSE. Une épreuve qui échoue ici veut dire que l'étape 1 n'a pas été jouée sur le code d'origine.
+- [x] **Étape 3 : la lancer** — `.venv/Scripts/python -m pytest tests/test_contenu_publie.py -q`. Attendu : PASSE. Une épreuve qui échoue ici veut dire que l'étape 1 n'a pas été jouée sur le code d'origine.
 
-- [ ] **Étape 4 : commit**
+- [x] **Étape 4 : commit**
 
 ```bash
 git add plateforme/outils/tests/reference plateforme/outils/tests/test_contenu_publie.py
@@ -286,7 +286,7 @@ Les fichiers et le chargeur seulement. Personne ne les consomme encore : `schema
 **Interfaces:**
 - Produces: `charger_table(chemin: Path) -> dict[str, dict]` — lit une liste YAML dont chaque entrée porte un `id`, et rend un dictionnaire indexé par cet `id`, l'`id` retiré des détails. C'est exactement la forme de `NOTIONS` et de `CHAPITRES`.
 
-- [ ] **Étape 1 : écrire l'épreuve qui échoue** — `tests/test_tables.py`
+- [x] **Étape 1 : écrire l'épreuve qui échoue** — `tests/test_tables.py`
 
 ```python
 """Les tables de contenu, lues depuis le YAML. Voir Specification atelier."""
@@ -344,9 +344,9 @@ def test_les_tables_ne_sont_pas_chargees_comme_des_exercices():
     assert len(charger_tous(CHAPITRE_1)) == 112
 ```
 
-- [ ] **Étape 2 : la lancer** — `.venv/Scripts/python -m pytest tests/test_tables.py -q`. Attendu : échec sur `charger_table` introuvable.
+- [x] **Étape 2 : la lancer** — `.venv/Scripts/python -m pytest tests/test_tables.py -q`. Attendu : échec sur `charger_table` introuvable.
 
-- [ ] **Étape 3 : écrire `notions.yaml`** — `plateforme/contenu/chapitre-1/notions.yaml`
+- [x] **Étape 3 : écrire `notions.yaml`** — `plateforme/contenu/chapitre-1/notions.yaml`
 
 ```yaml
 # Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unité de
@@ -461,7 +461,7 @@ def test_les_tables_ne_sont_pas_chargees_comme_des_exercices():
 > pas la provoquer. Relire la table avec :
 > `.venv/Scripts/python -c "import json;from schema import NOTIONS;print(json.dumps(NOTIONS,ensure_ascii=False,indent=1))"`
 
-- [ ] **Étape 4 : écrire `chapitres.yaml`**
+- [x] **Étape 4 : écrire `chapitres.yaml`**
 
 ```yaml
 # Les chapitres de navigation. ATTENTION au vocabulaire : ici, un « chapitre »
@@ -492,7 +492,7 @@ def test_les_tables_ne_sont_pas_chargees_comme_des_exercices():
   ouverture: "2026-09-30"
 ```
 
-- [ ] **Étape 5 : le chargeur** — dans `schema.py`, juste avant `NOTIONS` :
+- [x] **Étape 5 : le chargeur** — dans `schema.py`, juste avant `NOTIONS` :
 
 ```python
 def charger_table(chemin: Path) -> dict[str, dict]:
@@ -512,7 +512,7 @@ def charger_table(chemin: Path) -> dict[str, dict]:
     return table
 ```
 
-- [ ] **Étape 6 : exclure les tables du chargement des exercices** — dans `charger_tous` :
+- [x] **Étape 6 : exclure les tables du chargement des exercices** — dans `charger_tous` :
 
 ```python
 # Les tables de contenu vivent a la racine du chapitre et ne sont PAS des
@@ -530,9 +530,9 @@ def charger_tous(racine: Path) -> list[Exercice]:
     ]
 ```
 
-- [ ] **Étape 7 : lancer `tests/test_tables.py`, puis la suite entière.** Attendu : tout passe, `test_contenu_publie.py` compris.
+- [x] **Étape 7 : lancer `tests/test_tables.py`, puis la suite entière.** Attendu : tout passe, `test_contenu_publie.py` compris.
 
-- [ ] **Étape 8 : commit**
+- [x] **Étape 8 : commit**
 
 ```bash
 git add plateforme/contenu/chapitre-1/notions.yaml plateforme/contenu/chapitre-1/chapitres.yaml plateforme/outils/schema.py plateforme/outils/tests/test_tables.py
@@ -562,7 +562,7 @@ et une epreuve verifie qu'ils disent exactement la meme chose."
 > Dès que la table est vide au chargement du module, ce `Literal` devient vide et **toutes** les
 > leçons sont refusées. Il doit devenir un `field_validator`.
 
-- [ ] **Étape 1 : écrire les épreuves qui échouent** — ajouter à `tests/test_tables.py` :
+- [x] **Étape 1 : écrire les épreuves qui échouent** — ajouter à `tests/test_tables.py` :
 
 ```python
 def test_le_registre_est_vide_avant_chargement(monkeypatch):
@@ -600,9 +600,9 @@ def test_une_lecon_sur_une_notion_inconnue_est_refusee():
         )
 ```
 
-- [ ] **Étape 2 : les lancer.** Attendu : échec sur `charger_tables` introuvable.
+- [x] **Étape 2 : les lancer.** Attendu : échec sur `charger_tables` introuvable.
 
-- [ ] **Étape 3 : le registre** — dans `schema.py`, remplacer les deux dictionnaires littéraux par :
+- [x] **Étape 3 : le registre** — dans `schema.py`, remplacer les deux dictionnaires littéraux par :
 
 ```python
 # Les tables de contenu, remplies par `charger_tables`. Vides au chargement du
@@ -634,7 +634,7 @@ def charger_tables(racine: Path) -> None:
                 registre[identifiant] = details
 ```
 
-- [ ] **Étape 4 : `Lecon.notion` devient un champ validé**
+- [x] **Étape 4 : `Lecon.notion` devient un champ validé**
 
 ```python
     notion: str
@@ -654,7 +654,7 @@ def charger_tables(racine: Path) -> None:
         return v
 ```
 
-- [ ] **Étape 5 : le motif remplace `MOTIFS_NOTION`** — dans `valider_contenu.py`, supprimer le dictionnaire et son commentaire, puis dans `verifier_lecon` :
+- [x] **Étape 5 : le motif remplace `MOTIFS_NOTION`** — dans `valider_contenu.py`, supprimer le dictionnaire et son commentaire, puis dans `verifier_lecon` :
 
 ```python
     for bloc in lecon.blocs:
@@ -676,7 +676,7 @@ def charger_tables(racine: Path) -> None:
                 )
 ```
 
-- [ ] **Étape 6 : `verifier_racine` charge les tables en premier** — première ligne du corps :
+- [x] **Étape 6 : `verifier_racine` charge les tables en premier** — première ligne du corps :
 
 ```python
     # Avant tout chargement d'exercice ou de lecon : les modeles valident
@@ -687,11 +687,11 @@ def charger_tables(racine: Path) -> None:
 
 > Cette ligne est **provisoire** : elle accepte encore une racine de chapitre pour que la tâche 5 passe seule. La tâche 6 la réduit à `charger_tables(racine)` une fois la racine devenue `contenu/`.
 
-- [ ] **Étape 7 : retirer les deux épreuves de fidélité** de `tests/test_tables.py` — `test_les_notions_yaml_disent_la_meme_chose_que_la_table_python` et sa jumelle. Elles comparaient le YAML aux littéraux Python, qui n'existent plus. Ce qu'elles protégeaient est désormais protégé par `test_contenu_publie.py`, qui compare la sortie réelle.
+- [x] **Étape 7 : retirer les deux épreuves de fidélité** de `tests/test_tables.py` — `test_les_notions_yaml_disent_la_meme_chose_que_la_table_python` et sa jumelle. Elles comparaient le YAML aux littéraux Python, qui n'existent plus. Ce qu'elles protégeaient est désormais protégé par `test_contenu_publie.py`, qui compare la sortie réelle.
 
-- [ ] **Étape 8 : la suite entière de `outils`.** Attendu : tout passe, `test_contenu_publie.py` en tête. **Si ce dernier échoue, ne pas ajuster la référence** : c'est le déplacement qui a changé quelque chose.
+- [x] **Étape 8 : la suite entière de `outils`.** Attendu : tout passe, `test_contenu_publie.py` en tête. **Si ce dernier échoue, ne pas ajuster la référence** : c'est le déplacement qui a changé quelque chose.
 
-- [ ] **Étape 9 : commit**
+- [x] **Étape 9 : commit**
 
 ```bash
 git add plateforme/outils/schema.py plateforme/outils/valider_contenu.py plateforme/outils/tests/test_tables.py
@@ -721,15 +721,15 @@ comparaient : le contenu publie est desormais tenu par test_contenu_publie."
 - Consumes: `charger_tables(racine)` (tâche 5).
 - Produces: `construire(racine: Path, sortie: Path) -> int` où `racine` est désormais `plateforme/contenu/`.
 
-- [ ] **Étape 1 : faire échouer l'épreuve en la pointant sur la nouvelle racine** — dans `test_contenu_publie.py`, remplacer l'appel :
+- [x] **Étape 1 : faire échouer l'épreuve en la pointant sur la nouvelle racine** — dans `test_contenu_publie.py`, remplacer l'appel :
 
 ```python
     construire(CONTENU, tmp_path)
 ```
 
-- [ ] **Étape 2 : la lancer.** Attendu : ÉCHEC — `charger_tous` ne trouve rien, ou la comparaison diverge.
+- [x] **Étape 2 : la lancer.** Attendu : ÉCHEC — `charger_tous` ne trouve rien, ou la comparaison diverge.
 
-- [ ] **Étape 3 : `verifier_racine` parcourt les chapitres** — dans `valider_contenu.py` :
+- [x] **Étape 3 : `verifier_racine` parcourt les chapitres** — dans `valider_contenu.py` :
 
 Deux lignes seulement changent dans le corps. La première est celle que la tâche 5 avait laissée
 provisoire, qui redescendait d'un cran quand on lui passait un dossier de chapitre :
@@ -750,22 +750,22 @@ La seconde est le parcours des leçons, qui gagne un niveau :
 
   `charger_tous` fait déjà un `rglob`, il descend donc dans les chapitres sans changement.
 
-- [ ] **Étape 4 : les valeurs par défaut des deux scripts** — `Path("../contenu")` dans `construire_contenu.py` et dans `valider_contenu.py`. Les anciennes (`../../contenu/chapitre-1`) désignaient un dossier qui n'existe pas ; seuls les appels explicites fonctionnaient.
+- [x] **Étape 4 : les valeurs par défaut des deux scripts** — `Path("../contenu")` dans `construire_contenu.py` et dans `valider_contenu.py`. Les anciennes (`../../contenu/chapitre-1`) désignaient un dossier qui n'existe pas ; seuls les appels explicites fonctionnaient.
 
-- [ ] **Étape 5 : le Dockerfile** — dans `deploiement/Dockerfile.web`, la ligne de construction :
+- [x] **Étape 5 : le Dockerfile** — dans `deploiement/Dockerfile.web`, la ligne de construction :
 
 ```dockerfile
  && cd outils && python construire_contenu.py ../contenu /build/public-contenu
 ```
 
-- [ ] **Étape 6 : le README** — les deux commandes de la section « Développer » :
+- [x] **Étape 6 : le README** — les deux commandes de la section « Développer » :
 
 ```bash
 .venv/Scripts/python valider_contenu.py ../contenu
 .venv/Scripts/python construire_contenu.py ../contenu ../web/public/contenu
 ```
 
-- [ ] **Étape 7 : adapter `tests/test_construire_contenu.py`.** Chacun de ses tests construit depuis un `tmp_path` qui figurait un dossier de chapitre ; ce `tmp_path` devient `contenu/`, et il lui faut un chapitre avec ses tables. Ajouter en tête du fichier :
+- [x] **Étape 7 : adapter `tests/test_construire_contenu.py`.** Chacun de ses tests construit depuis un `tmp_path` qui figurait un dossier de chapitre ; ce `tmp_path` devient `contenu/`, et il lui faut un chapitre avec ses tables. Ajouter en tête du fichier :
 
 ```python
 NOTIONS_MINIMALES = [
@@ -809,9 +809,9 @@ def _chapitre(racine: Path, nom: str = "chapitre-1") -> Path:
   `NOTIONS_MINIMALES` et `CHAPITRES_MINIMAUX` dit la même chose et ne dépend plus d'un import qui
   change sous les pieds du test.
 
-- [ ] **Étape 8 : relancer l'épreuve, puis la suite entière.** Attendu : les quatre fichiers de `test_contenu_publie.py` sont **identiques**, et `test_construire_contenu.py` passe.
+- [x] **Étape 8 : relancer l'épreuve, puis la suite entière.** Attendu : les quatre fichiers de `test_contenu_publie.py` sont **identiques**, et `test_construire_contenu.py` passe.
 
-- [ ] **Étape 9 : vérifier la construction réelle de l'image**
+- [x] **Étape 9 : vérifier la construction réelle de l'image**
 
 ```bash
 docker compose build web
@@ -819,7 +819,7 @@ docker compose build web
 
   Attendu : l'étape `contenu` affiche `112 exercices publies`.
 
-- [ ] **Étape 10 : commit**
+- [x] **Étape 10 : commit**
 
 ```bash
 git add plateforme/outils README.md deploiement/Dockerfile.web
@@ -842,7 +842,7 @@ sortent identiques, octet pour octet."
 **Interfaces:**
 - Produces: `verifier_tables(notions: dict[str, dict], chapitres: dict[str, dict]) -> list[str]`, sur le modèle de `verifier_chapitres`, appelée depuis `verifier_racine`.
 
-- [ ] **Étape 1 : écrire les épreuves qui échouent** — `tests/test_valider_tables.py`
+- [x] **Étape 1 : écrire les épreuves qui échouent** — `tests/test_valider_tables.py`
 
 ```python
 """Deux regles tenues a la main sur quatorze notions, et desormais verifiees."""
@@ -964,9 +964,9 @@ def test_un_exercice_sur_une_notion_inconnue_est_refuse():
         )
 ```
 
-- [ ] **Étape 2 : les lancer.** Attendu : échec sur `verifier_tables` introuvable.
+- [x] **Étape 2 : les lancer.** Attendu : échec sur `verifier_tables` introuvable.
 
-- [ ] **Étape 3 : le contrôle des tables** — dans `valider_contenu.py`, à côté de `verifier_chapitres` :
+- [x] **Étape 3 : le contrôle des tables** — dans `valider_contenu.py`, à côté de `verifier_chapitres` :
 
 ```python
 def verifier_tables(notions: dict[str, dict], chapitres: dict[str, dict]) -> list[str]:
@@ -1015,7 +1015,7 @@ def verifier_tables(notions: dict[str, dict], chapitres: dict[str, dict]) -> lis
   Cette boucle doit venir **après** `exercices = charger_tous(racine)`. Déplacer la ligne
   `problemes: list[str] = …` sous le chargement si ce n'est pas déjà le cas.
 
-- [ ] **Étape 4 : l'exercice aussi vérifie sa notion** — dans `Exercice`, à côté des autres validateurs :
+- [x] **Étape 4 : l'exercice aussi vérifie sa notion** — dans `Exercice`, à côté des autres validateurs :
 
 ```python
     @field_validator("notion")
@@ -1029,9 +1029,9 @@ def verifier_tables(notions: dict[str, dict], chapitres: dict[str, dict]) -> lis
         return v
 ```
 
-- [ ] **Étape 5 : la suite entière.** Attendu : tout passe, `test_contenu_publie.py` compris.
+- [x] **Étape 5 : la suite entière.** Attendu : tout passe, `test_contenu_publie.py` compris.
 
-- [ ] **Étape 6 : commit**
+- [x] **Étape 6 : commit**
 
 ```bash
 git add plateforme/outils
@@ -1057,7 +1057,7 @@ constructeur, sans nommer l'exercice."
 **Interfaces:**
 - Produces: `sortie/schema.json`, de forme `{"exercice": {...}, "lecon": {...}}`, chacun le résultat de `model_json_schema()`.
 
-- [ ] **Étape 1 : écrire les épreuves qui échouent** — ajouter à `tests/test_construire_contenu.py` :
+- [x] **Étape 1 : écrire les épreuves qui échouent** — ajouter à `tests/test_construire_contenu.py` :
 
 ```python
 def test_le_schema_est_publie_avec_ses_quatre_types_de_tests(tmp_path):
@@ -1104,9 +1104,9 @@ def test_le_discriminant_des_tests_est_publie(tmp_path):
     }
 ```
 
-- [ ] **Étape 2 : les lancer.** Attendu : échec, `schema.json` n'existe pas.
+- [x] **Étape 2 : les lancer.** Attendu : échec, `schema.json` n'existe pas.
 
-- [ ] **Étape 3 : publier** — dans `construire`, après `lecons.json` :
+- [x] **Étape 3 : publier** — dans `construire`, après `lecons.json` :
 
 ```python
     # Le schema se publie lui-meme. Le formulaire de l'atelier s'en nourrit —
@@ -1131,9 +1131,9 @@ def _publier_objet(chemin: Path, donnees: dict) -> None:
 
   et l'import `from schema import CHAPITRES, NOTIONS, Exercice, Lecon, charger_tables`.
 
-- [ ] **Étape 4 : la suite entière.** Attendu : tout passe. `test_contenu_publie.py` ne compare que quatre fichiers : le cinquième ne le dérange pas.
+- [x] **Étape 4 : la suite entière.** Attendu : tout passe. `test_contenu_publie.py` ne compare que quatre fichiers : le cinquième ne le dérange pas.
 
-- [ ] **Étape 5 : vérifier à l'œil ce que le formulaire recevra**
+- [x] **Étape 5 : vérifier à l'œil ce que le formulaire recevra**
 
 ```bash
 .venv/Scripts/python -c "from pathlib import Path; from construire_contenu import construire; construire(Path('../contenu'), Path('../web/public/contenu'))"
@@ -1141,7 +1141,7 @@ def _publier_objet(chemin: Path, donnees: dict) -> None:
 
   Attendu : `web/public/contenu/schema.json` existe et pèse environ 5 Ko.
 
-- [ ] **Étape 6 : commit**
+- [x] **Étape 6 : commit**
 
 ```bash
 git add plateforme/outils plateforme/web/public/contenu
@@ -1160,25 +1160,25 @@ dessus sans qu'aucune copie du schema ne vive cote TypeScript."
 - Create: `docs/vault/2-decisions/ADR-015 L'atelier écrit des fichiers, pas des lignes de base.md`
 - Modify: `docs/vault/2-decisions/Journal de décisions.md`, `docs/vault/3-architecture/Modèle de contenu.md`, `docs/vault/3-architecture/Pièges et invariants.md`, `docs/vault/Accueil.md`
 
-- [ ] **Étape 1 : ADR-015.** Format des autres ADR — contexte, décision, conséquences, alternatives écartées, voir aussi. Il doit dire :
+- [x] **Étape 1 : ADR-015.** Format des autres ADR — contexte, décision, conséquences, alternatives écartées, voir aussi. Il doit dire :
   - Ce qu'[[ADR-003 Exercices versionnés en YAML]] gardait et que ce palier **ne renverse pas** : Git reste la source, un exercice reste un fichier, aucune base de contenu.
   - Ce qui change : une surface qui **aide à écrire** le fichier, là où ADR-003 refusait une surface qui le **remplacerait**.
   - Les tables de contenu passent en YAML : un titre, un ordre, une couleur et une date sont du contenu, pas du code — et sans cela l'atelier ne peut pas déclarer un chapitre.
   - La dépendance `yaml` côté navigateur au palier 2, et pourquoi un analyseur maison serait pire : il accepterait des fichiers que la construction refuse.
   - Alternatives écartées : la base avec administration web (déjà écartée par ADR-003, pour la même raison) ; l'atelier qui affiche du Python à coller dans `schema.py` ; laisser les bornes à trois séances.
 
-- [ ] **Étape 2 : le journal** — une entrée `**015**` après ADR-014, datée du 27 septembre 2026.
+- [x] **Étape 2 : le journal** — une entrée `**015**` après ADR-014, datée du 27 septembre 2026.
 
-- [ ] **Étape 3 : [[Modèle de contenu]]** — la section des fichiers publiés passe de quatre à cinq et décrit `schema.json` ; l'arborescence gagne `notions.yaml` et `chapitres.yaml` ; la racine de construction est `contenu/`.
+- [x] **Étape 3 : [[Modèle de contenu]]** — la section des fichiers publiés passe de quatre à cinq et décrit `schema.json` ; l'arborescence gagne `notions.yaml` et `chapitres.yaml` ; la racine de construction est `contenu/`.
 
-- [ ] **Étape 4 : [[Pièges et invariants]]** — trois entrées, chacune avec son « ce qui casse » :
+- [x] **Étape 4 : [[Pièges et invariants]]** — trois entrées, chacune avec son « ce qui casse » :
   - Les deux sens du mot « chapitre », et pourquoi on ne renomme pas.
   - Une date d'ouverture non quotée devient un objet `date` et échappe au contrôle de format.
   - Rien ne doit lire `NOTIONS` au moment de **définir** une classe : c'était le cas de `Lecon.notion`, et une table vide au chargement du module refusait toutes les leçons.
 
-- [ ] **Étape 5 : [[Accueil]]** — une ligne d'état pour le palier 1, les nombres de tests remis à jour, et [[Spécification atelier de contenu]] dans les cartes du coffre.
+- [x] **Étape 5 : [[Accueil]]** — une ligne d'état pour le palier 1, les nombres de tests remis à jour, et [[Spécification atelier de contenu]] dans les cartes du coffre.
 
-- [ ] **Étape 6 : commit**
+- [x] **Étape 6 : commit**
 
 ```bash
 git add docs/vault

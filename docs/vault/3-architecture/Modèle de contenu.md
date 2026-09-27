@@ -3,7 +3,7 @@ title: Modèle de contenu
 tags:
   - architecture
   - contenu
-mis-a-jour: 2026-09-14
+mis-a-jour: 2026-09-27
 ---
 
 # Modèle de contenu
@@ -210,6 +210,8 @@ quatre notions. Voir [[Spécification interface]].
 ```
 contenu/
   chapitre-1/
+    notions.yaml                  les 14 notions : ordre, titre, couleur, motif
+    chapitres.yaml                les 3 chapitres : ordre, titre, séance, ouverture
     seance-1/
       s1-01.yaml … s1-34.yaml     34 exercices, dont 25 obligatoires
       lecons/
@@ -235,18 +237,35 @@ contenu/
         c3-tantque.yaml
 ```
 
-`charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,
-et la charger comme tel ferait échouer la validation sur un fichier parfaitement valide.
+`charger_tous()` ignore tout fichier sous un dossier `lecons/`, ainsi que `notions.yaml` et
+`chapitres.yaml` : ni une leçon ni une table n'est un exercice, et la charger comme telle ferait
+échouer la validation sur un fichier parfaitement valide.
 
-Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers, toutes séances
+> [!info] Les tables sont du contenu depuis le 27 septembre 2026
+> `NOTIONS` et `CHAPITRES` vivaient dans `schema.py`, en Python. Un titre, un ordre, une couleur
+> et une date d'ouverture ne sont pas du code — et l'atelier, qui produit du YAML, ne pouvait pas
+> déclarer un chapitre. Voir [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]].
+>
+> **La racine de construction est désormais `contenu/`**, parcourue chapitre par chapitre. Chaque
+> chapitre porte ses deux tables ; construire un seul chapitre effacerait les notions des autres.
+
+Ce que la construction publie dans `web/public/contenu/` — **cinq fichiers, toutes séances
 confondues** :
 
 | Fichier | Contenu |
 |---|---|
 | `exercices.json` | les exercices, sans leur `solution`, chacun avec sa `famille` |
 | `lecons.json` | les leçons, dans l'ordre du cours — écrit même vide |
-| `notions.json` | la table des notions |
+| `notions.json` | la table des notions, **sans leur `motif`** |
 | `chapitres.json` | la table des chapitres |
+| `schema.json` | le schéma de l'exercice et de la leçon, produit par Pydantic |
+
+`schema.json` est ce qui pilote le formulaire de l'atelier : énumérations, champs requis, bornes,
+et le discriminant des quatre types de tests. ==Aucune copie du schéma ne vit côté TypeScript==,
+exactement comme pour `notions.json`.
+
+Le champ `motif` d'une notion, lui, ne sort jamais : il sert au validateur à repérer une notion
+employée trop tôt dans une leçon, c'est un outil d'auteur.
 
 > [!note] Un fichier par nature de contenu, pas un par séance
 > Jusqu'au 14 septembre 2026, chaque séance publiait les siens (`seance-1.json`,

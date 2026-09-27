@@ -4,7 +4,7 @@ tags:
   - specification
   - contenu
   - professeur
-statut: à construire
+statut: palier 1 livré
 date: 2026-09-27
 ---
 

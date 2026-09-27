@@ -3,7 +3,7 @@ title: Accueil
 tags:
   - moc
 statut: en-conception
-mis-a-jour: 2026-09-25
+mis-a-jour: 2026-09-27
 ---
 
 # Coding Dojo 2026-2027
@@ -45,6 +45,8 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Tableau de bord professeur atteignable | ✅ livré — sur `/prof` |
 | Contenu du chapitre 1 | ✅ **écrit** — 112 exercices et 14 leçons, les trois séances, branche `contenu-seance-2` |
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
+| Atelier de contenu — palier 1 | ✅ livré — [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]], branche `atelier-contenu` |
+| Atelier de contenu — paliers 2 et 3 | ⬜ à faire — [[Spécification atelier de contenu]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Revue finale de branche | ⬜ à faire |
 
@@ -57,8 +59,8 @@ qu'il a demandé à la plateforme, sur `contenu-seance-2`, qui en part ; le comp
 | Partie | État |
 |---|---|
 | `web/` | Front React + TypeScript, Pyodide auto-hébergé, **412 tests**, couverture 93 % |
-| `api/` | FastAPI + SQLite, **94 tests** |
-| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **106 tests**, couverture 91 % |
+| `api/` | FastAPI + SQLite, **96 tests** |
+| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **138 tests**, couverture 93 % |
 | `contenu/` | **112 exercices** des trois séances — 75 obligatoires, 14 renforts, 23 experts — et **14 leçons** |
 | `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
 
@@ -86,10 +88,10 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 ## Cartes du coffre
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
-- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]]
+- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]] · [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Tableau de bord]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
-- **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]]
-- **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]]
+- **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]] · [[Spécification atelier de contenu]]
+- **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]] · [[Plan atelier palier 1]]

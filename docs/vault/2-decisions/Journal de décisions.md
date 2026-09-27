@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-25
+mis-a-jour: 2026-09-27
 ---
 
 # Journal de décisions
@@ -58,6 +58,12 @@ code professeur » :
 - **014** — [[ADR-014 Le compte professeur se crée au premier lancement]]
   Plus aucun secret dans le `.env`. L'instance tire sa clé en base, et `/prof` propose de créer
   le compte tant qu'il n'existe pas.
+
+Le 27 septembre 2026, en ouvrant la chaîne de contenu pour le chapitre 2 :
+
+- **015** — [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]]
+  Une surface d'écriture qui aide à produire le fichier YAML, sans le remplacer. Git reste la
+  source ; les tables de notions et de chapitres deviennent du contenu.
 
 ## Le fil conducteur
 
