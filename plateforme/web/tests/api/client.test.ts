@@ -98,3 +98,88 @@ describe('ClientApi — identite', () => {
     ).rejects.toThrow(/n'existe pas/)
   })
 })
+
+describe('ClientApi — quiz', () => {
+  const ETAT = { partie: 1, maintenant: '2026-09-30T14:00:00+00:00', phase: 'attente' }
+
+  async function connecte(...reponses: unknown[]) {
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'DOJO-K7M2.sig', code_acces: 'DOJO-K7M2' }) })
+    for (const r of reponses) fetchFactice.mockResolvedValueOnce(r)
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('DOJO-K7M2')
+    return { client, fetchFactice }
+  }
+
+  it('présente le jeton à la sonnette dans un message, pas dans une URL', async () => {
+    const { client } = await connecte()
+    expect(client.presentationQuiz()).toEqual({ jeton: 'DOJO-K7M2.sig' })
+    expect(() => new ClientApi('/api', vi.fn()).presentationQuiz()).toThrow(/session/i)
+  })
+
+  it('lit l état du quiz avec le jeton', async () => {
+    const { client, fetchFactice } = await connecte({ ok: true, json: async () => ETAT })
+    expect(await client.lireQuiz()).toEqual(ETAT)
+    expect(fetchFactice.mock.calls[1]![0]).toBe('/api/quiz/etat')
+    expect(fetchFactice.mock.calls[1]![1].headers.Authorization).toBe('Bearer DOJO-K7M2.sig')
+  })
+
+  it('rejoint en POST', async () => {
+    const { client, fetchFactice } = await connecte({ ok: true, json: async () => ETAT })
+    await client.rejoindreQuiz()
+    expect(fetchFactice.mock.calls[1]![0]).toBe('/api/quiz/rejoindre')
+    expect(fetchFactice.mock.calls[1]![1].method).toBe('POST')
+  })
+
+  it('répond par un numéro d option, et rien d autre', async () => {
+    const { client, fetchFactice } = await connecte({ ok: true, json: async () => ETAT })
+    await client.repondreQuiz(1, 0, 2)
+    const corps = JSON.parse(fetchFactice.mock.calls[1]![1].body)
+    expect(corps).toEqual({ partie: 1, question: 0, choix: 2 })
+  })
+
+  it('montre tel quel un refus écrit pour l élève', async () => {
+    const { client } = await connecte({
+      ok: false,
+      status: 409,
+      json: async () => ({ detail: 'Le temps de réponse est écoulé.' }),
+    })
+    await expect(client.repondreQuiz(1, 0, 2)).rejects.toThrow('Le temps de réponse est écoulé.')
+  })
+
+  it('ne montre jamais une erreur de validation technique', async () => {
+    const { client } = await connecte({
+      ok: false,
+      status: 422,
+      json: async () => ({ detail: [{ loc: ['body', 'choix'], msg: 'too big' }] }),
+    })
+    await expect(client.repondreQuiz(1, 0, 9)).rejects.toThrow('La plateforme a refusé (erreur 422).')
+  })
+
+  it('distingue la panne du refus', async () => {
+    const fetchFactice = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ jeton: 'j', code_acces: 'a' }) })
+      .mockRejectedValueOnce(new TypeError('Failed to fetch'))
+    const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)
+    await client.ouvrirSession('DOJO-K7M2')
+    await expect(client.lireQuiz()).rejects.toThrow(/ne répond pas/)
+  })
+
+  it('refuse une réponse d une autre forme plutôt que de faire planter l écran', async () => {
+    const { client } = await connecte({ ok: true, json: async () => ({ autre: 'chose' }) })
+    await expect(client.lireQuiz()).rejects.toThrow(/inattendue/)
+  })
+
+  it('tolère un corps illisible dans une erreur', async () => {
+    const { client } = await connecte({
+      ok: false,
+      status: 502,
+      json: async () => {
+        throw new SyntaxError('pas du json')
+      },
+    })
+    await expect(client.lireQuiz()).rejects.toThrow('La plateforme a refusé (erreur 502).')
+  })
+})
