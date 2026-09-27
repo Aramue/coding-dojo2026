@@ -272,6 +272,18 @@ def _repartition(reponses: Iterable[ReponseQuiz], rang: int, nombre_options: int
     return comptes
 
 
+def nom_affiche(prenom: str, nom: str) -> str:
+    """« Camille R. » : ce qu'on lit d'un eleve sur l'ecran d'un autre.
+
+    Jamais le code d'acces en repli — il EST le secret de l'eleve, et le
+    montrer a la classe lui donnerait la progression de quelqu'un d'autre.
+    """
+    prenom, nom = (prenom or "").strip(), (nom or "").strip()
+    if not prenom:
+        return "Élève"
+    return f"{prenom} {nom[0].upper()}." if nom else prenom
+
+
 def vue_eleve(
     partie: PartieQuiz,
     quiz: QuizPublie,
@@ -279,8 +291,14 @@ def vue_eleve(
     reponses: list[ReponseQuiz],
     code: str,
     maintenant: datetime,
+    identites: list[dict] | None = None,
 ) -> dict:
-    """La partie vue par UN eleve. Rien sur les autres, sauf leur nombre."""
+    """La partie vue par UN eleve.
+
+    Des autres, il ne voit que leur nombre — et, en salle d'attente seulement,
+    leur « Prenom N. », comme sur l'ecran projete au meme moment. Jamais un
+    score, jamais un rang qui ne soit pas le sien. Voir ADR-013.
+    """
     phase = phase_effective(partie, maintenant)
     corrigee = phase in ("correction", "terminee")
     en_jeu = phase in ("question", "correction")
@@ -308,6 +326,13 @@ def vue_eleve(
             "participants": len(participants),
         }
 
+    joueurs = []
+    if phase == "attente" and identites:
+        joueurs = [
+            {"nom": nom_affiche(i["prenom"], i["nom"]), "moi": i["code_acces"] == code}
+            for i in identites
+        ]
+
     return {
         "partie": partie.id,
         "titre": quiz.titre,
@@ -317,6 +342,7 @@ def vue_eleve(
         "question": _vue_question(partie, quiz, corrigee) if en_jeu else None,
         "ma_reponse": ma_reponse,
         "moi": moi,
+        "joueurs": joueurs,
     }
 
 
@@ -389,6 +415,23 @@ def bilan(quiz: QuizPublie, reponses: list[ReponseQuiz], jouees: int) -> list[di
             }
         )
     return lignes
+
+
+def resultats(quiz: QuizPublie, reponses: list[ReponseQuiz], jouees: int, joueurs: int) -> dict:
+    """Ce qu'une partie a laisse : le taux de reussite, et le bilan anonyme.
+
+    Le taux compte les reponses justes sur les reponses donnees — une question
+    a laquelle personne n'a repondu ne tire pas la moyenne vers zero.
+    """
+    lignes = bilan(quiz, reponses, jouees)
+    donnees = sum(ligne["reponses"] for ligne in lignes)
+    justes = sum(ligne["repartition"][ligne["bonne_reponse"]] for ligne in lignes)
+    return {
+        "joueurs": joueurs,
+        "reponses": donnees,
+        "reussite": justes / donnees if donnees else None,
+        "bilan": lignes,
+    }
 
 
 def resume(quiz: QuizPublie) -> dict:

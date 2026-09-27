@@ -14,10 +14,12 @@ from app.quiz import (
     evaluer,
     fermer,
     ouvrir_suivante,
+    nom_affiche,
     phase_effective,
     podium,
     points,
     questions_closes,
+    resultats,
     resume,
     terminer,
     tous_ont_repondu,
@@ -416,3 +418,32 @@ def test_un_quiz_publie_a_la_main_avec_une_reponse_hors_des_options_est_refuse()
             seance=1,
             questions=[{"enonce": "?", "options": ["a", "b"], "bonne_reponse": 2, "duree_s": 10}],
         )
+
+
+
+def test_le_nom_affiche_ne_montre_jamais_le_code():
+    assert nom_affiche("Camille", "Rey") == "Camille R."
+    assert nom_affiche("  Noa ", "") == "Noa"
+    assert nom_affiche("", "Rey") == "Élève"
+
+
+def test_en_salle_d_attente_la_vue_eleve_nomme_les_joueurs_et_se_reconnait():
+    identites = [
+        {"code_acces": "A", "prenom": "Camille", "nom": "Rey"},
+        {"code_acces": "B", "prenom": "Alex", "nom": "Morel"},
+    ]
+    vue = vue_eleve(partie(), QUIZ, ["A", "B"], [], "B", T0, identites)
+    assert vue["joueurs"] == [{"nom": "Camille R.", "moi": False}, {"nom": "Alex M.", "moi": True}]
+
+
+def test_en_jeu_la_vue_eleve_ne_nomme_plus_personne():
+    identites = [{"code_acces": "A", "prenom": "Camille", "nom": "Rey"}]
+    assert vue_eleve(en_question(), QUIZ, ["A"], [], "A", T0, identites)["joueurs"] == []
+
+
+def test_les_resultats_comptent_les_reponses_donnees_seulement():
+    reponses = [reponse("A", 0, 1, 900, True), reponse("B", 0, 0), reponse("A", 1, 0, 800, True)]
+    bilan_partie = resultats(QUIZ, reponses, jouees=2, joueurs=2)
+    assert (bilan_partie["reponses"], bilan_partie["reussite"]) == (3, 2 / 3)
+    assert len(bilan_partie["bilan"]) == 2
+    assert resultats(QUIZ, [], jouees=2, joueurs=0)["reussite"] is None

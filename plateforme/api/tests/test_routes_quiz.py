@@ -50,7 +50,16 @@ def test_le_catalogue_est_reserve_au_professeur(client, catalogue):
 
 def test_le_catalogue_resume_chaque_quiz(client, catalogue):
     assert client.get("/prof/quiz", headers=PROF).json() == {
-        "quiz": [{"id": "q1-bases", "titre": "Les bases", "seance": 1, "questions": 2, "duree_s": 30}]
+        "quiz": [
+            {
+                "id": "q1-bases",
+                "titre": "Les bases",
+                "seance": 1,
+                "questions": 2,
+                "duree_s": 30,
+                "derniere": None,
+            }
+        ]
     }
 
 
@@ -387,3 +396,93 @@ def test_retirer_un_eleve_emporte_ses_participations_et_ses_reponses(
     for modele in (ParticipantQuiz, ReponseQuiz):
         restantes = session_test.exec(select(modele).where(modele.code_acces == "DOJO-K7M2")).all()
         assert restantes == []
+
+
+# --- Salle d'attente, cote eleve ---------------------------------------------
+
+
+def test_en_salle_d_attente_l_eleve_voit_qui_est_pret_sans_aucun_code(
+    client, partie, eleve, horloge
+):
+    camille = eleve("DOJO-K7M2", "Camille", "Rey")
+    client.post("/quiz/rejoindre", headers=eleve("DOJO-M3QP", "Alex", "Morel"))
+    horloge.avancer(1)  # dans l'ordre d'arrivee
+    vue = client.post("/quiz/rejoindre", headers=camille).json()
+
+    assert vue["joueurs"] == [
+        {"nom": "Alex M.", "moi": False},
+        {"nom": "Camille R.", "moi": True},
+    ]
+    # Le code d'acces est le secret d'un eleve : il n'arrive jamais chez un autre.
+    assert "DOJO-M3QP" not in str(vue)
+    assert "Morel" not in str(vue)
+
+
+def test_une_fois_la_partie_lancee_les_noms_ne_circulent_plus(client, partie, eleve):
+    entetes = eleve("DOJO-K7M2")
+    client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    assert client.get("/quiz/etat", headers=entetes).json()["joueurs"] == []
+
+
+# --- Derniers resultats -------------------------------------------------------
+
+
+def test_le_catalogue_donne_le_taux_de_reussite_de_la_derniere_partie(client, partie, eleve, horloge):
+    camille, alex = eleve("DOJO-K7M2"), eleve("DOJO-M3QP", "Alex", "Morel")
+    for entetes in (camille, alex):
+        client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    repondre(client, camille, partie["partie"], 0, 1)
+    repondre(client, alex, partie["partie"], 0, 0)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+
+    derniere = client.get("/prof/quiz", headers=PROF).json()["quiz"][0]["derniere"]
+    assert derniere["partie"] == partie["partie"]
+    assert (derniere["joueurs"], derniere["reponses"], derniere["reussite"]) == (2, 2, 0.5)
+    assert derniere["terminee_le"].startswith("2026-09-30T14:00")
+    assert "bilan" not in derniere
+
+
+def test_les_derniers_resultats_d_un_quiz(client, partie, eleve, horloge):
+    entetes = eleve("DOJO-K7M2")
+    client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    repondre(client, entetes, partie["partie"], 0, 1)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+
+    resultats = client.get("/prof/quiz/q1-bases/resultats", headers=PROF).json()
+    assert resultats["titre"] == "Les bases"
+    assert resultats["reussite"] == 1.0
+    # Une seule question jouee avant l'arret : le bilan s'arrete la.
+    assert [ligne["repartition"] for ligne in resultats["bilan"]] == [[0, 1, 0]]
+    assert "DOJO-K7M2" not in str(resultats)
+
+
+def test_une_partie_sans_reponse_ne_masque_pas_la_precedente(client, partie, eleve, horloge):
+    """Le test de charge laisse une partie vide : les vrais resultats restent lisibles."""
+    entetes = eleve("DOJO-K7M2")
+    client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    repondre(client, entetes, partie["partie"], 0, 0)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+    client.post("/prof/quiz/parties", json={"quiz_id": "q1-bases"}, headers=PROF)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+
+    resultats = client.get("/prof/quiz/q1-bases/resultats", headers=PROF).json()
+    assert resultats["partie"] == partie["partie"]
+    assert resultats["reussite"] == 0.0
+
+
+def test_un_quiz_jamais_joue_n_a_pas_de_resultats(client, catalogue, horloge):
+    assert client.get("/prof/quiz", headers=PROF).json()["quiz"][0]["derniere"] is None
+    reponse = client.get("/prof/quiz/q1-bases/resultats", headers=PROF)
+    assert reponse.status_code == 404
+    assert reponse.json()["detail"] == "Ce quiz n'a pas encore été joué."
+
+
+def test_les_resultats_sont_reserves_au_professeur_et_valides(client, catalogue, horloge):
+    assert client.get("/prof/quiz/q1-bases/resultats").status_code == 401
+    assert client.get("/prof/quiz/q2-absent/resultats", headers=PROF).status_code == 404
+    assert client.get("/prof/quiz/..%2Fetc/resultats", headers=PROF).status_code in (404, 422)
+    assert client.get("/prof/quiz/Q1-BASES/resultats", headers=PROF).status_code == 422

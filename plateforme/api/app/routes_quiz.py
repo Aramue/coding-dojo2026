@@ -13,7 +13,7 @@ from contextlib import suppress
 from datetime import datetime, timedelta
 from typing import Annotated, Callable
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, WebSocket
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Path, WebSocket
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
@@ -30,6 +30,7 @@ from .quiz import (
     fermer,
     iso,
     ouvrir_suivante,
+    resultats,
     resume,
     terminer,
     tous_ont_repondu,
@@ -144,8 +145,37 @@ def _reponses(session: Session, partie_id: int) -> list[ReponseQuiz]:
 
 
 def _vue_eleve(session: Session, partie: PartieQuiz, quiz: QuizPublie, code: str, quand: datetime) -> dict:
-    codes = [p["code_acces"] for p in _identites(session, partie.id)]  # type: ignore[arg-type]
-    return vue_eleve(partie, quiz, codes, _reponses(session, partie.id), code, quand)  # type: ignore[arg-type]
+    identites = _identites(session, partie.id)  # type: ignore[arg-type]
+    codes = [p["code_acces"] for p in identites]
+    return vue_eleve(
+        partie, quiz, codes, _reponses(session, partie.id), code, quand, identites  # type: ignore[arg-type]
+    )
+
+
+def _derniere_jouee(session: Session, quiz: QuizPublie) -> dict | None:
+    """Les resultats de la derniere partie terminee de ce quiz qui a eu des reponses.
+
+    Une partie annulee en salle d'attente, ou celle du test de charge — dont
+    les eleves d'essai sont partis avec leurs reponses —, ne dit rien de la
+    classe : on remonte a la precedente.
+    """
+    parties = session.exec(
+        select(PartieQuiz)
+        .where(PartieQuiz.quiz_id == quiz.id)
+        .where(PartieQuiz.phase == "terminee")
+        .order_by(PartieQuiz.id.desc())  # type: ignore[union-attr]
+    ).all()
+    for partie in parties:
+        reponses = _reponses(session, partie.id)  # type: ignore[arg-type]
+        if not reponses:
+            continue
+        joueurs = len(_identites(session, partie.id))  # type: ignore[arg-type]
+        return {
+            "partie": partie.id,
+            "terminee_le": iso(partie.terminee_le),
+            **resultats(quiz, reponses, partie.question + 1, joueurs),
+        }
+    return None
 
 
 def _vue_prof(session: Session, partie: PartieQuiz, quiz: QuizPublie, quand: datetime) -> dict:
@@ -273,9 +303,32 @@ def repondre(
 
 
 @routeur_prof.get("")
-def lister_quiz(catalogue: Catalogue) -> dict:
+def lister_quiz(session: SessionBdd, catalogue: Catalogue) -> dict:
+    """Le catalogue, et pour chaque quiz le taux de reussite de sa derniere partie."""
     ordonnes = sorted(catalogue.values(), key=lambda q: (q.seance, q.id))
-    return {"quiz": [resume(q) for q in ordonnes]}
+    lignes = []
+    for quiz in ordonnes:
+        derniere = _derniere_jouee(session, quiz)
+        if derniere is not None:
+            derniere = {cle: valeur for cle, valeur in derniere.items() if cle != "bilan"}
+        lignes.append({**resume(quiz), "derniere": derniere})
+    return {"quiz": lignes}
+
+
+@routeur_prof.get("/{quiz_id}/resultats")
+def lire_resultats(
+    quiz_id: Annotated[str, Path(pattern=MOTIF_QUIZ)],
+    session: SessionBdd,
+    catalogue: Catalogue,
+) -> dict:
+    """Le bilan de la derniere partie jouee de ce quiz. Anonyme, comme en fin de partie."""
+    quiz = catalogue.get(quiz_id)
+    if quiz is None:
+        raise HTTPException(404, "Quiz inconnu.")
+    derniere = _derniere_jouee(session, quiz)
+    if derniere is None:
+        raise HTTPException(404, "Ce quiz n'a pas encore été joué.")
+    return {"quiz_id": quiz.id, "titre": quiz.titre, **derniere}
 
 
 @routeur_prof.post("/parties", status_code=201)
