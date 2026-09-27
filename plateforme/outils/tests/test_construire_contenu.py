@@ -205,3 +205,43 @@ def test_chaque_notion_declare_son_chapitre(tmp_path):
 
     notions = _lire(sortie, "notions.json")
     assert {n["chapitre"] for n in notions} == set(CHAPITRES)
+
+
+def test_le_schema_est_publie_avec_ses_quatre_types_de_tests(tmp_path):
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
+    construire(tmp_path, tmp_path / "sortie")
+
+    publie = _lire(tmp_path / "sortie", "schema.json")
+    assert set(publie) == {"exercice", "lecon"}
+    assert set(publie["exercice"]["$defs"]) == {
+        "TestMotif",
+        "TestQcm",
+        "TestSortie",
+        "TestVariable",
+    }
+
+
+def test_le_schema_porte_les_enumerations_dont_le_formulaire_a_besoin(tmp_path):
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
+    construire(tmp_path, tmp_path / "sortie")
+
+    exercice = _lire(tmp_path / "sortie", "schema.json")["exercice"]
+    assert exercice["properties"]["type"]["enum"] == ["predire", "debug", "completer", "ecrire"]
+    assert exercice["properties"]["niveau"]["enum"] == ["normal", "expert"]
+    assert "solution" in exercice["required"]
+
+
+def test_le_discriminant_des_tests_est_publie(tmp_path):
+    """Le formulaire s'en sert pour savoir quels champs porte chaque carte."""
+    _ecrire(chapitre_temporaire(tmp_path) / "seance-1", dict(BASE))
+    construire(tmp_path, tmp_path / "sortie")
+
+    tests = _lire(tmp_path / "sortie", "schema.json")["exercice"]["properties"]["tests"]
+    assert tests["items"]["discriminator"]["propertyName"] == "type"
+    assert set(tests["items"]["discriminator"]["mapping"]) == {
+        "sortie",
+        "variable",
+        "qcm",
+        "interdit",
+        "contient",
+    }

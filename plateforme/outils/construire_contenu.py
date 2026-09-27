@@ -11,7 +11,7 @@ import json
 import sys
 from pathlib import Path
 
-from schema import CHAPITRES, NOTIONS
+from schema import CHAPITRES, NOTIONS, Exercice, Lecon
 from valider_contenu import verifier_racine
 
 def _en_camel(nom: str) -> str:
@@ -48,6 +48,10 @@ def _table(registre: dict[str, dict]) -> list[dict]:
         }
         for identifiant, details in sorted(registre.items(), key=lambda paire: paire[1]["ordre"])
     ]
+
+
+def _publier_objet(chemin: Path, donnees: dict) -> None:
+    chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _publier(chemin: Path, donnees: list) -> None:
@@ -99,6 +103,18 @@ def construire(racine: Path, sortie: Path) -> int:
             {**_convertir_cles(l.model_dump()), "famille": NOTIONS[l.notion]["famille"]}
             for l in lecons
         ],
+    )
+
+    # Le schema se publie lui-meme. Le formulaire de l'atelier s'en nourrit —
+    # enumerations, champs requis, variantes de tests — et aucune copie du
+    # schema ne vit cote TypeScript. Meme traitement que notions.json.
+    #
+    # `Lecon.notion` n'y figure plus comme une enumeration depuis qu'il est
+    # valide a l'execution : la liste des notions se lit dans notions.json, qui
+    # en est de toute facon la seule source.
+    _publier_objet(
+        sortie / "schema.json",
+        {"exercice": Exercice.model_json_schema(), "lecon": Lecon.model_json_schema()},
     )
 
     return len(exercices)

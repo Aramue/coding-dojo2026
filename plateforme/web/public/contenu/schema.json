@@ -1,0 +1,421 @@
+{
+  "exercice": {
+    "$defs": {
+      "TestMotif": {
+        "properties": {
+          "type": {
+            "enum": [
+              "interdit",
+              "contient"
+            ],
+            "title": "Type",
+            "type": "string"
+          },
+          "motif": {
+            "title": "Motif",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Message"
+          },
+          "maitrise": {
+            "default": false,
+            "title": "Maitrise",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "motif"
+        ],
+        "title": "TestMotif",
+        "type": "object"
+      },
+      "TestQcm": {
+        "properties": {
+          "type": {
+            "const": "qcm",
+            "title": "Type",
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "title": "Options",
+            "type": "array"
+          },
+          "bonne_reponse": {
+            "title": "Bonne Reponse",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "options",
+          "bonne_reponse"
+        ],
+        "title": "TestQcm",
+        "type": "object"
+      },
+      "TestSortie": {
+        "properties": {
+          "type": {
+            "const": "sortie",
+            "title": "Type",
+            "type": "string"
+          },
+          "entrees": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Entrees",
+            "type": "array"
+          },
+          "attendu": {
+            "title": "Attendu",
+            "type": "string"
+          },
+          "exige_exact": {
+            "default": false,
+            "title": "Exige Exact",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "attendu"
+        ],
+        "title": "TestSortie",
+        "type": "object"
+      },
+      "TestVariable": {
+        "properties": {
+          "type": {
+            "const": "variable",
+            "title": "Type",
+            "type": "string"
+          },
+          "nom": {
+            "title": "Nom",
+            "type": "string"
+          },
+          "valeur_attendue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Valeur Attendue"
+          },
+          "type_attendu": {
+            "anyOf": [
+              {
+                "enum": [
+                  "int",
+                  "float",
+                  "str",
+                  "bool"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Type Attendu"
+          }
+        },
+        "required": [
+          "type",
+          "nom"
+        ],
+        "title": "TestVariable",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "concept": {
+        "title": "Concept",
+        "type": "string"
+      },
+      "notion": {
+        "title": "Notion",
+        "type": "string"
+      },
+      "seance": {
+        "maximum": 99,
+        "minimum": 1,
+        "title": "Seance",
+        "type": "integer"
+      },
+      "niveau": {
+        "enum": [
+          "normal",
+          "expert"
+        ],
+        "title": "Niveau",
+        "type": "string"
+      },
+      "type": {
+        "enum": [
+          "predire",
+          "debug",
+          "completer",
+          "ecrire"
+        ],
+        "title": "Type",
+        "type": "string"
+      },
+      "titre": {
+        "title": "Titre",
+        "type": "string"
+      },
+      "obligatoire": {
+        "title": "Obligatoire",
+        "type": "boolean"
+      },
+      "enonce": {
+        "title": "Enonce",
+        "type": "string"
+      },
+      "depart": {
+        "default": "",
+        "title": "Depart",
+        "type": "string"
+      },
+      "indices": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Indices",
+        "type": "array"
+      },
+      "tests": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "contient": "#/$defs/TestMotif",
+              "interdit": "#/$defs/TestMotif",
+              "qcm": "#/$defs/TestQcm",
+              "sortie": "#/$defs/TestSortie",
+              "variable": "#/$defs/TestVariable"
+            },
+            "propertyName": "type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TestSortie"
+            },
+            {
+              "$ref": "#/$defs/TestVariable"
+            },
+            {
+              "$ref": "#/$defs/TestQcm"
+            },
+            {
+              "$ref": "#/$defs/TestMotif"
+            }
+          ]
+        },
+        "minItems": 1,
+        "title": "Tests",
+        "type": "array"
+      },
+      "solution": {
+        "title": "Solution",
+        "type": "string"
+      },
+      "expert": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Expert"
+      }
+    },
+    "required": [
+      "id",
+      "concept",
+      "notion",
+      "seance",
+      "niveau",
+      "type",
+      "titre",
+      "obligatoire",
+      "enonce",
+      "tests",
+      "solution"
+    ],
+    "title": "Exercice",
+    "type": "object"
+  },
+  "lecon": {
+    "$defs": {
+      "BlocAttention": {
+        "properties": {
+          "type": {
+            "const": "attention",
+            "title": "Type",
+            "type": "string"
+          },
+          "texte": {
+            "minLength": 1,
+            "title": "Texte",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "texte"
+        ],
+        "title": "BlocAttention",
+        "type": "object"
+      },
+      "BlocCode": {
+        "properties": {
+          "type": {
+            "const": "code",
+            "title": "Type",
+            "type": "string"
+          },
+          "legende": {
+            "minLength": 1,
+            "title": "Legende",
+            "type": "string"
+          },
+          "python": {
+            "minLength": 1,
+            "title": "Python",
+            "type": "string"
+          },
+          "executable": {
+            "default": false,
+            "title": "Executable",
+            "type": "boolean"
+          },
+          "entrees": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Entrees",
+            "type": "array"
+          }
+        },
+        "required": [
+          "type",
+          "legende",
+          "python"
+        ],
+        "title": "BlocCode",
+        "type": "object"
+      },
+      "BlocParagraphe": {
+        "properties": {
+          "type": {
+            "const": "paragraphe",
+            "title": "Type",
+            "type": "string"
+          },
+          "texte": {
+            "minLength": 1,
+            "title": "Texte",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "texte"
+        ],
+        "title": "BlocParagraphe",
+        "type": "object"
+      }
+    },
+    "description": "Une lecon : ce que l'eleve lit avant d'attaquer les exercices d'une notion.",
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "notion": {
+        "title": "Notion",
+        "type": "string"
+      },
+      "ordre": {
+        "title": "Ordre",
+        "type": "integer"
+      },
+      "titre": {
+        "minLength": 1,
+        "title": "Titre",
+        "type": "string"
+      },
+      "duree_min": {
+        "maximum": 30,
+        "minimum": 1,
+        "title": "Duree Min",
+        "type": "integer"
+      },
+      "blocs": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "attention": "#/$defs/BlocAttention",
+              "code": "#/$defs/BlocCode",
+              "paragraphe": "#/$defs/BlocParagraphe"
+            },
+            "propertyName": "type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/BlocParagraphe"
+            },
+            {
+              "$ref": "#/$defs/BlocAttention"
+            },
+            {
+              "$ref": "#/$defs/BlocCode"
+            }
+          ]
+        },
+        "minItems": 1,
+        "title": "Blocs",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "notion",
+      "ordre",
+      "titre",
+      "duree_min",
+      "blocs"
+    ],
+    "title": "Lecon",
+    "type": "object"
+  }
+}
