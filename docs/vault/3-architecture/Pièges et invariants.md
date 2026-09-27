@@ -180,6 +180,23 @@ trois.
 [[ADR-013 Une séance s'ouvre à sa date]], pour un gain de clarté dans un seul fichier. On garde
 les noms.
 
+### La couverture est un cliquet a 100 %, pas un objectif
+
+Les trois suites — `outils`, `api`, `web` — echouent sous 100 %. Ce n'etait pas
+le cas avant le 27 septembre 2026 : `outils` etait a 82, `web` a 78, et `api`
+n'etait pas mesuree du tout.
+
+**Ce qui casse :** un seuil qu'on baisse « juste pour ce commit » ne remonte
+jamais. Ce que les derniers points couvraient n'etait pas du remplissage : les
+accords, les messages qui distinguent deux situations, les verdicts rouges, les
+courses au demontage — ==tout ce qui ne se voit qu'en seance==.
+
+Les rares lignes hors d'atteinte portent un `/* v8 ignore next */` ou, cote
+Python, tombent sous une exclusion de `.coveragerc`, et **chacune dit pourquoi**.
+Deux familles seulement : les fabriques de Worker Pyodide, qui ne demarrent pas
+sous jsdom, et les gardes que TypeScript exige sur des cas que le type a deja
+exclus. Une nouvelle exclusion sans sa raison est un aveu, pas une exemption.
+
 ## Serveur
 
 ### La validation vit côté serveur, jamais seulement côté navigateur

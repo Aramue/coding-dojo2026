@@ -58,9 +58,9 @@ qu'il a demandé à la plateforme, sur `contenu-seance-2`, qui en part ; le comp
 
 | Partie | État |
 |---|---|
-| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **412 tests**, couverture 93 % |
-| `api/` | FastAPI + SQLite, **96 tests** |
-| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **138 tests**, couverture 93 % |
+| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **506 tests**, ==couverture 100 %== |
+| `api/` | FastAPI + SQLite, **102 tests**, ==couverture 100 %== |
+| `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **149 tests**, ==couverture 100 %== |
 | `contenu/` | **112 exercices** des trois séances — 75 obligatoires, 14 renforts, 23 experts — et **14 leçons** |
 | `deploiement/` | Docker Compose + Caddy, images construites et vérifiées |
 

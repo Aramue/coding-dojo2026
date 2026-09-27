@@ -49,7 +49,7 @@ docs/vault/               la documentation, sous forme de coffre Obsidian
 cd plateforme/web
 pnpm install
 pnpm dev                 # serveur de développement
-pnpm test                # 412 tests
+pnpm test                # 506 tests, couverture 100 %
 pnpm test:couverture     # avec les seuils qui font échouer la construction
 
 # API
