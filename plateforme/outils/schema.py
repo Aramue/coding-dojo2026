@@ -107,6 +107,16 @@ class Exercice(BaseModel):
             raise ValueError(f"identifiant invalide : {v!r} (attendu s1-01 ou s1-01-expert)")
         return v
 
+    @field_validator("notion")
+    @classmethod
+    def notion_connue(cls, v: str) -> str:
+        # construire_contenu lit NOTIONS[ex.notion]["famille"] : une notion
+        # inconnue y levait une KeyError nue, au milieu d'une comprehension,
+        # sans dire quel exercice la portait.
+        if v not in NOTIONS:
+            raise ValueError(f"notion inconnue : {v!r}")
+        return v
+
     @model_validator(mode="after")
     def seance_accordee_a_l_identifiant(self) -> "Exercice":
         # `s2-14` avec `seance: 3` ne fait echouer personne : l'exercice

@@ -249,6 +249,33 @@ def verifier_chapitres(chapitres: dict[str, dict]) -> list[str]:
     return problemes
 
 
+def verifier_tables(notions: dict[str, dict], chapitres: dict[str, dict]) -> list[str]:
+    """Deux regles que quatorze notions ont tenues a la main.
+
+    La couleur oriente dans le menu : deux notions de la meme famille dans un
+    chapitre le rendent illisible. Il n'existe que cinq familles, ce qui borne
+    un chapitre a cinq notions — et c'est voulu.
+    """
+    problemes: list[str] = []
+    vues: dict[tuple[str, str], str] = {}
+
+    for identifiant, details in sorted(notions.items()):
+        chapitre = details["chapitre"]
+        if chapitre not in chapitres:
+            problemes.append(f"la notion {identifiant!r} pointe un chapitre inconnu {chapitre!r}")
+            continue
+        cle = (chapitre, details["famille"])
+        if cle in vues:
+            problemes.append(
+                f"les notions {vues[cle]!r} et {identifiant!r} partagent la famille "
+                f"{details['famille']!r} dans le chapitre {chapitre!r}"
+            )
+        else:
+            vues[cle] = identifiant
+
+    return problemes
+
+
 def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str]]:
     """Charge tout le contenu d'une racine et rend les problemes trouves.
 
@@ -262,7 +289,17 @@ def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str
 
     exercices = charger_tous(racine)
     identifiants = {ex.id for ex in exercices}
-    problemes: list[str] = verifier_chapitres(CHAPITRES)
+    problemes: list[str] = verifier_chapitres(CHAPITRES) + verifier_tables(NOTIONS, CHAPITRES)
+
+    # Les identifiants d'exercice sont uniques a travers TOUS les chapitres.
+    # `identifiants` est un ensemble : deux `s1-01` dans deux chapitres s'y
+    # fondaient en un seul, et le second ecrasait le premier a l'affichage
+    # sans que rien ne le signale.
+    vus: set[str] = set()
+    for ex in exercices:
+        if ex.id in vus:
+            problemes.append(f"l'identifiant {ex.id} apparait deux fois dans le contenu")
+        vus.add(ex.id)
 
     for ex in exercices:
         problemes += verifier_coherence(ex)
