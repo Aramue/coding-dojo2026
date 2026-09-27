@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Iterable, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .modeles import PartieQuiz, ReponseQuiz
 
@@ -44,10 +44,18 @@ class QuestionPublie(BaseModel):
 
     enonce: str
     code: str = ""
-    options: list[str]
+    options: list[str] = Field(min_length=2, max_length=4)
     bonne_reponse: int
-    duree_s: int
+    duree_s: int = Field(ge=1)
     explication: str = ""
+
+    @model_validator(mode="after")
+    def reponse_dans_les_options(self) -> "QuestionPublie":
+        # Le fichier vient d'une construction validee ; ce controle protege
+        # d'un fichier depose a la main dans le dossier des quiz.
+        if not 0 <= self.bonne_reponse < len(self.options):
+            raise ValueError("bonne_reponse hors des options")
+        return self
 
 
 class QuizPublie(BaseModel):
@@ -56,7 +64,7 @@ class QuizPublie(BaseModel):
     id: str
     titre: str
     seance: int
-    questions: list[QuestionPublie]
+    questions: list[QuestionPublie] = Field(min_length=1)
 
 
 class Refus(Exception):

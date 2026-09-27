@@ -15,7 +15,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlmodel import Session, func, select
 
 from .bdd import obtenir_session
-from .modeles import Eleve, Tentative
+from .modeles import Eleve, ParticipantQuiz, ReponseQuiz, Tentative
 from .routes_prof import verifier_prof
 
 routeur = APIRouter(prefix="/prof", dependencies=[Depends(verifier_prof)])
@@ -137,6 +137,11 @@ def retirer(code: str, session: Annotated[Session, Depends(obtenir_session)]) ->
     tentatives = session.exec(select(Tentative).where(Tentative.code_acces == code)).all()
     for t in tentatives:
         session.delete(t)
+    # Meme raisonnement pour le quiz : une participation orpheline compterait
+    # un joueur sans nom, et ses reponses resteraient en base apres lui.
+    for modele in (ReponseQuiz, ParticipantQuiz):
+        for ligne in session.exec(select(modele).where(modele.code_acces == code)).all():
+            session.delete(ligne)
     session.delete(eleve)
     session.commit()
     return {"code_acces": code, "tentatives_supprimees": len(tentatives)}

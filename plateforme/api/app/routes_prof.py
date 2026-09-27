@@ -36,9 +36,15 @@ ECHECS_POUR_BLOQUE = 3
 SECONDES_POUR_INACTIF = 600
 
 
-def verifier_prof(x_code_prof: Annotated[str | None, Header()] = None) -> None:
+def code_prof_valide(valeur: str | None) -> bool:
     # compare_digest : comparaison a temps constant, comme pour les jetons eleve.
-    if not x_code_prof or not hmac.compare_digest(x_code_prof, CODE_PROF):
+    # Partagee avec la sonnette du quiz, qui recoit le code dans un message
+    # WebSocket et non dans un en-tete : une seule facon de le verifier.
+    return bool(valeur) and hmac.compare_digest(valeur, CODE_PROF)  # type: ignore[arg-type]
+
+
+def verifier_prof(x_code_prof: Annotated[str | None, Header()] = None) -> None:
+    if not code_prof_valide(x_code_prof):
         raise HTTPException(401, "Code professeur invalide")
 
 

@@ -404,3 +404,15 @@ def test_le_resume_du_catalogue_ne_montre_rien_de_ce_qui_se_joue():
         "questions": 2,
         "duree_s": 30,
     }
+
+
+def test_un_quiz_publie_a_la_main_avec_une_reponse_hors_des_options_est_refuse():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError, match="hors des options"):
+        QuizPublie(
+            id="q1-bases",
+            titre="Les bases",
+            seance=1,
+            questions=[{"enonce": "?", "options": ["a", "b"], "bonne_reponse": 2, "duree_s": 10}],
+        )
