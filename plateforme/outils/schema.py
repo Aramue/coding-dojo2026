@@ -129,13 +129,17 @@ def charger_exercice(chemin: Path) -> Exercice:
 
 
 def charger_tous(racine: Path) -> list[Exercice]:
-    # Les lecons vivent dans `seance-N/lecons/` et ne sont PAS des exercices :
-    # les charger ici ferait echouer la validation sur un fichier parfaitement
-    # valide, avec un message parlant de champs d'exercice manquants.
+    # Les lecons vivent dans `seance-N/lecons/` et les quiz dans `quiz/` : ce ne
+    # sont PAS des exercices. Les charger ici ferait echouer la validation sur un
+    # fichier parfaitement valide, avec un message parlant de champs d'exercice
+    # manquants.
+    #
+    # Les parties sont lues RELATIVEMENT a la racine : un depot range dans un
+    # dossier nomme « quiz » ne doit pas voir disparaitre tous ses exercices.
     return [
         charger_exercice(p)
         for p in sorted(racine.rglob("*.yaml"))
-        if "lecons" not in p.parts
+        if not {"lecons", "quiz"} & set(p.relative_to(racine).parts)
     ]
 
 
@@ -278,3 +282,123 @@ def charger_lecon(chemin: Path) -> Lecon:
 def charger_lecons(racine: Path) -> list[Lecon]:
     lecons = [charger_lecon(p) for p in sorted(racine.rglob("*.yaml"))]
     return sorted(lecons, key=lambda l: l.ordre)
+
+
+# Un quiz se nomme comme une lecon, avec un q : q1-bases, q2-conditions.
+MOTIF_QUIZ = re.compile(r"^q[123]-[a-z]+(-[a-z]+)*$")
+
+# Le nom d'une exception Python, et rien d'autre : pas de texte libre.
+MOTIF_EXCEPTION = re.compile(r"^[A-Z][A-Za-z]*(Error|Exception)$")
+
+# Une option se lit sur un gros bouton, projetee au fond d'une salle, en vingt
+# secondes. Au-dela, ce n'est plus une option, c'est un paragraphe.
+LONGUEUR_OPTION = 90
+
+
+class QuestionQuiz(BaseModel):
+    """Une question de quiz : un QCM chronometre, souvent autour d'un bout de code.
+
+    La bonne reponse ne quitte jamais le serveur avant la correction : le quiz
+    est construit dans l'image de l'API, pas publie dans /contenu comme les
+    exercices. Voir ADR-013.
+    """
+
+    enonce: str
+    # Le code montre a l'eleve. Facultatif : une question peut porter sur une
+    # notion sans montrer de programme.
+    code: str = ""
+    # Entrees simulees, pour un code qui appelle input().
+    entrees: list[str] = Field(default_factory=list)
+    options: list[str] = Field(min_length=2, max_length=4)
+    bonne_reponse: int
+    duree_s: int = Field(default=20, ge=10, le=60)
+    # Ce que l'ecran projete affiche a la correction : une phrase qui dit
+    # pourquoi, pour que le professeur n'ait pas a l'improviser.
+    explication: str = ""
+    # `sortie` : la bonne reponse est EXACTEMENT ce que le code affiche. La
+    # validation l'execute et compare — une faute de frappe dans l'option juste
+    # ferait perdre des points a toute la classe pour avoir eu raison.
+    sortie: bool = False
+    # `erreur` : le code doit lever cette exception. La question porte alors sur
+    # le plantage, et la validation verifie qu'il a bien lieu.
+    erreur: str | None = None
+
+    @field_validator("enonce")
+    @classmethod
+    def enonce_utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un enonce de question")
+
+    @field_validator("options")
+    @classmethod
+    def options_utilisables(cls, v: list[str]) -> list[str]:
+        for option in v:
+            _texte_utilisable(option, "une option")
+            if len(option) > LONGUEUR_OPTION:
+                raise ValueError(
+                    f"option trop longue ({len(option)} caracteres, {LONGUEUR_OPTION} au plus)"
+                )
+        if len(set(v)) != len(v):
+            raise ValueError("deux options identiques")
+        return v
+
+    @field_validator("code")
+    @classmethod
+    def code_utilisable(cls, v: str) -> str:
+        if MOTIF_EMOJI.search(v):
+            raise ValueError("aucun emoji dans le code d'une question")
+        if "getpass" in v:
+            raise ValueError("getpass est impossible sous Pyodide, il est banni")
+        return v
+
+    @field_validator("explication")
+    @classmethod
+    def explication_sans_emoji(cls, v: str) -> str:
+        if MOTIF_EMOJI.search(v):
+            raise ValueError("aucun emoji dans une explication")
+        return v
+
+    @field_validator("erreur")
+    @classmethod
+    def erreur_bien_formee(cls, v: str | None) -> str | None:
+        if v is not None and not MOTIF_EXCEPTION.match(v):
+            raise ValueError(f"nom d'exception invalide : {v!r}")
+        return v
+
+    @model_validator(mode="after")
+    def coherente(self) -> "QuestionQuiz":
+        if not 0 <= self.bonne_reponse < len(self.options):
+            raise ValueError("bonne_reponse hors des options")
+        if not self.code and (self.sortie or self.erreur or self.entrees):
+            raise ValueError("sortie, erreur et entrees supposent un code a executer")
+        if self.sortie and self.erreur:
+            raise ValueError("une question ne peut pas attendre a la fois une sortie et une erreur")
+        return self
+
+
+class Quiz(BaseModel):
+    """Une partie de quiz : une suite de questions jouees ensemble, en direct."""
+
+    id: str
+    titre: str = Field(min_length=1)
+    seance: int = Field(ge=1, le=3)
+    questions: list[QuestionQuiz] = Field(min_length=1, max_length=30)
+
+    @field_validator("id")
+    @classmethod
+    def identifiant_bien_forme(cls, v: str) -> str:
+        if not MOTIF_QUIZ.match(v):
+            raise ValueError(f"identifiant de quiz invalide : {v!r} (attendu q1-bases)")
+        return v
+
+
+def charger_quiz(chemin: Path) -> Quiz:
+    return Quiz(**yaml.safe_load(chemin.read_text(encoding="utf-8")))
+
+
+def charger_quiz_tous(racine: Path) -> list[Quiz]:
+    """Tous les quiz sous une racine : les fichiers ranges dans un dossier `quiz/`."""
+    return [
+        charger_quiz(p)
+        for p in sorted(racine.rglob("*.yaml"))
+        if "quiz" in p.relative_to(racine).parts
+    ]
