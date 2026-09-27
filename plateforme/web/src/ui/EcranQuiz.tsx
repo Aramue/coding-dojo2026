@@ -34,7 +34,14 @@ function rang(n: number): string {
  * Ce que l'élève voit des autres : leur nombre, et son propre rang parmi eux.
  * Jamais un nom, jamais un score qui ne soit pas le sien.
  */
-export function EcranQuiz({ client }: { client: ClientApi }) {
+export function EcranQuiz({
+  client,
+  onRetourCours,
+}: {
+  client: ClientApi
+  /** Ramène l'élève à la page de cours qu'il a quittée pour le quiz. */
+  onRetourCours?: () => void
+}) {
   const { etat, ecartMs, erreur, flux } = useFluxQuiz<EtatEleve>(
     () => client.lireQuiz(),
     () => client.presentationQuiz(),
@@ -109,9 +116,10 @@ export function EcranQuiz({ client }: { client: ClientApi }) {
         </p>
       )}
       {!etat && <p className="quiz__attente">Chargement du quiz…</p>}
-      {etat && !partie && <AucunePartie />}
+      {etat && !partie && <AucunePartie onRetourCours={onRetourCours} />}
       {partie && (
         <Partie
+          onRetourCours={onRetourCours}
           partie={partie}
           ecartMs={ecartMs}
           envoi={envoi}
@@ -125,7 +133,16 @@ export function EcranQuiz({ client }: { client: ClientApi }) {
   )
 }
 
-function AucunePartie() {
+function RetourCours({ onRetourCours }: { onRetourCours?: () => void }) {
+  if (!onRetourCours) return null
+  return (
+    <button type="button" className="bouton" onClick={onRetourCours}>
+      Retourner au cours
+    </button>
+  )
+}
+
+function AucunePartie({ onRetourCours }: { onRetourCours?: () => void }) {
   return (
     <section className="quiz__carte">
       <h1>Aucun quiz en cours</h1>
@@ -133,11 +150,13 @@ function AucunePartie() {
         Quand ton professeur en lancera un, un bandeau apparaîtra en haut de ton espace. Tu peux
         continuer tes exercices en attendant.
       </p>
+      <RetourCours onRetourCours={onRetourCours} />
     </section>
   )
 }
 
 function Partie({
+  onRetourCours,
   partie,
   ecartMs,
   envoi,
@@ -146,6 +165,7 @@ function Partie({
   onRejoindre,
   onRepondre,
 }: {
+  onRetourCours?: () => void
   partie: Partie
   ecartMs: number
   envoi: boolean
@@ -154,7 +174,7 @@ function Partie({
   onRejoindre: () => void
   onRepondre: (choix: number) => void
 }) {
-  if (partie.phase === 'terminee') return <Fin partie={partie} />
+  if (partie.phase === 'terminee') return <Fin partie={partie} onRetourCours={onRetourCours} />
 
   if (!partie.rejoint) {
     return (
@@ -292,7 +312,7 @@ function MonScore({ moi }: { moi: NonNullable<Partie['moi']> }) {
   )
 }
 
-function Fin({ partie }: { partie: Partie }) {
+function Fin({ partie, onRetourCours }: { partie: Partie; onRetourCours?: () => void }) {
   const moi = partie.moi
   return (
     <section className="quiz__carte">
@@ -311,6 +331,7 @@ function Fin({ partie }: { partie: Partie }) {
       ) : (
         <p className="quiz__aide">Tu n'as pas joué cette partie.</p>
       )}
+      <RetourCours onRetourCours={onRetourCours} />
     </section>
   )
 }

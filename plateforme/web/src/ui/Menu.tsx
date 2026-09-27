@@ -15,17 +15,32 @@ export function Menu({
   chapitres,
   destination,
   quiz = { ouvert: false },
+  verrouille = false,
 }: {
   chapitres: GroupeChapitre[]
   destination: Destination
   quiz?: QuizDuMenu
+  /**
+   * Pendant une partie, TOUS les chapitres se ferment — y compris ceux qu'on
+   * ajoutera : le verrou porte sur le cours entier, pas sur une liste. Seule
+   * l'entrée du quiz, qui n'est pas un chapitre, reste ouverte.
+   */
+  verrouille?: boolean
 }) {
   return (
     <nav className="menu" aria-label="Sommaire du cours">
       <EntreeQuiz quiz={quiz} destination={destination} />
-      {chapitres.map((chapitre) => (
-        <Chapitre key={chapitre.id} chapitre={chapitre} destination={destination} />
-      ))}
+      {verrouille && (
+        <p className="menu__ferme">
+          <Cadenas />
+          Le cours est fermé pendant le quiz.
+        </p>
+      )}
+      <div className="menu__cours" inert={verrouille} data-verrouille={verrouille || undefined}>
+        {chapitres.map((chapitre) => (
+          <Chapitre key={chapitre.id} chapitre={chapitre} destination={destination} />
+        ))}
+      </div>
     </nav>
   )
 }
@@ -220,6 +235,15 @@ function Lien({
 }
 
 /* SVG tracés à la main, trait 1,8 : la charte interdit emoji et icônes importées. */
+
+function Cadenas() {
+  return (
+    <svg className="menu__cadenas" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+      <rect x="5" y="10.5" width="14" height="9.5" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
 
 function Chrono() {
   return (

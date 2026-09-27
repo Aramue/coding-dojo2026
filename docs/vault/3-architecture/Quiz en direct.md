@@ -60,6 +60,35 @@ elles n'ont qu'à savoir si une partie existe.
 Les arrivées sonnent chez tout le monde **en salle d'attente**, où chacun voit les autres
 arriver ; en cours de partie, chez le professeur seulement.
 
+## Le cours fermé pendant une partie
+
+De la création d'une partie à sa fin, **tout le cours se ferme** chez tous les élèves : les
+chapitres du sommaire deviennent inertes (grisés, ni clic ni clavier), et une page de cours
+ouverte passe sous un panneau « Le cours est fermé pendant le quiz », avec **Aller au quiz**.
+Seule l'entrée du quiz reste ouverte. Le verrou porte sur le cours entier, pas sur une liste de
+chapitres : un chapitre ajouté plus tard se ferme de lui-même.
+
+Fermé pour tous, et pas seulement pour les joueurs : répondre vaut rejoindre, et un élève qui
+n'aurait pas rejoint pourrait sinon chercher la réponse dans le cours avant de cliquer.
+
+La page reste **montée** sous le panneau (attribut `inert`) : l'élève qui écrivait du code au
+moment où la partie commence le retrouve intact à la fin. En fin de partie, **Retourner au
+cours** le ramène à la dernière page de cours qu'il avait ouverte.
+
+> [!note] Une consigne de classe, pas une barrière de sécurité
+> Le contenu du cours est public (`/contenu/*.json`) : un élève décidé l'ouvre par les outils de
+> développement ou sur un autre appareil. Le verrou retire la tentation, il ne la rend pas
+> impossible — comme un cahier fermé sur la table.
+
+## Côté professeur, où mène chaque fin
+
+| Situation | Écran |
+|---|---|
+| La page s'ouvre, aucune partie en cours (jamais jouée, ou déjà finie) | le catalogue, avec « Derniers résultats » |
+| La page s'ouvre sur une partie en cours | la partie, là où elle en est |
+| La partie finit sous les yeux de la classe, avec des réponses | le podium et le bilan, puis **Nouvelle partie** → catalogue |
+| La partie est arrêtée sans aucune réponse | le catalogue |
+
 ## Les derniers résultats
 
 Depuis le catalogue, le professeur lit pour chaque quiz le taux de bonnes réponses de sa

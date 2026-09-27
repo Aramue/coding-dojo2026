@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClientApi, type Identite } from './api/client'
 import {
   chargerChapitres,
@@ -83,15 +83,26 @@ export function App() {
   const [alerte, setAlerte] = useState<string | null>(null)
 
   // La sonnette de la coquille : c'est elle qui allume le bandeau et l'entrée
-  // du menu à la création d'une partie, et les éteint à sa fin. Suspendue sur
-  // /quiz, où l'écran de la partie a la sienne.
+  // du menu à la création d'une partie, et les éteint à sa fin. Elle reste
+  // branchée sur /quiz aussi : c'est elle qui tient le cours fermé, et le
+  // sommaire se voit depuis la page du quiz.
   const surLeQuiz = destination.vue === 'quiz'
   const quiz = useFluxQuiz<EtatEleve>(
     () => client.lireQuiz(),
     () => client.presentationQuiz(),
-    { actif: identite !== null && !surLeQuiz, repliMs: RELEVE_HORS_PARTIE_MS },
+    { actif: identite !== null, repliMs: RELEVE_HORS_PARTIE_MS },
   )
   const quizOuvert = partieOuverte(quiz.etat)
+  // Pendant une partie, tout le cours se ferme : chapitres, leçons, exercices.
+  // Seule l'entrée du quiz reste ouverte.
+  const coursFerme = quizOuvert && !surLeQuiz
+
+  // La dernière page de cours visitée : c'est là que l'élève revient après
+  // le quiz, et non au début du parcours.
+  const dernierCours = useRef<Destination | null>(null)
+  useEffect(() => {
+    if ('notion' in destination) dernierCours.current = destination
+  }, [destination])
 
   // Derive, jamais stocke : sans cela, le compteur du menu resterait fige sur
   // sa valeur du moment de la connexion, et valider un exercice ne se verrait
@@ -170,33 +181,72 @@ export function App() {
           ouvert: quizOuvert,
           titre: quizOuvert && quiz.etat?.partie !== null ? quiz.etat?.titre : undefined,
         }}
+        verrouille={quizOuvert}
       />
       {alerte && (
         <p role="alert" className="alerte">
           {alerte}
         </p>
       )}
-      <Vue
-        // `key` remonte la vue à chaque changement de page : c'est ce qui
-        // rejoue l'animation d'entrée, sans état à piloter.
-        key={versChemin(destination)}
-        destination={destination}
-        groupes={groupes}
-        reussis={reussis}
-        executeur={executeur}
-        client={client}
-        onReussi={(reussite) =>
-          setReussis((liste) => [
-            // Une seule entrée par exercice, et on garde la meilleure : rejouer
-            // moins bien ne retire pas une coche déjà obtenue.
-            ...liste.filter((r) => r.exerciceId !== reussite.exerciceId),
-            liste.find((r) => r.exerciceId === reussite.exerciceId && r.verdict === 'vert') ??
-              reussite,
-          ])
-        }
-        onAlerte={setAlerte}
-      />
+      {coursFerme && <CoursFerme />}
+      {/*
+        Toujours là, même cours ouvert : ajouter ou retirer ce conteneur
+        remonterait la page, et l'élève perdrait le code qu'il était en train
+        d'écrire quand la partie a commencé. `inert` suffit à tout rendre
+        inerte — clic, clavier, focus — sans rien démonter.
+      */}
+      <div className="zone-cours" inert={coursFerme}>
+        <Vue
+          // `key` remonte la vue à chaque changement de page : c'est ce qui
+          // rejoue l'animation d'entrée, sans état à piloter.
+          key={versChemin(destination)}
+          destination={destination}
+          groupes={groupes}
+          reussis={reussis}
+          executeur={executeur}
+          client={client}
+          onRetourCours={() => {
+            const ouverte = premiereOuverte(groupes) ?? groupes[0]
+            const cible =
+              dernierCours.current ?? (ouverte ? { vue: 'cours' as const, notion: ouverte.id } : null)
+            if (cible) naviguer(cible)
+          }}
+          onReussi={(reussite) =>
+            setReussis((liste) => [
+              // Une seule entrée par exercice, et on garde la meilleure : rejouer
+              // moins bien ne retire pas une coche déjà obtenue.
+              ...liste.filter((r) => r.exerciceId !== reussite.exerciceId),
+              liste.find((r) => r.exerciceId === reussite.exerciceId && r.verdict === 'vert') ??
+                reussite,
+            ])
+          }
+          onAlerte={setAlerte}
+        />
+      </div>
     </div>
+  )
+}
+
+/**
+ * Par-dessus la page de cours, pendant une partie. La page reste montée
+ * dessous, inerte : à la fin de la partie, l'élève la retrouve telle quelle.
+ */
+function CoursFerme() {
+  return (
+    <section className="cours-ferme" aria-labelledby="titre-cours-ferme">
+      <h2 id="titre-cours-ferme">Le cours est fermé pendant le quiz</h2>
+      <p>Il rouvre dès la fin de la partie, et cette page t'attend telle que tu l'as laissée.</p>
+      <button
+        type="button"
+        className="bouton bouton--primaire"
+        onClick={() => {
+          naviguer({ vue: 'quiz' })
+          scrollTo({ top: 0 })
+        }}
+      >
+        Aller au quiz
+      </button>
+    </section>
   )
 }
 
@@ -208,6 +258,7 @@ type ProprietesVue = {
   client: ClientApi
   onReussi: (reussite: Reussite) => void
   onAlerte: (message: string | null) => void
+  onRetourCours: () => void
 }
 
 /**
@@ -222,8 +273,9 @@ function Vue({
   client,
   onReussi,
   onAlerte,
+  onRetourCours,
 }: ProprietesVue) {
-  if (destination.vue === 'quiz') return <EcranQuiz client={client} />
+  if (destination.vue === 'quiz') return <EcranQuiz client={client} onRetourCours={onRetourCours} />
 
   const groupe =
     'notion' in destination ? groupes.find((g) => g.id === destination.notion) : undefined

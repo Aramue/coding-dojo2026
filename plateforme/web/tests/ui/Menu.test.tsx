@@ -153,6 +153,31 @@ describe('Menu', () => {
   })
 })
 
+describe('Menu — le cours fermé pendant un quiz', () => {
+  it('rend inertes tous les chapitres, et dit pourquoi', () => {
+    const { container } = render(
+      <Menu
+        chapitres={CHAPITRES}
+        destination={{ vue: 'quiz' }}
+        quiz={{ ouvert: true, titre: 'Les bases de la séance 1' }}
+        verrouille
+      />,
+    )
+    expect(screen.getByText('Le cours est fermé pendant le quiz.')).toBeInTheDocument()
+    const cours = container.querySelector('.menu__cours')!
+    expect(cours).toHaveAttribute('inert')
+    expect(cours).toContainElement(screen.getByRole('button', { name: /Les bases de Python/ }))
+    // L'entrée du quiz n'est pas un chapitre : elle reste ouverte.
+    expect(screen.getByRole('link', { name: /Quiz en direct/ }).closest('[inert]')).toBeNull()
+  })
+
+  it('ne ferme rien par défaut', () => {
+    const { container } = render(<Menu chapitres={CHAPITRES} destination={{ vue: 'connexion' }} />)
+    expect(container.querySelector('.menu__cours')).not.toHaveAttribute('inert')
+    expect(screen.queryByText('Le cours est fermé pendant le quiz.')).toBeNull()
+  })
+})
+
 describe('Menu — l entrée du quiz', () => {
   it('est toujours en tête, et éteinte tant qu aucune partie n est ouverte', () => {
     render(<Menu chapitres={CHAPITRES} destination={{ vue: 'cours', notion: 'afficher' }} />)

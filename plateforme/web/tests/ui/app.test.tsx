@@ -1,6 +1,8 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '../../src/app'
+import { naviguer } from '../../src/routage'
 
 vi.mock('../../src/execution/executeur', () => ({
   Executeur: class {
@@ -194,6 +196,69 @@ describe('App — tableau de bord professeur', () => {
     expect(entree.closest('[aria-disabled="true"]')).not.toBeNull()
     expect(screen.queryByRole('link', { name: /Quiz en direct/ })).toBeNull()
     expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  const PARTIE_OUVERTE = {
+    partie: 1,
+    titre: 'Les bases de la séance 1',
+    phase: 'question',
+    maintenant: new Date().toISOString(),
+    rejoint: true,
+    question: null,
+    ma_reponse: null,
+    moi: null,
+    joueurs: [],
+  }
+
+  it('ferme tout le cours pendant une partie, et ouvre le chemin du quiz', async () => {
+    etatDuQuiz = PARTIE_OUVERTE
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/cours')
+    const { container } = render(<App />)
+
+    expect(await screen.findByRole('heading', { name: 'Le cours est fermé pendant le quiz' })).toBeInTheDocument()
+    // La page reste montée dessous, inerte : rien ne se perd.
+    expect(container.querySelector('.zone-cours')).toHaveAttribute('inert')
+    expect(container.querySelector('.zone-cours main')).not.toBeNull()
+    // Tous les chapitres du sommaire, et eux seuls.
+    expect(container.querySelector('.menu__cours')).toHaveAttribute('inert')
+    expect(screen.getByText('Le cours est fermé pendant le quiz.')).toBeInTheDocument()
+    expect(container.querySelector('.menu-quiz')?.closest('[inert]')).toBeNull()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Aller au quiz' }))
+    expect(location.pathname).toBe('/quiz')
+    // Sur la page du quiz, rien n'est inerte, mais le sommaire reste fermé.
+    expect(container.querySelector('.zone-cours')).not.toHaveAttribute('inert')
+    expect(container.querySelector('.menu__cours')).toHaveAttribute('inert')
+    expect(screen.queryByRole('heading', { name: 'Le cours est fermé pendant le quiz' })).toBeNull()
+  })
+
+  it('ne ferme rien sans partie ouverte', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/cours')
+    const { container } = render(<App />)
+    await screen.findByText('Pas de quiz lancé')
+    expect(container.querySelector('.zone-cours')).not.toHaveAttribute('inert')
+    expect(container.querySelector('.menu__cours')).not.toHaveAttribute('inert')
+    expect(screen.queryByText('Le cours est fermé pendant le quiz.')).toBeNull()
+  })
+
+  it('après le quiz, ramène l élève à la page de cours qu il avait quittée', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/variables/cours')
+    render(<App />)
+    await screen.findByText('Pas de quiz lancé')
+    act(() => naviguer({ vue: 'quiz' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Retourner au cours' }))
+    expect(location.pathname).toBe('/variables/cours')
+  })
+
+  it('sans page de cours visitée, ramène à la première notion ouverte', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/quiz')
+    render(<App />)
+    await userEvent.click(await screen.findByRole('button', { name: 'Retourner au cours' }))
+    expect(location.pathname).toBe('/afficher/cours')
   })
 
   it('allume le bandeau et l entrée du sommaire quand une partie est créée', async () => {

@@ -98,6 +98,29 @@ a.menu-quiz .menu-quiz__etat {
   background: var(--py-yellow);
 }
 
+/* ---------- Le cours fermé pendant un quiz ---------- */
+
+.menu__ferme {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 var(--e-3) var(--e-1);
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.menu__cadenas {
+  flex: none;
+}
+
+/* Inerte (attribut `inert`) : ni clic, ni clavier. Grisé : ça se voit. */
+.menu__cours[data-verrouille] {
+  opacity: 0.4;
+  filter: grayscale(1);
+  user-select: none;
+}
+
 /* ---------- Chapitre ---------- */
 
 .chapitre {
