@@ -162,3 +162,23 @@ def test_un_motif_est_exigeant_par_defaut():
         )
     )
     assert ex.tests[2].maitrise is False
+
+
+def test_la_seance_doit_suivre_l_identifiant():
+    with pytest.raises(ValidationError, match="s2-14 annonce la seance 3"):
+        Exercice(**exercice_minimal(id="s2-14", seance=3))
+
+
+def test_un_expert_suit_aussi_son_identifiant():
+    ex = Exercice(**exercice_minimal(id="s12-07-expert", seance=12, niveau="expert"))
+    assert ex.seance == 12
+
+
+def test_les_112_exercices_du_depot_sont_deja_accordes():
+    """La regle est ajoutee apres coup : elle ne doit rien casser d'existant."""
+    from pathlib import Path
+
+    from schema import charger_tous
+
+    racine = Path(__file__).parent.parent.parent / "contenu" / "chapitre-1"
+    assert len(charger_tous(racine)) == 112

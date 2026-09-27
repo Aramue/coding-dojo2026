@@ -108,6 +108,16 @@ class Exercice(BaseModel):
         return v
 
     @model_validator(mode="after")
+    def seance_accordee_a_l_identifiant(self) -> "Exercice":
+        # `s2-14` avec `seance: 3` ne fait echouer personne : l'exercice
+        # apparait simplement le mauvais jour, et c'est invisible jusqu'au
+        # cours. Les deux se sont suivis a la main sur 112 fichiers.
+        annoncee = int(self.id.split("-")[0][1:])
+        if annoncee != self.seance:
+            raise ValueError(f"{self.id} annonce la seance {self.seance}, pas {annoncee}")
+        return self
+
+    @model_validator(mode="after")
     def sans_getpass(self) -> "Exercice":
         # getpass est impossible sous Pyodide et a coute deux rendus en 2025.
         for champ in (self.enonce, self.depart, self.solution):
