@@ -12,6 +12,12 @@ date: 2026-09-04
 
 > [!success] Statut : acceptée le 4 septembre 2026
 
+> [!warning] Amendée le 27 septembre 2026 par [[ADR-013 Quiz en direct et classement encadré]]
+> Le quiz en direct a un classement, **à l'intérieur d'une partie seulement** : cinq premiers
+> projetés, chacun son rang sur son écran, rien qui subsiste ni ne compte ailleurs. ==Pour le
+> parcours, la décision ci-dessous tient entièrement== — deux coches, pas de points, pas de
+> classement. Le texte est conservé tel qu'il a été écrit.
+
 ## Contexte
 
 Le verdict était binaire à l'affichage : réussi, ou pas. Le BLEU existait déjà — il valide
