@@ -46,7 +46,8 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Contenu du chapitre 1 | ✅ **écrit** — 112 exercices et 14 leçons, les trois séances, branche `contenu-seance-2` |
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Atelier de contenu — palier 1 | ✅ livré — [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]], branche `atelier-contenu` |
-| Atelier de contenu — paliers 2 et 3 | ⬜ à faire — [[Spécification atelier de contenu]] |
+| Atelier de contenu — palier 2 | ✅ livré — composer, éprouver, exporter ; le glisser-déposer reste |
+| Atelier de contenu — palier 3, les leçons | ⬜ à faire — [[Spécification atelier de contenu]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Revue finale de branche | ⬜ à faire |
 
@@ -58,7 +59,7 @@ qu'il a demandé à la plateforme, sur `contenu-seance-2`, qui en part ; le comp
 
 | Partie | État |
 |---|---|
-| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **506 tests**, ==couverture 100 %== |
+| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **668 tests**, ==couverture 100 %== |
 | `api/` | FastAPI + SQLite, **102 tests**, ==couverture 100 %== |
 | `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **149 tests**, ==couverture 100 %== |
 | `contenu/` | **112 exercices** des trois séances — 75 obligatoires, 14 renforts, 23 experts — et **14 leçons** |
@@ -94,4 +95,4 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 - **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
 - **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]] · [[Spécification atelier de contenu]]
-- **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]] · [[Plan atelier palier 1]]
+- **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]] · [[Plan atelier palier 1]] · [[Plan atelier palier 2]]

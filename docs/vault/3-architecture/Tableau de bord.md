@@ -228,13 +228,13 @@ Voir [[ADR-002 Identification par code d'agent]].
 ## Trois onglets, trois chemins
 
 L'espace professeur s'ouvre sur une barre d'onglets. **Séance** porte le tableau de bord et
-l'accès à l'aperçu ; **Ma classe** la liste des élèves ; **Atelier** viendra avec le palier 2 de
-[[Spécification atelier de contenu]].
+l'accès à l'aperçu ; **Ma classe** la liste des élèves ; **Atelier** compose un exercice et l'éprouve avant de l'écrire dans un fichier.
 
 | Onglet | Chemin |
 |---|---|
 | Séance | `/prof` |
 | Ma classe | `/prof/classe` |
+| Atelier | `/prof/atelier` — voir [[Spécification atelier de contenu]] |
 
 Jusqu'au 27 septembre 2026, les deux premières sections s'empilaient sur une seule page. Une
 troisième l'aurait rendue interminable, et l'atelier a besoin de toute la hauteur.

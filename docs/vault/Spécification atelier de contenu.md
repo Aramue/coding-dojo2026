@@ -4,7 +4,7 @@ tags:
   - specification
   - contenu
   - professeur
-statut: palier 1 livré
+statut: paliers 1 et 2 livrés, sauf le glisser-déposer
 date: 2026-09-27
 ---
 
@@ -304,6 +304,11 @@ L'onglet Aperçu monte `EcranExercice` avec l'exercice en cours de composition. 
 ==reçoit déjà l'exercice en prop==, pas un identifiant à chercher dans le contenu publié : il n'y a
 donc aucun composant d'aperçu à écrire, et ce que montre l'atelier est l'écran réel de l'élève,
 avec ses vraies fautes de frappe et sa vraie longueur.
+
+> [!success] Livré le 27 septembre 2026, sauf le glisser-déposer
+> Le formulaire, les cartes de tests, le remplissage de l'`attendu`, la batterie d'essais,
+> l'aperçu et la sortie du fichier fonctionnent. Ce qui reste de cette section : **reprendre un
+> fichier existant**, avec la dépendance `yaml` et le contrôle des champs inconnus.
 
 ### 5.6 Entrer un fichier, en sortir un
 

@@ -260,6 +260,15 @@ confondues** :
 | `chapitres.json` | la table des chapitres |
 | `schema.json` | le schéma de l'exercice et de la leçon, produit par Pydantic |
 
+> [!tip] Un exercice peut désormais s'écrire depuis l'atelier
+> `/prof/atelier` compose le fichier, l'éprouve par le moteur de l'élève et le rend. ==Le fichier
+> reste la source== : l'atelier aide à l'écrire, il ne le remplace pas. Voir
+> [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]].
+>
+> Son émetteur reproduit le style du dépôt, et deux règles y sont sans exception : `enonce`,
+> `depart` et `solution` s'écrivent **toujours** en bloc `|`, et l'`attendu` aussi — en `|-`
+> quand il n'a pas de saut final, parce qu'il est comparé au caractère près.
+
 `schema.json` est ce qui pilote le formulaire de l'atelier : énumérations, champs requis, bornes,
 et le discriminant des quatre types de tests. ==Aucune copie du schéma ne vit côté TypeScript==,
 exactement comme pour `notions.json`.
