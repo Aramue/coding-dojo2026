@@ -19,7 +19,7 @@ Ce qu'il mesure, et ce qui compte en salle :
 - les erreurs, qui doivent etre zero.
 
 Ne remplace pas l'essai depuis une vraie salle : un proxy d'etablissement qui
-refuse le WebSocket ne se simule pas d'ici. Voir ADR-014.
+refuse le WebSocket ne se simule pas d'ici. Voir ADR-016.
 
 Dependances : httpx et websockets, deja installes avec l'API.
 """

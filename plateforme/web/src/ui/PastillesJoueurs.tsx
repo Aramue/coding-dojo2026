@@ -10,7 +10,7 @@ function initiale(nom: string): string {
  *
  * Un nombre seul (« 12 élèves prêts ») ne se voit pas grandir ; des ronds qui
  * arrivent un à un, si. Les noms sont les mêmes des deux côtés — « Prénom N. »,
- * jamais un code d'accès. Voir ADR-013.
+ * jamais un code d'accès. Voir ADR-015.
  */
 export function PastillesJoueurs({
   joueurs,

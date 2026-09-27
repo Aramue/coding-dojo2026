@@ -297,7 +297,7 @@ exercices, eux, y sont à leur place : on s'y entraîne seul.
 une réponse reçue par l'un ne fait pas sonner l'écran du professeur branché sur l'autre : le
 compteur « 18 réponses sur 21 » reste figé jusqu'à la relecture de sûreté, dix secondes plus
 tard. Rien ne plante — c'est ce qui le rend difficile à voir. Voir
-[[ADR-014 Temps réel par sonnette WebSocket]].
+[[ADR-016 Temps réel par sonnette WebSocket]].
 
 ### La correction ne s'écrit pas
 

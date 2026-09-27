@@ -300,7 +300,7 @@ class QuestionQuiz(BaseModel):
 
     La bonne reponse ne quitte jamais le serveur avant la correction : le quiz
     est construit dans l'image de l'API, pas publie dans /contenu comme les
-    exercices. Voir ADR-013.
+    exercices. Voir ADR-015.
     """
 
     enonce: str

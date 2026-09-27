@@ -20,15 +20,15 @@ correction, la répartition des réponses et les cinq premiers ; chaque élève 
 
 **Architecture :** l'état de la partie vit dans SQLite. Chaque écran le lit par un `GET` qui rend
 une photographie calculée pour lui ; un WebSocket ne sert que de sonnette, et sans lui on relit
-toutes les secondes ([[ADR-014 Temps réel par sonnette WebSocket]]). Les questions sont écrites
+toutes les secondes ([[ADR-016 Temps réel par sonnette WebSocket]]). Les questions sont écrites
 en YAML, validées et construites **dans l'image de l'API**, jamais publiées dans `/contenu`. La
 logique du jeu — phases, barème, classement, vues — est une fonction pure, testée sans HTTP.
 
 **Pile :** FastAPI (WebSocket de Starlette) · SQLModel · SQLite · pytest · React 19 · TypeScript ·
 Vitest · Testing Library.
 
-Décisions : [[ADR-013 Quiz en direct et classement encadré]] ·
-[[ADR-014 Temps réel par sonnette WebSocket]].
+Décisions : [[ADR-015 Quiz en direct et classement encadré]] ·
+[[ADR-016 Temps réel par sonnette WebSocket]].
 
 ## Contraintes globales
 
@@ -38,10 +38,10 @@ Décisions : [[ADR-013 Quiz en direct et classement encadré]] ·
   de fuite le vérifie.
 - **Tout champ reçu est validé côté serveur** : motifs, bornes, `extra="forbid"`
   ([[ADR-008 Validation serveur des champs libres]]).
-- **Garde-fous du classement** ([[ADR-013 Quiz en direct et classement encadré]]) : cinq premiers
+- **Garde-fous du classement** ([[ADR-015 Quiz en direct et classement encadré]]) : cinq premiers
   projetés, rang individuel sur l'écran de l'élève seulement, noms « Prénom N. », rien qui
   subsiste d'une partie à l'autre, rien qui compte dans la progression.
-- **Un seul processus uvicorn** ([[ADR-014 Temps réel par sonnette WebSocket]]).
+- **Un seul processus uvicorn** ([[ADR-016 Temps réel par sonnette WebSocket]]).
 - **La logique pure est couverte à 100 %**, côté API comme côté front.
 - **Commits** : préfixe conventionnel, message en français, sans accents dans le sujet, qui dit ce
   qui est vrai après le commit.
@@ -79,7 +79,7 @@ deploiement/Dockerfile.api        # + etape de construction des quiz
 
 ## Tâche 1 : Décisions et plan
 
-- [x] ADR-013 et ADR-014, ADR-011 marquée comme amendée, [[Journal de décisions]]
+- [x] ADR-015 et ADR-016, ADR-011 marquée comme amendée, [[Journal de décisions]]
 - [x] Ce plan
 - [x] Commit `docs: ...`
 

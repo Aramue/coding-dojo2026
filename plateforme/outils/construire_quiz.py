@@ -5,7 +5,7 @@ eleve : c'est voulu, il s'entraine seul et la bonne reponse d'un QCM ne lui
 apprend rien qu'il ne puisse trouver en essayant. Un quiz, lui, est une partie
 avec un score. Sa bonne reponse doit rester sur le serveur jusqu'a la
 correction — c'est donc l'image de l'API qui l'embarque, et elle seule.
-Voir ADR-013.
+Voir ADR-015.
 """
 
 from __future__ import annotations

@@ -29,7 +29,7 @@ function rang(n: number): string {
  *
  * L'écran ne décide de rien : il montre la photographie que le serveur lui
  * rend, et relit quand la sonnette le dit. La bonne réponse n'arrive qu'avec
- * la correction — elle n'existe pas dans le navigateur avant. Voir ADR-013.
+ * la correction — elle n'existe pas dans le navigateur avant. Voir ADR-015.
  *
  * Ce que l'élève voit des autres : leur nombre, et son propre rang parmi eux.
  * Jamais un nom, jamais un score qui ne soit pas le sien.

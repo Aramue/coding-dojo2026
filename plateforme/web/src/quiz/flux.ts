@@ -5,7 +5,7 @@ import type { PhaseQuiz, QuestionVue } from './types'
  * La sonnette du quiz, et la relève qui la remplace quand elle se tait.
  *
  * Le WebSocket ne transporte jamais l'état : il dit « relis », et on relit par
- * le GET ordinaire (ADR-014). Il n'y a donc qu'un seul chemin de données, le
+ * le GET ordinaire (ADR-016). Il n'y a donc qu'un seul chemin de données, le
  * même avec ou sans WebSocket :
  *
  * - sonnette branchée : on relit à chaque sonnerie, et toutes les dix secondes

@@ -11,8 +11,8 @@ mis-a-jour: 2026-09-28
 
 Le professeur lance une partie depuis son tableau de bord ; les élèves la rejoignent depuis leur
 espace, répondent à des questions en temps limité ; l'écran projeté montre la correction, la
-répartition des réponses et les cinq premiers. Décisions : [[ADR-013 Quiz en direct et
-classement encadré]] · [[ADR-014 Temps réel par sonnette WebSocket]]. Plan : [[Plan quiz]].
+répartition des réponses et les cinq premiers. Décisions : [[ADR-015 Quiz en direct et
+classement encadré]] · [[ADR-016 Temps réel par sonnette WebSocket]]. Plan : [[Plan quiz]].
 
 ## Le déroulé
 
@@ -181,5 +181,5 @@ médiane (p95 116 ms), sonnette reçue **70 ms** après « Question suivante »,
 
 ## Voir aussi
 
-[[ADR-013 Quiz en direct et classement encadré]] · [[ADR-014 Temps réel par sonnette WebSocket]] ·
+[[ADR-015 Quiz en direct et classement encadré]] · [[ADR-016 Temps réel par sonnette WebSocket]] ·
 [[Charte visuelle]] · [[Pièges et invariants]] · [[Vue d'ensemble]]

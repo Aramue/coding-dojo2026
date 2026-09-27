@@ -1,7 +1,7 @@
 """Le quiz en direct : routes eleve, routes professeur, et la sonnette.
 
 L'etat d'une partie vit en base et se lit par GET ; le WebSocket ne dit que
-« relis » (ADR-014). La regle du jeu est entierement dans quiz.py : ce module
+« relis » (ADR-016). La regle du jeu est entierement dans quiz.py : ce module
 lit la base, appelle la regle, ecrit le resultat, et fait sonner.
 """
 
@@ -453,7 +453,7 @@ async def _authentifier(ws: WebSocket) -> Role | None:
     """Le premier message dit qui ouvre la connexion. Jamais l'URL.
 
     Une URL finit dans les journaux du proxy et du serveur : un jeton ou un
-    code professeur n'a rien a y faire. Voir ADR-014.
+    code professeur n'a rien a y faire. Voir ADR-016.
     """
     try:
         message = await asyncio.wait_for(ws.receive(), DELAI_AUTHENTIFICATION_S)

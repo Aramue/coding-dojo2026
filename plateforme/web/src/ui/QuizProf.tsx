@@ -62,7 +62,7 @@ function date(iso: string): string {
  * Deux conséquences, tenues par le serveur et respectées ici :
  * - la bonne réponse n'arrive qu'à la correction, jamais pendant la question ;
  * - le classement s'arrête aux cinq premiers et ne montre personne à zéro.
- * Voir ADR-013.
+ * Voir ADR-015.
  */
 export function QuizProf({ codeProf }: { codeProf: string }) {
   const { etat, ecartMs, erreur, flux } = useFluxQuiz<EtatProf>(

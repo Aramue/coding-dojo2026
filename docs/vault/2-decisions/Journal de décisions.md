@@ -48,10 +48,10 @@ Les deux dernières datent du 4 septembre 2026, après une première interface l
 
 Les deux suivantes datent du 27 septembre 2026, pour le quiz en direct.
 
-- **013** — [[ADR-013 Quiz en direct et classement encadré]]
+- **015** — [[ADR-015 Quiz en direct et classement encadré]]
   Un classement dans la partie seulement : cinq premiers projetés, chacun son rang pour soi.
   Amende ADR-011, qui tient toujours pour le parcours.
-- **014** — [[ADR-014 Temps réel par sonnette WebSocket]]
+- **016** — [[ADR-016 Temps réel par sonnette WebSocket]]
   Le WebSocket dit « relis », jamais « voici » ; sans lui, on relit toutes les secondes.
 
 ## Le fil conducteur
@@ -97,5 +97,5 @@ Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans 
 - [ ] Le nombre exact d'exercices du chapitre 1 et leur ordre — voir [[Chapitre 1]]
 - [x] La forme précise de la gamification — tranchée par [[ADR-011 Trois niveaux de réussite]] :
       deux coches, ni points ni classement ; le quiz en direct y déroge, dans les limites
-      d'[[ADR-013 Quiz en direct et classement encadré]]
+      d'[[ADR-015 Quiz en direct et classement encadré]]
 - [ ] Le découpage du livrable de la séance 1 par rapport au reste

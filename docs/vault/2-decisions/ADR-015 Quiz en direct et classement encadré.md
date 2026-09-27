@@ -1,5 +1,5 @@
 ---
-title: ADR-013 Quiz en direct et classement encadré
+title: ADR-015 Quiz en direct et classement encadré
 tags:
   - decision
   - pedagogie
@@ -8,7 +8,7 @@ statut: acceptée
 date: 2026-09-27
 ---
 
-# ADR-013 — Quiz en direct et classement encadré
+# ADR-015 — Quiz en direct et classement encadré
 
 > [!success] Statut : acceptée le 27 septembre 2026
 > Elle **déroge** à [[ADR-011 Trois niveaux de réussite]] sur un point précis — le classement —
@@ -86,7 +86,7 @@ adolescents et projeté devant la classe est un problème de modération, et, se
   d'option, rien d'autre.
 - **Le serveur est l'arbitre.** Les bonnes réponses ne sont jamais envoyées à un élève avant la
   fin de la question, et les points sont calculés côté serveur — voir
-  [[ADR-014 Temps réel par sonnette WebSocket]].
+  [[ADR-016 Temps réel par sonnette WebSocket]].
 
 ## Conséquences
 
@@ -112,4 +112,4 @@ adolescents et projeté devant la classe est un problème de modération, et, se
 ## Voir aussi
 
 [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] ·
-[[ADR-014 Temps réel par sonnette WebSocket]] · [[Quiz en direct]]
+[[ADR-016 Temps réel par sonnette WebSocket]] · [[Quiz en direct]]

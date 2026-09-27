@@ -94,7 +94,7 @@ Volontairement minimal — chaque point d'entrée supplémentaire est du code à
 > [!note] Le seul temps réel de la plateforme
 > Le quiz ajoute un WebSocket, qui ne transporte jamais de données : il dit « relis ». Sans lui,
 > chaque écran relit toutes les secondes. L'API doit rester **un seul processus** uvicorn. Voir
-> [[ADR-014 Temps réel par sonnette WebSocket]].
+> [[ADR-016 Temps réel par sonnette WebSocket]].
 
 > [!note] Ce que l'API ne reçoit jamais
 > Le code source écrit par l'élève. Seuls le verdict et le **type** d'erreur remontent

@@ -1,5 +1,5 @@
 ---
-title: ADR-014 Temps réel par sonnette WebSocket
+title: ADR-016 Temps réel par sonnette WebSocket
 tags:
   - decision
   - architecture
@@ -8,7 +8,7 @@ statut: acceptée
 date: 2026-09-27
 ---
 
-# ADR-014 — Temps réel par sonnette WebSocket
+# ADR-016 — Temps réel par sonnette WebSocket
 
 > [!success] Statut : acceptée le 27 septembre 2026
 
@@ -99,5 +99,5 @@ asyncio aurait été perdu au redémarrage, et il aurait fallu écrire une repri
 
 ## Voir aussi
 
-[[ADR-013 Quiz en direct et classement encadré]] · [[Quiz en direct]] · [[Vue d'ensemble]] ·
+[[ADR-015 Quiz en direct et classement encadré]] · [[Quiz en direct]] · [[Vue d'ensemble]] ·
 [[Pièges et invariants]]

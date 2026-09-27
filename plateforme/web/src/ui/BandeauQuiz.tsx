@@ -10,7 +10,7 @@ export function partieOuverte(etat: EtatEleve | null): etat is Extract<EtatEleve
  * Le bandeau qui invite l'élève dans une partie en cours.
  *
  * C'est la porte d'entrée du quiz : pas de code de partie à recopier, l'élève
- * est déjà connecté et une instance ne sert qu'une classe. Voir ADR-013.
+ * est déjà connecté et une instance ne sert qu'une classe. Voir ADR-015.
  *
  * Il colle sous l'en-tête pendant le défilement : un élève au milieu d'un long
  * exercice doit le voir sans remonter. Il suit la sonnette de la coquille —

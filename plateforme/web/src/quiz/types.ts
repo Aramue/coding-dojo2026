@@ -89,7 +89,7 @@ export type EtatProf =
       derniere: boolean
       reponses_recues: number
       repartition: number[] | null
-      /** Cinq au plus, jamais quelqu'un à zéro point. Voir ADR-013. */
+      /** Cinq au plus, jamais quelqu'un à zéro point. Voir ADR-015. */
       podium: PlaceProjetee[]
       bilan: LigneBilan[] | null
     }

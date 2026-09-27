@@ -54,7 +54,7 @@ class PartieQuiz(SQLModel, table=True):
     `phase` ne s'ecrit qu'en trois valeurs : attente, question, terminee. La
     correction ne s'ecrit PAS : elle se deduit de `fin_a` et de l'heure de la
     lecture (voir quiz.py). Aucun minuteur serveur, donc rien a perdre si le
-    conteneur redemarre en pleine partie. Voir ADR-014.
+    conteneur redemarre en pleine partie. Voir ADR-016.
     """
 
     id: int | None = Field(default=None, primary_key=True)

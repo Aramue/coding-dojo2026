@@ -9,9 +9,9 @@ Deux regles portent tout le module :
 
 - ==le serveur est l'arbitre==. Un eleve ne recoit ni la bonne reponse, ni la
   justesse de la sienne, ni des points qui la trahiraient, tant que la question
-  n'est pas corrigee. Voir ADR-013 ;
+  n'est pas corrigee. Voir ADR-015 ;
 - la correction ne s'ecrit pas, elle se DEDUIT de l'echeance. Aucun minuteur
-  serveur. Voir ADR-014.
+  serveur. Voir ADR-016.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ TOLERANCE = timedelta(milliseconds=500)
 
 POINTS_MAX = 1000
 
-# Garde-fou d'ADR-013 : l'ecran projete ne montre que le haut du tableau.
+# Garde-fou d'ADR-015 : l'ecran projete ne montre que le haut du tableau.
 TAILLE_PODIUM = 5
 
 
@@ -297,7 +297,7 @@ def vue_eleve(
 
     Des autres, il ne voit que leur nombre — et, en salle d'attente seulement,
     leur « Prenom N. », comme sur l'ecran projete au meme moment. Jamais un
-    score, jamais un rang qui ne soit pas le sien. Voir ADR-013.
+    score, jamais un rang qui ne soit pas le sien. Voir ADR-015.
     """
     phase = phase_effective(partie, maintenant)
     corrigee = phase in ("correction", "terminee")

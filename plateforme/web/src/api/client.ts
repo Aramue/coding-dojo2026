@@ -103,7 +103,7 @@ export class ClientApi {
 
   /**
    * Le premier message de la sonnette du quiz. Le jeton passe là, jamais dans
-   * l'URL du WebSocket, qui finirait dans les journaux du proxy. Voir ADR-014.
+   * l'URL du WebSocket, qui finirait dans les journaux du proxy. Voir ADR-016.
    */
   presentationQuiz(): { jeton: string } {
     if (!this.jeton) throw new Error('Session non ouverte.')

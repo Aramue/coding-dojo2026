@@ -1,4 +1,4 @@
-"""La sonnette du quiz : le registre des WebSocket ouverts. Voir ADR-014.
+"""La sonnette du quiz : le registre des WebSocket ouverts. Voir ADR-016.
 
 Elle ne transporte qu'un message, `{"type": "changement"}`, qui dit « relis ».
 Les donnees passent toujours par les GET ordinaires : une sonnette perdue
