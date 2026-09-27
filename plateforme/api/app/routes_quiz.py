@@ -228,7 +228,12 @@ def rejoindre(
             # l'eleve est deja dedans. Ce n'est pas une erreur a lui montrer.
             session.rollback()
         else:
-            taches.add_task(diffuseur.sonner, "prof")
+            # En salle d'attente, chaque eleve voit arriver les autres : tout
+            # le monde relit. Une fois la partie lancee, seul le professeur.
+            if partie.phase == "attente":
+                taches.add_task(diffuseur.sonner)
+            else:
+                taches.add_task(diffuseur.sonner, "prof")
     return _vue_eleve(session, partie, quiz, code, quand)
 
 

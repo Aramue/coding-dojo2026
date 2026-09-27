@@ -126,11 +126,13 @@ def test_une_ecriture_du_professeur_sonne_chez_tout_le_monde(
 def test_chaque_ecriture_sonne_chez_qui_doit_relire(
     client, catalogue, horloge, jeton_eleve, inscrire, monkeypatch
 ):
-    """Les reponses et les arrivees ne sonnent que chez le professeur.
+    """Les reponses ne sonnent que chez le professeur ; le reste, chez tous.
 
     Un eleve n'a pas besoin de savoir que son voisin a repondu : vingt-quatre
-    relectures par reponse ne serviraient a personne. Les changements de phase,
-    eux, concernent tout le monde.
+    relectures par reponse ne serviraient a personne. Les changements de phase
+    concernent tout le monde, et les arrivees en salle d'attente aussi — chaque
+    eleve y voit les autres arriver. Une arrivee en cours de partie, elle, ne
+    sonne que chez le professeur.
     """
     sonneries: list[tuple] = []
 
@@ -155,7 +157,14 @@ def test_chaque_ecriture_sonne_chez_qui_doit_relire(
     )
     client.post("/prof/quiz/partie/terminer", headers=PROF)
 
-    assert sonneries == [(), ("prof",), ("prof",), (), ("prof",), (), ()]
+    assert sonneries == [(), (), (), (), ("prof",), (), ()]
+
+    # Arriver en pleine partie ne derange que le professeur.
+    sonneries.clear()
+    client.post("/prof/quiz/parties", json={"quiz_id": "q1-bases"}, headers=PROF)
+    client.post("/prof/quiz/partie/suivante", json={"question": -1}, headers=PROF)
+    client.post("/quiz/rejoindre", headers=eleve)
+    assert sonneries == [(), (), ("prof",)]
 
 
 # --- Le registre, seul --------------------------------------------------------
