@@ -1,0 +1,171 @@
+# Le quiz de fin de seance 1 : afficher, variables, types, saisie.
+#
+# Tire des exercices « predire » de la seance, reformule pour se jouer en
+# vingt secondes. Trois regles d'ecriture :
+#
+# - la bonne reponse change de place d'une question a l'autre (trois fois a
+#   chaque position) : une classe qui repere « c'est toujours la premiere »
+#   ne joue plus au quiz ;
+# - toute question qui montre du code est executee a la construction, et
+#   `sortie: true` verifie que l'option juste est exactement ce qui s'affiche ;
+# - aucune notion au-dela de la seance 1 : ni condition, ni boucle.
+id: q1-bases
+titre: Les bases de la séance 1
+seance: 1
+questions:
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      print("Bonjour")
+    options:
+      - print("Bonjour")
+      - Bonjour
+      - '"Bonjour"'
+    bonne_reponse: 1
+    sortie: true
+    explication: Les guillemets marquent le début et la fin du texte. Ils ne s'affichent pas.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      print("Bonjour", "Camille")
+    options:
+      - BonjourCamille
+      - Bonjour,Camille
+      - Bonjour Camille
+      - Bonjour, Camille
+    bonne_reponse: 2
+    sortie: true
+    explication: La virgule sépare deux valeurs, et print met un espace entre elles.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      prenom = "Camille"
+      prenom = "Alex"
+      print(prenom)
+    options:
+      - Alex
+      - Camille
+      - Camille Alex
+    bonne_reponse: 0
+    sortie: true
+    explication: Une variable ne garde que sa dernière valeur. La seconde affectation remplace la première.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      prix = 3
+      copie = prix
+      prix = 5
+      print(prix, copie)
+    options:
+      - 5 5
+      - 3 3
+      - 3 5
+      - 5 3
+    bonne_reponse: 3
+    duree_s: 30
+    sortie: true
+    explication: copie a reçu la valeur de prix au moment de l'affectation. Changer prix ensuite ne la touche plus.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      points = 10
+      points = points + 5
+      print(points)
+    options:
+      - "10"
+      - "15"
+      - points + 5
+    bonne_reponse: 1
+    sortie: true
+    explication: Python calcule d'abord la droite du =, avec l'ancienne valeur, puis range le résultat dans points.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      print("2" + "2")
+    options:
+      - "22"
+      - "4"
+      - 2 2
+      - Une erreur
+    bonne_reponse: 0
+    sortie: true
+    explication: Entre guillemets, "2" est un texte. Deux textes se collent, ils ne s'additionnent pas.
+
+  - enonce: Que se passe-t-il quand on exécute ce programme ?
+    code: |
+      age = 17
+      print("J'ai " + age + " ans")
+    options:
+      - Il affiche J'ai 17 ans
+      - Il affiche J'ai age ans
+      - Python signale une erreur
+      - Il affiche J'ai 17ans
+    bonne_reponse: 2
+    duree_s: 30
+    erreur: TypeError
+    explication: On ne colle pas un texte et un nombre avec +. Il faut d'abord transformer le nombre en texte, avec str(age).
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      note = 7.0
+      print(note + note)
+    options:
+      - "14"
+      - "7.07.0"
+      - "14,0"
+      - "14.0"
+    bonne_reponse: 3
+    sortie: true
+    explication: 7.0 est un nombre à virgule. La somme en est un aussi, et Python l'écrit avec un point.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      prenom = "Camille"
+      age = 17
+      print(f"{prenom} a {age} ans")
+    options:
+      - prenom a age ans
+      - "{prenom} a {age} ans"
+      - Camille a 17 ans
+    bonne_reponse: 2
+    sortie: true
+    explication: Le f devant les guillemets demande à Python de remplacer chaque accolade par la valeur de la variable.
+
+  - enonce: On tape 17 au clavier. Qu'affiche la dernière ligne ?
+    code: |
+      age = input("Ton âge : ")
+      print(age + age)
+    entrees: ["17"]
+    options:
+      - "1717"
+      - "34"
+      - 17 17
+    bonne_reponse: 0
+    duree_s: 30
+    explication: input() rend toujours du texte. age vaut "17", et deux textes se collent.
+
+  - enonce: On tape 17 au clavier. Qu'affiche la dernière ligne ?
+    code: |
+      age = int(input("Ton âge : "))
+      print(age + 1)
+    entrees: ["17"]
+    options:
+      - "171"
+      - "18"
+      - Une erreur
+      - 17 1
+    bonne_reponse: 1
+    duree_s: 30
+    explication: int() transforme le texte tapé en nombre entier. age vaut 17, et 17 + 1 vaut 18.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      x = "5"
+      print(type(x))
+    options:
+      - "5"
+      - <class 'int'>
+      - <class 'float'>
+      - <class 'str'>
+    bonne_reponse: 3
+    sortie: true
+    explication: Les guillemets font de "5" un texte, donc une valeur de type str, même s'il ne contient qu'un chiffre.
