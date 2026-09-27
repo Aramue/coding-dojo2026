@@ -99,7 +99,24 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
   }
 
   const partie = etat && etat.partie !== null ? (etat as Partie) : null
-  const choisir = etat !== null && (!partie || nouvelle)
+
+  // La partie que cet écran a vue en cours. Sa fin mérite le podium, projeté
+  // au moment où la classe le découvre ; une partie finie AVANT l'ouverture
+  // de la page, elle, n'accueille plus personne — ses résultats restent dans
+  // « Derniers résultats ».
+  const [suivie, setSuivie] = useState<number | null>(null)
+  const enCours = partie !== null && partie.phase !== 'terminee' ? partie.partie : null
+  useEffect(() => {
+    if (enCours !== null) setSuivie(enCours)
+  }, [enCours])
+
+  const finEnDirect =
+    partie?.phase === 'terminee' &&
+    suivie === partie.partie &&
+    // Arrêtée sans une seule réponse, il n'y a ni podium ni bilan à montrer.
+    (partie.bilan ?? []).some((ligne) => ligne.reponses > 0)
+  const choisir =
+    etat !== null && (!partie || nouvelle || (partie.phase === 'terminee' && !finEnDirect))
 
   return (
     <main className="quiz-prof">
@@ -130,7 +147,6 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
           envoi={envoi}
           onLancer={(id) => void agir(() => creerPartie(codeProf, id))}
           onResultats={setResultatsDe}
-          onAnnuler={partie ? () => setNouvelle(false) : undefined}
         />
       )}
       {partie && !choisir && (
@@ -154,13 +170,11 @@ function Catalogue({
   envoi,
   onLancer,
   onResultats,
-  onAnnuler,
 }: {
   codeProf: string
   envoi: boolean
   onLancer: (id: string) => void
   onResultats: (id: string) => void
-  onAnnuler?: () => void
 }) {
   const [quiz, setQuiz] = useState<ResumeQuiz[] | null>(null)
   const [erreur, setErreur] = useState<string | null>(null)
@@ -216,11 +230,6 @@ function Catalogue({
             </li>
           ))}
         </ul>
-      )}
-      {onAnnuler && (
-        <button type="button" className="bouton" onClick={onAnnuler}>
-          Revenir à la dernière partie
-        </button>
       )}
     </section>
   )

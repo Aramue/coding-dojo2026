@@ -149,47 +149,54 @@ describe('QuizProf', () => {
     expect(await screen.findByRole('button', { name: 'Voir le résultat final' })).toBeInTheDocument()
   })
 
-  it('en fin de partie, le podium et le bilan anonyme, question par question', async () => {
-    etat = etatProf({
-      phase: 'terminee',
-      podium: [{ ...INSCRITS[0]!, points: 1800, rang: 1 }],
-      bilan: [
-        { rang: 0, enonce: 'Q facile', code: 'print(1)', options: ['1', '2'], bonne_reponse: 0, repartition: [3, 0], reponses: 3 },
-        { rang: 1, enonce: 'Q piège', code: '', options: ['a', 'b', 'c'], bonne_reponse: 2, repartition: [2, 1, 0], reponses: 3 },
-        { rang: 2, enonce: 'Q muette', code: '', options: ['x', 'y'], bonne_reponse: 1, repartition: [0, 0], reponses: 0 },
-      ],
-    })
+  const BILAN = [
+    { rang: 0, enonce: 'Q facile', code: 'print(1)', options: ['1', '2'], bonne_reponse: 0, repartition: [3, 0], reponses: 3 },
+    { rang: 1, enonce: 'Q piège', code: '', options: ['a', 'b', 'c'], bonne_reponse: 2, repartition: [2, 1, 0], reponses: 3 },
+    { rang: 2, enonce: 'Q muette', code: '', options: ['x', 'y'], bonne_reponse: 1, repartition: [0, 0], reponses: 0 },
+  ]
+
+  it('une partie qui finit sous les yeux de la classe montre son podium et son bilan', async () => {
+    etat = etatProf({ phase: 'correction', derniere: true, question: question({ rang: 11, bonne_reponse: 0 }) })
+    apresAction = reponse(
+      etatProf({ phase: 'terminee', podium: [{ ...INSCRITS[0]!, points: 1800, rang: 1 }], bilan: BILAN }),
+    )
     monter()
 
+    await userEvent.click(await screen.findByRole('button', { name: 'Voir le résultat final' }))
     expect(await screen.findByText('Partie terminée')).toBeInTheDocument()
     expect(screen.getByText('Camille R.')).toBeInTheDocument()
     const lignes = within(screen.getByRole('region', { name: 'Question par question' })).getAllByRole('listitem')
     const piege = lignes.find((li) => li.textContent?.includes('Q piège'))!
     expect(piege).toHaveTextContent('À reprendre')
     expect(piege).toHaveTextContent('0 % de bonnes réponses (0 sur 3)')
-    const facile = lignes.find((li) => li.textContent?.includes('Q facile'))!
-    expect(facile).not.toHaveTextContent('À reprendre')
+    expect(lignes.find((li) => li.textContent?.includes('Q facile'))).not.toHaveTextContent('À reprendre')
     expect(lignes.find((li) => li.textContent?.includes('Q muette'))).toHaveTextContent('Aucune réponse')
     // Plus rien à arrêter.
     expect(screen.queryByRole('button', { name: 'Terminer la partie' })).toBeNull()
+
+    // « Nouvelle partie » mène au catalogue, et y reste : la relève ne ramène pas le podium.
+    await userEvent.click(screen.getByRole('button', { name: 'Nouvelle partie' }))
+    expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+    expect(screen.queryByText('Revenir à la dernière partie')).toBeNull()
   })
 
-  it('une partie où personne n a marqué ne projette aucun nom', async () => {
-    etat = etatProf({ phase: 'terminee', bilan: [] })
+  it('ouverte sur une partie déjà finie, la page va droit au catalogue', async () => {
+    etat = etatProf({ phase: 'terminee', podium: [{ ...INSCRITS[0]!, points: 1800, rang: 1 }], bilan: BILAN })
     monter()
+    expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+    expect(screen.queryByText('Partie terminée')).toBeNull()
+    expect(screen.queryByText('Revenir à la dernière partie')).toBeNull()
+  })
+
+  it('une partie finie en direct où personne n a marqué ne projette aucun nom', async () => {
+    etat = etatProf({ phase: 'correction', derniere: true, question: question({ rang: 11, bonne_reponse: 0 }) })
+    apresAction = reponse(etatProf({ phase: 'terminee', podium: [], bilan: [BILAN[1]!] }))
+    monter()
+    await userEvent.click(await screen.findByRole('button', { name: 'Voir le résultat final' }))
     expect(await screen.findByText(/Personne n'a marqué de point/)).toBeInTheDocument()
   })
 
-  it('une nouvelle partie repasse par le catalogue, avec un retour possible', async () => {
-    etat = etatProf({ phase: 'terminee', bilan: [] })
-    monter()
-    await userEvent.click(await screen.findByRole('button', { name: 'Nouvelle partie' }))
-    expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Revenir à la dernière partie' }))
-    expect(screen.getByText('Partie terminée')).toBeInTheDocument()
-  })
-
-  it('arrêter la partie demande une confirmation qui dit ce qu elle fait', async () => {
+  it('arrêter la partie demande une confirmation, puis ramène au catalogue s il n y avait rien', async () => {
     etat = etatProf({ participants: INSCRITS })
     apresAction = reponse(etatProf({ phase: 'terminee', bilan: [] }))
     monter()
@@ -202,7 +209,27 @@ describe('QuizProf', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Terminer la partie' }))
     await userEvent.click(screen.getByRole('button', { name: 'Arrêter la partie' }))
     expect(postes()).toEqual([['/api/prof/quiz/partie/terminer', null]])
+    // Arrêtée en salle d'attente : rien à montrer, on repart du catalogue.
+    expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+    expect(screen.queryByText('Partie terminée')).toBeNull()
+  })
+
+  it('arrêter une partie qui avait des réponses montre son bilan', async () => {
+    etat = etatProf({ phase: 'question', question: question({ rang: 3 }), participants: INSCRITS })
+    apresAction = reponse(etatProf({ phase: 'terminee', bilan: BILAN }))
+    monter()
+    await userEvent.click(await screen.findByRole('button', { name: 'Terminer la partie' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Arrêter la partie' }))
     expect(await screen.findByText('Partie terminée')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Question par question' })).toBeInTheDocument()
+  })
+
+  it('une partie lancée depuis le catalogue ouvre sa salle d attente', async () => {
+    etat = etatProf({ phase: 'terminee', bilan: BILAN })
+    apresAction = reponse(etatProf({ partie: 2 }), 201)
+    monter()
+    await userEvent.click(await screen.findByRole('button', { name: 'Lancer' }))
+    expect(await screen.findByText("Salle d'attente")).toBeInTheDocument()
   })
 
   it('montre le refus du serveur, écrit pour être lu', async () => {
