@@ -110,3 +110,31 @@ def test_deux_exercices_de_meme_identifiant_dans_deux_chapitres_echouent(tmp_pat
 def test_le_contenu_du_depot_ne_remonte_aucun_probleme():
     _, _, problemes = verifier_racine(Path(CONTENU))
     assert problemes == []
+
+
+def test_un_renvoi_vers_un_expert_inexistant_est_signale(tmp_path):
+    """Le bouton « Mode expert » menerait a une page vide."""
+    exercice = dict(
+        id="s1-01",
+        concept="print",
+        notion="afficher",
+        seance=1,
+        niveau="normal",
+        type="ecrire",
+        titre="T",
+        obligatoire=True,
+        enonce="Affiche Camille.",
+        tests=[{"type": "interdit", "motif": "xyzzy"}],
+        solution='print("Camille")\n',
+        expert="s1-99-expert",
+    )
+    from conftest import chapitre_temporaire
+
+    seance = chapitre_temporaire(tmp_path) / "seance-1"
+    seance.mkdir(parents=True, exist_ok=True)
+    (seance / "s1-01.yaml").write_text(
+        yaml.safe_dump(exercice, allow_unicode=True), encoding="utf-8"
+    )
+
+    _, _, problemes = verifier_racine(tmp_path)
+    assert any("expert inexistant" in p for p in problemes)

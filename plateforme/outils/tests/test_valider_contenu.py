@@ -173,3 +173,47 @@ def test_l_input_simule_repond_toujours_avec_le_compteur_de_tours():
     assert erreur is None
     assert sortie == "Nom : Camille\nCamille\n"
     assert espace["nom"] == "Camille"
+
+
+def test_une_valeur_de_variable_qui_ne_correspond_pas_fait_echouer():
+    """Le dernier refus de _passe : la variable existe, du bon type, mauvaise valeur."""
+    from schema import Exercice
+    from valider_contenu import _passe
+
+    ex = Exercice(
+        id="s1-01",
+        concept="variables",
+        notion="variables",
+        seance=1,
+        niveau="normal",
+        type="completer",
+        titre="La boite",
+        obligatoire=True,
+        enonce="Range 7 dans age.",
+        tests=[{"type": "variable", "nom": "age", "valeur_attendue": "7"}],
+        solution="age = 7",
+    )
+    assert _passe(ex, "age = 7")
+    assert not _passe(ex, "age = 8")
+
+
+def test_une_variable_du_mauvais_type_fait_echouer():
+    """« 7 » en texte n'est pas 7 en nombre : c'est le bug 2025 le plus frequent."""
+    from schema import Exercice
+    from valider_contenu import _passe
+
+    ex = Exercice(
+        id="s1-01",
+        concept="types",
+        notion="types",
+        seance=1,
+        niveau="normal",
+        type="completer",
+        titre="La boite",
+        obligatoire=True,
+        enonce="Range 7 dans age, en nombre.",
+        tests=[{"type": "variable", "nom": "age", "type_attendu": "int"}],
+        solution="age = 7",
+    )
+    assert _passe(ex, "age = 7")
+    assert not _passe(ex, 'age = "7"')

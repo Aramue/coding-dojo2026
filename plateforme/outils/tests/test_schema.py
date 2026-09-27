@@ -182,3 +182,33 @@ def test_les_112_exercices_du_depot_sont_deja_accordes():
 
     racine = Path(__file__).parent.parent.parent / "contenu" / "chapitre-1"
     assert len(charger_tous(racine)) == 112
+
+
+def test_une_bonne_reponse_hors_des_options_est_refusee():
+    """Un indice hors bornes rendrait le QCM invalidable, sans rien signaler."""
+    with pytest.raises(ValidationError, match="bonne_reponse hors des options"):
+        Exercice(
+            **exercice_minimal(
+                type="predire",
+                tests=[{"type": "qcm", "options": ["a", "b"], "bonne_reponse": 2}],
+            )
+        )
+
+
+def test_un_predire_sans_qcm_est_refuse():
+    with pytest.raises(ValidationError, match="exige un test 'qcm'"):
+        Exercice(
+            **exercice_minimal(
+                type="predire", tests=[{"type": "sortie", "entrees": [], "attendu": "Camille"}]
+            )
+        )
+
+
+def test_un_ecrire_sans_motif_interdit_est_refuse():
+    """Sans interdit, l'eleve ecrit la reponse en dur et passe au vert."""
+    with pytest.raises(ValidationError, match="exige un motif 'interdit'"):
+        Exercice(
+            **exercice_minimal(
+                type="ecrire", tests=[{"type": "sortie", "entrees": [], "attendu": "Camille"}]
+            )
+        )

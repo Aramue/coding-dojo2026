@@ -64,7 +64,7 @@ def principal() -> int:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     parseur = argparse.ArgumentParser(description="Remplit le champ attendu depuis la solution.")
-    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../../contenu"))
+    parseur.add_argument("racine", type=Path, nargs="?", default=Path("../contenu"))
     arguments = parseur.parse_args()
 
     cibles = [arguments.racine] if arguments.racine.is_file() else sorted(arguments.racine.rglob("*.yaml"))
