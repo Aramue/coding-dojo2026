@@ -65,6 +65,17 @@ function poserLeReseau(r: Reseau = {}) {
     if (url.includes('chapitres')) return reponse(200, r.contenu ? CHAPITRES : [])
     if (url.includes('notions')) return reponse(200, r.contenu ? NOTIONS : [])
     if (url.includes('exercices')) return reponse(200, r.contenu ? EXERCICES : [])
+    if (url.includes('schema.json')) {
+      return reponse(200, {
+        exercice: {
+          properties: {
+            type: { enum: ['predire', 'debug', 'completer', 'ecrire'] },
+            niveau: { enum: ['normal', 'expert'] },
+          },
+        },
+        lecon: {},
+      })
+    }
     return reponse(200, [])
   })
   vi.stubGlobal('fetch', appel)
@@ -488,5 +499,28 @@ describe("EcranProf — les onglets de l'espace professeur", () => {
 
     // Fermer la session est une sortie, pas une quatrième activité.
     expect(screen.getByRole('button', { name: /fermer la session/i })).toBeInTheDocument()
+  })
+})
+
+describe("EcranProf — le troisième onglet", () => {
+  it("mène à l'atelier, sur son propre chemin", async () => {
+    poserLeReseau({ contenu: true })
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="atelier" />)
+
+    expect(await screen.findByLabelText('Identifiant')).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'Atelier' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.queryByRole('heading', { name: /séance en cours/i })).toBeNull()
+  })
+
+  it('change de chemin en allant à l atelier', async () => {
+    poserLeReseau({ contenu: true })
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf onglet="seance" />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Atelier' }))
+
+    expect(location.pathname).toBe('/prof/atelier')
   })
 })

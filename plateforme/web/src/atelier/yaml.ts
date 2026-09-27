@@ -117,6 +117,23 @@ function enTest(test: Test): string {
   return sortie
 }
 
+/**
+ * Un texte narratif ou du code : toujours en bloc, et toujours terminé par un
+ * saut de ligne.
+ *
+ * Les 112 fichiers du dépôt écrivent `enonce`, `depart` et `solution` en `|`,
+ * ==sans une seule exception==. Une chaîne sur une ligne est possible en YAML,
+ * mais elle rompt l'alignement de la relecture — et un jour, quelqu'un y
+ * mettra un deux-points.
+ *
+ * L'`attendu`, lui, garde la distinction `|` / `|-` : il est comparé au
+ * caractère près, et un saut de ligne de trop y change le verdict.
+ */
+function texte(cle: string, valeur: string, retrait = ''): string {
+  const termine = valeur.endsWith('\n') ? valeur : `${valeur}\n`
+  return champ(cle, termine, retrait, true)
+}
+
 export function enYaml(brouillon: Brouillon): string {
   let sortie = ''
   // L'ordre des clés est celui du modèle Pydantic, jamais l'alphabétique :
@@ -129,17 +146,17 @@ export function enYaml(brouillon: Brouillon): string {
   sortie += champ('type', brouillon.type)
   sortie += champ('titre', brouillon.titre)
   sortie += `obligatoire: ${brouillon.obligatoire}\n`
-  sortie += champ('enonce', brouillon.enonce)
+  sortie += texte('enonce', brouillon.enonce)
 
   // Un champ vide ne s'écrit pas : le schéma lui donne déjà sa valeur par
   // défaut, et `depart: ""` dans un fichier relu à la main est du bruit.
-  if (brouillon.depart) sortie += champ('depart', brouillon.depart)
+  if (brouillon.depart) sortie += texte('depart', brouillon.depart)
   if (brouillon.indices.length > 0) sortie += listeLongue('indices', brouillon.indices, '')
 
   sortie += 'tests:\n'
   for (const test of brouillon.tests) sortie += enTest(test)
 
-  sortie += champ('solution', brouillon.solution)
+  sortie += texte('solution', brouillon.solution)
   if (brouillon.expert) sortie += champ('expert', brouillon.expert)
   return sortie
 }

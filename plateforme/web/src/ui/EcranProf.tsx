@@ -3,6 +3,7 @@ import { Executeur } from '../execution/executeur'
 import { compteExiste, creerCompte, LONGUEUR_MIN, seConnecter } from '../prof/compte'
 import { naviguer, versChemin, type Destination, type OngletProf } from '../routage'
 import { Apercu } from './Apercu'
+import { Atelier } from './Atelier'
 import { Classe } from './Classe'
 import { TableauDeBord } from './TableauDeBord'
 import './EcranProf.css'
@@ -255,6 +256,7 @@ function Connexion({ onOuvert }: { onOuvert: (jeton: string) => void }) {
 const ONGLETS: { id: OngletProf; libelle: string }[] = [
   { id: 'seance', libelle: 'Séance' },
   { id: 'classe', libelle: 'Ma classe' },
+  { id: 'atelier', libelle: 'Atelier' },
 ]
 
 function BarreOnglets({ courant }: { courant: OngletProf }) {
@@ -342,6 +344,8 @@ function SessionProf({
       )}
 
       {onglet === 'classe' && <Classe jetonProf={jeton} />}
+
+      {onglet === 'atelier' && <Atelier executeur={executeur} />}
 
       {/* La sortie reste hors des onglets : ce n'est pas une activité. */}
       <div className="prof__pied">

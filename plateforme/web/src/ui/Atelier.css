@@ -1,0 +1,318 @@
+/*
+ * L'atelier des exercices. Deux colonnes : a gauche ce qu'on remplit, a
+ * droite ce qu'on regarde. Elles defilent separement — sinon, verifier
+ * l'apercu ferait perdre sa place dans le formulaire.
+ *
+ * TOUT est scope sous `.atelier`. `.champ` existe deja dans Classe.css, avec
+ * d'autres reglages : deux definitions globales du meme nom se departagent a
+ * l'ordre des imports, c'est-a-dire au hasard des refactorisations. La case a
+ * cocher de l'atelier s'affichait ainsi en colonne, au-dessus de son libelle.
+ */
+.atelier {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--e-3);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--e-3);
+  align-items: start;
+}
+
+.atelier--attente {
+  display: block;
+  padding: var(--e-5) var(--e-3);
+  color: var(--ink-soft);
+}
+
+@media (max-width: 1100px) {
+  /* Sous cette largeur, deux colonnes rendent les deux illisibles. */
+  .atelier {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.atelier__colonne {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  min-width: 0;
+}
+
+.atelier__colonne--droite {
+  position: sticky;
+  top: var(--e-2);
+}
+
+.atelier__bloc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-3);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+}
+
+.atelier__titre {
+  margin: 0 0 var(--e-1);
+  font-size: var(--t-4);
+  color: var(--ink);
+}
+
+.atelier__paire {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--e-2);
+  align-items: end;
+}
+
+.atelier .champ {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: var(--t-2);
+  color: var(--ink);
+  min-width: 0;
+}
+
+.atelier .champ--case {
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--e-1);
+  line-height: 1.5;
+}
+
+.atelier .champ--case input {
+  /* `width: auto` explicite : Classe.css impose `width: 100%` a tout input
+     sous `.champ`, et une case a cocher etiree sur toute la largeur pousse
+     son libelle a la ligne suivante. */
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+}
+
+/*
+ * `:not([type='checkbox'])` : sans lui, la case a cocher heritait du padding
+ * et du fond des champs de saisie. Elle devenait un carre gris de trois
+ * centimetres, pose au-dessus de son libelle au lieu d'etre a cote.
+ */
+.atelier .champ input:not([type='checkbox']),
+.atelier .champ select,
+.atelier .champ textarea {
+  padding: 0.5rem var(--e-1);
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-2);
+}
+
+.atelier .champ textarea {
+  font-family: var(--police-code);
+  font-size: var(--t-2);
+  resize: vertical;
+}
+
+/* Un champ que l'atelier calcule : il se lit, il ne se tape pas. */
+.atelier .champ--calcule {
+  background: var(--ground-2);
+  color: var(--ink-soft);
+}
+
+.atelier .champ input:focus-visible,
+.atelier .champ select:focus-visible,
+.atelier .champ textarea:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 1px;
+}
+
+.atelier .champ__note {
+  margin: 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* Un libelle que seul un lecteur d'ecran doit entendre. */
+.atelier .champ__invisible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.atelier .cartes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.atelier .carte-test {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-2);
+  background: var(--ground);
+  border: 1px solid var(--rule-doux);
+  border-left: 3px solid var(--py-blue);
+  border-radius: var(--rayon-2);
+}
+
+.atelier .carte-test__tete {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.atelier .carte-test__sorte {
+  font-size: var(--t-2);
+  font-weight: 500;
+}
+
+.atelier .carte-test__retirer {
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.atelier .carte-test__aide {
+  margin: 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.atelier .cartes__ajout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1);
+  margin-top: var(--e-2);
+}
+
+.atelier__sortie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  align-items: flex-start;
+}
+
+.atelier__note,
+.atelier .essais__note {
+  margin: 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.atelier__alerte {
+  margin: 0;
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--ko) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ko) 35%, var(--surface));
+  color: var(--ko);
+  font-size: var(--t-2);
+}
+
+.atelier__volets {
+  display: flex;
+  gap: var(--e-1);
+  border-bottom: 1px solid var(--rule-doux);
+}
+
+.atelier__volet {
+  padding: var(--e-1) var(--e-2);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  font: inherit;
+  font-size: var(--t-2);
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.atelier__volet[aria-selected='true'] {
+  color: var(--ink);
+  border-bottom-color: var(--py-blue);
+}
+
+/* L'apercu monte l'ecran de l'eleve tel quel : il porte son propre fond. */
+.atelier__apercu {
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  overflow: hidden;
+}
+
+.atelier .essais {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  padding: var(--e-3);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  align-items: flex-start;
+}
+
+.atelier .essais__vide {
+  margin: 0;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.atelier .essais__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  width: 100%;
+}
+
+.atelier .essai {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--e-1);
+  align-items: start;
+}
+
+.atelier .essai__marque {
+  font-weight: 700;
+}
+
+.atelier .essai[data-verdict='vert'] .essai__marque {
+  color: var(--ok);
+}
+
+.atelier .essai[data-verdict='rouge'] .essai__marque {
+  color: var(--ko);
+}
+
+.atelier .essai__titre {
+  margin: 0;
+  font-size: var(--t-2);
+}
+
+.atelier .essai__detail {
+  margin: 0.25rem 0 0;
+  padding: var(--e-1);
+  background: var(--ground-2);
+  border-radius: var(--rayon-1);
+  font-family: var(--police-code);
+  font-size: var(--t-1);
+  white-space: pre-wrap;
+  color: var(--ink-soft);
+}

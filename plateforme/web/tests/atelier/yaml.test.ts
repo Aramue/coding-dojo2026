@@ -92,6 +92,22 @@ describe('enYaml — quand un titre a besoin de guillemets', () => {
   })
 })
 
+describe('enYaml — les textes narratifs et le code', () => {
+  it("écrit l'énoncé, le départ et la solution en bloc, toujours", () => {
+    // Les 112 fichiers du dépôt le font sans une seule exception : une chaîne
+    // sur une ligne rompt l'alignement de la relecture.
+    const y = enYaml(exemple({ enonce: 'Une ligne.', depart: 'a = 1', solution: 'b = 2' }))
+    expect(y).toContain('enonce: |\n  Une ligne.\n')
+    expect(y).toContain('depart: |\n  a = 1\n')
+    expect(y).toContain('solution: |\n  b = 2\n')
+  })
+
+  it("ne double pas le saut de ligne d'un texte qui en a déjà un", () => {
+    const y = enYaml(exemple({ enonce: 'Une ligne.\n' }))
+    expect(y).toContain('enonce: |\n  Une ligne.\n')
+  })
+})
+
 describe('enYaml — les textes longs', () => {
   it('écrit un texte multiligne en bloc, indenté de deux espaces', () => {
     const y = enYaml(exemple({ enonce: 'Première ligne.\nSeconde ligne.\n' }))
