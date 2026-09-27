@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Executeur } from '../execution/executeur'
-import type { Destination } from '../routage'
+import { naviguer, type Destination } from '../routage'
 import { Apercu } from './Apercu'
 import { Classe } from './Classe'
+import { QuizProf } from './QuizProf'
 import { TableauDeBord } from './TableauDeBord'
 import './EcranProf.css'
 
@@ -25,7 +26,11 @@ function lireCodeMemorise(): string | null {
   }
 }
 
-export function EcranProf() {
+/**
+ * `quiz` : la même porte ouvre l'écran projeté du quiz, sur /prof/quiz. Un
+ * seul code professeur, gardé le temps de l'onglet.
+ */
+export function EcranProf({ quiz = false }: { quiz?: boolean }) {
   const [code, setCode] = useState<string | null>(() => lireCodeMemorise())
   const [saisi, setSaisi] = useState('')
 
@@ -52,7 +57,7 @@ export function EcranProf() {
   }
 
   if (code) {
-    return <SessionProf code={code} onFermer={fermer} />
+    return quiz ? <QuizProf codeProf={code} /> : <SessionProf code={code} onFermer={fermer} />
   }
 
   return (
@@ -114,6 +119,13 @@ function SessionProf({ code, onFermer }: { code: string; onFermer: () => void })
         <span className="prof__note">
           Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
         </span>
+        <button
+          type="button"
+          className="bouton prof__quiz"
+          onClick={() => naviguer({ vue: 'prof-quiz' })}
+        >
+          Quiz en direct
+        </button>
       </div>
 
       <Classe codeProf={code} />

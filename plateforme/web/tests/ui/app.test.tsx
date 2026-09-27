@@ -181,6 +181,12 @@ describe('App — le menu suit la progression', () => {
 })
 
 describe('App — tableau de bord professeur', () => {
+  it("ouvre l'ecran projete du quiz sur /prof/quiz, derriere la porte du professeur", async () => {
+    history.pushState(null, '', '/prof/quiz')
+    render(<App />)
+    expect(screen.getByLabelText(/code professeur/i)).toBeInTheDocument()
+  })
+
   it("s'atteint sur /prof sans code eleve", async () => {
     // Le tableau de bord a sa propre porte : il doit rester joignable meme
     // quand personne n'est connecte cote eleve.

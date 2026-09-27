@@ -93,3 +93,33 @@ describe('EcranProf — la porte', () => {
     lire.mockRestore()
   })
 })
+
+describe('EcranProf — le quiz', () => {
+  it('mène au quiz en direct depuis le tableau de bord', async () => {
+    sessionStorage.setItem(CLE, 'code-de-test')
+    history.pushState(null, '', '/prof')
+    render(<EcranProf />)
+    await userEvent.click(await screen.findByRole('button', { name: 'Quiz en direct' }))
+    expect(location.pathname).toBe('/prof/quiz')
+  })
+
+  it('ouvre l ecran projete avec le meme code professeur', async () => {
+    vi.stubGlobal('WebSocket', class { close() {} })
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        status: 200,
+        json: async () =>
+          url.endsWith('/prof/quiz/partie')
+            ? { partie: null, maintenant: new Date().toISOString() }
+            : url.endsWith('/prof/quiz')
+              ? { quiz: [] }
+              : { eleves: [] },
+      })),
+    )
+    sessionStorage.setItem(CLE, 'code-de-test')
+    render(<EcranProf quiz />)
+    expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+  })
+})

@@ -119,11 +119,11 @@ export function App() {
 
   // Le tableau de bord ne passe pas par le code eleve : il a sa propre porte,
   // et il doit rester atteignable meme si personne n'est connecte cote eleve.
-  if (destination.vue === 'prof') {
+  if (destination.vue === 'prof' || destination.vue === 'prof-quiz') {
     return (
       <div className="appli appli--seul">
         <Entete />
-        <EcranProf />
+        <EcranProf quiz={destination.vue === 'prof-quiz'} />
       </div>
     )
   }
