@@ -1,0 +1,108 @@
+# Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unité de
+# navigation : elle porte une leçon, un groupe d'exercices et une couleur.
+#
+# SEULE SOURCE de cette table. Le schéma la charge, construire_contenu.py la
+# publie dans notions.json, et le front la lit là. Personne ne la recopie.
+#
+# `famille` est un nom de couleur, pas un nom de sens : la couleur suit la
+# NOTION, pas le concept. La table FAMILLES mappait autrefois print → variables
+# et input → types, ce qui donnait deux couleurs pour quatre notions. Les cinq
+# familles doivent être distinctes à l'intérieur d'un chapitre, ce qui borne un
+# chapitre à cinq notions.
+#
+# `motif` est facultatif : c'est ce qui trahit la notion dans un exemple de
+# leçon. Une leçon d'ordre N ne peut employer que des notions d'ordre <= N.
+# Le motif est compilé avec re.MULTILINE, et il n'est jamais publié.
+
+- id: afficher
+  ordre: 1
+  titre: Afficher un message
+  famille: conditions
+  chapitre: bases
+
+- id: variables
+  ordre: 2
+  titre: Les variables
+  famille: variables
+  chapitre: bases
+  # Une affectation en début de ligne, mais pas une comparaison `==`.
+  motif: '^\s*[a-z_][a-z0-9_]*\s*=(?!=)'
+
+- id: types
+  ordre: 3
+  titre: Types et conversion
+  famille: types
+  chapitre: bases
+  motif: '\b(?:int|float|str)\s*\(|\bf[\"'']'
+
+- id: saisie
+  ordre: 4
+  titre: Demander une information
+  famille: operateurs
+  chapitre: bases
+  motif: '\binput\s*\('
+
+# --- Séance 2 ---
+# Une notion à part pour les trois exercices de réactivation : la conception
+# exige un créneau NOMMÉ, qu'on ne peut pas sacrifier quand la séance déborde.
+# Noyés en tête de « Calculer », ils se liraient comme des exercices ratés.
+- id: reveil
+  ordre: 5
+  titre: Se remettre en route
+  famille: variables
+  chapitre: decisions
+
+- id: calculer
+  ordre: 6
+  titre: Calculer
+  famille: operateurs
+  chapitre: decisions
+
+- id: comparer
+  ordre: 7
+  titre: Comparer
+  famille: types
+  chapitre: decisions
+
+- id: combiner
+  ordre: 8
+  titre: Combiner des conditions
+  famille: boucles
+  chapitre: decisions
+
+- id: decider
+  ordre: 9
+  titre: Décider
+  famille: conditions
+  chapitre: decisions
+
+# --- Séance 3 ---
+- id: rappels
+  ordre: 10
+  titre: Rappels avant les boucles
+  famille: variables
+  chapitre: boucles
+
+- id: repeter
+  ordre: 11
+  titre: Répéter avec for
+  famille: boucles
+  chapitre: boucles
+
+- id: parcourir
+  ordre: 12
+  titre: Parcourir un texte
+  famille: types
+  chapitre: boucles
+
+- id: compter
+  ordre: 13
+  titre: Compter et cumuler
+  famille: operateurs
+  chapitre: boucles
+
+- id: tantque
+  ordre: 14
+  titre: Répéter tant que
+  famille: conditions
+  chapitre: boucles

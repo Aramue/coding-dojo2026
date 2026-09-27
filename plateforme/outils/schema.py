@@ -142,6 +142,11 @@ def charger_exercice(chemin: Path) -> Exercice:
     return Exercice(**donnees)
 
 
+# Les tables de contenu vivent a la racine d'un chapitre et ne sont pas des
+# exercices non plus. Meme raison que pour les lecons.
+TABLES = {"notions.yaml", "chapitres.yaml"}
+
+
 def charger_tous(racine: Path) -> list[Exercice]:
     # Les lecons vivent dans `seance-N/lecons/` et ne sont PAS des exercices :
     # les charger ici ferait echouer la validation sur un fichier parfaitement
@@ -149,8 +154,25 @@ def charger_tous(racine: Path) -> list[Exercice]:
     return [
         charger_exercice(p)
         for p in sorted(racine.rglob("*.yaml"))
-        if "lecons" not in p.parts
+        if "lecons" not in p.parts and p.name not in TABLES
     ]
+
+
+def charger_table(chemin: Path) -> dict[str, dict]:
+    """Lit une table de contenu : une liste d'entrees portant chacune un `id`.
+
+    Rend un dictionnaire indexe par cet identifiant, l'identifiant retire des
+    details — exactement la forme qu'avaient NOTIONS et CHAPITRES quand elles
+    vivaient ici en dur.
+    """
+    table: dict[str, dict] = {}
+    for entree in yaml.safe_load(chemin.read_text(encoding="utf-8")):
+        details = dict(entree)
+        identifiant = details.pop("id")
+        if identifiant in table:
+            raise ValueError(f"{chemin.name} : l'identifiant {identifiant!r} apparait deux fois")
+        table[identifiant] = details
+    return table
 
 
 MOTIF_LECON = re.compile(r"^c([1-9][0-9]?)-[a-z]+$")
