@@ -81,6 +81,14 @@ vérification est pire que pas d'outil.==
   échouer le déploiement ; l'atelier dit la même chose tout de suite.
 - Écrire du YAML à la main reste parfaitement viable. L'atelier n'est pas un passage obligé.
 
+> [!note] Complément du 28 septembre 2026 — l'atelier écrit dans le dépôt
+> Sur Chrome et Edge, l'atelier ouvre désormais le **dossier du clone local** et y réécrit un
+> fichier corrigé, à sa place. La décision tient telle quelle : ce qu'il écrit est toujours un
+> fichier du dépôt, jamais une ligne sur le serveur, et ==publier reste un commit et un
+> déploiement== — que le professeur fait, après avoir relu le diff. Deux pertes ne se font jamais
+> en silence : les commentaires du fichier, et une modification faite sur le disque depuis la
+> lecture. Voir [[Spécification atelier de contenu]], §5.8.
+
 ## Alternatives écartées
 
 - **Une base de contenu avec administration web.** Déjà écartée par ADR-003, et pour la même

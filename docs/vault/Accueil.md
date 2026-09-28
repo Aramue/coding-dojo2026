@@ -3,7 +3,7 @@ title: Accueil
 tags:
   - moc
 statut: en-conception
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-09-28
 ---
 
 # Coding Dojo 2026-2027
@@ -47,6 +47,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Atelier de contenu — palier 1 | ✅ livré — [[ADR-015 L'atelier écrit des fichiers, pas des lignes de base]], branche `atelier-contenu` |
 | Atelier de contenu — paliers 2 et 3 | ✅ livrés — composer, éprouver, reprendre, exporter ; exercices **et** leçons |
+| Atelier — corriger depuis le dépôt | ✅ livré — ouvrir le dossier, chercher, corriger, réécrire à sa place ; voir [[Spécification atelier de contenu]] §5.8 |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Revue finale de branche | ⬜ à faire |
 
@@ -58,7 +59,7 @@ qu'il a demandé à la plateforme, sur `contenu-seance-2`, qui en part ; le comp
 
 | Partie | État |
 |---|---|
-| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **1025 tests**, ==couverture 100 %== |
+| `web/` | Front React + TypeScript, Pyodide auto-hébergé, **1097 tests**, ==couverture 100 %== |
 | `api/` | FastAPI + SQLite, **102 tests**, ==couverture 100 %== |
 | `outils/` | Schéma, validateur, générateur d'attendu, constructeur, **149 tests**, ==couverture 100 %== |
 | `contenu/` | **112 exercices** des trois séances — 75 obligatoires, 14 renforts, 23 experts — et **14 leçons** |

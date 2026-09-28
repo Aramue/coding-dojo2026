@@ -6,6 +6,7 @@ tags:
   - professeur
 statut: livrée
 date: 2026-09-27
+mis-a-jour: 2026-09-28
 ---
 
 # Spécification — l'atelier de contenu
@@ -311,9 +312,9 @@ avec ses vraies fautes de frappe et sa vraie longueur.
 
 ### 5.6 Entrer un fichier, en sortir un
 
-**Glisser-déposer.** On lâche un ou plusieurs `.yaml` sur la page. C'est ==la seule façon de
-reprendre un exercice existant== : les solutions ne sont jamais publiées, donc rien d'utile ne peut
-venir de `/contenu/`.
+**Glisser-déposer.** On lâche un ou plusieurs `.yaml` sur la page. C'est, avec le dossier du
+dépôt (§5.8), ==la seule façon de reprendre un exercice existant== : les solutions ne sont jamais
+publiées, donc rien d'utile ne peut venir de `/contenu/`.
 
 La lecture demande **une dépendance nouvelle, `yaml`**. Le dépôt pose « aucune dépendance
 nouvelle » ; l'exception est délibérée et consignée dans ADR-015. Écrire un analyseur de
@@ -359,9 +360,9 @@ centaine de lignes, et un test qui les verrouille :
 > avant tout export.
 
 **La sortie.** Un bouton télécharge le fichier. Sur les navigateurs qui exposent l'API d'accès au
-système de fichiers — Chrome et Edge — l'atelier propose en plus de **désigner une fois le dossier
-du dépôt** et d'y enregistrer directement, sous le bon nom. Firefox et Safari retombent sur le
-téléchargement, sans que rien ne manque.
+système de fichiers — Chrome et Edge — il ouvre à la place une fenêtre d'enregistrement, sous le
+bon nom ; et un fichier repris du dossier du dépôt se **réécrit à sa place**, sans fenêtre du
+tout (§5.8). Firefox et Safari retombent sur le téléchargement, sans que rien ne manque.
 
 ### 5.7 Ce qui peut mal tourner
 
@@ -372,6 +373,64 @@ téléchargement, sans que rien ne manque.
 | Un fichier porte des champs **inconnus** du schéma | ==Il est refusé, et les champs sont nommés.== Les charger dans un formulaire qui les ignore les perdrait silencieusement à l'export |
 | Pyodide n'est pas prêt, ou lent | L'onglet Essais le dit ; tout le reste de l'atelier fonctionne |
 | La solution boucle sans fin | Le délai de cinq secondes de l'exécuteur s'applique, et le message est celui de l'élève — « Ton programme tourne en rond » |
+| Un fichier du dépôt a disparu entre la lecture et l'enregistrement | L'atelier nomme son chemin et demande de rouvrir le dossier ; rien n'est écrit |
+| L'écriture dans le dépôt échoue | Le message le dit ; la correction reste ouverte, et marquée modifiée |
+| Un fichier du dépôt est refusé | Il reste dans le rail, marqué. Un nouveau clic dans le catalogue le **relit** : on vient peut-être de le réparer dans l'éditeur |
+| La fenêtre de choix du dossier est refermée | Rien ne se passe, et le catalogue d'avant reste |
+
+### 5.8 Corriger depuis le dossier du dépôt
+
+Le glisser-déposer suffit pour reprendre un fichier, pas pour **corriger vite** : il faut retrouver
+le fichier dans l'explorateur, le lâcher, puis l'enregistrer au bon endroit par une fenêtre de
+choix. Sur Chrome et Edge, l'atelier ouvre donc le **dossier du dépôt**, une fois pour la session :
+
+1. « Ouvrir le dossier du dépôt » — sa racine ou `contenu/`, en lecture **et** en écriture ;
+2. le catalogue liste chaque exercice et chaque leçon **avec son titre**, et une recherche sans
+   casse ni accents les filtre : `s3-07`, « boucle », ou « mal boucle » dans n'importe quel ordre.
+   Entrée reprend le premier trouvé ;
+3. un clic **relit le fichier à l'instant** et l'ouvre dans le rail, entier — solution et
+   commentaires compris. Un fichier déjà ouvert n'est pas relu : on y retourne, avec ce qu'on y a
+   changé ;
+4. « Enregistrer dans le dépôt » le réécrit **à sa place**, sans fenêtre de choix, et le dit.
+
+> [!important] Deux pertes qui ne se font jamais sans qu'on l'ait dit
+> Avant de réécrire, l'atelier relit le fichier sur le disque. S'il porte des **commentaires** —
+> quinze fichiers du chapitre 1 en portent, et ils expliquent un choix pédagogique — ou s'il a
+> **changé depuis la lecture** — une correction faite entre-temps dans l'éditeur, par exemple —
+> l'atelier le dit et attend « Enregistrer quand même ». Toucher au brouillon retire la question :
+> elle valait pour l'état d'avant.
+
+> [!warning] Un identifiant changé n'écrase pas l'original
+> `s3-07.yaml` qui contiendrait `s3-09` serait un exercice sous le nom d'un autre, et la
+> construction ne compare pas le nom d'un fichier à son identifiant. Si l'identifiant change,
+> l'atelier le dit sous le bouton, et le fichier part **comme un neuf** — fenêtre d'enregistrement
+> ou téléchargement. L'original reste tel quel, et toujours marqué modifié.
+
+Un fichier corrigé mais pas encore enregistré porte « modifié » dans le rail, et fermer l'onglet
+du navigateur demande alors confirmation. L'atelier reste monté quand on va voir la séance ou la
+classe : le dossier ouvert et les corrections en cours survivent au changement d'onglet.
+
+Le parcours du dossier évite `node_modules`, `dist`, `public`, `coverage`, `__pycache__`,
+`htmlcov` et tout ce qui commence par un point, et s'arrête à huit niveaux. Depuis la racine du
+dépôt, il trouve les 126 fichiers en une fraction de seconde — un test le rejoue sur le vrai
+dépôt, et vérifie qu'il n'en manque aucun et qu'il n'en prend pas d'autre.
+
+> [!warning] Réécrire, c'est réécrire dans la mise en page de l'atelier
+> L'atelier ne corrige pas un fichier ligne à ligne : il le **réécrit entier**, dans son style.
+> Mesuré le 28 septembre 2026 sur le chapitre 1 : des 98 exercices sans commentaires, **65
+> ressortent identiques à l'octet**, hors ce qu'on a corrigé ; **33 exercices et 11 leçons sur
+> 14** ont été écrits à la main dans une mise en page que l'atelier ne reproduit pas — un titre
+> entre guillemets, des options de QCM sur une ligne, des paragraphes repliés ailleurs. Même sens,
+> garanti par le tour complet, mais ==le diff dépasse la correction==. L'atelier le dit sous le
+> bouton avant d'enregistrer, et ne le dit plus une fois le fichier réécrit.
+>
+> Le remède complet serait de ne réécrire **que les champs modifiés**, en gardant les octets du
+> reste — commentaires compris. Ce n'est pas fait.
+
+> [!note] Ce qui n'est pas fait
+> La poignée du dossier n'est pas gardée d'une session à l'autre : après un rechargement, on
+> rouvre le dossier. La garder demanderait IndexedDB et une nouvelle demande de permission au
+> premier clic — pour épargner un clic par séance de travail.
 
 ## 6. Palier 3 — l'atelier des leçons
 
@@ -399,9 +458,10 @@ faible.
 | 1 | **Les quatre fichiers déjà publiés — `exercices`, `lecons`, `notions`, `chapitres` — sont identiques octet pour octet avant et après le déplacement des tables** ; les bornes acceptent `s99-01` et refusent `s0-01` et `s01-01` ; deux notions de même famille dans un chapitre échouent ; deux identifiants en double échouent ; un `seance` qui contredit son identifiant échoue ; `schema.json`, le cinquième, décrit les quatre types de tests ; l'API accepte une tentative sur `s4-01` |
 | 2 | Les trois onglets ont chacun leur chemin, et un rechargement revient sur le bon ; `/prof` seul vaut « Séance » ; Ctrl+clic sur un onglet ne change pas de page ; les deux `tablist` de la page portent des noms distincts ; le tour complet sur les 112 fichiers ; l'émetteur et les contrôles à **100 % de couverture**, comme toute logique pure de ce dépôt ; le lanceur d'essais avec un exécuteur simulé, y compris le cas du départ qui passe déjà ; le glisser-déposer d'un fichier cassé, d'un fichier étranger, d'un fichier à champs inconnus ; l'export refusé quand un champ requis manque |
 | 3 | Les trois types de blocs ; l'exemple qui plante est signalé et nommé ; entrées et exécutable sont incompatibles |
+| Dépôt | Le catalogue du **vrai dépôt**, depuis sa racine : chaque fichier du corpus, aucun autre, chacun avec son titre ; la réécriture en place, octet pour octet hors de ce qu'on a changé ; la confirmation avant d'effacer des commentaires ou d'écraser un fichier changé sur le disque ; l'identifiant changé qui part en fichier neuf ; le double-clic qui n'ouvre qu'une fois ; le fichier refusé qu'on relit une fois réparé ; le fichier disparu, l'écriture qui échoue ; l'onglet qui retient sa fermeture ; l'atelier qui survit au changement d'onglet |
 
-`src/atelier/**` rejoint les seuils à 100 % de `vitest.config.ts`, aux côtés de `validation/`,
-`routage.ts`, `texte.tsx` et `calendrier.ts`. Les composants restent au plancher global.
+Tout `src/` est aux seuils à 100 % de `vitest.config.ts` depuis le 27 septembre 2026 — atelier
+compris, composants compris.
 
 ## 8. Risques
 

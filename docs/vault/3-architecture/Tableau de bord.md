@@ -3,7 +3,7 @@ title: Tableau de bord
 tags:
   - architecture
   - professeur
-mis-a-jour: 2026-09-25
+mis-a-jour: 2026-09-28
 ---
 
 # Tableau de bord
@@ -228,7 +228,8 @@ Voir [[ADR-002 Identification par code d'agent]].
 ## Trois onglets, trois chemins
 
 L'espace professeur s'ouvre sur une barre d'onglets. **Séance** porte le tableau de bord et
-l'accès à l'aperçu ; **Ma classe** la liste des élèves ; **Atelier** compose un exercice et l'éprouve avant de l'écrire dans un fichier.
+l'accès à l'aperçu ; **Ma classe** la liste des élèves ; **Atelier** compose un exercice ou une
+leçon, l'éprouve avant de l'écrire dans un fichier, et corrige ceux du dépôt à leur place.
 
 | Onglet | Chemin |
 |---|---|
@@ -245,10 +246,15 @@ troisième l'aurait rendue interminable, et l'atelier a besoin de toute la haute
 > Seuls `classe` et `atelier` sont interceptés après `/prof` : une notion qui s'appellerait
 > « prof » garde ses pages `/prof/cours` et `/prof/exercices`.
 
-> [!note] Un onglet inactif est démonté
+> [!note] Séance et classe sont démontées quand on les quitte, pas l'atelier
 > Le tableau cesse donc d'interroger l'API pendant qu'on est ailleurs, et repart à neuf en
 > revenant. Contrepartie assumée : un jeton qui expire pendant ce temps ne renvoie à la porte
 > qu'au retour sur « Séance ».
+>
+> L'atelier, lui, reste monté une fois ouvert, caché quand on est ailleurs, depuis le 28
+> septembre 2026 : aller jeter un œil à la séance ne doit coûter ni le dossier du dépôt ouvert,
+> ni les corrections pas encore enregistrées. Il n'interroge pas l'API, et n'a donc rien à
+> arrêter.
 
 « Fermer la session professeur » reste **hors** des onglets, en pied : c'est une sortie, pas une
 quatrième activité. L'aperçu, lui, reste une fenêtre par-dessus tout.

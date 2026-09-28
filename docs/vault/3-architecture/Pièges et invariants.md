@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-09-28
 ---
 
 # Pièges et invariants
@@ -384,6 +384,51 @@ tapée avec quatre espaces, comme la leçon le demande, ne s'alignent plus, et P
 `IndentationError` sur un bloc qui a l'air juste.
 
 Au clavier, on sort toujours de l'éditeur : Échap, puis Tab dans les deux secondes.
+
+### L'éditeur ne renvoie pas au parent la valeur qu'il vient d'en recevoir
+
+Quand `valeur` change de l'extérieur — un autre exercice, un autre fichier ouvert dans l'atelier —
+`Editeur.tsx` remplace le document par une transaction annotée `venuDuParent`, et son écouteur
+ignore les transactions qui la portent. `onChange` ne signale donc que ce qu'on a **tapé**.
+
+**Ce qui casse :** sans l'annotation, le remplacement revient au parent comme une frappe. Côté
+élève, c'est invisible : le parent reçoit la valeur qu'il a déjà. Dans l'atelier, ==chaque
+fichier était marqué « modifié » à la seconde où on l'ouvrait==, et fermer l'onglet demandait une
+confirmation pour une correction qui n'existait pas. Trouvé le 28 septembre 2026 par le test qui
+ouvre un fichier du dépôt sans rien y changer.
+
+### Le rail de l'atelier désigne un fichier par sa clé, jamais par son rang
+
+Chaque fichier ouvert reçoit une `cle` stable à l'ouverture ; le fichier courant, les
+modifications et la réécriture passent par elle.
+
+**Ce qui casse :** avec le rang, retirer un fichier placé **avant** le courant décalait tout. Le
+courant pointait dans le vide, les modifications suivantes n'allaient nulle part — puis dans le
+premier fichier ouvert ensuite. Tant que l'atelier ne faisait que télécharger, on perdait une
+correction. ==Avec la réécriture en place, c'était écrire un exercice dans le fichier d'un
+autre.==
+
+### Une réécriture en place relit le disque, et demande avant de perdre
+
+Avant d'écrire un fichier du dépôt, l'atelier le relit. S'il porte des commentaires, ou s'il a
+changé depuis qu'on l'a ouvert, il attend « Enregistrer quand même ». Le bouton s'écrit
+`onClick={() => void sortir(false)}`, jamais `onClick={sortir}`.
+
+**Ce qui casse :** sans la relecture, une correction faite entre-temps dans l'éditeur de texte
+est écrasée sans un mot, et les commentaires — quinze fichiers du chapitre 1, qui expliquent un
+choix pédagogique — disparaissent au premier enregistrement. Personne ne relit un diff pour
+vérifier qu'un commentaire est encore là. Quant à `onClick={sortir}`, React passerait
+l'événement en premier argument : un objet, donc vrai, donc « déjà confirmé ».
+
+### Un fichier du dépôt ne se réécrit que sous son propre nom
+
+Si l'identifiant change pendant la correction, `s3-07.yaml` n'est pas réécrit : le fichier part
+comme un neuf, sous le nouveau nom, et l'original reste tel quel.
+
+**Ce qui casse :** `s3-07.yaml` qui contiendrait `s3-09` serait un exercice sous le nom d'un
+autre. La construction ne compare pas le nom d'un fichier à son identifiant — elle ne refuse que
+les doublons : le décalage passe, et la prochaine correction de `s3-09` se cherche dans le
+mauvais fichier.
 
 ## Déploiement
 
