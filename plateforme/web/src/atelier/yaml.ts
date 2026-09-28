@@ -30,14 +30,17 @@ function aBesoinDeGuillemets(valeur: string): boolean {
   if (/^[-?:,[\]{}#&*!|>'"%@`]/.test(valeur)) return true
   if (/^[0-9.=]/.test(valeur)) return true
   if (/: |\s#|^\s|\s$/.test(valeur)) return true
-  // Un guillemet dans un scalaire nu passe en YAML, mais se relit mal : on
-  // entoure, ce qui rend l'echappement visible.
-  if (valeur.includes('"')) return true
+  // Un guillemet double au milieu d'un scalaire ne gêne pas YAML, et les
+  // fichiers du dépôt le laissent nu : `- print("Bonjour")`. L'entourer
+  // produirait une forêt d'échappements pour rien.
   return false
 }
 
 function scalaire(valeur: string): string {
   if (!aBesoinDeGuillemets(valeur)) return valeur
+  // Apostrophes simples quand la valeur porte un guillemet double : c'est ce
+  // que fait le dépôt pour une option de QCM comme `'"Bonjour"'`.
+  if (valeur.includes('"')) return `'${valeur.replace(/'/g, "''")}'`
   return `"${valeur.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
 }
 
@@ -79,9 +82,24 @@ function listeCourte(cle: string, valeurs: string[], retrait: string): string {
   return `${retrait}${cle}: [${dedans}]\n`
 }
 
-/** Une liste longue, un élément par ligne. */
+/**
+ * Une liste longue, un élément par ligne.
+ *
+ * Une valeur sur PLUSIEURS lignes ne peut pas sortir en scalaire nu : elle
+ * produirait des lignes orphelines, sans tiret, et le fichier ne se
+ * rechargerait plus. Une option de QCM en porte — s1-24 en a trois, qui
+ * comparent trois sorties de programme. Elle s'écrit donc entre guillemets,
+ * avec ses sauts échappés, comme le fait le dépôt.
+ */
 function listeLongue(cle: string, valeurs: string[], retrait: string): string {
-  const lignes = valeurs.map((v) => `${retrait}  - ${scalaire(v)}\n`).join('')
+  const lignes = valeurs
+    .map((v) => {
+      const rendu = v.includes('\n')
+        ? `"${v.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n')}"`
+        : scalaire(v)
+      return `${retrait}  - ${rendu}\n`
+    })
+    .join('')
   return `${retrait}${cle}:\n${lignes}`
 }
 
@@ -148,9 +166,10 @@ export function enYaml(brouillon: Brouillon): string {
   sortie += `obligatoire: ${brouillon.obligatoire}\n`
   sortie += texte('enonce', brouillon.enonce)
 
-  // Un champ vide ne s'écrit pas : le schéma lui donne déjà sa valeur par
-  // défaut, et `depart: ""` dans un fichier relu à la main est du bruit.
-  if (brouillon.depart) sortie += texte('depart', brouillon.depart)
+  // `depart` s'écrit TOUJOURS, même vide : les 112 fichiers du dépôt le
+  // portent tous, et son absence se lirait comme un oubli plutôt que comme un
+  // exercice à écrire de zéro.
+  sortie += brouillon.depart ? texte('depart', brouillon.depart) : `depart: ''\n`
   if (brouillon.indices.length > 0) sortie += listeLongue('indices', brouillon.indices, '')
 
   sortie += 'tests:\n'

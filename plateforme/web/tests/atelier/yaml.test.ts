@@ -87,8 +87,15 @@ describe('enYaml — quand un titre a besoin de guillemets', () => {
     expect(enYaml(exemple({ titre }))).toContain(`titre: "${titre}"\n`)
   })
 
-  it('échappe un guillemet dans un titre', () => {
-    expect(enYaml(exemple({ titre: 'Le "vrai" faux' }))).toContain('titre: "Le \\"vrai\\" faux"\n')
+  it("laisse un guillemet nu quand rien n'oblige à entourer", () => {
+    // `- print("Bonjour")` dans le dépôt : entourer produirait une forêt
+    // d'échappements pour rien.
+    expect(enYaml(exemple({ titre: 'Le "vrai" faux' }))).toContain('titre: Le "vrai" faux\n')
+  })
+
+  it("entoure d'apostrophes quand il faut entourer ET qu'il y a un guillemet", () => {
+    // Une option de QCM comme `'"Bonjour"'` : le dépôt fait exactement ça.
+    expect(enYaml(exemple({ titre: '"Bonjour"' }))).toContain(`titre: '"Bonjour"'\n`)
   })
 })
 
@@ -132,8 +139,10 @@ describe('enYaml — les textes longs', () => {
 })
 
 describe('enYaml — ce qui ne sort pas', () => {
-  it('omet un départ vide plutôt que d écrire une chaîne vide', () => {
-    expect(enYaml(exemple({ depart: '' }))).not.toContain('depart')
+  it("écrit un départ vide plutôt que de l'omettre", () => {
+    // Les 112 fichiers du dépôt portent tous un `depart`. Son absence se
+    // lirait comme un oubli, pas comme un exercice à écrire de zéro.
+    expect(enYaml(exemple({ depart: '' }))).toContain(`depart: ''\n`)
   })
 
   it('omet une liste d indices vide', () => {
