@@ -103,8 +103,9 @@ contenait le fichier, et ils s'appelaient `deploiement-*`.
 > il passait chez l'un, échouait chez l'autre.
 
 Les secrets vivaient alors dans `.env` à la racine, hors dépôt, documenté par `.env.example`.
-Depuis le 25 septembre 2026, le `.env` ne porte plus que `DOJO_DOMAINE`, et il est facultatif —
-voir « Premier lancement » ci-dessus.
+Depuis le 25 septembre 2026, il n'y a plus de secret du tout — voir « Premier lancement »
+ci-dessus. Il porte désormais deux réglages d'exploitation, `DOJO_VERSION` et `DOJO_PUBLICATION` ;
+`DOJO_DOMAINE` a disparu avec le TLS de Caddy. Voir « La VM de production » plus bas.
 
 ## Le quiz en direct — 27 septembre 2026
 
@@ -128,3 +129,110 @@ voir « Premier lancement » ci-dessus.
   ne passe pas, le quiz fonctionne quand même, en relisant chaque seconde.
 
 Voir [[Quiz en direct]].
+
+## La VM de production — 28 septembre 2026
+
+==La machine n'est pas dédiée.== C'est un VPS (Ubuntu 22.04, 2 cœurs, 3,9 Go de mémoire, 58 Go de
+disque) qui héberge déjà `aramue.com` et un autre service en production. Tout ce qui suit découle
+de ce partage. Décision : [[ADR-017 Une seule branche, des releases par tag]].
+
+### Ce que la machine tenait déjà
+
+| Ce qui occupe | Détail |
+|---|---|
+| nginx | les ports **80 et 443**, cinq blocs de site, certificats certbot renouvelés par `certbot.timer` |
+| Six conteneurs | un autre projet, production et préproduction, publiés sur `127.0.0.1:3000`, `:3001`, `:3100`, `:3101` |
+| oauth2-proxy | `127.0.0.1:4180` et `:4181`, pour protéger leurs sites |
+| Un cron | la sauvegarde de leur base, à 3h15 |
+
+### Où le dojo se glisse
+
+- Le dépôt est cloné dans `/var/www/coding-dojo`, à côté du voisin.
+- Le conteneur web publie sur **`127.0.0.1:3200`** et rien d'autre. L'API n'est publiée nulle
+  part : Caddy l'atteint par le réseau Docker.
+- **nginx termine le TLS** pour `dojo.aramue.com` et relaie vers 3200 —
+  `deploiement/nginx-dojo.aramue.com.conf`, calqué sur les blocs déjà en place.
+- **Caddy ne fait plus de TLS.** Il écoute `:80` en clair et ne connaît plus le nom du site.
+  `DOJO_DOMAINE` et le volume `caddy_data` ont disparu, ainsi que le bloc à deux schémas qu'il
+  fallait déclarer pour échapper à sa redirection HTTPS automatique.
+
+> [!danger] Le `proxy_read_timeout` par défaut ferme la sonnette toutes les minutes
+> La sonnette du quiz ==ne dit rien entre deux questions==, et nginx ferme au bout de 60 s une
+> connexion relayée restée silencieuse. Il faut un `location /api/quiz/flux` à part, avec
+> `proxy_read_timeout 3600s`. Sans lui le quiz marche quand même — le repli est fait pour ça
+> ([[ADR-016 Temps réel par sonnette WebSocket]]) — mais chaque élève se rebranche une fois par
+> minute pendant toute la partie, pour rien.
+
+> [!warning] Pas de `limit_req` sur ce site, contrairement aux autres de la machine
+> Vingt-quatre élèves dont le WebSocket ne passe pas, c'est vingt-quatre requêtes par seconde, et
+> c'est le fonctionnement **normal** du repli. Une limite réglée pour un site vitrine
+> transformerait un réseau d'établissement capricieux en quiz cassé. Pas de `proxy_cache` non
+> plus : Caddy pose déjà les bons en-têtes, et mettre `/api` en cache servirait à un élève l'état
+> d'un autre.
+
+### Installer, la première fois
+
+1. **DNS** : `dojo.aramue.com` vers l'adresse de la VM.
+2. Cloner dans `/var/www/coding-dojo`, puis écrire `.env` d'après `.env.example` —
+   `DOJO_PUBLICATION=127.0.0.1:3200`.
+3. Un bloc nginx minimal en `:80` qui sert `/.well-known/acme-challenge/` depuis `/var/www/certbot`
+   (le webroot que la machine utilise déjà), puis :
+   ```bash
+   sudo certbot certonly --webroot -w /var/www/certbot -d dojo.aramue.com
+   ```
+   ==Le certificat doit exister avant le bloc `443`==, sinon `nginx -t` échoue sur un fichier absent
+   et refuse de recharger — ce qui couperait aussi les autres sites.
+4. Poser le fichier complet, `sudo nginx -t`, `sudo systemctl reload nginx`.
+5. `deploiement/deployer.sh v1.0.0`
+6. **Ouvrir `/prof` tout de suite** et créer le compte professeur (voir le danger plus haut).
+
+### Déployer, ensuite
+
+```bash
+/var/www/coding-dojo/deploiement/deployer.sh v1.1.0
+```
+
+Il sauvegarde la base, passe le dépôt sur le tag, tire les images, démarre **sans jamais
+construire** (`--no-build`), attend que `/api/sante` réponde, puis supprime nos images anciennes en
+gardant les deux dernières. Il demande confirmation : un déploiement coupe toutes les sonnettes en
+cours. Le retour arrière est le même script avec le tag précédent, et son image est encore là.
+
+### Les quatre façons de remplir un disque partagé
+
+| Le risque | Ce qui le borne |
+|---|---|
+| Journaux de conteneurs | `logging` dans `docker-compose.yml` : 10 Mo × 3 par service. Cette machine n'a ==pas de `/etc/docker/daemon.json`==, donc rien ne les bornerait. On borne chez nous plutôt que de changer un démon qui n'est pas à nous. |
+| Images périmées | `deployer.sh` supprime les nôtres au-delà des deux dernières, et ne fait **jamais** de `prune` global : les images du voisin ne nous regardent pas. |
+| Cache de construction | Il n'y en a pas. La VM ne construit rien. |
+| Sauvegardes | `sauvegarde.sh` garde 14 jours, et n'écrit rien si la base n'a pas changé. |
+
+Et la mémoire : `mem_limit` à 512 Mo sur l'API, 256 Mo sur Caddy. Sur 3,9 Go partagés, cela
+garantit qu'une fuite chez nous fait tuer **nos** conteneurs, et pas ceux du voisin — l'OOM killer
+du noyau choisit sa victime sur la mémoire consommée, pas sur l'ancienneté.
+
+### Sauvegardes
+
+```bash
+30 3 * * * /var/www/coding-dojo/deploiement/sauvegarde.sh >> /var/log/coding-dojo-sauvegarde.log 2>&1
+```
+
+3h30 et pas 3h15 : le voisin sauvegarde à 3h15, et deux `docker compose exec` en même temps sur
+deux cœurs, ce n'est pas la peine. La copie passe par `sqlite3.backup` **dans le conteneur**,
+jamais par `cp` : la base est ouverte pendant la copie, et un `cp` peut attraper un fichier à
+moitié écrit — on ne s'en apercevrait qu'en essayant de restaurer.
+
+Restaurer, conteneur arrêté :
+
+```bash
+cd /var/www/coding-dojo
+COMPOSE="docker compose -f docker-compose.yml -f deploiement/production.yml"
+gzip -dc /var/backups/coding-dojo/dojo-AAAAMMJJ-HHMMSS.db.gz > /tmp/dojo.db
+$COMPOSE stop api
+docker run --rm -v coding-dojo_donnees:/donnees -v /tmp:/depuis alpine \
+  cp /depuis/dojo.db /donnees/dojo.db
+$COMPOSE start api
+rm /tmp/dojo.db
+```
+
+Cela restaure la progression, les codes d'accès, le compte professeur et la clé des jetons : ils
+sont dans le même fichier.

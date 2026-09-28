@@ -38,7 +38,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Implémentation du palier 1 | ✅ **livrée** — 14 tâches, branche `palier-1` |
 | Spécification de l'interface | ✅ écrite — [[Spécification interface]] |
 | Plan de l'interface | ✅ écrit — [[Plan interface]], 16 tâches |
-| Quiz en direct | ✅ développé — [[Quiz en direct]], [[Plan quiz]], branche `quiz-en-direct` |
+| Quiz en direct | ✅ **livré** — [[Quiz en direct]], [[Plan quiz]], fusionné dans `main` le 28 septembre 2026 |
 | Implémentation de l'interface | ✅ **livrée** — tâches 1 à 14, branche `palier-1` |
 | Retrait de la fiction — code et base | ✅ livré |
 | Retrait de la fiction — 25 énoncés | ✅ livré |
@@ -47,6 +47,8 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Contenu du chapitre 1 | ✅ **écrit** — 112 exercices et 14 leçons, les trois séances, branche `contenu-seance-2` |
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
+| Intégration continue | ✅ livrée — trois contrôles, [[ADR-017 Une seule branche, des releases par tag]] |
+| Mise en production sur la VM | 🔶 en cours — [[Déploiement UNIGE]] |
 | Revue finale de branche | ⬜ à faire |
 
 ## Ce qui tourne aujourd'hui
@@ -87,7 +89,7 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 ## Cartes du coffre
 
 - **Contexte** — [[Bilan 2025-2026]] · [[Contraintes]]
-- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]]
+- **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]] · [[ADR-015 Quiz en direct et classement encadré]] · [[ADR-016 Temps réel par sonnette WebSocket]] · [[ADR-017 Une seule branche, des releases par tag]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Tableau de bord]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
 - **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]

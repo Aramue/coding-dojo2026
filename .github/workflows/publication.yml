@@ -1,0 +1,68 @@
+# Un tag `vX.Y.Z` sur `main` produit les deux images de production, et rien
+# d'autre : la publication ne déploie pas. C'est un humain qui déploie, sur la
+# VM, hors séance.
+#
+# Pourquoi construire ici et pas sur la VM : la VM a 2 cœurs, 4 Go de mémoire et
+# fait déjà tourner un autre service. Un `pnpm install` et un `vite build` chez
+# elle, c'est de la mémoire prise à ce service et un cache de construction qui
+# grossit à chaque déploiement sur un disque partagé. Elle ne fait donc que
+# tirer des images déjà faites.
+name: Publication
+
+on:
+  push:
+    tags: ['v*']
+  # Pour republier un tag sans avoir à le refaire.
+  workflow_dispatch:
+
+jobs:
+  # Un tag n'est jamais publié sans ses tests, même si le commit est déjà passé
+  # par une PR : c'est ce qui permet de déployer sans rien relire.
+  verifications:
+    uses: ./.github/workflows/verifications.yml
+
+  images:
+    name: Images
+    needs: verifications
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Le seul droit d'écriture de tout le dépôt, et il ne sert qu'ici.
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ouvrir la session GHCR
+        run: echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+
+      # Construction simple : un seul `docker build` par image, pas de buildx ni
+      # de cache distant. La VM est en amd64 comme le runner, et ce travail ne
+      # tourne qu'à chaque release — un cache serait expiré avant d'être relu.
+      #
+      # Le nom du dépôt est écrit en minuscules parce que GHCR n'accepte que
+      # ça, et `github.repository` vaut « Aramue/coding-dojo2026 ».
+      - name: Construire et publier
+        env:
+          DEPOT: ghcr.io/aramue/coding-dojo2026
+        run: |
+          set -euo pipefail
+          for service in api web; do
+            image="$DEPOT/$service:${GITHUB_REF_NAME}"
+            echo "::group::$image"
+            docker build \
+              --file "deploiement/Dockerfile.$service" \
+              --tag "$image" \
+              --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
+              --label "org.opencontainers.image.revision=${{ github.sha }}" \
+              --label "org.opencontainers.image.version=${GITHUB_REF_NAME}" \
+              .
+            docker push "$image"
+            echo "::endgroup::"
+          done
+
+      - name: Ce qu'il faut lancer sur la VM
+        run: |
+          echo "### Publié : \`${GITHUB_REF_NAME}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo '```bash' >> "$GITHUB_STEP_SUMMARY"
+          echo "sudo /var/www/coding-dojo/deploiement/deployer.sh ${GITHUB_REF_NAME}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

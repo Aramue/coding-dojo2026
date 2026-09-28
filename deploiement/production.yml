@@ -1,0 +1,27 @@
+# Le complément de production. Il ne sert jamais seul :
+#
+#   docker compose -f docker-compose.yml -f deploiement/production.yml pull
+#   docker compose -f docker-compose.yml -f deploiement/production.yml up -d --no-build
+#
+# On ne tape pas cette commande à la main : `deployer.sh` l'assemble, et c'est
+# lui qui ajoute `--no-build`. Voir ADR-017.
+#
+# Il n'ajoute que deux choses : les images à tirer, et une borne mémoire.
+services:
+  api:
+    # Épinglée sur un tag, jamais `latest` : c'est ce qui rend le retour arrière
+    # possible. `:?` fait échouer la commande tout de suite si le `.env` de la
+    # machine n'a pas de DOJO_VERSION, plutôt que de tirer une image vide.
+    image: ghcr.io/aramue/coding-dojo2026/api:${DOJO_VERSION:?DOJO_VERSION manque dans le .env de la machine}
+    # La VM a 3,9 Go et fait déjà tourner six conteneurs d'un autre service en
+    # production. Sans borne, une fuite chez nous ferait tuer les leurs par
+    # l'OOM killer du noyau, qui choisit sa victime sur la mémoire consommée et
+    # pas sur l'ancienneté. On préfère être tué chez nous.
+    mem_limit: 512m
+
+  web:
+    image: ghcr.io/aramue/coding-dojo2026/web:${DOJO_VERSION:?DOJO_VERSION manque dans le .env de la machine}
+    # Caddy ne sert que des fichiers, mais il les compresse à la volée, Pyodide
+    # compris : 256 Mo plutôt que le strict minimum, un conteneur tué par sa
+    # propre borne coûtant plus cher que la mémoire économisée.
+    mem_limit: 256m

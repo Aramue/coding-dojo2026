@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-09-28
 ---
 
 # Journal de décisions
@@ -67,6 +67,13 @@ parallèle : elles prennent les numéros qui suivent.
   Amende ADR-011, qui tient toujours pour le parcours.
 - **016** — [[ADR-016 Temps réel par sonnette WebSocket]]
   Le WebSocket dit « relis », jamais « voici » ; sans lui, on relit toutes les secondes.
+
+Le 28 septembre 2026, en préparant la mise en production sur une VM déjà occupée par un autre
+service :
+
+- **017** — [[ADR-017 Une seule branche, des releases par tag]]
+  `main` seule, une release est un tag, la VM tourne sur un tag et ne construit rien. Trois
+  contrôles en CI — les premiers de ce dépôt.
 
 ## Le fil conducteur
 

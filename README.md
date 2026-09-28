@@ -1,5 +1,7 @@
 # Coding Dojo — Python
 
+[![Vérifications](https://github.com/Aramue/coding-dojo2026/actions/workflows/verifications.yml/badge.svg)](https://github.com/Aramue/coding-dojo2026/actions/workflows/verifications.yml)
+
 Plateforme d'exercices Python pour le Coding Dojo 2026-2027, à destination
 d'élèves de gymnase genevois de 15 à 19 ans.
 
@@ -77,6 +79,23 @@ cd plateforme/outils
 > contenu incohérent fait échouer la construction plutôt que d'atteindre les
 > élèves. C'est le contrôle qui économise le plus de temps en séance.
 
+## Vérifier
+
+Trois contrôles tournent sur chaque PR et sur chaque poussée dans `main`. Ils
+lancent les commandes ci-dessus, pas d'autres :
+
+| Job | Ce qu'il lance |
+|---|---|
+| API | les 222 tests de `plateforme/api` |
+| Contenu | les 143 tests de `plateforme/outils`, la validation du contenu, les deux constructions |
+| Interface | les 514 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
+
+Une minute de calcul en tout. Une release est un **tag** `vX.Y.Z` posé sur
+`main` : il rejoue ces trois contrôles, puis construit et publie les deux images
+sur GHCR. Aucune image publiée n'échappe aux tests, et ==la CI ne déploie
+rien== — un déploiement se lance à la main, hors séance. Voir
+[ADR-017](docs/vault/2-decisions/ADR-017%20Une%20seule%20branche,%20des%20releases%20par%20tag.md).
+
 ## Documentation
 
 Tout est dans `docs/vault/`, un coffre Obsidian qui s'ouvre aussi très bien en
@@ -96,9 +115,23 @@ démarrage et rangée dans la base SQLite, avec l'empreinte du mot de passe
 professeur. Les deux vivent dans le volume `donnees` : sauvegarder la base,
 c'est sauvegarder la progression **et** le compte.
 
-1. `docker compose up -d --build`, avec `DOJO_DOMAINE` dans un `.env` si le
-   serveur a un nom (voir `.env.example`).
-2. Ouvrir `/prof` **tout de suite** et créer le compte professeur.
+En production, la machine **ne construit rien** : les images viennent de GHCR, où
+la CI les a construites et testées au tag.
+
+```bash
+/var/www/coding-dojo/deploiement/deployer.sh v1.1.0
+```
+
+Le script sauvegarde la base, passe le dépôt sur le tag, tire les images,
+démarre sans construire, attend que `/api/sante` réponde, puis supprime nos
+images anciennes au-delà des deux dernières. Le retour arrière est le même
+script avec le tag précédent. Au premier déploiement seulement : ouvrir `/prof`
+**tout de suite** et créer le compte professeur.
+
+Le reste — nginx qui termine le TLS devant `127.0.0.1:3200`, le certificat, la
+sauvegarde nocturne avec rétention, et les bornes qui empêchent la pile de
+remplir un disque partagé avec un autre service — est dans
+[Déploiement UNIGE](docs/vault/3-architecture/Déploiement%20UNIGE.md).
 
 Mot de passe oublié :
 
