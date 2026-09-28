@@ -4,7 +4,7 @@ tags:
   - specification
   - contenu
   - professeur
-statut: paliers 1 et 2 livrés, sauf le glisser-déposer
+statut: livrée
 date: 2026-09-27
 ---
 
@@ -305,10 +305,9 @@ L'onglet Aperçu monte `EcranExercice` avec l'exercice en cours de composition. 
 donc aucun composant d'aperçu à écrire, et ce que montre l'atelier est l'écran réel de l'élève,
 avec ses vraies fautes de frappe et sa vraie longueur.
 
-> [!success] Livré le 27 septembre 2026, sauf le glisser-déposer
-> Le formulaire, les cartes de tests, le remplissage de l'`attendu`, la batterie d'essais,
-> l'aperçu et la sortie du fichier fonctionnent. Ce qui reste de cette section : **reprendre un
-> fichier existant**, avec la dépendance `yaml` et le contrôle des champs inconnus.
+> [!success] Livré
+> Les trois paliers sont en place : composer, éprouver, exporter, reprendre un fichier existant,
+> et faire de même pour les leçons.
 
 ### 5.6 Entrer un fichier, en sortir un
 
@@ -338,10 +337,26 @@ Scalaires `|` pour les textes et le code, `|-` pour un attendu sans saut final, 
 courte sur une ligne, clés dans l'ordre du modèle, guillemets seulement quand il le faut. Une
 centaine de lignes, et un test qui les verrouille :
 
-> [!success] Le test qui tient l'émetteur
-> ==Les 112 fichiers du dépôt, relus puis réécrits, reviennent identiques octet pour octet.==
-> Si l'un diverge, c'est l'émetteur qui a tort — ou le fichier, et on le normalise une fois, dans
-> son propre commit.
+> [!success] Le test qui tient l'émetteur, et ce qu'il a fallu corriger
+> L'épreuve visait l'identité **octet pour octet** sur les 112 fichiers. Elle est hors d'atteinte,
+> et pour deux bonnes raisons qui ne sont pas des défauts de l'émetteur :
+>
+> - ==le corpus n'est pas uniforme==. `options` s'écrit sur une ligne dans dix fichiers et en
+>   liste dans trente-trois ; `exige_exact` passe avant l'`attendu` dans treize ; un indice
+>   contenant une apostrophe est entouré ici et nu là. Treize jours d'écriture à la main.
+> - **quinze fichiers portent des commentaires**, qui expliquent un choix pédagogique. Aucun
+>   émetteur qui ne les préserve pas ne peut les rendre.
+>
+> L'épreuve porte donc sur le **sens** : relire puis réécrire doit donner un fichier qui dit
+> exactement la même chose, et l'émetteur doit être **idempotent**. Les deux tiennent sur les 112
+> exercices et les 14 leçons. Le style, lui, est verrouillé par une épreuve caractère par
+> caractère sur un exercice écrit exprès.
+>
+> ==Elle a trouvé un vrai bug== : une option de QCM sur plusieurs lignes sortait en lignes
+> orphelines, sans tiret, et le fichier ne se rechargeait plus. `s1-24` en porte trois.
+>
+> Ce que l'atelier ne rend pas, il le **dit** : un fichier commenté est signalé dans le rail
+> avant tout export.
 
 **La sortie.** Un bouton télécharge le fichier. Sur les navigateurs qui exposent l'API d'accès au
 système de fichiers — Chrome et Edge — l'atelier propose en plus de **désigner une fois le dossier

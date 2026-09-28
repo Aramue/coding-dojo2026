@@ -212,7 +212,7 @@ solution: |
 - [x] **Étape 4 : [[Accueil]]** — l'état, et les nombres de tests.
 - [x] **Étape 5 : commit** — `docs: le coffre enregistre l'atelier des exercices`
 
-## Ce qui reste après cette tranche
+## Ce qui a été livré en plus du plan
 
-Le **glisser-déposer** d'un YAML existant, avec la dépendance `yaml` et le contrôle des champs
-inconnus. Puis le **palier 3**, l'atelier des leçons.
+Le **glisser-déposer** et le **palier 3** — l'atelier des leçons — ont suivi dans la foulée.
+L'atelier est complet.
