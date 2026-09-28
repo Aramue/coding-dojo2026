@@ -1,5 +1,7 @@
 # Coding Dojo — Python
 
+[![Vérifications](https://github.com/Aramue/coding-dojo2026/actions/workflows/verifications.yml/badge.svg)](https://github.com/Aramue/coding-dojo2026/actions/workflows/verifications.yml)
+
 Plateforme d'exercices Python pour le Coding Dojo 2026-2027, à destination
 d'élèves de gymnase genevois de 15 à 19 ans.
 
@@ -76,6 +78,23 @@ cd plateforme/outils
 > contre ses propres tests**, et chaque exemple de code de chaque leçon. Un
 > contenu incohérent fait échouer la construction plutôt que d'atteindre les
 > élèves. C'est le contrôle qui économise le plus de temps en séance.
+
+## Vérifier
+
+Trois contrôles tournent sur chaque PR et sur chaque poussée dans `main`. Ils
+lancent les commandes ci-dessus, pas d'autres :
+
+| Job | Ce qu'il lance |
+|---|---|
+| API | les 222 tests de `plateforme/api` |
+| Contenu | les 143 tests de `plateforme/outils`, la validation du contenu, les deux constructions |
+| Interface | les 514 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
+
+Une minute de calcul en tout. Une release est un **tag** `vX.Y.Z` posé sur
+`main` : il rejoue ces trois contrôles, puis construit et publie les deux images
+sur GHCR. Aucune image publiée n'échappe aux tests, et ==la CI ne déploie
+rien== — un déploiement se lance à la main, hors séance. Voir
+[ADR-017](docs/vault/2-decisions/ADR-017%20Une%20seule%20branche,%20des%20releases%20par%20tag.md).
 
 ## Documentation
 
