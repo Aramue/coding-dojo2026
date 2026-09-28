@@ -109,13 +109,13 @@ export function lireExercice(texte: string): Brouillon {
   const premiere = document.errors[0]
   if (premiere) {
     const ligne = premiere.linePos?.[0]?.line
-    throw new FichierRefuse([
-      // `linePos` est typé facultatif par la bibliothèque, mais
-      // `parseDocument` le remplit toujours : la branche sans ligne est une
-      // garde que TypeScript exige, pas un cas qui se produit.
-      /* v8 ignore next */
-      ligne ? `ce n'est pas du YAML valide (ligne ${ligne}).` : "ce n'est pas du YAML valide.",
-    ])
+    // `linePos` est typé facultatif par la bibliothèque, mais `parseDocument`
+    // le remplit chaque fois qu'il signale une erreur — vérifié sur les trois
+    // familles d'erreur YAML. Le repli est une garde que TypeScript exige,
+    // pas un cas qui se produit.
+    /* v8 ignore next */
+    const ou = ligne === undefined ? '' : ` (ligne ${ligne})`
+    throw new FichierRefuse([`ce n'est pas du YAML valide${ou}.`])
   }
   const brut: unknown = document.toJS()
 
