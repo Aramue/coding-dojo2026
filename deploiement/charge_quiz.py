@@ -2,10 +2,12 @@
 
 A lancer HORS SEANCE, contre une instance deployee ou locale :
 
-    python deploiement/charge_quiz.py --url http://localhost/api --mot-de-passe ...
+    python deploiement/charge_quiz.py --url https://dojo.aramue.com/api
 
 Le mot de passe est celui du compte professeur (ADR-014) : le script ouvre une
-session comme le ferait /prof, et n'envoie ensuite que le jeton rendu.
+session comme le ferait /prof, et n'envoie ensuite que le jeton rendu. Il est
+demande au clavier, et non passe en argument — un argument finit dans
+l'historique du shell et dans la liste des processus.
 
 Le script inscrit N eleves d'essai (« Essai Charge 01 »...), ouvre leurs
 sessions et leurs sonnettes, cree une partie, la fait jouer, puis TERMINE la
@@ -31,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import getpass
 import json
 import random
 import statistics
@@ -188,12 +191,25 @@ async def jouer(url: str, mot_de_passe: str, nombre: int, questions: int) -> int
 def principal() -> int:
     parseur = argparse.ArgumentParser(description="Test de charge du quiz en direct.")
     parseur.add_argument("--url", default="http://localhost/api", help="racine de l'API")
-    parseur.add_argument("--mot-de-passe", required=True, help="mot de passe du compte professeur")
+    # Pas `required=True` : un mot de passe passe en argument finit dans
+    # l'historique du shell et dans la liste des processus, que tout autre
+    # compte de la machine peut lire. Sans le drapeau, on le demande au
+    # clavier, et il ne s'ecrit nulle part.
+    parseur.add_argument(
+        "--mot-de-passe",
+        help="mot de passe du compte professeur ; demande au clavier si absent",
+    )
     parseur.add_argument("--eleves", type=int, default=24)
     parseur.add_argument("--questions", type=int, default=3)
     arguments = parseur.parse_args()
+
+    mot_de_passe = arguments.mot_de_passe or getpass.getpass("Mot de passe professeur : ")
+    if not mot_de_passe:
+        print("Aucun mot de passe : rien a faire.", file=sys.stderr)
+        return 2
+
     return asyncio.run(
-        jouer(arguments.url.rstrip("/"), arguments.mot_de_passe, arguments.eleves, arguments.questions)
+        jouer(arguments.url.rstrip("/"), mot_de_passe, arguments.eleves, arguments.questions)
     )
 
 
