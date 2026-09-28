@@ -37,7 +37,7 @@ Ce sont celles qu'un lecteur risque le plus de défaire par ignorance.
 - **009** — [[ADR-009 Routage maison sans bibliothèque]]
   Quatre formes de chemin sur l'API History. Une fonction pure porte la logique, pas un routeur.
 
-Les deux dernières datent du 4 septembre 2026, après une première interface livrée et essayée.
+Les trois suivantes datent du 4 septembre 2026, après une première interface livrée et essayée.
 
 - **010** — [[ADR-010 Abandon de la fiction narrative]]
   Plus de Quartier Général : des exemples du quotidien, et un code d'accès `DOJO-XXXX`.
@@ -46,7 +46,21 @@ Les deux dernières datent du 4 septembre 2026, après une première interface l
 - **012** — [[ADR-012 Le professeur tient la liste de sa classe]]
   L'élève porte un nom ; le code d'accès reste la clé, et un code inconnu n'ouvre plus rien.
 
-Les deux suivantes datent du 27 septembre 2026, pour le quiz en direct.
+Le 14 septembre 2026, en publiant la séance 2 avant que la séance 1 ait eu lieu :
+
+- **013** — [[ADR-013 Une séance s'ouvre à sa date]]
+  Chaque chapitre porte sa date. Avant, il n'existe ni pour l'élève ni dans les comptes du
+  professeur ; seul l'aperçu le montre, en le signalant.
+
+Le 25 septembre 2026, après une question simple restée sans réponse évidente — « c'est quoi le
+code professeur » :
+
+- **014** — [[ADR-014 Le compte professeur se crée au premier lancement]]
+  Plus aucun secret dans le `.env`. L'instance tire sa clé en base, et `/prof` propose de créer
+  le compte tant qu'il n'existe pas.
+
+Les deux suivantes datent du 27 septembre 2026, pour le quiz en direct, écrites sur une branche
+parallèle : elles prennent les numéros qui suivent.
 
 - **015** — [[ADR-015 Quiz en direct et classement encadré]]
   Un classement dans la partie seulement : cinq premiers projetés, chacun son rang pour soi.

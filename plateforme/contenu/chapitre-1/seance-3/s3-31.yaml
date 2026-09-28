@@ -1,0 +1,34 @@
+id: s3-31
+concept: while
+notion: tantque
+seance: 3
+niveau: normal
+type: debug
+titre: La boucle qui ne s'arrête jamais
+obligatoire: true
+enonce: |
+  Ce programme doit annoncer les trois tours d'un échauffement, puis s'arrêter.
+  Il ne s'arrête jamais : au bout de quelques secondes, la plateforme
+  l'interrompt. Trouve pourquoi, puis répare-le.
+depart: |
+  tour = 1
+  while tour <= 3:
+      print("Tour", tour)
+  print("Échauffement terminé")
+indices:
+  - La condition dépend de la variable tour. Que vaut tour au deuxième passage ? Et au centième ?
+  - Rien ne change tour dans la boucle, donc la condition reste vraie pour toujours. Ajoute 1 à tour à chaque passage, dans la boucle.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Tour 1
+      Tour 2
+      Tour 3
+      Échauffement terminé
+solution: |
+  tour = 1
+  while tour <= 3:
+      print("Tour", tour)
+      tour = tour + 1
+  print("Échauffement terminé")

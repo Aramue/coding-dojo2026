@@ -1,0 +1,43 @@
+id: s2-31
+concept: indentation
+notion: decider
+seance: 2
+niveau: normal
+type: debug
+titre: Le message sorti du bloc
+obligatoire: true
+enonce: |
+  Une attraction est réservée aux personnes d'au moins 120 cm. Le programme
+  tourne sans erreur. Mais essaie avec 110 cm : il refuse, puis souhaite quand
+  même une bonne descente.
+
+  Répare-le, pour que le souhait ne s'affiche qu'aux personnes acceptées.
+depart: |
+  taille = int(input("Ta taille en cm : "))
+  if taille >= 120:
+      print("C'est bon, tu peux monter.")
+  else:
+      print("Pas encore : il faut au moins 120 cm.")
+  print("Bonne descente !")
+indices:
+  - Quelle ligne s'exécute dans tous les cas, quelle que soit la taille ? Regarde son décalage.
+  - Une ligne qui n'est pas décalée ne dépend d'aucun bloc. Pour appartenir au if, elle doit être décalée comme les autres lignes du if, et placée avant le else.
+tests:
+  - type: sortie
+    entrees: ["130"]
+    attendu: |-
+      Ta taille en cm : 130
+      C'est bon, tu peux monter.
+      Bonne descente !
+  - type: sortie
+    entrees: ["110"]
+    attendu: |-
+      Ta taille en cm : 110
+      Pas encore : il faut au moins 120 cm.
+solution: |
+  taille = int(input("Ta taille en cm : "))
+  if taille >= 120:
+      print("C'est bon, tu peux monter.")
+      print("Bonne descente !")
+  else:
+      print("Pas encore : il faut au moins 120 cm.")

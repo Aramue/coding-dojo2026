@@ -1,0 +1,30 @@
+id: s3-06
+concept: for
+notion: repeter
+seance: 3
+niveau: normal
+type: completer
+titre: Trois tours de piste
+obligatoire: true
+enonce: |
+  Pour l'échauffement, ce programme doit afficher trois fois « Encore un tour
+  de piste ! », puis une seule fois « Bravo, c'est fini. ». Complète le trou.
+depart: |
+  for i in range(_____):
+      print("Encore un tour de piste !")
+  print("Bravo, c'est fini.")
+indices:
+  - Le nombre entre les parenthèses de range() décide du nombre de tours.
+  - range(3) donne trois valeurs, 0, 1 et 2. La boucle fait donc exactement trois tours.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Encore un tour de piste !
+      Encore un tour de piste !
+      Encore un tour de piste !
+      Bravo, c'est fini.
+solution: |
+  for i in range(3):
+      print("Encore un tour de piste !")
+  print("Bravo, c'est fini.")

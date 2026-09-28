@@ -1,0 +1,42 @@
+id: s3-25
+concept: accumulateur
+notion: compter
+seance: 3
+niveau: normal
+type: debug
+titre: Le total qui repart de zéro
+obligatoire: true
+enonce: |
+  Ce programme demande le prix de trois articles, puis affiche le total. Il
+  tourne sans erreur, mais le total ne vaut que le prix du dernier article.
+  Répare-le.
+depart: |
+  for article in range(1, 4):
+      total = 0
+      prix = int(input(f"Prix de l'article {article} : "))
+      total = total + prix
+  print("Total :", total)
+indices:
+  - À quel endroit total est-il remis à 0 ? Combien de fois cette ligne s'exécute-t-elle ?
+  - Une variable qui cumule se crée une seule fois, avant la boucle. Dans la boucle, elle ne fait que grandir.
+tests:
+  - type: sortie
+    entrees: ["12", "5", "8"]
+    attendu: |-
+      Prix de l'article 1 : 12
+      Prix de l'article 2 : 5
+      Prix de l'article 3 : 8
+      Total : 25
+  - type: sortie
+    entrees: ["3", "3", "3"]
+    attendu: |-
+      Prix de l'article 1 : 3
+      Prix de l'article 2 : 3
+      Prix de l'article 3 : 3
+      Total : 9
+solution: |
+  total = 0
+  for article in range(1, 4):
+      prix = int(input(f"Prix de l'article {article} : "))
+      total = total + prix
+  print("Total :", total)

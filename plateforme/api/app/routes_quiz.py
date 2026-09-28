@@ -39,8 +39,8 @@ from .quiz import (
     vue_prof,
 )
 from .routes_eleve import eleve_courant
-from .routes_prof import code_prof_valide, verifier_prof
-from .securite import lire_jeton
+from .routes_prof import verifier_prof
+from .securite import jeton_prof_valide, lire_jeton
 
 routeur = APIRouter()
 routeur_prof = APIRouter(prefix="/prof/quiz", dependencies=[Depends(verifier_prof)])
@@ -449,11 +449,12 @@ async def _fermer(ws: WebSocket, code: int) -> None:
         await ws.close(code=code)
 
 
-async def _authentifier(ws: WebSocket) -> Role | None:
+async def _authentifier(ws: WebSocket, session: Session) -> Role | None:
     """Le premier message dit qui ouvre la connexion. Jamais l'URL.
 
-    Une URL finit dans les journaux du proxy et du serveur : un jeton ou un
-    code professeur n'a rien a y faire. Voir ADR-016.
+    Une URL finit dans les journaux du proxy et du serveur : un jeton n'a rien
+    a y faire. Jeton eleve ou jeton de session professeur, verifies comme sur
+    les routes HTTP — contre la cle rangee en base (ADR-014). Voir ADR-016.
     """
     try:
         message = await asyncio.wait_for(ws.receive(), DELAI_AUTHENTIFICATION_S)
@@ -469,18 +470,24 @@ async def _authentifier(ws: WebSocket) -> Role | None:
     if not isinstance(donnees, dict):
         return None
 
-    code_prof, jeton = donnees.get("code_prof"), donnees.get("jeton")
-    if isinstance(code_prof, str) and code_prof_valide(code_prof):
+    jeton_prof, jeton = donnees.get("jeton_prof"), donnees.get("jeton")
+    if isinstance(jeton_prof, str) and jeton_prof_valide(session, jeton_prof):
         return "prof"
-    if isinstance(jeton, str) and lire_jeton(jeton):
+    if isinstance(jeton, str) and lire_jeton(session, jeton):
         return "eleve"
     return None
 
 
 @routeur.websocket("/quiz/flux")
-async def flux(ws: WebSocket) -> None:
+async def flux(ws: WebSocket, session: SessionBdd) -> None:
     await ws.accept()
-    role = await _authentifier(ws)
+    try:
+        role = await _authentifier(ws, session)
+    finally:
+        # La base ne sert qu'a verifier le jeton. Gardee ouverte le temps de la
+        # connexion, chaque onglet retiendrait une connexion SQLite : vingt-
+        # quatre eleves videraient le pool, et les GET attendraient.
+        session.close()
     if role is None:
         await _fermer(ws, 4401)
         return

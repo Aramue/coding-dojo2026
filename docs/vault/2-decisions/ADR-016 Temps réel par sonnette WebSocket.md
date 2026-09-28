@@ -46,8 +46,8 @@ Trois contraintes du terrain pèsent sur le choix :
    lecture. Chaque écran décompte seul, recalé sur l'heure du serveur que porte chaque
    photographie, et relit à l'échéance.
 5. **L'authentification passe dans le premier message**, jamais dans l'URL : une URL finit dans
-   les journaux du proxy et du serveur. Jeton élève ou code professeur, vérifiés comme sur les
-   routes HTTP. Un premier message absent, invalide ou trop long ferme la connexion.
+   les journaux du proxy et du serveur. Jeton élève ou jeton de session professeur, vérifiés
+   comme sur les routes HTTP. Un premier message absent, invalide ou trop long ferme la connexion.
 6. **Les réponses passent par `POST /quiz/reponse`**, pas par le WebSocket : validation Pydantic
    (`extra="forbid"`, bornes), codes d'erreur explicites, et une route qui marche aussi quand le
    WebSocket ne passe pas.

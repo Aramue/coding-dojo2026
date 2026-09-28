@@ -1,18 +1,6 @@
 import { useEffect, useState } from 'react'
-import {
-  chargerChapitres,
-  chargerLecons,
-  chargerNotions,
-  chargerParcours,
-} from '../contenu/chargeur'
-import type { Chapitre, Exercice, Lecon, Notion } from '../contenu/types'
-
-export type ContenuPublie = {
-  chapitres: Chapitre[]
-  notions: Notion[]
-  exercices: Exercice[]
-  lecons: Lecon[]
-}
+import { chargerContenu } from '../contenu/chargeur'
+import type { ContenuPublie } from '../contenu/types'
 
 /**
  * Le contenu publié, tel que l'élève le reçoit.
@@ -30,13 +18,9 @@ export function useContenuPublie(): ContenuPublie | null {
 
   useEffect(() => {
     let vivant = true
-    Promise.all([chargerChapitres(), chargerNotions(), chargerParcours(), chargerLecons()])
-      .then(([chapitres, notions, exercices, lecons]) => {
-        // Même garde que sur la séance : un non-tableau dans l'état ferait
-        // planter le premier `.map` du rendu, et l'écran du professeur
-        // ==deviendrait blanc en pleine séance==.
-        if (![chapitres, notions, exercices, lecons].every(Array.isArray)) return
-        if (vivant) setContenu({ chapitres, notions, exercices, lecons })
+    chargerContenu()
+      .then((publie) => {
+        if (vivant) setContenu(publie)
       })
       .catch(() => undefined)
     return () => {

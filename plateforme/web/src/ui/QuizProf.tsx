@@ -3,6 +3,7 @@ import { listerEleves } from '../prof/classe'
 import {
   corriger,
   creerPartie,
+  SessionProfRefusee,
   lirePartie,
   lireResultats,
   listerQuiz,
@@ -64,10 +65,29 @@ function date(iso: string): string {
  * - le classement s'arrête aux cinq premiers et ne montre personne à zéro.
  * Voir ADR-015.
  */
-export function QuizProf({ codeProf }: { codeProf: string }) {
+export function QuizProf({
+  jetonProf,
+  onRefuse,
+}: {
+  jetonProf: string
+  /** Le jeton est refusé (expiré, compte recréé) : on rend la main à la porte. */
+  onRefuse?: () => void
+}) {
+  function surveiller<T>(action: () => Promise<T>): () => Promise<T> {
+    return async () => {
+      try {
+        return await action()
+      } catch (e) {
+        if (e instanceof SessionProfRefusee) onRefuse?.()
+        throw e
+      }
+    }
+  }
+
   const { etat, ecartMs, erreur, flux } = useFluxQuiz<EtatProf>(
-    () => lirePartie(codeProf),
-    () => ({ code_prof: codeProf }),
+    surveiller(() => lirePartie(jetonProf)),
+    // Le jeton dans le premier message, jamais dans l'URL. Voir ADR-016.
+    () => ({ jeton_prof: jetonProf }),
   )
   const [refus, setRefus] = useState<string | null>(null)
   const [envoi, setEnvoi] = useState(false)
@@ -78,16 +98,16 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
   useEffect(() => {
     // Le nombre d'inscrits, pour lire « 18 sur 24 » plutôt que « 18 ». Sans
     // lui l'écran se contente du compte : dégradé, jamais cassé.
-    listerEleves(codeProf)
+    listerEleves(jetonProf)
       .then((eleves) => setInscrits(eleves.length))
       .catch(() => setInscrits(null))
-  }, [codeProf])
+  }, [jetonProf])
 
   async function agir(action: () => Promise<EtatProf>) {
     setEnvoi(true)
     const envoiA = Date.now()
     try {
-      flux.recevoir(await action(), envoiA)
+      flux.recevoir(await surveiller(action)(), envoiA)
       setRefus(null)
       setNouvelle(false)
     } catch (e) {
@@ -139,13 +159,13 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
 
       {!etat && <p className="quiz__attente">Chargement…</p>}
       {choisir && resultatsDe && (
-        <Resultats codeProf={codeProf} quizId={resultatsDe} onRetour={() => setResultatsDe(null)} />
+        <Resultats jetonProf={jetonProf} quizId={resultatsDe} onRetour={() => setResultatsDe(null)} />
       )}
       {choisir && !resultatsDe && (
         <Catalogue
-          codeProf={codeProf}
+          jetonProf={jetonProf}
           envoi={envoi}
-          onLancer={(id) => void agir(() => creerPartie(codeProf, id))}
+          onLancer={(id) => void agir(() => creerPartie(jetonProf, id))}
           onResultats={setResultatsDe}
         />
       )}
@@ -155,9 +175,9 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
           ecartMs={ecartMs}
           inscrits={inscrits}
           envoi={envoi}
-          onSuivante={() => void agir(() => questionSuivante(codeProf, partie.question?.rang ?? -1))}
-          onCorriger={() => partie.question && void agir(() => corriger(codeProf, partie.question!.rang))}
-          onTerminer={() => void agir(() => terminerPartie(codeProf))}
+          onSuivante={() => void agir(() => questionSuivante(jetonProf, partie.question?.rang ?? -1))}
+          onCorriger={() => partie.question && void agir(() => corriger(jetonProf, partie.question!.rang))}
+          onTerminer={() => void agir(() => terminerPartie(jetonProf))}
           onNouvelle={() => setNouvelle(true)}
         />
       )}
@@ -166,12 +186,12 @@ export function QuizProf({ codeProf }: { codeProf: string }) {
 }
 
 function Catalogue({
-  codeProf,
+  jetonProf,
   envoi,
   onLancer,
   onResultats,
 }: {
-  codeProf: string
+  jetonProf: string
   envoi: boolean
   onLancer: (id: string) => void
   onResultats: (id: string) => void
@@ -180,10 +200,10 @@ function Catalogue({
   const [erreur, setErreur] = useState<string | null>(null)
 
   useEffect(() => {
-    listerQuiz(codeProf)
+    listerQuiz(jetonProf)
       .then(setQuiz)
       .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Catalogue indisponible.'))
-  }, [codeProf])
+  }, [jetonProf])
 
   return (
     <section className="quiz-prof__catalogue" aria-labelledby="titre-catalogue">
@@ -252,11 +272,11 @@ function ResumeDerniere({ derniere }: { derniere: DernierePartie }) {
  * l'autre —, puis le bilan anonyme, question par question.
  */
 function Resultats({
-  codeProf,
+  jetonProf,
   quizId,
   onRetour,
 }: {
-  codeProf: string
+  jetonProf: string
   quizId: string
   onRetour: () => void
 }) {
@@ -264,10 +284,10 @@ function Resultats({
   const [erreur, setErreur] = useState<string | null>(null)
 
   useEffect(() => {
-    lireResultats(codeProf, quizId)
+    lireResultats(jetonProf, quizId)
       .then(setResultats)
       .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Résultats indisponibles.'))
-  }, [codeProf, quizId])
+  }, [jetonProf, quizId])
 
   return (
     <section className="quiz-prof__resultats" aria-labelledby="titre-resultats">

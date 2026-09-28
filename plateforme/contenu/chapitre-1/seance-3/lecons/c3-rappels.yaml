@@ -1,0 +1,48 @@
+id: c3-rappels
+notion: rappels
+ordre: 10
+titre: Rappels avant les boucles
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Dernière séance du chapitre : les boucles. Une boucle répète des lignes,
+      et une erreur dans ces lignes se répète avec elles. Trois règles des
+      séances précédentes valent donc la peine d'être revues avant de commencer.
+  - type: paragraphe
+    texte: >-
+      **La borne compte.** `>` exclut la valeur limite, `>=` l'inclut : « dès
+      18 ans » s'écrit `age >= 18`.
+  - type: code
+    legende: 18 ans pile
+    executable: true
+    python: |
+      age = 18
+      print(age > 18)
+      print(age >= 18)
+  - type: paragraphe
+    texte: >-
+      **Chaque cas doit avoir sa réponse.** Quand aucune condition n'est vraie,
+      seul un `else` dit encore quelque chose. Sans lui, le programme se tait.
+  - type: code
+    legende: Trois cas, trois réponses
+    executable: true
+    python: |
+      note = 4
+      if note >= 5:
+          print("Très bien")
+      elif note >= 4:
+          print("Suffisant")
+      else:
+          print("Insuffisant")
+  - type: paragraphe
+    texte: >-
+      **`input()` rend toujours du texte**, même quand on tape des chiffres.
+      Pour calculer avec la réponse, il faut d'abord la convertir avec `int()`.
+  - type: code
+    legende: Coller, ou additionner
+    entrees: ["15"]
+    python: |
+      reponse = input("Ton âge : ")
+      print(reponse + "1")
+      print(int(reponse) + 1)

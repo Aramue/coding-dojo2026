@@ -1,0 +1,46 @@
+id: s2-33
+concept: conditions
+notion: decider
+seance: 2
+niveau: normal
+type: debug
+titre: Le cas oublié
+obligatoire: true
+enonce: |
+  Pour s'inscrire au cours de plongée, il faut avoir au moins 16 ans. Ce
+  programme accueille bien ceux qui ont l'âge. Mais essaie avec 14 ans : il ne
+  dit rien du tout, et on ne sait pas si on est inscrit.
+
+  Ajoute ce qui manque pour que, à 14 ans, l'écran montre :
+
+  Âge : 14
+  Refusé : il faut au moins 16 ans.
+depart: |
+  age = int(input("Âge : "))
+  if age >= 16:
+      print("Inscription acceptée.")
+indices:
+  - Le programme ne prévoit rien pour ceux que le if refuse. Quel mot prend en charge tous les autres cas ?
+  - Ajoute un else aligné sur le if, avec son deux-points, et le message décalé juste en dessous.
+tests:
+  - type: sortie
+    entrees: ["17"]
+    attendu: |-
+      Âge : 17
+      Inscription acceptée.
+  - type: sortie
+    entrees: ["16"]
+    attendu: |-
+      Âge : 16
+      Inscription acceptée.
+  - type: sortie
+    entrees: ["14"]
+    attendu: |-
+      Âge : 14
+      Refusé : il faut au moins 16 ans.
+solution: |
+  age = int(input("Âge : "))
+  if age >= 16:
+      print("Inscription acceptée.")
+  else:
+      print("Refusé : il faut au moins 16 ans.")

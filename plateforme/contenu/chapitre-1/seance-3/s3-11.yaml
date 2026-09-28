@@ -1,0 +1,40 @@
+id: s3-11
+concept: for
+notion: repeter
+seance: 3
+niveau: expert
+type: ecrire
+titre: Le compte à rebours
+obligatoire: false
+enonce: |
+  Défi : le pas de `range()` peut être négatif. Écris une boucle qui affiche le
+  compte à rebours d'un décollage, puis le décollage lui-même :
+
+  5
+  4
+  3
+  2
+  1
+  Décollage !
+depart: ""
+indices:
+  - Avec un pas de -1, range() compte à l'envers. Le début est 5, et la fin n'est jamais atteinte.
+  - Pour que 1 soit la dernière valeur, la fin doit être 0. Le message final s'affiche une seule fois, après la boucle.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      5
+      4
+      3
+      2
+      1
+      Décollage !
+  - type: interdit
+    motif: print(5)
+    message: >-
+      Ce défi se résout avec une boucle : une seule ligne print() répétée, pas cinq.
+solution: |
+  for seconde in range(5, 0, -1):
+      print(seconde)
+  print("Décollage !")

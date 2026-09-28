@@ -71,7 +71,7 @@ function poserLeReseau(eleves: unknown[], seance: { ok?: boolean } = {}) {
 
 async function rendre(eleves: unknown[]) {
   poserLeReseau(eleves)
-  render(<TableauDeBord codeProf="code-prof-test" />)
+  render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
   await screen.findByRole('heading', { name: /séance en cours/i })
 }
 
@@ -114,7 +114,7 @@ describe('TableauDeBord — ce que le professeur lit', () => {
         throw new Error('contenu indisponible')
       }),
     )
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     expect(await screen.findByText('s1-29')).toBeInTheDocument()
   })
 
@@ -223,7 +223,7 @@ describe('TableauDeBord — le pouls', () => {
 
   it('dit que la liaison est rompue plutot que de laisser croire au calme', async () => {
     poserLeReseau([], { ok: false })
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     expect(await screen.findByText('plus de données')).toBeInTheDocument()
   })
 })
@@ -304,7 +304,7 @@ describe("TableauDeBord — ouvrir l'exercice depuis le parcours", () => {
     // sans ce clic il ne peut pas relire ce que l'enonce demande.
     const onApercu = vi.fn()
     poserLeReseau([ligne({ prenom: 'Enzo', nom: 'Poupard', exercice_id: 's1-29' })])
-    render(<TableauDeBord codeProf="code-prof-test" onApercu={onApercu} />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" onApercu={onApercu} />)
 
     await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
     await userEvent.click(
@@ -317,7 +317,7 @@ describe("TableauDeBord — ouvrir l'exercice depuis le parcours", () => {
 
   it("n'offre pas le clic quand personne n'écoute", async () => {
     poserLeReseau([ligne({ prenom: 'Enzo', exercice_id: 's1-29' })])
-    render(<TableauDeBord codeProf="code-prof-test" />)
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
     await userEvent.click(await screen.findByRole('button', { name: /Déplier le parcours/ }))
     expect(
       screen.getByRole('button', { name: /L'âge qui refuse de s'additionner/ }),
@@ -358,5 +358,54 @@ describe('TableauDeBord — les jauges', () => {
     const jauges = screen.getAllByRole('progressbar', { name: /exercices réussis sur/ })
     expect(jauges.length).toBeGreaterThan(1)
     expect(screen.getByRole('heading', { name: 'Afficher un message1/1' })).toBeInTheDocument()
+  })
+})
+
+describe("TableauDeBord — une séance à venir n'entre pas dans les comptes", () => {
+  it('laisse ses exercices hors du total de la médiane', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url.includes('chapitres')) {
+          return {
+            ok: true,
+            json: async () => [
+              { id: 'bases', ordre: 1, titre: 'Les bases de Python', seance: 1 },
+              {
+                id: 'decisions',
+                ordre: 2,
+                titre: 'Calculer, comparer, décider',
+                seance: 2,
+                ouverture: '2999-01-01',
+              },
+            ],
+          }
+        }
+        if (url.includes('notions')) {
+          return {
+            ok: true,
+            json: async () => [
+              ...NOTIONS,
+              { id: 'calculer', ordre: 6, titre: 'Calculer', famille: 'operateurs', chapitre: 'decisions' },
+            ],
+          }
+        }
+        if (url.includes('lecons')) return { ok: true, json: async () => [] }
+        if (url.includes('prof/seance')) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ eleves: [ligne({ reussis: [reussi('s1-02')] })] }),
+          }
+        }
+        return {
+          ok: true,
+          json: async () => [...EXERCICES, ex('s2-04', 'calculer', 'Les quatre opérations')],
+        }
+      }),
+    )
+    render(<TableauDeBord jetonProf="prof.4102444800.signature" />)
+    // Trois obligatoires ouverts ; le quatrième appartient à la séance 2.
+    expect(await screen.findByText(/médiane 1 \/ 3/)).toBeInTheDocument()
   })
 })

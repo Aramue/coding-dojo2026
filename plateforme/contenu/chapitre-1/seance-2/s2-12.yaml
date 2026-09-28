@@ -1,0 +1,55 @@
+id: s2-12
+concept: modulo
+notion: calculer
+seance: 2
+niveau: expert
+type: ecrire
+titre: Décomposer un nombre sans boucle
+obligatoire: false
+enonce: |
+  Défi : sépare les trois chiffres d'un nombre, sans le transformer en texte.
+  Seuls `//` et `%` sont permis.
+
+  Pour 472, ton programme doit afficher :
+
+  Un nombre à trois chiffres : 472
+  Centaines : 4
+  Dizaines : 7
+  Unités : 2
+
+  Ton programme sera relancé avec un autre nombre.
+depart: |
+  nombre = int(input("Un nombre à trois chiffres : "))
+indices:
+  - Commence par les unités. C'est le reste de la division par 10.
+  - Pour les centaines, combien de fois 100 rentre-t-il dans le nombre ? Pour les dizaines, enlève d'abord les unités avec // 10, puis garde le reste de la division par 10.
+tests:
+  - type: sortie
+    entrees: ["472"]
+    attendu: |-
+      Un nombre à trois chiffres : 472
+      Centaines : 4
+      Dizaines : 7
+      Unités : 2
+  - type: sortie
+    entrees: ["905"]
+    attendu: |-
+      Un nombre à trois chiffres : 905
+      Centaines : 9
+      Dizaines : 0
+      Unités : 5
+  - type: interdit
+    motif: str(
+    message: >-
+      Ce défi se résout sans transformer le nombre en texte : seuls // et % sont permis.
+  # Un f-string transforme aussi en texte, et [0] en tire le premier caractère :
+  # sans ce second motif, le défi se contourne sans jamais toucher a // ni a %.
+  - type: interdit
+    motif: "["
+    message: >-
+      Ce défi se résout sans transformer le nombre en texte : seuls // et % sont permis.
+solution: |
+  nombre = int(input("Un nombre à trois chiffres : "))
+  print("Centaines :", nombre // 100)
+  print("Dizaines :", nombre // 10 % 10)
+  print("Unités :", nombre % 10)

@@ -1,0 +1,34 @@
+id: s3-15
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: normal
+type: completer
+titre: Transformer le nombre en texte
+obligatoire: true
+enonce: |
+  Ce programme calcule le nombre de secondes dans une journée, puis doit en
+  afficher les chiffres un par un. Complète le trou pour que la boucle puisse
+  parcourir ce nombre.
+depart: |
+  secondes = 24 * 60 * 60
+  for chiffre in _____(secondes):
+      print(chiffre)
+indices:
+  - Une boucle for ne parcourt pas un nombre. Quelle fonction transforme un nombre en texte ?
+  - La fonction qui transforme en texte s'écrit avec les trois lettres du type texte, que tu as vu à la séance 1.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      8
+      6
+      4
+      0
+      0
+  - type: contient
+    motif: str(
+solution: |
+  secondes = 24 * 60 * 60
+  for chiffre in str(secondes):
+      print(chiffre)

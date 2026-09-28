@@ -1,0 +1,38 @@
+id: s3-37
+concept: import math
+notion: tantque
+seance: 3
+niveau: normal
+type: completer
+titre: La boîte à outils math
+obligatoire: false
+enonce: |
+  Python range des outils supplémentaires dans des modules. Pour se servir de
+  ceux du module math, on écrit d'abord `import math`, puis `math.` devant
+  l'outil : `math.sqrt()` calcule une racine carrée, et `math.pi` vaut 3,14159…
+
+  Complète les deux trous.
+depart: |
+  import math
+  racine = math._____(81)
+  aire = math._____ * 2 * 2
+  print("Racine carrée de 81 :", racine)
+  print("Aire d'un disque de rayon 2 :", aire)
+indices:
+  - Le premier trou attend le nom de l'outil qui calcule une racine carrée, le second celui qui vaut 3,14159.
+  - Après math. on écrit sqrt pour la racine carrée, et pi pour le nombre pi, sans parenthèses puisque ce n'est pas une fonction.
+tests:
+  - type: variable
+    nom: racine
+    valeur_attendue: "9.0"
+    type_attendu: float
+  - type: variable
+    nom: aire
+    valeur_attendue: "12.566370614359172"
+    type_attendu: float
+solution: |
+  import math
+  racine = math.sqrt(81)
+  aire = math.pi * 2 * 2
+  print("Racine carrée de 81 :", racine)
+  print("Aire d'un disque de rayon 2 :", aire)

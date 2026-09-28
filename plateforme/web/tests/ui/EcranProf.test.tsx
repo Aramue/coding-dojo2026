@@ -1,125 +1,281 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { EcranProf } from '../../src/ui/EcranProf'
 
-const CLE = 'dojo.code-prof'
+const CLE = 'dojo.jeton-prof'
+const JETON = 'prof.4102444800.signature'
+const MOT_DE_PASSE = 'un-mot-de-passe-long'
+
+type Reseau = {
+  /** `null` : la plateforme ne répond pas. */
+  existe?: boolean | null
+  creation?: number
+  connexion?: number
+  seance?: number
+}
+
+function reponse(status: number, corps: unknown) {
+  return { ok: status < 400, status, json: async () => corps }
+}
+
+/** Le réseau du professeur, route par route. */
+function poserLeReseau(r: Reseau = {}) {
+  const appel = vi.fn(async (url: string, init?: RequestInit) => {
+    const methode = init?.method ?? 'GET'
+    if (url === '/api/prof/compte' && methode === 'GET') {
+      return r.existe === null ? reponse(502, {}) : reponse(200, { existe: r.existe ?? true })
+    }
+    if (url === '/api/prof/compte') return reponse(r.creation ?? 201, { jeton: JETON })
+    if (url === '/api/prof/connexion') return reponse(r.connexion ?? 200, { jeton: JETON })
+    if (url.includes('prof/seance')) return reponse(r.seance ?? 200, { eleves: [] })
+    if (url.includes('prof/eleves')) return reponse(200, { eleves: [] })
+    return reponse(200, [])
+  })
+  vi.stubGlobal('fetch', appel)
+  return appel
+}
+
+function corpsEnvoye(appel: ReturnType<typeof poserLeReseau>, url: string): unknown {
+  const trouve = appel.mock.calls.find(([u, init]) => u === url && init?.method === 'POST')
+  return trouve ? JSON.parse(String((trouve[1] as RequestInit).body)) : undefined
+}
 
 beforeEach(() => {
   sessionStorage.clear()
+  localStorage.clear()
   vi.unstubAllGlobals()
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(async (url: string) =>
-      url.includes('prof/seance')
-        ? { ok: true, json: async () => ({ eleves: [] }) }
-        : { ok: true, json: async () => [] },
-    ),
-  )
 })
 
-describe('EcranProf — la porte', () => {
-  it('demande le code avant de montrer quoi que ce soit de la classe', () => {
+describe('EcranProf — premier lancement', () => {
+  it("propose de créer le compte quand aucun n'existe", async () => {
+    poserLeReseau({ existe: false })
     render(<EcranProf />)
-    expect(screen.getByLabelText(/code professeur/i)).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { name: 'Créer le compte professeur' }),
+    ).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /séance en cours/i })).toBeNull()
   })
 
-  it('masque la saisie : le tableau se projette souvent au mur', () => {
+  it('exige douze caractères avant de permettre la création', async () => {
+    poserLeReseau({ existe: false })
     render(<EcranProf />)
-    expect(screen.getByLabelText(/code professeur/i)).toHaveAttribute('type', 'password')
+    const champ = await screen.findByLabelText(/^mot de passe$/i)
+    await userEvent.type(champ, 'a'.repeat(11))
+    await userEvent.type(screen.getByLabelText(/confirme/i), 'a'.repeat(11))
+    const bouton = screen.getByRole('button', { name: 'Créer le compte' })
+    expect(bouton).toBeDisabled()
+    await userEvent.type(champ, 'a')
+    await userEvent.type(screen.getByLabelText(/confirme/i), 'a')
+    expect(bouton).toBeEnabled()
+  })
+
+  it('signale deux mots de passe différents, sans crier pendant la frappe', async () => {
+    poserLeReseau({ existe: false })
+    render(<EcranProf />)
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
+    const confirmation = screen.getByLabelText(/confirme/i)
+    await userEvent.type(confirmation, 'un-mot')
+    expect(screen.queryByText(/diffèrent/)).toBeNull()
+    await userEvent.type(confirmation, 'X')
+    expect(screen.getByText('Les deux mots de passe diffèrent.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Créer le compte' })).toBeDisabled()
+  })
+
+  it('crée le compte, ouvre le tableau, et ne garde que le jeton', async () => {
+    const appel = poserLeReseau({ existe: false })
+    render(<EcranProf />)
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
+    await userEvent.type(screen.getByLabelText(/confirme/i), MOT_DE_PASSE)
+    await userEvent.click(screen.getByRole('button', { name: 'Créer le compte' }))
+
+    expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+    expect(corpsEnvoye(appel, '/api/prof/compte')).toEqual({ mot_de_passe: MOT_DE_PASSE })
+    expect(sessionStorage.getItem(CLE)).toBe(JETON)
+    expect(localStorage.getItem(CLE)).toBeNull()
+    for (let i = 0; i < sessionStorage.length; i++) {
+      expect(sessionStorage.getItem(sessionStorage.key(i)!)).not.toContain(MOT_DE_PASSE)
+    }
+  })
+
+  it('dit pourquoi la création a échoué', async () => {
+    poserLeReseau({ existe: false, creation: 409 })
+    render(<EcranProf />)
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
+    await userEvent.type(screen.getByLabelText(/confirme/i), MOT_DE_PASSE)
+    await userEvent.click(screen.getByRole('button', { name: 'Créer le compte' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent(/existe déjà/)
+  })
+})
+
+describe('EcranProf — la porte', () => {
+  it('demande le mot de passe quand le compte existe', async () => {
+    poserLeReseau()
+    render(<EcranProf />)
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toHaveAttribute('type', 'password')
+    expect(screen.getByRole('heading', { name: 'Tableau de bord' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /séance en cours/i })).toBeNull()
   })
 
   it("n'ouvre pas sur un champ vide", async () => {
+    poserLeReseau()
     render(<EcranProf />)
+    await screen.findByLabelText(/^mot de passe$/i)
     expect(screen.getByRole('button', { name: 'Ouvrir' })).toBeDisabled()
   })
 
-  it('ouvre le tableau une fois le code saisi', async () => {
+  it('ouvre le tableau avec le bon mot de passe', async () => {
+    const appel = poserLeReseau()
     render(<EcranProf />)
-    await userEvent.type(screen.getByLabelText(/code professeur/i), 'code-de-test')
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
     await userEvent.click(screen.getByRole('button', { name: 'Ouvrir' }))
     expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+    expect(corpsEnvoye(appel, '/api/prof/connexion')).toEqual({ mot_de_passe: MOT_DE_PASSE })
+    expect(sessionStorage.getItem(CLE)).toBe(JETON)
   })
 
-  it('garde le code le temps de l onglet, jamais au-dela', async () => {
-    // sessionStorage et non localStorage : la machine de la salle est partagee.
+  it('envoie le jeton, jamais le mot de passe, au tableau de bord', async () => {
+    const appel = poserLeReseau()
     render(<EcranProf />)
-    await userEvent.type(screen.getByLabelText(/code professeur/i), 'code-de-test')
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
     await userEvent.click(screen.getByRole('button', { name: 'Ouvrir' }))
-    expect(sessionStorage.getItem(CLE)).toBe('code-de-test')
-    expect(localStorage.getItem(CLE)).toBeNull()
+    await screen.findByRole('heading', { name: /séance en cours/i })
+    const seance = appel.mock.calls.find(([u]) => u.includes('prof/seance'))!
+    expect((seance[1] as RequestInit).headers).toMatchObject({ 'X-Jeton-Prof': JETON })
   })
 
-  it("rouvre tout seul sur un code deja memorise", async () => {
-    sessionStorage.setItem(CLE, 'code-de-test')
+  it('dit que le mot de passe est faux et reste sur la porte', async () => {
+    poserLeReseau({ connexion: 401 })
     render(<EcranProf />)
-    expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
-  })
-
-  it('referme la session et efface le code', async () => {
-    sessionStorage.setItem(CLE, 'code-de-test')
-    render(<EcranProf />)
-    await userEvent.click(screen.getByRole('button', { name: /fermer la session/i }))
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), 'pas-le-bon-du-tout')
+    await userEvent.click(screen.getByRole('button', { name: 'Ouvrir' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Mot de passe incorrect.')
+    expect(screen.queryByRole('heading', { name: /séance en cours/i })).toBeNull()
     expect(sessionStorage.getItem(CLE)).toBeNull()
-    expect(screen.getByLabelText(/code professeur/i)).toBeInTheDocument()
   })
 
-  it("ignore un code fait d'espaces", async () => {
+  it('dit comment retrouver l accès quand le mot de passe est perdu', async () => {
+    poserLeReseau()
     render(<EcranProf />)
-    await userEvent.type(screen.getByLabelText(/code professeur/i), '   ')
-    expect(screen.getByRole('button', { name: 'Ouvrir' })).toBeDisabled()
+    await screen.findByLabelText(/^mot de passe$/i)
+    expect(screen.getByText(/python -m app\.oublier_prof/)).toBeInTheDocument()
+  })
+})
+
+describe('EcranProf — la session', () => {
+  it('rouvre tout seul sur un jeton mémorisé, sans redemander', async () => {
+    const appel = poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+    expect(appel.mock.calls.some(([u]) => u === '/api/prof/compte')).toBe(false)
   })
 
-  it("s'ouvre quand meme si le navigateur refuse d'ecrire", async () => {
-    // Navigation privee, cookies bloques : sans ce filet, la porte reste close
+  it('referme la session et efface le jeton', async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    await userEvent.click(await screen.findByRole('button', { name: /fermer la session/i }))
+    expect(sessionStorage.getItem(CLE)).toBeNull()
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+  })
+
+  it('revient à la porte quand le jeton est refusé', async () => {
+    // Un jeton expiré après douze heures : un « Accès refusé » ne dirait pas
+    // quoi faire, la porte le dit.
+    poserLeReseau({ seance: 401 })
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+    expect(sessionStorage.getItem(CLE)).toBeNull()
+  })
+})
+
+describe('EcranProf — ce qui peut mal tourner', () => {
+  it('dit quand la plateforme ne répond pas, et laisse réessayer', async () => {
+    poserLeReseau({ existe: null })
+    render(<EcranProf />)
+    expect(await screen.findByRole('alert')).toHaveTextContent(/ne répond pas/)
+    poserLeReseau({ existe: true })
+    await userEvent.click(screen.getByRole('button', { name: 'Réessayer' }))
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+  })
+
+  it("s'ouvre quand même si le navigateur refuse d'écrire", async () => {
+    // Navigation privée, cookies bloqués : sans ce filet, la porte reste close
     // et le professeur n'a aucun moyen de comprendre pourquoi.
+    poserLeReseau()
     const ecrire = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('refus')
     })
     render(<EcranProf />)
-    await userEvent.type(screen.getByLabelText(/code professeur/i), 'code-de-test')
+    await userEvent.type(await screen.findByLabelText(/^mot de passe$/i), MOT_DE_PASSE)
     await userEvent.click(screen.getByRole('button', { name: 'Ouvrir' }))
     expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
     ecrire.mockRestore()
   })
 
-  it("ne plante pas quand le navigateur refuse meme de lire", () => {
+  it('se referme même si le navigateur refuse d effacer', async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    const effacer = vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      throw new Error('refus')
+    })
+    render(<EcranProf />)
+    await userEvent.click(await screen.findByRole('button', { name: /fermer la session/i }))
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+    effacer.mockRestore()
+  })
+
+  it('ne plante pas quand le navigateur refuse même de lire', async () => {
+    poserLeReseau()
     const lire = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('refus')
     })
     render(<EcranProf />)
-    expect(screen.getByLabelText(/code professeur/i)).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByLabelText(/^mot de passe$/i)).toBeInTheDocument())
     lire.mockRestore()
   })
 })
 
 describe('EcranProf — le quiz', () => {
   it('mène au quiz en direct depuis le tableau de bord', async () => {
-    sessionStorage.setItem(CLE, 'code-de-test')
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
     history.pushState(null, '', '/prof')
     render(<EcranProf />)
     await userEvent.click(await screen.findByRole('button', { name: 'Quiz en direct' }))
     expect(location.pathname).toBe('/prof/quiz')
   })
 
-  it('ouvre l ecran projete avec le meme code professeur', async () => {
-    vi.stubGlobal('WebSocket', class { close() {} })
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (url: string) => ({
-        ok: true,
-        status: 200,
-        json: async () =>
-          url.endsWith('/prof/quiz/partie')
-            ? { partie: null, maintenant: new Date().toISOString() }
-            : url.endsWith('/prof/quiz')
-              ? { quiz: [] }
-              : { eleves: [] },
-      })),
+  it('ouvre l écran projeté avec la même session professeur', async () => {
+    const appel = vi.fn(async (url: string, _init?: RequestInit) =>
+      url.endsWith('/prof/quiz/partie')
+        ? reponse(200, { partie: null, maintenant: new Date().toISOString() })
+        : url.endsWith('/prof/quiz')
+          ? reponse(200, { quiz: [] })
+          : reponse(200, { eleves: [] }),
     )
-    sessionStorage.setItem(CLE, 'code-de-test')
+    vi.stubGlobal('fetch', appel)
+    sessionStorage.setItem(CLE, JETON)
     render(<EcranProf quiz />)
     expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+    const [, init] = appel.mock.calls.find(([u]) => String(u).endsWith('/prof/quiz/partie'))!
+    expect(init?.headers).toMatchObject({ 'X-Jeton-Prof': JETON })
+  })
+
+  it('rend la main à la porte quand la session a expiré', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        url === '/api/prof/compte'
+          ? reponse(200, { existe: true })
+          : reponse(401, { detail: 'Session professeur absente ou expiree' }),
+      ),
+    )
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf quiz />)
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+    expect(sessionStorage.getItem(CLE)).toBeNull()
   })
 })

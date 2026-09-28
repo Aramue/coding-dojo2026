@@ -1,0 +1,52 @@
+id: s2-03
+concept: reactivation
+notion: reveil
+seance: 2
+niveau: normal
+type: ecrire
+titre: La phrase au format exact
+obligatoire: true
+enonce: |
+  Dernier échauffement avant les nouveautés.
+
+  Le programme demande un prénom, puis un nombre de pages lues. Ajoute UNE ligne
+  à la fin, qui affiche la phrase au format exact.
+
+  Si on répond Léa, puis 42, l'écran doit montrer :
+
+  Prénom : Léa
+  Pages lues : 42
+  Léa a lu 42 pages
+
+  Ton programme sera relancé avec d'autres réponses : n'écris ni le prénom ni le
+  nombre à la main.
+depart: |
+  prenom = input("Prénom : ")
+  pages = input("Pages lues : ")
+indices:
+  - "Un f-string glisse une variable dans une phrase : un f collé devant les guillemets, et le nom de la variable entre accolades."
+  - "Il te faut un seul print(), avec les deux variables dans la même phrase."
+tests:
+  - type: sortie
+    entrees: ["Léa", "42"]
+    attendu: |-
+      Prénom : Léa
+      Pages lues : 42
+      Léa a lu 42 pages
+  - type: sortie
+    entrees: ["Noé", "7"]
+    attendu: |-
+      Prénom : Noé
+      Pages lues : 7
+      Noé a lu 7 pages
+  - type: interdit
+    motif: Léa
+  - type: contient
+    motif: "{"
+    maitrise: true
+    message: >-
+      L'exercice est validé. Tu peux le refaire avec un f-string : un f collé devant les guillemets, et les variables entre accolades. Ça décroche la seconde coche.
+solution: |
+  prenom = input("Prénom : ")
+  pages = input("Pages lues : ")
+  print(f"{prenom} a lu {pages} pages")

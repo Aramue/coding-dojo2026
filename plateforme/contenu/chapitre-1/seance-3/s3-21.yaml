@@ -1,0 +1,33 @@
+id: s3-21
+concept: compteur
+notion: compter
+seance: 3
+niveau: normal
+type: predire
+titre: Avant la boucle, et dedans
+obligatoire: true
+enonce: |
+  Une variable qui compte les tours se crée avant la boucle, et se met à jour
+  dedans. `tours += 1` est un raccourci pour `tours = tours + 1`.
+depart: |
+  tours = 0
+  for lettre in "vélo":
+      tours += 1
+      print(tours)
+  print("Total :", tours)
+indices:
+  - Au premier tour, tours vaut 0 juste avant la ligne tours += 1. Que vaut-il juste après, au moment du print ?
+  - La variable n'est créée qu'une fois, avant la boucle. À chaque tour elle gagne 1, et le print décalé affiche sa nouvelle valeur.
+tests:
+  - type: qcm
+    options:
+      - "1\n2\n3\n4\nTotal : 4"
+      - "0\n1\n2\n3\nTotal : 4"
+      - "1\n1\n1\n1\nTotal : 1"
+    bonne_reponse: 0
+solution: |
+  tours = 0
+  for lettre in "vélo":
+      tours += 1
+      print(tours)
+  print("Total :", tours)

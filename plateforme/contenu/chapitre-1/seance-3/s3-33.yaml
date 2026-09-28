@@ -1,0 +1,39 @@
+id: s3-33
+concept: while
+notion: tantque
+seance: 3
+niveau: normal
+type: predire
+titre: for ou while ?
+obligatoire: true
+enonce: |
+  Quand on sait d'avance combien de tours faire, `for` suffit, et `range()`
+  compte à ta place. Quand on ne le sait pas, comme pour « jusqu'à ce qu'on tape
+  fin », il faut `while`, et compter soi-même si besoin. Ces deux boucles-ci
+  font le même travail.
+depart: |
+  for i in range(1, 4):
+      print(i)
+  print("---")
+  i = 1
+  while i < 4:
+      print(i)
+      i = i + 1
+indices:
+  - La première boucle prend les valeurs de range(1, 4). La seconde part de 1 et avance d'un à chaque tour.
+  - La seconde s'arrête dès que i vaut 4, puisque 4 < 4 est faux. Le 4 n'est donc jamais affiché, pas plus que dans range(1, 4).
+tests:
+  - type: qcm
+    options:
+      - "1\n2\n3\n---\n1\n2\n3"
+      - "1\n2\n3\n---\n1\n2\n3\n4"
+      - "1\n2\n3\n4\n---\n1\n2\n3"
+    bonne_reponse: 0
+solution: |
+  for i in range(1, 4):
+      print(i)
+  print("---")
+  i = 1
+  while i < 4:
+      print(i)
+      i = i + 1

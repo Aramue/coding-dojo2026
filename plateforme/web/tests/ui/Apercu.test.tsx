@@ -170,3 +170,50 @@ describe('Apercu — une fenêtre par-dessus, pas un cadre en bas de page', () =
     expect(await screen.findByRole('dialog')).toHaveFocus()
   })
 })
+
+describe('Apercu — les séances à venir', () => {
+  function reseauAvecSeance2(ouverture: string) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => ({
+        ok: true,
+        json: async () => {
+          if (url.includes('chapitres')) {
+            return [
+              ...CHAPITRES,
+              { id: 'decisions', ordre: 2, titre: 'Calculer, comparer, décider', seance: 2, ouverture },
+            ]
+          }
+          if (url.includes('notions')) {
+            return [
+              ...NOTIONS,
+              { id: 'calculer', ordre: 6, titre: 'Calculer', famille: 'operateurs', chapitre: 'decisions' },
+            ]
+          }
+          if (url.includes('lecons')) return LECONS
+          return EXERCICES
+        },
+      })),
+    )
+  }
+
+  it('montre une séance pas encore ouverte, et dit que la classe ne la voit pas', async () => {
+    // C'est avant une séance qu'on la cadre : l'aperçu doit pouvoir la montrer.
+    reseauAvecSeance2('2999-01-01')
+    render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
+    expect(
+      await screen.findByText(
+        /ne voient pas encore « Calculer, comparer, décider » : la séance 2 s'ouvre le/,
+      ),
+    ).toBeInTheDocument()
+    const menu = screen.getByRole('navigation', { name: /sommaire/i })
+    expect(within(menu).getByText('Calculer')).toBeInTheDocument()
+  })
+
+  it('ne signale rien quand la séance est ouverte', async () => {
+    reseauAvecSeance2('2000-01-01')
+    render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
+    await screen.findByRole('navigation', { name: /sommaire/i })
+    expect(screen.queryByText(/ne voient pas encore/)).toBeNull()
+  })
+})

@@ -48,6 +48,17 @@ class Tentative(SQLModel, table=True):
     horodatage: datetime = Field(default_factory=maintenant, index=True)
 
 
+class Reglage(SQLModel, table=True):
+    """Ce que l'instance tire ou recoit une fois pour toutes.
+
+    La cle qui signe les jetons, tiree au premier besoin, et l'empreinte du
+    mot de passe professeur, ecrite a la creation du compte. Rien de tout cela
+    ne vient plus de l'environnement : voir ADR-014.
+    """
+
+    cle: str = Field(primary_key=True)
+    valeur: str
+
 class PartieQuiz(SQLModel, table=True):
     """Une partie de quiz en direct. Une seule est en cours a la fois.
 

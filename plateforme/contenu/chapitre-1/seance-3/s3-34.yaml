@@ -1,0 +1,37 @@
+id: s3-34
+concept: while
+notion: tantque
+seance: 3
+niveau: normal
+type: debug
+titre: L'étage oublié
+obligatoire: false
+enonce: |
+  L'ascenseur annonce chaque étage en descendant, du 4e jusqu'au rez-de-chaussée,
+  qui est l'étage 0. Le programme tourne, mais l'étage 0 n'est jamais annoncé.
+  Répare-le.
+depart: |
+  etage = 4
+  while etage > 0:
+      print("Étage", etage)
+      etage = etage - 1
+  print("Portes ouvertes")
+indices:
+  - Quand etage vaut 0, la condition etage > 0 est-elle vraie ? Le tour de l'étage 0 a-t-il lieu ?
+  - Pour que l'étage 0 soit annoncé, la condition doit rester vraie quand etage vaut 0. C'est la borne comprise, comme à la séance 2.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Étage 4
+      Étage 3
+      Étage 2
+      Étage 1
+      Étage 0
+      Portes ouvertes
+solution: |
+  etage = 4
+  while etage >= 0:
+      print("Étage", etage)
+      etage = etage - 1
+  print("Portes ouvertes")

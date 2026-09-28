@@ -1,0 +1,38 @@
+id: s3-27
+concept: accumulateur
+notion: compter
+seance: 3
+niveau: normal
+type: debug
+titre: Le compteur qui n'existe pas
+obligatoire: false
+enonce: |
+  Ce programme doit compter les lettres e d'une phrase. Il s'arrête sur une
+  erreur dès la première lettre e. Lis le message, puis répare le programme.
+depart: |
+  phrase = input("Une phrase : ")
+  for lettre in phrase:
+      if lettre == "e":
+          nombre = nombre + 1
+  print("Nombre de e :", nombre)
+indices:
+  - La première fois que Python arrive sur nombre = nombre + 1, que vaut nombre ?
+  - La variable doit exister avant le premier tour. Crée-la avant la boucle, avec la valeur qui convient quand on n'a encore rien compté.
+tests:
+  - type: sortie
+    entrees: ["le vélo de Léa"]
+    attendu: |-
+      Une phrase : le vélo de Léa
+      Nombre de e : 2
+  - type: sortie
+    entrees: ["abc"]
+    attendu: |-
+      Une phrase : abc
+      Nombre de e : 0
+solution: |
+  phrase = input("Une phrase : ")
+  nombre = 0
+  for lettre in phrase:
+      if lettre == "e":
+          nombre = nombre + 1
+  print("Nombre de e :", nombre)

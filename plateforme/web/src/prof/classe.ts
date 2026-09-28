@@ -1,5 +1,5 @@
 /**
- * Le client des routes de gestion de classe. Toutes portent le code
+ * Le client des routes de gestion de classe. Toutes portent le jeton
  * professeur, aucune ne passe par le jeton élève.
  */
 
@@ -20,39 +20,41 @@ export type Fiche = { prenom: string; nom: string; etablissement: string }
 export const FICHE_VIDE: Fiche = { prenom: '', nom: '', etablissement: '' }
 
 async function appeler(
-  codeProf: string,
+  jetonProf: string,
   chemin: string,
   options: RequestInit = {},
 ): Promise<unknown> {
   const reponse = await fetch(`/api/prof${chemin}`, {
     ...options,
-    headers: { 'Content-Type': 'application/json', 'X-Code-Prof': codeProf },
+    headers: { 'Content-Type': 'application/json', 'X-Jeton-Prof': jetonProf },
   })
-  if (reponse.status === 401) throw new Error('Code professeur refusé.')
+  if (reponse.status === 401) {
+    throw new Error('Session professeur refusée ou expirée : reconnecte-toi.')
+  }
   if (reponse.status === 422) throw new Error('Le prénom est obligatoire.')
   if (reponse.status === 404) throw new Error("Cet élève n'existe plus.")
   if (!reponse.ok) throw new Error(`La plateforme a refusé (erreur ${reponse.status}).`)
   return reponse.json()
 }
 
-export async function listerEleves(codeProf: string): Promise<EleveInscrit[]> {
-  const donnees = (await appeler(codeProf, '/eleves')) as { eleves?: unknown }
+export async function listerEleves(jetonProf: string): Promise<EleveInscrit[]> {
+  const donnees = (await appeler(jetonProf, '/eleves')) as { eleves?: unknown }
   // Même garde que sur la séance : un non-tableau dans l'état ferait planter le
   // premier `.map` du rendu, et l'écran du professeur deviendrait blanc.
   if (!Array.isArray(donnees?.eleves)) throw new Error('Réponse inattendue de la plateforme.')
   return donnees.eleves as EleveInscrit[]
 }
 
-export function creerEleve(codeProf: string, fiche: Fiche): Promise<unknown> {
-  return appeler(codeProf, '/eleves', { method: 'POST', body: JSON.stringify(fiche) })
+export function creerEleve(jetonProf: string, fiche: Fiche): Promise<unknown> {
+  return appeler(jetonProf, '/eleves', { method: 'POST', body: JSON.stringify(fiche) })
 }
 
-export function modifierEleve(codeProf: string, code: string, fiche: Fiche): Promise<unknown> {
-  return appeler(codeProf, `/eleves/${code}`, { method: 'PATCH', body: JSON.stringify(fiche) })
+export function modifierEleve(jetonProf: string, code: string, fiche: Fiche): Promise<unknown> {
+  return appeler(jetonProf, `/eleves/${code}`, { method: 'PATCH', body: JSON.stringify(fiche) })
 }
 
-export function retirerEleve(codeProf: string, code: string): Promise<unknown> {
-  return appeler(codeProf, `/eleves/${code}`, { method: 'DELETE' })
+export function retirerEleve(jetonProf: string, code: string): Promise<unknown> {
+  return appeler(jetonProf, `/eleves/${code}`, { method: 'DELETE' })
 }
 
 /**

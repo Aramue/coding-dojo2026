@@ -1,0 +1,29 @@
+id: s2-01
+concept: reactivation
+notion: reveil
+seance: 2
+niveau: normal
+type: predire
+titre: La copie qui ne suit pas
+obligatoire: true
+enonce: |
+  Un rappel de la séance 1 pour se remettre en route.
+  Au début d'une nouvelle partie, ce programme met de côté le score de la
+  précédente, puis enregistre le nouveau. Déroule-le ligne par ligne.
+depart: |
+  score = 12
+  ancien = score
+  score = 20
+  print(score, ancien)
+indices:
+  - Arrête-toi juste après la ligne 2 et note ce que contient chaque boîte à cet instant.
+  - La ligne 2 recopie dans ancien la valeur que score contient à ce moment-là. Si score change ensuite, ancien ne suit pas.
+tests:
+  - type: qcm
+    options: ["20 12", "20 20", "12 12"]
+    bonne_reponse: 0
+solution: |
+  score = 12
+  ancien = score
+  score = 20
+  print(score, ancien)

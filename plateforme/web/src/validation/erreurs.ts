@@ -13,6 +13,13 @@ type Regle = {
   construire: (c: RegExpMatchArray) => MessageErreur
 }
 
+/** Le nom qu'un débutant comprend, pour les types qu'il a appris. */
+const NOMS_DE_TYPE: Record<string, string> = {
+  int: 'un nombre entier',
+  float: 'un nombre à virgule',
+  bool: 'un booléen',
+}
+
 const REGLES: Regle[] = [
   {
     type: 'NameError',
@@ -45,6 +52,17 @@ const REGLES: Regle[] = [
     }),
   },
   {
+    type: 'TypeError',
+    // Rencontrée exprès en s3-14 : for sur un nombre. Sans cette règle, le
+    // message générique ne disait pas ce qu'on ne peut pas parcourir.
+    motif: /'(\w+)' object is not iterable/,
+    construire: (c) => ({
+      titre: `On ne parcourt pas ${NOMS_DE_TYPE[c[1]!] ?? `une valeur de type ${c[1]}`}`,
+      explication: `for parcourt un texte caractère par caractère, ou les valeurs d'un range(). Cette valeur n'a rien à parcourir.`,
+      piste: `Pour parcourir les chiffres d'un nombre, transforme-le d'abord en texte avec str().`,
+    }),
+  },
+  {
     type: 'ValueError',
     motif: /invalid literal for int\(\) with base 10: '(.*)'/,
     construire: (c) => ({
@@ -60,6 +78,18 @@ const REGLES: Regle[] = [
       titre: 'Il manque un deux-points',
       explication: `En Python, if, elif, else, for et while finissent toujours par « : ».`,
       piste: `Ajoute « : » à la fin de la ligne signalée.`,
+    }),
+  },
+  {
+    type: 'SyntaxError',
+    // Python le devine depuis la version 3.10, mais le dit en anglais. Sans
+    // cette règle, l'erreur la plus fréquente du débutant qui compare tombait
+    // sur le message générique, qui ne dit rien.
+    motif: /Maybe you meant '==' or ':=' instead of '='/,
+    construire: () => ({
+      titre: 'Un seul = là où Python attend une comparaison',
+      explication: `Le signe = range une valeur dans une variable. Il ne demande pas si deux valeurs sont égales.`,
+      piste: `Regarde le = de la ligne signalée : range-t-il une valeur, ou pose-t-il une question ? Pour comparer, le signe s'écrit ==.`,
     }),
   },
   {

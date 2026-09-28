@@ -1,0 +1,29 @@
+id: s2-26
+concept: logique
+notion: combiner
+seance: 2
+niveau: normal
+type: predire
+titre: « Au moins 12 et au plus 70 »
+obligatoire: false
+enonce: |
+  En français, on dit « au moins 12 et au plus 70 ». Ce programme essaie de
+  l'écrire exactement comme on le dit.
+depart: |
+  age = 40
+  accepte = age >= 12 and <= 70
+  print("Accepté :", accepte)
+indices:
+  - Chaque côté d'un and doit être une question complète. Que demande le côté droit, <= 70, et à propos de quoi ?
+  - "Python ne devine pas que <= 70 parle encore de age : il refuse de lancer le programme. Il aurait fallu écrire age >= 12 and age <= 70."
+tests:
+  - type: qcm
+    options:
+      - "Une erreur : Python refuse de lancer le programme"
+      - "Accepté : True"
+      - "Accepté : False"
+    bonne_reponse: 0
+solution: |
+  age = 40
+  accepte = age >= 12 and <= 70
+  print("Accepté :", accepte)

@@ -1,0 +1,39 @@
+id: s3-38
+concept: import math
+notion: tantque
+seance: 3
+niveau: expert
+type: ecrire
+titre: À vol d'oiseau
+obligatoire: false
+enonce: |
+  Défi : sur un plan quadrillé, l'école est au point (1, 2) et la piscine au
+  point (7, 10). La distance à vol d'oiseau se calcule avec Pythagore : c'est la
+  racine carrée de la somme des carrés des deux écarts.
+
+  Complète le programme pour que la variable `distance` contienne cette
+  distance.
+depart: |
+  import math
+  x1 = 1
+  y1 = 2
+  x2 = 7
+  y2 = 10
+indices:
+  - L'écart horizontal est x2 - x1, l'écart vertical y2 - y1. Un carré se calcule avec la double étoile, ou en multipliant un nombre par lui-même.
+  - Additionne les deux carrés, puis donne la somme à math.sqrt(). Des parenthèses gardent chaque écart entier avant qu'on le mette au carré.
+tests:
+  - type: variable
+    nom: distance
+    valeur_attendue: "10.0"
+    type_attendu: float
+  - type: interdit
+    motif: distance = 10
+solution: |
+  import math
+  x1 = 1
+  y1 = 2
+  x2 = 7
+  y2 = 10
+  distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+  print("Distance :", distance)

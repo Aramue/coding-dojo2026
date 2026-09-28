@@ -5,7 +5,15 @@ from sqlmodel import select
 
 from app.modeles import Eleve, ParticipantQuiz, PartieQuiz, ReponseQuiz
 
-PROF = {"X-Code-Prof": "code-prof-test"}
+# Rempli pour chaque test par `prof_connecte` : le jeton de la session
+# professeur, obtenu comme en vrai en creant le compte. Voir ADR-014.
+PROF: dict[str, str] = {}
+
+
+@pytest.fixture(autouse=True)
+def prof_connecte(entetes_prof):
+    PROF.clear()
+    PROF.update(entetes_prof)
 
 
 @pytest.fixture(name="eleve")
@@ -45,7 +53,7 @@ def repondre(client, entetes, partie: int, question: int, choix: int):
 
 def test_le_catalogue_est_reserve_au_professeur(client, catalogue):
     assert client.get("/prof/quiz").status_code == 401
-    assert client.get("/prof/quiz", headers={"X-Code-Prof": "faux"}).status_code == 401
+    assert client.get("/prof/quiz", headers={"X-Jeton-Prof": "prof.1.faux"}).status_code == 401
 
 
 def test_le_catalogue_resume_chaque_quiz(client, catalogue):

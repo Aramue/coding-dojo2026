@@ -3,8 +3,8 @@ title: Chapitre 1
 tags:
   - moc
   - pedagogie
-statut: conçu
-mis-a-jour: 2026-09-03
+statut: écrit
+mis-a-jour: 2026-09-14
 ---
 
 # Chapitre 1 — Introduction à la programmation
@@ -64,6 +64,94 @@ Voir [[Types d'exercices]].
 > Les cinq autres travaillent un point isolé : `
 `, `5 = age`, la casse, l'échange de deux
 > variables, la lecture d'un appel imbriqué. Voir [[Bugs réels de la promotion 2025]].
+
+> [!success] Séance 2 écrite en entier — 14 septembre 2026
+> Les **38 exercices** de la séance 2 existent : 26 obligatoires, 4 renforts, 8 experts, répartis
+> en cinq notions qui ont chacune leur leçon. Tout est validé par exécution et relu dans l'aperçu
+> du professeur. Publiée d'avance, la séance ne s'ouvre aux élèves que le **23 septembre** — voir
+> [[ADR-013 Une séance s'ouvre à sa date]].
+>
+> | Notion | Exercices | Leçon |
+> |---|---|---|
+> | Se remettre en route | `s2-01` à `s2-03` — 3 obligatoires | `c2-reveil` |
+> | Calculer | `s2-04` à `s2-12` — 6 obligatoires, 1 renfort, 2 experts | `c2-calculer` |
+> | Comparer | `s2-13` à `s2-21` — 6 obligatoires, 1 renfort, 2 experts | `c2-comparer` |
+> | Combiner des conditions | `s2-22` à `s2-28` — 4 obligatoires, 1 renfort, 2 experts | `c2-combiner` |
+> | Décider | `s2-29` à `s2-38` — 7 obligatoires, 1 renfort, 2 experts | `c2-decider` |
+>
+> Écarts assumés avec `progression-chapitre-1.json` :
+>
+> - Les trois exercices de réactivation forment **une notion à part**. La conception exige un
+>   créneau nommé, qu'on ne sacrifie pas quand la séance déborde : noyés en tête de « Calculer »,
+>   ils se liraient comme des exercices de calcul ratés. Leurs titres perdent le préfixe
+>   « Réveil : », que le menu dit déjà — et `s2-01` ne reprend pas le titre de `s1-12`, qu'il
+>   réactive : deux « Photo, pas formule » dans le même menu se confondraient.
+> - `s2-03` « la ligne de rapport » devient « La phrase au format exact » : le rapport venait du
+>   Quartier Général, abandonné avec [[ADR-010 Abandon de la fiction narrative]].
+> - `s2-12` se valide **sur sa sortie**, pour 472 et pour 905 et son zéro au milieu, et non par
+>   inspection de variables : le programme demande le nombre avec `input()`, et une inspection
+>   s'exécute sans entrée. Un second motif interdit, `[`, ferme le contournement par un f-string
+>   découpé — sans lui, le défi se résoudrait sans toucher à `//` ni à `%`.
+> - `s2-14` fait rencontrer le `=` à la place de `==` **sans `if`**. La conception l'écrivait
+>   `if age = 18`, mais `if` n'arrive que deux notions plus loin. Une comparaison rangée dans une
+>   variable, `ouvert = (code = 4321)`, produit exactement la même erreur — avant même que le
+>   programme pose sa première question.
+> - `s2-17` et `s2-21` se valident sur leur sortie, avec plusieurs réponses dont les bornes
+>   (140 cm pile, 10 ans et 130 cm pile), et non par inspection de variables : leurs programmes
+>   posent leurs questions avec `input()`.
+> - `s2-28`, le drapeau d'accès, se construit **sans `if`** lui aussi. La conception faisait passer
+>   `acces_autorise` à `False` dans trois `if`, qui n'arrivent qu'à la notion suivante. Le drapeau
+>   se met ici à jour avec `and` après chaque question : même idée, avec un outil déjà vu. Le
+>   motif `autorise and` est exigé : un seul `and` écrit à la fin marche, mais ne fait pas
+>   travailler le drapeau.
+> - `s2-38`, le programme de fin de séance, quitte le Quartier Général et devient
+>   « L'abonnement de la piscine », autonome. Sa formule passe de `(age * 7) % 1000` à
+>   `(age * 37) % 1000` : entre 18 et 65 ans, `age * 7` ne dépasse jamais 1000, et aucun essai
+>   n'aurait distingué `% 1000` de `% 10000`. Voir [[Programme d'assemblage]].
+
+> [!success] Séance 3 écrite en entier — 14 septembre 2026
+> Les **40 exercices** de la séance 3 existent : 24 obligatoires, 6 renforts, 10 experts, répartis
+> en cinq notions qui ont chacune leur leçon. Même méthode que la séance 2 : validés par exécution
+> et relus dans l'aperçu. Elle s'ouvre aux élèves le **30 septembre**. ==Le chapitre 1 est complet :
+> 112 exercices, dont 75 obligatoires, conformes au volume conçu.==
+>
+> | Notion | Exercices | Leçon |
+> |---|---|---|
+> | Rappels avant les boucles | `s3-01` à `s3-03` — 3 obligatoires | `c3-rappels` |
+> | Répéter avec for | `s3-04` à `s3-12` — 6 obligatoires, 1 renfort, 2 experts | `c3-repeter` |
+> | Parcourir un texte | `s3-13` à `s3-20` — 5 obligatoires, 1 renfort, 2 experts | `c3-parcourir` |
+> | Compter et cumuler | `s3-21` à `s3-29` — 5 obligatoires, 2 renforts, 2 experts | `c3-compter` |
+> | Répéter tant que | `s3-30` à `s3-40` — 5 obligatoires, 2 renforts, 4 experts | `c3-tantque` |
+>
+> Écarts assumés avec `progression-chapitre-1.json` :
+>
+> - Le créneau de réactivation porte un **autre titre** que celui de la séance 2 : le tableau de
+>   bord nomme la notion à côté de chaque exercice, et deux « Se remettre en route » s'y
+>   confondraient.
+> - Avant les boucles, deux outils ont dû changer : une leçon prend désormais l'ordre de sa
+>   notion (la borne fixe à 9 bloquait la séance 3), et le validateur interrompt un programme
+>   qui ne s'arrête pas — sans quoi la boucle infinie de `s3-31` aurait bloqué la construction.
+> - Aucun titre ne donne la réponse de son QCM : « range(5) donne 0, 1, 2, 3, 4 » devient
+>   « Les valeurs de range(5) ». Et « Un tour de trop » devient « Il manque la dernière
+>   question », puisque `range(1, 5)` s'arrête un tour **trop tôt**.
+> - `s3-12`, « la grille de sécurité », quitte le Quartier Général pour les tables de
+>   multiplication : deux boucles imbriquées, et une sortie que chacun sait vérifier de tête.
+> - `s3-19` lit les caractères par leur position avec `for` et `range(len(mot))`, et non avec un
+>   `while` : celui-ci n'arrive que deux notions plus loin.
+> - `s3-20`, « le brouilleur », devient « Le mot à l'envers » : même accumulateur de texte,
+>   vérifié sur la variable, et même pont vers le chiffrement de César du chapitre 2.
+> - La leçon « Compter et cumuler » présente `total += prix` comme raccourci de
+>   `total = total + prix` : le notebook de 2025 l'emploie, et les élèves le croiseront partout.
+>   `s3-21` le fait lire ; les exercices à écrire gardent la forme longue.
+> - `s3-28` exige une boucle (`for`) : le reste de la division du numéro lui-même par 9 donne le
+>   même chiffre de contrôle, et contournerait l'addition des chiffres, qui est le défi.
+> - `s3-33`, « for ou while ? », devait être un QCM de quatre situations à trier. Or tout QCM de
+>   la plateforme demande *Qu'affiche ce programme ?* : le choix est donc enseigné par
+>   l'énoncé, sur deux boucles qui font le même travail, l'une avec `for`, l'autre avec `while`.
+> - `s3-39`, le programme de fin de chapitre, devient « La carte jeune du cinéma », autonome. À
+>   25 ans, son code n'a que deux chiffres : l'essai démasque une boucle qui n'en serait pas une.
+>   Son bonus `s3-40` reprend le corrigé avancé de 2025 **sans `enumerate()`**, avec le compteur
+>   manuel de `s3-24`, et sans emoji. Voir [[Programme d'assemblage]].
 
 ## Les trois séances
 

@@ -1,0 +1,27 @@
+id: s3-10
+concept: indentation
+notion: repeter
+seance: 3
+niveau: normal
+type: debug
+titre: La boucle sans corps
+obligatoire: false
+enonce: |
+  Ce programme doit souhaiter bon appétit trois fois. Python refuse de le
+  lancer. Lis le message d'erreur, puis répare le programme.
+depart: |
+  for i in range(3):
+  print("Bon appétit !")
+indices:
+  - Après le deux-points du for, Python attend au moins une ligne décalée. Il n'en trouve aucune.
+  - Place le curseur au début de la ligne 2 et appuie sur Tab.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |-
+      Bon appétit !
+      Bon appétit !
+      Bon appétit !
+solution: |
+  for i in range(3):
+      print("Bon appétit !")

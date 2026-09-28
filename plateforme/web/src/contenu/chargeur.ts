@@ -1,4 +1,4 @@
-import type { Chapitre, Exercice, Lecon, Notion } from './types'
+import type { Chapitre, ContenuPublie, Exercice, Lecon, Notion } from './types'
 
 /** Variables à relire dans l'espace de noms après exécution, pour les tests `variable`. */
 export function nomsVariablesRequis(exercice: Exercice): string[] {
@@ -14,14 +14,22 @@ export async function chargerJson<T>(chemin: string): Promise<T> {
   return (await reponse.json()) as T
 }
 
-export const chargerParcours = (chemin = '/contenu/seance-1.json') =>
-  chargerJson<Exercice[]>(chemin)
-
-export const chargerNotions = (chemin = '/contenu/seance-1-notions.json') =>
-  chargerJson<Notion[]>(chemin)
-
-export const chargerLecons = (chemin = '/contenu/seance-1-lecons.json') =>
-  chargerJson<Lecon[]>(chemin)
-
-export const chargerChapitres = (chemin = '/contenu/seance-1-chapitres.json') =>
-  chargerJson<Chapitre[]>(chemin)
+/**
+ * Tout le contenu publié : quatre fichiers, toutes séances confondues.
+ *
+ * Un fichier qui n'est pas un tableau est refusé ici, à l'entrée. Glissé dans
+ * l'état, il ferait planter le premier `.map` du rendu, et ==l'écran
+ * deviendrait blanc en pleine séance== sans rien qui explique pourquoi.
+ */
+export async function chargerContenu(): Promise<ContenuPublie> {
+  const [chapitres, notions, exercices, lecons] = await Promise.all([
+    chargerJson<Chapitre[]>('/contenu/chapitres.json'),
+    chargerJson<Notion[]>('/contenu/notions.json'),
+    chargerJson<Exercice[]>('/contenu/exercices.json'),
+    chargerJson<Lecon[]>('/contenu/lecons.json'),
+  ])
+  if (![chapitres, notions, exercices, lecons].every(Array.isArray)) {
+    throw new Error('Contenu illisible.')
+  }
+  return { chapitres, notions, exercices, lecons }
+}

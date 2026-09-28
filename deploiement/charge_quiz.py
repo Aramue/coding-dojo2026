@@ -2,7 +2,10 @@
 
 A lancer HORS SEANCE, contre une instance deployee ou locale :
 
-    python deploiement/charge_quiz.py --url http://localhost/api --code-prof ...
+    python deploiement/charge_quiz.py --url http://localhost/api --mot-de-passe ...
+
+Le mot de passe est celui du compte professeur (ADR-014) : le script ouvre une
+session comme le ferait /prof, et n'envoie ensuite que le jeton rendu.
 
 Le script inscrit N eleves d'essai (« Essai Charge 01 »...), ouvre leurs
 sessions et leurs sonnettes, cree une partie, la fait jouer, puis TERMINE la
@@ -80,12 +83,17 @@ class Sonnette:
             await asyncio.gather(self._tache, return_exceptions=True)
 
 
-async def jouer(url: str, code_prof: str, nombre: int, questions: int) -> int:
-    prof = {"X-Code-Prof": code_prof}
+async def jouer(url: str, mot_de_passe: str, nombre: int, questions: int) -> int:
     erreurs: list[str] = []
     codes: list[str] = []
 
     async with httpx.AsyncClient(base_url=url, timeout=15) as http:
+        connexion = await http.post("/prof/connexion", json={"mot_de_passe": mot_de_passe})
+        if connexion.status_code != 200:
+            print(f"Connexion professeur refusee ({connexion.status_code}) : {connexion.text[:80]}")
+            return 2
+        prof = {"X-Jeton-Prof": connexion.json()["jeton"]}
+
         courante = (await http.get("/prof/quiz/partie", headers=prof)).raise_for_status().json()
         if courante.get("partie") and courante.get("phase") != "terminee":
             print("Une partie est en cours : le test de charge ne la derange pas. Abandon.")
@@ -180,12 +188,12 @@ async def jouer(url: str, code_prof: str, nombre: int, questions: int) -> int:
 def principal() -> int:
     parseur = argparse.ArgumentParser(description="Test de charge du quiz en direct.")
     parseur.add_argument("--url", default="http://localhost/api", help="racine de l'API")
-    parseur.add_argument("--code-prof", required=True, help="valeur de DOJO_CODE_PROF")
+    parseur.add_argument("--mot-de-passe", required=True, help="mot de passe du compte professeur")
     parseur.add_argument("--eleves", type=int, default=24)
     parseur.add_argument("--questions", type=int, default=3)
     arguments = parseur.parse_args()
     return asyncio.run(
-        jouer(arguments.url.rstrip("/"), arguments.code_prof, arguments.eleves, arguments.questions)
+        jouer(arguments.url.rstrip("/"), arguments.mot_de_passe, arguments.eleves, arguments.questions)
     )
 
 

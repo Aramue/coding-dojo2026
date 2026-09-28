@@ -1,7 +1,8 @@
 import { python } from '@codemirror/lang-python'
+import { indentUnit } from '@codemirror/language'
 import { Compartment, EditorState } from '@codemirror/state'
 import { EditorView, keymap, lineNumbers } from '@codemirror/view'
-import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
+import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { useEffect, useRef } from 'react'
 
@@ -32,8 +33,16 @@ export function Editeur({
       extensions: [
         lineNumbers(),
         compartimentHistorique.current.of(history()),
-        keymap.of([...defaultKeymap, ...historyKeymap]),
+        // Tab indente au lieu de quitter l'éditeur. Sans lui, l'élève qui
+        // décalait le corps d'un if envoyait le focus sur le bouton Valider,
+        // et son code ne bougeait pas. Au clavier, on sort toujours de
+        // l'éditeur : Échap, puis Tab dans les deux secondes.
+        keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
         python(),
+        // Quatre espaces, comme la leçon et le message d'IndentationError le
+        // demandent. CodeMirror en met deux par défaut : un bloc tapé à la main
+        // et un bloc décalé au clavier ne s'aligneraient plus.
+        indentUnit.of('    '),
         oneDark,
         compartimentEditable.current.of(EditorView.editable.of(!lectureSeule)),
         EditorView.updateListener.of((maj) => {

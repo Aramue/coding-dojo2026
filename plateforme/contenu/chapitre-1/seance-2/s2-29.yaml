@@ -1,0 +1,36 @@
+id: s2-29
+concept: conditions
+notion: decider
+seance: 2
+niveau: normal
+type: predire
+titre: Une seule branche s'exécute
+obligatoire: true
+enonce: |
+  `if` pose une question. Si la réponse est True, Python exécute les lignes
+  décalées juste en dessous. Sinon, il saute au `else` et exécute les siennes.
+  La dernière ligne, elle, n'est pas décalée.
+depart: |
+  age = 16
+  if age >= 18:
+      print("Tu es majeur.")
+  else:
+      print("Tu es mineur.")
+  print("Fin du programme.")
+indices:
+  - Commence par la question du if. 16 est-il plus grand ou égal à 18 ?
+  - Une seule des deux branches s'exécute. La dernière ligne n'est pas décalée, elle ne dépend donc ni du if ni du else.
+tests:
+  - type: qcm
+    options:
+      - "Tu es mineur.\nFin du programme."
+      - "Tu es majeur.\nTu es mineur.\nFin du programme."
+      - "Tu es mineur."
+    bonne_reponse: 0
+solution: |
+  age = 16
+  if age >= 18:
+      print("Tu es majeur.")
+  else:
+      print("Tu es mineur.")
+  print("Fin du programme.")

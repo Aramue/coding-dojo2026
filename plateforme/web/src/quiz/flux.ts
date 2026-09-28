@@ -37,7 +37,7 @@ const PRESENTATION_REFUSEE = 4401
 export type OptionsFlux<E extends Photographie> = {
   /** Le GET de la photographie. Lève avec un message lisible en cas d'échec. */
   lire: () => Promise<E>
-  /** Le premier message de la sonnette : `{ jeton }` ou `{ code_prof }`. Jamais l'URL. */
+  /** Le premier message de la sonnette : `{ jeton }` ou `{ jeton_prof }`. Jamais l'URL. */
   presentation: () => Record<string, string>
   onEtat: (etat: E, ecartMs: number) => void
   /** Un message à montrer, ou `null` quand tout va de nouveau bien. */

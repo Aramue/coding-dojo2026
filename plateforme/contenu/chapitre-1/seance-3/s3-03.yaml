@@ -1,0 +1,27 @@
+id: s3-03
+concept: reactivation
+notion: rappels
+seance: 3
+niveau: normal
+type: predire
+titre: Deux fois la même réponse
+obligatoire: true
+enonce: |
+  Dernier rappel avant les boucles. On lance ce programme, et on tape 4 quand
+  il pose sa question.
+depart: |
+  nombre = input("Un nombre : ")
+  print(nombre + nombre)
+indices:
+  - Que range input() dans la variable nombre quand on tape 4 ? Un nombre, ou un texte ?
+  - input() rend toujours du texte. Entre deux textes, + colle bout à bout, il n'additionne pas.
+tests:
+  - type: qcm
+    options:
+      - "Un nombre : 4\n44"
+      - "Un nombre : 4\n8"
+      - "Un nombre : 4\n4 4"
+    bonne_reponse: 0
+solution: |
+  nombre = input("Un nombre : ")
+  print(nombre + nombre)

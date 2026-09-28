@@ -1,0 +1,36 @@
+id: s3-16
+concept: chaines
+notion: parcourir
+seance: 3
+niveau: normal
+type: predire
+titre: La lettre, ou sa position ?
+obligatoire: true
+enonce: |
+  Deux façons de parcourir le même mot. Dans la première boucle, la variable
+  prend les caractères. Dans la seconde, elle prend les valeurs de `range()`,
+  et `len()` compte les caractères du mot.
+depart: |
+  mot = "vélo"
+  for c in mot:
+      print(c)
+  print("---")
+  for i in range(len(mot)):
+      print(i)
+indices:
+  - len(mot) vaut 4, puisque vélo a quatre caractères. Que donne alors range(4) ?
+  - La seconde boucle ne touche jamais aux lettres. Elle affiche les positions, qui commencent à 0.
+tests:
+  - type: qcm
+    options:
+      - "v\né\nl\no\n---\n0\n1\n2\n3"
+      - "v\né\nl\no\n---\nv\né\nl\no"
+      - "v\né\nl\no\n---\n1\n2\n3\n4"
+    bonne_reponse: 0
+solution: |
+  mot = "vélo"
+  for c in mot:
+      print(c)
+  print("---")
+  for i in range(len(mot)):
+      print(i)

@@ -1,0 +1,65 @@
+id: c2-comparer
+notion: comparer
+ordre: 7
+titre: Comparer
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Une comparaison pose une question à Python, et Python répond aussitôt :
+      **`True`** (vrai) ou **`False`** (faux). Cette réponse n'est pas un
+      message, c'est une valeur : elle s'affiche, et elle se range dans une
+      variable.
+  - type: code
+    legende: Deux questions, deux réponses
+    executable: true
+    python: |
+      print(12 > 7)
+      print(3 == 4)
+  - type: paragraphe
+    texte: >-
+      C'est le **quatrième type** de Python, après `int`, `float` et `str` : le
+      type `bool`, qui n'a que deux valeurs. `True` et `False` s'écrivent avec
+      une majuscule, et sans guillemets.
+  - type: code
+    legende: Une réponse rangée dans une variable
+    executable: true
+    python: |
+      temperature = 31
+      canicule = temperature >= 30
+      print(canicule)
+      print(type(canicule))
+  - type: attention
+    texte: >-
+      **Un `=` range, deux `==` comparent.** `age = 18` met 18 dans la boîte
+      `age`. `age == 18` demande si la boîte contient 18. Un seul `=` à la place
+      de deux, et le programme refuse de démarrer.
+  - type: paragraphe
+    texte: >-
+      Six comparateurs en tout : `==` égal, `!=` différent, `<` plus petit,
+      `>` plus grand, `<=` plus petit ou égal, `>=` plus grand ou égal.
+  - type: code
+    legende: Deux nombres égaux, six questions
+    executable: true
+    python: |
+      a = 5
+      b = 5
+      print(a == b, a != b)
+      print(a < b, a <= b)
+      print(a > b, a >= b)
+  - type: paragraphe
+    texte: >-
+      **La borne compte.** `>` exclut la valeur limite, `>=` l'inclut. Pour
+      « au moins 18 ans », quelqu'un qui a 18 ans pile doit passer : c'est `>=`
+      qu'il faut écrire.
+  - type: paragraphe
+    texte: >-
+      Deux textes aussi se comparent, et Python les veut **identiques jusqu'au
+      dernier caractère** : une majuscule, un accent ou un espace de plus, et ce
+      n'est plus le même texte.
+  - type: code
+    legende: La casse compte
+    executable: true
+    python: |
+      print("Genève" == "Genève")
+      print("Genève" == "genève")

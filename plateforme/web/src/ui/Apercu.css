@@ -47,6 +47,7 @@
 }
 
 .apercu__note {
+  display: block;
   font-size: var(--t-1);
   color: var(--ink-soft);
 }

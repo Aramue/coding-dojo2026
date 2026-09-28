@@ -11,11 +11,11 @@ validateur de la salle.
 ## Démarrer
 
 ```bash
-cp .env.example .env    # puis remplacer les deux secrets, voir le fichier
 docker compose up -d --build
 ```
 
-L'application est servie sur <http://localhost>.
+L'application est servie sur <http://localhost>. Aucun fichier à préparer :
+le `.env` est facultatif et ne porte plus aucun secret.
 
 | Où | Quoi |
 |---|---|
@@ -24,8 +24,12 @@ L'application est servie sur <http://localhost>.
 | `/prof/quiz` | l'écran projeté du quiz en direct : le professeur lance et mène une partie |
 | `/quiz` | la partie de quiz côté élève ; un bandeau y mène dès qu'une partie est créée |
 
-Les codes d'accès n'ont pas besoin d'être créés à l'avance : le premier usage
-d'un code bien formé ouvre le compte. Il suffit de les distribuer en séance.
+**Au premier lancement, `/prof` propose de créer le compte professeur** : un
+mot de passe de douze caractères au moins. Le compte revient au premier qui
+ouvre la page — sur un serveur, crée-le juste après le déploiement.
+
+Les codes d'accès des élèves se créent ensuite dans « Ma classe », sur `/prof`.
+Un code inconnu n'ouvre rien.
 
 ## Arborescence
 
@@ -47,7 +51,7 @@ docs/vault/               la documentation, sous forme de coffre Obsidian
 cd plateforme/web
 pnpm install
 pnpm dev                 # serveur de développement
-pnpm test                # 455 tests
+pnpm test                # 514 tests
 pnpm test:couverture     # avec les seuils qui font échouer la construction
 
 # API
@@ -85,9 +89,23 @@ markdown ordinaire. Points d'entrée :
   défaut réel
 - [Journal de décisions](docs/vault/2-decisions/Journal%20de%20décisions.md) — les ADR
 
-## Avant un déploiement
+## Déployer
 
-Le fichier `.env` n'est pas dans le dépôt : il porte les secrets de l'instance.
-Sur un serveur, il doit exister et porter `DOJO_SECRET` et `DOJO_CODE_PROF`.
-Sans eux, l'API tire des valeurs aléatoires au démarrage et les avertit — les
-sessions ne survivent alors pas à un redémarrage.
+Aucun secret à écrire. La clé qui signe les sessions est tirée au premier
+démarrage et rangée dans la base SQLite, avec l'empreinte du mot de passe
+professeur. Les deux vivent dans le volume `donnees` : sauvegarder la base,
+c'est sauvegarder la progression **et** le compte.
+
+1. `docker compose up -d --build`, avec `DOJO_DOMAINE` dans un `.env` si le
+   serveur a un nom (voir `.env.example`).
+2. Ouvrir `/prof` **tout de suite** et créer le compte professeur.
+
+Mot de passe oublié :
+
+```bash
+docker compose exec api python -m app.oublier_prof
+```
+
+Le compte est effacé et `/prof` propose de nouveau de le créer. Les élèves,
+leurs codes et leur progression ne bougent pas. Détail dans
+[ADR-014](docs/vault/2-decisions/ADR-014%20Le%20compte%20professeur%20se%20crée%20au%20premier%20lancement.md).

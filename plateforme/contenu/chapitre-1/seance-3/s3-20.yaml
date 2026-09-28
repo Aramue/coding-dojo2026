@@ -1,0 +1,35 @@
+id: s3-20
+concept: accumulateur de chaine
+notion: parcourir
+seance: 3
+niveau: expert
+type: ecrire
+titre: Le mot à l'envers
+obligatoire: false
+enonce: |
+  Défi : un texte se construit aussi morceau par morceau. Complète le programme
+  pour que la variable `envers` contienne le mot écrit à l'envers. Parcours le
+  mot, et range chaque lettre **devant** celles déjà rangées.
+depart: |
+  mot = "Genève"
+  envers = ""
+indices:
+  - À chaque tour, envers doit devenir la lettre du tour, suivie de ce qu'il contenait déjà.
+  - "Dans la boucle, envers = lettre + envers. Après G, envers vaut G ; après e, il vaut eG ; et ainsi de suite."
+tests:
+  - type: variable
+    nom: envers
+    valeur_attendue: "'evèneG'"
+    type_attendu: str
+  - type: interdit
+    motif: evèneG
+  - type: interdit
+    motif: "::-1"
+    message: >-
+      Ce défi se résout avec une boucle, en rangeant les lettres une par une.
+solution: |
+  mot = "Genève"
+  envers = ""
+  for lettre in mot:
+      envers = lettre + envers
+  print(envers)

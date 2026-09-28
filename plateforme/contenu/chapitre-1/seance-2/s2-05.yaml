@@ -1,0 +1,28 @@
+id: s2-05
+concept: arithmetique
+notion: calculer
+seance: 2
+niveau: normal
+type: predire
+titre: La division rend un nombre à virgule
+obligatoire: true
+enonce: |
+  Trois amis partagent une addition de 60 francs au restaurant, et chacun paie
+  la même part.
+depart: |
+  addition = 60
+  amis = 3
+  part = addition / amis
+  print(part)
+indices:
+  - Regarde le signe utilisé pour diviser. En Python, / rend toujours un nombre à virgule, même quand la division tombe juste.
+  - Un nombre à virgule s'affiche avec un point, pas avec une virgule, et il garde son .0 même quand il est rond.
+tests:
+  - type: qcm
+    options: ["20.0", "20", "20,0"]
+    bonne_reponse: 0
+solution: |
+  addition = 60
+  amis = 3
+  part = addition / amis
+  print(part)

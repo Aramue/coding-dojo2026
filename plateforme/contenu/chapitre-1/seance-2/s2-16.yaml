@@ -1,0 +1,29 @@
+id: s2-16
+concept: comparateurs
+notion: comparer
+seance: 2
+niveau: normal
+type: predire
+titre: Dix-huit ans pile
+obligatoire: true
+enonce: |
+  Pour s'inscrire seul à un stage d'escalade, il faut avoir au moins 18 ans.
+  Ce programme vérifie l'âge de Noé, qui fête justement ses 18 ans aujourd'hui.
+depart: |
+  age = 18
+  peut_s_inscrire = age > 18
+  print("Inscription possible :", peut_s_inscrire)
+indices:
+  - « Au moins 18 ans » veut dire 18 ou plus. Mais que demande exactement le signe > ?
+  - Un nombre n'est jamais plus grand que lui-même, donc 18 > 18 est faux. Le programme refuse Noé alors qu'il a le droit de s'inscrire. Il aurait fallu >=, qui inclut la borne.
+tests:
+  - type: qcm
+    options:
+      - "Inscription possible : False"
+      - "Inscription possible : True"
+      - "Inscription possible : 18"
+    bonne_reponse: 0
+solution: |
+  age = 18
+  peut_s_inscrire = age > 18
+  print("Inscription possible :", peut_s_inscrire)

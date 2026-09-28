@@ -1,0 +1,59 @@
+id: s2-32
+concept: conditions
+notion: decider
+seance: 2
+niveau: normal
+type: completer
+titre: Trois branches
+obligatoire: true
+enonce: |
+  Ce programme conseille une tenue selon la température. Complète les deux
+  trous pour obtenir trois branches : 25 degrés ou plus, puis 15 degrés ou
+  plus, et tout le reste.
+
+  Ton programme sera essayé avec plusieurs températures, dont 25 et 15.
+depart: |
+  temperature = int(input("Température : "))
+  if temperature >= 25:
+      print("Short et t-shirt.")
+  _____ temperature >= 15:
+      print("Un pull suffit.")
+  _____:
+      print("Prends ta veste.")
+indices:
+  - Le premier trou ajoute une deuxième question, qui n'est posée que si la première a répondu False.
+  - Le second trou n'a pas de condition. Il prend tout ce que les deux questions ont refusé.
+tests:
+  - type: sortie
+    entrees: ["30"]
+    attendu: |-
+      Température : 30
+      Short et t-shirt.
+  - type: sortie
+    entrees: ["25"]
+    attendu: |-
+      Température : 25
+      Short et t-shirt.
+  - type: sortie
+    entrees: ["20"]
+    attendu: |-
+      Température : 20
+      Un pull suffit.
+  - type: sortie
+    entrees: ["15"]
+    attendu: |-
+      Température : 15
+      Un pull suffit.
+  - type: sortie
+    entrees: ["8"]
+    attendu: |-
+      Température : 8
+      Prends ta veste.
+solution: |
+  temperature = int(input("Température : "))
+  if temperature >= 25:
+      print("Short et t-shirt.")
+  elif temperature >= 15:
+      print("Un pull suffit.")
+  else:
+      print("Prends ta veste.")

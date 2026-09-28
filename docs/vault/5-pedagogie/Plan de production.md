@@ -3,7 +3,7 @@ title: Plan de production
 tags:
   - pedagogie
   - planification
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-09-14
 ---
 
 # Plan de production
@@ -14,6 +14,17 @@ mis-a-jour: 2026-09-03
 > tourne. Ce plan est conçu pour que le projet survive à ce moment-là.
 
 ## Les quatre lots
+
+> [!success] Lots 2, 3 et 4 produits le 14 septembre 2026
+> Deux jours avant la première séance, les **112 exercices** du chapitre existent : les
+> obligatoires des séances 2 et 3, et tous les renforts et experts. Chacun est validé par
+> exécution, et chaque notion a été relue dans l'aperçu du professeur. Les séances 2 et 3 sont
+> publiées d'avance et ne s'ouvrent qu'à leur date — voir
+> [[ADR-013 Une séance s'ouvre à sa date]].
+>
+> La séance 3 n'a pas été la moins chère des trois : le retrait de la fiction a obligé à récrire
+> son problème et son corrigé, et à rendre le validateur capable d'interrompre une boucle infinie.
+> Le détail notion par notion, et les écarts avec la conception, sont dans [[Chapitre 1]].
 
 | Lot | Contenu | Coût | Quand |
 |---|---|---|---|

@@ -3,7 +3,7 @@ title: Modèle de contenu
 tags:
   - architecture
   - contenu
-mis-a-jour: 2026-09-04
+mis-a-jour: 2026-09-14
 ---
 
 # Modèle de contenu
@@ -78,6 +78,15 @@ blocs:
 paragraphes se limite à `**gras**` et `` `code` `` — une fonction d'une dizaine de lignes,
 aucune bibliothèque de rendu markdown.
 
+> [!warning] Un opérateur s'écrit entre accents graves, dans un énoncé comme dans une leçon
+> `formaterTexte` lit une double étoile comme une ouverture de gras. Un premier jet de `s2-08`
+> écrivait `** calcule une puissance : 3 ** 2 vaut 3 fois 3` : tout ce qui séparait les deux
+> doubles étoiles serait sorti en gras, et les étoiles auraient disparu de l'écran. ==Entre
+> accents graves, un opérateur est du code, et rien d'autre.==
+>
+> Les **indices** et les **propositions de QCM** s'affichent en texte brut : un accent grave y
+> resterait visible. On y écrit les opérateurs tels quels.
+
 Un bloc `code` peut porter deux champs de plus :
 
 | Champ | Effet |
@@ -144,22 +153,35 @@ choix du motif sont dans [[Moteur de validation]].
 
 `maitrise` est refusé sur un `interdit` — un interdit disqualifie par définition.
 
+> [!warning] La seconde coche promet « plus court »
+> Le verdict bleu s'intitule *Ça marche. Il y a plus court.* C'est vrai du f-string, seul critère
+> de maîtrise de la séance 1. C'était faux du drapeau de `s2-28`, qui ajoute une ligne après
+> chaque question : l'élève lisait « plus court », puis un conseil qui allongeait son programme.
+> ==Un critère de maîtrise ne récompense qu'une méthode plus courte.== Quand la méthode attendue
+> est plus longue, le motif est exigé, sans `maitrise`.
+
 ## Le chapitre, unité de regroupement
 
 Un chapitre rassemble les notions d'un même sujet. C'est **le niveau que le menu déplie** : sans
 lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient ensemble.
 
-| Identifiant | Titre affiché | Notions |
-|---|---|---|
-| `bases` | Les bases de Python | `afficher`, `variables`, `types`, `saisie` |
+| Identifiant | Titre affiché | Séance | Ouverture | Notions |
+|---|---|---|---|---|
+| `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
+| `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner`, `decider` |
+| `boucles` | Répéter, parcourir, compter | 3 | 30 septembre 2026 | `rappels`, `repeter`, `parcourir`, `compter`, `tantque` |
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
-`seance-1-chapitres.json`. Chaque notion déclare son `chapitre`.
+`chapitres.json`. Chaque notion déclare son `chapitre`.
+
+Un chapitre peut porter une date d'`ouverture`, écrite `AAAA-MM-JJ`. Avant ce jour, ni lui ni ses
+notions, ses exercices et ses leçons n'existent pour l'élève, ni dans les comptes du professeur.
+Sans date, il est ouvert d'emblée. Voir [[ADR-013 Une séance s'ouvre à sa date]].
 
 ## La notion, unité de navigation
 
 Une notion porte une leçon, un groupe d'exercices et une couleur. La table vit dans
-`outils/schema.py` et **nulle part ailleurs** : elle est publiée en `seance-1-notions.json` pour
+`outils/schema.py` et **nulle part ailleurs** : elle est publiée en `notions.json` pour
 que le front n'en garde aucune copie.
 
 | Identifiant | Titre affiché | Couleur | Exercices |
@@ -168,6 +190,16 @@ que le front n'en garde aucune copie.
 | `variables` | Les variables | indigo | 6 |
 | `types` | Types et conversion | vert | 6 |
 | `saisie` | Demander une information | bleu | 6 |
+| `reveil` | Se remettre en route | indigo | 3 |
+| `calculer` | Calculer | bleu | 9 |
+| `comparer` | Comparer | vert | 9 |
+| `combiner` | Combiner des conditions | corail | 7 |
+| `decider` | Décider | ambre | 10 |
+| `rappels` | Rappels avant les boucles | indigo | 3 |
+| `repeter` | Répéter avec for | corail | 9 |
+| `parcourir` | Parcourir un texte | vert | 8 |
+| `compter` | Compter et cumuler | bleu | 9 |
+| `tantque` | Répéter tant que | ambre | 11 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour
@@ -179,26 +211,52 @@ quatre notions. Voir [[Spécification interface]].
 contenu/
   chapitre-1/
     seance-1/
-      s1-01.yaml … s1-34.yaml     25 exercices
+      s1-01.yaml … s1-34.yaml     34 exercices, dont 25 obligatoires
       lecons/
         c1-afficher.yaml
         c1-variables.yaml
         c1-types.yaml
         c1-saisie.yaml
     seance-2/
+      s2-01.yaml … s2-38.yaml     38 exercices, dont 26 obligatoires
+      lecons/
+        c2-reveil.yaml
+        c2-calculer.yaml
+        c2-comparer.yaml
+        c2-combiner.yaml
+        c2-decider.yaml
     seance-3/
+      s3-01.yaml … s3-40.yaml     40 exercices, dont 24 obligatoires
+      lecons/
+        c3-rappels.yaml
+        c3-repeter.yaml
+        c3-parcourir.yaml
+        c3-compter.yaml
+        c3-tantque.yaml
 ```
 
 `charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,
 et la charger comme tel ferait échouer la validation sur un fichier parfaitement valide.
 
-Ce que la construction publie dans `web/public/contenu/` :
+Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers, toutes séances
+confondues** :
 
 | Fichier | Contenu |
 |---|---|
-| `seance-1.json` | les exercices, sans leur `solution`, chacun avec sa `famille` |
-| `seance-1-lecons.json` | les leçons, triées par `ordre` |
-| `seance-1-notions.json` | la table des notions |
+| `exercices.json` | les exercices, sans leur `solution`, chacun avec sa `famille` |
+| `lecons.json` | les leçons, dans l'ordre du cours — écrit même vide |
+| `notions.json` | la table des notions |
+| `chapitres.json` | la table des chapitres |
+
+> [!note] Un fichier par nature de contenu, pas un par séance
+> Jusqu'au 14 septembre 2026, chaque séance publiait les siens (`seance-1.json`,
+> `seance-1-lecons.json`…) et le front ne demandait que ceux de la séance 1. Ajouter la séance 2
+> l'aurait obligé à savoir combien de séances existent, et à tolérer un fichier de leçons absent :
+> ==ce fichier répondrait 404, et la connexion de l'élève échouerait==. Quatre chemins fixes lui
+> épargnent les deux, et `lecons.json` est écrit même vide.
+>
+> `construire` appelle désormais `verifier_racine` au lieu de refaire ses propres contrôles : un
+> contenu que le validateur refuse ne peut plus se publier par un autre chemin.
 
 ## Validation à la construction
 
@@ -209,10 +267,16 @@ la construction** plutôt que d'atteindre les élèves. Contrôles :
 - La `solution` passe réellement tous ses propres tests
 - Le `depart` échoue au moins un test — sinon l'exercice est déjà résolu
 - Chaque `expert` référencé existe
+- Chaque date d'ouverture de chapitre est un vrai jour, écrit `AAAA-MM-JJ` — « 23/09/2026 » se
+  comparerait quand même dans le navigateur, et la séance resterait fermée en silence
 - **Chaque exemple de code d'une leçon s'exécute sans lever d'exception**
 - Une leçon n'utilise aucune notion enseignée après elle — une affectation dans « Afficher un
   message », un `int()` avant « Types et conversion », un `input()` avant « Demander une
   information » sont refusés
+- L'ordre d'une leçon est celui de sa notion : c'est lui qui décide des notions que ses exemples
+  ont le droit d'employer
+- Un programme qui ne s'arrête pas est interrompu après 100 000 tours de boucle, et compte comme
+  un échec : la boucle infinie d'un exercice `debug` ne bloque pas la construction
 
 > [!tip] Le contrôle qui sauve le plus de temps
 > ==Exécuter la solution contre ses propres tests, à chaque construction.== C'est ce qui empêche

@@ -1,0 +1,39 @@
+id: s3-22
+concept: compteur
+notion: compter
+seance: 3
+niveau: normal
+type: debug
+titre: Le numéro qui ne bouge pas
+obligatoire: true
+enonce: |
+  Ce programme doit numéroter les chiffres d'un code. Il tourne sans erreur,
+  mais tous les chiffres portent le numéro 1. Répare-le.
+depart: |
+  code = input("Ton code : ")
+  position = 1
+  for chiffre in code:
+      print(f"Position {position} : {chiffre}")
+indices:
+  - La variable position est bien créée avant la boucle. Mais change-t-elle, à un moment, pendant la boucle ?
+  - Un compteur doit être mis à jour dedans, à chaque tour. Ajoute-lui 1 dans la boucle, après l'affichage.
+tests:
+  - type: sortie
+    entrees: ["472"]
+    attendu: |-
+      Ton code : 472
+      Position 1 : 4
+      Position 2 : 7
+      Position 3 : 2
+  - type: sortie
+    entrees: ["90"]
+    attendu: |-
+      Ton code : 90
+      Position 1 : 9
+      Position 2 : 0
+solution: |
+  code = input("Ton code : ")
+  position = 1
+  for chiffre in code:
+      print(f"Position {position} : {chiffre}")
+      position = position + 1

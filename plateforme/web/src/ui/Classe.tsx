@@ -18,7 +18,7 @@ import './Classe.css'
  * l'avance ni devinés : le professeur inscrit ses élèves, la plateforme tire
  * un code par élève, et lui le recopie au tableau ou sur un papier.
  */
-export function Classe({ codeProf }: { codeProf: string }) {
+export function Classe({ jetonProf }: { jetonProf: string }) {
   const [eleves, setEleves] = useState<EleveInscrit[]>([])
   const [erreur, setErreur] = useState<string | null>(null)
   const [charge, setCharge] = useState(false)
@@ -27,14 +27,14 @@ export function Classe({ codeProf }: { codeProf: string }) {
 
   const rafraichir = useCallback(async () => {
     try {
-      setEleves(await listerEleves(codeProf))
+      setEleves(await listerEleves(jetonProf))
       setErreur(null)
     } catch (e) {
       setErreur(e instanceof Error ? e.message : 'Liste indisponible.')
     } finally {
       setCharge(true)
     }
-  }, [codeProf])
+  }, [jetonProf])
 
   useEffect(() => {
     void rafraichir()
@@ -65,7 +65,7 @@ export function Classe({ codeProf }: { codeProf: string }) {
 
       {erreur && <p role="alert">{erreur}</p>}
 
-      <Ajout enCours={enCours} onAjouter={(fiches) => agir(() => ajouterToutes(codeProf, fiches))} />
+      <Ajout enCours={enCours} onAjouter={(fiches) => agir(() => ajouterToutes(jetonProf, fiches))} />
 
       {charge && eleves.length === 0 && !erreur && (
         <p className="classe__vide">
@@ -84,7 +84,7 @@ export function Classe({ codeProf }: { codeProf: string }) {
                   legende={`Modifier ${eleve.prenom} ${eleve.nom}`.trim()}
                   libelleAction="Enregistrer"
                   onValider={async (fiche) => {
-                    await agir(() => modifierEleve(codeProf, eleve.code_acces, fiche))
+                    await agir(() => modifierEleve(jetonProf, eleve.code_acces, fiche))
                     setEnEdition(null)
                   }}
                   onAnnuler={() => setEnEdition(null)}
@@ -128,7 +128,7 @@ export function Classe({ codeProf }: { codeProf: string }) {
                       const sur = confirm(
                         `Retirer ${eleve.prenom} ${eleve.nom}${perdu} ? C'est définitif.`,
                       )
-                      if (sur) void agir(() => retirerEleve(codeProf, eleve.code_acces))
+                      if (sur) void agir(() => retirerEleve(jetonProf, eleve.code_acces))
                     }}
                   >
                     Retirer
@@ -144,8 +144,8 @@ export function Classe({ codeProf }: { codeProf: string }) {
 }
 
 /** Les créations partent l'une après l'autre : le serveur tire un code par appel. */
-async function ajouterToutes(codeProf: string, fiches: Fiche[]): Promise<void> {
-  for (const fiche of fiches) await creerEleve(codeProf, fiche)
+async function ajouterToutes(jetonProf: string, fiches: Fiche[]): Promise<void> {
+  for (const fiche of fiches) await creerEleve(jetonProf, fiche)
 }
 
 function Ajout({

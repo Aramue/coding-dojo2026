@@ -1,0 +1,67 @@
+id: s2-21
+concept: booleens
+notion: comparer
+seance: 2
+niveau: expert
+type: ecrire
+titre: Compter les conditions remplies
+obligatoire: false
+enonce: |
+  Défi : une attraction de parc pose trois conditions. Avoir au moins 10 ans,
+  mesurer au moins 130 cm, et venir accompagné.
+
+  Le programme pose déjà les trois questions. Ajoute de quoi afficher combien
+  de conditions sont remplies, en additionnant les réponses des comparaisons.
+
+  Pour 11 ans, 125 cm et « oui », l'écran doit montrer :
+
+  Âge : 11
+  Taille en cm : 125
+  Accompagné (oui ou non) : oui
+  Conditions remplies : 2
+
+  Ton programme sera relancé avec d'autres réponses.
+depart: |
+  age = int(input("Âge : "))
+  taille = int(input("Taille en cm : "))
+  accompagne = input("Accompagné (oui ou non) : ")
+indices:
+  - Chaque condition est une comparaison, qui vaut True ou False. Et True compte pour 1 quand on l'additionne.
+  - Écris les trois comparaisons, chacune entre parenthèses, et relie-les par des +. La troisième compare deux textes.
+tests:
+  - type: sortie
+    entrees: ["11", "125", "oui"]
+    attendu: |-
+      Âge : 11
+      Taille en cm : 125
+      Accompagné (oui ou non) : oui
+      Conditions remplies : 2
+  - type: sortie
+    entrees: ["10", "130", "non"]
+    attendu: |-
+      Âge : 10
+      Taille en cm : 130
+      Accompagné (oui ou non) : non
+      Conditions remplies : 2
+  - type: sortie
+    entrees: ["9", "120", "non"]
+    attendu: |-
+      Âge : 9
+      Taille en cm : 120
+      Accompagné (oui ou non) : non
+      Conditions remplies : 0
+  - type: sortie
+    entrees: ["15", "160", "oui"]
+    attendu: |-
+      Âge : 15
+      Taille en cm : 160
+      Accompagné (oui ou non) : oui
+      Conditions remplies : 3
+  - type: interdit
+    motif: "remplies : 2"
+solution: |
+  age = int(input("Âge : "))
+  taille = int(input("Taille en cm : "))
+  accompagne = input("Accompagné (oui ou non) : ")
+  remplies = (age >= 10) + (taille >= 130) + (accompagne == "oui")
+  print("Conditions remplies :", remplies)

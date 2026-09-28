@@ -1,0 +1,52 @@
+id: s2-34
+concept: conditions
+notion: decider
+seance: 2
+niveau: normal
+type: debug
+titre: L'ordre des elif
+obligatoire: true
+enonce: |
+  Un cinéma est gratuit avant 6 ans, au tarif enfant avant 16 ans, et au plein
+  tarif ensuite. Ce programme ne plante pas, et pourtant un enfant de 4 ans
+  paie le tarif enfant. Trouve pourquoi, puis répare-le.
+depart: |
+  age = int(input("Âge : "))
+  if age < 16:
+      print("Tarif enfant : 10 francs")
+  elif age < 6:
+      print("Gratuit")
+  else:
+      print("Plein tarif : 15 francs")
+indices:
+  - Déroule le programme pour 4 ans. Quelle est la première question qui répond True ?
+  - Python s'arrête à la première condition vraie. Une question plus précise doit donc être posée avant une question plus large.
+tests:
+  - type: sortie
+    entrees: ["4"]
+    attendu: |-
+      Âge : 4
+      Gratuit
+  - type: sortie
+    entrees: ["6"]
+    attendu: |-
+      Âge : 6
+      Tarif enfant : 10 francs
+  - type: sortie
+    entrees: ["15"]
+    attendu: |-
+      Âge : 15
+      Tarif enfant : 10 francs
+  - type: sortie
+    entrees: ["16"]
+    attendu: |-
+      Âge : 16
+      Plein tarif : 15 francs
+solution: |
+  age = int(input("Âge : "))
+  if age < 6:
+      print("Gratuit")
+  elif age < 16:
+      print("Tarif enfant : 10 francs")
+  else:
+      print("Plein tarif : 15 francs")

@@ -1,0 +1,33 @@
+id: s2-19
+concept: booleens
+notion: comparer
+seance: 2
+niveau: normal
+type: debug
+titre: Le mot de passe et le signe =
+obligatoire: false
+enonce: |
+  Ce programme vérifie le mot de passe du Wi-Fi de la bibliothèque.
+  Il s'arrête sur une erreur avant même de le demander. Répare-le.
+depart: |
+  saisie = input("Mot de passe : ")
+  correct = (saisie = "Lecture2026")
+  print("Connexion :", correct)
+indices:
+  - Sur la ligne 2, le signe = devrait demander si la saisie est égale au mot de passe. Que fait un seul = ?
+  - Comparer deux textes s'écrit exactement comme comparer deux nombres, avec deux signes = collés.
+tests:
+  - type: sortie
+    entrees: ["Lecture2026"]
+    attendu: |-
+      Mot de passe : Lecture2026
+      Connexion : True
+  - type: sortie
+    entrees: ["lecture2026"]
+    attendu: |-
+      Mot de passe : lecture2026
+      Connexion : False
+solution: |
+  saisie = input("Mot de passe : ")
+  correct = (saisie == "Lecture2026")
+  print("Connexion :", correct)

@@ -1,0 +1,60 @@
+id: s3-02
+concept: reactivation
+notion: rappels
+seance: 3
+niveau: normal
+type: debug
+titre: Le cas que personne n'a prévu
+obligatoire: true
+enonce: |
+  Ce programme surveille un aquarium, dont l'eau doit rester entre 24 et 28
+  degrés. Il prévient quand l'eau est trop froide ou trop chaude. Mais essaie
+  avec 26 : il ne dit rien du tout.
+
+  Ajoute ce qui manque pour qu'à 26 degrés, l'écran montre :
+
+  Température de l'eau : 26
+  Température idéale.
+depart: |
+  temperature = int(input("Température de l'eau : "))
+  if temperature < 24:
+      print("Eau trop froide : allume le chauffage.")
+  elif temperature > 28:
+      print("Eau trop chaude : éteins la lampe.")
+indices:
+  - Quand l'eau n'est ni trop froide ni trop chaude, aucune des deux conditions n'est vraie. Qu'est-ce qui prend alors le relais ?
+  - Ajoute un else aligné sur le if et le elif, avec le message décalé juste en dessous.
+tests:
+  - type: sortie
+    entrees: ["20"]
+    attendu: |-
+      Température de l'eau : 20
+      Eau trop froide : allume le chauffage.
+  - type: sortie
+    entrees: ["24"]
+    attendu: |-
+      Température de l'eau : 24
+      Température idéale.
+  - type: sortie
+    entrees: ["26"]
+    attendu: |-
+      Température de l'eau : 26
+      Température idéale.
+  - type: sortie
+    entrees: ["28"]
+    attendu: |-
+      Température de l'eau : 28
+      Température idéale.
+  - type: sortie
+    entrees: ["31"]
+    attendu: |-
+      Température de l'eau : 31
+      Eau trop chaude : éteins la lampe.
+solution: |
+  temperature = int(input("Température de l'eau : "))
+  if temperature < 24:
+      print("Eau trop froide : allume le chauffage.")
+  elif temperature > 28:
+      print("Eau trop chaude : éteins la lampe.")
+  else:
+      print("Température idéale.")

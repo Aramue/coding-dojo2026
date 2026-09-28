@@ -9,7 +9,18 @@ from starlette.websockets import WebSocketDisconnect
 
 from app.diffuseur import Diffuseur, diffuseur
 
-PROF = {"X-Code-Prof": "code-prof-test"}
+PROF: dict[str, str] = {}
+
+
+@pytest.fixture(autouse=True)
+def prof_connecte(entetes_prof):
+    """Le compte professeur existe, et PROF porte le jeton de sa session."""
+    PROF.clear()
+    PROF.update(entetes_prof)
+
+
+def presentation_prof() -> str:
+    return json.dumps({"jeton_prof": PROF["X-Jeton-Prof"]})
 
 
 @pytest.fixture(autouse=True)
@@ -35,9 +46,9 @@ def _fermeture(ws) -> int:
 # --- Authentification -------------------------------------------------------
 
 
-def test_le_professeur_se_presente_par_son_code(client):
+def test_le_professeur_se_presente_par_le_jeton_de_sa_session(client):
     with client.websocket_connect("/quiz/flux") as ws:
-        ws.send_text(json.dumps({"code_prof": "code-prof-test"}))
+        ws.send_text(presentation_prof())
         assert ws.receive_json() == {"type": "pret"}
         assert len(diffuseur) == 1
 
@@ -51,12 +62,13 @@ def test_l_eleve_se_presente_par_son_jeton(client, jeton_eleve):
 @pytest.mark.parametrize(
     "message",
     [
-        json.dumps({"code_prof": "faux"}),
+        json.dumps({"jeton_prof": "prof.9999999999.signature-inventee"}),
+        json.dumps({"code_prof": "l-ancien-code-partage"}),
         json.dumps({"jeton": "DOJO-K7M2.signature-inventee"}),
         json.dumps({"jeton": 42}),
-        json.dumps(["code-prof-test"]),
+        json.dumps(["un", "tableau"]),
         "pas du json",
-        json.dumps({"code_prof": "x" * 600}),
+        json.dumps({"jeton_prof": "x" * 600}),
     ],
 )
 def test_une_presentation_invalide_ferme_la_connexion(client, message):
@@ -68,13 +80,13 @@ def test_une_presentation_invalide_ferme_la_connexion(client, message):
 
 def test_une_presentation_en_binaire_est_refusee(client):
     with client.websocket_connect("/quiz/flux") as ws:
-        ws.send_bytes(b'{"code_prof": "code-prof-test"}')
+        ws.send_bytes(presentation_prof().encode())
         assert _fermeture(ws) == 4401
 
 
 def test_le_code_ne_passe_jamais_par_l_url(client):
     """Une URL finit dans les journaux : la route n'y lit rien."""
-    with client.websocket_connect("/quiz/flux?code_prof=code-prof-test") as ws:
+    with client.websocket_connect(f"/quiz/flux?jeton_prof={PROF['X-Jeton-Prof']}") as ws:
         ws.send_text("{}")
         assert _fermeture(ws) == 4401
 
@@ -90,16 +102,16 @@ def test_sans_presentation_la_connexion_se_ferme(client, monkeypatch):
 def test_au_dela_du_plafond_la_connexion_est_refusee(client, monkeypatch):
     monkeypatch.setattr(diffuseur, "maximum", 1)
     with client.websocket_connect("/quiz/flux") as premier:
-        premier.send_text(json.dumps({"code_prof": "code-prof-test"}))
+        premier.send_text(presentation_prof())
         assert premier.receive_json() == {"type": "pret"}
         with client.websocket_connect("/quiz/flux") as second:
-            second.send_text(json.dumps({"code_prof": "code-prof-test"}))
+            second.send_text(presentation_prof())
             assert _fermeture(second) == 1013
 
 
 def test_une_deconnexion_retire_l_abonne(client):
     with client.websocket_connect("/quiz/flux") as ws:
-        ws.send_text(json.dumps({"code_prof": "code-prof-test"}))
+        ws.send_text(presentation_prof())
         ws.receive_json()
         ws.send_text("un message ignore")
     # Le serveur a vu partir le client : le registre est vide.

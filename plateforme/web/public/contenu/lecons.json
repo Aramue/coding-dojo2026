@@ -1,0 +1,741 @@
+[
+  {
+    "id": "c1-afficher",
+    "notion": "afficher",
+    "ordre": 1,
+    "titre": "Afficher un message",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un programme qui ne dit rien ne sert à rien. La toute première chose à savoir faire, c'est **écrire un message à l'écran**. En Python, cela s'appelle `print`."
+      },
+      {
+        "type": "code",
+        "legende": "Ton premier programme",
+        "python": "print(\"Bonjour\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Lis cette ligne comme une phrase : `print` est l'ordre donné à Python, les parenthèses disent où commence et où finit ce qu'on lui donne, et les guillemets marquent le début et la fin du texte."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les guillemets **ne s'affichent pas**. Ils servent à Python, pas au lecteur. À l'écran, tu vois `Bonjour`, sans rien autour."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Python exécute tes lignes **de haut en bas, une à la fois**. Deux `print` donnent deux lignes à l'écran, dans l'ordre où tu les as écrites."
+      },
+      {
+        "type": "code",
+        "legende": "Deux lignes, dans cet ordre",
+        "python": "print(\"Bonjour\")\nprint(\"À demain\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tu peux aussi donner plusieurs choses à un seul `print`, séparées par des virgules. Python les affiche à la suite, **en insérant une espace entre chacune**."
+      },
+      {
+        "type": "code",
+        "legende": "Une virgule insère une espace",
+        "python": "print(\"Bonjour\", \"Camille\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "Un message doit s'afficher **exactement** comme demandé : une majuscule oubliée, une espace en trop ou un point manquant, et ce n'est plus le même texte. Python compare caractère par caractère, il ne devine rien."
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "c1-variables",
+    "notion": "variables",
+    "ordre": 2,
+    "titre": "Les variables",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une variable, c'est une **boîte avec une étiquette**. Tu écris un nom dessus, tu ranges une valeur dedans, et tu la ressors quand tu en as besoin."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le nom te sert à retrouver la valeur plus loin dans le programme, sans avoir à la réécrire."
+      },
+      {
+        "type": "code",
+        "legende": "Ranger, puis ressortir",
+        "python": "prenom = \"Camille\"\nage = 16\n\nprint(prenom)\nprint(age)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tu choisis le nom. Prends-en un qui dit ce qu'il y a dedans : `prenom` se relit six mois plus tard, `x` non. Un nom de variable s'écrit sans espace et sans accent, et Python distingue les majuscules des minuscules — `prenom` et `Prenom` sont deux boîtes différentes."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ranger une nouvelle valeur dans la même boîte **efface l'ancienne**. Une boîte ne garde qu'une seule valeur à la fois."
+      },
+      {
+        "type": "code",
+        "legende": "La deuxième valeur remplace la première",
+        "python": "score = 10\nscore = 25\n\nprint(score)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Python lit ton programme **de haut en bas, une ligne à la fois**. Une boîte doit donc être remplie avant la ligne qui vient la lire — sinon Python s'arrête et dit qu'il ne connaît pas ce nom."
+      },
+      {
+        "type": "attention",
+        "texte": "Le signe `=` ne veut pas dire « est égal à ». Il veut dire « range la valeur de droite dans la boîte de gauche ». C'est pour ça que `score = score + 1` a du sens en Python, alors que c'est impossible en mathématiques."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c1-types",
+    "notion": "types",
+    "ordre": 3,
+    "titre": "Types et conversion",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Toutes les valeurs ne se ressemblent pas. Python distingue le **texte**, appelé `str`, les **nombres entiers** `int` et les **nombres à virgule** `float`. C'est ce qu'on appelle le *type* d'une valeur."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ce qui est entre guillemets est toujours du texte, même si ça ressemble à un nombre. `17` est un entier ; `\"17\"` est un texte de deux caractères."
+      },
+      {
+        "type": "code",
+        "legende": "Trois types différents",
+        "python": "age = 17\ntaille = 1.75\nprenom = \"Camille\"\n\nprint(type(age))\nprint(type(taille))\nprint(type(prenom))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le type change **ce que fait le signe `+`**. Entre deux nombres, il additionne. Entre deux textes, il colle bout à bout."
+      },
+      {
+        "type": "code",
+        "legende": "Le même signe, deux effets",
+        "python": "print(2 + 3)\nprint(\"2\" + \"3\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Entre un texte et un nombre, en revanche, Python refuse : il ne sait pas s'il doit additionner ou coller. Il faut d'abord **convertir**. `str()` transforme un nombre en texte, `int()` transforme un texte en entier."
+      },
+      {
+        "type": "code",
+        "legende": "Convertir avant de coller",
+        "python": "age = 17\nprint(\"J'ai \" + str(age) + \" ans\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Il existe plus court. Un **f-string** — un texte précédé de la lettre `f` — te laisse écrire le nom d'une variable directement dans le message, entre accolades."
+      },
+      {
+        "type": "code",
+        "legende": "La même phrase, en f-string",
+        "python": "age = 17\nprenom = \"Camille\"\n\nprint(f\"{prenom} a {age} ans\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "`int()` n'accepte que des chiffres. `int(\"17\")` vaut `17`, mais `int(\"dix-sept\")` arrête le programme : Python ne sait pas lire les nombres écrits en lettres."
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c1-saisie",
+    "notion": "saisie",
+    "ordre": 4,
+    "titre": "Demander une information",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Jusqu'ici tes programmes affichaient toujours la même chose. Pour qu'ils s'adaptent, il faut **poser une question** à la personne qui les utilise. C'est le rôle de `input`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`input` fait deux choses : il affiche une invite, puis il attend que la personne tape quelque chose et appuie sur Entrée. Ce qu'elle a tapé devient la valeur de `input`, qu'on range dans une variable."
+      },
+      {
+        "type": "code",
+        "legende": "Poser une question et garder la réponse",
+        "python": "prenom = input(\"Ton prénom : \")\nprint(\"Bonjour\", prenom)\n",
+        "executable": false,
+        "entrees": [
+          "Camille"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le texte entre parenthèses est l'**invite**. Écris-la avec soin : c'est tout ce que la personne voit pour comprendre ce qu'on lui demande. Termine par un deux-points et une espace, pour que sa réponse ne colle pas à la question."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Point le plus important de cette leçon : `input` rend **toujours du texte**. Même si la personne tape `17`, tu obtiens le texte `\"17\"`, pas le nombre `17`. Tu ne peux donc pas calculer avec directement."
+      },
+      {
+        "type": "code",
+        "legende": "Convertir la réponse pour pouvoir calculer",
+        "python": "age = int(input(\"Ton âge : \"))\nprint(\"L'an prochain tu auras\", age + 1, \"ans\")\n",
+        "executable": false,
+        "entrees": [
+          "17"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Lis cette ligne de l'intérieur vers l'extérieur : `input` pose la question et rend du texte, `int` transforme ce texte en nombre, et le résultat est rangé dans `age`."
+      },
+      {
+        "type": "attention",
+        "texte": "Oublier `int()` ne provoque pas toujours une erreur — parfois le programme tourne et donne un résultat faux. `age + 1` sur du texte s'arrête net, mais `age + age` colle deux fois la réponse au lieu de la doubler."
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c2-reveil",
+    "notion": "reveil",
+    "ordre": 5,
+    "titre": "Se remettre en route",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une semaine a passé. Avant les nouveautés, trois règles de la séance 1 à garder en tête : ce sont celles qui ont fait trébucher le plus d'élèves."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Une variable garde une valeur, pas une formule.** Quand on écrit `hier = temperature`, Python recopie la valeur que `temperature` contient à cet instant. Si `temperature` change ensuite, `hier` ne bouge pas."
+      },
+      {
+        "type": "code",
+        "legende": "Une copie qui ne suit pas",
+        "python": "temperature = 18\nhier = temperature\ntemperature = 23\nprint(temperature, hier)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**`input()` rend toujours du texte**, même quand on tape des chiffres. Pour calculer avec la réponse, il faut la convertir en nombre entier avec `int()`, placé autour de `input()`."
+      },
+      {
+        "type": "code",
+        "legende": "Convertir avant de calculer",
+        "python": "billets = int(input(\"Nombre de billets : \"))\nprint(billets + 1)\n",
+        "executable": false,
+        "entrees": [
+          "3"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Un f-string glisse une variable dans une phrase** : un `f` collé devant les guillemets, et le nom de la variable entre accolades."
+      },
+      {
+        "type": "code",
+        "legende": "Une phrase avec deux variables",
+        "python": "prenom = \"Noé\"\nage = 15\nprint(f\"{prenom} a {age} ans\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "Ces trois règles reviennent partout dans la séance d'aujourd'hui. Si l'une d'elles te semble floue, relis la leçon correspondante de la séance 1 avant de continuer."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c2-calculer",
+    "notion": "calculer",
+    "ordre": 6,
+    "titre": "Calculer",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Python calcule comme une calculatrice. Quatre signes pour les quatre opérations : `+` additionne, `-` soustrait, `*` multiplie et `/` divise. La multiplication s'écrit avec une étoile, jamais avec une croix."
+      },
+      {
+        "type": "code",
+        "legende": "Les quatre opérations",
+        "python": "print(20 + 5)\nprint(20 - 5)\nprint(20 * 5)\nprint(20 / 5)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**`/` rend toujours un nombre à virgule**, même quand la division tombe juste : `20 / 5` donne `4.0`, pas `4`. Et ce nombre s'écrit avec un point, jamais avec une virgule."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour un partage en parts entières, deux autres signes. `//` donne le nombre de parts entières, et `%` donne **ce qui reste** une fois le partage fait."
+      },
+      {
+        "type": "code",
+        "legende": "22 billes pour 4 enfants",
+        "python": "billes = 22\nenfants = 4\nprint(billes // enfants)\nprint(billes % enfants)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le reste sert plus souvent qu'on ne le croit. Un nombre est **pair** quand le reste de sa division par 2 vaut 0."
+      },
+      {
+        "type": "code",
+        "legende": "Pair ou impair ?",
+        "python": "print(14 % 2)\nprint(15 % 2)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Comme en mathématiques, **les multiplications passent avant les additions**, et des parenthèses changent l'ordre. `**` calcule une puissance, qui passe même avant la multiplication : `2 ** 3` vaut 2 fois 2 fois 2."
+      },
+      {
+        "type": "code",
+        "legende": "L'ordre des opérations",
+        "python": "print(10 - 2 * 3)\nprint((10 - 2) * 3)\nprint(5 * 2 ** 2)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Enfin, une fonction pour mesurer un texte : `len()` compte ses caractères, espaces et signes compris."
+      },
+      {
+        "type": "code",
+        "legende": "Compter les caractères",
+        "python": "print(len(\"Genève\"))\nprint(len(\"Bonjour à tous\"))\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c2-comparer",
+    "notion": "comparer",
+    "ordre": 7,
+    "titre": "Comparer",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une comparaison pose une question à Python, et Python répond aussitôt : **`True`** (vrai) ou **`False`** (faux). Cette réponse n'est pas un message, c'est une valeur : elle s'affiche, et elle se range dans une variable."
+      },
+      {
+        "type": "code",
+        "legende": "Deux questions, deux réponses",
+        "python": "print(12 > 7)\nprint(3 == 4)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "C'est le **quatrième type** de Python, après `int`, `float` et `str` : le type `bool`, qui n'a que deux valeurs. `True` et `False` s'écrivent avec une majuscule, et sans guillemets."
+      },
+      {
+        "type": "code",
+        "legende": "Une réponse rangée dans une variable",
+        "python": "temperature = 31\ncanicule = temperature >= 30\nprint(canicule)\nprint(type(canicule))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Un `=` range, deux `==` comparent.** `age = 18` met 18 dans la boîte `age`. `age == 18` demande si la boîte contient 18. Un seul `=` à la place de deux, et le programme refuse de démarrer."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Six comparateurs en tout : `==` égal, `!=` différent, `<` plus petit, `>` plus grand, `<=` plus petit ou égal, `>=` plus grand ou égal."
+      },
+      {
+        "type": "code",
+        "legende": "Deux nombres égaux, six questions",
+        "python": "a = 5\nb = 5\nprint(a == b, a != b)\nprint(a < b, a <= b)\nprint(a > b, a >= b)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**La borne compte.** `>` exclut la valeur limite, `>=` l'inclut. Pour « au moins 18 ans », quelqu'un qui a 18 ans pile doit passer : c'est `>=` qu'il faut écrire."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Deux textes aussi se comparent, et Python les veut **identiques jusqu'au dernier caractère** : une majuscule, un accent ou un espace de plus, et ce n'est plus le même texte."
+      },
+      {
+        "type": "code",
+        "legende": "La casse compte",
+        "python": "print(\"Genève\" == \"Genève\")\nprint(\"Genève\" == \"genève\")\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c2-combiner",
+    "notion": "combiner",
+    "ordre": 8,
+    "titre": "Combiner des conditions",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une seule comparaison suffit rarement. Pour un stage, il faut souvent un âge minimum **et** une autorisation. Trois mots combinent plusieurs réponses `True` ou `False` en une seule."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`and` vaut `True` seulement si **les deux côtés** sont vrais. `or` vaut `True` si **au moins un** côté est vrai. `not` **inverse** la réponse qui le suit."
+      },
+      {
+        "type": "code",
+        "legende": "Et, ou, non",
+        "python": "pluie = True\nparapluie = False\nprint(pluie and parapluie)\nprint(pluie or parapluie)\nprint(not parapluie)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour vérifier qu'une valeur se trouve **entre deux bornes**, Python accepte l'écriture des mathématiques. `16 <= age <= 25` dit exactement la même chose que `age >= 16 and age <= 25`."
+      },
+      {
+        "type": "code",
+        "legende": "Deux écritures, une seule question",
+        "python": "age = 19\nprint(16 <= age <= 25)\nprint(age >= 16 and age <= 25)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Chaque côté d'un `and` est une question complète.** On dit « au moins 16 et au plus 25 », mais `age >= 16 and <= 25` ne veut rien dire pour Python : le côté droit ne dit pas de quoi il parle, et le programme refuse de démarrer."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`not` se place aussi devant une question entière, entre parenthèses : `not (16 <= age <= 25)` demande si l'âge est **en dehors** des bornes."
+      },
+      {
+        "type": "code",
+        "legende": "En dehors des bornes",
+        "python": "age = 30\nprint(not (16 <= age <= 25))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un `or` écrit à la place d'un `and` ne provoque aucune erreur : le programme tourne, et il répond juste pour certaines valeurs. **Essaie toujours plusieurs cas**, et surtout ceux où une seule des conditions est remplie."
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "c2-decider",
+    "notion": "decider",
+    "ordre": 9,
+    "titre": "Décider",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Jusqu'ici, un programme exécutait toutes ses lignes, dans l'ordre. `if` lui permet de **décider** : exécuter certaines lignes seulement quand une condition vaut `True`."
+      },
+      {
+        "type": "code",
+        "legende": "Si, sinon",
+        "python": "temperature = 12\nif temperature >= 20:\n    print(\"Il fait bon.\")\nelse:\n    print(\"Prends une veste.\")\nprint(\"Bonne journée !\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "La ligne du `if` se termine par **deux-points**. Les lignes qui dépendent de lui sont **décalées de quatre espaces** : c'est ce décalage, et lui seul, qui dit à Python où le bloc commence et où il s'arrête. `else` n'a pas de condition, il prend tout ce que le `if` a refusé. Une seule des deux branches s'exécute, jamais les deux."
+      },
+      {
+        "type": "attention",
+        "texte": "**Le décalage n'est pas décoratif.** Une ligne décalée appartient au bloc ; une ligne alignée sur le `if` s'exécute dans tous les cas. Et un `if` sans aucune ligne décalée en dessous empêche le programme de démarrer. Dans l'éditeur, la touche Tab décale de quatre espaces."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour plus de deux cas, `elif` ajoute une question. Python les pose **dans l'ordre**, et n'exécute que la branche de la **première** condition vraie : les suivantes ne sont même pas examinées."
+      },
+      {
+        "type": "code",
+        "legende": "Trois branches",
+        "python": "vitesse = 42\nif vitesse > 50:\n    print(\"Beaucoup trop vite !\")\nelif vitesse > 30:\n    print(\"Ralentis, tu es en zone 30.\")\nelse:\n    print(\"Bonne allure.\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "L'ordre compte donc : une condition trop large, placée en premier, attrape des cas destinés aux suivantes. Et pense à tous les cas : sans `else`, une valeur qu'aucune condition n'accepte ne produit rien du tout."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Enfin, une variable créée dans une branche n'existe que si cette branche a été prise. Si la suite du programme en a besoin, crée-la **avant** le `if`."
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "c3-rappels",
+    "notion": "rappels",
+    "ordre": 10,
+    "titre": "Rappels avant les boucles",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Dernière séance du chapitre : les boucles. Une boucle répète des lignes, et une erreur dans ces lignes se répète avec elles. Trois règles des séances précédentes valent donc la peine d'être revues avant de commencer."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**La borne compte.** `>` exclut la valeur limite, `>=` l'inclut : « dès 18 ans » s'écrit `age >= 18`."
+      },
+      {
+        "type": "code",
+        "legende": "18 ans pile",
+        "python": "age = 18\nprint(age > 18)\nprint(age >= 18)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Chaque cas doit avoir sa réponse.** Quand aucune condition n'est vraie, seul un `else` dit encore quelque chose. Sans lui, le programme se tait."
+      },
+      {
+        "type": "code",
+        "legende": "Trois cas, trois réponses",
+        "python": "note = 4\nif note >= 5:\n    print(\"Très bien\")\nelif note >= 4:\n    print(\"Suffisant\")\nelse:\n    print(\"Insuffisant\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**`input()` rend toujours du texte**, même quand on tape des chiffres. Pour calculer avec la réponse, il faut d'abord la convertir avec `int()`."
+      },
+      {
+        "type": "code",
+        "legende": "Coller, ou additionner",
+        "python": "reponse = input(\"Ton âge : \")\nprint(reponse + \"1\")\nprint(int(reponse) + 1)\n",
+        "executable": false,
+        "entrees": [
+          "15"
+        ]
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c3-repeter",
+    "notion": "repeter",
+    "ordre": 11,
+    "titre": "Répéter avec for",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Afficher dix lignes avec dix `print`, c'est long, et facile à rater. Une **boucle** répète des lignes à ta place : `for` les répète une fois pour chaque valeur que lui donne `range()`."
+      },
+      {
+        "type": "code",
+        "legende": "Trois tours",
+        "python": "for i in range(3):\n    print(\"Tour numéro\", i)\nprint(\"La boucle est finie.\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Comme pour `if`, la ligne du `for` finit par **deux-points**, et les lignes répétées sont **décalées de quatre espaces**. La première ligne qui n'est plus décalée n'appartient plus à la boucle : elle s'exécute une seule fois, après le dernier tour."
+      },
+      {
+        "type": "attention",
+        "texte": "**`range(3)` commence à 0 et s'arrête avant 3** : il donne 0, 1 et 2. Trois valeurs, mais jamais le 3 lui-même."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Avec deux nombres, `range(début, fin)` part d'où tu veux. Avec trois, `range(début, fin, pas)` avance du pas à chaque tour. La fin, elle, n'est jamais atteinte."
+      },
+      {
+        "type": "code",
+        "legende": "Un début, une fin, un pas",
+        "python": "for n in range(1, 4):\n    print(n)\nfor n in range(10, 30, 5):\n    print(n)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "La variable de la boucle prend une nouvelle valeur à chaque tour. Elle se glisse dans un message comme n'importe quelle autre variable."
+      },
+      {
+        "type": "code",
+        "legende": "Numéroter des lignes",
+        "python": "for jour in range(1, 4):\n    print(f\"Jour {jour} : entraînement\")\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "c3-parcourir",
+    "notion": "parcourir",
+    "ordre": 12,
+    "titre": "Parcourir un texte",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "`for` ne parcourt pas seulement les valeurs de `range()`. Donne-lui un texte, et il le parcourt **caractère par caractère** : à chaque tour, la variable prend le caractère suivant, du premier au dernier."
+      },
+      {
+        "type": "code",
+        "legende": "Lettre après lettre",
+        "python": "for lettre in \"Genève\":\n    print(lettre)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tout compte comme un caractère : les lettres accentuées, les chiffres, les signes, et même les **espaces**."
+      },
+      {
+        "type": "attention",
+        "texte": "**Un nombre ne se parcourt pas.** `for chiffre in 2026` arrête le programme, parce qu'un nombre n'a pas de caractères à donner. Pour parcourir ses chiffres, transforme-le d'abord en texte avec `str()`."
+      },
+      {
+        "type": "code",
+        "legende": "Les chiffres d'un nombre",
+        "python": "annee = 2026\nfor chiffre in str(annee):\n    print(chiffre)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "On peut aussi parcourir les **positions** d'un texte plutôt que ses caractères : `len()` compte les caractères, et `range(len(mot))` donne leurs positions, en commençant à 0."
+      },
+      {
+        "type": "code",
+        "legende": "Des positions, pas des lettres",
+        "python": "mot = \"ski\"\nfor position in range(len(mot)):\n    print(position)\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c3-compter",
+    "notion": "compter",
+    "ordre": 13,
+    "titre": "Compter et cumuler",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Pour compter les tours d'une boucle, ou additionner des valeurs au fil des tours, il faut une variable qui **se souvient** d'un tour à l'autre. Deux règles la font marcher : on la crée **avant** la boucle, une seule fois, et on la met à jour **dedans**, à chaque tour."
+      },
+      {
+        "type": "code",
+        "legende": "Additionner au fil des tours",
+        "python": "total = 0\nfor prix in range(5, 20, 5):\n    total = total + prix\n    print(\"Total provisoire :\", total)\nprint(\"Total :\", total)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Avant, et dedans.** Créée dans la boucle, la variable repart de zéro à chaque tour, et le total ne garde que la dernière valeur. Jamais créée, elle n'existe pas au premier tour, et Python s'arrête."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`total = total + prix` s'écrit aussi `total += prix` : même effet, en plus court. Les deux écritures se rencontrent partout."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un compteur sert aussi à **numéroter**. Pour partir de 1, deux façons marchent : partir de 0 et ajouter 1 **avant** d'afficher, ou partir de 1 et ajouter 1 **après**."
+      },
+      {
+        "type": "code",
+        "legende": "Numéroter à partir de 1",
+        "python": "numero = 0\nfor lettre in \"abc\":\n    numero = numero + 1\n    print(numero, lettre)\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c3-tantque",
+    "notion": "tantque",
+    "ordre": 14,
+    "titre": "Répéter tant que",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "`for` répète un nombre de tours connu d'avance. `while` répète **tant qu'une condition est vraie** : c'est la boucle qu'il faut quand on ne sait pas combien de tours seront nécessaires."
+      },
+      {
+        "type": "code",
+        "legende": "Tant que",
+        "python": "compteur = 3\nwhile compteur > 0:\n    print(\"Encore\", compteur)\n    compteur = compteur - 1\nprint(\"Terminé\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Python vérifie la condition **avant chaque tour**, y compris avant le tout premier. Si elle est fausse dès le départ, la boucle ne tourne pas une seule fois, et Python passe directement à la suite."
+      },
+      {
+        "type": "attention",
+        "texte": "**Quelque chose doit changer dans la boucle.** Si la variable de la condition ne bouge jamais, la condition reste vraie pour toujours : le programme tourne en rond, et la plateforme l'arrête au bout de quelques secondes."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Là où `while` est irremplaçable : répéter une question **jusqu'à une réponse précise**, sans savoir combien de fois il faudra la poser."
+      },
+      {
+        "type": "code",
+        "legende": "Jusqu'à la bonne réponse",
+        "python": "reponse = input(\"On y va ? \")\nwhile reponse != \"oui\":\n    reponse = input(\"On y va ? \")\nprint(\"C'est parti !\")\n",
+        "executable": false,
+        "entrees": [
+          "pas encore",
+          "non",
+          "oui"
+        ]
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour choisir, une seule question : sait-on d'avance combien de tours faire ? Si oui, `for` et `range()` comptent à ta place. Sinon, c'est `while`, et c'est à toi de faire changer la condition."
+      }
+    ],
+    "famille": "conditions"
+  }
+]

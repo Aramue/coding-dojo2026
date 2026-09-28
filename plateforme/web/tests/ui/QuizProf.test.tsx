@@ -44,7 +44,7 @@ function monter() {
     throw new Error(`appel inattendu : ${url}`)
   })
   vi.stubGlobal('fetch', fetchFactice)
-  render(<QuizProf codeProf="code-prof" />)
+  render(<QuizProf jetonProf="jeton-prof" />)
 }
 
 function postes() {
@@ -314,7 +314,7 @@ describe('QuizProf', () => {
       return reponse({ detail: 'panne' }, 500)
     })
     vi.stubGlobal('fetch', fetchFactice)
-    render(<QuizProf codeProf="code-prof" />)
+    render(<QuizProf jetonProf="jeton-prof" />)
     expect(await screen.findByText('panne')).toBeInTheDocument()
   })
 })
