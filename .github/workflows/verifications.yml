@@ -1,0 +1,122 @@
+# Trois contrôles, et rien de plus : exactement ce qu'un développeur lance avant
+# de pousser, décrit dans le README. Une minute de calcul en tout — la CI de ce
+# dépôt n'a pas besoin d'être plus grosse que le dépôt.
+#
+# Elle ne déploie rien. Un déploiement part d'un tag et se lance à la main sur
+# la VM : redémarrer l'API coupe toutes les sonnettes du quiz, ce qui ne doit
+# jamais arriver en pleine séance. Voir « Déploiement UNIGE » dans le coffre.
+name: Vérifications
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # `publication.yml` appelle ce fichier avant de construire les images : aucune
+  # image publiée n'échappe à ces trois contrôles.
+  workflow_call:
+
+# Lire le dépôt suffit. Les droits d'écriture sont demandés là où ils servent,
+# c'est-à-dire dans `publication.yml` seulement.
+permissions:
+  contents: read
+
+# Une poussée qui en remplace une autre annule la précédente : inutile de payer
+# deux fois pour un état déjà dépassé.
+concurrency:
+  group: verifications-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plateforme/api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # La version de l'image de production, deploiement/Dockerfile.api.
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: plateforme/api/requirements.txt
+
+      - run: pip install -r requirements.txt
+
+      - name: 222 tests
+        run: python -m pytest -q
+
+  contenu:
+    name: Contenu
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plateforme/outils
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: plateforme/outils/requirements.txt
+
+      - run: pip install -r requirements.txt
+
+      # pytest.ini porte `--cov-fail-under=82` : le plancher de couverture des
+      # outils est vérifié ici, pas à la main.
+      - name: 143 tests
+        run: python -m pytest -q
+
+      # Exécute la solution de référence de chaque exercice et rejoue chaque
+      # question de quiz : c'est la seule porte qui attrape une bonne réponse
+      # qui n'est pas ce que le code affiche.
+      - name: Validation du contenu
+        run: python valider_contenu.py ../contenu/chapitre-1
+
+      # Les deux constructions que font les images, avec les mêmes commandes.
+      # Elles écrivent hors du dépôt : `construire_quiz.py` refuse d'écrire sous
+      # `public` ou `contenu`, parce que les bonnes réponses n'ont rien à faire
+      # dans ce que les élèves téléchargent. Voir ADR-015.
+      - name: Construction du contenu et des quiz
+        run: |
+          python construire_contenu.py ../contenu/chapitre-1 "$RUNNER_TEMP/contenu"
+          python construire_quiz.py ../contenu/chapitre-1 "$RUNNER_TEMP/quiz"
+
+  web:
+    name: Interface
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plateforme/web
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm installé directement, jamais par corepack : son shim relit
+      # `devEngines.packageManager` dans package.json, et ce champ porte un
+      # intervalle semver (^11.8.0) là où corepack exige une version exacte.
+      # Même raison que deploiement/Dockerfile.web.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+
+      - uses: actions/setup-node@v4
+        with:
+          # La version de l'image de construction, deploiement/Dockerfile.web.
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: plateforme/web/pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      # `test:couverture` et pas `test` : les seuils de vitest.config.ts — 100 %
+      # sur `src/quiz/**`, `src/validation/**`, le routage, le calendrier — ne
+      # servent à rien s'ils ne font échouer que la machine du développeur.
+      - name: 514 tests et seuils de couverture
+        run: pnpm test:couverture
+
+      # `tsc --noEmit && vite build`, la commande du Dockerfile.
+      - name: Types et construction
+        run: pnpm build
