@@ -59,6 +59,17 @@ describe("Editeur — changer d'exercice", () => {
     expect(vue!.state.doc.toString()).toBe('age = 17')
   })
 
+  it("ne renvoie pas au parent la valeur qu'il vient de donner", () => {
+    // Ce n'est pas une frappe. L'écho faisait marquer « modifié » un fichier
+    // de l'atelier à la seconde où on l'ouvrait.
+    const onChange = vi.fn()
+    const { rerender } = render(<Editeur valeur={'print("Bonjour")'} onChange={onChange} />)
+
+    rerender(<Editeur valeur={'age = 17'} onChange={onChange} />)
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
   it("ne retouche pas le document quand la valeur n a pas change", () => {
     // Le composant se redessine à chaque frappe : réécrire le document à
     // chaque fois replacerait le curseur au début.

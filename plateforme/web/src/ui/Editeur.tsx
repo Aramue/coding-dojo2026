@@ -1,10 +1,20 @@
 import { python } from '@codemirror/lang-python'
 import { indentUnit } from '@codemirror/language'
-import { Compartment, EditorState } from '@codemirror/state'
+import { Annotation, Compartment, EditorState } from '@codemirror/state'
 import { EditorView, keymap, lineNumbers } from '@codemirror/view'
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { useEffect, useRef } from 'react'
+
+/**
+ * Marque un document remplacé depuis l'extérieur — un autre exercice, un
+ * autre fichier ouvert dans l'atelier.
+ *
+ * Ce n'est pas une frappe, et `onChange` ne doit pas le renvoyer comme une :
+ * le parent a déjà cette valeur, c'est lui qui l'a donnée. L'écho faisait
+ * marquer « modifié » un fichier de l'atelier à la seconde où on l'ouvrait.
+ */
+const venuDuParent = Annotation.define<boolean>()
 
 export function Editeur({
   valeur,
@@ -49,7 +59,9 @@ export function Editeur({
         oneDark,
         compartimentEditable.current.of(EditorView.editable.of(!lectureSeule)),
         EditorView.updateListener.of((maj) => {
-          if (maj.docChanged) rappel.current(maj.state.doc.toString())
+          if (!maj.docChanged) return
+          if (maj.transactions.some((t) => t.annotation(venuDuParent))) return
+          rappel.current(maj.state.doc.toString())
         }),
         EditorView.theme({
           '&': { fontFamily: 'var(--police-code)', fontSize: '0.88rem', borderRadius: '12px' },
@@ -81,7 +93,10 @@ export function Editeur({
   useEffect(() => {
     const v = vue.current
     if (!v || v.state.doc.toString() === valeur) return
-    v.dispatch({ changes: { from: 0, to: v.state.doc.length, insert: valeur } })
+    v.dispatch({
+      changes: { from: 0, to: v.state.doc.length, insert: valeur },
+      annotations: venuDuParent.of(true),
+    })
     v.dispatch({ effects: compartimentHistorique.current.reconfigure([]) })
     v.dispatch({ effects: compartimentHistorique.current.reconfigure(history()) })
   }, [valeur])
