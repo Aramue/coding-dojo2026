@@ -1,0 +1,370 @@
+/*
+ * L'écran projeté du quiz. Il se lit du fond d'une salle : tout y est plus
+ * grand d'un cran que sur l'écran de l'élève, et il reste clair — un fond
+ * sombre se lit mal au projecteur dans une salle éclairée.
+ */
+
+.quiz-prof {
+  grid-area: contenu;
+  min-width: 0;
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  padding: var(--e-3) var(--e-3) var(--e-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.quiz-prof__fil {
+  display: flex;
+}
+
+/* Une vraie sortie, lisible au premier coup d'œil : le professeur y revient souvent. */
+.quiz-prof__retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--t-3);
+}
+
+.quiz-prof__derniere {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.quiz-prof__derniere b {
+  color: var(--ink);
+}
+
+.quiz-prof__resultats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-2);
+}
+
+.quiz-prof__taux {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  color: var(--ink-soft);
+}
+
+.quiz-prof__taux b {
+  font-size: var(--t-7);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.quiz-prof h1 {
+  font-size: var(--t-6);
+  color: var(--ink);
+}
+
+.quiz-prof h2 {
+  font-size: var(--t-4);
+  color: var(--ink);
+}
+
+/* ---------- Catalogue ---------- */
+
+.quiz-prof__catalogue,
+.quiz-prof__attente,
+.quiz-prof__fin {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-2);
+}
+
+.quiz-prof__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+}
+
+.quiz-prof__ligne {
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  padding: var(--e-2) var(--e-3);
+}
+
+.quiz-prof__ligne + .quiz-prof__ligne {
+  border-top: 1px solid var(--rule-doux);
+}
+
+.quiz-prof__nom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz-prof__nom span {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+/* ---------- Salle d'attente ---------- */
+
+.quiz-prof__effectif {
+  margin: 0;
+  font-size: var(--t-4);
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Question et correction ---------- */
+
+.quiz-prof__question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.quiz-prof__grille {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--e-4);
+}
+
+.quiz-prof__grille:has(.quiz-prof__cote) {
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
+}
+
+@media (max-width: 900px) {
+  .quiz-prof__grille:has(.quiz-prof__cote) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.quiz-prof__principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.quiz-prof__enonce {
+  line-height: 1.15;
+}
+
+.quiz-prof .carte-code {
+  font-size: var(--t-5);
+  line-height: 1.6;
+}
+
+.quiz-prof .options-quiz__bouton {
+  min-height: 5rem;
+  font-size: var(--t-5);
+}
+
+.quiz-prof .compte__secondes {
+  font-size: var(--t-7);
+}
+
+.quiz-prof__explication {
+  margin: 0;
+  font-size: var(--t-4);
+  color: var(--ink);
+  line-height: 1.5;
+  animation: quiz-arrivee 180ms ease-out;
+}
+
+.quiz-prof__cote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.quiz-prof__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+}
+
+.quiz-prof__actions .quiz-prof__effectif {
+  margin-right: auto;
+}
+
+/*
+ * Arrêter la partie est une sortie, pas une action de la question : elle se
+ * détache par un filet, comme « Fermer la session professeur ».
+ */
+.quiz-prof__pied {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  margin-top: var(--e-4);
+  padding-top: var(--e-3);
+  border-top: 1px solid var(--rule-doux);
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+/* ---------- Podium ---------- */
+
+.podium {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 32rem;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+}
+
+.podium__place {
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-2);
+  padding: 0.7rem var(--e-2);
+  font-size: var(--t-4);
+  animation: quiz-arrivee 180ms ease-out;
+}
+
+.podium__place + .podium__place {
+  border-top: 1px solid var(--rule-doux);
+}
+
+.podium__rang {
+  min-width: 1.5rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.podium__nom {
+  flex: 1;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.podium__points {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* ---------- Bilan ---------- */
+
+.bilan {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  margin-top: var(--e-3);
+}
+
+.bilan__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+}
+
+.bilan__ligne {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-2) var(--e-3);
+}
+
+.bilan__ligne + .bilan__ligne {
+  border-top: 1px solid var(--rule-doux);
+}
+
+.bilan__entete {
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-1) var(--e-2);
+  flex-wrap: wrap;
+}
+
+.bilan__numero {
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.bilan__enonce {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.bilan__reprendre {
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--ko);
+  color: #fff;
+  font-size: var(--t-1);
+  font-weight: 500;
+}
+
+.bilan__taux {
+  margin-left: auto;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.bilan__code {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--d-bg);
+  color: var(--d-fg);
+  border-radius: var(--rayon-1);
+  font-size: var(--t-1);
+  overflow-x: auto;
+}
+
+.bilan__repartition {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bilan__repartition li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--rayon-1);
+  border: 1px solid var(--rule-doux);
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.bilan__repartition li[data-bonne] {
+  border-color: var(--ok);
+  color: var(--ink);
+}
+
+.bilan__lettre {
+  font-weight: 700;
+}
+
+.bilan__option {
+  white-space: pre-line;
+}
+
+.bilan__compte {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}

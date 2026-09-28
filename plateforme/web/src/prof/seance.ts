@@ -144,7 +144,7 @@ function frequences(valeurs: (string | null)[]): string[] {
  * famille est abrégé — vingt-quatre élèves de huit établissements tiennent
  * dans un prénom et une initiale, et la ligne reste lisible.
  */
-export function nommer(eleve: LigneEleve): string {
+export function nommer(eleve: Pick<LigneEleve, 'code_acces' | 'prenom' | 'nom'>): string {
   const prenom = eleve.prenom?.trim()
   if (!prenom) return eleve.code_acces
   const nom = eleve.nom?.trim()

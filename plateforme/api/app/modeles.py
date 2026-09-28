@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, SQLModel
 
 
@@ -57,3 +58,51 @@ class Reglage(SQLModel, table=True):
 
     cle: str = Field(primary_key=True)
     valeur: str
+
+class PartieQuiz(SQLModel, table=True):
+    """Une partie de quiz en direct. Une seule est en cours a la fois.
+
+    `phase` ne s'ecrit qu'en trois valeurs : attente, question, terminee. La
+    correction ne s'ecrit PAS : elle se deduit de `fin_a` et de l'heure de la
+    lecture (voir quiz.py). Aucun minuteur serveur, donc rien a perdre si le
+    conteneur redemarre en pleine partie. Voir ADR-016.
+    """
+
+    id: int | None = Field(default=None, primary_key=True)
+    quiz_id: str
+    phase: str = "attente"
+    # Rang de la question courante, -1 tant que la premiere n'est pas ouverte.
+    question: int = -1
+    ouverte_le: datetime | None = None
+    fin_a: datetime | None = None
+    creee_le: datetime = Field(default_factory=maintenant)
+    terminee_le: datetime | None = None
+
+
+class ParticipantQuiz(SQLModel, table=True):
+    """Un eleve entre dans une partie. Son identite est son code, rien d'autre."""
+
+    partie_id: int = Field(foreign_key="partiequiz.id", primary_key=True)
+    code_acces: str = Field(foreign_key="eleve.code_acces", primary_key=True)
+    rejoint_le: datetime = Field(default_factory=maintenant)
+
+
+class ReponseQuiz(SQLModel, table=True):
+    """Une reponse a une question : un numero d'option, jamais du texte.
+
+    La contrainte d'unicite porte la regle du jeu — une reponse par eleve et
+    par question, la premiere compte — la ou deux requetes simultanees
+    passeraient toutes deux une verification faite en Python.
+    """
+
+    __table_args__ = (UniqueConstraint("partie_id", "question", "code_acces"),)
+
+    id: int | None = Field(default=None, primary_key=True)
+    partie_id: int = Field(foreign_key="partiequiz.id", index=True)
+    question: int
+    code_acces: str = Field(foreign_key="eleve.code_acces", index=True)
+    choix: int
+    delai_ms: int
+    correcte: bool
+    points: int
+    recue_le: datetime = Field(default_factory=maintenant)

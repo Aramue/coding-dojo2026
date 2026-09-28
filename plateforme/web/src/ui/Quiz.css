@@ -1,0 +1,439 @@
+/*
+ * Les écrans du quiz, élève et professeur.
+ *
+ * Le même langage que le reste : canevas neutre, contenu sur surface blanche,
+ * code dans la carte Dracula. Une seule exception, la grille des options : ses
+ * quatre familles relient l'option projetée au bouton de l'élève. Voir la
+ * Charte visuelle, amendement du 27 septembre 2026.
+ */
+
+/* ---------- Les options ---------- */
+
+.options-quiz {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--e-1);
+}
+
+@media (max-width: 560px) {
+  .options-quiz {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Option A, B, C, D : variables, types, opérateurs, conditions. */
+.options-quiz__option[data-option='0'] { --fond: var(--var-tint); --encre-option: var(--var-ink); }
+.options-quiz__option[data-option='1'] { --fond: var(--typ-tint); --encre-option: var(--typ-ink); }
+.options-quiz__option[data-option='2'] { --fond: var(--ope-tint); --encre-option: var(--ope-ink); }
+.options-quiz__option[data-option='3'] { --fond: var(--con-tint); --encre-option: var(--con-ink); }
+
+.options-quiz__bouton {
+  width: 100%;
+  height: 100%;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem var(--e-2);
+  padding: var(--e-2);
+  border: 2px solid transparent;
+  border-radius: var(--rayon-2);
+  background: var(--fond);
+  color: var(--encre-option);
+  font: inherit;
+  font-weight: 500;
+  font-size: var(--t-4);
+  text-align: left;
+  transition: border-color 150ms ease-out, background 150ms ease-out;
+}
+
+button.options-quiz__bouton {
+  cursor: pointer;
+}
+
+button.options-quiz__bouton:hover:not(:disabled) {
+  border-color: var(--encre-option);
+}
+
+button.options-quiz__bouton:focus-visible {
+  outline: 3px solid var(--py-blue);
+  outline-offset: 2px;
+}
+
+button.options-quiz__bouton:disabled {
+  cursor: default;
+}
+
+/* Le choix de l'élève, avant la correction : le reste s'efface un peu. */
+.options-quiz__option[data-etat='choisie'] .options-quiz__bouton {
+  border-color: var(--encre-option);
+  box-shadow: inset 0 0 0 2px var(--encre-option);
+}
+
+.options-quiz:has([data-etat='choisie']) .options-quiz__option:not([data-etat='choisie']) .options-quiz__bouton {
+  background: var(--surface-doux);
+  border-color: var(--rule-doux);
+}
+
+.forme-option {
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: none;
+  fill: var(--encre-option);
+}
+
+.options-quiz__lettre {
+  font-size: var(--t-1);
+  opacity: 0.85;
+  min-width: 0.8rem;
+}
+
+.options-quiz__texte {
+  flex: 1 1 8rem;
+  min-width: 0;
+  /* Une option peut être une sortie sur deux lignes : on garde ses retours. */
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- La correction ---------- */
+
+.options-quiz__option[data-etat='autre'] .options-quiz__bouton {
+  background: var(--surface-doux);
+  border-color: var(--rule-doux);
+  color: var(--ink-soft);
+}
+
+.options-quiz__option[data-etat='autre'] .forme-option {
+  fill: var(--ink-soft);
+}
+
+.options-quiz__option[data-etat='bonne'] .options-quiz__bouton {
+  border-color: var(--ok);
+  box-shadow: inset 0 0 0 1px var(--ok);
+}
+
+.options-quiz__option[data-mienne] .options-quiz__bouton {
+  border-color: var(--ko);
+}
+
+.coche {
+  width: 1.3rem;
+  height: 1.3rem;
+  flex: none;
+  fill: none;
+  stroke: var(--ok);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.options-quiz__mienne {
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--ko);
+}
+
+.options-quiz__option[data-etat='bonne'] .options-quiz__mienne {
+  color: var(--ok);
+}
+
+/* La répartition, sur l'écran projeté : une jauge par option, dans sa couleur. */
+.options-quiz__compte {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  font-size: var(--t-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.options-quiz__jauge {
+  flex: 1;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 60%);
+  overflow: hidden;
+}
+
+.options-quiz__jauge span {
+  display: block;
+  height: 100%;
+  background: var(--encre-option);
+  transform-origin: left;
+  transition: transform 400ms ease-out;
+}
+
+.options-quiz__option[data-etat='autre'] .options-quiz__jauge {
+  background: var(--ground-2);
+}
+
+.options-quiz__option[data-etat='autre'] .options-quiz__jauge span {
+  background: var(--ink-soft);
+}
+
+/* ---------- Le compte à rebours ---------- */
+
+.compte {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  min-width: 10rem;
+}
+
+.compte__secondes {
+  font-size: var(--t-6);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  min-width: 2.2ch;
+  text-align: right;
+  color: var(--ink);
+}
+
+.compte__barre {
+  flex: 1;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--ground-2);
+  overflow: hidden;
+}
+
+/* La seule animation longue de l'application : une horloge. */
+.compte__barre span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transform-origin: left;
+  transition: transform 250ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compte__barre {
+    display: none;
+  }
+}
+
+/* ---------- L'écran de l'élève ---------- */
+
+.quiz {
+  width: min(820px, 100%);
+  margin-inline: auto;
+  padding: var(--e-5) var(--e-3) var(--e-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.quiz__alerte {
+  margin: 0;
+  padding: 0.8rem var(--e-3);
+  border-radius: var(--rayon-2);
+  background: var(--ko);
+  color: #fff;
+  font-size: var(--t-2);
+}
+
+.quiz__attente {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.quiz__carte {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-1);
+  padding: var(--e-4);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  box-shadow: var(--ombre-1);
+}
+
+.quiz__carte h1 {
+  font-size: var(--t-6);
+  color: var(--ink);
+}
+
+.quiz__carte .bouton {
+  margin-top: var(--e-2);
+}
+
+.quiz__surtitre {
+  margin: 0;
+  font-size: var(--t-2);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.quiz__aide,
+.quiz__detail {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.quiz__detail {
+  font-variant-numeric: tabular-nums;
+}
+
+.quiz__question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.quiz__entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+}
+
+.quiz__enonce {
+  font-size: var(--t-5);
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.quiz__question .carte-code {
+  font-size: var(--t-3);
+}
+
+.quiz__statut {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--t-2);
+}
+
+.quiz__correction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-3);
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  animation: quiz-arrivee 180ms ease-out;
+}
+
+.quiz__verdict {
+  margin: 0;
+  font-size: var(--t-4);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.quiz__verdict[data-ton='juste'] { color: var(--ok); }
+.quiz__verdict[data-ton='faux'] { color: var(--ko); }
+
+.quiz__explication {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.quiz__score,
+.quiz__bilan {
+  margin: 0;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.quiz__score b,
+.quiz__bilan {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.quiz__bilan {
+  font-size: var(--t-4);
+}
+
+/* Le verdict arrive, il ne surgit pas : l'usage « apparition du verdict ». */
+@keyframes quiz-arrivee {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 720px) {
+  .quiz {
+    padding: var(--e-3) var(--e-2) var(--e-5);
+  }
+}
+
+/* ---------- Les élèves prêts ---------- */
+
+.pastilles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  width: 100%;
+}
+
+.pastilles__compte {
+  margin: 0;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.pastilles__compte b {
+  font-size: var(--t-5);
+  color: var(--ink);
+}
+
+.pastilles__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1);
+}
+
+.pastille {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.3rem;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: 999px;
+  animation: quiz-arrivee 180ms ease-out;
+}
+
+.pastille__rond {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--ground-2);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: var(--t-2);
+}
+
+.pastille__nom {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.pastille[data-moi] {
+  border-color: var(--ink);
+}
+
+.pastille[data-moi] .pastille__rond {
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.pastille__toi {
+  font-weight: 400;
+  color: var(--ink-soft);
+}

@@ -24,10 +24,12 @@ from schema import (
     BlocCode,
     Exercice,
     Lecon,
+    Quiz,
     TestMotif,
     TestSortie,
     TestVariable,
     charger_lecons,
+    charger_quiz_tous,
     charger_tous,
 )
 
@@ -227,6 +229,43 @@ def verifier_lecon(lecon: Lecon) -> list[str]:
     return problemes
 
 
+def verifier_quiz(quiz: Quiz) -> list[str]:
+    """Le code de chaque question tourne, et fait ce que la question annonce.
+
+    Un quiz se joue une fois, devant toute la classe, en vingt secondes par
+    question. Une bonne reponse mal recopiee n'y coute pas une main levee : elle
+    retire des points a tous ceux qui avaient raison, et le professeur le
+    decouvre en meme temps qu'eux, projete au tableau.
+    """
+    problemes: list[str] = []
+    for rang, question in enumerate(quiz.questions, start=1):
+        if not question.code:
+            continue
+        ou = f"{quiz.id} question {rang}"
+        stdout, _, erreur = _executer(question.code, question.entrees)
+
+        if question.erreur:
+            leve = erreur.split(":", 1)[0] if erreur else None
+            if leve != question.erreur:
+                problemes.append(
+                    f"{ou} : le code devait lever {question.erreur}, "
+                    + (f"il leve {leve}" if leve else "il s'execute sans erreur")
+                )
+            continue
+
+        if erreur:
+            problemes.append(f"{ou} : le code plante ({erreur})")
+            continue
+
+        juste = question.options[question.bonne_reponse]
+        if question.sortie and stdout.rstrip() != juste.rstrip():
+            problemes.append(
+                f"{ou} : le code affiche {stdout.rstrip()!r}, "
+                f"la bonne reponse annoncee est {juste!r}"
+            )
+    return problemes
+
+
 MOTIF_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 
 
@@ -255,6 +294,19 @@ def verifier_chapitres(chapitres: dict[str, dict]) -> list[str]:
     return problemes
 
 
+def verifier_tous_les_quiz(racine: Path) -> tuple[list[Quiz], list[str]]:
+    """Charge et verifie les quiz d'une racine. Deux quiz ne partagent pas un id."""
+    tous = charger_quiz_tous(racine)
+    problemes: list[str] = []
+    vus: set[str] = set()
+    for quiz in tous:
+        if quiz.id in vus:
+            problemes.append(f"{quiz.id} : identifiant de quiz en double")
+        vus.add(quiz.id)
+        problemes += verifier_quiz(quiz)
+    return tous, problemes
+
+
 def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str]]:
     """Charge tout le contenu d'une racine et rend les problemes trouves.
 
@@ -276,6 +328,9 @@ def verifier_racine(racine: Path) -> tuple[list[Exercice], list[Lecon], list[str
     for lecon in lecons:
         problemes += verifier_lecon(lecon)
 
+    _, problemes_quiz = verifier_tous_les_quiz(racine)
+    problemes += problemes_quiz
+
     return exercices, lecons, problemes
 
 
@@ -288,6 +343,7 @@ def principal() -> int:
 
     print(f"{len(exercices)} exercices charges.")
     print(f"{len(lecons)} lecons chargees.")
+    print(f"{len(charger_quiz_tous(arguments.racine))} quiz charges.")
     for p in problemes:
         print(f"  PROBLEME  {p}")
     print("Contenu valide." if not problemes else f"{len(problemes)} probleme(s).")

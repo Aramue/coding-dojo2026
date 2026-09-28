@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Executeur } from '../execution/executeur'
 import { compteExiste, creerCompte, LONGUEUR_MIN, seConnecter } from '../prof/compte'
-import type { Destination } from '../routage'
+import { naviguer, type Destination } from '../routage'
 import { Apercu } from './Apercu'
 import { Classe } from './Classe'
+import { QuizProf } from './QuizProf'
 import { TableauDeBord } from './TableauDeBord'
 import './EcranProf.css'
 
@@ -30,7 +31,11 @@ function lireJetonMemorise(): string | null {
 
 type Porte = 'verification' | 'creation' | 'connexion' | 'injoignable'
 
-export function EcranProf() {
+/**
+ * `quiz` : la même porte ouvre l'écran projeté du quiz, sur /prof/quiz. Une
+ * seule session professeur, gardée le temps de l'onglet.
+ */
+export function EcranProf({ quiz = false }: { quiz?: boolean }) {
   const [jeton, setJeton] = useState<string | null>(() => lireJetonMemorise())
   const [porte, setPorte] = useState<Porte>('verification')
   // Relance la question « le compte existe-t-il ? » après une panne.
@@ -73,7 +78,11 @@ export function EcranProf() {
   }, [])
 
   if (jeton) {
-    return <SessionProf jeton={jeton} onFermer={fermer} />
+    return quiz ? (
+      <QuizProf jetonProf={jeton} onRefuse={fermer} />
+    ) : (
+      <SessionProf jeton={jeton} onFermer={fermer} />
+    )
   }
 
   return (
@@ -271,6 +280,13 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
         <span className="prof__note">
           Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
         </span>
+        <button
+          type="button"
+          className="bouton prof__quiz"
+          onClick={() => naviguer({ vue: 'prof-quiz' })}
+        >
+          Quiz en direct
+        </button>
       </div>
 
       <Classe jetonProf={jeton} />

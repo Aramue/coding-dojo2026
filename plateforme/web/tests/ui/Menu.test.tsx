@@ -152,3 +152,63 @@ describe('Menu', () => {
     expect(screen.getByRole('navigation', { name: /sommaire/i })).toBeInTheDocument()
   })
 })
+
+describe('Menu — le cours fermé pendant un quiz', () => {
+  it('rend inertes tous les chapitres, et dit pourquoi', () => {
+    const { container } = render(
+      <Menu
+        chapitres={CHAPITRES}
+        destination={{ vue: 'quiz' }}
+        quiz={{ ouvert: true, titre: 'Les bases de la séance 1' }}
+        verrouille
+      />,
+    )
+    expect(screen.getByText('Le cours est fermé pendant le quiz.')).toBeInTheDocument()
+    const cours = container.querySelector('.menu__cours')!
+    expect(cours).toHaveAttribute('inert')
+    expect(cours).toContainElement(screen.getByRole('button', { name: /Les bases de Python/ }))
+    // L'entrée du quiz n'est pas un chapitre : elle reste ouverte.
+    expect(screen.getByRole('link', { name: /Quiz en direct/ }).closest('[inert]')).toBeNull()
+  })
+
+  it('ne ferme rien par défaut', () => {
+    const { container } = render(<Menu chapitres={CHAPITRES} destination={{ vue: 'connexion' }} />)
+    expect(container.querySelector('.menu__cours')).not.toHaveAttribute('inert')
+    expect(screen.queryByText('Le cours est fermé pendant le quiz.')).toBeNull()
+  })
+})
+
+describe('Menu — l entrée du quiz', () => {
+  it('est toujours en tête, et éteinte tant qu aucune partie n est ouverte', () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'cours', notion: 'afficher' }} />)
+    const entree = screen.getByText('Quiz en direct').closest('.menu-quiz')!
+    expect(entree).toHaveAttribute('aria-disabled', 'true')
+    expect(entree.tagName).toBe('DIV')
+    expect(screen.getByText('Pas de quiz lancé')).toBeInTheDocument()
+    // Avant les chapitres, dans l'ordre du document.
+    const chapitre = screen.getByRole('button', { name: /Les bases de Python/ })
+    expect(entree.compareDocumentPosition(chapitre) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('s allume et mène à la partie quand elle est ouverte', async () => {
+    history.pushState(null, '', '/afficher/cours')
+    render(
+      <Menu
+        chapitres={CHAPITRES}
+        destination={{ vue: 'cours', notion: 'afficher' }}
+        quiz={{ ouvert: true, titre: 'Les bases de la séance 1' }}
+      />,
+    )
+    const lien = screen.getByRole('link', { name: /Quiz en direct/ })
+    expect(lien).toHaveTextContent('Les bases de la séance 1')
+    await userEvent.click(lien)
+    expect(location.pathname).toBe('/quiz')
+  })
+
+  it('reste un lien, marqué comme page courante, sur la page du quiz', () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'quiz' }} />)
+    const lien = screen.getByRole('link', { name: /Quiz en direct/ })
+    expect(lien).toHaveAttribute('aria-current', 'page')
+    expect(lien).toHaveTextContent('Aucune partie')
+  })
+})

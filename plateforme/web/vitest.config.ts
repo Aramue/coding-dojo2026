@@ -20,6 +20,9 @@ export default defineConfig({
         'src/validation/**': { statements: 100, branches: 100, functions: 100, lines: 100 },
         'src/routage.ts': { statements: 100, branches: 100, functions: 100, lines: 100 },
         'src/ui/texte.tsx': { statements: 100, branches: 100, functions: 100, lines: 100 },
+        // La mecanique du quiz : l'horloge et la sonnette decident de ce que
+        // vingt-quatre ecrans affichent en meme temps.
+        'src/quiz/**': { statements: 100, branches: 100, functions: 100, lines: 100 },
         'src/contenu/calendrier.ts': { statements: 100, branches: 100, functions: 100, lines: 100 },
         // Plancher global : la mesure du 4 septembre 2026 apres la coquille,
         // arrondie a l'entier inferieur. C'est un cliquet, pas un objectif —

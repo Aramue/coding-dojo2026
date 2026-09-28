@@ -4,6 +4,10 @@ export type Destination =
   | { vue: 'connexion' }
   /** Tableau de bord professeur. Sa porte est le code prof, pas un code eleve. */
   | { vue: 'prof' }
+  /** L'écran du quiz projeté par le professeur, derrière la même porte. */
+  | { vue: 'prof-quiz' }
+  /** La partie de quiz en cours, côté élève. */
+  | { vue: 'quiz' }
   | { vue: 'cours'; notion: string }
   | { vue: 'exercices'; notion: string }
   | { vue: 'exercice'; notion: string; numero: number }
@@ -23,6 +27,10 @@ export function analyser(chemin: string): Destination {
   const morceaux = chemin.split('/').filter(Boolean)
   if (morceaux.length === 0) return { vue: 'connexion' }
   if (morceaux.length === 1 && morceaux[0] === 'prof') return { vue: 'prof' }
+  if (morceaux.length === 1 && morceaux[0] === 'quiz') return { vue: 'quiz' }
+  if (morceaux.length === 2 && morceaux[0] === 'prof' && morceaux[1] === 'quiz') {
+    return { vue: 'prof-quiz' }
+  }
 
   const [notion, page, numero] = morceaux
   if (!notion || !MOTIF_NOTION.test(notion)) return { vue: 'inconnue' }
@@ -50,6 +58,10 @@ export function versChemin(destination: Destination): string {
       return `/${destination.notion}/exercices/${destination.numero}`
     case 'prof':
       return '/prof'
+    case 'prof-quiz':
+      return '/prof/quiz'
+    case 'quiz':
+      return '/quiz'
     default:
       return '/'
   }

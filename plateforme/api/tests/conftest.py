@@ -75,3 +75,61 @@ def fixture_entetes_prof(client):
     """Cree le compte professeur, comme au premier lancement, et rend l'en-tete."""
     reponse = client.post("/prof/compte", json={"mot_de_passe": MOT_DE_PASSE_TEST})
     return {"X-Jeton-Prof": reponse.json()["jeton"]}
+
+# --- Quiz en direct ---------------------------------------------------------
+
+QUIZ_EXEMPLE = {
+    "id": "q1-bases",
+    "titre": "Les bases",
+    "seance": 1,
+    "questions": [
+        {
+            "enonce": "Qu'affiche ce programme ?",
+            "code": 'print("2" + "2")',
+            "options": ["4", "22", "Une erreur"],
+            "bonne_reponse": 1,
+            "duree_s": 20,
+            "explication": "Deux textes se collent, ils ne s'additionnent pas.",
+        },
+        {
+            "enonce": "Une variable garde-t-elle sa premiere valeur ?",
+            "options": ["Oui", "Non"],
+            "bonne_reponse": 1,
+            "duree_s": 10,
+        },
+    ],
+}
+
+
+@pytest.fixture(name="catalogue")
+def fixture_catalogue(client):
+    """Un catalogue d'un seul quiz, a la place de celui construit sur disque."""
+    from app.catalogue import obtenir_catalogue
+    from app.quiz import QuizPublie
+
+    quiz = {"q1-bases": QuizPublie(**QUIZ_EXEMPLE)}
+    application.dependency_overrides[obtenir_catalogue] = lambda: quiz
+    return quiz
+
+
+class Horloge:
+    """L'heure du serveur, reglee a la main : une echeance se teste a la milliseconde."""
+
+    def __init__(self) -> None:
+        from datetime import datetime, timezone
+
+        self.maintenant = datetime(2026, 9, 30, 14, 0, tzinfo=timezone.utc)
+
+    def avancer(self, secondes: float) -> None:
+        from datetime import timedelta
+
+        self.maintenant += timedelta(seconds=secondes)
+
+
+@pytest.fixture(name="horloge")
+def fixture_horloge(client):
+    from app.routes_quiz import heure
+
+    horloge = Horloge()
+    application.dependency_overrides[heure] = lambda: horloge.maintenant
+    return horloge

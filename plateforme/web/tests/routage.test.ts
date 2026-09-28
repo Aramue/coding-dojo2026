@@ -12,6 +12,19 @@ describe('analyser', () => {
     expect(analyser('/prof/')).toEqual({ vue: 'prof' })
   })
 
+  it('reconnait le quiz, cote eleve et cote professeur', () => {
+    expect(analyser('/quiz')).toEqual({ vue: 'quiz' })
+    expect(analyser('/quiz/')).toEqual({ vue: 'quiz' })
+    expect(analyser('/prof/quiz')).toEqual({ vue: 'prof-quiz' })
+    expect(versChemin({ vue: 'quiz' })).toBe('/quiz')
+    expect(versChemin({ vue: 'prof-quiz' })).toBe('/prof/quiz')
+  })
+
+  it('ne prend pas une page inconnue sous /quiz pour le quiz', () => {
+    expect(analyser('/quiz/triche')).toEqual({ vue: 'inconnue' })
+    expect(analyser('/prof/quiz/1')).toEqual({ vue: 'inconnue' })
+  })
+
   it('ne confond pas /prof avec une notion', () => {
     expect(analyser('/prof/cours')).toEqual({ vue: 'cours', notion: 'prof' })
   })

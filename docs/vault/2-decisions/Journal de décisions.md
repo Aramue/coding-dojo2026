@@ -3,7 +3,7 @@ title: Journal de décisions
 tags:
   - moc
   - decisions
-mis-a-jour: 2026-09-25
+mis-a-jour: 2026-09-27
 ---
 
 # Journal de décisions
@@ -59,6 +59,15 @@ code professeur » :
   Plus aucun secret dans le `.env`. L'instance tire sa clé en base, et `/prof` propose de créer
   le compte tant qu'il n'existe pas.
 
+Les deux suivantes datent du 27 septembre 2026, pour le quiz en direct, écrites sur une branche
+parallèle : elles prennent les numéros qui suivent.
+
+- **015** — [[ADR-015 Quiz en direct et classement encadré]]
+  Un classement dans la partie seulement : cinq premiers projetés, chacun son rang pour soi.
+  Amende ADR-011, qui tient toujours pour le parcours.
+- **016** — [[ADR-016 Temps réel par sonnette WebSocket]]
+  Le WebSocket dit « relis », jamais « voici » ; sans lui, on relit toutes les secondes.
+
 ## Le fil conducteur
 
 Cinq de ces six décisions découlent d'un même constat, établi dans [[Bilan 2025-2026]] :
@@ -101,5 +110,6 @@ Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans 
 
 - [ ] Le nombre exact d'exercices du chapitre 1 et leur ordre — voir [[Chapitre 1]]
 - [x] La forme précise de la gamification — tranchée par [[ADR-011 Trois niveaux de réussite]] :
-      deux coches, ni points ni classement
+      deux coches, ni points ni classement ; le quiz en direct y déroge, dans les limites
+      d'[[ADR-015 Quiz en direct et classement encadré]]
 - [ ] Le découpage du livrable de la séance 1 par rapport au reste

@@ -1,3 +1,4 @@
+import type { EtatEleve } from '../quiz/types'
 import type { Reussite, Verdict } from '../validation/types'
 
 /** Qui est connecté. `prenom` est vide tant que le professeur n'a rien saisi. */
@@ -99,4 +100,69 @@ export class ClientApi {
       throw new Error(`Progression non enregistrée (erreur ${reponse.status}).`)
     }
   }
+
+  /**
+   * Le premier message de la sonnette du quiz. Le jeton passe là, jamais dans
+   * l'URL du WebSocket, qui finirait dans les journaux du proxy. Voir ADR-016.
+   */
+  presentationQuiz(): { jeton: string } {
+    if (!this.jeton) throw new Error('Session non ouverte.')
+    return { jeton: this.jeton }
+  }
+
+  lireQuiz(): Promise<EtatEleve> {
+    return this.appelerQuiz('/quiz/etat')
+  }
+
+  rejoindreQuiz(): Promise<EtatEleve> {
+    return this.appelerQuiz('/quiz/rejoindre', { method: 'POST' })
+  }
+
+  /** Un numéro d'option, et rien d'autre : ni texte, ni code. */
+  repondreQuiz(partie: number, question: number, choix: number): Promise<EtatEleve> {
+    return this.appelerQuiz('/quiz/reponse', {
+      method: 'POST',
+      body: JSON.stringify({ partie, question, choix }),
+    })
+  }
+
+  private async appelerQuiz(chemin: string, options: RequestInit = {}): Promise<EtatEleve> {
+    let reponse: Response
+    try {
+      reponse = await this.executerRequete(`${this.base}${chemin}`, {
+        ...options,
+        headers: this.entetes(),
+      })
+    } catch {
+      throw new Error('La plateforme ne répond pas. Préviens ton professeur.')
+    }
+    const donnees = await reponse.json().catch(() => null)
+    if (!reponse.ok) throw new Error(messageRefus(donnees, reponse.status))
+    // Même garde que le tableau de bord : une réponse d'une autre forme mise
+    // dans l'état ferait planter le rendu, et l'élève verrait un écran blanc.
+    if (!estPhotographie(donnees)) throw new Error('Réponse inattendue de la plateforme.')
+    return donnees as EtatEleve
+  }
+}
+
+/**
+ * Le message à montrer quand l'API refuse.
+ *
+ * Les refus du quiz sont écrits pour l'élève, en français (« Le temps de
+ * réponse est écoulé. ») : on les montre tels quels. Une erreur de validation
+ * FastAPI, elle, porte une liste technique — on ne la montre jamais.
+ */
+export function messageRefus(donnees: unknown, statut: number): string {
+  const detail = (donnees as { detail?: unknown } | null)?.detail
+  if (typeof detail === 'string') return detail
+  return `La plateforme a refusé (erreur ${statut}).`
+}
+
+export function estPhotographie(donnees: unknown): boolean {
+  return (
+    typeof donnees === 'object' &&
+    donnees !== null &&
+    'partie' in donnees &&
+    typeof (donnees as { maintenant?: unknown }).maintenant === 'string'
+  )
 }

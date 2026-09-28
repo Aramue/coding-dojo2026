@@ -18,6 +18,109 @@
   overflow-y: auto;
 }
 
+/* ---------- Le quiz, tout en haut ---------- */
+
+/*
+ * Toujours là, à la même place. Éteint, il se lit comme une information
+ * (« pas de quiz lancé »), pas comme un bouton cassé ; allumé, il reprend le
+ * sombre du bandeau, qui est celui de l'action.
+ */
+.menu-quiz {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 var(--e-2) var(--e-2);
+  padding: 0.6rem 0.8rem;
+  border: 1px dashed var(--rule);
+  border-radius: var(--rayon-2);
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.menu-quiz[aria-disabled='true'] {
+  cursor: default;
+}
+
+a.menu-quiz {
+  border: 1px solid var(--d-bg);
+  background: var(--d-bg);
+  color: var(--d-fg);
+  transition: background 150ms ease-out;
+}
+
+a.menu-quiz:hover {
+  background: #343746;
+}
+
+a.menu-quiz:focus-visible {
+  outline: 2px solid var(--py-blue);
+  outline-offset: 2px;
+}
+
+a.menu-quiz[aria-current='page'] {
+  box-shadow: inset 3px 0 0 var(--py-yellow);
+}
+
+.menu-quiz__icone {
+  flex: none;
+}
+
+.menu-quiz__texte {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.menu-quiz__titre {
+  font-size: var(--t-2);
+  font-weight: 700;
+}
+
+.menu-quiz__etat {
+  font-size: var(--t-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.menu-quiz .menu-quiz__etat {
+  color: var(--d-label);
+}
+
+/* La pastille « en direct » : un point, pas un clignotement. */
+.menu-quiz__direct {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--py-yellow);
+}
+
+/* ---------- Le cours fermé pendant un quiz ---------- */
+
+.menu__ferme {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 var(--e-3) var(--e-1);
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.menu__cadenas {
+  flex: none;
+}
+
+/* Inerte (attribut `inert`) : ni clic, ni clavier. Grisé : ça se voit. */
+.menu__cours[data-verrouille] {
+  opacity: 0.4;
+  filter: grayscale(1);
+  user-select: none;
+}
+
 /* ---------- Chapitre ---------- */
 
 .chapitre {

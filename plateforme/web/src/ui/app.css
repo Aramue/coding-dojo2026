@@ -15,11 +15,16 @@
 .appli {
   min-height: 100vh;
   display: grid;
+  /*
+   * La rangée `bandeau` est vide la plupart du temps : une rangée `auto` sans
+   * contenu ne mesure rien. Elle ne se remplit que pendant un quiz.
+   */
   grid-template-areas:
     'entete entete'
+    'bandeau bandeau'
     'menu contenu';
   grid-template-columns: 272px minmax(0, 1fr);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   background: var(--ground);
 }
 
@@ -29,11 +34,30 @@
     'entete'
     'contenu';
   grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
 }
 
 .appli > main {
   grid-area: contenu;
   min-width: 0; /* sans quoi un <pre> large fait déborder toute la grille */
+}
+
+/*
+ * Chez l'élève connecté, la page vit dans `.zone-cours`, qui la rend inerte
+ * pendant un quiz sans la démonter. C'est elle qui occupe la zone de contenu.
+ */
+.zone-cours {
+  grid-area: contenu;
+  min-width: 0;
+}
+
+.zone-cours > main {
+  min-width: 0;
+}
+
+.zone-cours[inert] > main {
+  opacity: 0.35;
+  filter: grayscale(1);
 }
 
 .appli > .alerte {
@@ -45,6 +69,7 @@
   .appli {
     grid-template-areas:
       'entete'
+      'bandeau'
       'menu'
       'contenu';
     /*
@@ -53,8 +78,51 @@
      * 12 rem) faisait alors deborder toute la page de 17 px vers la droite.
      */
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr;
   }
+}
+
+/* ---------- Bandeau du quiz ---------- */
+
+/*
+ * Collé sous l'en-tête (3,5 rem), au-dessus du contenu qui défile : l'élève
+ * plongé dans un long exercice le voit sans remonter.
+ */
+.bandeau-quiz {
+  grid-area: bandeau;
+  position: sticky;
+  top: 3.5rem;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+  padding: var(--e-1) var(--e-3);
+  background: var(--d-bg);
+  color: var(--d-fg);
+  font-size: var(--t-2);
+  animation: bandeau-arrivee 220ms ease-out;
+}
+
+.bandeau-quiz__texte span {
+  color: var(--d-label);
+}
+
+/* Le pourquoi de la page grisée, sous le titre du quiz. */
+.bandeau-quiz__texte .bandeau-quiz__ferme {
+  display: block;
+  font-size: var(--t-1);
+}
+
+.bandeau-quiz .bouton {
+  min-height: 2.25rem;
+  padding-block: 0.35rem;
+}
+
+@keyframes bandeau-arrivee {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ---------- En-tête ---------- */
@@ -257,7 +325,8 @@ html {
   }
 }
 
-.appli > main {
+.appli > main,
+.zone-cours > main {
   animation: entree-page 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -279,6 +348,7 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   .appli > main,
+  .zone-cours > main,
   .page__corps,
   .pied {
     animation: none;

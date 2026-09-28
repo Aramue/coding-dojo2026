@@ -1,9 +1,25 @@
+# Les quiz sont construits ICI, et nulle part ailleurs. Leur bonne reponse doit
+# rester sur le serveur jusqu'a la correction : ils n'entrent jamais dans
+# l'image web, dont tout le contenu est lisible par les eleves. Voir ADR-015.
+# Un quiz incoherent — une bonne reponse qui n'est pas ce que le code affiche —
+# fait echouer cette etape, donc le deploiement.
+FROM python:3.12-slim AS quiz
+WORKDIR /build
+COPY plateforme/outils ./outils
+COPY plateforme/contenu ./contenu
+RUN pip install --no-cache-dir -r outils/requirements.txt \
+ && cd outils && python construire_quiz.py ../contenu/chapitre-1 /build/quiz
+
 FROM python:3.12-slim
 WORKDIR /app
 COPY plateforme/api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY plateforme/api/app ./app
+COPY --from=quiz /build/quiz ./quiz
 RUN mkdir -p /app/donnees
 ENV DOJO_BDD=sqlite:////app/donnees/dojo.db
+ENV DOJO_QUIZ=/app/quiz
 EXPOSE 8000
+# Un seul processus, jamais `--workers` : le registre des WebSocket du quiz vit
+# en memoire. Voir ADR-016.
 CMD ["uvicorn", "app.main:application", "--host", "0.0.0.0", "--port", "8000"]

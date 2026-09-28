@@ -237,3 +237,45 @@ describe('EcranProf — ce qui peut mal tourner', () => {
     lire.mockRestore()
   })
 })
+
+describe('EcranProf — le quiz', () => {
+  it('mène au quiz en direct depuis le tableau de bord', async () => {
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    history.pushState(null, '', '/prof')
+    render(<EcranProf />)
+    await userEvent.click(await screen.findByRole('button', { name: 'Quiz en direct' }))
+    expect(location.pathname).toBe('/prof/quiz')
+  })
+
+  it('ouvre l écran projeté avec la même session professeur', async () => {
+    const appel = vi.fn(async (url: string, _init?: RequestInit) =>
+      url.endsWith('/prof/quiz/partie')
+        ? reponse(200, { partie: null, maintenant: new Date().toISOString() })
+        : url.endsWith('/prof/quiz')
+          ? reponse(200, { quiz: [] })
+          : reponse(200, { eleves: [] }),
+    )
+    vi.stubGlobal('fetch', appel)
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf quiz />)
+    expect(await screen.findByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+    const [, init] = appel.mock.calls.find(([u]) => String(u).endsWith('/prof/quiz/partie'))!
+    expect(init?.headers).toMatchObject({ 'X-Jeton-Prof': JETON })
+  })
+
+  it('rend la main à la porte quand la session a expiré', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        url === '/api/prof/compte'
+          ? reponse(200, { existe: true })
+          : reponse(401, { detail: 'Session professeur absente ou expiree' }),
+      ),
+    )
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf quiz />)
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+    expect(sessionStorage.getItem(CLE)).toBeNull()
+  })
+})

@@ -1,6 +1,8 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '../../src/app'
+import { naviguer } from '../../src/routage'
 
 vi.mock('../../src/execution/executeur', () => ({
   Executeur: class {
@@ -53,6 +55,8 @@ const EXERCICES = [
   },
 ]
 
+let etatDuQuiz: unknown
+
 function poserLeReseau() {
   vi.stubGlobal(
     'fetch',
@@ -64,6 +68,7 @@ function poserLeReseau() {
         if (url.includes('lecons')) return []
         if (url.includes('parcours')) return { reussis: [] }
         if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+        if (url.includes('quiz/etat')) return etatDuQuiz
         return EXERCICES
       },
     })),
@@ -73,6 +78,7 @@ function poserLeReseau() {
 beforeEach(() => {
   history.pushState(null, '', '/')
   sessionStorage.clear()
+  etatDuQuiz = { partie: null, maintenant: new Date().toISOString() }
   poserLeReseau()
 })
 
@@ -143,6 +149,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+        if (url.includes('quiz/etat')) return etatDuQuiz
           return EXERCICES
         },
       })),
@@ -167,6 +174,7 @@ describe('App — le menu suit la progression', () => {
           if (url.includes('lecons')) return []
           if (url.includes('parcours')) return { reussis: [REUSSI_S1_01] }
           if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
+        if (url.includes('quiz/etat')) return etatDuQuiz
           return EXERCICES
         },
       })),
@@ -181,6 +189,120 @@ describe('App — le menu suit la progression', () => {
 })
 
 describe('App — tableau de bord professeur', () => {
+  it('garde le quiz tout en haut du sommaire, grisé tant qu aucune partie n est ouverte', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    render(<App />)
+    const entree = await screen.findByText('Pas de quiz lancé')
+    expect(entree.closest('[aria-disabled="true"]')).not.toBeNull()
+    expect(screen.queryByRole('link', { name: /Quiz en direct/ })).toBeNull()
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  const PARTIE_OUVERTE = {
+    partie: 1,
+    titre: 'Les bases de la séance 1',
+    phase: 'question',
+    maintenant: new Date().toISOString(),
+    rejoint: true,
+    question: null,
+    ma_reponse: null,
+    moi: null,
+    joueurs: [],
+  }
+
+  it('ferme tout le cours pendant une partie, et ouvre le chemin du quiz', async () => {
+    etatDuQuiz = { ...PARTIE_OUVERTE, rejoint: false }
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/cours')
+    const { container } = render(<App />)
+
+    expect(await screen.findByRole('status')).toHaveTextContent("Le cours est fermé jusqu'à la fin de la partie")
+    // Deux chemins vers le quiz, pas trois : le bouton du bandeau et l'entrée du sommaire.
+    expect(screen.getAllByRole('button', { name: 'Rejoindre' })).toHaveLength(1)
+    expect(screen.getAllByRole('link', { name: /Quiz en direct/ })).toHaveLength(1)
+    expect(screen.queryByRole('button', { name: 'Aller au quiz' })).toBeNull()
+    // La page reste montée dessous, inerte : rien ne se perd.
+    expect(container.querySelector('.zone-cours')).toHaveAttribute('inert')
+    expect(container.querySelector('.zone-cours main')).not.toBeNull()
+    // Tous les chapitres du sommaire, et eux seuls.
+    expect(container.querySelector('.menu__cours')).toHaveAttribute('inert')
+    expect(screen.getByText('Le cours est fermé pendant le quiz.')).toBeInTheDocument()
+    expect(container.querySelector('.menu-quiz')?.closest('[inert]')).toBeNull()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Rejoindre' }))
+    expect(location.pathname).toBe('/quiz')
+    // Sur la page du quiz, rien n'est inerte, mais le sommaire reste fermé.
+    expect(container.querySelector('.zone-cours')).not.toHaveAttribute('inert')
+    expect(container.querySelector('.menu__cours')).toHaveAttribute('inert')
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('ne ferme rien sans partie ouverte', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/afficher/cours')
+    const { container } = render(<App />)
+    await screen.findByText('Pas de quiz lancé')
+    expect(container.querySelector('.zone-cours')).not.toHaveAttribute('inert')
+    expect(container.querySelector('.menu__cours')).not.toHaveAttribute('inert')
+    expect(screen.queryByText('Le cours est fermé pendant le quiz.')).toBeNull()
+  })
+
+  it('après le quiz, ramène l élève à la page de cours qu il avait quittée', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/variables/cours')
+    render(<App />)
+    await screen.findByText('Pas de quiz lancé')
+    act(() => naviguer({ vue: 'quiz' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Retourner au cours' }))
+    expect(location.pathname).toBe('/variables/cours')
+  })
+
+  it('sans page de cours visitée, ramène à la première notion ouverte', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/quiz')
+    render(<App />)
+    await userEvent.click(await screen.findByRole('button', { name: 'Retourner au cours' }))
+    expect(location.pathname).toBe('/afficher/cours')
+  })
+
+  it('allume le bandeau et l entrée du sommaire quand une partie est créée', async () => {
+    etatDuQuiz = {
+      partie: 1,
+      titre: 'Les bases de la séance 1',
+      phase: 'attente',
+      maintenant: new Date().toISOString(),
+      rejoint: false,
+      question: null,
+      ma_reponse: null,
+      moi: null,
+      joueurs: [],
+    }
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    render(<App />)
+    expect(await screen.findByRole('status')).toHaveTextContent('Un quiz a commencé')
+    const entree = screen.getByRole('link', { name: /Quiz en direct/ })
+    expect(entree).toHaveAttribute('href', '/quiz')
+    expect(entree).toHaveTextContent('Les bases de la séance 1')
+  })
+
+  it('ouvre la partie de quiz sur /quiz, dans la coquille de l eleve', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/quiz')
+    render(<App />)
+    expect(await screen.findByRole('heading', { name: 'Aucun quiz en cours' })).toBeInTheDocument()
+    expect(screen.getByRole('navigation')).toBeInTheDocument()
+  })
+
+  it("ouvre l'ecran projete du quiz sur /prof/quiz, derriere la porte du professeur", async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, status: 200, json: async () => ({ existe: true }) })),
+    )
+    history.pushState(null, '', '/prof/quiz')
+    render(<App />)
+    expect(await screen.findByLabelText(/^mot de passe$/i)).toBeInTheDocument()
+  })
+
   it("s'atteint sur /prof sans code eleve", async () => {
     // Le tableau de bord a sa propre porte : il doit rester joignable meme
     // quand personne n'est connecte cote eleve.
