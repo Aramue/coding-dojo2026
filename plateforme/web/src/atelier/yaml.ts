@@ -12,7 +12,9 @@
  */
 
 import type { Test } from '../validation/types'
+import type { Bloc } from '../contenu/types'
 import type { Brouillon } from './brouillon'
+import type { BrouillonLecon } from './lecon'
 
 /**
  * Ce qui oblige à mettre un scalaire entre guillemets.
@@ -181,5 +183,63 @@ export function enYaml(brouillon: Brouillon): string {
 }
 
 export function nomDeFichier(brouillon: Brouillon): string {
+  return `${brouillon.id}.yaml`
+}
+
+/**
+ * Un texte narratif de leçon, replié — le `>-` de YAML.
+ *
+ * Les 75 paragraphes des 14 leçons du dépôt sont écrits ainsi, sans une
+ * exception : le repli garde des lignes courtes dans le fichier tout en
+ * produisant un paragraphe continu à la lecture. Un bloc `|` donnerait la
+ * même chaîne mais une ligne de trois cents caractères, illisible en revue.
+ *
+ * Une ligne vide dans le texte reste une ligne vide : c'est ainsi que YAML
+ * marque un saut de paragraphe dans un scalaire replié.
+ */
+function plie(valeur: string, retrait: string, largeur = 80): string {
+  const utile = largeur - retrait.length - 2
+  const paragraphes = valeur.split('\n').map((paragraphe) => {
+    const lignes: string[] = []
+    let courante = ''
+    for (const mot of paragraphe.split(' ')) {
+      if (courante === '') courante = mot
+      else if (`${courante} ${mot}`.length <= utile) courante += ` ${mot}`
+      else {
+        lignes.push(courante)
+        courante = mot
+      }
+    }
+    lignes.push(courante)
+    return lignes.map((l) => (l === '' ? '' : `${retrait}  ${l}`)).join('\n')
+  })
+  return `>-\n${paragraphes.join('\n')}\n`
+}
+
+/** Un bloc de leçon, en entrée de liste. */
+function enBloc(bloc: Bloc): string {
+  const r = '    '
+  if (bloc.type === 'code') {
+    let sortie = `  - type: code\n${champ('legende', bloc.legende, r)}`
+    if (bloc.executable) sortie += `${r}executable: true\n`
+    if (bloc.entrees.length > 0) sortie += listeCourte('entrees', bloc.entrees, r)
+    return sortie + texte('python', bloc.python, r)
+  }
+  return `  - type: ${bloc.type}\n${r}texte: ${plie(bloc.texte, r)}`
+}
+
+export function leconEnYaml(brouillon: BrouillonLecon, ordre: number): string {
+  let sortie = ''
+  sortie += champ('id', brouillon.id)
+  sortie += champ('notion', brouillon.notion)
+  sortie += `ordre: ${ordre}\n`
+  sortie += champ('titre', brouillon.titre)
+  sortie += `duree_min: ${brouillon.dureeMin}\n`
+  sortie += 'blocs:\n'
+  for (const bloc of brouillon.blocs) sortie += enBloc(bloc)
+  return sortie
+}
+
+export function nomDeFichierLecon(brouillon: BrouillonLecon): string {
   return `${brouillon.id}.yaml`
 }

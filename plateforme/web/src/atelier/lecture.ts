@@ -14,6 +14,8 @@
 
 import { parseDocument, visit } from 'yaml'
 import { BROUILLON_VIDE, type Brouillon } from './brouillon'
+import type { BrouillonLecon } from './lecon'
+import type { Bloc } from '../contenu/types'
 import type { Test } from '../validation/types'
 
 /** Ce qu'un fichier d'exercice a le droit de porter. */
@@ -181,4 +183,69 @@ export function porteDesCommentaires(texte: string): boolean {
     return undefined
   })
   return trouve
+}
+
+const CHAMPS_LECON = new Set(['id', 'notion', 'ordre', 'titre', 'duree_min', 'blocs'])
+const CHAMPS_DE_BLOC: Record<string, Set<string>> = {
+  paragraphe: new Set(['type', 'texte']),
+  attention: new Set(['type', 'texte']),
+  code: new Set(['type', 'legende', 'python', 'executable', 'entrees']),
+}
+const REQUIS_LECON = ['id', 'notion', 'ordre', 'titre', 'duree_min', 'blocs']
+
+function enBloc(brut: Record<string, unknown>, rang: number): Bloc {
+  const sorte = String(brut.type ?? '')
+  const connus = CHAMPS_DE_BLOC[sorte]
+  if (!connus) throw new FichierRefuse([`le bloc ${rang + 1} a un type inconnu : « ${sorte} ».`])
+
+  const inconnus = Object.keys(brut).filter((cle) => !connus.has(cle))
+  if (inconnus.length > 0) {
+    throw new FichierRefuse([`le bloc ${rang + 1} porte un champ inconnu : ${inconnus.join(', ')}.`])
+  }
+
+  if (sorte === 'code') {
+    return {
+      type: 'code',
+      legende: String(brut.legende ?? ''),
+      python: String(brut.python ?? ''),
+      executable: brut.executable === true,
+      entrees: ((brut.entrees as unknown[]) ?? []).map(String),
+    }
+  }
+  return { type: sorte as 'paragraphe' | 'attention', texte: String(brut.texte ?? '') }
+}
+
+/** Le texte d'un fichier de leçon devient un brouillon, ou le refus dit pourquoi. */
+export function lireLecon(texte: string): BrouillonLecon {
+  const document = parseDocument(texte)
+  const premiere = document.errors[0]
+  if (premiere) {
+    const ligne = premiere.linePos?.[0]?.line
+    /* v8 ignore next */
+    const ou = ligne === undefined ? '' : ` (ligne ${ligne})`
+    throw new FichierRefuse([`ce n'est pas du YAML valide${ou}.`])
+  }
+
+  const brut: unknown = document.toJS()
+  if (brut === null || typeof brut !== 'object' || Array.isArray(brut)) {
+    throw new FichierRefuse(['ce fichier ne décrit pas une leçon.'])
+  }
+  const donnees = brut as Record<string, unknown>
+
+  const inconnus = Object.keys(donnees).filter((cle) => !CHAMPS_LECON.has(cle))
+  if (inconnus.length > 0) {
+    throw new FichierRefuse([
+      `champ inconnu : ${inconnus.join(', ')}. L'atelier le perdrait à l'export.`,
+    ])
+  }
+  const manquants = REQUIS_LECON.filter((cle) => donnees[cle] === undefined)
+  if (manquants.length > 0) throw new FichierRefuse([`il manque ${manquants.join(', ')}.`])
+
+  return {
+    id: String(donnees.id),
+    notion: String(donnees.notion),
+    titre: String(donnees.titre),
+    dureeMin: Number(donnees.duree_min),
+    blocs: (donnees.blocs as Record<string, unknown>[]).map(enBloc),
+  }
 }

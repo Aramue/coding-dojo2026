@@ -17,6 +17,7 @@ import type { ResultatExecution } from '../execution/types'
 import { evaluer } from '../validation/evaluer'
 import type { Test } from '../validation/types'
 import { versExercice, type Brouillon } from './brouillon'
+import type { BrouillonLecon } from './lecon'
 
 export type Essai = { titre: string; verdict: 'vert' | 'rouge'; detail?: string }
 
@@ -209,4 +210,50 @@ export async function remplirAttendu(
   if (resultat.timeout) throw new Error('Le programme tourne en rond : rien à écrire.')
   if (resultat.erreur) throw new Error(`Le programme plante (${resultat.erreur.type}) : rien à écrire.`)
   return resultat.stdout
+}
+
+/**
+ * Chaque exemple de code d'une leçon doit tourner.
+ *
+ * C'est le contrôle cher, et le seul qui compte vraiment ici : un exemple qui
+ * plante, c'est une leçon qu'on lit en cours et qui ne marche pas au tableau.
+ *
+ * La règle « un exemple ne peut pas employer une notion enseignée plus tard »
+ * reste à la construction : c'est une heuristique à base d'expressions
+ * régulières Python, et la faire vivre dans les deux moteurs ferait un miroir
+ * fragile pour un gain faible.
+ */
+export async function eprouverLecon(
+  brouillon: BrouillonLecon,
+  executeur: Executeur,
+): Promise<Essai[]> {
+  const essais: Essai[] = []
+  let rang = 0
+  for (const bloc of brouillon.blocs) {
+    rang += 1
+    if (bloc.type !== 'code') continue
+
+    const titre = `L'exemple « ${bloc.legende || `bloc ${rang}`} » tourne`
+    const resultat = await executeur.executer({
+      code: bloc.python,
+      entrees: bloc.entrees,
+      nomsVariables: [],
+    })
+    if (resultat.timeout) {
+      essais.push({ titre, verdict: 'rouge', detail: 'Le programme ne s’arrête pas.' })
+    } else if (resultat.erreur) {
+      essais.push({
+        titre,
+        verdict: 'rouge',
+        detail: `${resultat.erreur.type} : ${resultat.erreur.message}`,
+      })
+    } else {
+      essais.push({ titre, verdict: 'vert', detail: resultat.stdout || undefined })
+    }
+  }
+
+  if (essais.length === 0) {
+    return [{ titre: 'Aucun exemple de code à éprouver', verdict: 'vert' }]
+  }
+  return essais
 }
