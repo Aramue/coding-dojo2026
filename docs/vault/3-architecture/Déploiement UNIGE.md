@@ -175,16 +175,28 @@ de ce partage. Décision : [[ADR-017 Une seule branche, des releases par tag]].
 1. **DNS** : `dojo.aramue.com` vers l'adresse de la VM.
 2. Cloner dans `/var/www/coding-dojo`, puis écrire `.env` d'après `.env.example` —
    `DOJO_PUBLICATION=127.0.0.1:3200`.
-3. Un bloc nginx minimal en `:80` qui sert `/.well-known/acme-challenge/` depuis `/var/www/certbot`
+3. Le dossier des sauvegardes, qui appartient à root et doit nous revenir :
+   ```bash
+   sudo mkdir -p /var/backups/coding-dojo
+   sudo chown ubuntu:ubuntu /var/backups/coding-dojo
+   sudo chmod 700 /var/backups/coding-dojo
+   ```
+   > [!warning] Oublier cette étape ne casse que le *deuxième* déploiement
+   > `deployer.sh` sauvegarde avant tout et s'arrête à la moindre erreur. Au premier passage aucun
+   > conteneur ne tourne encore, donc `sauvegarde.sh` sort avant d'écrire et le déploiement
+   > réussit. ==C'est le suivant qui échoue==, des semaines plus tard, sur un `Permission denied`
+   > qu'on ne relie pas au jour de l'installation. Le script nomme désormais la commande à lancer.
+4. Un bloc nginx minimal en `:80` qui sert `/.well-known/acme-challenge/` depuis `/var/www/certbot`
    (le webroot que la machine utilise déjà), puis :
    ```bash
    sudo certbot certonly --webroot -w /var/www/certbot -d dojo.aramue.com
    ```
    ==Le certificat doit exister avant le bloc `443`==, sinon `nginx -t` échoue sur un fichier absent
    et refuse de recharger — ce qui couperait aussi les autres sites.
-4. Poser le fichier complet, `sudo nginx -t`, `sudo systemctl reload nginx`.
-5. `deploiement/deployer.sh v1.0.0`
-6. **Ouvrir `/prof` tout de suite** et créer le compte professeur (voir le danger plus haut).
+5. Poser le fichier complet, `sudo nginx -t`, `sudo systemctl reload nginx`.
+6. `deploiement/deployer.sh v1.0.0`
+7. **Ouvrir `/prof` tout de suite** et créer le compte professeur (voir le danger plus haut).
+8. Le cron de sauvegarde, puis `charge_quiz.py` hors séance.
 
 ### Déployer, ensuite
 
