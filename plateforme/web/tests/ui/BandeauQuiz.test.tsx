@@ -13,6 +13,7 @@ describe('BandeauQuiz', () => {
   it('invite à rejoindre une partie qui commence', async () => {
     render(<BandeauQuiz etat={etatEleve({ rejoint: false })} />)
     expect(screen.getByRole('status')).toHaveTextContent('Un quiz a commencé · Les bases de la séance 1')
+    expect(screen.getByRole('status')).toHaveTextContent("Le cours est fermé jusqu'à la fin de la partie")
     await userEvent.click(screen.getByRole('button', { name: 'Rejoindre' }))
     expect(location.pathname).toBe('/quiz')
   })

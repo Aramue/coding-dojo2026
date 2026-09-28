@@ -90,7 +90,8 @@ export function App() {
   )
   const quizOuvert = partieOuverte(quiz.etat)
   // Pendant une partie, tout le cours se ferme : chapitres, leçons, exercices.
-  // Seule l'entrée du quiz reste ouverte.
+  // Deux chemins mènent au quiz, pas trois : le bandeau, qui dit aussi que le
+  // cours est fermé, et l'entrée du sommaire. La page reste dessous, grisée.
   const coursFerme = quizOuvert && !surLeQuiz
 
   // La dernière page de cours visitée : c'est là que l'élève revient après
@@ -188,7 +189,6 @@ export function App() {
           {alerte}
         </p>
       )}
-      {coursFerme && <CoursFerme />}
       {/*
         Toujours là, même cours ouvert : ajouter ou retirer ce conteneur
         remonterait la page, et l'élève perdrait le code qu'il était en train
@@ -224,29 +224,6 @@ export function App() {
         />
       </div>
     </div>
-  )
-}
-
-/**
- * Par-dessus la page de cours, pendant une partie. La page reste montée
- * dessous, inerte : à la fin de la partie, l'élève la retrouve telle quelle.
- */
-function CoursFerme() {
-  return (
-    <section className="cours-ferme" aria-labelledby="titre-cours-ferme">
-      <h2 id="titre-cours-ferme">Le cours est fermé pendant le quiz</h2>
-      <p>Il rouvre dès la fin de la partie, et cette page t'attend telle que tu l'as laissée.</p>
-      <button
-        type="button"
-        className="bouton bouton--primaire"
-        onClick={() => {
-          naviguer({ vue: 'quiz' })
-          scrollTo({ top: 0 })
-        }}
-      >
-        Aller au quiz
-      </button>
-    </section>
   )
 }
 

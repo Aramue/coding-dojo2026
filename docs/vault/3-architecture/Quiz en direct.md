@@ -63,15 +63,20 @@ arriver ; en cours de partie, chez le professeur seulement.
 ## Le cours fermé pendant une partie
 
 De la création d'une partie à sa fin, **tout le cours se ferme** chez tous les élèves : les
-chapitres du sommaire deviennent inertes (grisés, ni clic ni clavier), et une page de cours
-ouverte passe sous un panneau « Le cours est fermé pendant le quiz », avec **Aller au quiz**.
-Seule l'entrée du quiz reste ouverte. Le verrou porte sur le cours entier, pas sur une liste de
+chapitres du sommaire deviennent inertes (grisés, ni clic ni clavier), et la page de cours
+ouverte se grise sous le bandeau, qui dit pourquoi : « Le cours est fermé jusqu'à la fin de la
+partie ». Seule l'entrée du quiz reste ouverte. Le verrou porte sur le cours entier, pas sur une liste de
 chapitres : un chapitre ajouté plus tard se ferme de lui-même.
+
+**Deux chemins vers le quiz, pas trois** (28 septembre 2026) : le bouton du bandeau et l'entrée du
+sommaire. Un panneau au milieu de la page, avec son propre bouton, doublait le bandeau — hors de
+`/quiz`, pendant une partie, toutes les pages sont des pages de cours fermées, et les deux
+apparaissaient toujours ensemble. Le bandeau a pris son message.
 
 Fermé pour tous, et pas seulement pour les joueurs : répondre vaut rejoindre, et un élève qui
 n'aurait pas rejoint pourrait sinon chercher la réponse dans le cours avant de cliquer.
 
-La page reste **montée** sous le panneau (attribut `inert`) : l'élève qui écrivait du code au
+La page reste **montée**, grisée (attribut `inert`) : l'élève qui écrivait du code au
 moment où la partie commence le retrouve intact à la fin. En fin de partie, **Retourner au
 cours** le ramène à la dernière page de cours qu'il avait ouverte.
 

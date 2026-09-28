@@ -211,12 +211,16 @@ describe('App — tableau de bord professeur', () => {
   }
 
   it('ferme tout le cours pendant une partie, et ouvre le chemin du quiz', async () => {
-    etatDuQuiz = PARTIE_OUVERTE
+    etatDuQuiz = { ...PARTIE_OUVERTE, rejoint: false }
     sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
     history.pushState(null, '', '/afficher/cours')
     const { container } = render(<App />)
 
-    expect(await screen.findByRole('heading', { name: 'Le cours est fermé pendant le quiz' })).toBeInTheDocument()
+    expect(await screen.findByRole('status')).toHaveTextContent("Le cours est fermé jusqu'à la fin de la partie")
+    // Deux chemins vers le quiz, pas trois : le bouton du bandeau et l'entrée du sommaire.
+    expect(screen.getAllByRole('button', { name: 'Rejoindre' })).toHaveLength(1)
+    expect(screen.getAllByRole('link', { name: /Quiz en direct/ })).toHaveLength(1)
+    expect(screen.queryByRole('button', { name: 'Aller au quiz' })).toBeNull()
     // La page reste montée dessous, inerte : rien ne se perd.
     expect(container.querySelector('.zone-cours')).toHaveAttribute('inert')
     expect(container.querySelector('.zone-cours main')).not.toBeNull()
@@ -225,12 +229,12 @@ describe('App — tableau de bord professeur', () => {
     expect(screen.getByText('Le cours est fermé pendant le quiz.')).toBeInTheDocument()
     expect(container.querySelector('.menu-quiz')?.closest('[inert]')).toBeNull()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Aller au quiz' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Rejoindre' }))
     expect(location.pathname).toBe('/quiz')
     // Sur la page du quiz, rien n'est inerte, mais le sommaire reste fermé.
     expect(container.querySelector('.zone-cours')).not.toHaveAttribute('inert')
     expect(container.querySelector('.menu__cours')).toHaveAttribute('inert')
-    expect(screen.queryByRole('heading', { name: 'Le cours est fermé pendant le quiz' })).toBeNull()
+    expect(screen.queryByRole('status')).toBeNull()
   })
 
   it('ne ferme rien sans partie ouverte', async () => {

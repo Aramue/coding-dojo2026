@@ -55,39 +55,6 @@
   min-width: 0;
 }
 
-/* Par-dessus la page de cours, pendant un quiz. */
-.cours-ferme {
-  grid-area: contenu;
-  align-self: start;
-  justify-self: center;
-  position: sticky;
-  top: calc(3.5rem + var(--e-5) + var(--e-3));
-  z-index: 8;
-  width: min(30rem, calc(100% - 2 * var(--e-3)));
-  margin-top: var(--e-5);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--e-1);
-  padding: var(--e-4);
-  background: var(--surface);
-  border: 1px solid var(--rule-doux);
-  border-radius: var(--rayon-3);
-  box-shadow: var(--ombre-2);
-  animation: entree-page 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.cours-ferme h2 {
-  font-size: var(--t-5);
-  color: var(--ink);
-}
-
-.cours-ferme p {
-  margin: 0 0 var(--e-1);
-  color: var(--ink-soft);
-  line-height: 1.55;
-}
-
 .zone-cours[inert] > main {
   opacity: 0.35;
   filter: grayscale(1);
@@ -140,6 +107,12 @@
 
 .bandeau-quiz__texte span {
   color: var(--d-label);
+}
+
+/* Le pourquoi de la page grisée, sous le titre du quiz. */
+.bandeau-quiz__texte .bandeau-quiz__ferme {
+  display: block;
+  font-size: var(--t-1);
 }
 
 .bandeau-quiz .bouton {
@@ -376,7 +349,6 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .appli > main,
   .zone-cours > main,
-  .cours-ferme,
   .page__corps,
   .pied {
     animation: none;
