@@ -409,6 +409,161 @@
   padding: 0 0.3rem;
 }
 
+.atelier .rail__nom {
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-1);
+}
+
+/* Une correction pas encore ecrite. Le point se voit d'un coup d'oeil dans
+   une liste ; le mot dit ce qu'il veut dire. */
+.atelier .rail__modifie {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.atelier .rail__modifie::before {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.3em;
+  border-radius: 50%;
+  background: var(--py-yellow);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+/*
+ * Le dossier du depot. Au-dessus du rail : c'est la voie courte pour
+ * corriger, le glisser-deposer reste pour les navigateurs qui ne savent pas
+ * ouvrir un dossier.
+ */
+.atelier .depot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-1);
+  padding: var(--e-2);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-3);
+}
+
+.atelier .depot--absent,
+.atelier .depot__aide {
+  margin: 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.atelier .depot--absent {
+  padding: 0 var(--e-1);
+  background: none;
+  border: 0;
+}
+
+.atelier .depot__tete {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--e-2);
+  font-size: var(--t-2);
+  color: var(--ink);
+}
+
+.atelier .depot__changer {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--t-1);
+  color: var(--py-blue);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.atelier .depot .champ {
+  align-self: stretch;
+}
+
+/* Cent vingt-six fichiers : la liste defile, elle ne pousse pas le
+   formulaire trois ecrans plus bas. */
+.atelier .depot__liste {
+  align-self: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+  border-top: 1px solid var(--rule-doux);
+}
+
+.atelier .depot__fichier {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-1);
+  padding: 0.3rem var(--e-1);
+  border: 0;
+  border-radius: var(--rayon-1);
+  background: none;
+  font: inherit;
+  font-size: var(--t-2);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.atelier .depot__fichier:hover,
+.atelier .depot__fichier:focus-visible {
+  background: var(--ground-2);
+}
+
+.atelier .depot__fichier .mono {
+  flex: 0 0 auto;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.atelier .depot__titre {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Ce qu'une reecriture en place perdrait : a confirmer, pas une erreur. */
+.atelier__confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-2);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--py-yellow) 14%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--py-yellow) 55%, var(--surface));
+  font-size: var(--t-2);
+  color: var(--ink);
+}
+
+.atelier__confirmation p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.atelier__confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1);
+}
+
+.atelier__enregistre {
+  margin: 0;
+  font-size: var(--t-2);
+  color: var(--ok);
+}
+
 /* Le choix de ce qu'on ecrit : un exercice ou une lecon. */
 .atelier__sorte {
   display: flex;

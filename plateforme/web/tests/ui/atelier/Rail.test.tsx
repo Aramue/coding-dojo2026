@@ -70,24 +70,42 @@ describe('Rail — la zone de dépôt', () => {
 })
 
 describe('Rail — les fichiers ouverts', () => {
-  const ACCEPTE: Ouvert = { nom: 's1-01.yaml', sorte: 'exercice', brouillon: { id: 's1-01' } }
+  const ACCEPTE: Ouvert = {
+    cle: 10,
+    nom: 's1-01.yaml',
+    sorte: 'exercice',
+    brouillon: { id: 's1-01' },
+  }
+  const SECOND: Ouvert = { ...ACCEPTE, cle: 11, nom: 's1-02.yaml' }
   const REFUSE: Ouvert = {
+    cle: 12,
     nom: 's1-99.yaml',
     sorte: 'exercice',
     brouillon: null,
     refus: 'champ inconnu : surnom.',
   }
 
-  it('marque celui qu on est en train d éditer', () => {
-    monter([ACCEPTE, { ...ACCEPTE, nom: 's1-02.yaml' }], 1)
+  it('marque celui qu on est en train d éditer, par sa clé', () => {
+    monter([ACCEPTE, SECOND], 11)
     expect(screen.getByRole('button', { name: 'Ouvrir s1-02.yaml' })).toHaveAttribute('aria-current', 'true')
     expect(screen.getByRole('button', { name: 'Ouvrir s1-01.yaml' })).toHaveAttribute('aria-current', 'false')
   })
 
-  it('ouvre celui sur lequel on clique', async () => {
-    const { onChoisir } = monter([ACCEPTE, { ...ACCEPTE, nom: 's1-02.yaml' }], 0)
+  it('ouvre celui sur lequel on clique, désigné par sa clé et non par son rang', async () => {
+    const { onChoisir } = monter([ACCEPTE, SECOND], 10)
     await userEvent.click(screen.getByRole('button', { name: 'Ouvrir s1-02.yaml' }))
-    expect(onChoisir).toHaveBeenCalledWith(1)
+    expect(onChoisir).toHaveBeenCalledWith(11)
+  })
+
+  it('signale un fichier modifié, y compris au lecteur d écran', () => {
+    // Le nom explicite du bouton masque son contenu : « modifié » doit
+    // passer par la description.
+    monter([{ ...ACCEPTE, modifie: true }, SECOND])
+    const modifie = screen.getByRole('button', { name: 'Ouvrir s1-01.yaml' })
+    expect(modifie).toHaveAccessibleDescription('modifié')
+    expect(screen.getByRole('button', { name: 'Ouvrir s1-02.yaml' })).not.toHaveAttribute(
+      'aria-describedby',
+    )
   })
 
   it('garde un fichier refusé dans le rail, avec sa raison', () => {
@@ -114,8 +132,8 @@ describe('Rail — les fichiers ouverts', () => {
   })
 
   it('retire un fichier du rail', async () => {
-    const { onFermer } = monter([ACCEPTE, { ...ACCEPTE, nom: 's1-02.yaml' }], 0)
+    const { onFermer } = monter([ACCEPTE, SECOND], 10)
     await userEvent.click(screen.getByRole('button', { name: 'Retirer s1-02.yaml' }))
-    expect(onFermer).toHaveBeenCalledWith(1)
+    expect(onFermer).toHaveBeenCalledWith(11)
   })
 })

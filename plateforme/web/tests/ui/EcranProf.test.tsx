@@ -523,4 +523,26 @@ describe("EcranProf — le troisième onglet", () => {
 
     expect(location.pathname).toBe('/prof/atelier')
   })
+
+  it("garde ce qu'on écrit dans l'atelier en allant voir la séance", async () => {
+    // Le démonter perdait le dossier du dépôt ouvert et les corrections pas
+    // encore enregistrées.
+    poserLeReseau({ contenu: true })
+    sessionStorage.setItem(CLE, JETON)
+    const { rerender } = render(<EcranProf onglet="seance" />)
+    await screen.findByRole('heading', { name: /séance en cours/i })
+    // Jamais ouvert : l'atelier ne se monte pas pour rien.
+    expect(screen.queryByLabelText('Titre')).toBeNull()
+
+    rerender(<EcranProf onglet="atelier" />)
+    fireEvent.change(await screen.findByLabelText('Titre'), { target: { value: 'En cours' } })
+
+    rerender(<EcranProf onglet="seance" />)
+    expect(await screen.findByRole('heading', { name: /séance en cours/i })).toBeInTheDocument()
+    expect(screen.getByLabelText('Titre')).not.toBeVisible()
+
+    rerender(<EcranProf onglet="atelier" />)
+    expect(screen.getByLabelText('Titre')).toBeVisible()
+    expect(screen.getByLabelText('Titre')).toHaveValue('En cours')
+  })
 })

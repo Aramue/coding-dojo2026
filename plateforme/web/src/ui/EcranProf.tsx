@@ -289,12 +289,16 @@ function BarreOnglets({ courant }: { courant: OngletProf }) {
 }
 
 /**
- * Ce que le professeur voit une fois entré : la séance, sa classe, et l'aperçu
- * de l'espace élève quand il l'ouvre.
+ * Ce que le professeur voit une fois entré : la séance, sa classe, l'atelier,
+ * et l'aperçu de l'espace élève quand il l'ouvre.
  *
- * Un seul onglet est monté à la fois. Le tableau de bord cesse donc
- * d'interroger l'API pendant qu'on est ailleurs, et repart à neuf en
- * revenant — ce qui est de toute façon ce qu'on veut lire.
+ * La séance et la classe ne sont montées que visibles. Le tableau de bord
+ * cesse donc d'interroger l'API pendant qu'on est ailleurs, et repart à neuf
+ * en revenant — ce qui est de toute façon ce qu'on veut lire.
+ *
+ * L'atelier, lui, reste monté une fois ouvert, caché quand on est ailleurs :
+ * aller jeter un œil à la séance ne doit coûter ni le dossier du dépôt
+ * ouvert, ni les corrections pas encore enregistrées.
  */
 function SessionProf({
   jeton,
@@ -319,6 +323,11 @@ function SessionProf({
   // `null` : fermé. Une destination : ouvert là-dessus. `undefined` dans
   // l'objet signifie « ouvre où tu veux », c'est-à-dire la première leçon.
   const [apercu, setApercu] = useState<{ ou?: Destination } | null>(null)
+
+  // Ajusté pendant le rendu, comme React le recommande pour un état qui suit
+  // une prop : un effet laisserait passer un rendu sans l'atelier.
+  const [atelierOuvert, setAtelierOuvert] = useState(onglet === 'atelier')
+  if (onglet === 'atelier' && !atelierOuvert) setAtelierOuvert(true)
 
   return (
     <main className="prof">
@@ -345,7 +354,11 @@ function SessionProf({
 
       {onglet === 'classe' && <Classe jetonProf={jeton} />}
 
-      {onglet === 'atelier' && <Atelier executeur={executeur} />}
+      {atelierOuvert && (
+        <div hidden={onglet !== 'atelier'}>
+          <Atelier executeur={executeur} />
+        </div>
+      )}
 
       {/* La sortie reste hors des onglets : ce n'est pas une activité. */}
       <div className="prof__pied">
