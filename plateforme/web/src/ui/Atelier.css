@@ -408,3 +408,25 @@
   line-height: 1;
   padding: 0 0.3rem;
 }
+
+/* Le choix de ce qu'on ecrit : un exercice ou une lecon. */
+.atelier__sorte {
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  margin: 0;
+  padding: var(--e-1) var(--e-2);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-2);
+  background: var(--surface);
+}
+
+.atelier__sorte legend {
+  padding: 0 var(--e-1);
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+}
+
+.atelier__sorte .champ--case {
+  margin: 0;
+}

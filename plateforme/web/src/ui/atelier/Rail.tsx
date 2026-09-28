@@ -10,6 +10,8 @@ import { useState, type DragEvent } from 'react'
  */
 export type Ouvert = {
   nom: string
+  /** Un exercice ou une lecon : le rail bascule l'atelier dessus. */
+  sorte: 'exercice' | 'lecon'
   /** `null` quand le fichier a été refusé ; la raison est alors dans `refus`. */
   brouillon: unknown | null
   refus?: string

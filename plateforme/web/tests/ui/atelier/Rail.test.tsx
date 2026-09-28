@@ -70,8 +70,13 @@ describe('Rail — la zone de dépôt', () => {
 })
 
 describe('Rail — les fichiers ouverts', () => {
-  const ACCEPTE: Ouvert = { nom: 's1-01.yaml', brouillon: { id: 's1-01' } }
-  const REFUSE: Ouvert = { nom: 's1-99.yaml', brouillon: null, refus: 'champ inconnu : surnom.' }
+  const ACCEPTE: Ouvert = { nom: 's1-01.yaml', sorte: 'exercice', brouillon: { id: 's1-01' } }
+  const REFUSE: Ouvert = {
+    nom: 's1-99.yaml',
+    sorte: 'exercice',
+    brouillon: null,
+    refus: 'champ inconnu : surnom.',
+  }
 
   it('marque celui qu on est en train d éditer', () => {
     monter([ACCEPTE, { ...ACCEPTE, nom: 's1-02.yaml' }], 1)

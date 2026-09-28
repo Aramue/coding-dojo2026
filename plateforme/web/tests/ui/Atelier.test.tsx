@@ -555,3 +555,163 @@ describe('Atelier — le rail, cas de bord', () => {
     )
   })
 })
+
+const LECON = `id: c2-comparer
+notion: comparer
+ordre: 7
+titre: Comparer
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Une comparaison pose une question à Python.
+  - type: code
+    legende: Deux questions
+    executable: true
+    python: |
+      print(12 > 7)
+`
+
+describe("Atelier — écrire une leçon", () => {
+  async function passerEnLecon() {
+    await userEvent.click(screen.getByRole('radio', { name: 'Une leçon' }))
+  }
+
+  it('bascule du formulaire d exercice à celui de leçon', async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    expect(screen.getByLabelText('Type')).toBeInTheDocument()
+
+    await passerEnLecon()
+
+    expect(screen.queryByLabelText('Type')).toBeNull()
+    expect(screen.getByLabelText(/Durée de lecture/)).toBeInTheDocument()
+  })
+
+  it("monte l'écran de cours de l'élève dans l'aperçu", async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    await passerEnLecon()
+
+    fireEvent.change(screen.getByLabelText('Identifiant'), { target: { value: 'c2-comparer' } })
+    fireEvent.change(screen.getByLabelText('Titre'), { target: { value: 'Comparer' } })
+    fireEvent.change(screen.getByLabelText('Notion'), { target: { value: 'comparer' } })
+    await userEvent.click(screen.getByRole('button', { name: '+ Paragraphe' }))
+    fireEvent.change(screen.getByLabelText('Texte'), { target: { value: 'Une comparaison.' } })
+
+    const apercu = document.querySelector('.atelier__apercu') as HTMLElement
+    expect(within(apercu).getByRole('heading', { name: 'Comparer' })).toBeInTheDocument()
+    expect(within(apercu).getByText('Une comparaison.')).toBeInTheDocument()
+  })
+
+  it("réclame ce qui manque avant d'exporter une leçon", async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    await passerEnLecon()
+
+    expect(screen.getByText(/À compléter d'abord : un identifiant bien formé/)).toBeInTheDocument()
+    expect(screen.getByText(/au moins un bloc/)).toBeInTheDocument()
+  })
+
+  it('éprouve les exemples de code de la leçon', async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('19\n')} />)
+    await screen.findByLabelText('Identifiant')
+    await passerEnLecon()
+    fireEvent.change(screen.getByLabelText('Identifiant'), { target: { value: 'c2-comparer' } })
+    fireEvent.change(screen.getByLabelText('Titre'), { target: { value: 'Comparer' } })
+    fireEvent.change(screen.getByLabelText('Notion'), { target: { value: 'comparer' } })
+    await userEvent.click(screen.getByRole('button', { name: '+ Code' }))
+    fireEvent.change(screen.getByLabelText('Légende'), { target: { value: 'Additionner' } })
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Essais' }))
+    await userEvent.click(screen.getByRole('button', { name: /Lancer les essais/ }))
+
+    expect(await screen.findByText("L'exemple « Additionner » tourne")).toBeInTheDocument()
+  })
+
+  it("charge une leçon déposée, et bascule dessus tout seul", async () => {
+    // Le nom du fichier annonce la sorte : `c…` pour une leçon.
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+
+    lacher([{ nom: 'c2-comparer.yaml', texte: LECON }])
+
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('c2-comparer'))
+    expect(screen.getByRole('radio', { name: 'Une leçon' })).toBeChecked()
+    expect(screen.getByLabelText(/Durée de lecture/)).toHaveValue(4)
+    expect(screen.getByLabelText('Légende')).toHaveValue('Deux questions')
+  })
+
+  it("réexporte une leçon reprise sans en changer le sens", async () => {
+    poserLeReseau()
+    const ecrit: string[] = []
+    vi.stubGlobal(
+      'showSaveFilePicker',
+      vi.fn(async () => ({
+        createWritable: async () => ({
+          write: async (t: string) => void ecrit.push(t),
+          close: vi.fn(),
+        }),
+      })),
+    )
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    lacher([{ nom: 'c2-comparer.yaml', texte: LECON }])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('c2-comparer'))
+
+    await userEvent.click(screen.getByRole('button', { name: /Enregistrer le fichier/ }))
+
+    await waitFor(() => expect(ecrit).toHaveLength(1))
+    expect(ecrit[0]).toContain('ordre: 7')
+    expect(ecrit[0]).toContain('duree_min: 4')
+    expect(ecrit[0]).toContain('texte: >-')
+  })
+
+  it("quitte le fichier ouvert en changeant de sorte", async () => {
+    // Garder le fichier courant enregistrerait une leçon dans un exercice.
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    lacher([{ nom: 's3-07.yaml', texte: FICHIER }])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+
+    await passerEnLecon()
+    fireEvent.change(screen.getByLabelText('Titre'), { target: { value: 'Une leçon' } })
+
+    await userEvent.click(screen.getByRole('button', { name: 'Ouvrir s3-07.yaml' }))
+    expect(screen.getByLabelText('Titre')).toHaveValue('La boucle qui compte mal')
+  })
+
+  it("exporte une leçon dont la notion n'est pas encore publiée", async () => {
+    // On peut écrire la leçon d'une notion du chapitre 2 avant que la table
+    // ne la déclare. L'ordre retombe alors sur 1, et la construction
+    // tranchera.
+    poserLeReseau()
+    const ecrit: string[] = []
+    vi.stubGlobal(
+      'showSaveFilePicker',
+      vi.fn(async () => ({
+        createWritable: async () => ({
+          write: async (t: string) => void ecrit.push(t),
+          close: vi.fn(),
+        }),
+      })),
+    )
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    lacher([
+      { nom: 'c4-inconnue.yaml', texte: LECON.replace('notion: comparer', 'notion: fantome') },
+    ])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('c2-comparer'))
+
+    await userEvent.click(screen.getByRole('button', { name: /Enregistrer le fichier/ }))
+
+    await waitFor(() => expect(ecrit).toHaveLength(1))
+    expect(ecrit[0]).toContain('ordre: 1')
+  })
+})

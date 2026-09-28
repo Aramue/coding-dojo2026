@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { eprouverLecon } from '../../src/atelier/controles'
+import { leconEnYaml } from '../../src/atelier/yaml'
 import {
   blocNeuf,
   champsManquantsLecon,
@@ -203,5 +204,23 @@ describe('eprouverLecon', () => {
     await expect(eprouverLecon(COMPLETE, executeur())).resolves.toEqual([
       { titre: 'Aucun exemple de code à éprouver', verdict: 'vert' },
     ])
+  })
+})
+
+describe('leconEnYaml — un texte à plusieurs paragraphes', () => {
+  it('garde la ligne vide qui les sépare', () => {
+    // Dans un scalaire replié, c'est la ligne vide qui marque le saut de
+    // paragraphe : la perdre collerait les deux en un seul pavé.
+    const sortie = leconEnYaml(
+      {
+        id: 'c2-comparer',
+        notion: 'comparer',
+        titre: 'Comparer',
+        dureeMin: 4,
+        blocs: [{ type: 'paragraphe', texte: 'Avant.\n\nAprès.' }],
+      },
+      7,
+    )
+    expect(sortie).toContain('texte: >-\n      Avant.\n\n      Après.\n')
   })
 })

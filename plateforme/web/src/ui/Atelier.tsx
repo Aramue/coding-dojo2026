@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react'
 import { BROUILLON_VIDE, champsManquants, versExercice, type Brouillon } from '../atelier/brouillon'
-import { eprouver, remplirAttendu, type Essai } from '../atelier/controles'
+import { eprouver, eprouverLecon, remplirAttendu, type Essai } from '../atelier/controles'
 import { enregistrerEnPlace, peutEnregistrerEnPlace, telecharger } from '../atelier/fichiers'
-import { FichierRefuse, lireExercice, porteDesCommentaires } from '../atelier/lecture'
+import {
+  champsManquantsLecon,
+  LECON_VIDE,
+  versLecon,
+  type BrouillonLecon,
+} from '../atelier/lecon'
+import { FichierRefuse, lireExercice, lireLecon, porteDesCommentaires } from '../atelier/lecture'
 import { chargerSchema, type SchemaPublie } from '../atelier/schema'
-import { enYaml, nomDeFichier } from '../atelier/yaml'
+import { enYaml, leconEnYaml, nomDeFichier, nomDeFichierLecon } from '../atelier/yaml'
 import { useContenuPublie } from '../prof/contenu'
 import type { Executeur } from '../execution/executeur'
 import { EcranExercice } from './EcranExercice'
+import { PageCours } from './PageCours'
 import { Essais } from './atelier/Essais'
 import { Formulaire } from './atelier/Formulaire'
+import { FormulaireLecon } from './atelier/FormulaireLecon'
 import { Rail, type Ouvert } from './atelier/Rail'
 import { Tests } from './atelier/Tests'
 import './Atelier.css'
@@ -26,10 +34,15 @@ import './Atelier.css'
  */
 type Volet = 'apercu' | 'essais'
 
+/** Ce qu'on est en train d'ecrire. Le rail bascule dessus tout seul. */
+type Sorte = 'exercice' | 'lecon'
+
 export function Atelier({ executeur }: { executeur: Executeur }) {
   const contenu = useContenuPublie()
   const [schema, setSchema] = useState<SchemaPublie | null>(null)
+  const [sorte, setSorte] = useState<Sorte>('exercice')
   const [brouillon, setBrouillon] = useState<Brouillon>(BROUILLON_VIDE)
+  const [lecon, setLecon] = useState<BrouillonLecon>(LECON_VIDE)
   // Les fichiers déposés. Chacun garde ses modifications : on passe de l'un à
   // l'autre sans rien perdre.
   const [ouverts, setOuverts] = useState<Ouvert[]>([])
@@ -53,18 +66,28 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
     }
   }, [])
 
-  const manquants = champsManquants(brouillon)
+  const manquants = sorte === 'exercice' ? champsManquants(brouillon) : champsManquantsLecon(lecon)
 
-  function changer(suivant: Brouillon) {
-    setBrouillon(suivant)
+  /** Enregistre dans le fichier courant, et oublie les essais devenus faux. */
+  function retenir(suivant: Brouillon | BrouillonLecon) {
     if (courant !== null) {
       setOuverts((liste) =>
         liste.map((o, rang) => (rang === courant ? { ...o, brouillon: suivant } : o)),
       )
     }
-    // Les essais valaient pour l'état d'avant : les garder affichés
-    // ferait croire à un exercice éprouvé qu'on vient de modifier.
+    // Les essais valaient pour l'état d'avant : les garder affichés ferait
+    // croire à un contenu éprouvé qu'on vient de modifier.
     setEssais(null)
+  }
+
+  function changer(suivant: Brouillon) {
+    setBrouillon(suivant)
+    retenir(suivant)
+  }
+
+  function changerLecon(suivant: BrouillonLecon) {
+    setLecon(suivant)
+    retenir(suivant)
   }
 
   async function deposer(fichiers: File[]) {
@@ -76,9 +99,15 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
         // pas lire faisait sinon échouer tout le lâcher, et les fichiers
         // sains déposés avec lui étaient perdus.
         const texte = await fichier.text()
+        // Un fichier de leçon porte un identifiant en `c…`, un exercice en
+        // `s…`. On lit selon ce que le nom annonce, pour que le refus parle
+        // du bon schéma plutôt que de reprocher à une leçon de ne pas être
+        // un exercice.
+        const estLecon = fichier.name.startsWith('c')
         lus.push({
           nom: fichier.name,
-          brouillon: lireExercice(texte),
+          sorte: estLecon ? 'lecon' : 'exercice',
+          brouillon: estLecon ? lireLecon(texte) : lireExercice(texte),
           commente: porteDesCommentaires(texte),
         })
       } catch (erreur) {
@@ -86,6 +115,7 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
         // laisserait croire qu'on ne l'a jamais lâché.
         lus.push({
           nom: fichier.name,
+          sorte: fichier.name.startsWith('c') ? 'lecon' : 'exercice',
           brouillon: null,
           refus:
             erreur instanceof FichierRefuse ? erreur.raisons.join(' ') : 'fichier illisible.',
@@ -96,12 +126,15 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
     setOuverts([...ouverts, ...lus])
     // On ouvre le premier qui a été accepté, s'il y en a un.
     const premier = lus.findIndex((o) => o.brouillon !== null)
-    if (premier !== -1) choisir(debut + premier, lus[premier]!.brouillon as Brouillon)
+    if (premier !== -1) choisir(debut + premier, lus[premier]!)
   }
 
-  function choisir(rang: number, quoi: Brouillon) {
+  /** Ouvre un fichier du rail, et bascule sur sa sorte. */
+  function choisir(rang: number, ouvert: Ouvert) {
     setCourant(rang)
-    setBrouillon(quoi)
+    setSorte(ouvert.sorte)
+    if (ouvert.sorte === 'lecon') setLecon(ouvert.brouillon as BrouillonLecon)
+    else setBrouillon(ouvert.brouillon as Brouillon)
     setEssais(null)
   }
 
@@ -109,11 +142,15 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
     setEnCours(true)
     setAlerte(null)
     try {
-      // `contenu` est forcément là : la page rend un écran d'attente tant
-      // qu'il manque, et ce bouton n'existe pas avant. Le `??` est une garde
-      // que TypeScript exige, pas un cas qui se produit.
-      /* v8 ignore next */
-      setEssais(await eprouver(brouillon, contenu?.notions ?? [], executeur))
+      if (sorte === 'lecon') {
+        setEssais(await eprouverLecon(lecon, executeur))
+      } else {
+        // `contenu` est forcément là : la page rend un écran d'attente tant
+        // qu'il manque, et ce bouton n'existe pas avant. Le `??` est une
+        // garde que TypeScript exige, pas un cas qui se produit.
+        /* v8 ignore next */
+        setEssais(await eprouver(brouillon, contenu?.notions ?? [], executeur))
+      }
     } finally {
       setEnCours(false)
     }
@@ -136,8 +173,12 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
 
   async function sortir() {
     setAlerte(null)
-    const texte = enYaml(brouillon)
-    const nom = nomDeFichier(brouillon)
+    // L'ordre d'une leçon est celui de sa notion : le schéma refuse le
+    // désaccord, et l'atelier ne peut donc pas le laisser choisir.
+    const notion = contenu?.notions.find((n) => n.id === lecon.notion)
+    const texte =
+      sorte === 'lecon' ? leconEnYaml(lecon, notion?.ordre ?? 1) : enYaml(brouillon)
+    const nom = sorte === 'lecon' ? nomDeFichierLecon(lecon) : nomDeFichier(brouillon)
     if (!peutEnregistrerEnPlace()) {
       telecharger(nom, texte)
       return
@@ -165,7 +206,7 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
         <Rail
           ouverts={ouverts}
           courant={courant}
-          onChoisir={(rang) => choisir(rang, ouverts[rang]!.brouillon as Brouillon)}
+          onChoisir={(rang) => choisir(rang, ouverts[rang]!)}
           onDeposer={deposer}
           onFermer={(rang) => {
             setOuverts((liste) => liste.filter((_, i) => i !== rang))
@@ -173,13 +214,50 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
           }}
         />
 
-        <Formulaire
-          brouillon={brouillon}
-          notions={contenu.notions}
-          schema={schema}
-          onChange={changer}
-        />
-        <Tests tests={brouillon.tests} onChange={(tests) => changer({ ...brouillon, tests })} onRemplir={remplir} />
+        <fieldset className="atelier__sorte">
+          <legend>Ce que j'écris</legend>
+          {(
+            [
+              ['exercice', 'Un exercice'],
+              ['lecon', 'Une leçon'],
+            ] as [Sorte, string][]
+          ).map(([id, libelle]) => (
+            <label key={id} className="champ champ--case">
+              <input
+                type="radio"
+                name="sorte"
+                checked={sorte === id}
+                onChange={() => {
+                  setSorte(id)
+                  // On quitte le fichier ouvert : il est d'une autre sorte,
+                  // et le garder courant enregistrerait un exercice dans une
+                  // leçon.
+                  setCourant(null)
+                  setEssais(null)
+                }}
+              />
+              <span>{libelle}</span>
+            </label>
+          ))}
+        </fieldset>
+
+        {sorte === 'exercice' ? (
+          <>
+            <Formulaire
+              brouillon={brouillon}
+              notions={contenu.notions}
+              schema={schema}
+              onChange={changer}
+            />
+            <Tests
+              tests={brouillon.tests}
+              onChange={(tests) => changer({ ...brouillon, tests })}
+              onRemplir={remplir}
+            />
+          </>
+        ) : (
+          <FormulaireLecon brouillon={lecon} notions={contenu.notions} onChange={changerLecon} />
+        )}
 
         <div className="atelier__sortie">
           <button
@@ -228,12 +306,35 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
 
         {volet === 'apercu' && (
           <div className="atelier__apercu">
-            <EcranExercice
-              key={brouillon.id}
-              exercice={versExercice(brouillon, contenu.notions)}
-              executeur={executeur}
-              onTentative={() => undefined}
-            />
+            {sorte === 'exercice' ? (
+              <EcranExercice
+                key={brouillon.id}
+                exercice={versExercice(brouillon, contenu.notions)}
+                executeur={executeur}
+                onTentative={() => undefined}
+              />
+            ) : (
+              // `PageCours` attend un groupe de notion, pas une leçon seule :
+              // c'est ainsi que l'élève la reçoit. Les exercices sont vides,
+              // la progression aussi — rien n'est enregistré dans l'aperçu.
+              <PageCours
+                key={lecon.id}
+                groupe={{
+                  ...(contenu.notions.find((n) => n.id === lecon.notion) ?? {
+                    id: '',
+                    ordre: 1,
+                    titre: '',
+                    famille: 'variables' as const,
+                    chapitre: '',
+                  }),
+                  lecon: versLecon(lecon, contenu.notions),
+                  exercices: [],
+                  faits: 0,
+                  total: 0,
+                }}
+                executeur={executeur}
+              />
+            )}
           </div>
         )}
 

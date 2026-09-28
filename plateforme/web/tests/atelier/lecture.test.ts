@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { FichierRefuse, lireExercice, porteDesCommentaires } from '../../src/atelier/lecture'
+import {
+  FichierRefuse,
+  lireExercice,
+  lireLecon,
+  porteDesCommentaires,
+} from '../../src/atelier/lecture'
 
 const COMPLET = `id: s2-14
 concept: booleens
@@ -202,5 +207,128 @@ describe('lireExercice — des tests réduits au minimum', () => {
 describe('porteDesCommentaires — au niveau du document', () => {
   it('en voit un posé après tout le contenu', () => {
     expect(porteDesCommentaires(COMPLET + '# une remarque finale\n')).toBe(true)
+  })
+})
+
+const LECON = `id: c2-comparer
+notion: comparer
+ordre: 7
+titre: Comparer
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Une comparaison pose une question.
+  - type: code
+    legende: Deux questions
+    executable: true
+    python: |
+      print(12 > 7)
+`
+
+function refusLecon(texte: string): string[] {
+  try {
+    lireLecon(texte)
+  } catch (erreur) {
+    if (erreur instanceof FichierRefuse) return erreur.raisons
+    throw erreur
+  }
+  throw new Error('le fichier aurait dû être refusé')
+}
+
+describe('lireLecon — une leçon bien formée', () => {
+  it('rend un brouillon complet', () => {
+    const l = lireLecon(LECON)
+    expect(l.id).toBe('c2-comparer')
+    expect(l.dureeMin).toBe(4)
+    expect(l.blocs).toEqual([
+      { type: 'paragraphe', texte: 'Une comparaison pose une question.' },
+      {
+        type: 'code',
+        legende: 'Deux questions',
+        python: 'print(12 > 7)\n',
+        executable: true,
+        entrees: [],
+      },
+    ])
+  })
+
+  it("n'invente pas un exécutable là où il n'est pas déclaré", () => {
+    const l = lireLecon(LECON.replace('    executable: true\n', ''))
+    expect(l.blocs[1]).toMatchObject({ executable: false })
+  })
+
+  it('lit les entrées simulées d un bloc', () => {
+    const l = lireLecon(LECON.replace('    executable: true', '    entrees: ["Camille"]'))
+    expect(l.blocs[1]).toMatchObject({ entrees: ['Camille'] })
+  })
+
+  it('donne leurs valeurs par défaut aux champs absents d un bloc', () => {
+    const l = lireLecon(
+      LECON.replace(
+        /  - type: code\n    legende: Deux questions\n    executable: true\n    python: \|\n      print\(12 > 7\)\n/,
+        '  - type: code\n',
+      ),
+    )
+    expect(l.blocs[1]).toEqual({
+      type: 'code',
+      legende: '',
+      python: '',
+      executable: false,
+      entrees: [],
+    })
+  })
+
+  it('lit un bloc attention', () => {
+    const l = lireLecon(LECON.replace('  - type: paragraphe', '  - type: attention'))
+    expect(l.blocs[0]).toEqual({ type: 'attention', texte: 'Une comparaison pose une question.' })
+  })
+
+  it('accepte un bloc de texte vide', () => {
+    const l = lireLecon(
+      LECON.replace('    texte: >-\n      Une comparaison pose une question.\n', ''),
+    )
+    expect(l.blocs[0]).toEqual({ type: 'paragraphe', texte: '' })
+  })
+})
+
+describe('lireLecon — ce qu il refuse', () => {
+  it('nomme la ligne fautive d un YAML cassé', () => {
+    expect(refusLecon('id: c2\ntitre: "pas fermé\n')[0]).toMatch(/YAML valide \(ligne \d+\)/)
+  })
+
+  it("refuse un document qui n'est pas une leçon", () => {
+    expect(refusLecon('- un\n- deux\n')[0]).toMatch(/ne décrit pas une leçon/)
+  })
+
+  it('refuse un champ inconnu plutôt que de le perdre à l export', () => {
+    expect(refusLecon(LECON.replace('titre: Comparer', 'titre: Comparer\nsurnom: Cam'))[0]).toMatch(
+      /champ inconnu : surnom/,
+    )
+  })
+
+  it('nomme les champs requis qui manquent', () => {
+    const raisons = refusLecon('id: c2-comparer\nnotion: comparer\n')
+    expect(raisons[0]).toMatch(/ordre/)
+    expect(raisons[0]).toMatch(/blocs/)
+  })
+
+  it('refuse un bloc dont le type est inconnu', () => {
+    expect(refusLecon(LECON.replace('  - type: paragraphe', '  - type: encadre'))[0]).toMatch(
+      /le bloc 1 a un type inconnu : « encadre »/,
+    )
+  })
+
+  it("refuse un bloc sans type plutôt que d'en deviner un", () => {
+    const sansType = LECON.replace(
+      '  - type: paragraphe\n    texte: >-\n      Une comparaison pose une question.\n',
+      '  - texte: Sans type.\n',
+    )
+    expect(refusLecon(sansType)[0]).toMatch(/le bloc 1 a un type inconnu/)
+  })
+
+  it('refuse un champ inconnu dans un bloc, en le situant', () => {
+    const raisons = refusLecon(LECON.replace('    legende: Deux questions', '    couleur: bleu'))
+    expect(raisons[0]).toMatch(/le bloc 2 porte un champ inconnu : couleur/)
   })
 })
