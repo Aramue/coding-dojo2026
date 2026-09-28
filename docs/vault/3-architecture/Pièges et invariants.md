@@ -190,8 +190,37 @@ Le 4 septembre 2026, `QG_SECRET`, `QG_CODE_PROF`, `QG_BDD` et `QG_DOMAINE` sont 
 `docker compose` refuse alors de démarrer avec un message qui ne nomme que la nouvelle variable.
 
 Depuis le 25 septembre 2026, `DOJO_SECRET` et `DOJO_CODE_PROF` ne sont plus lues du tout, et
-`docker compose` n'exige plus aucune variable. Il n'en reste qu'une, `DOJO_DOMAINE`, facultative.
-Un `.env` de serveur qui les porte encore ne casse rien : les deux lignes sont simplement ignorées.
+`docker compose` n'exige plus aucun secret. Un `.env` de serveur qui les porte encore ne casse
+rien : les lignes sont simplement ignorées.
+
+Le 28 septembre 2026, `DOJO_DOMAINE` a disparu avec le TLS de Caddy, et deux réglages
+d'exploitation sont apparus : `DOJO_VERSION`, le tag déployé, et `DOJO_PUBLICATION`, l'adresse où
+le conteneur web publie son port. ==Le second est le seul qui casse quelque chose s'il manque== :
+sans lui, la valeur par défaut est `80`, et sur une machine où nginx tient déjà ce port le
+conteneur refuse de démarrer. `deployer.sh` vérifie sa présence avant tout le reste, plutôt que
+d'échouer à moitié.
+
+### La sonnette du quiz est silencieuse, donc un proxy la ferme
+
+`proxy_read_timeout` vaut 60 s par défaut dans nginx, et la sonnette ne transmet rien entre deux
+questions : sans un `location /api/quiz/flux` à part qui monte ce délai, chaque élève se rebranche
+une fois par minute pendant toute la partie.
+
+**Ce qui casse :** rien de visible, et c'est le piège. Le repli par relecture
+([[ADR-016 Temps réel par sonnette WebSocket]]) rattrape la coupure, donc le quiz a l'air de
+marcher ; on ne le découvre qu'en lisant les journaux, ou en se demandant pourquoi vingt-quatre
+connexions se rouvrent en boucle. Le même raisonnement vaut pour tout proxy d'établissement.
+
+### Sur un serveur partagé, c'est à nous de nous borner
+
+La VM de production fait tourner un autre service. Il n'y a **pas** de
+`/etc/docker/daemon.json`, donc rien ne limite les journaux de conteneur par défaut ; et l'OOM
+killer du noyau choisit sa victime sur la mémoire consommée, pas sur l'ancienneté.
+
+**Ce qui casse :** un `docker system prune` global, ou un `daemon.json` ajouté pour nous, toucherait
+le voisin. `docker-compose.yml` borne donc nos journaux, `production.yml` borne notre mémoire, et
+`deployer.sh` ne supprime que des images de notre propre dépôt. ==Aucune commande de ce dépôt n'agit
+à l'échelle du démon Docker.==
 
 ## Interface
 

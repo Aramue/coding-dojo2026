@@ -115,9 +115,23 @@ démarrage et rangée dans la base SQLite, avec l'empreinte du mot de passe
 professeur. Les deux vivent dans le volume `donnees` : sauvegarder la base,
 c'est sauvegarder la progression **et** le compte.
 
-1. `docker compose up -d --build`, avec `DOJO_DOMAINE` dans un `.env` si le
-   serveur a un nom (voir `.env.example`).
-2. Ouvrir `/prof` **tout de suite** et créer le compte professeur.
+En production, la machine **ne construit rien** : les images viennent de GHCR, où
+la CI les a construites et testées au tag.
+
+```bash
+/var/www/coding-dojo/deploiement/deployer.sh v1.1.0
+```
+
+Le script sauvegarde la base, passe le dépôt sur le tag, tire les images,
+démarre sans construire, attend que `/api/sante` réponde, puis supprime nos
+images anciennes au-delà des deux dernières. Le retour arrière est le même
+script avec le tag précédent. Au premier déploiement seulement : ouvrir `/prof`
+**tout de suite** et créer le compte professeur.
+
+Le reste — nginx qui termine le TLS devant `127.0.0.1:3200`, le certificat, la
+sauvegarde nocturne avec rétention, et les bornes qui empêchent la pile de
+remplir un disque partagé avec un autre service — est dans
+[Déploiement UNIGE](docs/vault/3-architecture/Déploiement%20UNIGE.md).
 
 Mot de passe oublié :
 
