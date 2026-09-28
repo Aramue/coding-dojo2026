@@ -380,3 +380,178 @@ describe('Atelier — les cas de repli', () => {
     expect(appels).toEqual([])
   })
 })
+
+const FICHIER = `id: s3-07
+concept: boucles
+notion: comparer
+seance: 3
+niveau: normal
+type: debug
+titre: La boucle qui compte mal
+obligatoire: true
+enonce: |
+  Répare la boucle.
+depart: |
+  for i in range(3):
+indices:
+  - Regarde la borne.
+tests:
+  - type: interdit
+    motif: xyzzy
+solution: |
+  for i in range(4):
+`
+
+/** Un lâcher de fichiers, tel que le navigateur le produit. */
+function lacher(contenus: { nom: string; texte: string }[]) {
+  const fichiers = contenus.map(({ nom, texte }) => new File([texte], nom, { type: 'text/yaml' }))
+  fireEvent.drop(screen.getByLabelText('Fichiers ouverts'), { dataTransfer: { files: fichiers } })
+}
+
+describe("Atelier — reprendre un exercice déjà écrit", () => {
+  it('charge un fichier déposé dans le formulaire', async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+
+    lacher([{ nom: 's3-07.yaml', texte: FICHIER }])
+
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+    expect(screen.getByLabelText('Titre')).toHaveValue('La boucle qui compte mal')
+    expect(screen.getByText("Séance 3, déduite de l'identifiant.")).toBeInTheDocument()
+    expect(screen.getByLabelText('Motif')).toHaveValue('xyzzy')
+  })
+
+  it('garde les modifications de chaque fichier en passant de l un à l autre', async () => {
+    // Deux exercices ouverts, deux états distincts : revenir au premier doit
+    // retrouver ce qu'on y avait tapé.
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+
+    lacher([
+      { nom: 's3-07.yaml', texte: FICHIER },
+      { nom: 's3-08.yaml', texte: FICHIER.replace('s3-07', 's3-08') },
+    ])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+
+    fireEvent.change(screen.getByLabelText('Titre'), { target: { value: 'Titre retouché' } })
+    await userEvent.click(screen.getByRole('button', { name: 'Ouvrir s3-08.yaml' }))
+    expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-08')
+
+    await userEvent.click(screen.getByRole('button', { name: 'Ouvrir s3-07.yaml' }))
+    expect(screen.getByLabelText('Titre')).toHaveValue('Titre retouché')
+  })
+
+  it('charge les fichiers valides même quand un autre est refusé', async () => {
+    // Déposer une séance entière ne doit pas échouer en bloc pour un fichier
+    // de travers.
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+
+    lacher([
+      { nom: 'casse.yaml', texte: 'titre: "pas fermé\n' },
+      { nom: 's3-07.yaml', texte: FICHIER },
+    ])
+
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+    expect(screen.getByText(/YAML valide/)).toBeInTheDocument()
+  })
+
+  it("prévient qu'un fichier commenté perdra ses commentaires", async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+
+    lacher([{ nom: 's3-07.yaml', texte: '# Pourquoi cet exercice existe\n' + FICHIER }])
+
+    expect(await screen.findByText(/l'export ne les rendra pas/)).toBeInTheDocument()
+  })
+
+  it("laisse le formulaire tranquille quand tous les fichiers sont refusés", async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    fireEvent.change(screen.getByLabelText('Titre'), { target: { value: 'En cours' } })
+
+    lacher([{ nom: 'casse.yaml', texte: 'titre: "pas fermé\n' }])
+
+    await screen.findByText(/YAML valide/)
+    expect(screen.getByLabelText('Titre')).toHaveValue('En cours')
+  })
+
+  it('retire un fichier du rail', async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    lacher([{ nom: 's3-07.yaml', texte: FICHIER }])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+
+    await userEvent.click(screen.getByRole('button', { name: 'Retirer s3-07.yaml' }))
+
+    expect(screen.getByText(/Dépose ici un ou plusieurs fichiers/)).toBeInTheDocument()
+  })
+
+  it("réexporte un fichier repris sans en changer le sens", async () => {
+    poserLeReseau()
+    const ecrit: string[] = []
+    vi.stubGlobal(
+      'showSaveFilePicker',
+      vi.fn(async () => ({
+        createWritable: async () => ({
+          write: async (t: string) => void ecrit.push(t),
+          close: vi.fn(),
+        }),
+      })),
+    )
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    lacher([{ nom: 's3-07.yaml', texte: FICHIER }])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+
+    await userEvent.click(screen.getByRole('button', { name: /Enregistrer le fichier/ }))
+
+    await waitFor(() => expect(ecrit).toHaveLength(1))
+    expect(ecrit[0]).toBe(FICHIER)
+  })
+})
+
+describe('Atelier — le rail, cas de bord', () => {
+  it("dit « fichier illisible » quand la lecture elle-même échoue", async () => {
+    // Un fichier que le navigateur ne sait pas lire — support retiré en
+    // pleine lecture, par exemple. Ce n'est pas un refus de schéma.
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+
+    const casse = new File([''], 'illisible.yaml')
+    Object.defineProperty(casse, 'text', {
+      value: () => Promise.reject(new Error('support retiré')),
+    })
+    fireEvent.drop(screen.getByLabelText('Fichiers ouverts'), {
+      dataTransfer: { files: [casse] },
+    })
+
+    expect(await screen.findByText('fichier illisible.')).toBeInTheDocument()
+  })
+
+  it("garde le fichier courant quand on en retire un autre", async () => {
+    poserLeReseau()
+    render(<Atelier executeur={executeurQuiRend('')} />)
+    await screen.findByLabelText('Identifiant')
+    lacher([
+      { nom: 's3-07.yaml', texte: FICHIER },
+      { nom: 's3-08.yaml', texte: FICHIER.replace('s3-07', 's3-08') },
+    ])
+    await waitFor(() => expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07'))
+
+    await userEvent.click(screen.getByRole('button', { name: 'Retirer s3-08.yaml' }))
+
+    expect(screen.getByLabelText('Identifiant')).toHaveValue('s3-07')
+    expect(screen.getByRole('button', { name: 'Ouvrir s3-07.yaml' })).toHaveAttribute(
+      'aria-current',
+      'true',
+    )
+  })
+})

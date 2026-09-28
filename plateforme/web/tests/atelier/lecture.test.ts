@@ -154,3 +154,53 @@ describe('porteDesCommentaires', () => {
     )
   })
 })
+
+describe('lireExercice — des tests réduits au minimum', () => {
+  function avecTest(bloc: string) {
+    return lireExercice(
+      COMPLET.replace(
+        /  - type: sortie\n    entrees: \["4321"\]\n    attendu: \|-\n      Vrai\n/,
+        bloc,
+      ),
+    ).tests[0]
+  }
+
+  it("refuse un test sans type plutôt que d'en deviner un", () => {
+    const sansType = COMPLET.replace(
+      '  - type: sortie\n    entrees: ["4321"]\n    attendu: |-\n      Vrai\n',
+      '  - entrees: []\n',
+    )
+    expect(refus(sansType)[0]).toMatch(/type inconnu/)
+  })
+
+  it('donne leurs valeurs par défaut aux champs absents', () => {
+    // Un fichier écrit à la main peut omettre `entrees` ou `options` : on les
+    // remplit plutôt que de laisser passer `undefined` dans le formulaire.
+    expect(avecTest('  - type: sortie\n')).toEqual({ type: 'sortie', entrees: [], attendu: '' })
+    expect(avecTest('  - type: variable\n')).toEqual({ type: 'variable', nom: '' })
+    expect(avecTest('  - type: qcm\n')).toEqual({ type: 'qcm', options: [], bonneReponse: 0 })
+    expect(avecTest('  - type: interdit\n')).toEqual({ type: 'interdit', motif: '' })
+  })
+
+  it('lit une valeur attendue sans type attendu', () => {
+    expect(avecTest('  - type: variable\n    nom: age\n    valeur_attendue: "17"\n')).toEqual({
+      type: 'variable',
+      nom: 'age',
+      valeurAttendue: '17',
+    })
+  })
+
+  it('lit un type attendu sans valeur attendue', () => {
+    expect(avecTest('  - type: variable\n    nom: age\n    type_attendu: int\n')).toEqual({
+      type: 'variable',
+      nom: 'age',
+      typeAttendu: 'int',
+    })
+  })
+})
+
+describe('porteDesCommentaires — au niveau du document', () => {
+  it('en voit un posé après tout le contenu', () => {
+    expect(porteDesCommentaires(COMPLET + '# une remarque finale\n')).toBe(true)
+  })
+})

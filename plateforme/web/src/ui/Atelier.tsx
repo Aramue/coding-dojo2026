@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BROUILLON_VIDE, champsManquants, versExercice, type Brouillon } from '../atelier/brouillon'
 import { eprouver, remplirAttendu, type Essai } from '../atelier/controles'
 import { enregistrerEnPlace, peutEnregistrerEnPlace, telecharger } from '../atelier/fichiers'
+import { FichierRefuse, lireExercice, porteDesCommentaires } from '../atelier/lecture'
 import { chargerSchema, type SchemaPublie } from '../atelier/schema'
 import { enYaml, nomDeFichier } from '../atelier/yaml'
 import { useContenuPublie } from '../prof/contenu'
@@ -9,6 +10,7 @@ import type { Executeur } from '../execution/executeur'
 import { EcranExercice } from './EcranExercice'
 import { Essais } from './atelier/Essais'
 import { Formulaire } from './atelier/Formulaire'
+import { Rail, type Ouvert } from './atelier/Rail'
 import { Tests } from './atelier/Tests'
 import './Atelier.css'
 
@@ -28,6 +30,10 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
   const contenu = useContenuPublie()
   const [schema, setSchema] = useState<SchemaPublie | null>(null)
   const [brouillon, setBrouillon] = useState<Brouillon>(BROUILLON_VIDE)
+  // Les fichiers déposés. Chacun garde ses modifications : on passe de l'un à
+  // l'autre sans rien perdre.
+  const [ouverts, setOuverts] = useState<Ouvert[]>([])
+  const [courant, setCourant] = useState<number | null>(null)
   const [volet, setVolet] = useState<Volet>('apercu')
   const [essais, setEssais] = useState<Essai[] | null>(null)
   const [enCours, setEnCours] = useState(false)
@@ -51,8 +57,51 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
 
   function changer(suivant: Brouillon) {
     setBrouillon(suivant)
+    if (courant !== null) {
+      setOuverts((liste) =>
+        liste.map((o, rang) => (rang === courant ? { ...o, brouillon: suivant } : o)),
+      )
+    }
     // Les essais valaient pour l'état d'avant : les garder affichés
     // ferait croire à un exercice éprouvé qu'on vient de modifier.
+    setEssais(null)
+  }
+
+  async function deposer(fichiers: File[]) {
+    setAlerte(null)
+    const lus: Ouvert[] = []
+    for (const fichier of fichiers) {
+      try {
+        // La lecture EST dans le try : un fichier que le navigateur ne sait
+        // pas lire faisait sinon échouer tout le lâcher, et les fichiers
+        // sains déposés avec lui étaient perdus.
+        const texte = await fichier.text()
+        lus.push({
+          nom: fichier.name,
+          brouillon: lireExercice(texte),
+          commente: porteDesCommentaires(texte),
+        })
+      } catch (erreur) {
+        // Le fichier reste dans le rail, marqué : le retirer en silence
+        // laisserait croire qu'on ne l'a jamais lâché.
+        lus.push({
+          nom: fichier.name,
+          brouillon: null,
+          refus:
+            erreur instanceof FichierRefuse ? erreur.raisons.join(' ') : 'fichier illisible.',
+        })
+      }
+    }
+    const debut = ouverts.length
+    setOuverts([...ouverts, ...lus])
+    // On ouvre le premier qui a été accepté, s'il y en a un.
+    const premier = lus.findIndex((o) => o.brouillon !== null)
+    if (premier !== -1) choisir(debut + premier, lus[premier]!.brouillon as Brouillon)
+  }
+
+  function choisir(rang: number, quoi: Brouillon) {
+    setCourant(rang)
+    setBrouillon(quoi)
     setEssais(null)
   }
 
@@ -113,6 +162,17 @@ export function Atelier({ executeur }: { executeur: Executeur }) {
   return (
     <div className="atelier">
       <div className="atelier__colonne">
+        <Rail
+          ouverts={ouverts}
+          courant={courant}
+          onChoisir={(rang) => choisir(rang, ouverts[rang]!.brouillon as Brouillon)}
+          onDeposer={deposer}
+          onFermer={(rang) => {
+            setOuverts((liste) => liste.filter((_, i) => i !== rang))
+            if (rang === courant) setCourant(null)
+          }}
+        />
+
         <Formulaire
           brouillon={brouillon}
           notions={contenu.notions}

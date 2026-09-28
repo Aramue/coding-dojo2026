@@ -316,3 +316,95 @@
   white-space: pre-wrap;
   color: var(--ink-soft);
 }
+
+/*
+ * Le rail des fichiers deposes. Il est en tete de la colonne de gauche :
+ * c'est par la qu'on commence quand on reprend un exercice existant.
+ */
+.atelier .rail {
+  padding: var(--e-2);
+  background: var(--surface);
+  border: 1px dashed var(--rule);
+  border-radius: var(--rayon-3);
+}
+
+.atelier .rail[data-survole='true'] {
+  border-color: var(--py-blue);
+  border-style: solid;
+  background: color-mix(in srgb, var(--py-blue) 6%, var(--surface));
+}
+
+.atelier .rail__vide {
+  margin: 0;
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.atelier .rail__liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.atelier .rail__liste li {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+}
+
+.atelier .rail__fichier {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.35rem var(--e-1);
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: var(--rayon-1);
+  background: none;
+  font: inherit;
+  font-size: var(--t-2);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.atelier .rail__fichier[aria-current='true'] {
+  background: var(--ground-2);
+  border-left-color: var(--py-blue);
+}
+
+/* Un fichier refuse reste visible, mais ne s'ouvre pas. */
+.atelier .rail__fichier[data-refuse='true'] {
+  cursor: not-allowed;
+  border-left-color: var(--ko);
+}
+
+.atelier .rail__refus {
+  font-size: var(--t-1);
+  color: var(--ko);
+  line-height: 1.4;
+}
+
+.atelier .rail__note {
+  font-size: var(--t-1);
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.atelier .rail__retirer {
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--t-3);
+  color: var(--ink-soft);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.3rem;
+}
