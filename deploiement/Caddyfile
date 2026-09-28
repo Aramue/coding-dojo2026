@@ -1,11 +1,16 @@
-http://{$DOJO_DOMAINE:localhost}, https://{$DOJO_DOMAINE:localhost} {
-	# Les deux schemas sont explicites : Caddy exclut de la redirection HTTPS
-	# automatique tout hote qui apparait dans un bloc http:// declare — sans
-	# quoi il redirige tout HTTP en 308 des qu'un nom d'hote est configure
-	# (y compris "localhost", via son autorite de certification interne), ce
-	# qui rendrait vaines les verifications curl en HTTP simple ci-dessous.
-	# Le HTTPS reste disponible sur le vrai domaine UNIGE (utile au test de
-	# charge de la seance, qui l'interroge explicitement).
+# Caddy ne fait PAS de TLS, et n'ecoute qu'en clair. Il ne connait meme pas le
+# nom du site.
+#
+# Sur la VM, nginx tient deja les ports 80 et 443 pour d'autres sites, avec ses
+# certificats certbot : c'est lui qui termine le TLS et qui relaie vers ce
+# conteneur, publie sur 127.0.0.1 seulement. En developpement on ouvre
+# http://localhost, ou il n'y a rien a certifier. Voir ADR-017 et
+# « Deploiement UNIGE » dans le coffre.
+#
+# Ce que cela a supprime : le bloc a deux schemas qu'il fallait declarer pour
+# echapper a la redirection HTTPS automatique de Caddy, le volume de ses
+# certificats, et la variable DOJO_DOMAINE.
+:80 {
 	encode zstd gzip
 
 	handle_path /api/* {

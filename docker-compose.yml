@@ -1,11 +1,26 @@
-# Lancé depuis la racine du dépôt :
+# Lancé depuis la racine du dépôt, en développement :
 #
 #   docker compose up -d --build
+#
+# En production, ce fichier ne sert jamais seul : `deploiement/production.yml`
+# le complète pour épingler des images déjà construites, et c'est
+# `deploiement/deployer.sh` qui assemble la commande. Voir ADR-017.
 #
 # `name` fixe le préfixe des conteneurs et des volumes. Sans lui, Docker prend
 # le nom du dossier qui contient ce fichier — les conteneurs s'appelaient
 # « deploiement-web-1 », ce qui ne dit rien à personne dans six mois.
 name: coding-dojo
+
+# Les journaux sont bornés ici, pour les deux services et dans les deux
+# environnements. La VM de production n'a pas de `/etc/docker/daemon.json` :
+# sans cette clause, les journaux de conteneur grossissent sans limite sur un
+# disque partagé avec un autre service. On borne chez nous plutôt que de changer
+# le démon, qui n'est pas à nous.
+x-journaux: &journaux
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: "3"
 
 services:
   api:
@@ -18,22 +33,21 @@ services:
     volumes:
       - donnees:/app/donnees
     restart: unless-stopped
+    logging: *journaux
 
   web:
     build:
       context: .
       dockerfile: deploiement/Dockerfile.web
-    environment:
-      DOJO_DOMAINE: ${DOJO_DOMAINE:-localhost}
     ports:
-      - "80:80"
-      - "443:443"
+      # En développement : le port 80 de la machine, donc <http://localhost>.
+      # Sur la VM : `DOJO_PUBLICATION=127.0.0.1:3200`, parce que nginx y tient
+      # déjà 80 et 443 et que l'API n'a rien à exposer sur le réseau local.
+      - "${DOJO_PUBLICATION:-80}:80"
     depends_on:
       - api
-    volumes:
-      - caddy_data:/data
     restart: unless-stopped
+    logging: *journaux
 
 volumes:
   donnees:
-  caddy_data:
