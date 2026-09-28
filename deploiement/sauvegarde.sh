@@ -31,7 +31,21 @@ if ! "${COMPOSE[@]}" ps --status running --services 2>/dev/null | grep -qx api; 
   exit 0
 fi
 
-mkdir -p "$DESTINATION"
+# `/var/backups` appartient a root, et ce script tourne sous le compte de
+# deploiement : le dossier doit exister et nous appartenir avant le premier
+# passage. On le dit franchement, avec la commande a lancer — un « Permission
+# denied » nu dans un journal de cron que personne ne lit couterait cher, et
+# `deployer.sh` appelant ce script en premier, tout deploiement echouerait ici
+# sans qu'on comprenne pourquoi.
+if ! mkdir -p "$DESTINATION" 2>/dev/null || [[ ! -w "$DESTINATION" ]]; then
+  echo "$(horodatage) ECHEC : impossible d'ecrire dans $DESTINATION" >&2
+  echo "  A faire une fois, avec les droits root :" >&2
+  echo "    sudo mkdir -p $DESTINATION" >&2
+  echo "    sudo chown $(id -un):$(id -gn) $DESTINATION" >&2
+  echo "    sudo chmod 700 $DESTINATION" >&2
+  exit 1
+fi
+
 temporaire="$(mktemp)"
 trap 'rm -f "$temporaire"' EXIT
 
