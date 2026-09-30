@@ -37,6 +37,29 @@ def test_le_second_compte_refuse_ne_change_pas_le_mot_de_passe(client, entetes_p
     assert reponse.status_code == 200
 
 
+def test_un_second_compte_refuse_ne_calcule_aucune_empreinte(client, entetes_prof, monkeypatch):
+    """Le cout de scrypt ne se paie que si l'empreinte va servir.
+
+    `POST /prof/compte` reste joignable sans jeton toute la vie de l'instance.
+    Hacher avant de savoir que le compte existe faisait payer au serveur, a
+    chaque appel, un calcul volontairement lent dont le resultat partait a la
+    poubelle.
+    """
+    from app import compte
+
+    vrai_hacher, appels = compte.hacher, []
+
+    def hacher_en_comptant(mot_de_passe: str) -> str:
+        appels.append(mot_de_passe)
+        return vrai_hacher(mot_de_passe)
+
+    monkeypatch.setattr(compte, "hacher", hacher_en_comptant)
+
+    reponse = client.post("/prof/compte", json={"mot_de_passe": "un-autre-mot-de-passe"})
+    assert reponse.status_code == 409
+    assert appels == []
+
+
 def test_un_mot_de_passe_trop_court_est_refuse_par_le_serveur(client):
     assert client.post("/prof/compte", json={"mot_de_passe": "a" * 11}).status_code == 422
     assert client.get("/prof/compte").json() == {"existe": False}
