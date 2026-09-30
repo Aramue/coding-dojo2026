@@ -47,6 +47,14 @@ export class ClientApi {
         "Ce code n'existe pas. Vérifie chaque caractère, puis demande-le à ton professeur.",
       )
     }
+    // 429 : nginx borne cette route, parce qu'un code d'accès de quatre
+    // caractères s'essaie sinon en entier. Une classe qui arrive ensemble passe
+    // sous la rafale ; si la limite tombe quand même, dire d'attendre vaut
+    // mieux que « préviens ton professeur », qui fait lever la main pour
+    // quelque chose qui se résout tout seul en quelques secondes.
+    if (reponse.status === 429) {
+      throw new Error("Trop d'essais d'un coup. Attends quelques secondes et réessaie.")
+    }
     if (!reponse.ok) {
       throw new Error('La plateforme a un problème. Préviens ton professeur.')
     }
