@@ -123,8 +123,9 @@ la CI les a construites et testées au tag.
 ```
 
 Le script sauvegarde la base, passe le dépôt sur le tag, tire les images,
-démarre sans construire, attend que `/api/sante` réponde, puis supprime nos
-images anciennes au-delà des deux dernières. Le retour arrière est le même
+démarre sans construire, attend que `/api/sante` réponde, installe le bloc
+nginx s'il a changé — `nginx -t` d'abord, l'ancien remis s'il échoue —, puis
+supprime nos images anciennes au-delà des deux dernières. Le retour arrière est le même
 script avec le tag précédent. Au premier déploiement seulement : ouvrir `/prof`
 **tout de suite** et créer le compte professeur.
 

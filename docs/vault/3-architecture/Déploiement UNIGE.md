@@ -3,7 +3,7 @@ title: Déploiement UNIGE
 tags:
   - architecture
   - exploitation
-mis-a-jour: 2026-09-30
+mis-a-jour: 2026-10-01
 ---
 
 # Déploiement UNIGE
@@ -206,19 +206,10 @@ nginx répond **429** et non le 503 par défaut, et l'interface en fait deux mes
 d'attendre — sans quoi un élève bridé lirait « préviens ton professeur » et lèverait la main pour
 une limite qui se lève toute seule.
 
-> [!danger] `deployer.sh` ne touche pas à nginx
-> La configuration nginx vit dans le dépôt mais s'installe **à la main** : un déploiement ne la
-> recopie pas. Après toute modification de `deploiement/nginx-dojo.aramue.com.conf`, il faut la
-> reposer sur la VM, sinon le dépôt et la machine divergent en silence.
->
-> ```bash
-> sudo cp /var/www/coding-dojo/deploiement/nginx-dojo.aramue.com.conf \
->   /etc/nginx/sites-available/dojo.aramue.com
-> sudo nginx -t && sudo systemctl reload nginx
-> ```
->
-> `nginx -t` avant le rechargement, toujours : une erreur de syntaxe sur ce fichier empêche nginx
-> de recharger, ==et couperait aussi les autres sites de la machine==.
+> [!success] Le bloc nginx suit le tag — depuis le 1er octobre 2026
+> Ces limites ont d'abord été posées **à la main** : `deployer.sh` ne recopiait pas la
+> configuration nginx, et le dépôt pouvait diverger de la machine en silence. Il le fait
+> maintenant, à chaque déploiement — voir « Déployer, ensuite ».
 
 ### Installer, la première fois
 
@@ -255,9 +246,29 @@ une limite qui se lève toute seule.
 ```
 
 Il sauvegarde la base, passe le dépôt sur le tag, tire les images, démarre **sans jamais
-construire** (`--no-build`), attend que `/api/sante` réponde, puis supprime nos images anciennes en
-gardant les deux dernières. Il demande confirmation : un déploiement coupe toutes les sonnettes en
-cours. Le retour arrière est le même script avec le tag précédent, et son image est encore là.
+construire** (`--no-build`), attend que `/api/sante` réponde, installe le bloc nginx s'il a changé,
+puis supprime nos images anciennes en gardant les deux dernières. Il demande confirmation : un
+déploiement coupe toutes les sonnettes en cours. Le retour arrière est le même script avec le tag
+précédent, et son image est encore là.
+
+**Le bloc nginx suit le tag**, comme le compose et le Caddyfile. Le script compare
+`deploiement/nginx-dojo.aramue.com.conf` au fichier de `/etc/nginx/sites-available/` :
+
+- identiques — le cas de presque tous les déploiements —, il ne touche à rien ;
+- différents, il affiche le `diff`, garde une copie de l'ancien, pose le nouveau, lance
+  `nginx -t`, et ne recharge **que** si le test passe ;
+- si `nginx -t` refuse, ==il remet l'ancien== et sort en erreur. La pile, elle, est déjà en ligne.
+
+> [!danger] nginx n'est pas à nous seuls
+> Un fichier cassé laissé dans `sites-available` ferait échouer le **prochain** rechargement de
+> nginx — le nôtre, celui du voisin, celui de certbot au renouvellement. C'est pour cela que
+> l'ancien est remis avant de sortir, et que rien ne recharge sans `nginx -t`.
+
+Il faut `sudo` pour ces trois commandes (`cp`, `nginx -t`, `systemctl reload nginx`). Et la
+**première** installation reste manuelle : sans fichier déjà en place le script ne pose rien, parce
+que le certificat doit exister avant le bloc `443` — voir « Installer, la première fois ». Un
+retour arrière remet aussi le bloc du tag précédent : revenir à `v1.0.0` retire les limites de
+débit.
 
 ### Les quatre façons de remplir un disque partagé
 
