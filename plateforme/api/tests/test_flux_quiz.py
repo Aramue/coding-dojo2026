@@ -109,6 +109,39 @@ def test_au_dela_du_plafond_la_connexion_est_refusee(client, monkeypatch):
             assert _fermeture(second) == 1013
 
 
+def test_un_eleve_ne_prend_que_sa_part_des_sonnettes(client, jeton_eleve, inscrire, monkeypatch):
+    """Le plafond global se remplit par n'importe qui : il en faut un par eleve.
+
+    Sans lui, un seul jeton pouvait occuper tout le registre et laisser la
+    classe entiere au repli. L'onglet de trop est refuse comme un registre
+    plein — 1013, le client relit en attendant — et le voisin, lui, passe.
+    """
+    monkeypatch.setattr(diffuseur, "par_eleve", 2)
+    inscrire("DOJO-M3QP", prenom="Alex")
+    voisin = client.post("/session", json={"code_acces": "DOJO-M3QP"}).json()["jeton"]
+
+    with (
+        client.websocket_connect("/quiz/flux") as premier,
+        client.websocket_connect("/quiz/flux") as second,
+    ):
+        for ws in (premier, second):
+            ws.send_text(json.dumps({"jeton": jeton_eleve}))
+            assert ws.receive_json() == {"type": "pret"}
+
+        with client.websocket_connect("/quiz/flux") as de_trop:
+            de_trop.send_text(json.dumps({"jeton": jeton_eleve}))
+            assert _fermeture(de_trop) == 1013
+
+        with client.websocket_connect("/quiz/flux") as autre:
+            autre.send_text(json.dumps({"jeton": voisin}))
+            assert autre.receive_json() == {"type": "pret"}
+
+        # Le professeur n'a pas de code d'acces : seul le plafond global le borne.
+        with client.websocket_connect("/quiz/flux") as prof:
+            prof.send_text(presentation_prof())
+            assert prof.receive_json() == {"type": "pret"}
+
+
 def test_une_deconnexion_retire_l_abonne(client):
     with client.websocket_connect("/quiz/flux") as ws:
         ws.send_text(presentation_prof())
@@ -223,3 +256,25 @@ def test_le_registre_a_un_plafond():
     assert registre.inscrire(FauxWebSocket(), "eleve") is False
     registre.retirer(FauxWebSocket())  # un inconnu : rien ne se passe
     assert len(registre) == 1
+
+
+def test_le_registre_compte_les_sonnettes_de_chaque_eleve():
+    registre = Diffuseur(par_eleve=2)
+    premiere, seconde = FauxWebSocket(), FauxWebSocket()
+    assert registre.inscrire(premiere, "eleve", "DOJO-K7M2") is True
+    assert registre.inscrire(seconde, "eleve", "DOJO-K7M2") is True
+    assert registre.inscrire(FauxWebSocket(), "eleve", "DOJO-K7M2") is False
+    # Le plafond est par eleve : le voisin et le professeur ne le voient pas.
+    assert registre.inscrire(FauxWebSocket(), "eleve", "DOJO-M3QP") is True
+    assert registre.inscrire(FauxWebSocket(), "prof") is True
+
+    # Une place rendue est une place reprise : fermer un onglet suffit.
+    registre.retirer(premiere)
+    assert registre.inscrire(FauxWebSocket(), "eleve", "DOJO-K7M2") is True
+
+
+def test_le_plafond_par_eleve_ne_peut_pas_remplir_le_registre():
+    """L'invariant qui fait tenir le tout : une classe au plafond laisse de la place."""
+    from app.diffuseur import MAX_CONNEXIONS, MAX_PAR_ELEVE
+
+    assert 24 * MAX_PAR_ELEVE < MAX_CONNEXIONS

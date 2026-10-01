@@ -449,12 +449,15 @@ async def _fermer(ws: WebSocket, code: int) -> None:
         await ws.close(code=code)
 
 
-async def _authentifier(ws: WebSocket, session: Session) -> Role | None:
+async def _authentifier(ws: WebSocket, session: Session) -> tuple[Role, str | None] | None:
     """Le premier message dit qui ouvre la connexion. Jamais l'URL.
 
     Une URL finit dans les journaux du proxy et du serveur : un jeton n'a rien
     a y faire. Jeton eleve ou jeton de session professeur, verifies comme sur
     les routes HTTP — contre la cle rangee en base (ADR-014). Voir ADR-016.
+
+    Rend le role, et le code d'acces de l'eleve : le registre compte les
+    sonnettes de chacun. Le professeur n'a pas de code.
     """
     try:
         message = await asyncio.wait_for(ws.receive(), DELAI_AUTHENTIFICATION_S)
@@ -472,9 +475,9 @@ async def _authentifier(ws: WebSocket, session: Session) -> Role | None:
 
     jeton_prof, jeton = donnees.get("jeton_prof"), donnees.get("jeton")
     if isinstance(jeton_prof, str) and jeton_prof_valide(session, jeton_prof):
-        return "prof"
-    if isinstance(jeton, str) and lire_jeton(session, jeton):
-        return "eleve"
+        return "prof", None
+    if isinstance(jeton, str) and (code := lire_jeton(session, jeton)):
+        return "eleve", code
     return None
 
 
@@ -482,17 +485,20 @@ async def _authentifier(ws: WebSocket, session: Session) -> Role | None:
 async def flux(ws: WebSocket, session: SessionBdd) -> None:
     await ws.accept()
     try:
-        role = await _authentifier(ws, session)
+        identite = await _authentifier(ws, session)
     finally:
         # La base ne sert qu'a verifier le jeton. Gardee ouverte le temps de la
         # connexion, chaque onglet retiendrait une connexion SQLite : vingt-
         # quatre eleves videraient le pool, et les GET attendraient.
         session.close()
-    if role is None:
+    if identite is None:
         await _fermer(ws, 4401)
         return
-    if not diffuseur.inscrire(ws, role):
-        await _fermer(ws, 1013)  # « reessaie plus tard » : le client relit en attendant
+    # Registre plein, ou eleve deja a son plafond de sonnettes : 1013,
+    # « reessaie plus tard ». Le client relit chaque seconde en attendant, donc
+    # l'onglet de trop marche quand meme — il n'a simplement pas de sonnette.
+    if not diffuseur.inscrire(ws, *identite):
+        await _fermer(ws, 1013)
         return
     try:
         await ws.send_json({"type": "pret"})

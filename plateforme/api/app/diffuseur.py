@@ -21,23 +21,47 @@ Role = Literal["eleve", "prof"]
 # laisse de la marge sans laisser quiconque ouvrir des milliers de connexions.
 MAX_CONNEXIONS = 200
 
+# Sur la page du quiz, UN onglet tient DEUX sonnettes : celle de la coquille,
+# qui garde le cours ferme, et celle de la partie. Six laissent donc trois
+# onglets a un eleve, ou deux et un rechargement dont l'ancienne connexion
+# n'est pas encore oubliee.
+#
+# Le plafond global ne suffisait pas : il se remplit par n'importe qui, donc un
+# seul jeton pouvait prendre les deux cents places et laisser la classe entiere
+# au repli, a relire chaque seconde. Avec six par eleve, vingt-quatre eleves au
+# plafond en occupent cent quarante-quatre : personne ne peut plus priver les
+# autres, ni le professeur, de leur sonnette.
+MAX_PAR_ELEVE = 6
+
 SONNERIE = {"type": "changement"}
 
 
 class Diffuseur:
-    def __init__(self, maximum: int = MAX_CONNEXIONS) -> None:
+    def __init__(self, maximum: int = MAX_CONNEXIONS, par_eleve: int = MAX_PAR_ELEVE) -> None:
         self.maximum = maximum
+        self.par_eleve = par_eleve
         # Indexe par id() : un WebSocket de Starlette est un Mapping, donc
         # non hachable, et ne peut pas servir de cle lui-meme.
-        self._abonnes: dict[int, tuple[WebSocket, Role]] = {}
+        self._abonnes: dict[int, tuple[WebSocket, Role, str | None]] = {}
 
     def __len__(self) -> int:
         return len(self._abonnes)
 
-    def inscrire(self, ws: WebSocket, role: Role) -> bool:
+    def inscrire(self, ws: WebSocket, role: Role, code_acces: str | None = None) -> bool:
+        """Faux si le registre est plein, ou si cet eleve y a deja sa part.
+
+        `code_acces` est celui du jeton presente : c'est lui qu'on compte, pas
+        l'adresse IP, que toute la classe partage. Le professeur n'en a pas et
+        n'est borne que par le plafond global — il a un tableau de bord, un
+        ecran projete, et il a deja donne son mot de passe.
+        """
         if len(self._abonnes) >= self.maximum:
             return False
-        self._abonnes[id(ws)] = (ws, role)
+        if code_acces is not None:
+            siennes = sum(1 for _, _, code in self._abonnes.values() if code == code_acces)
+            if siennes >= self.par_eleve:
+                return False
+        self._abonnes[id(ws)] = (ws, role, code_acces)
         return True
 
     def retirer(self, ws: WebSocket) -> None:
@@ -51,7 +75,7 @@ class Diffuseur:
         relectures par reponse ne serviraient a personne.
         """
         cibles = roles or ("eleve", "prof")
-        for ws, role in list(self._abonnes.values()):
+        for ws, role, _ in list(self._abonnes.values()):
             if role not in cibles:
                 continue
             try:
