@@ -86,7 +86,7 @@ lancent les commandes ci-dessus, pas d'autres :
 
 | Job | Ce qu'il lance |
 |---|---|
-| API | les 223 tests de `plateforme/api` |
+| API | les 226 tests de `plateforme/api` |
 | Contenu | les 143 tests de `plateforme/outils`, la validation du contenu, les deux constructions |
 | Interface | les 516 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
 

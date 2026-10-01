@@ -45,7 +45,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: 223 tests
+      - name: 226 tests
         run: python -m pytest -q
 
   contenu:

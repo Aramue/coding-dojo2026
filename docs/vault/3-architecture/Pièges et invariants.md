@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-30
+mis-a-jour: 2026-10-01
 ---
 
 # Pièges et invariants
@@ -237,6 +237,20 @@ résultat et répondre 409. Sans borne par-dessus, l'API — un seul processus
 ([[ADR-016 Temps réel par sonnette WebSocket]]) limité à 512 Mo — se fait tuer par l'OOM killer,
 et `restart: unless-stopped` la relance pour que la suite recommence. Les bornes mémoire qui
 protègent le voisin de la VM garantissent que la victime, c'est nous.
+
+### Un plafond global se remplit par n'importe qui
+
+Le registre de la sonnette accepte deux cents connexions, et **six par élève** — comptées sur le
+code d'accès du jeton présenté, pas sur l'adresse IP, que toute la classe partage.
+
+Six et pas deux : sur la page du quiz, ==un onglet tient deux sonnettes==, celle de la coquille
+et celle de la partie. Et vingt-quatre élèves au plafond en occupent cent quarante-quatre, ce qui
+laisse toujours sa place au professeur — `test_flux_quiz.py` tient cet invariant.
+
+**Ce qui casse :** avec le seul plafond global, un jeton suffit à prendre toutes les places. Rien
+ne tombe — le repli par relecture rattrape ([[ADR-016 Temps réel par sonnette WebSocket]]) — mais
+la classe entière relit chaque seconde pendant toute la partie. L'onglet de trop, lui, est refusé
+en 1013 et relit en attendant : il marche, sans sonnette.
 
 ### La configuration nginx ne part pas avec le déploiement
 
