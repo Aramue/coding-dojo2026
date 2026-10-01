@@ -252,15 +252,19 @@ ne tombe — le repli par relecture rattrape ([[ADR-016 Temps réel par sonnette
 la classe entière relit chaque seconde pendant toute la partie. L'onglet de trop, lui, est refusé
 en 1013 et relit en attendant : il marche, sans sonnette.
 
-### La configuration nginx ne part pas avec le déploiement
+### Le bloc nginx part avec le déploiement, et jamais sans `nginx -t`
 
-`deployer.sh` passe le dépôt sur un tag, tire les images et redémarre. Il ne recopie **jamais**
-`deploiement/nginx-dojo.aramue.com.conf` dans `/etc/nginx/`, qui demande `sudo` et un
-`systemctl reload`.
+`deployer.sh` compare `deploiement/nginx-dojo.aramue.com.conf` au fichier de `/etc/nginx/` et, s'il
+a changé, garde l'ancien, pose le nouveau, lance `nginx -t`, puis recharge. Si le test échoue, il
+==remet l'ancien== avant de sortir en erreur.
 
-**Ce qui casse :** rien, et c'est le piège. Le dépôt et la machine divergent en silence, et la
-protection qu'on croit déployée n'existe que dans Git. ==Toute modification de ce fichier se
-repose à la main== — voir [[Déploiement UNIGE]], « Les trois routes bornées ».
+**Ce qui casse, sans l'installation automatique :** rien, et c'était le piège. Le script ne
+recopiait pas ce fichier ; le dépôt et la machine divergeaient en silence, et une protection
+qu'on croyait déployée n'existait que dans Git.
+
+**Ce qui casse, sans le test ni la remise en place :** un fichier refusé laissé dans
+`sites-available` fait échouer le prochain rechargement de nginx — le nôtre, celui des autres
+sites de la machine, celui de certbot. Voir [[Déploiement UNIGE]], « Déployer, ensuite ».
 
 ## Interface
 
