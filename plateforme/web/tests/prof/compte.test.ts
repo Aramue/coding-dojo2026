@@ -48,6 +48,10 @@ describe('creerCompte et seConnecter', () => {
     [404, /Aucun compte/],
     [409, /existe déjà/],
     [422, /au moins 12 caractères/],
+    // nginx borne les deux routes du mot de passe. La limite se compte par
+    // adresse IP, que le professeur partage avec toute sa classe : le message
+    // doit dire d'attendre, pas laisser croire à un mot de passe faux.
+    [429, /Attends une minute/],
     [500, /erreur 500/],
   ])('traduit le statut %i', async (status, message) => {
     repondre(status)

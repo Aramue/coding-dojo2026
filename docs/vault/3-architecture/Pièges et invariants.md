@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-10-01
 ---
 
 # Pièges et invariants
@@ -221,6 +221,46 @@ killer du noyau choisit sa victime sur la mémoire consommée, pas sur l'ancienn
 le voisin. `docker-compose.yml` borne donc nos journaux, `production.yml` borne notre mémoire, et
 `deployer.sh` ne supprime que des images de notre propre dépôt. ==Aucune commande de ce dépôt n'agit
 à l'échelle du démon Docker.==
+
+### Une route ouverte dont le calcul est cher se borne, et ne hache qu'à la fin
+
+`POST /prof/compte` et `POST /prof/connexion` hachent le mot de passe reçu avec scrypt, lent et
+gourmand en mémoire **par construction** — c'est ce qui le protège d'un dictionnaire. Ce sont
+aussi les deux seules routes joignables sans jeton dont le coût ne se décide pas chez nous.
+
+Deux gestes, et il faut les deux : `creer_le_compte` ne hache ==qu'après== avoir constaté que le
+compte manque, et `nginx-dojo.aramue.com.conf` borne le débit des deux routes, comme celui de
+`/session` dont le code d'accès tient en quatre caractères.
+
+**Ce qui casse :** hacher avant de savoir, c'est payer le calcul à chaque appel pour jeter le
+résultat et répondre 409. Sans borne par-dessus, l'API — un seul processus
+([[ADR-016 Temps réel par sonnette WebSocket]]) limité à 512 Mo — se fait tuer par l'OOM killer,
+et `restart: unless-stopped` la relance pour que la suite recommence. Les bornes mémoire qui
+protègent le voisin de la VM garantissent que la victime, c'est nous.
+
+### Un plafond global se remplit par n'importe qui
+
+Le registre de la sonnette accepte deux cents connexions, et **six par élève** — comptées sur le
+code d'accès du jeton présenté, pas sur l'adresse IP, que toute la classe partage.
+
+Six et pas deux : sur la page du quiz, ==un onglet tient deux sonnettes==, celle de la coquille
+et celle de la partie. Et vingt-quatre élèves au plafond en occupent cent quarante-quatre, ce qui
+laisse toujours sa place au professeur — `test_flux_quiz.py` tient cet invariant.
+
+**Ce qui casse :** avec le seul plafond global, un jeton suffit à prendre toutes les places. Rien
+ne tombe — le repli par relecture rattrape ([[ADR-016 Temps réel par sonnette WebSocket]]) — mais
+la classe entière relit chaque seconde pendant toute la partie. L'onglet de trop, lui, est refusé
+en 1013 et relit en attendant : il marche, sans sonnette.
+
+### La configuration nginx ne part pas avec le déploiement
+
+`deployer.sh` passe le dépôt sur un tag, tire les images et redémarre. Il ne recopie **jamais**
+`deploiement/nginx-dojo.aramue.com.conf` dans `/etc/nginx/`, qui demande `sudo` et un
+`systemctl reload`.
+
+**Ce qui casse :** rien, et c'est le piège. Le dépôt et la machine divergent en silence, et la
+protection qu'on croit déployée n'existe que dans Git. ==Toute modification de ce fichier se
+repose à la main== — voir [[Déploiement UNIGE]], « Les trois routes bornées ».
 
 ## Interface
 

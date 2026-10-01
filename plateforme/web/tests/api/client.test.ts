@@ -26,6 +26,17 @@ describe('ClientApi', () => {
     await expect(client.ouvrirSession('toto')).rejects.toThrow(/code d'accès/i)
   })
 
+  it('dit d attendre quand la limite de debit tombe, plutot que d alerter le professeur', async () => {
+    // nginx borne /session : un code d'accès de quatre caractères s'essaie
+    // sinon en entier. La limite se compte par adresse IP, et toute la classe
+    // en partage une — elle peut donc tomber sur un élève qui n'a rien fait de
+    // mal, et qui n'a qu'à attendre quelques secondes.
+    const borne = vi.fn().mockResolvedValue({ ok: false, status: 429, json: async () => ({}) })
+    await expect(
+      new ClientApi('/api', borne as unknown as typeof fetch).ouvrirSession('DOJO-K7M2'),
+    ).rejects.toThrow(/attends/i)
+  })
+
   it('n envoie jamais de code source dans une tentative', async () => {
     const fetchFactice = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ jeton: 'j', code_acces: 'a' }) })
     const client = new ClientApi('/api', fetchFactice as unknown as typeof fetch)

@@ -32,6 +32,12 @@ async function demanderJeton(chemin: 'compte' | 'connexion', motDePasse: string)
   if (reponse.status === 422) {
     throw new Error(`Le mot de passe doit faire au moins ${LONGUEUR_MIN} caractères.`)
   }
+  // 429 : nginx borne les deux routes du mot de passe. La limite se compte par
+  // adresse IP, et la classe entière partage celle du professeur — elle peut
+  // donc tomber sans que ce soit lui qui se soit trompé.
+  if (reponse.status === 429) {
+    throw new Error('Trop de tentatives. Attends une minute, puis réessaie.')
+  }
   if (!reponse.ok) throw new Error(`La plateforme a refusé (erreur ${reponse.status}).`)
   const donnees = (await reponse.json()) as { jeton?: unknown }
   if (typeof donnees?.jeton !== 'string') throw new Error('Réponse inattendue de la plateforme.')

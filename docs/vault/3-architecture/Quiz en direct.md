@@ -4,7 +4,7 @@ tags:
   - architecture
   - quiz
   - professeur
-mis-a-jour: 2026-09-28
+mis-a-jour: 2026-10-01
 ---
 
 # Quiz en direct
@@ -144,7 +144,7 @@ deploiement/charge_quiz.py       le test de charge
 | `GET /prof/quiz/partie` | prof | la dernière partie, même terminée : son bilan reste lisible |
 | `POST /prof/quiz/partie/suivante` · `corriger` | prof | portent le rang que l'écran croit courant : un double clic est refusé |
 | `POST /prof/quiz/partie/terminer` | prof | arrête pour tout le monde |
-| `WS /quiz/flux` | les deux | la sonnette ; présentation dans le premier message, jamais dans l'URL |
+| `WS /quiz/flux` | les deux | la sonnette ; présentation dans le premier message, jamais dans l'URL ; six par élève, deux cents en tout — voir [[Pièges et invariants]] |
 
 ## Écrire un quiz
 

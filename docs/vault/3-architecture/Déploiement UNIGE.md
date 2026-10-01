@@ -3,7 +3,7 @@ title: Déploiement UNIGE
 tags:
   - architecture
   - exploitation
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-09-30
 ---
 
 # Déploiement UNIGE
@@ -163,12 +163,62 @@ de ce partage. Décision : [[ADR-017 Une seule branche, des releases par tag]].
 > ([[ADR-016 Temps réel par sonnette WebSocket]]) — mais chaque élève se rebranche une fois par
 > minute pendant toute la partie, pour rien.
 
-> [!warning] Pas de `limit_req` sur ce site, contrairement aux autres de la machine
+> [!warning] Pas de `limit_req` à l'échelle du site, contrairement aux autres de la machine
 > Vingt-quatre élèves dont le WebSocket ne passe pas, c'est vingt-quatre requêtes par seconde, et
 > c'est le fonctionnement **normal** du repli. Une limite réglée pour un site vitrine
 > transformerait un réseau d'établissement capricieux en quiz cassé. Pas de `proxy_cache` non
 > plus : Caddy pose déjà les bons en-têtes, et mettre `/api` en cache servirait à un élève l'état
 > d'un autre.
+>
+> ==Trois routes font exception==, et ce sont les seules — voir « Les trois routes bornées »
+> ci-dessous.
+
+### Les trois routes bornées — 30 septembre 2026
+
+Le site n'a toujours pas de limite globale, pour la raison ci-dessus. Mais trois routes en ont
+une, parce que leur coût ou leur secret ne dépend pas de nous :
+
+| Route | Zone | Débit | Rafale | Pourquoi |
+|---|---|---|---|---|
+| `/api/prof/connexion` | `dojo_mot_de_passe` | 12/min | 8 | scrypt, volontairement lent et gourmand |
+| `/api/prof/compte` | `dojo_mot_de_passe` | 12/min | 8 | même calcul, même route ouverte sans jeton |
+| `/api/session` | `dojo_code_acces` | 30/min | 40 | un code d'accès tient en quatre caractères |
+
+Les deux premières hachent le mot de passe reçu avec scrypt. C'est **voulu** — c'est ce qui
+protège le mot de passe d'un dictionnaire — mais ce sont aussi les deux seules routes joignables
+sans jeton dont le coût se décide ailleurs qu'ici. ==L'API est un seul processus== ([[ADR-016
+Temps réel par sonnette WebSocket]]) borné à 512 Mo : sans limite, on peut lui faire payer ce
+calcul aussi souvent qu'on le demande, et les bornes mémoire qui protègent le voisin garantissent
+alors que c'est **nous** qui tombons.
+
+La troisième échange un code d'accès contre un jeton. Quatre caractères
+([[ADR-002 Identification par code d'agent]]), c'est un espace qui se balaie en quelques minutes
+sans limite ; un code trouvé donne le prénom, la progression et la place au quiz de son porteur.
+
+> [!danger] La rafale compte plus que le débit : une classe sort par UNE adresse IP
+> `limit_req_zone` compte par `$binary_remote_addr`, et vingt-quatre élèves derrière le NAT de
+> l'établissement partagent une seule adresse — ==avec leur professeur==. Les rafales sont
+> dimensionnées pour une classe qui arrive ensemble, fautes de frappe comprises, pas pour une
+> personne seule. Conséquence assumée : si quelqu'un épuise la limite depuis la salle, la
+> connexion du professeur attend elle aussi. C'est moins cher qu'une API tuée en pleine séance.
+
+nginx répond **429** et non le 503 par défaut, et l'interface en fait deux messages qui disent
+d'attendre — sans quoi un élève bridé lirait « préviens ton professeur » et lèverait la main pour
+une limite qui se lève toute seule.
+
+> [!danger] `deployer.sh` ne touche pas à nginx
+> La configuration nginx vit dans le dépôt mais s'installe **à la main** : un déploiement ne la
+> recopie pas. Après toute modification de `deploiement/nginx-dojo.aramue.com.conf`, il faut la
+> reposer sur la VM, sinon le dépôt et la machine divergent en silence.
+>
+> ```bash
+> sudo cp /var/www/coding-dojo/deploiement/nginx-dojo.aramue.com.conf \
+>   /etc/nginx/sites-available/dojo.aramue.com
+> sudo nginx -t && sudo systemctl reload nginx
+> ```
+>
+> `nginx -t` avant le rechargement, toujours : une erreur de syntaxe sur ce fichier empêche nginx
+> de recharger, ==et couperait aussi les autres sites de la machine==.
 
 ### Installer, la première fois
 

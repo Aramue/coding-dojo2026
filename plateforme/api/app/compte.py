@@ -52,7 +52,19 @@ def etat_du_compte(session: Annotated[Session, Depends(obtenir_session)]) -> dic
 def creer_le_compte(
     demande: DemandeCreation, session: Annotated[Session, Depends(obtenir_session)]
 ) -> dict:
-    if not ecrire_reglage_neuf(session, CLE_EMPREINTE, hacher(demande.mot_de_passe)):
+    # Le compte d'abord, l'empreinte ensuite. `or` court-circuite, donc
+    # `hacher` n'est pas appele quand le compte existe deja.
+    #
+    # scrypt est lent et gourmand en memoire EXPRES : c'est ce qui protege le
+    # mot de passe. Mais cette route reste joignable sans jeton toute la vie de
+    # l'instance, et hacher avant de savoir faisait payer ce calcul au serveur a
+    # chaque appel, pour jeter le resultat et repondre 409.
+    #
+    # `ecrire_reglage_neuf` garde le dernier mot : entre deux creations
+    # simultanees, c'est la cle primaire qui tranche, pas cette lecture.
+    if lire_reglage(session, CLE_EMPREINTE) is not None or not ecrire_reglage_neuf(
+        session, CLE_EMPREINTE, hacher(demande.mot_de_passe)
+    ):
         raise HTTPException(409, "Un compte professeur existe deja")
     return {"jeton": creer_jeton_prof(session)}
 
