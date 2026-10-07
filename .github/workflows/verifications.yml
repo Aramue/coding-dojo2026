@@ -115,7 +115,7 @@ jobs:
       # `test:couverture` et pas `test` : les seuils de vitest.config.ts — 100 %
       # sur `src/quiz/**`, `src/validation/**`, le routage, le calendrier — ne
       # servent à rien s'ils ne font échouer que la machine du développeur.
-      - name: 529 tests et seuils de couverture
+      - name: 532 tests et seuils de couverture
         run: pnpm test:couverture
 
       # `tsc --noEmit && vite build`, la commande du Dockerfile.

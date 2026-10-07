@@ -143,6 +143,10 @@ trouve, et lit la réponse dessous, pour comparer avec ce qu'un élève a écrit
 
 - **Repliée à l'ouverture.** L'aperçu est souvent projeté : visible d'emblée, la solution serait
   donnée à toute la classe avant que le professeur l'ait décidé.
+- **« Solutions des exercices »**, à côté de « Voir l'espace élève », est le même aperçu par une
+  autre porte : il s'ouvre sur la liste des exercices plutôt que sur une leçon, et les solutions
+  y sont ==déjà dépliées== — là, le professeur les a demandées. Le bouton reste grisé tant que les
+  solutions ne sont pas arrivées : un bouton qui n'en montrerait aucune ferait chercher une panne.
 - **« Mettre dans l'éditeur »** recopie la solution dans l'éditeur de l'aperçu, pour la lancer et
   voir sa sortie. Rien n'est enregistré, comme pour tout l'aperçu.
 - **Sur un QCM**, le bloc donne la bonne réponse et ne répète pas le programme : la solution *est*

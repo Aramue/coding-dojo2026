@@ -116,7 +116,26 @@ describe("Apercu — ce que l'élève voit", () => {
       />,
     )
     expect(await screen.findByText(/Solution de référence/)).toBeInTheDocument()
-    expect(screen.getByText(/les élèves ne\s+l'ont pas/)).toBeInTheDocument()
+    expect(screen.getByText(/repliée sous chaque exercice/)).toHaveTextContent(
+      "Les élèves ne l'ont pas",
+    )
+  })
+
+  it('par « Solutions des exercices », ouvre sur les exercices, solutions dépliées', async () => {
+    render(
+      <Apercu
+        executeur={EXECUTEUR}
+        solutions={{ 's1-01': 'print("bonjour")' }}
+        pourLesSolutions
+        onFermer={vi.fn()}
+      />,
+    )
+    // La liste des exercices de la première notion, pas sa leçon.
+    const cadre = await screen.findByRole('dialog', { name: 'Solutions des exercices' })
+    await userEvent.click(await within(cadre).findByRole('link', { name: /Dire bonjour/ }))
+    const bloc = (await screen.findByText(/Solution de référence/)).closest('details')!
+    expect(bloc.open).toBe(true)
+    expect(within(bloc).getByText('print("bonjour")')).toBeInTheDocument()
   })
 
   it("sans solutions, reste l'aperçu de l'élève, tel quel", async () => {

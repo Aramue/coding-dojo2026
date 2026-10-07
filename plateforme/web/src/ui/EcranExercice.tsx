@@ -34,6 +34,7 @@ export function EcranExercice({
   precedent,
   suivant,
   solution,
+  solutionOuverte = false,
 }: {
   exercice: Exercice
   executeur: Executeur
@@ -43,6 +44,8 @@ export function EcranExercice({
    * Absente — toujours, côté élève —, l'écran est exactement le même qu'avant.
    */
   solution?: string
+  /** Le professeur est venu pour les solutions : le bloc est déjà déplié. */
+  solutionOuverte?: boolean
   /** Nom affiche de la notion, pour le rappel colore en haut de page. */
   titreNotion?: string
   /**
@@ -276,12 +279,13 @@ export function EcranExercice({
           <PanneauVerdict resultat={resultat} />
 
           {/*
-            Repliée à l'ouverture : l'aperçu est souvent projeté, et une
+            Repliée à l'ouverture de l'aperçu : il est souvent projeté, et une
             solution visible d'emblée serait donnée à toute la classe avant
-            que le professeur l'ait décidé.
+            que le professeur l'ait décidé. Elle n'est dépliée que s'il est
+            entré par « Solutions des exercices » — là, il l'a demandé.
           */}
           {solution !== undefined && (
-            <details className="solution">
+            <details className="solution" open={solutionOuverte}>
               <summary>
                 Solution de référence
                 <span className="solution__note">visible du professeur seulement</span>
