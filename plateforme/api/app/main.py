@@ -11,6 +11,7 @@ from .routes_eleve import routeur as routeur_eleve
 from .routes_prof import routeur as routeur_prof
 from .routes_quiz import routeur as routeur_quiz
 from .routes_quiz import routeur_prof as routeur_quiz_prof
+from .solutions import routeur as routeur_solutions
 
 
 @asynccontextmanager
@@ -26,6 +27,7 @@ application.include_router(routeur_prof)
 application.include_router(routeur_eleves_prof)
 application.include_router(routeur_quiz)
 application.include_router(routeur_quiz_prof)
+application.include_router(routeur_solutions)
 
 
 @application.get("/sante")
