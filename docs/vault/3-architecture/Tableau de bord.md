@@ -3,7 +3,7 @@ title: Tableau de bord
 tags:
   - architecture
   - professeur
-mis-a-jour: 2026-09-25
+mis-a-jour: 2026-10-07
 ---
 
 # Tableau de bord
@@ -134,6 +134,29 @@ départ. Un bouton ouvre aussi l'espace au départ, pour parcourir la séance av
 L'aperçu montre **tout le contenu publié, séances à venir comprises**, puisque c'est avant une
 séance qu'on la cadre. Il est le seul écran à le faire, et il le dit : une ligne sous son titre
 nomme ce que la classe ne voit pas encore, et le jour où elle le verra.
+
+### La solution sous chaque exercice — 7 octobre 2026
+
+L'aperçu ajoute une seule chose à ce que voit l'élève : ==la solution de référence==, repliée sous
+chaque exercice. Mêmes menus, mêmes titres — le professeur retrouve un exercice comme la classe le
+trouve, et lit la réponse dessous, pour comparer avec ce qu'un élève a écrit ou le débloquer.
+
+- **Repliée à l'ouverture.** L'aperçu est souvent projeté : visible d'emblée, la solution serait
+  donnée à toute la classe avant que le professeur l'ait décidé.
+- **« Mettre dans l'éditeur »** recopie la solution dans l'éditeur de l'aperçu, pour la lancer et
+  voir sa sortie. Rien n'est enregistré, comme pour tout l'aperçu.
+- **Sur un QCM**, le bloc donne la bonne réponse et ne répète pas le programme : la solution *est*
+  le programme affiché à gauche.
+
+> [!danger] Les solutions ne passent jamais par le contenu publié
+> `construire_contenu.py` retire la solution de chaque exercice : tout ce que le navigateur d'un
+> élève télécharge, il peut le lire. Elles suivent donc le chemin des quiz —
+> `construire_solutions.py` les écrit pour **l'image de l'API**, qui les rend par
+> `GET /prof/solutions`, derrière le jeton professeur. L'interface les garde en mémoire et ne les
+> range ni dans `sessionStorage` ni ailleurs : la machine de la salle sert aussi aux élèves.
+
+Sans le fichier des solutions — en développement, avant d'avoir lancé `construire_solutions.py` —
+l'aperçu est le même qu'avant, sans le bloc. Rien ne plante.
 
 > [!important] Ce ne sont ni des captures ni une maquette
 > ==Ce sont les composants de l'élève, avec le contenu publié==, montés tels quels. Ce que le
