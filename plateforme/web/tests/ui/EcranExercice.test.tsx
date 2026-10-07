@@ -130,6 +130,77 @@ describe('EcranExercice — rappel de réussite', () => {
   })
 })
 
+describe('EcranExercice — solution de référence', () => {
+  it("n'en montre aucune à l'élève : il n'en reçoit pas", () => {
+    render(<EcranExercice exercice={exercice()} executeur={executeurFactice([])} onTentative={vi.fn()} />)
+    expect(screen.queryByText(/Solution de référence/)).toBeNull()
+  })
+
+  it('la garde repliée tant que le professeur ne l a pas ouverte', () => {
+    // L'aperçu est souvent projeté : visible d'emblée, la solution serait
+    // donnée à toute la classe avant que le professeur l'ait décidé.
+    render(
+      <EcranExercice
+        exercice={exercice()}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+        solution={'print("Bonjour")\n'}
+      />,
+    )
+    const bloc = screen.getByText(/Solution de référence/).closest('details')!
+    expect(bloc.open).toBe(false)
+    expect(screen.getByText(/visible du professeur seulement/)).toBeInTheDocument()
+  })
+
+  it("la met dans l'éditeur, pour la lancer ou la comparer", async () => {
+    // Ce que l'exécuteur reçoit est ce que l'éditeur contient.
+    const lancements: string[] = []
+    const executeur = {
+      executer: async (demande: DemandeExecution): Promise<ResultatExecution> => {
+        lancements.push(demande.code)
+        return { stdout: 'Bonjour', erreur: null, variables: {}, dureeMs: 3, timeout: false }
+      },
+      detruire: vi.fn(),
+    } as unknown as Executeur
+    render(
+      <EcranExercice
+        exercice={exercice({ depart: '# à toi' })}
+        executeur={executeur}
+        onTentative={vi.fn()}
+        solution={'print("Bonjour")\n'}
+      />,
+    )
+    await userEvent.click(screen.getByText(/Solution de référence/))
+    expect(screen.getByText('La solution')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /Mettre dans l'éditeur/ }))
+    await userEvent.click(screen.getByRole('button', { name: 'Valider' }))
+    await waitFor(() => expect(lancements).toEqual(['print("Bonjour")\n']))
+  })
+
+  it('sur un QCM, donne la bonne réponse sans répéter le programme', async () => {
+    const programme = 'print("Bonjour", "Camille")\n'
+    render(
+      <EcranExercice
+        exercice={exercice({
+          type: 'predire',
+          depart: programme,
+          tests: [
+            { type: 'qcm', options: ['Bonjour Camille', 'BonjourCamille'], bonneReponse: 0 },
+          ] as Test[],
+        })}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+        solution={programme}
+      />,
+    )
+    await userEvent.click(screen.getByText(/Solution de référence/))
+    const reponse = screen.getByText('Bonne réponse').parentElement!
+    expect(reponse).toHaveTextContent('Bonjour Camille')
+    expect(screen.queryByText('La solution')).toBeNull()
+    expect(screen.queryByRole('button', { name: /Mettre dans l'éditeur/ })).toBeNull()
+  })
+})
+
 describe('EcranExercice — console', () => {
   it('attend une exécution avant de montrer quoi que ce soit', () => {
     render(

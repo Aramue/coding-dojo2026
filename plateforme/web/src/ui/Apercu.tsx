@@ -4,6 +4,7 @@ import { aujourdhui, chapitresAVenir, dateLongue } from '../contenu/calendrier'
 import { grouper, grouperParChapitre } from '../contenu/notions'
 import type { Executeur } from '../execution/executeur'
 import { useContenuPublie } from '../prof/contenu'
+import type { Solutions } from '../prof/solutions'
 import { analyser, type Destination } from '../routage'
 import { ContexteDefilement } from './defilement'
 import { EcranExercice } from './EcranExercice'
@@ -30,12 +31,19 @@ import './Apercu.css'
  *
  * Rien n'est enregistré : la progression affichée est vide, et une validation
  * ne part nulle part.
+ *
+ * Une seule chose s'ajoute à ce que voit l'élève : ==la solution de référence==,
+ * repliée sous chaque exercice. Mêmes menus, mêmes titres — le professeur
+ * retrouve un exercice comme la classe le trouve, et lit la réponse dessous.
  */
 export function Apercu({
   depart,
   executeur,
   onFermer,
+  solutions,
 }: {
+  /** Les solutions de référence, par identifiant d'exercice. Absentes : l'aperçu seul. */
+  solutions?: Solutions | null
   /** Où ouvrir l'aperçu — l'exercice qu'on veut lire, ou la première leçon. */
   depart?: Destination
   executeur: Executeur
@@ -132,6 +140,12 @@ export function Apercu({
           <span className="apercu__note">
             Le contenu réel, avec une progression vide. Rien n'est enregistré ici.
           </span>
+          {solutions && (
+            <span className="apercu__note">
+              La solution de référence est repliée sous chaque exercice&nbsp;: les élèves ne
+              l'ont pas.
+            </span>
+          )}
           {aVenir.map((chapitre) => (
             <span key={chapitre.id} className="apercu__note">
               Les élèves ne voient pas encore «&nbsp;{chapitre.titre}&nbsp;»&nbsp;: la séance{' '}
@@ -156,7 +170,12 @@ export function Apercu({
           <ContexteDefilement.Provider value={cadre}>
             <div className="appli appli--apercu">
               <Menu chapitres={chapitres} destination={destination} />
-              <Vue destination={destination} groupes={groupes} executeur={executeur} />
+              <Vue
+                destination={destination}
+                groupes={groupes}
+                executeur={executeur}
+                solutions={solutions ?? null}
+              />
             </div>
           </ContexteDefilement.Provider>
         </div>
@@ -171,10 +190,12 @@ function Vue({
   destination,
   groupes,
   executeur,
+  solutions,
 }: {
   destination: Destination
   groupes: ReturnType<typeof grouper>
   executeur: Executeur
+  solutions: Solutions | null
 }) {
   const groupe =
     'notion' in destination ? groupes.find((g) => g.id === destination.notion) : undefined
@@ -199,6 +220,7 @@ function Vue({
         titreNotion={groupe.titre}
         exercice={exercice}
         executeur={executeur}
+        solution={solutions?.[exercice.id]}
         precedent={
           avant
             ? {

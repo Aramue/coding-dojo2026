@@ -106,6 +106,32 @@ describe("Apercu — ce que l'élève voit", () => {
     expect(await screen.findByText('0 / 1')).toBeInTheDocument()
   })
 
+  it('ajoute la solution de référence sous l exercice, et le dit', async () => {
+    render(
+      <Apercu
+        depart={{ vue: 'exercice', notion: 'saisie', numero: 1 }}
+        executeur={EXECUTEUR}
+        solutions={{ 's1-31': 'print("fiche")' }}
+        onFermer={vi.fn()}
+      />,
+    )
+    expect(await screen.findByText(/Solution de référence/)).toBeInTheDocument()
+    expect(screen.getByText(/les élèves ne\s+l'ont pas/)).toBeInTheDocument()
+  })
+
+  it("sans solutions, reste l'aperçu de l'élève, tel quel", async () => {
+    render(
+      <Apercu
+        depart={{ vue: 'exercice', notion: 'saisie', numero: 1 }}
+        executeur={EXECUTEUR}
+        solutions={null}
+        onFermer={vi.fn()}
+      />,
+    )
+    expect(await screen.findByRole('heading', { name: 'Deux questions, une fiche' })).toBeInTheDocument()
+    expect(screen.queryByText(/Solution de référence/)).toBeNull()
+  })
+
   it('dit que rien n est enregistré', async () => {
     render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
     expect(await screen.findByText(/Rien n'est enregistré ici/)).toBeInTheDocument()

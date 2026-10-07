@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Executeur } from '../execution/executeur'
 import { compteExiste, creerCompte, LONGUEUR_MIN, seConnecter } from '../prof/compte'
+import { useSolutions } from '../prof/solutions'
 import { naviguer, type Destination } from '../routage'
 import { Apercu } from './Apercu'
 import { Classe } from './Classe'
@@ -265,6 +266,10 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
   // l'objet signifie « ouvre où tu veux », c'est-à-dire la première leçon.
   const [apercu, setApercu] = useState<{ ou?: Destination } | null>(null)
 
+  // Chargées une fois, à l'entrée : l'aperçu les a sous la main dès qu'il
+  // s'ouvre, y compris depuis un exercice du tableau de bord.
+  const solutions = useSolutions(jeton)
+
   return (
     <main className="prof">
       <TableauDeBord
@@ -278,7 +283,8 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
           Voir l'espace élève
         </button>
         <span className="prof__note">
-          Le contenu réel, tel que la classe le lit. Rien n'y est enregistré.
+          Le contenu réel, tel que la classe le lit, avec la solution sous chaque exercice. Rien
+          n'y est enregistré.
         </span>
         <button
           type="button"
@@ -299,7 +305,12 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
 
       {/* Par-dessus, pas à la place : le tableau attend derrière, intact. */}
       {apercu && (
-        <Apercu depart={apercu.ou} executeur={executeur} onFermer={() => setApercu(null)} />
+        <Apercu
+          depart={apercu.ou}
+          executeur={executeur}
+          solutions={solutions}
+          onFermer={() => setApercu(null)}
+        />
       )}
     </main>
   )
