@@ -279,3 +279,35 @@ describe('EcranProf — le quiz', () => {
     expect(sessionStorage.getItem(CLE)).toBeNull()
   })
 })
+
+describe('EcranProf — les solutions', () => {
+  it('ouvre les solutions par leur propre bouton, à côté de l espace élève', async () => {
+    const appel = vi.fn(async (url: string, _init?: RequestInit) => {
+      if (url === '/api/prof/solutions') return reponse(200, { solutions: { 's1-01': 'print()' } })
+      if (url.includes('prof/seance') || url.includes('prof/eleves')) {
+        return reponse(200, { eleves: [] })
+      }
+      return reponse(200, [])
+    })
+    vi.stubGlobal('fetch', appel)
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+
+    const bouton = await screen.findByRole('button', { name: 'Solutions des exercices' })
+    await waitFor(() => expect(bouton).toBeEnabled())
+    await userEvent.click(bouton)
+    expect(screen.getByRole('dialog', { name: 'Solutions des exercices' })).toBeInTheDocument()
+
+    const [, init] = appel.mock.calls.find(([u]) => u === '/api/prof/solutions')!
+    expect(init?.headers).toEqual({ 'X-Jeton-Prof': JETON })
+  })
+
+  it('grise le bouton tant que les solutions ne sont pas là', async () => {
+    // Un bouton « Solutions » qui n'en montre aucune ferait chercher une panne.
+    poserLeReseau()
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+    expect(await screen.findByRole('button', { name: 'Solutions des exercices' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: "Voir l'espace élève" })).toBeEnabled()
+  })
+})

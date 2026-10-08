@@ -681,6 +681,87 @@ html {
   border-style: dashed;
 }
 
+/* ---------- Solution de reference (apercu du professeur) ---------- */
+
+/*
+ * Repliee a l'ouverture, et dessinee comme un indice plutot que comme un
+ * verdict : c'est une aide a cote du travail, pas un resultat. Les eleves ne
+ * la recoivent jamais — ce bloc n'existe que dans l'apercu du professeur.
+ */
+.solution {
+  border: 1px dashed rgb(255 195 49 / 45%);
+  border-radius: var(--rayon-2);
+  background: rgb(255 195 49 / 5%);
+}
+
+.solution summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-1);
+  flex-wrap: wrap;
+  padding: var(--e-2);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--t-2);
+  color: var(--py-yellow);
+}
+
+.solution summary:focus-visible {
+  outline: 2px solid var(--py-yellow);
+  outline-offset: 2px;
+  border-radius: var(--rayon-2);
+}
+
+.solution__note {
+  font-weight: 400;
+  font-size: var(--t-1);
+  color: var(--texte-doux);
+}
+
+.solution[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  padding-bottom: var(--e-2);
+}
+
+.solution[open] > :not(summary) {
+  margin: 0 var(--e-2);
+}
+
+.solution__reponse {
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-1);
+  flex-wrap: wrap;
+  font-size: var(--t-2);
+}
+
+.solution__reponse b {
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--py-yellow);
+}
+
+.solution__reponse span {
+  font-family: var(--police-code);
+  color: var(--d-fg);
+  white-space: pre-wrap;
+}
+
+/* Le bouton secondaire est dessine pour un fond clair : ici, le fond est sombre. */
+.solution .bouton {
+  align-self: flex-start;
+  background: transparent;
+  border-color: var(--trait);
+  color: var(--d-fg);
+}
+
+.solution .bouton:hover {
+  background: rgb(255 255 255 / 6%);
+  border-color: rgb(255 255 255 / 32%);
+}
+
 /* ---------- Choix multiple ---------- */
 
 .qcm {

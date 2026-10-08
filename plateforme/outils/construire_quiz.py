@@ -18,15 +18,22 @@ from pathlib import Path
 from valider_contenu import verifier_tous_les_quiz
 
 
-def construire_quiz(racine: Path, sortie: Path) -> int:
-    # Garde-fou contre une commande mal recopiee : tout ce qui est sous
-    # `web/public` est servi par Caddy, et le contenu y vit dans `contenu/`. Y
-    # ecrire mettrait les reponses sous les yeux de toute la classe.
+def refuser_le_contenu_publie(sortie: Path, quoi: str) -> None:
+    """Garde-fou contre une commande mal recopiee.
+
+    Tout ce qui est sous `web/public` est servi par Caddy, et le contenu y vit
+    dans `contenu/`. Y ecrire mettrait les reponses sous les yeux de toute la
+    classe. `construire_solutions.py` s'en sert aussi, pour la meme raison.
+    """
     parties = sortie.resolve().parts
     if "public" in parties or "contenu" in parties[-2:]:
         raise SystemExit(
-            f"{sortie} ressemble au contenu publie : les quiz ne doivent jamais y aller."
+            f"{sortie} ressemble au contenu publie : {quoi} ne doivent jamais y aller."
         )
+
+
+def construire_quiz(racine: Path, sortie: Path) -> int:
+    refuser_le_contenu_publie(sortie, "les quiz")
 
     tous, problemes = verifier_tous_les_quiz(racine)
     if problemes:

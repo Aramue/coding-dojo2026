@@ -106,6 +106,51 @@ describe("Apercu — ce que l'élève voit", () => {
     expect(await screen.findByText('0 / 1')).toBeInTheDocument()
   })
 
+  it('ajoute la solution de référence sous l exercice, et le dit', async () => {
+    render(
+      <Apercu
+        depart={{ vue: 'exercice', notion: 'saisie', numero: 1 }}
+        executeur={EXECUTEUR}
+        solutions={{ 's1-31': 'print("fiche")' }}
+        onFermer={vi.fn()}
+      />,
+    )
+    expect(await screen.findByText(/Solution de référence/)).toBeInTheDocument()
+    expect(screen.getByText(/repliée sous chaque exercice/)).toHaveTextContent(
+      "Les élèves ne l'ont pas",
+    )
+  })
+
+  it('par « Solutions des exercices », ouvre sur les exercices, solutions dépliées', async () => {
+    render(
+      <Apercu
+        executeur={EXECUTEUR}
+        solutions={{ 's1-01': 'print("bonjour")' }}
+        pourLesSolutions
+        onFermer={vi.fn()}
+      />,
+    )
+    // La liste des exercices de la première notion, pas sa leçon.
+    const cadre = await screen.findByRole('dialog', { name: 'Solutions des exercices' })
+    await userEvent.click(await within(cadre).findByRole('link', { name: /Dire bonjour/ }))
+    const bloc = (await screen.findByText(/Solution de référence/)).closest('details')!
+    expect(bloc.open).toBe(true)
+    expect(within(bloc).getByText('print("bonjour")')).toBeInTheDocument()
+  })
+
+  it("sans solutions, reste l'aperçu de l'élève, tel quel", async () => {
+    render(
+      <Apercu
+        depart={{ vue: 'exercice', notion: 'saisie', numero: 1 }}
+        executeur={EXECUTEUR}
+        solutions={null}
+        onFermer={vi.fn()}
+      />,
+    )
+    expect(await screen.findByRole('heading', { name: 'Deux questions, une fiche' })).toBeInTheDocument()
+    expect(screen.queryByText(/Solution de référence/)).toBeNull()
+  })
+
   it('dit que rien n est enregistré', async () => {
     render(<Apercu executeur={EXECUTEUR} onFermer={vi.fn()} />)
     expect(await screen.findByText(/Rien n'est enregistré ici/)).toBeInTheDocument()

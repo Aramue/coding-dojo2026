@@ -3,12 +3,17 @@
 # l'image web, dont tout le contenu est lisible par les eleves. Voir ADR-015.
 # Un quiz incoherent — une bonne reponse qui n'est pas ce que le code affiche —
 # fait echouer cette etape, donc le deploiement.
+#
+# Les solutions de reference suivent le meme chemin, pour la meme raison : la
+# publication les retire de chaque exercice, et seule une session professeur
+# les lit, par l'API.
 FROM python:3.12-slim AS quiz
 WORKDIR /build
 COPY plateforme/outils ./outils
 COPY plateforme/contenu ./contenu
 RUN pip install --no-cache-dir -r outils/requirements.txt \
- && cd outils && python construire_quiz.py ../contenu/chapitre-1 /build/quiz
+ && cd outils && python construire_quiz.py ../contenu/chapitre-1 /build/quiz \
+ && python construire_solutions.py ../contenu/chapitre-1 /build/solutions
 
 FROM python:3.12-slim
 WORKDIR /app
@@ -16,9 +21,11 @@ COPY plateforme/api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY plateforme/api/app ./app
 COPY --from=quiz /build/quiz ./quiz
+COPY --from=quiz /build/solutions ./solutions
 RUN mkdir -p /app/donnees
 ENV DOJO_BDD=sqlite:////app/donnees/dojo.db
 ENV DOJO_QUIZ=/app/quiz
+ENV DOJO_SOLUTIONS=/app/solutions/solutions.json
 EXPOSE 8000
 # Un seul processus, jamais `--workers` : le registre des WebSocket du quiz vit
 # en memoire. Voir ADR-016.

@@ -33,9 +33,19 @@ export function EcranExercice({
   dejaFait,
   precedent,
   suivant,
+  solution,
+  solutionOuverte = false,
 }: {
   exercice: Exercice
   executeur: Executeur
+  /**
+   * La solution de référence. ==Le professeur seul la reçoit==, dans son
+   * aperçu : elle vient de l'API derrière son jeton, jamais du contenu publié.
+   * Absente — toujours, côté élève —, l'écran est exactement le même qu'avant.
+   */
+  solution?: string
+  /** Le professeur est venu pour les solutions : le bloc est déjà déplié. */
+  solutionOuverte?: boolean
   /** Nom affiche de la notion, pour le rappel colore en haut de page. */
   titreNotion?: string
   /**
@@ -267,6 +277,41 @@ export function EcranExercice({
           {!qcm && <Console passages={passages} enCours={enCours} />}
 
           <PanneauVerdict resultat={resultat} />
+
+          {/*
+            Repliée à l'ouverture de l'aperçu : il est souvent projeté, et une
+            solution visible d'emblée serait donnée à toute la classe avant
+            que le professeur l'ait décidé. Elle n'est dépliée que s'il est
+            entré par « Solutions des exercices » — là, il l'a demandé.
+          */}
+          {solution !== undefined && (
+            <details className="solution" open={solutionOuverte}>
+              <summary>
+                Solution de référence
+                <span className="solution__note">visible du professeur seulement</span>
+              </summary>
+              {qcm && (
+                <p className="solution__reponse">
+                  <b>Bonne réponse</b>
+                  <span>{qcm.options[qcm.bonneReponse]}</span>
+                </p>
+              )}
+              {/*
+                Sur un « predire », la solution EST le programme affiché à
+                gauche : le répéter ici n'apprendrait rien.
+              */}
+              {(!qcm || solution.trim() !== exercice.depart.trim()) && (
+                <CarteCode legende="La solution">
+                  <pre>{solution.trimEnd()}</pre>
+                </CarteCode>
+              )}
+              {!qcm && (
+                <button type="button" className="bouton" onClick={() => setCode(solution)}>
+                  Mettre dans l'éditeur
+                </button>
+              )}
+            </details>
+          )}
         </section>
       </div>
 

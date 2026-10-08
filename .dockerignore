@@ -16,6 +16,7 @@
 **/dist
 plateforme/web/public/contenu
 plateforme/api/quiz
+plateforme/api/solutions
 
 # Bases locales et couverture.
 **/donnees/*.db

@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-10-01
+mis-a-jour: 2026-10-07
 ---
 
 # Pièges et invariants
@@ -412,6 +412,17 @@ Les quiz sont construits par `construire_quiz.py`, dans l'image de l'API seuleme
 **Ce qui casse :** tout ce que sert Caddy est lisible par n'importe quel élève. Un quiz publié là
 donne les bonnes réponses à qui ouvre l'onglet réseau — dans une partie avec un classement. Les
 exercices, eux, y sont à leur place : on s'y entraîne seul.
+
+### Une solution n'entre jamais dans `web/public` non plus
+
+`construire_contenu.py` retire `solution` de chaque exercice publié, et un test l'affirme.
+`construire_solutions.py` les écrit à part, pour l'image de l'API, avec le même refus d'écrire
+sous `public` ou `contenu` ; l'API ne les rend que par `GET /prof/solutions`, derrière le jeton
+professeur, et l'interface ne les range dans aucun stockage du navigateur.
+
+**Ce qui casse :** une solution dans `exercices.json`, ou servie à un jeton élève, donne toutes
+les réponses à qui ouvre l'onglet réseau. Et une solution gardée dans `sessionStorage` reste sur
+la machine de la salle, où un élève s'assoit ensuite.
 
 ### L'API reste un seul processus
 

@@ -53,7 +53,7 @@ docs/vault/               la documentation, sous forme de coffre Obsidian
 cd plateforme/web
 pnpm install
 pnpm dev                 # serveur de développement
-pnpm test                # 516 tests
+pnpm test                # 532 tests
 pnpm test:couverture     # avec les seuils qui font échouer la construction
 
 # API
@@ -66,12 +66,17 @@ cd plateforme/outils
 .venv/Scripts/python valider_contenu.py ../contenu/chapitre-1
 .venv/Scripts/python construire_contenu.py ../contenu/chapitre-1 ../web/public/contenu
 .venv/Scripts/python construire_quiz.py     # les quiz, pour l'API seulement -> ../api/quiz
+.venv/Scripts/python construire_solutions.py   # les solutions, pour le professeur -> ../api/solutions
 ```
 
 > [!WARNING]
 > Les quiz ne vont **jamais** dans `web/public` : leurs bonnes réponses y seraient lisibles par
 > toute la classe. Ils sont construits dans l'image de l'API. Voir
 > [Quiz en direct](docs/vault/3-architecture/Quiz%20en%20direct.md).
+>
+> Même règle pour les **solutions de référence** : la publication les retire de chaque exercice,
+> et seule une session professeur les lit, par l'API, repliées sous chaque exercice de « Voir
+> l'espace élève ».
 
 > [!IMPORTANT]
 > `valider_contenu.py` **exécute la solution de référence de chaque exercice
@@ -86,9 +91,9 @@ lancent les commandes ci-dessus, pas d'autres :
 
 | Job | Ce qu'il lance |
 |---|---|
-| API | les 226 tests de `plateforme/api` |
-| Contenu | les 143 tests de `plateforme/outils`, la validation du contenu, les deux constructions |
-| Interface | les 516 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
+| API | les 237 tests de `plateforme/api` |
+| Contenu | les 150 tests de `plateforme/outils`, la validation du contenu, les trois constructions |
+| Interface | les 532 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
 
 Une minute de calcul en tout. Une release est un **tag** `vX.Y.Z` posé sur
 `main` : il rejoue ces trois contrôles, puis construit et publie les deux images

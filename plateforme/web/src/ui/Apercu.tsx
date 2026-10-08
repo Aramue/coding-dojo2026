@@ -4,6 +4,7 @@ import { aujourdhui, chapitresAVenir, dateLongue } from '../contenu/calendrier'
 import { grouper, grouperParChapitre } from '../contenu/notions'
 import type { Executeur } from '../execution/executeur'
 import { useContenuPublie } from '../prof/contenu'
+import type { Solutions } from '../prof/solutions'
 import { analyser, type Destination } from '../routage'
 import { ContexteDefilement } from './defilement'
 import { EcranExercice } from './EcranExercice'
@@ -30,12 +31,26 @@ import './Apercu.css'
  *
  * Rien n'est enregistré : la progression affichée est vide, et une validation
  * ne part nulle part.
+ *
+ * Une seule chose s'ajoute à ce que voit l'élève : ==la solution de référence==,
+ * repliée sous chaque exercice. Mêmes menus, mêmes titres — le professeur
+ * retrouve un exercice comme la classe le trouve, et lit la réponse dessous.
  */
 export function Apercu({
   depart,
   executeur,
   onFermer,
+  solutions,
+  pourLesSolutions = false,
 }: {
+  /** Les solutions de référence, par identifiant d'exercice. Absentes : l'aperçu seul. */
+  solutions?: Solutions | null
+  /**
+   * L'entrée « Solutions des exercices » : le même aperçu, mais ouvert sur une
+   * liste d'exercices plutôt que sur une leçon, et chaque solution déjà
+   * dépliée — le professeur n'est venu que pour elles.
+   */
+  pourLesSolutions?: boolean
   /** Où ouvrir l'aperçu — l'exercice qu'on veut lire, ou la première leçon. */
   depart?: Destination
   executeur: Executeur
@@ -92,7 +107,10 @@ export function Apercu({
   // Faute de point de départ, on ouvre sur la première leçon : c'est par là que
   // l'élève commence, donc par là qu'on cadre.
   const destination: Destination =
-    ou ?? (groupes[0] ? { vue: 'cours', notion: groupes[0].id } : { vue: 'inconnue' })
+    ou ??
+    (groupes[0]
+      ? { vue: pourLesSolutions ? 'exercices' : 'cours', notion: groupes[0].id }
+      : { vue: 'inconnue' })
 
   /**
    * Les composants élève naviguent par `naviguer()`, qui change l'URL réelle.
@@ -122,16 +140,24 @@ export function Apercu({
       className="apercu"
       role="dialog"
       aria-modal="true"
-      aria-label="Aperçu de l'espace élève"
+      aria-label={pourLesSolutions ? 'Solutions des exercices' : "Aperçu de l'espace élève"}
       ref={panneau}
       tabIndex={-1}
     >
       <header className="apercu__barre">
         <div>
-          <b>Aperçu de l'espace élève</b>
+          <b>{pourLesSolutions ? 'Solutions des exercices' : "Aperçu de l'espace élève"}</b>
           <span className="apercu__note">
             Le contenu réel, avec une progression vide. Rien n'est enregistré ici.
           </span>
+          {solutions && (
+            <span className="apercu__note">
+              {pourLesSolutions
+                ? 'Choisis un exercice dans le menu : sa solution est affichée dessous.'
+                : 'La solution de référence est repliée sous chaque exercice.'}{' '}
+              Les élèves ne l'ont pas.
+            </span>
+          )}
           {aVenir.map((chapitre) => (
             <span key={chapitre.id} className="apercu__note">
               Les élèves ne voient pas encore «&nbsp;{chapitre.titre}&nbsp;»&nbsp;: la séance{' '}
@@ -156,7 +182,13 @@ export function Apercu({
           <ContexteDefilement.Provider value={cadre}>
             <div className="appli appli--apercu">
               <Menu chapitres={chapitres} destination={destination} />
-              <Vue destination={destination} groupes={groupes} executeur={executeur} />
+              <Vue
+                destination={destination}
+                groupes={groupes}
+                executeur={executeur}
+                solutions={solutions ?? null}
+                solutionsOuvertes={pourLesSolutions}
+              />
             </div>
           </ContexteDefilement.Provider>
         </div>
@@ -171,10 +203,14 @@ function Vue({
   destination,
   groupes,
   executeur,
+  solutions,
+  solutionsOuvertes,
 }: {
   destination: Destination
   groupes: ReturnType<typeof grouper>
   executeur: Executeur
+  solutions: Solutions | null
+  solutionsOuvertes: boolean
 }) {
   const groupe =
     'notion' in destination ? groupes.find((g) => g.id === destination.notion) : undefined
@@ -199,6 +235,8 @@ function Vue({
         titreNotion={groupe.titre}
         exercice={exercice}
         executeur={executeur}
+        solution={solutions?.[exercice.id]}
+        solutionOuverte={solutionsOuvertes}
         precedent={
           avant
             ? {

@@ -45,7 +45,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: 226 tests
+      - name: 237 tests
         run: python -m pytest -q
 
   contenu:
@@ -67,7 +67,7 @@ jobs:
 
       # pytest.ini porte `--cov-fail-under=82` : le plancher de couverture des
       # outils est vérifié ici, pas à la main.
-      - name: 143 tests
+      - name: 150 tests
         run: python -m pytest -q
 
       # Exécute la solution de référence de chaque exercice et rejoue chaque
@@ -76,14 +76,15 @@ jobs:
       - name: Validation du contenu
         run: python valider_contenu.py ../contenu/chapitre-1
 
-      # Les deux constructions que font les images, avec les mêmes commandes.
+      # Les trois constructions que font les images, avec les mêmes commandes.
       # Elles écrivent hors du dépôt : `construire_quiz.py` refuse d'écrire sous
       # `public` ou `contenu`, parce que les bonnes réponses n'ont rien à faire
       # dans ce que les élèves téléchargent. Voir ADR-015.
-      - name: Construction du contenu et des quiz
+      - name: Construction du contenu, des quiz et des solutions
         run: |
           python construire_contenu.py ../contenu/chapitre-1 "$RUNNER_TEMP/contenu"
           python construire_quiz.py ../contenu/chapitre-1 "$RUNNER_TEMP/quiz"
+          python construire_solutions.py ../contenu/chapitre-1 "$RUNNER_TEMP/solutions"
 
   web:
     name: Interface
@@ -114,7 +115,7 @@ jobs:
       # `test:couverture` et pas `test` : les seuils de vitest.config.ts — 100 %
       # sur `src/quiz/**`, `src/validation/**`, le routage, le calendrier — ne
       # servent à rien s'ils ne font échouer que la machine du développeur.
-      - name: 516 tests et seuils de couverture
+      - name: 532 tests et seuils de couverture
         run: pnpm test:couverture
 
       # `tsc --noEmit && vite build`, la commande du Dockerfile.
