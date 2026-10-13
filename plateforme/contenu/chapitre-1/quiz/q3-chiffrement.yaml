@@ -1,0 +1,205 @@
+# Le quiz du cours « Les algorithmes de chiffrement en Python » : César et
+# Vigenère.
+#
+# Trois parties, dans l'ordre où le cours les construit :
+#
+# - questions 1 à 5 : manipuler un texte — lire une lettre par sa position, le
+#   parcourir, passer d'une lettre à son numéro et retour avec ord() et chr() ;
+# - questions 6 à 9 : César — le décalage, le débordement après Z, le programme
+#   entier, le déchiffrement ;
+# - questions 10 à 13 : Vigenère — la clé répétée, la valeur d'une lettre de
+#   clé, une lettre, puis le programme entier.
+#
+# Les exemples sont ceux des diapositives : DOJO devient GRMR avec la clé 3, et
+# BONJOUR chiffré avec CLE commence par DZR. Un élève qui a suivi le cours
+# retrouve ce qu'il a vu au tableau.
+#
+# Les règles de q1-bases valent ici :
+#
+# - la bonne réponse change de place d'une question à l'autre ;
+# - toute question qui montre du code est exécutée à la construction, et
+#   `sortie: true` vérifie que l'option juste est exactement ce qui s'affiche ;
+# - une lettre vaut sa position en partant de ZÉRO — A vaut 0, B vaut 1 —,
+#   comme ord(lettre) - ord("A") et comme les diapositives de Vigenère.
+id: q3-chiffrement
+titre: Textes, César et Vigenère
+seance: 3
+questions:
+  # --- Manipuler un texte -----------------------------------------------------
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      mot = "CODING"
+      print(mot[2])
+    options:
+      - O
+      - D
+      - I
+    bonne_reponse: 1
+    sortie: true
+    explication: Les positions commencent à 0. C est à la position 0, O à la 1, D à la 2.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      mot = "DOJO"
+      print(mot[len(mot) - 1])
+    options:
+      - "4"
+      - J
+      - Une erreur
+      - O
+    bonne_reponse: 3
+    duree_s: 30
+    sortie: true
+    explication: len(mot) vaut 4, mais la dernière lettre est à la position 3, puisqu'on compte à partir de 0.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      resultat = ""
+      for lettre in "ABC":
+          resultat = lettre + resultat
+      print(resultat)
+    options:
+      - CBA
+      - ABC
+      - C
+      - AABBCC
+    bonne_reponse: 0
+    duree_s: 30
+    sortie: true
+    explication: Chaque lettre est collée DEVANT ce qui est déjà là. Le texte se construit donc à l'envers.
+
+  - enonce: ord() donne le numéro d'un caractère. Qu'affiche ce programme ?
+    code: |
+      print(ord("C") - ord("A"))
+    options:
+      - "3"
+      - "67"
+      - "2"
+    bonne_reponse: 2
+    duree_s: 30
+    sortie: true
+    explication: Les lettres se suivent dans le tableau ASCII. Soustraire ord("A") donne la position dans l'alphabet, en partant de 0.
+
+  - enonce: chr() fait l'inverse de ord(). Qu'affiche ce programme ?
+    code: |
+      print(chr(ord("A") + 3))
+    options:
+      - D
+      - A3
+      - "68"
+    bonne_reponse: 0
+    duree_s: 30
+    sortie: true
+    explication: ord("A") + 3 est le numéro de la lettre située trois places après A. chr() le retransforme en lettre.
+
+  # --- César ------------------------------------------------------------------
+
+  - enonce: Avec le chiffrement de César et la clé 3, que devient la lettre B ?
+    options:
+      - D
+      - E
+      - F
+    bonne_reponse: 1
+    explication: Chaque lettre avance de 3 places dans l'alphabet. B, C, D, E.
+
+  - enonce: Z est à la position 25. On la décale avec la clé 3. Qu'affiche ce programme ?
+    code: |
+      print((25 + 3) % 26)
+    options:
+      - "28"
+      - "3"
+      - "2"
+      - "0"
+    bonne_reponse: 2
+    duree_s: 30
+    sortie: true
+    explication: 28 dépasse la fin de l'alphabet. Le modulo 26 fait repartir du début. 28 moins 26 donne 2, la position de C.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      message = "DOJO"
+      cle = 3
+      chiffre = ""
+      for lettre in message:
+          position = ord(lettre) - ord("A")
+          nouvelle = (position + cle) % 26
+          chiffre = chiffre + chr(nouvelle + ord("A"))
+      print(chiffre)
+    options:
+      - DOJO3
+      - ALGL
+      - GRMS
+      - GRMR
+    bonne_reponse: 3
+    duree_s: 60
+    sortie: true
+    explication: Chaque lettre avance de 3. D devient G, O devient R, J devient M, et le second O redevient R.
+
+  - enonce: Pour déchiffrer, on recule de la clé. Ici la clé est 3. Qu'affiche ce programme ?
+    code: |
+      position = ord("B") - ord("A")
+      print(chr((position - 3) % 26 + ord("A")))
+    options:
+      - "Y"
+      - E
+      - "-2"
+      - Une erreur
+    bonne_reponse: 0
+    duree_s: 45
+    sortie: true
+    explication: 1 moins 3 donne -2. Le modulo 26 ramène -2 à 24, la position de Y. On est reparti de la fin de l'alphabet.
+
+  # --- Vigenère ---------------------------------------------------------------
+
+  - enonce: On chiffre BONJOUR avec la clé CLE. Quelle est la clé répétée ?
+    options:
+      - CLECLE
+      - CLECLEC
+      - CLECLECLE
+    bonne_reponse: 1
+    duree_s: 30
+    explication: On répète la clé jusqu'à couvrir tout le message. BONJOUR a 7 lettres, il faut donc 7 lettres de clé.
+
+  - enonce: Dans Vigenère, chaque lettre de la clé vaut un décalage. A décale de 0. De combien décale C ?
+    options:
+      - "3"
+      - "26"
+      - "2"
+    bonne_reponse: 2
+    explication: A vaut 0, B vaut 1, C vaut 2. C'est la position de la lettre dans l'alphabet, en partant de 0.
+
+  - enonce: On chiffre la lettre B avec la lettre de clé C. Qu'affiche ce programme ?
+    code: |
+      p = ord("B") - ord("A")
+      k = ord("C") - ord("A")
+      print(chr((p + k) % 26 + ord("A")))
+    options:
+      - BC
+      - C
+      - E
+      - D
+    bonne_reponse: 3
+    duree_s: 45
+    sortie: true
+    explication: B vaut 1 et C vaut 2. 1 plus 2 donne 3, la position de D. C'est César, avec un décalage donné par la clé.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      message = "BON"
+      cle = "CLE"
+      chiffre = ""
+      for i in range(len(message)):
+          p = ord(message[i]) - ord("A")
+          k = ord(cle[i]) - ord("A")
+          chiffre = chiffre + chr((p + k) % 26 + ord("A"))
+      print(chiffre)
+    options:
+      - ERQ
+      - DZR
+      - BONCLE
+      - DZS
+    bonne_reponse: 1
+    duree_s: 60
+    sortie: true
+    explication: Chaque lettre a son propre décalage. B avance de 2, O de 11, N de 4. Avec César, les trois auraient avancé du même nombre.
