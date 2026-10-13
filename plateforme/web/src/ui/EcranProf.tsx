@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Executeur } from '../execution/executeur'
 import { compteExiste, creerCompte, LONGUEUR_MIN, seConnecter } from '../prof/compte'
+import { useHistoriqueApercu } from '../prof/historiqueApercu'
 import { useSolutions } from '../prof/solutions'
-import { naviguer, type Destination } from '../routage'
+import { naviguer } from '../routage'
 import { Apercu } from './Apercu'
 import { Classe } from './Classe'
 import { QuizProf } from './QuizProf'
@@ -262,10 +263,10 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
   )
   useEffect(() => () => executeur.detruire(), [executeur])
 
-  // `null` : fermé. Une destination : ouvert là-dessus. `undefined` dans
-  // l'objet signifie « ouvre où tu veux », c'est-à-dire la première leçon.
-  // `solutions` : entré par « Solutions des exercices », donc solutions dépliées.
-  const [apercu, setApercu] = useState<{ ou?: Destination; solutions?: boolean } | null>(null)
+  // L'aperçu vit dans l'historique du navigateur : chaque page ouverte y est
+  // une entrée, pour que le bouton Retour revienne à la précédente au lieu de
+  // faire quitter le tableau de bord.
+  const { apercu, ouvrir, aller, fermer } = useHistoriqueApercu()
 
   // Chargées une fois, à l'entrée : l'aperçu les a sous la main dès qu'il
   // s'ouvre, y compris depuis un exercice du tableau de bord.
@@ -275,12 +276,12 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
     <main className="prof">
       <TableauDeBord
         jetonProf={jeton}
-        onApercu={(ou) => setApercu({ ou })}
+        onApercu={(ou) => ouvrir(ou)}
         onRefuse={onFermer}
       />
 
       <div className="prof__actions">
-        <button type="button" className="bouton" onClick={() => setApercu({})}>
+        <button type="button" className="bouton" onClick={() => ouvrir()}>
           Voir l'espace élève
         </button>
         {/*
@@ -292,7 +293,7 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
           type="button"
           className="bouton"
           disabled={!solutions}
-          onClick={() => setApercu({ solutions: true })}
+          onClick={() => ouvrir(undefined, true)}
         >
           Solutions des exercices
         </button>
@@ -324,7 +325,9 @@ function SessionProf({ jeton, onFermer }: { jeton: string; onFermer: () => void 
           executeur={executeur}
           solutions={solutions}
           pourLesSolutions={apercu.solutions}
-          onFermer={() => setApercu(null)}
+          defilement={apercu.defilement}
+          onAller={aller}
+          onFermer={fermer}
         />
       )}
     </main>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { aujourdhui, chapitresAVenir, dateLongue } from '../contenu/calendrier'
 import { grouper, grouperParChapitre } from '../contenu/notions'
@@ -42,7 +42,19 @@ export function Apercu({
   onFermer,
   solutions,
   pourLesSolutions = false,
+  defilement = 0,
+  onAller,
 }: {
+  /**
+   * Prévenu à chaque clic sur un lien de l'aperçu, avec la page demandée et la
+   * hauteur de défilement de celle qu'on quitte. C'est ce qui permet à
+   * l'écran du professeur d'en faire une entrée d'historique : le bouton
+   * Retour du navigateur revient alors à la page d'avant, là où on l'avait
+   * laissée, au lieu de faire quitter le tableau de bord.
+   */
+  onAller?: (ou: Destination, defilementQuitte: number) => void
+  /** Où remettre le défilement en arrivant sur `depart` : 0, sauf au retour en arrière. */
+  defilement?: number
   /** Les solutions de référence, par identifiant d'exercice. Absentes : l'aperçu seul. */
   solutions?: Solutions | null
   /**
@@ -61,6 +73,19 @@ export function Apercu({
   const panneau = useRef<HTMLDivElement>(null)
   // Le cadre, une fois monté : c'est LUI qui défile ici, pas la page.
   const [cadre, setCadre] = useState<HTMLElement | null>(null)
+
+  // `depart` change quand le professeur recule ou avance dans l'historique :
+  // l'aperçu suit. Sans historique, il ne change jamais après le montage.
+  useEffect(() => {
+    setOu(depart ?? null)
+  }, [depart])
+
+  // Une page neuve s'ouvre en haut ; une page retrouvée par le bouton Retour,
+  // là où on l'avait laissée. Le cadre ne le fait pas seul : c'est un élément
+  // qui défile, pas la fenêtre, et le navigateur ne restaure que la fenêtre.
+  useLayoutEffect(() => {
+    if (cadre) cadre.scrollTop = defilement
+  }, [cadre, ou, defilement])
 
   // Échap ferme, comme toute fenêtre par-dessus. Le professeur y revient les
   // mains sur le clavier, pas à la souris.
@@ -123,7 +148,10 @@ export function Apercu({
     if (!(lien instanceof HTMLAnchorElement)) return
     evenement.preventDefault()
     evenement.stopPropagation()
-    setOu(analyser(new URL(lien.href, location.origin).pathname))
+    const cible = analyser(new URL(lien.href, location.origin).pathname)
+    const quitte = cadre?.scrollTop ?? 0
+    setOu(cible)
+    onAller?.(cible, quitte)
   }
 
   /*

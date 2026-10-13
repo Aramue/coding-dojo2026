@@ -103,6 +103,31 @@ describe('App', () => {
     expect(screen.getByText('Les variables')).toBeInTheDocument()
   })
 
+  it('après la connexion, la redirection ne reste pas dans l historique', async () => {
+    // Le défaut d'origine : « / » restait derrière la première page. Le bouton
+    // Retour y ramenait, et l'élève connecté y lisait « Cette page n'existe pas ».
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    const longueur = history.length
+    render(<App />)
+    await waitFor(() => expect(location.pathname).toBe('/afficher/cours'))
+    expect(history.length).toBe(longueur)
+    expect(screen.queryByText("Cette page n'existe pas")).toBeNull()
+  })
+
+  it('connecté, revenir sur « / » ramène au cours, jamais à une page vide', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/variables/cours')
+    render(<App />)
+    expect(await screen.findByRole('navigation', { name: /sommaire/i })).toBeInTheDocument()
+
+    act(() => {
+      history.pushState(null, '', '/')
+      dispatchEvent(new PopStateEvent('popstate'))
+    })
+    await waitFor(() => expect(location.pathname).toBe('/afficher/cours'))
+    expect(screen.queryByText("Cette page n'existe pas")).toBeNull()
+  })
+
   it("oublie un code memorise que le serveur refuse", async () => {
     sessionStorage.setItem('dojo.code-acces', 'DOJO-VIEU')
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 422, json: async () => ({}) })))

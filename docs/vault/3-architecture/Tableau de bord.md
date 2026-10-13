@@ -3,7 +3,7 @@ title: Tableau de bord
 tags:
   - architecture
   - professeur
-mis-a-jour: 2026-10-07
+mis-a-jour: 2026-10-14
 ---
 
 # Tableau de bord
@@ -189,6 +189,11 @@ plus, et le tableau attend derrière, intact — dépliant compris.
 > **Les composants élève naviguent par `pushState`.** L'aperçu intercepte le clic *avant* eux et lit
 > la destination dans le `href`. Sans cela, un clic dans le cadre ferait quitter le tableau de bord
 > au professeur, sans qu'il comprenne pourquoi.
+>
+> **Le bouton Retour du navigateur suit l'aperçu** (14 octobre 2026). Chaque page ouverte dans le
+> cadre est une entrée d'historique, sur la même adresse `/prof` : Retour revient à la page
+> d'avant, là où on l'avait laissée, et sur la première il referme l'aperçu. Auparavant il faisait
+> quitter le tableau de bord. « Fermer l'aperçu » et Échap reviennent d'un coup au tableau.
 >
 > **La numérotation doit rester en parité avec `grouper()`**, et un test la verrouille : les deux
 > parcourent les exercices dans l'ordre de publication, filtré par notion. Si l'un des deux se met

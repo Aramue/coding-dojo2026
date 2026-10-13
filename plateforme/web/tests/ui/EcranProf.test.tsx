@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { EcranProf } from '../../src/ui/EcranProf'
@@ -309,5 +309,63 @@ describe('EcranProf — les solutions', () => {
     render(<EcranProf />)
     expect(await screen.findByRole('button', { name: 'Solutions des exercices' })).toBeDisabled()
     expect(screen.getByRole('button', { name: "Voir l'espace élève" })).toBeEnabled()
+  })
+})
+
+describe('EcranProf — le bouton Retour dans l aperçu', () => {
+  const CHAPITRES = [{ id: 'bases', ordre: 1, titre: 'Les bases', seance: 1 }]
+  const NOTIONS = [{ id: 'afficher', ordre: 1, titre: 'Afficher', famille: 'conditions', chapitre: 'bases' }]
+  const exo = (id: string, titre: string) => ({
+    id,
+    concept: 'print',
+    notion: 'afficher',
+    famille: 'conditions',
+    seance: 1,
+    niveau: 'normal',
+    type: 'ecrire',
+    titre,
+    obligatoire: true,
+    enonce: `Énoncé de ${titre}.`,
+    depart: '',
+    indices: [],
+    tests: [{ type: 'interdit', motif: 'xyzzy' }],
+  })
+
+  it('revient à l exercice précédent au lieu de quitter le tableau de bord', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === '/api/prof/solutions') return reponse(200, { solutions: { 's1-01': 'print(1)' } })
+        if (url.includes('prof/seance') || url.includes('prof/eleves')) return reponse(200, { eleves: [] })
+        if (url.includes('chapitres')) return reponse(200, CHAPITRES)
+        if (url.includes('notions')) return reponse(200, NOTIONS)
+        if (url.includes('lecons')) return reponse(200, [])
+        return reponse(200, [exo('s1-01', 'Dire bonjour'), exo('s1-02', 'Dire au revoir')])
+      }),
+    )
+    history.pushState(null, '', '/prof')
+    sessionStorage.setItem(CLE, JETON)
+    render(<EcranProf />)
+
+    const bouton = await screen.findByRole('button', { name: 'Solutions des exercices' })
+    await waitFor(() => expect(bouton).toBeEnabled())
+    await userEvent.click(bouton)
+    const cadre = screen.getByRole('dialog', { name: 'Solutions des exercices' })
+    await userEvent.click(await within(cadre).findByRole('link', { name: /Dire bonjour/ }))
+    expect(await within(cadre).findByRole('heading', { name: 'Dire bonjour' })).toBeInTheDocument()
+    await userEvent.click(within(cadre).getByRole('link', { name: /Dire au revoir/ }))
+    expect(await within(cadre).findByRole('heading', { name: 'Dire au revoir' })).toBeInTheDocument()
+
+    // Retour : l'exercice d'avant, toujours dans l'aperçu, toujours sur /prof.
+    history.back()
+    expect(await screen.findByRole('heading', { name: 'Dire bonjour' })).toBeInTheDocument()
+    expect(location.pathname).toBe('/prof')
+    expect(screen.getByRole('dialog', { name: 'Solutions des exercices' })).toBeInTheDocument()
+
+    // « Fermer l'aperçu » revient d'un coup au tableau, sans rien laisser derrière.
+    await userEvent.click(screen.getByRole('button', { name: /Fermer l'aperçu/ }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    expect(location.pathname).toBe('/prof')
+    expect(history.state).toBeNull()
   })
 })

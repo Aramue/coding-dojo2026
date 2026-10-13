@@ -53,7 +53,7 @@ docs/vault/               la documentation, sous forme de coffre Obsidian
 cd plateforme/web
 pnpm install
 pnpm dev                 # serveur de développement
-pnpm test                # 534 tests
+pnpm test                # 547 tests
 pnpm test:couverture     # avec les seuils qui font échouer la construction
 
 # API
@@ -93,7 +93,7 @@ lancent les commandes ci-dessus, pas d'autres :
 |---|---|
 | API | les 238 tests de `plateforme/api` |
 | Contenu | les 150 tests de `plateforme/outils`, la validation du contenu, les trois constructions |
-| Interface | les 534 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
+| Interface | les 547 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
 
 Une minute de calcul en tout. Une release est un **tag** `vX.Y.Z` posé sur
 `main` : il rejoue ces trois contrôles, puis construit et publie les deux images
