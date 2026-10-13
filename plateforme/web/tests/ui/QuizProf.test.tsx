@@ -180,6 +180,65 @@ describe('QuizProf', () => {
     expect(screen.queryByText('Revenir à la dernière partie')).toBeNull()
   })
 
+  it('le podium final a une marche par place, et ne nomme personne d autre', async () => {
+    // Le serveur n'envoie que les trois premiers, jamais quelqu'un à zéro :
+    // l'écran dessine ce qu'il reçoit, dans l'ordre du classement.
+    const place = (code: string, prenom: string, nom: string, points: number, rang: number) => ({
+      code_acces: code,
+      prenom,
+      nom,
+      points,
+      rang,
+    })
+    etat = etatProf({ phase: 'correction', derniere: true, question: question({ rang: 11, bonne_reponse: 0 }) })
+    apresAction = reponse(
+      etatProf({
+        phase: 'terminee',
+        podium: [
+          place('DOJO-AAAA', 'Camille', 'Rey', 910, 1),
+          place('DOJO-BBBB', 'Alex', 'Martin', 740, 2),
+          place('DOJO-CCCC', 'Sam', 'Blanc', 500, 3),
+        ],
+        bilan: BILAN,
+      }),
+    )
+    monter()
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Voir le résultat final' }))
+    const marches = within(await screen.findByRole('list', { name: 'Podium' })).getAllByRole('listitem')
+    expect(marches.map((m) => [m.dataset.rang, m.dataset.position])).toEqual([
+      ['1', '1'],
+      ['2', '2'],
+      ['3', '3'],
+    ])
+    expect(marches[0]).toHaveTextContent('Camille R.')
+    expect(marches[0]).toHaveTextContent('910')
+    expect(marches[1]).toHaveTextContent('Alex M.')
+    expect(marches[2]).toHaveTextContent('Sam B.')
+    // Un code d'accès n'est jamais projeté.
+    expect(screen.queryByText(/DOJO-/)).toBeNull()
+  })
+
+  it('deux ex æquo se tiennent à la même hauteur sur le podium', async () => {
+    etat = etatProf({ phase: 'correction', derniere: true, question: question({ rang: 11, bonne_reponse: 0 }) })
+    apresAction = reponse(
+      etatProf({
+        phase: 'terminee',
+        podium: [
+          { code_acces: 'DOJO-AAAA', prenom: 'Camille', nom: 'Rey', points: 900, rang: 1 },
+          { code_acces: 'DOJO-BBBB', prenom: 'Alex', nom: 'Martin', points: 900, rang: 1 },
+        ],
+        bilan: BILAN,
+      }),
+    )
+    monter()
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Voir le résultat final' }))
+    const marches = within(await screen.findByRole('list', { name: 'Podium' })).getAllByRole('listitem')
+    // La hauteur d'une marche vient du rang : deux premiers, deux marches de premier.
+    expect(marches.map((m) => m.dataset.rang)).toEqual(['1', '1'])
+  })
+
   it('ouverte sur une partie déjà finie, la page va droit au catalogue', async () => {
     etat = etatProf({ phase: 'terminee', podium: [{ ...INSCRITS[0]!, points: 1800, rang: 1 }], bilan: BILAN })
     monter()

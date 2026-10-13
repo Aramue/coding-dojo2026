@@ -35,7 +35,10 @@ TOLERANCE = timedelta(milliseconds=500)
 POINTS_MAX = 1000
 
 # Garde-fou d'ADR-015 : l'ecran projete ne montre que le haut du tableau.
-TAILLE_PODIUM = 5
+# Trois et pas cinq : dans une petite classe, cinq noms projetes laissent
+# deviner les autres. Un podium a trois marches, et on ne nomme que ceux qui
+# sont dessus.
+TAILLE_PODIUM = 3
 
 
 class QuestionPublie(BaseModel):
@@ -234,7 +237,7 @@ def classement(
 
 
 def podium(places: list[Place]) -> list[Place]:
-    """Les cinq premiers, et jamais quelqu'un a zero point.
+    """Les trois premiers, et jamais quelqu'un a zero point.
 
     Au premier tour, si personne n'a juste, tout le monde est premier ex aequo
     avec zero : sans ce filtre, l'ecran projete afficherait la classe entiere

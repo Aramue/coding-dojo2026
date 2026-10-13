@@ -257,6 +257,146 @@
   color: var(--ink);
 }
 
+/* ---------- Les marches : le podium de fin de partie ---------- */
+
+/*
+ * Trois marches, et seulement ceux qui sont dessus. Le premier est au milieu,
+ * le deuxieme a gauche, le troisieme a droite : c'est le CSS qui les place, la
+ * liste reste ecrite dans l'ordre du classement.
+ *
+ * La hauteur d'un socle vient du rang, pas de la position : deux ex aequo se
+ * tiennent a la meme hauteur.
+ */
+.marches {
+  list-style: none;
+  margin: var(--e-2) 0 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--e-2);
+}
+
+.marches__place {
+  flex: 1 1 0;
+  max-width: 17rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.marches__place[data-position='1'] { order: 2; }
+.marches__place[data-position='2'] { order: 1; }
+.marches__place[data-position='3'] { order: 3; }
+
+.marches__nom {
+  max-width: 100%;
+  font-size: var(--t-5);
+  font-weight: 600;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.marches__place[data-rang='1'] .marches__nom {
+  font-size: var(--t-6);
+}
+
+.marches__points {
+  font-size: var(--t-4);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.marches__points span {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.marches__socle {
+  width: 100%;
+  margin-top: var(--e-1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: var(--e-2);
+  border-radius: var(--rayon-3) var(--rayon-3) 0 0;
+  border: 1px solid var(--rule);
+  border-bottom: 0;
+  background: var(--ground-2);
+  height: 5rem;
+  transform-origin: bottom;
+  animation: marche-monte 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.marches__rang {
+  font-size: var(--t-7);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+/* Les trois teintes viennent de la palette des notions : aucune couleur neuve. */
+.marches__place[data-rang='1'] .marches__socle {
+  height: 11rem;
+  background: var(--py-yellow);
+  border-color: #e0a400;
+}
+
+.marches__place[data-rang='1'] .marches__rang {
+  color: #3c2500;
+}
+
+.marches__place[data-rang='2'] .marches__socle {
+  height: 8rem;
+  background: var(--ope-tint);
+  border-color: #9fd3f2;
+}
+
+.marches__place[data-rang='2'] .marches__rang {
+  color: var(--ope-ink);
+}
+
+.marches__place[data-rang='3'] .marches__socle {
+  height: 5.5rem;
+  background: var(--bou-tint);
+  border-color: #f4c2a4;
+}
+
+.marches__place[data-rang='3'] .marches__rang {
+  color: var(--bou-ink);
+}
+
+/* Le troisieme monte d'abord, le premier en dernier : on finit sur le gagnant. */
+.marches__place[data-position='3'] .marches__socle { animation-delay: 0ms; }
+.marches__place[data-position='2'] .marches__socle { animation-delay: 150ms; }
+.marches__place[data-position='1'] .marches__socle { animation-delay: 300ms; }
+
+@keyframes marche-monte {
+  from { transform: scaleY(0); }
+  to { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marches__socle {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .marches {
+    gap: var(--e-1);
+  }
+
+  .marches__nom,
+  .marches__place[data-rang='1'] .marches__nom {
+    font-size: var(--t-4);
+  }
+}
+
 /* ---------- Bilan ---------- */
 
 .bilan {

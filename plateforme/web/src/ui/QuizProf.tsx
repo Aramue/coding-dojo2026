@@ -485,6 +485,40 @@ function Podium({ places }: { places: PlaceProjetee[] }) {
   )
 }
 
+/**
+ * Le podium de fin de partie : trois marches, et seulement ceux qui sont
+ * dessus. Le serveur n'envoie que les trois premiers, et jamais quelqu'un à
+ * zéro point — s'ils ne sont que deux à avoir marqué, il n'y a que deux
+ * marches. Personne d'autre n'est nommé : ADR-015.
+ *
+ * La liste est écrite dans l'ordre du classement, pour qui l'écoute au lecteur
+ * d'écran ; c'est le CSS qui pose le premier au milieu. La hauteur d'une
+ * marche vient du RANG, pas de la position : deux ex æquo se tiennent à la
+ * même hauteur.
+ */
+function Marches({ places }: { places: PlaceProjetee[] }) {
+  return (
+    <ol className="marches" aria-label="Podium">
+      {places.map((place, position) => (
+        <li
+          key={place.code_acces}
+          className="marches__place"
+          data-position={position + 1}
+          data-rang={place.rang}
+        >
+          <span className="marches__nom">{nomProjete(place)}</span>
+          <span className="marches__points">
+            {place.points.toLocaleString('fr-CH')} <span>points</span>
+          </span>
+          <span className="marches__socle">
+            <span className="marches__rang">{place.rang}</span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
 function Fin({ partie, onNouvelle }: { partie: Partie; onNouvelle: () => void }) {
   return (
     <section className="quiz-prof__fin" aria-labelledby="titre-fin">
@@ -492,7 +526,7 @@ function Fin({ partie, onNouvelle }: { partie: Partie; onNouvelle: () => void })
       <h1 id="titre-fin">{partie.titre}</h1>
 
       {partie.podium.length > 0 ? (
-        <Podium places={partie.podium} />
+        <Marches places={partie.podium} />
       ) : (
         <p className="quiz__aide">Personne n'a marqué de point dans cette partie.</p>
       )}
