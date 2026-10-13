@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
-import type { Destination } from '../routage'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { analyser, versChemin, type Destination } from '../routage'
 
 /**
  * L'aperçu du professeur, rangé dans l'historique du navigateur.
@@ -30,24 +30,51 @@ export type EtatApercu = {
   defilement: number
 }
 
+/**
+ * Une destination relue de l'historique n'est pas crue sur parole : elle a pu
+ * être écrite par une version précédente de l'application, restée dans un
+ * onglet ouvert pendant un déploiement. On la fait repasser par le routeur —
+ * seul juge de ce qu'est une page —, et tout ce qu'il ne reconnaît pas devient
+ * « ouvre où tu veux ». Sans cela, un `ou` mal formé plantait le rendu de
+ * l'aperçu, et l'écran du professeur devenait blanc.
+ */
+function destinationSure(brut: unknown): Destination | undefined {
+  if (typeof brut !== 'object' || brut === null) return undefined
+  const relue = analyser(versChemin(brut as Destination))
+  return relue.vue === 'cours' || relue.vue === 'exercices' || relue.vue === 'exercice'
+    ? relue
+    : undefined
+}
+
 function lire(): EtatApercu | null {
-  const etat = (history.state as { apercu?: Partial<EtatApercu> } | null)?.apercu
-  if (!etat || typeof etat.profondeur !== 'number' || etat.profondeur < 1) return null
+  const etat = (history.state as { apercu?: Record<string, unknown> } | null)?.apercu
+  if (typeof etat !== 'object' || etat === null) return null
+  const { profondeur, defilement } = etat
+  if (typeof profondeur !== 'number' || !Number.isInteger(profondeur) || profondeur < 1) return null
   return {
-    ou: etat.ou,
+    ou: destinationSure(etat.ou),
     solutions: etat.solutions === true,
-    profondeur: etat.profondeur,
-    defilement: typeof etat.defilement === 'number' ? etat.defilement : 0,
+    profondeur,
+    defilement: typeof defilement === 'number' && defilement >= 0 ? defilement : 0,
   }
 }
+
+/** Un recul dans la même page est quasi immédiat : au-delà, c'est qu'il n'a pas eu lieu. */
+const DELAI_SANS_RECUL_MS = 500
 
 export function useHistoriqueApercu() {
   // Lu au montage : un rechargement de la page rouvre l'aperçu où il était.
   const [apercu, setApercu] = useState<EtatApercu | null>(lire)
 
+  // Vrai entre « Fermer » et le `popstate` qui lui répond : voir `fermer`.
+  const fermeture = useRef(false)
+
   // Retour, Suivant, et toute navigation de l'application : on relit où l'on est.
   useEffect(() => {
-    const relire = () => setApercu(lire())
+    const relire = () => {
+      fermeture.current = false
+      setApercu(lire())
+    }
     addEventListener('popstate', relire)
     return () => removeEventListener('popstate', relire)
   }, [])
@@ -71,11 +98,31 @@ export function useHistoriqueApercu() {
   /**
    * Revient d'un coup au tableau de bord. `history.go` est asynchrone : c'est
    * le `popstate` qu'il déclenche qui referme, par `relire`.
+   *
+   * > [!danger] Un seul recul par fermeture
+   * > Tant que ce `popstate` n'est pas arrivé, `history.state` est encore celui
+   * > de l'aperçu. Un second « Fermer » — Échap pressé deux fois, ou Échap puis
+   * > le bouton — relirait la même profondeur et reculerait une seconde fois :
+   * > ==le professeur quitterait le tableau de bord==. D'où le verrou.
    */
   const fermer = useCallback(() => {
+    if (fermeture.current) return
     const courant = lire()
-    if (courant) history.go(-courant.profondeur)
-    else setApercu(null)
+    if (!courant) {
+      setApercu(null)
+      return
+    }
+    fermeture.current = true
+    history.go(-courant.profondeur)
+    // Si l'historique est plus court que la profondeur annoncée — un onglet
+    // dupliqué n'emporte pas toujours le sien —, `go` ne fait rien et aucun
+    // `popstate` ne viendra. On referme alors sur place, sans laisser l'état.
+    setTimeout(() => {
+      if (!fermeture.current) return
+      fermeture.current = false
+      history.replaceState(null, '')
+      setApercu(null)
+    }, DELAI_SANS_RECUL_MS)
   }, [])
 
   return { apercu, ouvrir, aller, fermer }

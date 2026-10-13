@@ -5,7 +5,7 @@ import { grouper, grouperParChapitre } from '../contenu/notions'
 import type { Executeur } from '../execution/executeur'
 import { useContenuPublie } from '../prof/contenu'
 import type { Solutions } from '../prof/solutions'
-import { analyser, type Destination } from '../routage'
+import { analyser, versChemin, type Destination } from '../routage'
 import { ContexteDefilement } from './defilement'
 import { EcranExercice } from './EcranExercice'
 import { Menu } from './Menu'
@@ -83,9 +83,14 @@ export function Apercu({
   // Une page neuve s'ouvre en haut ; une page retrouvée par le bouton Retour,
   // là où on l'avait laissée. Le cadre ne le fait pas seul : c'est un élément
   // qui défile, pas la fenêtre, et le navigateur ne restaure que la fenêtre.
+  //
+  // La dépendance est le CHEMIN de la page, pas l'objet : l'historique rend un
+  // objet neuf à chaque relecture, et un simple rafraîchissement aurait alors
+  // remonté le cadre en haut au milieu d'une lecture.
+  const page = ou ? versChemin(ou) : ''
   useLayoutEffect(() => {
     if (cadre) cadre.scrollTop = defilement
-  }, [cadre, ou, defilement])
+  }, [cadre, page, defilement])
 
   // Échap ferme, comme toute fenêtre par-dessus. Le professeur y revient les
   // mains sur le clavier, pas à la souris.

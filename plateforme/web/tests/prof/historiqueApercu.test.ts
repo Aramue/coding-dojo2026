@@ -93,6 +93,59 @@ describe("useHistoriqueApercu — l'aperçu dans l'historique du navigateur", ()
     expect(renderHook(() => useHistoriqueApercu()).result.current.apercu).toBeNull()
   })
 
+  it('deux « Fermer » de suite ne reculent qu une fois', async () => {
+    // Échap pressé deux fois : le second arrivait avant le popstate du premier,
+    // relisait la même profondeur, et faisait quitter le tableau de bord.
+    history.pushState(null, '', '/afficher/cours') // la page d'avant le tableau
+    history.pushState(null, '', '/prof')
+    const { result } = renderHook(() => useHistoriqueApercu())
+    act(() => result.current.ouvrir(EX1))
+    act(() => result.current.aller(EX2, 0))
+
+    act(() => {
+      result.current.fermer()
+      result.current.fermer()
+    })
+    await waitFor(() => expect(result.current.apercu).toBeNull())
+    await new Promise((r) => setTimeout(r, 50))
+    expect(location.pathname).toBe('/prof')
+  })
+
+  it('referme sur place quand l historique est plus court que la profondeur annoncée', async () => {
+    // Un onglet dupliqué n'emporte pas toujours son historique : `history.go`
+    // ne fait alors rien, et l'aperçu ne doit pas rester ouvert pour autant.
+    history.pushState({ apercu: { ou: EX1, solutions: false, profondeur: 400, defilement: 0 } }, '')
+    const { result } = renderHook(() => useHistoriqueApercu())
+    expect(result.current.apercu?.profondeur).toBe(400)
+
+    act(() => result.current.fermer())
+    await waitFor(() => expect(result.current.apercu).toBeNull(), { timeout: 2000 })
+    expect(history.state).toBeNull()
+    expect(location.pathname).toBe('/prof')
+  })
+
+  it.each([
+    ['une chaîne', '/afficher/exercices/1'],
+    ['null', null],
+    ['une vue inconnue', { vue: 'admin' }],
+    ['une page hors aperçu', { vue: 'prof' }],
+    ['un numéro impossible', { vue: 'exercice', notion: 'afficher', numero: 'DROP' }],
+    ['une notion mal formée', { vue: 'cours', notion: '../../prof' }],
+  ])('une destination relue de l historique et mal formée (%s) devient « ouvre où tu veux »', (_nom, ou) => {
+    // Écrite par une version précédente restée dans un onglet, elle ne doit
+    // pas faire planter le rendu de l'aperçu.
+    history.pushState({ apercu: { ou, solutions: false, profondeur: 1, defilement: 0 } }, '')
+    const { result } = renderHook(() => useHistoriqueApercu())
+    expect(result.current.apercu).toEqual({ ou: undefined, solutions: false, profondeur: 1, defilement: 0 })
+  })
+
+  it('une profondeur ou un défilement absurdes sont écartés', () => {
+    history.pushState({ apercu: { profondeur: 1.5 } }, '')
+    expect(renderHook(() => useHistoriqueApercu()).result.current.apercu).toBeNull()
+    history.pushState({ apercu: { profondeur: 1, defilement: -40 } }, '')
+    expect(renderHook(() => useHistoriqueApercu()).result.current.apercu?.defilement).toBe(0)
+  })
+
   it('aller et fermer sans aperçu ouvert ne font rien', () => {
     const { result } = renderHook(() => useHistoriqueApercu())
     const longueur = history.length
