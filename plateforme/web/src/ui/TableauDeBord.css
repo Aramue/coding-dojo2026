@@ -65,6 +65,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  /*
+   * Une largeur reservee, celle du texte le plus long (« plus de donnees »).
+   * Le texte change toutes les secondes, et « a l'instant » n'a pas la largeur
+   * de « il y a 9 s » : sans elle, toute la rangee des compteurs sautait d'un
+   * cran a chaque rafraichissement, sous les yeux du professeur.
+   */
+  min-width: 9rem;
+  white-space: nowrap;
   padding-left: var(--e-2);
   border-left: 1px solid var(--rule-doux);
   font-size: var(--t-1);
