@@ -131,21 +131,29 @@ export function TableauDeBord({
           </p>
         </div>
 
-        {eleves.length > 0 && (
-          <div className="tableau__comptes" aria-label="Répartition de la classe">
-            <Compte valeur={vue.bloques} un="bloqué" plusieurs="bloqués" ton="bloque" />
-            <Compte valeur={vue.inactifs} un="inactif" plusieurs="inactifs" ton="inactif" />
-            <Compte
-              valeur={vue.pasCommence}
-              un="pas commencé"
-              plusieurs="pas commencé"
-              ton="pas_commence"
-            />
-            <Compte valeur={vue.enCours} un="en cours" plusieurs="en cours" ton="en_cours" />
-          </div>
-        )}
+        {/*
+          Les compteurs et le pouls forment UN bloc, qui ne se coupe pas : le
+          pouls reste à droite de « en cours », quelle que soit la largeur. Posé
+          seul dans l'en-tête, il passait à la ligne dès qu'il manquait quelques
+          pixels, et se retrouvait sous le titre.
+        */}
+        <div className="tableau__etat">
+          {eleves.length > 0 && (
+            <div className="tableau__comptes" aria-label="Répartition de la classe">
+              <Compte valeur={vue.bloques} un="bloqué" plusieurs="bloqués" ton="bloque" />
+              <Compte valeur={vue.inactifs} un="inactif" plusieurs="inactifs" ton="inactif" />
+              <Compte
+                valeur={vue.pasCommence}
+                un="pas commencé"
+                plusieurs="pas commencé"
+                ton="pas_commence"
+              />
+              <Compte valeur={vue.enCours} un="en cours" plusieurs="en cours" ton="en_cours" />
+            </div>
+          )}
 
-        <Pouls recuA={recuA} enErreur={Boolean(erreur)} />
+          <Pouls recuA={recuA} enErreur={Boolean(erreur)} />
+        </div>
       </header>
 
       {erreur && <p role="alert">{erreur}</p>}
