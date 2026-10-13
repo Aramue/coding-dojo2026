@@ -42,10 +42,24 @@
   line-height: 1.2;
 }
 
+/*
+ * Les compteurs et le pouls, d'un seul tenant. Le bloc entier peut passer sous
+ * le titre quand la place manque ; le pouls, lui, ne quitte jamais la droite
+ * des compteurs.
+ */
+.tableau__etat {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
 .tableau__comptes {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .tableau__effectif {
@@ -66,12 +80,17 @@
   align-items: center;
   gap: 0.4rem;
   /*
-   * Une largeur reservee, celle du texte le plus long (« plus de donnees »).
-   * Le texte change toutes les secondes, et « a l'instant » n'a pas la largeur
-   * de « il y a 9 s » : sans elle, toute la rangee des compteurs sautait d'un
-   * cran a chaque rafraichissement, sous les yeux du professeur.
+   * Une largeur reservee : le texte change toutes les secondes, et
+   * « a l'instant » n'a pas la largeur de « il y a 9 s ». Sans elle, toute la
+   * rangee des compteurs sautait d'un cran a chaque rafraichissement.
+   *
+   * Juste assez pour « a l'instant », le plus large des textes courants, et pas
+   * davantage (mesure : 88 px, reserve : 92). Reservee pour le texte
+   * d'erreur, plus long, elle ne tenait plus sur la ligne et le pouls passait
+   * SOUS le titre. Il ne retrecit jamais non plus — `flex: none`.
    */
-  min-width: 9rem;
+  flex: none;
+  min-width: 5.75rem;
   white-space: nowrap;
   padding-left: var(--e-2);
   border-left: 1px solid var(--rule-doux);
