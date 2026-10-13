@@ -44,8 +44,15 @@ en même temps, et se termine. Être septième à la question 4 ne dit rien de p
 
 **Le quiz a un classement, et ce classement est tenu en laisse.**
 
-1. **Seuls les cinq premiers sont projetés.** L'écran du professeur, celui que toute la salle
-   voit, montre le haut du tableau et jamais le bas. Personne n'est désigné comme dernier.
+1. **Seuls les trois premiers sont projetés.** L'écran du professeur, celui que toute la salle
+   voit, montre le haut du tableau et jamais le bas. Personne n'est désigné comme dernier, et
+   ==personne n'y figure avec zéro point==.
+
+   > [!note] Cinq, puis trois — 13 octobre 2026
+   > La première version projetait cinq noms. Dans une classe de vingt-quatre c'est le haut du
+   > tableau ; dans un groupe de huit, c'est déjà la majorité, et les absents de la liste se
+   > devinent. Trois noms tiennent sur un podium, et un podium ne dit rien de ceux qui n'y sont
+   > pas. S'ils ne sont que deux à avoir marqué, il n'y a que deux marches.
 2. **Chaque élève voit son propre rang, sur son seul écran.** « Tu es 12ᵉ sur 21 » est une
    information pour lui, pas une annonce à la classe.
 3. **Le score ne compte nulle part ailleurs.** Ni dans la progression, ni dans les coches, ni dans

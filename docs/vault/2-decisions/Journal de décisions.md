@@ -63,7 +63,7 @@ Les deux suivantes datent du 27 septembre 2026, pour le quiz en direct, écrites
 parallèle : elles prennent les numéros qui suivent.
 
 - **015** — [[ADR-015 Quiz en direct et classement encadré]]
-  Un classement dans la partie seulement : cinq premiers projetés, chacun son rang pour soi.
+  Un classement dans la partie seulement : trois premiers projetés (cinq jusqu'au 13 octobre 2026), chacun son rang pour soi.
   Amende ADR-011, qui tient toujours pour le parcours.
 - **016** — [[ADR-016 Temps réel par sonnette WebSocket]]
   Le WebSocket dit « relis », jamais « voici » ; sans lui, on relit toutes les secondes.

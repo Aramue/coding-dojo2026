@@ -253,10 +253,18 @@ def test_une_reponse_d_un_eleve_sorti_de_la_partie_est_ignoree():
     assert [p.code_acces for p in places] == ["A"]
 
 
-def test_le_podium_s_arrete_a_cinq():
+def test_le_podium_s_arrete_a_trois():
+    """Trois marches, trois noms : le quatrieme n'est jamais projete."""
     reponses = [reponse(f"E{i}", 0, 1, 1000 - i, True) for i in range(8)]
     places = classement([f"E{i}" for i in range(8)], reponses, closes=1)
-    assert [p.code_acces for p in podium(places)] == ["E0", "E1", "E2", "E3", "E4"]
+    assert [p.code_acces for p in podium(places)] == ["E0", "E1", "E2"]
+
+
+def test_le_podium_a_moins_de_trois_noms_quand_peu_ont_marque():
+    """Cinq joueurs, deux avec des points : deux noms, et personne a zero pour combler."""
+    reponses = [reponse("A", 0, 1, 900, True), reponse("B", 0, 1, 700, True), reponse("C", 0, 0)]
+    places = classement(["A", "B", "C", "D", "E"], reponses, closes=1)
+    assert [p.code_acces for p in podium(places)] == ["A", "B"]
 
 
 def test_le_podium_ne_montre_jamais_personne_a_zero():

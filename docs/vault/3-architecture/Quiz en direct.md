@@ -4,14 +4,14 @@ tags:
   - architecture
   - quiz
   - professeur
-mis-a-jour: 2026-10-01
+mis-a-jour: 2026-10-13
 ---
 
 # Quiz en direct
 
 Le professeur lance une partie depuis son tableau de bord ; les élèves la rejoignent depuis leur
 espace, répondent à des questions en temps limité ; l'écran projeté montre la correction, la
-répartition des réponses et les cinq premiers. Décisions : [[ADR-015 Quiz en direct et
+répartition des réponses et les trois premiers. Décisions : [[ADR-015 Quiz en direct et
 classement encadré]] · [[ADR-016 Temps réel par sonnette WebSocket]]. Plan : [[Plan quiz]].
 
 ## Le déroulé
@@ -39,12 +39,12 @@ redémarrage.
 |---|---|---|---|
 | **Élève** | la question, son choix | la bonne réponse, juste ou pas, ses points, **son** rang | son bilan : bonnes réponses, points, rang |
 | **Élève, en salle d'attente** | qui est prêt : un rond et un « Prénom N. » par joueur, le sien marqué « toi » | | |
-| **Écran projeté** | la question, le nombre de réponses reçues | la bonne réponse, la répartition, l'explication, les cinq premiers | le podium, le bilan anonyme question par question |
+| **Écran projeté** | la question, le nombre de réponses reçues | la bonne réponse, la répartition, l'explication, les trois premiers | le podium à trois marches, le bilan anonyme question par question |
 
 Ce que personne ne reçoit : un code d'accès d'un autre élève — le repli d'un élève sans prénom
 est « Élève », à l'écran projeté comme chez l'élève. La bonne réponse avant la correction — ni l'élève, ni l'écran projeté,
 qui est au mur. Des points qui trahiraient une réponse juste avant la correction. Le nom d'un
-autre élève, côté élève. Un classement au-delà de cinq, ou quelqu'un à zéro point. Tout cela est
+autre élève, côté élève. Un classement au-delà de trois, ou quelqu'un à zéro point. Tout cela est
 tenu **par le serveur**, dans `api/app/quiz.py` : `vue_eleve` et `vue_prof` sont les seules
 fonctions qui fabriquent ce qu'un écran reçoit, et des tests de fuite les vérifient.
 
