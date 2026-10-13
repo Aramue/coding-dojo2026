@@ -118,6 +118,25 @@ describe('naviguer', () => {
   })
 })
 
+describe('remplacer', () => {
+  it('redirige sans ajouter de page a l historique', async () => {
+    const { remplacer } = await import('../src/routage')
+    history.pushState(null, '', '/')
+    const longueur = history.length
+    const abonne = vi.fn()
+    addEventListener('popstate', abonne)
+
+    remplacer({ vue: 'cours', notion: 'types' })
+
+    // Le bouton Retour ne doit pas ramener sur la page qui redirigeait.
+    expect(location.pathname).toBe('/types/cours')
+    expect(history.length).toBe(longueur)
+    expect(abonne).toHaveBeenCalled()
+
+    removeEventListener('popstate', abonne)
+  })
+})
+
 describe('useRoute', () => {
   it("suit la navigation, et se desabonne au demontage", async () => {
     const { renderHook, act } = await import('@testing-library/react')

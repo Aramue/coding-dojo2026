@@ -6,7 +6,7 @@ import { grouper, grouperParChapitre, premiereOuverte } from './contenu/notions'
 import { Executeur } from './execution/executeur'
 import type { EtatEleve } from './quiz/types'
 import { useFluxQuiz } from './quiz/useFluxQuiz'
-import { naviguer, useRoute, versChemin, type Destination } from './routage'
+import { naviguer, remplacer, useRoute, versChemin, type Destination } from './routage'
 import { BandeauQuiz, partieOuverte } from './ui/BandeauQuiz'
 import { EcranConnexion } from './ui/EcranConnexion'
 import { EcranExercice } from './ui/EcranExercice'
@@ -135,16 +135,22 @@ export function App() {
     setReussis(acquis)
     setIdentite(qui)
     memoriserCode(qui.codeAcces)
-
-    // Une URL profonde ouverte avant connexion est conservée ; sinon on envoie
-    // l'élève sur la première notion qu'il n'a pas terminée.
-    if (destination.vue === 'connexion') {
-      const ouverte = premiereOuverte(
-        grouper(publie.notions, publie.exercices, publie.lecons, acquis),
-      )
-      if (ouverte) naviguer({ vue: 'cours', notion: ouverte.id })
-    }
   }
+
+  // Connecté, « / » n'est plus une page : c'est l'écran de saisie du code, et
+  // il n'y a plus de code à saisir. On envoie l'élève sur la première notion
+  // qu'il n'a pas terminée — une URL profonde ouverte avant la connexion, elle,
+  // est conservée.
+  //
+  // `remplacer`, pas `naviguer` : la redirection ne doit pas rester dans
+  // l'historique. Sinon le bouton Retour ramenait sur « / », qui n'avait rien à
+  // afficher, et l'élève lisait « Cette page n'existe pas ». Et cela vaut à
+  // chaque passage sur « / », pas seulement à la connexion.
+  useEffect(() => {
+    if (!identite || destination.vue !== 'connexion') return
+    const ouverte = premiereOuverte(groupes) ?? groupes[0]
+    if (ouverte) remplacer({ vue: 'cours', notion: ouverte.id })
+  }, [identite, destination.vue, groupes])
 
   // Le tableau de bord ne passe pas par le code eleve : il a sa propre porte,
   // et il doit rester atteignable meme si personne n'est connecte cote eleve.

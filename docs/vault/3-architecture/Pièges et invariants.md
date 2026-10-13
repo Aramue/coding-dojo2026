@@ -3,7 +3,7 @@ title: Pièges et invariants
 tags:
   - architecture
   - maintenance
-mis-a-jour: 2026-10-07
+mis-a-jour: 2026-10-14
 ---
 
 # Pièges et invariants
@@ -267,6 +267,28 @@ qu'on croyait déployée n'existait que dans Git.
 sites de la machine, celui de certbot. Voir [[Déploiement UNIGE]], « Déployer, ensuite ».
 
 ## Interface
+
+### Une redirection ne passe jamais par `naviguer()`
+
+`naviguer()` ajoute une page à l'historique ; `remplacer()` change de page sans en laisser.
+Après la connexion, l'élève est envoyé de « / » vers sa première notion par `remplacer()`, et
+tout passage sur « / » une fois connecté fait de même.
+
+**Ce qui casse :** avec `naviguer()`, « / » reste derrière la première page. Le bouton Retour y
+ramène, et « / » n'a plus rien à afficher — ce n'est plus l'écran de saisie du code. L'élève
+lisait ==« Cette page n'existe pas »== en reculant d'un cran de trop.
+
+### Une page qui ne change pas d'adresse doit quand même entrer dans l'historique
+
+L'aperçu du professeur s'ouvre par-dessus le tableau de bord, sur `/prof`, et ses pages ne
+changent pas l'adresse. `useHistoriqueApercu` en fait pourtant des entrées d'historique : même
+adresse, et l'endroit où l'on est dans `history.state`.
+
+**Ce qui casse :** des pages qui ne vivent que dans l'état de React sont invisibles pour le bouton
+Retour. Après quatre exercices parcourus dans l'aperçu, il ne revenait pas au troisième : ==il
+faisait quitter le tableau de bord==, pour la page vue avant d'y entrer. « Fermer l'aperçu »
+recule de la profondeur empilée, d'un coup — sans cela, Retour rouvrirait une à une les pages
+d'un aperçu qu'on vient de fermer.
 
 ### Le compteur du menu se dérive, il ne se stocke pas
 

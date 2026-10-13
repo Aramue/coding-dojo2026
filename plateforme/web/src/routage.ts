@@ -77,6 +77,21 @@ export function naviguer(destination: Destination): void {
   dispatchEvent(new PopStateEvent('popstate'))
 }
 
+/**
+ * Change de page **sans laisser de trace** dans l'historique : pour une
+ * redirection, jamais pour un clic.
+ *
+ * Une redirection faite par `naviguer()` laisse derrière elle la page qui
+ * redirige. Le bouton Retour y ramène, elle redirige de nouveau — ou, pire,
+ * elle n'a rien à afficher : après la connexion, « / » n'est plus l'écran de
+ * saisie du code, et l'élève qui revenait en arrière lisait « Cette page
+ * n'existe pas ».
+ */
+export function remplacer(destination: Destination): void {
+  history.replaceState(null, '', versChemin(destination))
+  dispatchEvent(new PopStateEvent('popstate'))
+}
+
 export function useRoute(): Destination {
   const [destination, setDestination] = useState<Destination>(() => analyser(location.pathname))
   useEffect(() => {
