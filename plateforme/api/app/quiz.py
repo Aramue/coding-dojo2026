@@ -99,6 +99,10 @@ def phase_effective(partie: PartieQuiz, maintenant: datetime) -> Phase:
     sans que rien ne l'ait ecrit. Un conteneur qui redemarre en pleine question
     retrouve donc la bonne phase a la premiere lecture.
     """
+    # En pause, le temps de la question s'est arrete a `pause_le` : c'est cet
+    # instant qu'on compare a l'echeance, pas l'heure qu'il est.
+    if partie.pause_le is not None:
+        maintenant = min(maintenant, utc(partie.pause_le))
     if (
         partie.phase == "question"
         and partie.fin_a is not None
@@ -106,6 +110,41 @@ def phase_effective(partie: PartieQuiz, maintenant: datetime) -> Phase:
     ):
         return "correction"
     return partie.phase  # type: ignore[return-value]
+
+
+def pauser(partie: PartieQuiz, maintenant: datetime) -> None:
+    """Arrete le temps de la question en cours.
+
+    Rien ne s'efface : l'echeance reste ou elle est, et le temps se lit a
+    l'instant de la pause tant qu'elle dure.
+
+    La pause sert a DONNER du temps, quand la question s'avere trop longue pour
+    la classe : on peut continuer de repondre, et une reponse donnee pendant la
+    pause vaut les points de l'instant ou le temps s'est arrete (voir
+    `evaluer`). Si tout le monde a repondu, la question se corrige comme
+    d'habitude, et `fermer` leve la pause : rien ne reste suspendu.
+    """
+    if partie.pause_le is not None:
+        raise Refus("Le quiz est déjà en pause.")
+    if phase_effective(partie, maintenant) != "question":
+        raise Refus("Aucune question n'est ouverte.")
+    partie.pause_le = maintenant
+
+
+def reprendre(partie: PartieQuiz, maintenant: datetime) -> None:
+    """Relance le temps la ou il s'etait arrete.
+
+    L'ouverture et l'echeance avancent de la duree de la pause : il reste
+    exactement le temps qu'il restait, et le bareme — qui se mesure depuis
+    l'ouverture — ne compte pas la pause contre ceux qui repondent ensuite.
+    """
+    if partie.pause_le is None:
+        raise Refus("Le quiz n'est pas en pause.")
+    assert partie.ouverte_le is not None and partie.fin_a is not None  # une question etait ouverte
+    duree = max(maintenant - utc(partie.pause_le), timedelta(0))
+    partie.ouverte_le = utc(partie.ouverte_le) + duree
+    partie.fin_a = utc(partie.fin_a) + duree
+    partie.pause_le = None
 
 
 def ouvrir_suivante(partie: PartieQuiz, quiz: QuizPublie, maintenant: datetime) -> None:
@@ -135,6 +174,8 @@ def fermer(partie: PartieQuiz, maintenant: datetime) -> None:
     """
     if phase_effective(partie, maintenant) != "question":
         raise Refus("Aucune question n'est ouverte.")
+    # Corriger pendant une pause la leve : la correction ne se met pas en pause.
+    partie.pause_le = None
     partie.fin_a = maintenant - TOLERANCE
 
 
@@ -143,6 +184,7 @@ def terminer(partie: PartieQuiz, maintenant: datetime) -> None:
         raise Refus("La partie est déjà terminée.")
     partie.phase = "terminee"
     partie.terminee_le = maintenant
+    partie.pause_le = None
 
 
 # --- Reponses et points -----------------------------------------------------
@@ -181,7 +223,10 @@ def evaluer(
         raise Invalide("Ce choix n'existe pas.")
 
     assert partie.ouverte_le is not None  # une question ouverte a toujours son heure
-    delai = int((maintenant - utc(partie.ouverte_le)).total_seconds() * 1000)
+    # Pendant une pause, le temps est arrete : on repond « a l'instant de la
+    # pause ». Prendre le temps que la pause donne ne coute aucun point.
+    instant = maintenant if partie.pause_le is None else min(maintenant, utc(partie.pause_le))
+    delai = int((instant - utc(partie.ouverte_le)).total_seconds() * 1000)
     correcte = choix == question.bonne_reponse
     return Evaluation(correcte, delai, points(correcte, delai, question.duree_s * 1000))
 
@@ -260,6 +305,9 @@ def _vue_question(partie: PartieQuiz, quiz: QuizPublie, corrigee: bool) -> dict:
         "duree_s": question.duree_s,
         "ouverte_le": iso(partie.ouverte_le),
         "fin_a": iso(partie.fin_a),
+        # Non nul pendant une pause : chaque ecran fige son compte a rebours sur
+        # ce qu'il restait a cet instant, `fin_a - pause_le`.
+        "pause_le": iso(partie.pause_le),
     }
     if corrigee:
         vue["bonne_reponse"] = question.bonne_reponse

@@ -31,6 +31,8 @@ from .quiz import (
     fermer,
     iso,
     ouvrir_suivante,
+    pauser,
+    reprendre,
     resultats,
     resume,
     terminer,
@@ -440,6 +442,35 @@ def corriger(
     return _agir(
         session, catalogue, quand, taches, demande.question,
         lambda partie, _quiz: fermer(partie, quand),
+    )
+
+
+@routeur_prof.post("/partie/pause")
+def mettre_en_pause(
+    demande: DemandeAction,
+    session: SessionBdd,
+    catalogue: Catalogue,
+    quand: Heure,
+    taches: BackgroundTasks,
+) -> dict:
+    """Arrete le temps de la question en cours. Tout le monde relit, et le voit."""
+    return _agir(
+        session, catalogue, quand, taches, demande.question,
+        lambda partie, _quiz: pauser(partie, quand),
+    )
+
+
+@routeur_prof.post("/partie/reprendre")
+def reprendre_partie(
+    demande: DemandeAction,
+    session: SessionBdd,
+    catalogue: Catalogue,
+    quand: Heure,
+    taches: BackgroundTasks,
+) -> dict:
+    return _agir(
+        session, catalogue, quand, taches, demande.question,
+        lambda partie, _quiz: reprendre(partie, quand),
     )
 
 

@@ -120,6 +120,45 @@ describe('QuizProf', () => {
     expect(postes()).toEqual([['/api/prof/quiz/partie/corriger', '{"question":2}']])
   })
 
+  it('met en pause à côté de « Corriger maintenant », d une autre couleur', async () => {
+    etat = etatProf({ phase: 'question', question: question({ rang: 2 }), participants: INSCRITS })
+    apresAction = reponse(
+      etatProf({
+        phase: 'question',
+        question: question({ rang: 2, pause_le: new Date().toISOString() }),
+        participants: INSCRITS,
+      }),
+    )
+    monter()
+
+    const pause = await screen.findByRole('button', { name: 'Pause' })
+    const corriger = screen.getByRole('button', { name: 'Corriger maintenant' })
+    // Juste à côté, et pas de la même teinte.
+    expect(corriger.nextElementSibling).toBe(pause)
+    expect(pause).toHaveClass('bouton--pause')
+    expect(corriger).not.toHaveClass('bouton--pause')
+    expect(pause).toHaveAttribute('aria-pressed', 'false')
+
+    await userEvent.click(pause)
+    expect(postes()).toEqual([['/api/prof/quiz/partie/pause', '{"question":2}']])
+    const reprendre = await screen.findByRole('button', { name: 'Reprendre' })
+    expect(reprendre).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByText('En pause')).toBeInTheDocument()
+  })
+
+  it('reprend une question en pause', async () => {
+    etat = etatProf({
+      phase: 'question',
+      question: question({ rang: 1, pause_le: new Date().toISOString() }),
+      participants: INSCRITS,
+    })
+    apresAction = reponse(etatProf({ phase: 'question', question: question({ rang: 1 }), participants: INSCRITS }))
+    monter()
+    await userEvent.click(await screen.findByRole('button', { name: 'Reprendre' }))
+    expect(postes()).toEqual([['/api/prof/quiz/partie/reprendre', '{"question":1}']])
+    expect(await screen.findByRole('button', { name: 'Pause' })).toBeInTheDocument()
+  })
+
   it('à la correction, projette la réponse, la répartition et les cinq premiers', async () => {
     etat = etatProf({
       phase: 'correction',

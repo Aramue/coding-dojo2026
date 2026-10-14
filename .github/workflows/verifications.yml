@@ -45,7 +45,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: 240 tests
+      - name: 254 tests
         run: python -m pytest -q
 
   contenu:
@@ -115,7 +115,7 @@ jobs:
       # `test:couverture` et pas `test` : les seuils de vitest.config.ts — 100 %
       # sur `src/quiz/**`, `src/validation/**`, le routage, le calendrier — ne
       # servent à rien s'ils ne font échouer que la machine du développeur.
-      - name: 558 tests et seuils de couverture
+      - name: 563 tests et seuils de couverture
         run: pnpm test:couverture
 
       # `tsc --noEmit && vite build`, la commande du Dockerfile.

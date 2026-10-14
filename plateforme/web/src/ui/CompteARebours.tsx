@@ -16,10 +16,13 @@ export function CompteARebours({
   finA,
   ecartMs,
   dureeS,
+  pauseLe,
 }: {
   finA: string
   ecartMs: number
   dureeS: number
+  /** Non nul : le temps est arrêté. Les secondes et la barre restent figées. */
+  pauseLe?: string | null
 }) {
   const [maintenant, setMaintenant] = useState(() => Date.now())
 
@@ -28,15 +31,22 @@ export function CompteARebours({
     return () => clearInterval(minuteur)
   }, [])
 
-  const reste = restant(finA, ecartMs, maintenant)
+  const reste = restant(finA, ecartMs, maintenant, pauseLe)
   const secondes = secondesAffichees(reste)
   const part = Math.min(1, reste / (dureeS * 1000))
 
   return (
     <div
       className="compte"
+      data-pause={pauseLe ? true : undefined}
       role="timer"
-      aria-label={secondes > 0 ? `${secondes} secondes restantes` : 'Temps écoulé'}
+      aria-label={
+        pauseLe
+          ? `En pause, ${secondes} secondes restantes`
+          : secondes > 0
+            ? `${secondes} secondes restantes`
+            : 'Temps écoulé'
+      }
     >
       <span className="compte__secondes" aria-hidden="true">
         {secondes}
@@ -44,6 +54,7 @@ export function CompteARebours({
       <span className="compte__barre" aria-hidden="true">
         <span style={{ transform: `scaleX(${part})` }} />
       </span>
+      {pauseLe && <span className="compte__pause">En pause</span>}
     </div>
   )
 }

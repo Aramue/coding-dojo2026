@@ -37,6 +37,13 @@ describe('restant', () => {
   it('ne descend jamais sous zéro', () => {
     expect(restant(fin, 0, T + 60_000)).toBe(0)
   })
+
+  it('en pause, garde ce qu il restait à la pause, quelle que soit l heure', () => {
+    // Pause à 5 s d'une question de 20 s : il reste 15 s, une minute plus tard aussi.
+    const pause = '2026-09-30T14:00:05.000Z'
+    expect(restant(fin, 0, T + 60_000, pause)).toBe(15_000)
+    expect(restant(fin, 5_000, T + 600_000, pause)).toBe(15_000)
+  })
 })
 
 describe('secondesAffichees', () => {

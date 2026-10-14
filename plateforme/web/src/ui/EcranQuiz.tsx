@@ -68,7 +68,8 @@ export function EcranQuiz({
   const partie = etat && etat.partie !== null ? (etat as Partie) : null
   const question = partie?.phase === 'question' ? partie.question : null
   // Relu à chaque rendu : le minuteur d'échéance plus bas en provoque un au bon moment.
-  const ecoule = question ? restant(question.fin_a, ecartMs, Date.now()) === 0 : false
+  const ecoule = question ? restant(question.fin_a, ecartMs, Date.now(), question.pause_le) === 0 : false
+  // En pause, on peut toujours répondre : la pause sert à donner du temps.
   const peutRepondre = Boolean(question && !partie?.ma_reponse && !envoi && !ecoule)
 
   function repondre(choix: number) {
@@ -224,7 +225,12 @@ function Partie({
           Question {question.rang + 1} sur {question.total}
         </p>
         {!corrigee && (
-          <CompteARebours finA={question.fin_a} ecartMs={ecartMs} dureeS={question.duree_s} />
+          <CompteARebours
+            finA={question.fin_a}
+            ecartMs={ecartMs}
+            dureeS={question.duree_s}
+            pauseLe={question.pause_le}
+          />
         )}
       </header>
 
@@ -253,10 +259,12 @@ function Partie({
         </p>
       )}
       {!corrigee && !partie.ma_reponse && (
-        <p className="quiz__statut">
-          {ecoule
-            ? 'Temps écoulé.'
-            : `Clique sur ta réponse, ou tape 1 à ${question.options.length}.`}
+        <p className="quiz__statut" role={question.pause_le ? 'status' : undefined}>
+          {question.pause_le
+            ? 'Le temps est en pause : prends le temps de répondre, tu ne perds aucun point.'
+            : ecoule
+              ? 'Temps écoulé.'
+              : `Clique sur ta réponse, ou tape 1 à ${question.options.length}.`}
         </p>
       )}
 

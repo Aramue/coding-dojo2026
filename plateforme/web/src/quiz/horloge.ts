@@ -27,9 +27,20 @@ export function ecart(maintenantServeur: string, envoiA: number, recuA: number):
   return serveur - (envoiA + recuA) / 2
 }
 
-/** Millisecondes restantes avant l'échéance, jamais négatives. */
-export function restant(finA: string, ecartMs: number, maintenantLocal: number): number {
-  return Math.max(0, Date.parse(finA) - (maintenantLocal + ecartMs))
+/**
+ * Millisecondes restantes avant l'échéance, jamais négatives.
+ *
+ * En pause, le temps s'est arrêté à `pauseLe` : il reste ce qu'il restait à
+ * cet instant, quelle que soit l'heure qu'il est.
+ */
+export function restant(
+  finA: string,
+  ecartMs: number,
+  maintenantLocal: number,
+  pauseLe?: string | null,
+): number {
+  const maintenantServeur = pauseLe ? Date.parse(pauseLe) : maintenantLocal + ecartMs
+  return Math.max(0, Date.parse(finA) - maintenantServeur)
 }
 
 /** Les secondes qu'on affiche : 0,2 s restante se lit « 1 », pas « 0 ». */

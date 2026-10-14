@@ -47,3 +47,22 @@ def test_la_migration_se_rejoue_sans_rien_casser(tmp_path):
     moteur = create_engine(f"sqlite:///{(tmp_path / 'neuve.db').as_posix()}")
     creer_schema(moteur)
     creer_schema(moteur)
+
+
+def test_une_partie_d_avant_la_pause_gagne_sa_colonne(tmp_path):
+    """La v1.1 a deja des parties en base : sans la colonne, lire une partie echouerait."""
+    chemin = tmp_path / "v1-1.db"
+    ancienne = sqlite3.connect(chemin)
+    ancienne.execute(
+        "CREATE TABLE partiequiz (id INTEGER PRIMARY KEY, quiz_id TEXT, phase TEXT, question INTEGER,"
+        " ouverte_le TEXT, fin_a TEXT, creee_le TEXT, terminee_le TEXT)"
+    )
+    ancienne.execute("INSERT INTO partiequiz VALUES (1, 'q1-bases', 'terminee', 3, NULL, NULL, '2026-10-01', '2026-10-01')")
+    ancienne.commit()
+    ancienne.close()
+
+    creer_schema(create_engine(f"sqlite:///{chemin.as_posix()}"))
+
+    verif = sqlite3.connect(chemin)
+    assert verif.execute("SELECT pause_le FROM partiequiz WHERE id = 1").fetchone() == (None,)
+    verif.close()

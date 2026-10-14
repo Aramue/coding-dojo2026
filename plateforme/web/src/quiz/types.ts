@@ -17,6 +17,13 @@ export type QuestionVue = {
   duree_s: number
   ouverte_le: string
   fin_a: string
+  /**
+   * Non nul pendant une pause : l'heure (serveur) où le temps s'est arrêté.
+   * Le compte à rebours se fige sur `fin_a - pause_le`. On peut toujours
+   * répondre : une réponse donnée pendant la pause vaut les points de cet
+   * instant-là.
+   */
+  pause_le?: string | null
   /** Absente tant que la question n'est pas corrigée : le serveur ne l'envoie pas. */
   bonne_reponse?: number
   explication?: string

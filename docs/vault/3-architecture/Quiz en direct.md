@@ -33,6 +33,30 @@ corrigée, à la lecture. « Corriger maintenant » recule l'échéance au lieu 
 n'existe donc qu'une façon d'entrer en correction, et aucun minuteur serveur à perdre au
 redémarrage.
 
+### La pause — 14 octobre 2026
+
+**Pause**, à côté de « Corriger maintenant » et en bleu pour ne pas s'y confondre, arrête le temps
+de la question ouverte ; le même bouton devient **Reprendre**. Même principe que la correction,
+rien ne tourne côté serveur :
+
+- **Pendant la pause**, `pause_le` porte l'instant où le temps s'est arrêté, et la phase se lit à
+  cet instant-là : la question ne peut pas s'écouler. Chaque écran fige son compte à rebours sur
+  `fin_a - pause_le`, et ne programme aucune relecture d'échéance.
+- **On peut toujours répondre.** La pause sert à ==donner du temps== quand une question s'avère
+  trop longue pour la classe. Une réponse donnée pendant la pause vaut les points de l'instant où
+  le temps s'est arrêté : prendre le temps offert ne coûte rien.
+- **Si tout le monde a répondu pendant la pause**, la question se corrige comme d'habitude, et la
+  correction lève la pause : rien ne reste suspendu, la question suivante s'ouvre normalement.
+- **À la reprise**, `ouverte_le` et `fin_a` avancent de la durée de la pause : il reste exactement
+  ce qu'il restait, et le barème, mesuré depuis l'ouverture, ne compte pas la pause contre ceux
+  qui répondent ensuite.
+- « Corriger maintenant » et « Terminer la partie » lèvent la pause.
+
+Vérifié sur l'instance locale, quatre élèves. Pause à 2 s d'une question de 20 s, tous répondent
+25 s plus tard : quatre réponses acceptées, correction quand le dernier répond, pause levée, 948
+points chacun — ceux d'une réponse à 2 s. Pause à 3 s d'une question de 30 s, deux répondent
+pendant la pause et deux après la reprise : il restait 27 s, et les points suivent l'ordre réel.
+
 ## Qui voit quoi
 
 | | Pendant la question | À la correction | En fin de partie |

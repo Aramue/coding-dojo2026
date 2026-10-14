@@ -164,7 +164,12 @@ export class FluxQuiz<E extends Photographie> {
 
   private planifierEcheance(etat: E, ecartMs: number): void {
     clearTimeout(this.minuteurEcheance)
-    if (this.arrete || etat.phase !== 'question' || !etat.question) return
+    // En pause, l'échéance ne tombe pas : la relire à `fin_a` relirait une
+    // question toujours ouverte, et replanifierait aussitôt, en boucle. La
+    // reprise sonne chez tout le monde : c'est elle qui relance l'échéance.
+    if (this.arrete || etat.phase !== 'question' || !etat.question || etat.question.pause_le) {
+      return
+    }
     const dans = relectureA(etat.question.fin_a, ecartMs) - Date.now()
     this.minuteurEcheance = setTimeout(
       () => void this.relire(),

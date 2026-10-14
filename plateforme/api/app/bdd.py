@@ -32,6 +32,11 @@ COLONNES_AJOUTEES: dict[str, dict[str, str]] = {
         "nom": "TEXT NOT NULL DEFAULT ''",
         "etablissement": "TEXT NOT NULL DEFAULT ''",
     },
+    # La pause du quiz, 14 octobre 2026 : une base de production a deja des
+    # parties, et la premiere lecture de partie echouerait sans cette colonne.
+    "partiequiz": {
+        "pause_le": "DATETIME",
+    },
 }
 
 

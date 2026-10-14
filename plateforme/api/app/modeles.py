@@ -75,6 +75,9 @@ class PartieQuiz(SQLModel, table=True):
     question: int = -1
     ouverte_le: datetime | None = None
     fin_a: datetime | None = None
+    # Non nul pendant une pause : l'instant ou le temps s'est arrete. Le temps
+    # de la question se lit a cet instant-la tant qu'elle dure. Voir quiz.py.
+    pause_le: datetime | None = None
     creee_le: datetime = Field(default_factory=maintenant)
     terminee_le: datetime | None = None
 

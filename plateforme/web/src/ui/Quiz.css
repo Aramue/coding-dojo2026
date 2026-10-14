@@ -184,6 +184,16 @@ button.options-quiz__bouton:disabled {
   min-width: 10rem;
 }
 
+.compte__pause {
+  font-size: var(--t-2);
+  font-weight: 600;
+  color: var(--ope-ink);
+  background: var(--ope-tint);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .compte__secondes {
   font-size: var(--t-6);
   font-weight: 700;

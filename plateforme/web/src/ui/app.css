@@ -379,13 +379,13 @@ html {
 }
 
 /* Bouton secondaire, sur fond clair. */
-.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu) {
+.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu):not(.bouton--pause) {
   background: var(--surface);
   border-color: var(--rule);
   color: var(--ink);
 }
 
-.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu):hover:not(:disabled) {
+.bouton:not(.bouton--primaire):not(.bouton--sombre):not(.bouton--menu):not(.bouton--pause):hover:not(:disabled) {
   background: var(--ground-2);
   border-color: var(--ink-soft);
 }
@@ -416,6 +416,32 @@ html {
 
 .bouton--primaire:hover:not(:disabled) {
   background: #ffd35e;
+}
+
+/*
+ * La pause du quiz : le bleu de la palette, ni le jaune de l'action principale
+ * ni le blanc de « Corriger maintenant », a cote duquel il se tient. Enfonce
+ * (aria-pressed) pendant la pause, il passe au plein : on voit de loin que le
+ * temps est arrete.
+ */
+.bouton--pause {
+  background: var(--ope-tint);
+  border-color: color-mix(in srgb, var(--ope-ink) 25%, transparent);
+  color: var(--ope-ink);
+}
+
+.bouton--pause:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ope-tint) 80%, var(--ope-ink));
+}
+
+.bouton--pause[aria-pressed='true'] {
+  background: var(--ope-ink);
+  border-color: var(--ope-ink);
+  color: #fff;
+}
+
+.bouton--pause[aria-pressed='true']:hover:not(:disabled) {
+  background: var(--ope-deep);
 }
 
 .bouton--sombre {

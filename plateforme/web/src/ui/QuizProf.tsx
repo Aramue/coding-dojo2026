@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { listerEleves } from '../prof/classe'
 import {
   corriger,
+  mettreEnPause,
+  reprendre,
   creerPartie,
   SessionProfRefusee,
   lirePartie,
@@ -178,6 +180,14 @@ export function QuizProf({
           envoi={envoi}
           onSuivante={() => void agir(() => questionSuivante(jetonProf, partie.question?.rang ?? -1))}
           onCorriger={() => partie.question && void agir(() => corriger(jetonProf, partie.question!.rang))}
+          onPause={() =>
+            partie.question &&
+            void agir(() =>
+              partie.question!.pause_le
+                ? reprendre(jetonProf, partie.question!.rang)
+                : mettreEnPause(jetonProf, partie.question!.rang),
+            )
+          }
           onTerminer={() => void agir(() => terminerPartie(jetonProf))}
           onNouvelle={() => setNouvelle(true)}
         />
@@ -373,6 +383,7 @@ function Deroule({
   envoi,
   onSuivante,
   onCorriger,
+  onPause,
   onTerminer,
   onNouvelle,
 }: {
@@ -382,6 +393,8 @@ function Deroule({
   envoi: boolean
   onSuivante: () => void
   onCorriger: () => void
+  /** Met en pause la question ouverte, ou la reprend si elle l'est déjà. */
+  onPause: () => void
   onTerminer: () => void
   onNouvelle: () => void
 }) {
@@ -422,7 +435,12 @@ function Deroule({
             {corrigee && ' · correction'}
           </p>
           {!corrigee && (
-            <CompteARebours finA={question.fin_a} ecartMs={ecartMs} dureeS={question.duree_s} />
+            <CompteARebours
+              finA={question.fin_a}
+              ecartMs={ecartMs}
+              dureeS={question.duree_s}
+              pauseLe={question.pause_le}
+            />
           )}
         </header>
 
@@ -464,9 +482,25 @@ function Deroule({
               {partie.derniere ? 'Voir le résultat final' : 'Question suivante'}
             </button>
           ) : (
-            <button type="button" className="bouton" disabled={envoi} onClick={onCorriger}>
-              Corriger maintenant
-            </button>
+            <>
+              <button type="button" className="bouton" disabled={envoi} onClick={onCorriger}>
+                Corriger maintenant
+              </button>
+              {/*
+                Une autre couleur que « Corriger maintenant » : l'un termine la
+                question, l'autre la suspend. Côte à côte et de la même teinte,
+                on les confondrait sous la main, devant la classe.
+              */}
+              <button
+                type="button"
+                className="bouton bouton--pause"
+                aria-pressed={Boolean(question.pause_le)}
+                disabled={envoi}
+                onClick={onPause}
+              >
+                {question.pause_le ? 'Reprendre' : 'Pause'}
+              </button>
+            </>
           )}
         </div>
       </section>

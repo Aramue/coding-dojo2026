@@ -74,6 +74,15 @@ export function corriger(jetonProf: string, question: number): Promise<EtatProf>
   return etat(jetonProf, '/partie/corriger', { method: 'POST', body: JSON.stringify({ question }) })
 }
 
+/** Arrête le temps de la question `question`. Refusé si elle a déjà changé à l'écran. */
+export function mettreEnPause(jetonProf: string, question: number): Promise<EtatProf> {
+  return etat(jetonProf, '/partie/pause', { method: 'POST', body: JSON.stringify({ question }) })
+}
+
+export function reprendre(jetonProf: string, question: number): Promise<EtatProf> {
+  return etat(jetonProf, '/partie/reprendre', { method: 'POST', body: JSON.stringify({ question }) })
+}
+
 export function terminerPartie(jetonProf: string): Promise<EtatProf> {
   return etat(jetonProf, '/partie/terminer', { method: 'POST' })
 }
