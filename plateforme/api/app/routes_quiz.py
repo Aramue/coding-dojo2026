@@ -26,6 +26,7 @@ from .quiz import (
     Invalide,
     QuizPublie,
     Refus,
+    classement_complet,
     evaluer,
     fermer,
     iso,
@@ -326,14 +327,30 @@ def lire_resultats(
     session: SessionBdd,
     catalogue: Catalogue,
 ) -> dict:
-    """Le bilan de la derniere partie jouee de ce quiz. Anonyme, comme en fin de partie."""
+    """Le bilan de la derniere partie jouee de ce quiz, et le classement de TOUS ses joueurs.
+
+    Le classement complet ne sort que d'ici : l'ecran de la partie, lui, ne
+    projette jamais que les trois premiers, et ni le podium ni la fin de partie
+    n'en recoivent davantage (ADR-015). Le catalogue n'en recoit pas non plus.
+    """
     quiz = catalogue.get(quiz_id)
     if quiz is None:
         raise HTTPException(404, "Quiz inconnu.")
     derniere = _derniere_jouee(session, quiz)
     if derniere is None:
         raise HTTPException(404, "Ce quiz n'a pas encore été joué.")
-    return {"quiz_id": quiz.id, "titre": quiz.titre, **derniere}
+    partie = session.get(PartieQuiz, derniere["partie"])
+    assert partie is not None  # _derniere_jouee vient de la lire
+    return {
+        "quiz_id": quiz.id,
+        "titre": quiz.titre,
+        **derniere,
+        "classement": classement_complet(
+            _identites(session, partie.id),  # type: ignore[arg-type]
+            _reponses(session, partie.id),  # type: ignore[arg-type]
+            jouees=partie.question + 1,
+        ),
+    }
 
 
 @routeur_prof.post("/parties", status_code=201)

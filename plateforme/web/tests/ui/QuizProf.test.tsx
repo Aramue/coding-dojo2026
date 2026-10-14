@@ -321,6 +321,11 @@ describe('QuizProf', () => {
       bilan: [
         { rang: 0, enonce: 'Q piège', code: '', options: ['a', 'b'], bonne_reponse: 1, repartition: [15, 6], reponses: 21 },
       ],
+      classement: [
+        { prenom: 'Camille', nom: 'Rey', points: 910, bonnes: 1, rang: 1 },
+        { prenom: 'Alex', nom: 'Morel', points: 0, bonnes: 0, rang: 2 },
+        { prenom: '', nom: '', points: 0, bonnes: 0, rang: 3 },
+      ],
     })
     monter()
 
@@ -334,6 +339,16 @@ describe('QuizProf', () => {
     expect(await screen.findByText('68 %')).toBeInTheDocument()
     expect(screen.getByText(/21 élèves, 240 réponses/)).toBeInTheDocument()
     expect(screen.getByText('Q piège').closest('li')).toHaveTextContent('À reprendre')
+    // Tous les joueurs, du premier au dernier, zéro compris.
+    const lignes = within(screen.getByRole('table')).getAllByRole('row').slice(1)
+    const cellules = lignes.map((l) => within(l).getAllByRole('cell').map((c) => c.textContent))
+    expect(cellules).toEqual([
+      ['1', 'Camille Rey', '910', '1 / 1'],
+      ['2', 'Alex Morel', '0', '0 / 1'],
+      // Sans prénom saisi, un élève reste anonyme : jamais son code d'accès.
+      ['3', 'Élève', '0', '0 / 1'],
+    ])
+    expect(lignes[1]).toHaveAttribute('data-vide')
     // Rien n'a été lancé pour les lire.
     expect(postes()).toEqual([])
 

@@ -17,6 +17,7 @@ import type {
   LigneBilan,
   Participant,
   PlaceProjetee,
+  PlaceResultat,
   ResultatsQuiz,
   ResumeQuiz,
 } from '../quiz/types'
@@ -304,6 +305,9 @@ function Resultats({
               {accord(resultats.reponses, 'réponse', 'réponses')}
             </span>
           </p>
+          {resultats.classement.length > 0 && (
+            <Classement places={resultats.classement} questions={resultats.bilan.length} />
+          )}
           <Bilan lignes={resultats.bilan} />
         </>
       )}
@@ -314,6 +318,52 @@ function Resultats({
       </div>
     </section>
   )
+}
+
+/**
+ * Tous les joueurs de la dernière partie, du premier au dernier, zéro compris.
+ *
+ * C'est la page où le professeur RELIT une partie, après coup : pour savoir qui
+ * a suivi et qui a décroché. Elle n'existe que dans « Derniers résultats » —
+ * l'écran de la partie, celui que la salle regarde, ne projette jamais que le
+ * podium à trois marches (ADR-015).
+ *
+ * Le nom en entier : c'est la liste du professeur, et deux « Lina F. » s'y
+ * confondraient.
+ */
+function Classement({ places, questions }: { places: PlaceResultat[]; questions: number }) {
+  return (
+    <section className="classement" aria-labelledby="titre-classement">
+      <h2 id="titre-classement">Tous les joueurs</h2>
+      <table className="classement__table">
+        <thead>
+          <tr>
+            <th scope="col">Rang</th>
+            <th scope="col">Élève</th>
+            <th scope="col">Points</th>
+            <th scope="col">Bonnes réponses</th>
+          </tr>
+        </thead>
+        <tbody>
+          {places.map((place, i) => (
+            <tr key={i} data-vide={place.points === 0 || undefined}>
+              <td className="classement__rang">{place.rang}</td>
+              <td>{nomComplet(place)}</td>
+              <td className="classement__nombre">{place.points.toLocaleString('fr-CH')}</td>
+              <td className="classement__nombre">
+                {place.bonnes} / {questions}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )
+}
+
+function nomComplet(place: PlaceResultat): string {
+  const nom = [place.prenom?.trim(), place.nom?.trim()].filter(Boolean).join(' ')
+  return nom || 'Élève'
 }
 
 function Deroule({

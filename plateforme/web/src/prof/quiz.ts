@@ -52,7 +52,9 @@ export async function listerQuiz(jetonProf: string): Promise<ResumeQuiz[]> {
 export async function lireResultats(jetonProf: string, quizId: string): Promise<ResultatsQuiz> {
   const donnees = (await appeler(jetonProf, `/${quizId}/resultats`)) as ResultatsQuiz | null
   if (!Array.isArray(donnees?.bilan)) throw new Error('Réponse inattendue de la plateforme.')
-  return donnees
+  // Une API d'avant le classement complet n'en envoie pas : la page reste
+  // lisible, sans la liste, plutôt que de devenir blanche.
+  return { ...donnees, classement: Array.isArray(donnees.classement) ? donnees.classement : [] }
 }
 
 export function lirePartie(jetonProf: string): Promise<EtatProf> {

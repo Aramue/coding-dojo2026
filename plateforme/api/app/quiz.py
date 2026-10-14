@@ -437,6 +437,31 @@ def resultats(quiz: QuizPublie, reponses: list[ReponseQuiz], jouees: int, joueur
     }
 
 
+def classement_complet(identites: list[dict], reponses: list[ReponseQuiz], jouees: int) -> list[dict]:
+    """Tous les joueurs d'une partie terminee, du premier au dernier, zero compris.
+
+    Pour « Derniers resultats » SEULEMENT : c'est la page ou le professeur
+    relit une partie, pas l'ecran que la salle regarde pendant qu'elle se joue.
+    Le podium et la fin de partie passent par `podium()`, qui s'arrete a trois
+    et ne nomme jamais personne a zero (ADR-015).
+
+    Ni code d'acces ni jeton : un nom, un score, un rang. Un eleve sans prenom
+    reste anonyme, comme partout ailleurs.
+    """
+    noms = {i["code_acces"]: i for i in identites}
+    places = classement(list(noms), reponses, closes=jouees)
+    return [
+        {
+            "prenom": noms[p.code_acces]["prenom"],
+            "nom": noms[p.code_acces]["nom"],
+            "points": p.points,
+            "bonnes": p.bonnes,
+            "rang": p.rang,
+        }
+        for p in places
+    ]
+
+
 def resume(quiz: QuizPublie) -> dict:
     """Une ligne du catalogue : de quoi choisir, rien de ce qui se joue."""
     return {

@@ -113,8 +113,26 @@ export type ResumeQuiz = {
   derniere: DernierePartie | null
 }
 
+/**
+ * Un joueur de la dernière partie, tel que « Derniers résultats » le classe.
+ * Ni code d'accès ni jeton : un nom, un score, un rang.
+ */
+export type PlaceResultat = {
+  prenom: string
+  nom: string
+  points: number
+  bonnes: number
+  rang: number
+}
+
 export type ResultatsQuiz = DernierePartie & {
   quiz_id: string
   titre: string
   bilan: LigneBilan[]
+  /**
+   * TOUS les joueurs, du premier au dernier, zéro compris. Seule cette page le
+   * reçoit : l'écran de la partie, le podium et la fin de partie n'en montrent
+   * jamais que trois (ADR-015).
+   */
+  classement: PlaceResultat[]
 }

@@ -397,6 +397,64 @@
   }
 }
 
+/* ---------- Tous les joueurs (« Derniers résultats » seulement) ---------- */
+
+.classement {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  margin-top: var(--e-2);
+}
+
+.classement__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+  overflow: hidden;
+  font-size: var(--t-3);
+}
+
+.classement__table th {
+  padding: 0.6rem var(--e-2);
+  text-align: left;
+  font-size: var(--t-1);
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: var(--surface-doux);
+  border-bottom: 1px solid var(--rule-doux);
+}
+
+.classement__table td {
+  padding: 0.6rem var(--e-2);
+  color: var(--ink);
+  border-top: 1px solid var(--rule-doux);
+}
+
+.classement__table tbody tr:first-child td {
+  border-top: 0;
+}
+
+.classement__rang {
+  width: 4rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.classement__table th:nth-child(n + 3),
+.classement__nombre {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Un joueur a zero reste dans la liste, sans etre mis en avant. */
+.classement__table tr[data-vide] td {
+  color: var(--ink-soft);
+}
+
 /* ---------- Bilan ---------- */
 
 .bilan {

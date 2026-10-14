@@ -467,6 +467,59 @@ def test_les_derniers_resultats_d_un_quiz(client, partie, eleve, horloge):
     assert "DOJO-K7M2" not in str(resultats)
 
 
+def test_les_derniers_resultats_classent_tous_les_joueurs_zero_compris(client, partie, eleve, horloge):
+    """Le professeur relit la partie : tout le monde, du premier au dernier."""
+    camille = eleve("DOJO-K7M2")
+    alex = eleve("DOJO-M3QP", "Alex", "Morel")
+    sam = eleve("DOJO-P4TX", "Sam", "Blanc")
+    for entetes in (camille, alex, sam):
+        client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    repondre(client, camille, partie["partie"], 0, 1)
+    horloge.avancer(5)
+    repondre(client, alex, partie["partie"], 0, 1)
+    repondre(client, sam, partie["partie"], 0, 0)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+
+    resultats = client.get("/prof/quiz/q1-bases/resultats", headers=PROF).json()
+    classement = resultats["classement"]
+    assert [(c["prenom"], c["rang"], c["bonnes"]) for c in classement] == [
+        ("Camille", 1, 1),
+        ("Alex", 2, 1),
+        ("Sam", 3, 0),
+    ]
+    assert classement[0]["points"] > classement[1]["points"] > 0
+    assert classement[2]["points"] == 0  # le dernier, a zero, y figure aussi
+    # Un nom et un score, jamais un code d'acces.
+    assert set(classement[0]) == {"prenom", "nom", "points", "bonnes", "rang"}
+    assert "DOJO-" not in str(resultats)
+
+
+def test_le_classement_complet_ne_sort_que_des_derniers_resultats(client, partie, eleve, horloge):
+    """Ni le catalogue, ni l'ecran de la partie, ni la fin de partie ne le recoivent."""
+    noms = [("K7M2", "Un"), ("M3QP", "Deux"), ("P4TX", "Trois"), ("R6WZ", "Quatre"), ("T8YB", "Cinq")]
+    joueurs = [eleve(f"DOJO-{code}", prenom, "Essai") for code, prenom in noms]
+    for entetes in joueurs:
+        client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    for rang, entetes in enumerate(joueurs):
+        horloge.avancer(1)
+        # Les quatre premiers repondent juste, de plus en plus lentement ; le cinquieme faux.
+        repondre(client, entetes, partie["partie"], 0, 1 if rang < 4 else 0)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+    fin = client.get("/prof/quiz/partie", headers=PROF).json()
+    assert fin["phase"] == "terminee"
+    assert "classement" not in fin
+    assert len(fin["podium"]) == 3
+    assert [p["prenom"] for p in fin["podium"]] == ["Un", "Deux", "Trois"]
+
+    catalogue = client.get("/prof/quiz", headers=PROF).json()["quiz"][0]["derniere"]
+    assert "classement" not in catalogue
+
+    complet = client.get("/prof/quiz/q1-bases/resultats", headers=PROF).json()["classement"]
+    assert [c["prenom"] for c in complet] == ["Un", "Deux", "Trois", "Quatre", "Cinq"]
+
+
 def test_une_partie_sans_reponse_ne_masque_pas_la_precedente(client, partie, eleve, horloge):
     """Le test de charge laisse une partie vide : les vrais resultats restent lisibles."""
     entetes = eleve("DOJO-K7M2")
