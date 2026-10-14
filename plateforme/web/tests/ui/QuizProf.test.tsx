@@ -120,6 +120,45 @@ describe('QuizProf', () => {
     expect(postes()).toEqual([['/api/prof/quiz/partie/corriger', '{"question":2}']])
   })
 
+  it('met en pause à côté de « Corriger maintenant », d une autre couleur', async () => {
+    etat = etatProf({ phase: 'question', question: question({ rang: 2 }), participants: INSCRITS })
+    apresAction = reponse(
+      etatProf({
+        phase: 'question',
+        question: question({ rang: 2, pause_le: new Date().toISOString() }),
+        participants: INSCRITS,
+      }),
+    )
+    monter()
+
+    const pause = await screen.findByRole('button', { name: 'Pause' })
+    const corriger = screen.getByRole('button', { name: 'Corriger maintenant' })
+    // Juste à côté, et pas de la même teinte.
+    expect(corriger.nextElementSibling).toBe(pause)
+    expect(pause).toHaveClass('bouton--pause')
+    expect(corriger).not.toHaveClass('bouton--pause')
+    expect(pause).toHaveAttribute('aria-pressed', 'false')
+
+    await userEvent.click(pause)
+    expect(postes()).toEqual([['/api/prof/quiz/partie/pause', '{"question":2}']])
+    const reprendre = await screen.findByRole('button', { name: 'Reprendre' })
+    expect(reprendre).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByText('En pause')).toBeInTheDocument()
+  })
+
+  it('reprend une question en pause', async () => {
+    etat = etatProf({
+      phase: 'question',
+      question: question({ rang: 1, pause_le: new Date().toISOString() }),
+      participants: INSCRITS,
+    })
+    apresAction = reponse(etatProf({ phase: 'question', question: question({ rang: 1 }), participants: INSCRITS }))
+    monter()
+    await userEvent.click(await screen.findByRole('button', { name: 'Reprendre' }))
+    expect(postes()).toEqual([['/api/prof/quiz/partie/reprendre', '{"question":1}']])
+    expect(await screen.findByRole('button', { name: 'Pause' })).toBeInTheDocument()
+  })
+
   it('à la correction, projette la réponse, la répartition et les cinq premiers', async () => {
     etat = etatProf({
       phase: 'correction',
@@ -321,6 +360,11 @@ describe('QuizProf', () => {
       bilan: [
         { rang: 0, enonce: 'Q piège', code: '', options: ['a', 'b'], bonne_reponse: 1, repartition: [15, 6], reponses: 21 },
       ],
+      classement: [
+        { prenom: 'Camille', nom: 'Rey', points: 910, bonnes: 1, rang: 1 },
+        { prenom: 'Alex', nom: 'Morel', points: 0, bonnes: 0, rang: 2 },
+        { prenom: '', nom: '', points: 0, bonnes: 0, rang: 3 },
+      ],
     })
     monter()
 
@@ -334,6 +378,16 @@ describe('QuizProf', () => {
     expect(await screen.findByText('68 %')).toBeInTheDocument()
     expect(screen.getByText(/21 élèves, 240 réponses/)).toBeInTheDocument()
     expect(screen.getByText('Q piège').closest('li')).toHaveTextContent('À reprendre')
+    // Tous les joueurs, du premier au dernier, zéro compris.
+    const lignes = within(screen.getByRole('table')).getAllByRole('row').slice(1)
+    const cellules = lignes.map((l) => within(l).getAllByRole('cell').map((c) => c.textContent))
+    expect(cellules).toEqual([
+      ['1', 'Camille Rey', '910', '1 / 1'],
+      ['2', 'Alex Morel', '0', '0 / 1'],
+      // Sans prénom saisi, un élève reste anonyme : jamais son code d'accès.
+      ['3', 'Élève', '0', '0 / 1'],
+    ])
+    expect(lignes[1]).toHaveAttribute('data-vide')
     // Rien n'a été lancé pour les lire.
     expect(postes()).toEqual([])
 

@@ -115,6 +115,23 @@ describe('EcranQuiz', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Le temps de réponse est écoulé.')
   })
 
+  it('en pause, fige le temps, laisse répondre et le dit', async () => {
+    const maintenant = Date.now()
+    const enPause = question({
+      fin_a: new Date(maintenant - 30_000).toISOString(), // l'échéance est passée…
+      pause_le: new Date(maintenant - 42_000).toISOString(), // …mais le temps s'est arrêté avant
+    })
+    etat = etatEleve({ phase: 'question', question: enPause })
+    await monter()
+    expect(await screen.findByText(/tu ne perds aucun point/)).toBeInTheDocument()
+    expect(screen.getByRole('timer')).toHaveAccessibleName('En pause, 12 secondes restantes')
+    // L'échéance est passée, mais le temps s'est arrêté avant : on peut répondre.
+    expect(screen.queryByText('Temps écoulé.')).toBeNull()
+    for (const bouton of screen.getAllByRole('button')) expect(bouton).toBeEnabled()
+    await userEvent.keyboard('1')
+    expect(corpsDu('/quiz/reponse')).toEqual({ partie: 1, question: 0, choix: 0 })
+  })
+
   it('verrouille les options quand le temps est écoulé', async () => {
     const passee = question({ fin_a: new Date(Date.now() - 1_000).toISOString() })
     etat = etatEleve({ phase: 'question', question: passee })

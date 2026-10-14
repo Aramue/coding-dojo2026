@@ -15,6 +15,8 @@ from app.quiz import (
     fermer,
     ouvrir_suivante,
     nom_affiche,
+    pauser,
+    reprendre,
     phase_effective,
     podium,
     points,
@@ -154,6 +156,92 @@ def test_terminer_en_pleine_question():
     p = en_question()
     terminer(p, T0 + timedelta(seconds=2))
     assert phase_effective(p, T0 + timedelta(seconds=2)) == "terminee"
+
+
+# --- Pause -------------------------------------------------------------------
+
+
+def test_en_pause_le_temps_s_arrete():
+    """Question de 20 s, pause a 5 s : une minute plus tard, elle est toujours ouverte."""
+    p = en_question()
+    pauser(p, T0 + timedelta(seconds=5))
+    assert phase_effective(p, T0 + timedelta(seconds=80)) == "question"
+
+
+def test_reprendre_rend_exactement_le_temps_qu_il_restait():
+    p = en_question()  # 20 s, ouverte a T0
+    pauser(p, T0 + timedelta(seconds=5))
+    reprendre(p, T0 + timedelta(seconds=65))  # une minute de pause
+    assert utc(p.fin_a) == T0 + timedelta(seconds=80)  # 15 s restantes, comme a la pause
+    assert p.pause_le is None
+    assert phase_effective(p, T0 + timedelta(seconds=79)) == "question"
+    assert phase_effective(p, T0 + timedelta(seconds=81)) == "correction"
+
+
+def test_la_pause_ne_compte_pas_contre_ceux_qui_repondent_apres():
+    p = en_question()
+    pauser(p, T0 + timedelta(seconds=5))
+    reprendre(p, T0 + timedelta(seconds=65))
+    # Repondre 0 s apres la reprise, c'est repondre a 5 s : 875 points, pas 500.
+    evaluation = evaluer(p, QUIZ, 0, 1, T0 + timedelta(seconds=65))
+    assert (evaluation.delai_ms, evaluation.points) == (5000, 875)
+
+
+def test_on_repond_pendant_la_pause_aux_points_de_l_instant_de_la_pause():
+    """La pause donne du temps : y repondre, meme une minute plus tard, ne coute rien."""
+    p = en_question()  # 20 s
+    pauser(p, T0 + timedelta(seconds=5))
+    evaluation = evaluer(p, QUIZ, 0, 1, T0 + timedelta(seconds=65))
+    assert (evaluation.correcte, evaluation.delai_ms, evaluation.points) == (True, 5000, 875)
+
+
+def test_meme_bien_apres_l_echeance_on_repond_pendant_la_pause():
+    """Pause a 19 s d'une question de 20 s : dix minutes apres, la reponse passe encore."""
+    p = en_question()
+    pauser(p, T0 + timedelta(seconds=19))
+    evaluation = evaluer(p, QUIZ, 0, 1, T0 + timedelta(minutes=10))
+    assert evaluation.delai_ms == 19000
+
+
+def test_on_ne_met_en_pause_qu_une_question_ouverte_et_une_seule_fois():
+    with pytest.raises(Refus, match="Aucune question"):
+        pauser(partie(), T0)
+    p = en_question()
+    fermer(p, T0 + timedelta(seconds=2))
+    with pytest.raises(Refus, match="Aucune question"):
+        pauser(p, T0 + timedelta(seconds=3))
+    p = en_question()
+    pauser(p, T0 + timedelta(seconds=1))
+    with pytest.raises(Refus, match="déjà en pause"):
+        pauser(p, T0 + timedelta(seconds=2))
+
+
+def test_on_ne_reprend_que_ce_qui_est_en_pause():
+    with pytest.raises(Refus, match="pas en pause"):
+        reprendre(en_question(), T0 + timedelta(seconds=1))
+
+
+def test_corriger_ou_terminer_pendant_la_pause_la_leve():
+    p = en_question()
+    pauser(p, T0 + timedelta(seconds=5))
+    fermer(p, T0 + timedelta(seconds=30))
+    assert p.pause_le is None
+    assert phase_effective(p, T0 + timedelta(seconds=30)) == "correction"
+
+    p = en_question()
+    pauser(p, T0 + timedelta(seconds=5))
+    terminer(p, T0 + timedelta(seconds=30))
+    assert p.pause_le is None
+
+
+def test_la_vue_dit_la_pause_a_chacun():
+    p = en_question()
+    assert vue_prof(p, QUIZ, [], [], T0)["question"]["pause_le"] is None
+    pauser(p, T0 + timedelta(seconds=5))
+    quand = T0 + timedelta(seconds=40)
+    assert vue_prof(p, QUIZ, [], [], quand)["question"]["pause_le"] == (T0 + timedelta(seconds=5)).isoformat()
+    assert vue_eleve(p, QUIZ, ["A"], [], "A", quand)["question"]["pause_le"] is not None
+    assert vue_eleve(p, QUIZ, ["A"], [], "A", quand)["phase"] == "question"
 
 
 # --- Bareme -----------------------------------------------------------------

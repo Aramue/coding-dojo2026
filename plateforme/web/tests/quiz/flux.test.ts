@@ -215,6 +215,25 @@ describe('FluxQuiz', () => {
     flux.arreter()
   })
 
+  it('ne relit pas à l échéance d une question en pause', async () => {
+    // Sans cette garde, l'échéance passée se relirait en boucle : le serveur
+    // répond « toujours ouverte », et la relecture se replanifierait aussitôt.
+    const finA = new Date(T0 - 5_000).toISOString()
+    const pause = new Date(T0 - 10_000).toISOString()
+    const lire = vi.fn(async () =>
+      photo({ phase: 'question', question: { fin_a: finA, pause_le: pause } as never }),
+    )
+    const { flux, sonnettes } = monter({ lire })
+    flux.demarrer()
+    await vider()
+    sonnettes[0]!.dire({ type: 'pret' })
+    await vider()
+    const avant = lire.mock.calls.length
+    await vi.advanceTimersByTimeAsync(3_000)
+    expect(lire).toHaveBeenCalledTimes(avant)
+    flux.arreter()
+  })
+
   it('relance vite une échéance déjà passée que le serveur ne voit pas encore', async () => {
     const finA = new Date(T0 - 5_000).toISOString()
     const lire = vi.fn(async () => photo({ phase: 'question', question: { fin_a: finA } as never }))

@@ -4,7 +4,7 @@ tags:
   - architecture
   - quiz
   - professeur
-mis-a-jour: 2026-10-13
+mis-a-jour: 2026-10-14
 ---
 
 # Quiz en direct
@@ -32,6 +32,30 @@ stateDiagram-v2
 corrigée, à la lecture. « Corriger maintenant » recule l'échéance au lieu d'écrire une phase. Il
 n'existe donc qu'une façon d'entrer en correction, et aucun minuteur serveur à perdre au
 redémarrage.
+
+### La pause — 14 octobre 2026
+
+**Pause**, à côté de « Corriger maintenant » et en bleu pour ne pas s'y confondre, arrête le temps
+de la question ouverte ; le même bouton devient **Reprendre**. Même principe que la correction,
+rien ne tourne côté serveur :
+
+- **Pendant la pause**, `pause_le` porte l'instant où le temps s'est arrêté, et la phase se lit à
+  cet instant-là : la question ne peut pas s'écouler. Chaque écran fige son compte à rebours sur
+  `fin_a - pause_le`, et ne programme aucune relecture d'échéance.
+- **On peut toujours répondre.** La pause sert à ==donner du temps== quand une question s'avère
+  trop longue pour la classe. Une réponse donnée pendant la pause vaut les points de l'instant où
+  le temps s'est arrêté : prendre le temps offert ne coûte rien.
+- **Si tout le monde a répondu pendant la pause**, la question se corrige comme d'habitude, et la
+  correction lève la pause : rien ne reste suspendu, la question suivante s'ouvre normalement.
+- **À la reprise**, `ouverte_le` et `fin_a` avancent de la durée de la pause : il reste exactement
+  ce qu'il restait, et le barème, mesuré depuis l'ouverture, ne compte pas la pause contre ceux
+  qui répondent ensuite.
+- « Corriger maintenant » et « Terminer la partie » lèvent la pause.
+
+Vérifié sur l'instance locale, quatre élèves. Pause à 2 s d'une question de 20 s, tous répondent
+25 s plus tard : quatre réponses acceptées, correction quand le dernier répond, pause levée, 948
+points chacun — ceux d'une réponse à 2 s. Pause à 3 s d'une question de 30 s, deux répondent
+pendant la pause et deux après la reprise : il restait 27 s, et les points suivent l'ordre réel.
 
 ## Qui voit quoi
 
@@ -101,6 +125,16 @@ dernière partie jouée (« 68 % de bonnes réponses, 21 élèves »), et l'ouvr
 **Derniers résultats** : le même bilan anonyme qu'en fin de partie. Une partie sans réponse —
 annulée en salle d'attente, ou celle du test de charge — est ignorée : elle ne masque pas la
 précédente.
+
+Depuis le 14 octobre 2026, **Derniers résultats** classe aussi **tous les joueurs** de cette
+partie : rang, nom en entier, points, bonnes réponses — zéro compris. C'est la seule page qui le
+reçoit : `GET /prof/quiz/{id}/resultats` porte un champ `classement` que ni le catalogue, ni
+l'écran de la partie, ni la fin de partie n'ont. Ceux-là s'en tiennent au podium à trois marches
+(voir [[ADR-015 Quiz en direct et classement encadré]]).
+
+> [!warning] Cette page est sur l'écran du quiz
+> « Derniers résultats » s'ouvre depuis `/prof/quiz`, l'écran qu'on projette. Si la salle le
+> regarde, elle lit le classement complet : à ouvrir projecteur coupé, ou depuis un autre écran.
 
 ## Le barème
 

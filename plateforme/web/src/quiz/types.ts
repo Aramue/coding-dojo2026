@@ -17,6 +17,13 @@ export type QuestionVue = {
   duree_s: number
   ouverte_le: string
   fin_a: string
+  /**
+   * Non nul pendant une pause : l'heure (serveur) où le temps s'est arrêté.
+   * Le compte à rebours se fige sur `fin_a - pause_le`. On peut toujours
+   * répondre : une réponse donnée pendant la pause vaut les points de cet
+   * instant-là.
+   */
+  pause_le?: string | null
   /** Absente tant que la question n'est pas corrigée : le serveur ne l'envoie pas. */
   bonne_reponse?: number
   explication?: string
@@ -113,8 +120,26 @@ export type ResumeQuiz = {
   derniere: DernierePartie | null
 }
 
+/**
+ * Un joueur de la dernière partie, tel que « Derniers résultats » le classe.
+ * Ni code d'accès ni jeton : un nom, un score, un rang.
+ */
+export type PlaceResultat = {
+  prenom: string
+  nom: string
+  points: number
+  bonnes: number
+  rang: number
+}
+
 export type ResultatsQuiz = DernierePartie & {
   quiz_id: string
   titre: string
   bilan: LigneBilan[]
+  /**
+   * TOUS les joueurs, du premier au dernier, zéro compris. Seule cette page le
+   * reçoit : l'écran de la partie, le podium et la fin de partie n'en montrent
+   * jamais que trois (ADR-015).
+   */
+  classement: PlaceResultat[]
 }
