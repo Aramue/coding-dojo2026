@@ -4,7 +4,7 @@ tags:
   - architecture
   - quiz
   - professeur
-mis-a-jour: 2026-10-13
+mis-a-jour: 2026-10-14
 ---
 
 # Quiz en direct
@@ -101,6 +101,16 @@ dernière partie jouée (« 68 % de bonnes réponses, 21 élèves »), et l'ouvr
 **Derniers résultats** : le même bilan anonyme qu'en fin de partie. Une partie sans réponse —
 annulée en salle d'attente, ou celle du test de charge — est ignorée : elle ne masque pas la
 précédente.
+
+Depuis le 14 octobre 2026, **Derniers résultats** classe aussi **tous les joueurs** de cette
+partie : rang, nom en entier, points, bonnes réponses — zéro compris. C'est la seule page qui le
+reçoit : `GET /prof/quiz/{id}/resultats` porte un champ `classement` que ni le catalogue, ni
+l'écran de la partie, ni la fin de partie n'ont. Ceux-là s'en tiennent au podium à trois marches
+(voir [[ADR-015 Quiz en direct et classement encadré]]).
+
+> [!warning] Cette page est sur l'écran du quiz
+> « Derniers résultats » s'ouvre depuis `/prof/quiz`, l'écran qu'on projette. Si la salle le
+> regarde, elle lit le classement complet : à ouvrir projecteur coupé, ou depuis un autre écran.
 
 ## Le barème
 

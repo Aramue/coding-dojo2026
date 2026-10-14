@@ -59,6 +59,15 @@ en même temps, et se termine. Être septième à la question 4 ne dit rien de p
    la certification. Le tableau de bord ne le montre pas.
 4. **Aucun classement ne subsiste d'une partie à l'autre.** Pas de cumul, pas de classement de la
    semaine : chaque partie repart de zéro.
+
+   > [!note] Le classement complet, pour le professeur — 14 octobre 2026
+   > « Derniers résultats » montre désormais **tous** les joueurs de la dernière partie d'un
+   > quiz, du premier au dernier, zéro compris, avec leurs points et leurs bonnes réponses. C'est
+   > la page où le professeur relit une partie après coup, pour savoir qui a suivi et qui a
+   > décroché — pas l'écran que la salle regarde pendant le jeu. ==L'écran de la partie, le
+   > podium et la fin de partie ne projettent toujours que les trois premiers==, et le serveur
+   > ne leur envoie rien de plus. Il n'y a toujours ni cumul ni classement d'une partie à l'autre :
+   > seule la dernière partie de chaque quiz est relisible.
 5. **Les noms projetés sont « Prénom N. »**, tirés de la liste de la classe
    ([[ADR-012 Le professeur tient la liste de sa classe]]). Aucun pseudonyme libre.
 
