@@ -1,0 +1,45 @@
+id: s4-19
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: ecrire
+titre: La taille de l'image
+obligatoire: false
+enonce: |
+  Calcule dans `hauteur` le nombre de lignes de l'image, et dans `largeur` le
+  nombre de pixels d'une ligne, avec `len()`.
+depart: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  hauteur =
+  largeur =
+indices:
+  - len(image) compte les éléments de la liste image. Que contient-elle ?
+  - 'Pour la largeur, compte les éléments d''une seule ligne, par exemple la première : image[0].'
+tests:
+  - type: variable
+    nom: hauteur
+    valeur_attendue: '2'
+    type_attendu: int
+  - type: variable
+    nom: largeur
+    valeur_attendue: '3'
+    type_attendu: int
+  - type: contient
+    motif: len(
+  - type: interdit
+    motif: hauteur = 2
+  - type: interdit
+    motif: largeur = 3
+solution: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  hauteur = len(image)
+  largeur = len(image[0])

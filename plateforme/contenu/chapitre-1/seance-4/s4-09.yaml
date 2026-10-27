@@ -1,0 +1,34 @@
+id: s4-09
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: ecrire
+titre: Additionner les valeurs d'une liste
+obligatoire: true
+enonce: |
+  La variable `prix` contient les prix de quatre articles. Calcule dans `total`
+  la somme de tous les prix, en parcourant la liste avec une boucle.
+depart: |
+  prix = [12, 5, 8, 20]
+  total = 0
+indices:
+  - 'for peut parcourir une liste comme il parcourt un texte : la variable prend chaque valeur à son tour.'
+  - Le total part de 0 et augmente de la valeur du tour, dans la boucle.
+tests:
+  - type: variable
+    nom: total
+    valeur_attendue: '45'
+    type_attendu: int
+  - type: contient
+    motif: 'for '
+  - type: interdit
+    motif: '45'
+  - type: interdit
+    motif: sum(
+    message: 'sum() fait le calcul à ta place : ici, c''est la boucle qu''on veut voir.'
+solution: |
+  prix = [12, 5, 8, 20]
+  total = 0
+  for p in prix:
+      total = total + p

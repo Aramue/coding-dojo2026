@@ -1,0 +1,43 @@
+id: s4-32
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: predire
+titre: Appeler une fonction toute faite
+obligatoire: true
+enonce: |
+  Le TP fournit une fonction, `get_lsb`. On ne l'écrit pas : on lit sa
+  description, et on l'appelle avec une valeur. Elle rend **deux** valeurs, que
+  l'on range dans deux variables séparées par une virgule. Le nombre 25 s'écrit
+  00011001. Que montre l'écran ?
+depart: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  gauche, droite = get_lsb(25)
+  print(gauche, droite)
+indices:
+  - 'get_lsb rend les deux derniers bits de la valeur : ici, ceux de 00011001.'
+  - Les deux derniers bits sont 0 puis 1. gauche reçoit le premier, droite le second.
+tests:
+  - type: qcm
+    options:
+      - 1 0
+      - '1'
+      - 0 1
+    bonne_reponse: 2
+solution: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  gauche, droite = get_lsb(25)
+  print(gauche, droite)

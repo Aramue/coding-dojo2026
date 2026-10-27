@@ -1,0 +1,26 @@
+id: s4-30
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: predire
+titre: Le ET bit à bit
+obligatoire: true
+enonce: |
+  L'opérateur `&` compare deux nombres bit à bit et ne garde que les bits égaux à
+  1 des deux côtés. `& 3` ne garde donc que les deux derniers bits, puisque 3
+  s'écrit 00000011. Le nombre 25 s'écrit 00011001. Que montre l'écran ?
+depart: |
+  print(25 & 3)
+indices:
+  - Les deux derniers bits de 00011001 sont 01.
+  - 01 en binaire vaut 1.
+tests:
+  - type: qcm
+    options:
+      - '1'
+      - '25'
+      - '3'
+    bonne_reponse: 0
+solution: |
+  print(25 & 3)

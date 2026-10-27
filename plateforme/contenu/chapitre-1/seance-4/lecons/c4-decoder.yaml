@@ -1,0 +1,74 @@
+id: c4-decoder
+notion: decoder
+ordre: 19
+titre: Bits de poids faible et décodage
+duree_min: 6
+blocs:
+  - type: paragraphe
+    texte: 'La **stéganographie** cache une information dans une autre. Ici, le message se cache dans les **deux derniers bits** d''une couleur, qu''on appelle les bits de poids faible, ou LSB. Les modifier change la couleur d''au plus 3 sur 255 : l''œil ne voit rien.'
+  - type: paragraphe
+    texte: Pour isoler ces deux bits, on utilise l'opérateur **`&`**. Il compare deux nombres bit à bit, et ne garde que les bits qui valent 1 des deux côtés. Comme 3 s'écrit `00000011`, `valeur & 3` efface tout, sauf les deux derniers bits.
+  - type: code
+    legende: Garder les deux derniers bits
+    executable: true
+    python: |
+      print(bin(25))
+      print(25 & 3)
+      print(203 & 3)
+  - type: paragraphe
+    texte: '`bin()` affiche un nombre en binaire, précédé de `0b`. Ici, 25 s''écrit `0b11001`, soit `00011001` sur huit bits : ses deux derniers bits sont 01, qui valent 1.'
+  - type: paragraphe
+    texte: 'Pour séparer ces deux bits, l''opérateur **`>>`** décale les bits vers la droite : le dernier disparaît. `3 >> 1` donne 1 (le bit de gauche), et `3 & 1` donne 1 (le bit de droite).'
+  - type: code
+    legende: Séparer les deux bits
+    executable: true
+    python: |
+      valeur = 2
+      print(valeur >> 1)
+      print(valeur & 1)
+  - type: paragraphe
+    texte: 'Tout ce travail est déjà écrit dans une **fonction** du TP, `get_lsb`. Tu n''as pas à l''écrire : tu lis sa description, et tu l''**appelles** avec une valeur entre parenthèses. Elle rend **deux** valeurs, que l''on range dans deux variables séparées par une virgule.'
+  - type: code
+    legende: Appeler get_lsb
+    executable: true
+    python: |
+      def get_lsb(value_of_color):
+          """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+          ex_value = int(value_of_color) & 0b11
+          lsb1 = (ex_value >> 1) & 1
+          lsb2 = ex_value & 1
+          return lsb1, lsb2
+
+      gauche, droite = get_lsb(25)
+      print(gauche, droite)
+  - type: attention
+    texte: '**Il faut autant de variables que de valeurs rendues.** `get_lsb` en rend deux : en écrire trois ou une seule arrête le programme.'
+  - type: paragraphe
+    texte: 'Décoder un message revient alors à enchaîner tout ce que tu sais : récolter les bits de chaque pixel dans une liste, les regrouper par huit, convertir chaque octet en lettre. Quatre pixels fournissent huit bits, donc une lettre.'
+  - type: code
+    legende: Quatre pixels, une lettre
+    executable: true
+    python: |
+      def get_lsb(value_of_color):
+          """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+          ex_value = int(value_of_color) & 0b11
+          lsb1 = (ex_value >> 1) & 1
+          lsb2 = ex_value & 1
+          return lsb1, lsb2
+
+      rouges = [25, 203, 57, 121]
+
+      bits = []
+      for valeur in rouges:
+          bit1, bit2 = get_lsb(valeur)
+          bits.append(bit1)
+          bits.append(bit2)
+
+      octet = ""
+      for bit in bits:
+          octet = octet + str(bit)
+
+      print(octet)
+      print(chr(int(octet, 2)))
+  - type: attention
+    texte: '**Avec plusieurs lettres, regroupe les bits par huit.** Une boucle `range(0, len(bits), 8)` donne le début de chaque paquet, et une boucle interne lit les huit bits à partir de ce début, à la position `i + j`.'

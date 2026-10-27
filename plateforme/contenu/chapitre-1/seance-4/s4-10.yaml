@@ -1,0 +1,38 @@
+id: s4-10
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: predire
+titre: Les positions avec range et len
+obligatoire: false
+enonce: |
+  `range(len(mots))` donne toutes les positions d'une liste : 0, 1, 2... Que
+  montre l'écran ?
+depart: |
+  mots = ["un", "deux", "trois"]
+  for i in range(len(mots)):
+      print(i, mots[i])
+indices:
+  - len(mots) vaut 3. Les valeurs de i sont donc 0, 1 et 2.
+  - À chaque tour, print affiche la position, puis l'élément qui s'y trouve.
+tests:
+  - type: qcm
+    options:
+      - |-
+        1 un
+        2 deux
+        3 trois
+      - |-
+        0 un
+        1 deux
+        2 trois
+      - |-
+        un
+        deux
+        trois
+    bonne_reponse: 1
+solution: |
+  mots = ["un", "deux", "trois"]
+  for i in range(len(mots)):
+      print(i, mots[i])

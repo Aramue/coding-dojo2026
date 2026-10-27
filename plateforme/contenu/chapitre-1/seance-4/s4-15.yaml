@@ -1,0 +1,34 @@
+id: s4-15
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: completer
+titre: Trois positions, un seul nombre
+obligatoire: true
+enonce: |
+  `image[ligne][colonne][couleur]` donne un seul nombre. Complète les trois trous
+  pour ranger dans `vert` le canal vert du dernier pixel de la deuxième ligne.
+  Le vert est la deuxième couleur d'un pixel.
+depart: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  vert = image[_____][_____][_____]
+indices:
+  - La deuxième ligne a la position 1. Le dernier de ses trois pixels a la position 2.
+  - Les couleurs sont dans l'ordre rouge (0), vert (1), bleu (2).
+tests:
+  - type: variable
+    nom: vert
+    valeur_attendue: '90'
+    type_attendu: int
+solution: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  vert = image[1][2][1]

@@ -1,0 +1,92 @@
+id: s4-40
+concept: programme
+notion: decoder
+seance: 4
+niveau: expert
+type: ecrire
+titre: Un autre canal
+obligatoire: false
+enonce: |
+  Défi : le même mot caché, mais dans le canal **vert**. Le programme choisit
+  son canal avec la variable `canal` : `"r"` pour rouge (position 0), `"g"` pour
+  vert (position 1), `"b"` pour bleu (position 2). Écris la suite qui
+  transforme `canal` en position, puis décode le message de la première ligne et
+  range-le dans `message`.
+depart: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  image = [
+      [  # ligne 0
+          [231, 97, 231], [94, 48, 95], [228, 47, 72], [21, 83, 231],
+          [7, 17, 30], [97, 237, 15], [167, 117, 100], [150, 41, 2],
+          [234, 41, 208], [130, 144, 117], [15, 206, 55], [55, 33, 197],
+      ],
+      [  # ligne 1
+          [8, 0, 109], [107, 26, 240], [192, 203, 214], [37, 101, 138],
+          [172, 44, 159], [170, 7, 209], [60, 68, 126], [51, 5, 30],
+          [238, 249, 90], [96, 229, 97], [67, 214, 196], [59, 202, 215],
+      ],
+  ]
+
+  canal = "g"
+indices:
+  - Un if / elif / else range dans position le nombre qui correspond à la lettre de canal.
+  - 'Le reste du programme est celui de l''exercice précédent : seule la position du canal change.'
+tests:
+  - type: variable
+    nom: message
+    valeur_attendue: '''OUI'''
+    type_attendu: str
+  - type: contient
+    motif: canal ==
+  - type: contient
+    motif: get_lsb(
+  - type: interdit
+    motif: OUI
+solution: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  image = [
+      [  # ligne 0
+          [231, 97, 231], [94, 48, 95], [228, 47, 72], [21, 83, 231],
+          [7, 17, 30], [97, 237, 15], [167, 117, 100], [150, 41, 2],
+          [234, 41, 208], [130, 144, 117], [15, 206, 55], [55, 33, 197],
+      ],
+      [  # ligne 1
+          [8, 0, 109], [107, 26, 240], [192, 203, 214], [37, 101, 138],
+          [172, 44, 159], [170, 7, 209], [60, 68, 126], [51, 5, 30],
+          [238, 249, 90], [96, 229, 97], [67, 214, 196], [59, 202, 215],
+      ],
+  ]
+
+  canal = "g"
+
+  if canal == "r":
+      position = 0
+  elif canal == "g":
+      position = 1
+  else:
+      position = 2
+
+  bits = []
+  for pixel in image[0]:
+      bit1, bit2 = get_lsb(pixel[position])
+      bits.append(bit1)
+      bits.append(bit2)
+
+  message = ""
+  for i in range(0, len(bits), 8):
+      octet = ""
+      for j in range(8):
+          octet = octet + str(bits[i + j])
+      message = message + chr(int(octet, 2))

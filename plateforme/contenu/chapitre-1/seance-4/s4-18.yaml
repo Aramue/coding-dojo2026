@@ -1,0 +1,43 @@
+id: s4-18
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: ecrire
+titre: Tous les pixels, ligne après ligne
+obligatoire: true
+enonce: |
+  Calcule dans `total_rouge` la somme du canal rouge de **tous** les pixels de
+  l'image, lignes comprises. Il te faut deux boucles : l'une dans l'autre.
+depart: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  total_rouge = 0
+indices:
+  - La première boucle prend chaque ligne de l'image. La seconde prend chaque pixel de cette ligne.
+  - La seconde boucle est décalée sous la première. Le total augmente du rouge du pixel, dans la seconde.
+tests:
+  - type: variable
+    nom: total_rouge
+    valeur_attendue: '456'
+    type_attendu: int
+  - type: contient
+    motif: 'for '
+  - type: interdit
+    motif: '456'
+  - type: interdit
+    motif: sum(
+    message: 'sum() fait le calcul à ta place : ici, ce sont les deux boucles qu''on veut voir.'
+solution: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  total_rouge = 0
+  for ligne in image:
+      for pixel in ligne:
+          total_rouge = total_rouge + pixel[0]

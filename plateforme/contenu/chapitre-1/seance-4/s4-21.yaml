@@ -1,0 +1,29 @@
+id: s4-21
+concept: matrices
+notion: matrices
+seance: 4
+niveau: expert
+type: predire
+titre: Changer une valeur dans l'image
+obligatoire: false
+enonce: |
+  Pour les curieux : on peut aussi changer une valeur à l'intérieur d'une liste de
+  listes, en la désignant par ses positions. Que montre l'écran ?
+depart: |
+  image = [[[1, 2, 3], [4, 5, 6]]]
+  image[0][1][2] = 0
+  print(image[0][1])
+indices:
+  - 'image[0][1] est le deuxième pixel de la première ligne : [4, 5, 6].'
+  - L'affectation remplace la troisième valeur de ce pixel, celle à la position 2.
+tests:
+  - type: qcm
+    options:
+      - '[4, 5, 0]'
+      - '[4, 5, 6]'
+      - '[1, 2, 0]'
+    bonne_reponse: 0
+solution: |
+  image = [[[1, 2, 3], [4, 5, 6]]]
+  image[0][1][2] = 0
+  print(image[0][1])

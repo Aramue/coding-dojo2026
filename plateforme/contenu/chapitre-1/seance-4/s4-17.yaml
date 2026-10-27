@@ -1,0 +1,39 @@
+id: s4-17
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: ecrire
+titre: Les rouges de la première ligne
+obligatoire: true
+enonce: |
+  La variable `image` contient deux lignes de trois pixels. Range dans la liste
+  `rouges` le canal rouge de chaque pixel de la **première** ligne, en partant
+  d'une liste vide.
+depart: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  rouges = []
+indices:
+  - 'image[0] est la première ligne : une liste de trois pixels. for peut la parcourir.'
+  - À chaque tour, pixel est une liste [rouge, vert, bleu]. Le rouge est pixel[0].
+tests:
+  - type: variable
+    nom: rouges
+    valeur_attendue: '[25, 203, 59]'
+  - type: contient
+    motif: append(
+  - type: interdit
+    motif: '[25, 203, 59]'
+solution: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  rouges = []
+  for pixel in image[0]:
+      rouges.append(pixel[0])

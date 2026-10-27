@@ -1,0 +1,36 @@
+id: s4-28
+concept: binaire
+notion: binaire
+seance: 4
+niveau: expert
+type: ecrire
+titre: De la base 10 au binaire
+obligatoire: false
+enonce: |
+  Défi : écris le nombre 173 en binaire, dans le texte `binaire`, sans `bin()`.
+  Divise le nombre par 2 jusqu'à ce qu'il tombe à 0 : à chaque tour, le reste
+  de la division est le prochain bit, à placer **devant** les autres.
+depart: |
+  nombre = 173
+  binaire = ""
+indices:
+  - Le reste de la division par 2 s'obtient avec %. Le quotient entier s'obtient avec //.
+  - 'Chaque nouveau bit se place devant les précédents : str(reste) + binaire.'
+tests:
+  - type: variable
+    nom: binaire
+    valeur_attendue: '''10101101'''
+    type_attendu: str
+  - type: contient
+    motif: 'while '
+  - type: interdit
+    motif: '10101101'
+  - type: interdit
+    motif: bin(
+    message: 'bin() fait la conversion à ta place : ici, c''est la boucle qu''on veut voir.'
+solution: |
+  nombre = 173
+  binaire = ""
+  while nombre > 0:
+      binaire = str(nombre % 2) + binaire
+      nombre = nombre // 2

@@ -1,0 +1,26 @@
+id: s4-22
+concept: binaire
+notion: binaire
+seance: 4
+niveau: normal
+type: predire
+titre: Lire un octet
+obligatoire: true
+enonce: |
+  `int()` peut lire un texte écrit en binaire : le second nombre donne la base,
+  et 2 veut dire « binaire ». Rappel : les bits valent 8, 4, 2, 1 en partant de
+  la droite. Que montre l'écran ?
+depart: |
+  print(int("101", 2))
+indices:
+  - '101 en binaire : 1 fois 4, plus 0 fois 2, plus 1 fois 1.'
+  - Le résultat est écrit en décimal.
+tests:
+  - type: qcm
+    options:
+      - '101'
+      - '5'
+      - '6'
+    bonne_reponse: 1
+solution: |
+  print(int("101", 2))

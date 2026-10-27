@@ -7,7 +7,7 @@ export type Exercice = {
   /** L'unité de navigation : une leçon, un groupe d'exercices, une couleur. */
   notion: string
   famille: 'variables' | 'types' | 'operateurs' | 'conditions' | 'boucles'
-  seance: 1 | 2 | 3
+  seance: 1 | 2 | 3 | 4
   niveau: 'normal' | 'expert'
   type: 'predire' | 'debug' | 'completer' | 'ecrire'
   titre: string

@@ -1,0 +1,103 @@
+id: s4-37
+concept: programme
+notion: decoder
+seance: 4
+niveau: normal
+type: ecrire
+titre: Le message caché dans l'image
+obligatoire: true
+enonce: |
+  Dernier exercice obligatoire de la séance : un programme complet, qui réunit ce
+  que tu as appris. L'image ci-dessous cache un mot dans les deux derniers bits du
+  canal **rouge** (la position 0 de chaque pixel), sur tous les pixels de la
+  **première ligne** seulement. Quatre pixels cachent une lettre.
+
+  Le programme doit :
+
+  1. lire les deux bits de poids faible du rouge de chaque pixel de la première ligne, avec `get_lsb`, et les ajouter à une liste de bits ;
+  2. regrouper les bits par huit, en un texte pour chaque octet ;
+  3. convertir chaque octet en lettre et construire le texte `message` ;
+  4. afficher `message`.
+depart: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  image = [
+      [  # ligne 0
+          [25, 77, 202], [28, 48, 187], [221, 19, 44], [44, 35, 123],
+          [113, 30, 63], [112, 203, 25], [215, 68, 148], [95, 60, 157],
+          [49, 96, 190], [252, 30, 105], [234, 160, 238], [94, 153, 127],
+          [253, 41, 153], [36, 229, 147], [175, 214, 84], [23, 250, 215],
+      ],
+      [  # ligne 1
+          [39, 160, 174], [179, 254, 233], [35, 47, 138], [242, 33, 31],
+          [158, 228, 145], [197, 177, 11], [236, 181, 86], [59, 252, 30],
+          [111, 147, 66], [126, 203, 200], [254, 41, 85], [229, 205, 142],
+          [70, 220, 142], [212, 183, 194], [118, 77, 42], [90, 77, 118],
+      ],
+  ]
+
+  # 1. liste des bits de poids faible du rouge, première ligne
+
+  # 2. regroupement par huit, et conversion de chaque octet en lettre
+
+  # 3. afficher le message
+indices:
+  - Une boucle sur image[0] donne chaque pixel de la première ligne. Son rouge est pixel[0].
+  - 'Garde le même schéma qu''avant : la liste de bits, puis le regroupement par huit, puis int(octet, 2) et chr().'
+tests:
+  - type: sortie
+    entrees: []
+    exige_exact: true
+    attendu: DOJO
+  - type: variable
+    nom: message
+    valeur_attendue: '''DOJO'''
+    type_attendu: str
+  - type: contient
+    motif: get_lsb(
+  - type: contient
+    motif: chr(
+  - type: interdit
+    motif: DOJO
+solution: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  image = [
+      [  # ligne 0
+          [25, 77, 202], [28, 48, 187], [221, 19, 44], [44, 35, 123],
+          [113, 30, 63], [112, 203, 25], [215, 68, 148], [95, 60, 157],
+          [49, 96, 190], [252, 30, 105], [234, 160, 238], [94, 153, 127],
+          [253, 41, 153], [36, 229, 147], [175, 214, 84], [23, 250, 215],
+      ],
+      [  # ligne 1
+          [39, 160, 174], [179, 254, 233], [35, 47, 138], [242, 33, 31],
+          [158, 228, 145], [197, 177, 11], [236, 181, 86], [59, 252, 30],
+          [111, 147, 66], [126, 203, 200], [254, 41, 85], [229, 205, 142],
+          [70, 220, 142], [212, 183, 194], [118, 77, 42], [90, 77, 118],
+      ],
+  ]
+
+  bits = []
+  for pixel in image[0]:
+      bit1, bit2 = get_lsb(pixel[0])
+      bits.append(bit1)
+      bits.append(bit2)
+
+  message = ""
+  for i in range(0, len(bits), 8):
+      octet = ""
+      for j in range(8):
+          octet = octet + str(bits[i + j])
+      message = message + chr(int(octet, 2))
+
+  print(message)

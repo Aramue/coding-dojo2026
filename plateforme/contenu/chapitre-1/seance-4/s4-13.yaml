@@ -1,0 +1,35 @@
+id: s4-13
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: predire
+titre: Ligne, puis colonne
+obligatoire: true
+enonce: |
+  Une liste peut contenir d'autres listes. On lit alors de l'extérieur vers
+  l'intérieur : d'abord la ligne, puis la colonne. Que montre l'écran ?
+depart: |
+  grille = [[1, 2, 3], [4, 5, 6]]
+  print(grille[1][0])
+  print(grille[0][2])
+indices:
+  - 'grille[1] est la deuxième ligne : [4, 5, 6]. Ensuite, [0] prend le premier élément de cette ligne.'
+  - 'grille[0] est la première ligne : [1, 2, 3]. Ensuite, [2] en prend le troisième élément.'
+tests:
+  - type: qcm
+    options:
+      - |-
+        2
+        4
+      - |-
+        4
+        3
+      - |-
+        4
+        6
+    bonne_reponse: 1
+solution: |
+  grille = [[1, 2, 3], [4, 5, 6]]
+  print(grille[1][0])
+  print(grille[0][2])

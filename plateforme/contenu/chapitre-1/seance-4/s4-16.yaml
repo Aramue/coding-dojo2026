@@ -1,0 +1,32 @@
+id: s4-16
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: debug
+titre: Lire un pixel dans l'image
+obligatoire: true
+enonce: |
+  Ce programme doit ranger dans `pixel` le deuxième pixel de la première ligne,
+  mais il s'arrête avec une erreur. Lis le message, puis répare le programme.
+depart: |
+  image = [
+      [[25, 200, 10], [203, 5, 7]],
+      [[59, 77, 1], [121, 9, 9]],
+  ]
+  pixel = image[0, 1]
+  print(pixel)
+indices:
+  - 'Avec des listes ordinaires, chaque position a ses propres crochets : l''une après l''autre.'
+  - La forme image[0, 1] existe dans la bibliothèque NumPy du TP, pas pour une liste ordinaire.
+tests:
+  - type: variable
+    nom: pixel
+    valeur_attendue: '[203, 5, 7]'
+solution: |
+  image = [
+      [[25, 200, 10], [203, 5, 7]],
+      [[59, 77, 1], [121, 9, 9]],
+  ]
+  pixel = image[0][1]
+  print(pixel)

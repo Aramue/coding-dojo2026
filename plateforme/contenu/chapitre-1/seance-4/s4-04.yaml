@@ -1,0 +1,35 @@
+id: s4-04
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: predire
+titre: Lire dans une liste
+obligatoire: true
+enonce: |
+  Une liste range plusieurs valeurs dans une seule variable. Chaque valeur a une
+  position, et la première position est 0. Que montre l'écran ?
+depart: |
+  notes = [12, 15, 9]
+  print(notes[0])
+  print(notes[2])
+indices:
+  - notes[0] est le premier élément de la liste, pas le deuxième.
+  - La liste a trois éléments, aux positions 0, 1 et 2. La position 2 est donc la dernière.
+tests:
+  - type: qcm
+    options:
+      - |-
+        12
+        15
+      - |-
+        12
+        9
+      - |-
+        15
+        12
+    bonne_reponse: 1
+solution: |
+  notes = [12, 15, 9]
+  print(notes[0])
+  print(notes[2])

@@ -3,7 +3,7 @@ title: Modèle de contenu
 tags:
   - architecture
   - contenu
-mis-a-jour: 2026-09-14
+mis-a-jour: 2026-10-27
 ---
 
 # Modèle de contenu
@@ -170,6 +170,11 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
 | `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner`, `decider` |
 | `boucles` | Répéter, parcourir, compter | 3 | 30 septembre 2026 | `rappels`, `repeter`, `parcourir`, `compter`, `tantque` |
+| `stegano` | Listes, bits et caractères | 4 | 27 octobre 2026 | `reprise`, `listes`, `matrices`, `binaire`, `decoder` |
+
+> [!note] Cinq notions au plus par chapitre
+> Il n'existe que cinq familles de couleur, et un test refuse deux notions voisines de la même
+> couleur. Un chapitre de six notions exigerait une sixième couleur — voir [[Palette]].
 
 La table vit dans `outils/schema.py` à côté de `NOTIONS`, et se publie en
 `chapitres.json`. Chaque notion déclare son `chapitre`.
@@ -200,6 +205,11 @@ que le front n'en garde aucune copie.
 | `parcourir` | Parcourir un texte | vert | 8 |
 | `compter` | Compter et cumuler | bleu | 9 |
 | `tantque` | Répéter tant que | ambre | 11 |
+| `reprise` | Rappels avant les listes | indigo | 3 |
+| `listes` | Les listes | corail | 9 |
+| `matrices` | Listes de listes | vert | 9 |
+| `binaire` | Binaire et caractères | bleu | 8 |
+| `decoder` | Bits de poids faible et décodage | ambre | 11 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour
@@ -233,6 +243,14 @@ contenu/
         c3-parcourir.yaml
         c3-compter.yaml
         c3-tantque.yaml
+    seance-4/
+      s4-01.yaml … s4-40.yaml     40 exercices, dont 28 obligatoires
+      lecons/
+        c4-reprise.yaml
+        c4-listes.yaml
+        c4-matrices.yaml
+        c4-binaire.yaml
+        c4-decoder.yaml
 ```
 
 `charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,

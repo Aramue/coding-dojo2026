@@ -1,0 +1,69 @@
+id: c4-listes
+notion: listes
+ordre: 16
+titre: Les listes
+duree_min: 5
+blocs:
+  - type: paragraphe
+    texte: Une **liste** range plusieurs valeurs dans une seule variable. On l'écrit entre crochets, avec des virgules entre les valeurs.
+  - type: code
+    legende: Une liste de notes
+    executable: true
+    python: |
+      notes = [12, 15, 9]
+      print(notes)
+      print(len(notes))
+  - type: paragraphe
+    texte: Chaque valeur a une **position**, et la première position est **0**. Pour lire une valeur, on écrit la position entre crochets, collés au nom de la liste.
+  - type: code
+    legende: Lire par la position
+    executable: true
+    python: |
+      notes = [12, 15, 9]
+      print(notes[0])
+      print(notes[2])
+  - type: attention
+    texte: '**La dernière position est `len(notes) - 1`, pas `len(notes)`.** Une liste de trois éléments a les positions 0, 1 et 2. Demander `notes[3]` arrête le programme avec une erreur : la position n''existe pas.'
+  - type: paragraphe
+    texte: 'Un **pixel** d''image est justement une liste de trois nombres : la quantité de rouge, de vert et de bleu, dans cet ordre.'
+  - type: code
+    legende: Les trois couleurs d'un pixel
+    executable: true
+    python: |
+      pixel = [153, 50, 204]
+      print("rouge :", pixel[0])
+      print("vert :", pixel[1])
+      print("bleu :", pixel[2])
+  - type: paragraphe
+    texte: On peut partir d'une liste vide, `[]`, et lui ajouter des valeurs à la fin avec `append()`. C'est la liste qui grandit, comme le texte vide qui grandissait.
+  - type: code
+    legende: Une liste qui grandit
+    executable: true
+    python: |
+      bits = []
+      bits.append(1)
+      bits.append(0)
+      bits.append(1)
+      print(bits)
+  - type: attention
+    texte: '**`append()` modifie la liste, et ne rend rien.** On écrit `bits.append(1)` sur une ligne seule. Écrire `bits = bits.append(1)` remplace la liste par le vide.'
+  - type: paragraphe
+    texte: 'Comme un texte, une liste se parcourt avec `for` : la variable prend chaque valeur à son tour, de la première à la dernière.'
+  - type: code
+    legende: Parcourir une liste
+    executable: true
+    python: |
+      prix = [12, 5, 8]
+      total = 0
+      for p in prix:
+          total = total + p
+      print(total)
+  - type: paragraphe
+    texte: Pour connaître la position en même temps que la valeur, parcours les positions avec `range(len(...))`, puis lis la valeur avec la position.
+  - type: code
+    legende: Des positions, pas des valeurs
+    executable: true
+    python: |
+      mots = ["un", "deux", "trois"]
+      for i in range(len(mots)):
+          print(i, mots[i])

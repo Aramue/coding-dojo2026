@@ -2,7 +2,7 @@
 title: Programme d'assemblage
 tags:
   - pedagogie
-mis-a-jour: 2026-09-14
+mis-a-jour: 2026-10-27
 ---
 
 # Programme d'assemblage
@@ -77,6 +77,21 @@ reste dans une sortie comparée.
 > « chaque exercice est autonome » ([[ADR-010 Abandon de la fiction narrative]]) a supprimé ce fil
 > rouge== : les deux blocs ont été réécrits en programmes autonomes. La progression technique,
 > elle, n'a pas changé.
+
+## Séance 4 — le message caché dans l'image
+
+`s4-37`, écrit le 27 octobre 2026. Une image de deux lignes de seize pixels cache `DOJO` dans les
+deux derniers bits du rouge de sa première ligne. Le programme récolte les bits avec `get_lsb`
+(fournie), les regroupe par huit, convertit chaque octet avec `int(..., 2)` et `chr()`, puis
+affiche le message. C'est le TP de stéganographie en miniature, sans NumPy ni fichier image.
+
+Notions réunies : boucle sur une liste de pixels, accès `pixel[0]`, appel d'une fonction qui rend
+deux valeurs, `append()`, regroupement par huit avec deux boucles imbriquées, `str()`, `int()` en
+base 2 et `chr()`. Voir [[Séance 4]].
+
+> [!note] La seconde ligne est du bruit, exprès
+> Lire la mauvaise ligne ne donne que des caractères sans sens : l'élève qui parcourt toute
+> l'image au lieu de `image[0]` le voit tout de suite.
 
 ## L'injection de bloc manquant
 

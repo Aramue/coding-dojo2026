@@ -1,0 +1,29 @@
+id: s4-27
+concept: binaire
+notion: binaire
+seance: 4
+niveau: normal
+type: predire
+titre: Avec ou sans la base
+obligatoire: false
+enonce: |
+  Sans la base, `int()` lit un texte comme un nombre ordinaire, écrit en
+  décimal. Que montre l'écran ?
+depart: |
+  a = int("11", 2)
+  b = int("11")
+  print(a, b)
+indices:
+  - 'int("11", 2) lit 11 en binaire : 1 fois 2, plus 1 fois 1.'
+  - int("11") lit 11 comme le nombre onze.
+tests:
+  - type: qcm
+    options:
+      - 3 11
+      - 3 3
+      - 11 11
+    bonne_reponse: 0
+solution: |
+  a = int("11", 2)
+  b = int("11")
+  print(a, b)

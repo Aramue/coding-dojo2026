@@ -1,0 +1,29 @@
+id: s4-29
+concept: binaire
+notion: binaire
+seance: 4
+niveau: expert
+type: predire
+titre: Décaler une lettre
+obligatoire: false
+enonce: |
+  Défi : `ord()` et `chr()` permettent de décaler une lettre dans l'alphabet. C'est
+  le principe du chiffre de César. Que montre l'écran ?
+depart: |
+  lettre = "a"
+  suivante = chr(ord(lettre) + 3)
+  print(suivante)
+indices:
+  - ord("a") vaut 97. On y ajoute 3 avant de revenir au caractère.
+  - Le caractère numéro 100 suit b et c.
+tests:
+  - type: qcm
+    options:
+      - a3
+      - '97'
+      - d
+    bonne_reponse: 2
+solution: |
+  lettre = "a"
+  suivante = chr(ord(lettre) + 3)
+  print(suivante)
