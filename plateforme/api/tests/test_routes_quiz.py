@@ -601,6 +601,39 @@ def test_une_partie_sans_reponse_ne_masque_pas_la_precedente(client, partie, ele
     assert resultats["reussite"] == 0.0
 
 
+def test_le_professeur_relit_les_questions_sans_lancer_de_partie(client, catalogue):
+    quiz = client.get("/prof/quiz/q1-bases/questions", headers=PROF)
+    assert quiz.status_code == 200
+    donnees = quiz.json()
+    assert (donnees["id"], donnees["titre"], donnees["questions"][0]["enonce"]) == (
+        "q1-bases",
+        "Les bases",
+        "Qu'affiche ce programme ?",
+    )
+    premiere = donnees["questions"][0]
+    assert premiere["code"] == 'print("2" + "2")'
+    assert premiere["options"] == ["4", "22", "Une erreur"]
+    assert premiere["bonne_reponse"] == 1
+    assert premiere["explication"] == "Deux textes se collent, ils ne s'additionnent pas."
+    assert len(donnees["questions"]) == 2
+    # Relire ne lance rien.
+    assert client.get("/prof/quiz/partie", headers=PROF).json()["partie"] is None
+
+
+def test_les_questions_d_un_quiz_sont_reservees_au_professeur(client, catalogue, eleve):
+    """Elles portent les bonnes reponses : ni sans session, ni avec un jeton eleve."""
+    assert client.get("/prof/quiz/q1-bases/questions").status_code == 401
+    entetes = eleve("DOJO-K7M2")
+    reponse = client.get("/prof/quiz/q1-bases/questions", headers=entetes)
+    assert reponse.status_code == 401
+    assert "bonne_reponse" not in reponse.text
+
+
+def test_les_questions_d_un_quiz_inconnu(client, catalogue):
+    assert client.get("/prof/quiz/q1-absent/questions", headers=PROF).status_code == 404
+    assert client.get("/prof/quiz/pas-un-quiz/questions", headers=PROF).status_code == 422
+
+
 def test_un_quiz_jamais_joue_n_a_pas_de_resultats(client, catalogue, horloge):
     assert client.get("/prof/quiz", headers=PROF).json()["quiz"][0]["derniere"] is None
     reponse = client.get("/prof/quiz/q1-bases/resultats", headers=PROF)

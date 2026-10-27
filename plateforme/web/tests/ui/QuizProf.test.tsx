@@ -26,6 +26,7 @@ let etat: EtatProf
 let apresAction: ReturnType<typeof reponse>
 let catalogue: unknown
 let resultats: ReturnType<typeof reponse>
+let questionsDuQuiz: ReturnType<typeof reponse>
 let fetchFactice: ReturnType<typeof vi.fn>
 
 function monter() {
@@ -33,6 +34,7 @@ function monter() {
     if (url === '/api/prof/eleves') return reponse({ eleves: INSCRITS })
     if (url === '/api/prof/quiz') return reponse({ quiz: catalogue })
     if (url === '/api/prof/quiz/q1-bases/resultats') return resultats
+    if (url === '/api/prof/quiz/q1-bases/questions') return questionsDuQuiz
     if (url === '/api/prof/quiz/partie') return reponse(etat)
     if (options?.method === 'POST') {
       // Comme le serveur : une action acceptée change ce que la relecture rend.
@@ -372,7 +374,7 @@ describe('QuizProf', () => {
     expect(ligne).toHaveTextContent('Dernière partie le 30 septembre : 68 % de bonnes réponses, 21 élèves')
     const boutons = within(ligne).getAllByRole('button').map((b) => b.textContent)
     // Juste à gauche de « Lancer ».
-    expect(boutons).toEqual(['Derniers résultats', 'Lancer'])
+    expect(boutons).toEqual(['Voir les questions', 'Derniers résultats', 'Lancer'])
 
     await userEvent.click(within(ligne).getByRole('button', { name: 'Derniers résultats' }))
     expect(await screen.findByText('68 %')).toBeInTheDocument()
@@ -388,6 +390,41 @@ describe('QuizProf', () => {
       ['3', 'Élève', '0', '0 / 1'],
     ])
     expect(lignes[1]).toHaveAttribute('data-vide')
+    // Rien n'a été lancé pour les lire.
+    expect(postes()).toEqual([])
+
+    await userEvent.click(screen.getByRole('button', { name: 'Revenir aux quiz' }))
+    expect(screen.getByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+  })
+
+  it('montre toutes les questions sans lancer de partie, réponses masquées d abord', async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    questionsDuQuiz = reponse({
+      id: 'q1-bases',
+      titre: 'Les bases de la séance 1',
+      seance: 1,
+      duree_s: 40,
+      questions: [
+        { enonce: 'Q une', code: 'print(1)', options: ['1', '2'], bonne_reponse: 0, duree_s: 20, explication: 'Parce que.' },
+        { enonce: 'Q deux', code: '', options: ['a', 'b', 'c'], bonne_reponse: 2, duree_s: 30, explication: '' },
+      ],
+    })
+    monter()
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Voir les questions' }))
+    const liste = await screen.findByRole('list', { name: 'Questions du quiz' })
+    const questions = within(liste).getAllByText(/^Q (une|deux)$/)
+    expect(questions).toHaveLength(2)
+    expect(within(liste).getByText('print(1)')).toBeInTheDocument()
+    // L'écran est projeté : aucune bonne réponse ni explication avant le clic.
+    expect(liste.querySelector('[data-bonne]')).toBeNull()
+    expect(screen.queryByText('Parce que.')).toBeNull()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Afficher les réponses' }))
+    const bonnes = [...liste.querySelectorAll('[data-bonne]')].map((li) => li.textContent)
+    expect(bonnes).toEqual(['A1', 'Cc'])
+    expect(screen.getByText('Parce que.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Masquer les réponses' })).toHaveAttribute('aria-pressed', 'true')
     // Rien n'a été lancé pour les lire.
     expect(postes()).toEqual([])
 

@@ -1,5 +1,5 @@
 import { estPhotographie, messageRefus } from '../api/client'
-import type { EtatProf, ResultatsQuiz, ResumeQuiz } from '../quiz/types'
+import type { EtatProf, QuizComplet, ResultatsQuiz, ResumeQuiz } from '../quiz/types'
 
 /**
  * Le client des routes du quiz côté professeur. Toutes portent le jeton de la
@@ -46,6 +46,13 @@ export async function listerQuiz(jetonProf: string): Promise<ResumeQuiz[]> {
   const donnees = (await appeler(jetonProf, '')) as { quiz?: unknown }
   if (!Array.isArray(donnees?.quiz)) throw new Error('Réponse inattendue de la plateforme.')
   return donnees.quiz as ResumeQuiz[]
+}
+
+/** Toutes les questions d'un quiz, bonnes réponses comprises, sans lancer de partie. */
+export async function lireQuestions(jetonProf: string, quizId: string): Promise<QuizComplet> {
+  const donnees = (await appeler(jetonProf, `/${quizId}/questions`)) as QuizComplet | null
+  if (!Array.isArray(donnees?.questions)) throw new Error('Réponse inattendue de la plateforme.')
+  return donnees
 }
 
 /** Le bilan de la dernière partie jouée de ce quiz. */

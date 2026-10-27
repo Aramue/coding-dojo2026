@@ -3,6 +3,7 @@ import {
   corriger,
   creerPartie,
   lirePartie,
+  lireQuestions,
   lireResultats,
   listerQuiz,
   questionSuivante,
@@ -41,6 +42,18 @@ describe('client du quiz, côté professeur', () => {
     fetchFactice.mockResolvedValue(reponse({ quiz }))
     expect(await listerQuiz('jeton-prof')).toEqual(quiz)
     expect(fetchFactice.mock.calls[0]![0]).toBe('/api/prof/quiz')
+  })
+
+  it('lit toutes les questions d un quiz', async () => {
+    const questions = [{ enonce: 'Q', code: '', options: ['a', 'b'], bonne_reponse: 1, duree_s: 20, explication: '' }]
+    fetchFactice.mockResolvedValue(reponse({ id: 'q1-bases', titre: 'Les bases', questions }))
+    expect((await lireQuestions('jeton-prof', 'q1-bases')).questions).toEqual(questions)
+    expect(fetchFactice.mock.calls[0]![0]).toBe('/api/prof/quiz/q1-bases/questions')
+  })
+
+  it('refuse des questions d une autre forme', async () => {
+    fetchFactice.mockResolvedValue(reponse({ titre: 'Les bases' }))
+    await expect(lireQuestions('jeton-prof', 'q1-bases')).rejects.toThrow(/inattendue/)
   })
 
   it('lit les derniers résultats avec le classement complet', async () => {

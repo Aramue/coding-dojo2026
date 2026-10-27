@@ -43,6 +43,12 @@
   gap: var(--e-2);
 }
 
+/* Le compte des questions a gauche, le bouton des reponses a droite. */
+.quiz-prof__actions--debut {
+  width: 100%;
+  justify-content: space-between;
+}
+
 .quiz-prof__taux {
   margin: 0;
   display: flex;

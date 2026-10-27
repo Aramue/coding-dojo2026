@@ -111,6 +111,21 @@ export type DernierePartie = {
   reussite: number | null
 }
 
+/** Une question telle que le professeur la relit, bonne réponse comprise. */
+export type QuestionComplete = {
+  enonce: string
+  code: string
+  options: string[]
+  bonne_reponse: number
+  duree_s: number
+  explication: string
+}
+
+/** Un quiz entier, pour le relire sans lancer de partie. Jamais envoyé à un élève. */
+export type QuizComplet = Omit<ResumeQuiz, 'derniere' | 'questions'> & {
+  questions: QuestionComplete[]
+}
+
 export type ResumeQuiz = {
   id: string
   titre: string
