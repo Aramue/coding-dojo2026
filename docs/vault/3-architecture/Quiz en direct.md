@@ -118,6 +118,16 @@ cours** le ramène à la dernière page de cours qu'il avait ouverte.
 | La partie finit sous les yeux de la classe, avec des réponses | le podium et le bilan, puis **Nouvelle partie** → catalogue |
 | La partie est arrêtée sans aucune réponse | le catalogue |
 
+## Relire un quiz sans le lancer — 27 octobre 2026
+
+Dans le catalogue, **Voir les questions** ouvre un quiz en entier : chaque question avec son
+code, ses options et sa durée, sans créer de partie — les élèves ne voient rien. Pour le relire
+avant de le jouer, ou retrouver une question à réexpliquer.
+
+Les bonnes réponses et les explications y sont **masquées à l'ouverture**, et un bouton les montre :
+la page s'ouvre depuis `/prof/quiz`, l'écran qu'on projette. Elles viennent de
+`GET /prof/quiz/{id}/questions`, derrière la session professeur ; un jeton élève n'y ouvre rien.
+
 ## Les derniers résultats
 
 Depuis le catalogue, le professeur lit pour chaque quiz le taux de bonnes réponses de sa

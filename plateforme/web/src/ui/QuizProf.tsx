@@ -7,6 +7,7 @@ import {
   creerPartie,
   SessionProfRefusee,
   lirePartie,
+  lireQuestions,
   lireResultats,
   listerQuiz,
   questionSuivante,
@@ -20,6 +21,7 @@ import type {
   Participant,
   PlaceProjetee,
   PlaceResultat,
+  QuizComplet,
   ResultatsQuiz,
   ResumeQuiz,
 } from '../quiz/types'
@@ -97,6 +99,7 @@ export function QuizProf({
   const [nouvelle, setNouvelle] = useState(false)
   const [inscrits, setInscrits] = useState<number | null>(null)
   const [resultatsDe, setResultatsDe] = useState<string | null>(null)
+  const [questionsDe, setQuestionsDe] = useState<string | null>(null)
 
   useEffect(() => {
     // Le nombre d'inscrits, pour lire « 18 sur 24 » plutôt que « 18 ». Sans
@@ -164,12 +167,16 @@ export function QuizProf({
       {choisir && resultatsDe && (
         <Resultats jetonProf={jetonProf} quizId={resultatsDe} onRetour={() => setResultatsDe(null)} />
       )}
-      {choisir && !resultatsDe && (
+      {choisir && questionsDe && !resultatsDe && (
+        <Questions jetonProf={jetonProf} quizId={questionsDe} onRetour={() => setQuestionsDe(null)} />
+      )}
+      {choisir && !resultatsDe && !questionsDe && (
         <Catalogue
           jetonProf={jetonProf}
           envoi={envoi}
           onLancer={(id) => void agir(() => creerPartie(jetonProf, id))}
           onResultats={setResultatsDe}
+          onQuestions={setQuestionsDe}
         />
       )}
       {partie && !choisir && (
@@ -201,11 +208,13 @@ function Catalogue({
   envoi,
   onLancer,
   onResultats,
+  onQuestions,
 }: {
   jetonProf: string
   envoi: boolean
   onLancer: (id: string) => void
   onResultats: (id: string) => void
+  onQuestions: (id: string) => void
 }) {
   const [quiz, setQuiz] = useState<ResumeQuiz[] | null>(null)
   const [erreur, setErreur] = useState<string | null>(null)
@@ -221,8 +230,8 @@ function Catalogue({
       <h1 id="titre-catalogue">Lancer un quiz</h1>
       <p className="quiz__aide">
         Les élèves rejoignent depuis leur espace : un bandeau les y invite dès que la partie est
-        créée. Le classement ne montre que les cinq premiers, et le score ne compte nulle part
-        ailleurs.
+        créée. L'écran de la partie ne montre que les trois premiers, et le score ne compte nulle
+        part ailleurs.
       </p>
       {erreur && <p className="quiz__aide">{erreur}</p>}
       {quiz && quiz.length === 0 && (
@@ -245,6 +254,9 @@ function Catalogue({
                   {q.derniere ? <ResumeDerniere derniere={q.derniere} /> : 'Pas encore joué'}
                 </span>
               </span>
+              <button type="button" className="bouton" onClick={() => onQuestions(q.id)}>
+                Voir les questions
+              </button>
               {q.derniere && (
                 <button type="button" className="bouton" onClick={() => onResultats(q.id)}>
                   Derniers résultats
@@ -374,6 +386,92 @@ function Classement({ places, questions }: { places: PlaceResultat[]; questions:
 function nomComplet(place: PlaceResultat): string {
   const nom = [place.prenom?.trim(), place.nom?.trim()].filter(Boolean).join(' ')
   return nom || 'Élève'
+}
+
+/**
+ * Toutes les questions d'un quiz, d'un coup, sans lancer de partie : pour le
+ * relire avant de le jouer, ou repérer une question à réexpliquer.
+ *
+ * Les bonnes réponses sont **masquées à l'ouverture**. Cette page s'ouvre
+ * depuis l'écran du quiz, celui qu'on projette : visibles d'emblée, elles
+ * seraient données à la classe avant la partie. Un bouton les montre.
+ */
+function Questions({
+  jetonProf,
+  quizId,
+  onRetour,
+}: {
+  jetonProf: string
+  quizId: string
+  onRetour: () => void
+}) {
+  const [quiz, setQuiz] = useState<QuizComplet | null>(null)
+  const [erreur, setErreur] = useState<string | null>(null)
+  const [reponses, setReponses] = useState(false)
+
+  useEffect(() => {
+    lireQuestions(jetonProf, quizId)
+      .then(setQuiz)
+      .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Questions indisponibles.'))
+  }, [jetonProf, quizId])
+
+  return (
+    <section className="quiz-prof__resultats" aria-labelledby="titre-questions">
+      <p className="quiz__surtitre">Les questions</p>
+      <h1 id="titre-questions">{quiz?.titre ?? 'Questions'}</h1>
+      {erreur && <p className="quiz__aide">{erreur}</p>}
+      {quiz && (
+        <>
+          <div className="quiz-prof__actions quiz-prof__actions--debut">
+            <p className="quiz__aide">
+              {accord(quiz.questions.length, 'question', 'questions')} · séance {quiz.seance}. Rien
+              n'est lancé : les élèves ne voient rien.
+            </p>
+            <button
+              type="button"
+              className="bouton bouton--pause"
+              aria-pressed={reponses}
+              onClick={() => setReponses((r) => !r)}
+            >
+              {reponses ? 'Masquer les réponses' : 'Afficher les réponses'}
+            </button>
+          </div>
+          <ol className="bilan__liste" aria-label="Questions du quiz">
+            {quiz.questions.map((question, rang) => (
+              <li key={rang} className="bilan__ligne">
+                <div className="bilan__entete">
+                  <span className="bilan__numero">Q{rang + 1}</span>
+                  <span className="bilan__enonce">{question.enonce}</span>
+                  <span className="bilan__taux">{question.duree_s} s</span>
+                </div>
+                {question.code && <pre className="bilan__code mono">{question.code}</pre>}
+                <ul className="bilan__repartition">
+                  {question.options.map((option, i) => (
+                    <li
+                      key={i}
+                      data-option={i}
+                      data-bonne={(reponses && i === question.bonne_reponse) || undefined}
+                    >
+                      <span className="bilan__lettre">{LETTRES[i]}</span>
+                      <span className="bilan__option">{option}</span>
+                    </li>
+                  ))}
+                </ul>
+                {reponses && question.explication && (
+                  <p className="quiz-prof__explication">{question.explication}</p>
+                )}
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+      <div className="quiz-prof__actions">
+        <button type="button" className="bouton" onClick={onRetour}>
+          Revenir aux quiz
+        </button>
+      </div>
+    </section>
+  )
 }
 
 function Deroule({

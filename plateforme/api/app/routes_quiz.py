@@ -355,6 +355,27 @@ def lire_resultats(
     }
 
 
+@routeur_prof.get("/{quiz_id}/questions")
+def lire_questions(
+    quiz_id: Annotated[str, Path(pattern=MOTIF_QUIZ)],
+    catalogue: Catalogue,
+) -> dict:
+    """Toutes les questions d'un quiz, bonnes reponses comprises, sans lancer de partie.
+
+    Pour que le professeur relise un quiz avant de le jouer — ou entre deux
+    seances — sans le derouler question par question devant personne. Derriere
+    la session professeur, comme tout ce routeur : les bonnes reponses ne
+    sortent jamais vers un eleve avant la correction (ADR-015).
+    """
+    quiz = catalogue.get(quiz_id)
+    if quiz is None:
+        raise HTTPException(404, "Quiz inconnu.")
+    return {
+        **resume(quiz),
+        "questions": [question.model_dump() for question in quiz.questions],
+    }
+
+
 @routeur_prof.post("/parties", status_code=201)
 def creer_partie(
     demande: DemandePartie,
