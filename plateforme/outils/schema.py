@@ -9,7 +9,7 @@ from typing import Annotated, Literal, Union
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-MOTIF_ID = re.compile(r"^s[123]-[0-9]{2}(-expert)?$")
+MOTIF_ID = re.compile(r"^s[1234]-[0-9]{2}(-expert)?$")
 
 # Construit a partir de points de code explicites plutot que recopie depuis des
 # emoji litteraux : un selecteur de variation invisible (U+FE0F) s'etait glisse
@@ -84,7 +84,7 @@ class Exercice(BaseModel):
     # d'exercices et une couleur. Le concept, lui, reste libre et sert au
     # regroupement pedagogique fin. Voir NOTIONS plus bas.
     notion: str
-    seance: int = Field(ge=1, le=3)
+    seance: int = Field(ge=1, le=4)
     niveau: Literal["normal", "expert"]
     type: Literal["predire", "debug", "completer", "ecrire"]
     titre: str
@@ -143,7 +143,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     ]
 
 
-MOTIF_LECON = re.compile(r"^c[123]-[a-z]+$")
+MOTIF_LECON = re.compile(r"^c[1234]-[a-z]+$")
 
 # Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
 # navigation : elle porte une lecon et un groupe d'exercices.
@@ -252,6 +252,40 @@ NOTIONS: dict[str, dict] = {
         "famille": "conditions",
         "chapitre": "boucles",
     },
+    # --- Seance 4 ---
+    # Preparation du TP de steganographie : listes, matrices, binaire, bits.
+    # Cinq notions et pas six : il n'y a que cinq couleurs, et deux notions
+    # voisines de la meme couleur se lisent comme une seule.
+    "reprise": {
+        "ordre": 15,
+        "titre": "Rappels avant les listes",
+        "famille": "variables",
+        "chapitre": "stegano",
+    },
+    "listes": {
+        "ordre": 16,
+        "titre": "Les listes",
+        "famille": "boucles",
+        "chapitre": "stegano",
+    },
+    "matrices": {
+        "ordre": 17,
+        "titre": "Listes de listes",
+        "famille": "types",
+        "chapitre": "stegano",
+    },
+    "binaire": {
+        "ordre": 18,
+        "titre": "Binaire et caractères",
+        "famille": "operateurs",
+        "chapitre": "stegano",
+    },
+    "decoder": {
+        "ordre": 19,
+        "titre": "Bits de poids faible et décodage",
+        "famille": "conditions",
+        "chapitre": "stegano",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
@@ -272,6 +306,12 @@ CHAPITRES: dict[str, dict] = {
         "titre": "Répéter, parcourir, compter",
         "seance": 3,
         "ouverture": "2026-09-30",
+    },
+    "stegano": {
+        "ordre": 4,
+        "titre": "Listes, bits et caractères",
+        "seance": 4,
+        "ouverture": "2026-11-04",
     },
 }
 

@@ -50,7 +50,12 @@ def test_type_inconnu_rejete():
 
 def test_seance_hors_bornes_rejetee():
     with pytest.raises(ValidationError):
-        Exercice(**exercice_minimal(seance=4))
+        Exercice(**exercice_minimal(seance=5))
+
+
+def test_seance_4_acceptee():
+    ex = Exercice(**exercice_minimal(id="s4-01", seance=4, notion="reprise"))
+    assert ex.seance == 4
 
 
 def test_identifiant_mal_forme_rejete():
