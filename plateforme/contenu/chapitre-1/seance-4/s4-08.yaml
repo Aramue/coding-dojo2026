@@ -1,0 +1,31 @@
+id: s4-08
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: ecrire
+titre: Construire une liste avec append
+obligatoire: true
+enonce: |
+  Complète le programme pour que la liste `carres` contienne les carrés des
+  entiers de 1 à 5 : 1, 4, 9, 16 et 25. Construis-la avec une boucle et
+  `append()`, en partant de la liste vide.
+depart: |
+  carres = []
+indices:
+  - La boucle doit passer par les entiers de 1 à 5. range(1, 6) s'arrête avant 6.
+  - À chaque tour, calcule le carré de n et ajoute-le avec carres.append(...).
+tests:
+  - type: variable
+    nom: carres
+    valeur_attendue: '[1, 4, 9, 16, 25]'
+  - type: contient
+    motif: append(
+  - type: interdit
+    motif: '[1, 4'
+  - type: interdit
+    motif: '16'
+solution: |
+  carres = []
+  for n in range(1, 6):
+      carres.append(n * n)

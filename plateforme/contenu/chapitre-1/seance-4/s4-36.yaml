@@ -1,0 +1,37 @@
+id: s4-36
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: ecrire
+titre: Regrouper les bits par huit
+obligatoire: true
+enonce: |
+  La liste `bits` contient seize bits : deux octets. Construis la liste `octets`
+  des deux textes de huit chiffres, dans l'ordre. Pour chaque paquet de huit :
+  une boucle `range(0, len(bits), 8)` donne le début, et une boucle interne
+  ajoute huit bits à un texte, en les convertissant avec `str()`.
+depart: |
+  bits = [0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1]
+  octets = []
+indices:
+  - Pour chaque paquet, repars d'un texte vide, ajoute huit bits, puis ajoute le texte obtenu à la liste octets.
+  - 'Dans la boucle interne, j va de 0 à 7 : le bit à lire se trouve à la position i + j.'
+tests:
+  - type: variable
+    nom: octets
+    valeur_attendue: '[''01001111'', ''01001011'']'
+  - type: contient
+    motif: range(0,
+  - type: interdit
+    motif: '01001111'
+  - type: interdit
+    motif: '01001011'
+solution: |
+  bits = [0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1]
+  octets = []
+  for i in range(0, len(bits), 8):
+      octet = ""
+      for j in range(8):
+          octet = octet + str(bits[i + j])
+      octets.append(octet)

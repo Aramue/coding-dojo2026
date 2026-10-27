@@ -1,0 +1,45 @@
+id: s4-34
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: ecrire
+titre: Les bits cachés dans un pixel
+obligatoire: true
+enonce: |
+  La fonction `get_lsb` est fournie. Appelle-la avec la valeur 121, et range les
+  deux bits rendus dans `bit1` et `bit2`.
+depart: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  # Appelle get_lsb avec 121 et range les deux bits dans bit1 et bit2
+indices:
+  - L'appel s'écrit get_lsb(121). Il rend deux valeurs.
+  - Écris deux variables séparées par une virgule à gauche du signe égal.
+tests:
+  - type: variable
+    nom: bit1
+    valeur_attendue: '0'
+    type_attendu: int
+  - type: variable
+    nom: bit2
+    valeur_attendue: '1'
+    type_attendu: int
+  - type: contient
+    motif: get_lsb(121)
+  - type: interdit
+    motif: bit2 = 1
+solution: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  bit1, bit2 = get_lsb(121)

@@ -1,0 +1,25 @@
+id: s4-38
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: completer
+titre: Isoler les deux derniers bits
+obligatoire: false
+enonce: |
+  Complète le trou pour que `deux_bits` garde uniquement les deux derniers bits
+  de la valeur. Pense au nombre qui s'écrit 00000011.
+depart: |
+  valeur = 203
+  deux_bits = valeur & _____
+indices:
+  - L'opérateur qui ne garde que les bits communs est &.
+  - Le masque 00000011 vaut 3.
+tests:
+  - type: variable
+    nom: deux_bits
+    valeur_attendue: '3'
+    type_attendu: int
+solution: |
+  valeur = 203
+  deux_bits = valeur & 3

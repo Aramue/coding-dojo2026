@@ -1,0 +1,27 @@
+id: s4-25
+concept: binaire
+notion: binaire
+seance: 4
+niveau: normal
+type: debug
+titre: Une lettre depuis un octet
+obligatoire: true
+enonce: |
+  Ce programme doit afficher la lettre cachée dans l'octet, mais il s'arrête avec
+  une erreur. Lis le message, puis répare le programme.
+depart: |
+  octet = "01000001"
+  lettre = chr(octet)
+  print(lettre)
+indices:
+  - chr() attend un nombre, et octet est un texte. Il faut convertir avant d'appeler chr().
+  - 'Le texte est écrit en binaire : int() a besoin de la base 2.'
+tests:
+  - type: variable
+    nom: lettre
+    valeur_attendue: '''A'''
+    type_attendu: str
+solution: |
+  octet = "01000001"
+  lettre = chr(int(octet, 2))
+  print(lettre)

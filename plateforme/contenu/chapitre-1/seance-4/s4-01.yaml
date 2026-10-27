@@ -1,0 +1,34 @@
+id: s4-01
+concept: accumulateur
+notion: reprise
+seance: 4
+niveau: normal
+type: predire
+titre: Un texte qui grandit
+obligatoire: true
+enonce: |
+  Un texte se construit morceau par morceau : on part du texte vide, et on y
+  ajoute quelque chose à chaque tour. Que montre l'écran ?
+depart: |
+  bits = ""
+  for i in range(3):
+      bits = bits + str(i)
+  print(bits)
+indices:
+  - Au premier tour, i vaut 0. À chaque tour, str(i) est ajouté à la fin du texte.
+  - Les valeurs de range(3) sont 0, 1 et 2. Elles sont collées les unes aux autres, sans espace.
+tests:
+  - type: qcm
+    options:
+      - '3'
+      - '012'
+      - |-
+        0
+        1
+        2
+    bonne_reponse: 1
+solution: |
+  bits = ""
+  for i in range(3):
+      bits = bits + str(i)
+  print(bits)

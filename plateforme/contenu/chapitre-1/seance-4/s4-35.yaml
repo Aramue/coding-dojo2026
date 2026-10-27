@@ -1,0 +1,48 @@
+id: s4-35
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: completer
+titre: Récolter les bits d'une ligne
+obligatoire: true
+enonce: |
+  Ce programme lit les deux bits de poids faible de chaque valeur rouge d'une
+  ligne, et les ajoute un par un à la liste `bits`. Complète les deux trous.
+depart: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  rouges = [25, 203, 57, 121]
+  bits = []
+  for valeur in rouges:
+      bit1, bit2 = get_lsb(valeur)
+      bits.append(_____)
+      bits.append(_____)
+  print(bits)
+indices:
+  - get_lsb rend deux bits, rangés dans bit1 et bit2. Il faut les ajouter à la liste, l'un après l'autre.
+  - Les deux trous contiennent le nom d'une variable créée par la ligne précédente.
+tests:
+  - type: variable
+    nom: bits
+    valeur_attendue: '[0, 1, 1, 1, 0, 1, 0, 1]'
+solution: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  rouges = [25, 203, 57, 121]
+  bits = []
+  for valeur in rouges:
+      bit1, bit2 = get_lsb(valeur)
+      bits.append(bit1)
+      bits.append(bit2)
+  print(bits)

@@ -1,0 +1,35 @@
+id: s4-11
+concept: listes
+notion: listes
+seance: 4
+niveau: expert
+type: predire
+titre: Compter depuis la fin
+obligatoire: false
+enonce: |
+  Pour les curieux : Python accepte aussi des positions négatives, qui comptent
+  depuis la fin. Que montre l'écran ?
+depart: |
+  lettres = ["a", "b", "c", "d"]
+  print(lettres[-1])
+  print(lettres[len(lettres) - 1])
+indices:
+  - lettres[-1] désigne le dernier élément de la liste.
+  - len(lettres) - 1 vaut 3, la position du dernier élément.
+tests:
+  - type: qcm
+    options:
+      - |-
+        a
+        d
+      - |-
+        d
+        c
+      - |-
+        d
+        d
+    bonne_reponse: 2
+solution: |
+  lettres = ["a", "b", "c", "d"]
+  print(lettres[-1])
+  print(lettres[len(lettres) - 1])

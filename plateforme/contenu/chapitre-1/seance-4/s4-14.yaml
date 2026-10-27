@@ -1,0 +1,35 @@
+id: s4-14
+concept: matrices
+notion: matrices
+seance: 4
+niveau: normal
+type: predire
+titre: Un pixel dans une ligne
+obligatoire: true
+enonce: |
+  Une ligne d'image est une liste de pixels, et chaque pixel est une liste de
+  trois nombres. Que montre l'écran ?
+depart: |
+  ligne = [[153, 50, 204], [10, 20, 30], [255, 0, 0]]
+  print(ligne[1])
+  print(ligne[2][0])
+indices:
+  - ligne[1] est le deuxième pixel, une liste entière de trois nombres.
+  - 'ligne[2] est le troisième pixel : [255, 0, 0]. Son premier nombre est le rouge.'
+tests:
+  - type: qcm
+    options:
+      - |-
+        [153, 50, 204]
+        255
+      - |-
+        [10, 20, 30]
+        0
+      - |-
+        [10, 20, 30]
+        255
+    bonne_reponse: 2
+solution: |
+  ligne = [[153, 50, 204], [10, 20, 30], [255, 0, 0]]
+  print(ligne[1])
+  print(ligne[2][0])

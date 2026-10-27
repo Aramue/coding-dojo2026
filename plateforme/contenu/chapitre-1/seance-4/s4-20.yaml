@@ -1,0 +1,38 @@
+id: s4-20
+concept: matrices
+notion: matrices
+seance: 4
+niveau: expert
+type: ecrire
+titre: Une colonne de l'image
+obligatoire: false
+enonce: |
+  Défi : range dans la liste `colonne` le canal rouge du **premier pixel de
+  chaque ligne** de l'image, c'est-à-dire sa première colonne.
+depart: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  colonne = []
+indices:
+  - 'Cette fois, on parcourt les lignes, et on ne garde qu''un seul pixel par ligne : le premier.'
+  - ligne[0] est le premier pixel d'une ligne, et ligne[0][0] est son rouge.
+tests:
+  - type: variable
+    nom: colonne
+    valeur_attendue: '[25, 121]'
+  - type: contient
+    motif: append(
+  - type: interdit
+    motif: '[25, 121]'
+solution: |
+  image = [
+      [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+      [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+  ]
+
+  colonne = []
+  for ligne in image:
+      colonne.append(ligne[0][0])

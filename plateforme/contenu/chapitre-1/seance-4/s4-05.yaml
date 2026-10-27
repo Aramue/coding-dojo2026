@@ -1,0 +1,41 @@
+id: s4-05
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: predire
+titre: Ajouter à la fin d'une liste
+obligatoire: true
+enonce: |
+  `append()` ajoute une valeur à la fin d'une liste, et `len()` compte ses
+  éléments. Que montre l'écran ?
+depart: |
+  bits = []
+  bits.append(1)
+  bits.append(0)
+  bits.append(1)
+  print(bits)
+  print(len(bits))
+indices:
+  - La liste part vide, puis reçoit trois valeurs, dans l'ordre où on les ajoute.
+  - Quand on affiche une liste entière, les crochets et les virgules s'affichent aussi.
+tests:
+  - type: qcm
+    options:
+      - |-
+        []
+        3
+      - |-
+        1 0 1
+        3
+      - |-
+        [1, 0, 1]
+        3
+    bonne_reponse: 2
+solution: |
+  bits = []
+  bits.append(1)
+  bits.append(0)
+  bits.append(1)
+  print(bits)
+  print(len(bits))

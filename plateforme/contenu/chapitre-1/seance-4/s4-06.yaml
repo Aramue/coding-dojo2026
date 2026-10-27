@@ -1,0 +1,37 @@
+id: s4-06
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: completer
+titre: Les trois couleurs d'un pixel
+obligatoire: true
+enonce: |
+  Un pixel est une liste de trois nombres : rouge, vert, bleu, dans cet ordre.
+  Complète les trois trous pour ranger chaque couleur dans sa variable.
+depart: |
+  pixel = [153, 50, 204]
+  rouge = pixel[_____]
+  vert = pixel[_____]
+  bleu = pixel[_____]
+indices:
+  - Le rouge est le premier élément de la liste. Quelle position porte le premier élément ?
+  - Les positions sont 0, 1 et 2, dans l'ordre rouge, vert, bleu.
+tests:
+  - type: variable
+    nom: rouge
+    valeur_attendue: '153'
+    type_attendu: int
+  - type: variable
+    nom: vert
+    valeur_attendue: '50'
+    type_attendu: int
+  - type: variable
+    nom: bleu
+    valeur_attendue: '204'
+    type_attendu: int
+solution: |
+  pixel = [153, 50, 204]
+  rouge = pixel[0]
+  vert = pixel[1]
+  bleu = pixel[2]

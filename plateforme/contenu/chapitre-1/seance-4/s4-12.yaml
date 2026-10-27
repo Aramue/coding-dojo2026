@@ -1,0 +1,36 @@
+id: s4-12
+concept: listes
+notion: listes
+seance: 4
+niveau: expert
+type: ecrire
+titre: Le plus grand sans max
+obligatoire: false
+enonce: |
+  Défi : trouve le plus grand nombre de la liste `valeurs` sans utiliser
+  `max()`. Range-le dans la variable `plus_grand`. Pars du premier élément, puis
+  compare-le avec chacun des autres.
+depart: |
+  valeurs = [4, 17, 9, 12]
+  plus_grand = valeurs[0]
+indices:
+  - plus_grand part du premier élément. Dans la boucle, un if compare chaque valeur à plus_grand.
+  - Quand une valeur dépasse plus_grand, c'est elle qui devient le nouveau plus_grand.
+tests:
+  - type: variable
+    nom: plus_grand
+    valeur_attendue: '17'
+    type_attendu: int
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: plus_grand = 17
+  - type: interdit
+    motif: max(
+    message: 'max() trouve le plus grand à ta place : ici, c''est la comparaison qu''on veut voir.'
+solution: |
+  valeurs = [4, 17, 9, 12]
+  plus_grand = valeurs[0]
+  for v in valeurs:
+      if v > plus_grand:
+          plus_grand = v

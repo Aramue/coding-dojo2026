@@ -1,0 +1,32 @@
+id: s4-26
+concept: binaire
+notion: binaire
+seance: 4
+niveau: normal
+type: ecrire
+titre: Lire deux octets
+obligatoire: true
+enonce: |
+  La liste `octets` contient deux octets écrits en binaire. Construis dans le
+  texte `message` les deux lettres qu'ils représentent, dans l'ordre, avec une
+  boucle.
+depart: |
+  octets = ["01001111", "01001011"]
+  message = ""
+indices:
+  - 'Pour chaque octet : int(octet, 2) donne le nombre, et chr() donne la lettre.'
+  - Ajoute chaque lettre à la fin de message, qui part du texte vide.
+tests:
+  - type: variable
+    nom: message
+    valeur_attendue: '''OK'''
+    type_attendu: str
+  - type: contient
+    motif: chr(
+  - type: interdit
+    motif: OK
+solution: |
+  octets = ["01001111", "01001011"]
+  message = ""
+  for octet in octets:
+      message = message + chr(int(octet, 2))

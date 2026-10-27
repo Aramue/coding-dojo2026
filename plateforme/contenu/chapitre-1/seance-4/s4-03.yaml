@@ -1,0 +1,32 @@
+id: s4-03
+concept: conversion
+notion: reprise
+seance: 4
+niveau: normal
+type: debug
+titre: Les chiffres rassemblés
+obligatoire: true
+enonce: |
+  Ce programme doit rassembler les chiffres 0, 1 et 2 dans un seul texte, mais
+  il s'arrête avec une erreur. Lis le message, puis répare le programme.
+depart: |
+  texte = ""
+  for i in range(3):
+      texte = texte + i
+  print(texte)
+indices:
+  - On ne peut ajouter qu'un texte à un texte. La variable i contient un nombre.
+  - Il manque la fonction qui transforme un nombre en texte, autour de i.
+tests:
+  - type: variable
+    nom: texte
+    valeur_attendue: '''012'''
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: '012'
+solution: |
+  texte = ""
+  for i in range(3):
+      texte = texte + str(i)
+  print(texte)

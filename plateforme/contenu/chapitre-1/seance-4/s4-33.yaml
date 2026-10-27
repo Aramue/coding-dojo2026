@@ -1,0 +1,44 @@
+id: s4-33
+concept: bits
+notion: decoder
+seance: 4
+niveau: normal
+type: debug
+titre: Les bits d'un pixel, mal rangés
+obligatoire: true
+enonce: |
+  Ce programme doit ranger les deux bits de poids faible de 203 dans `lsb1` et
+  `lsb2`, mais il s'arrête avec une erreur. Lis le message, puis répare le
+  programme. La fonction `get_lsb` est fournie, ne la modifie pas.
+depart: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  lsb1, lsb2, lsb3 = get_lsb(203)
+  print(lsb1, lsb2)
+indices:
+  - get_lsb rend deux valeurs. Combien de variables faut-il à gauche du signe égal ?
+  - Il y a une variable de trop dans la ligne qui appelle get_lsb.
+tests:
+  - type: variable
+    nom: lsb1
+    valeur_attendue: '1'
+    type_attendu: int
+  - type: variable
+    nom: lsb2
+    valeur_attendue: '1'
+    type_attendu: int
+solution: |
+  def get_lsb(value_of_color):
+      """Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2)."""
+      ex_value = int(value_of_color) & 0b11
+      lsb1 = (ex_value >> 1) & 1
+      lsb2 = ex_value & 1
+      return lsb1, lsb2
+
+  lsb1, lsb2 = get_lsb(203)
+  print(lsb1, lsb2)

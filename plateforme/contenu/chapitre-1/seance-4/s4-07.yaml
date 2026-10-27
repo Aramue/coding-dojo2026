@@ -1,0 +1,27 @@
+id: s4-07
+concept: listes
+notion: listes
+seance: 4
+niveau: normal
+type: debug
+titre: Le dernier nombre de la liste
+obligatoire: true
+enonce: |
+  Ce programme doit ranger le dernier nombre de la liste dans `dernier`, mais il
+  s'arrête avec une erreur. Lis le message, puis répare le programme.
+depart: |
+  valeurs = [10, 20, 30]
+  dernier = valeurs[3]
+  print(dernier)
+indices:
+  - La liste a trois éléments. Quelle est la position du dernier, sachant qu'on commence à 0 ?
+  - Les positions existantes sont 0, 1 et 2. La position 3 est une de trop.
+tests:
+  - type: variable
+    nom: dernier
+    valeur_attendue: '30'
+    type_attendu: int
+solution: |
+  valeurs = [10, 20, 30]
+  dernier = valeurs[2]
+  print(dernier)

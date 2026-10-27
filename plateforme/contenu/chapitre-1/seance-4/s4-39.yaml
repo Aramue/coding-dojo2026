@@ -1,0 +1,31 @@
+id: s4-39
+concept: bits
+notion: decoder
+seance: 4
+niveau: expert
+type: ecrire
+titre: Cacher deux bits dans une couleur
+obligatoire: false
+enonce: |
+  Défi : voici le chemin inverse. On veut cacher les deux bits `deux_bits` dans
+  `valeur`. Calcule dans `nouveau` la valeur dont les deux derniers bits sont
+  remplacés par `deux_bits`. Aide : `valeur & 252` met à zéro les deux derniers
+  bits (252 s'écrit 11111100), et `|` combine deux nombres bit à bit.
+depart: |
+  valeur = 200
+  deux_bits = 2
+  nouveau =
+indices:
+  - Commence par vider les deux derniers bits avec & 252. Il reste un nombre dont la fin est 00.
+  - Combine ensuite ce nombre avec deux_bits grâce à |.
+tests:
+  - type: variable
+    nom: nouveau
+    valeur_attendue: '202'
+    type_attendu: int
+  - type: interdit
+    motif: '202'
+solution: |
+  valeur = 200
+  deux_bits = 2
+  nouveau = (valeur & 252) | deux_bits

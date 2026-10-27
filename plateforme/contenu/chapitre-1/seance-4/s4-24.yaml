@@ -1,0 +1,31 @@
+id: s4-24
+concept: binaire
+notion: binaire
+seance: 4
+niveau: normal
+type: completer
+titre: Un octet devient une lettre
+obligatoire: true
+enonce: |
+  Un octet est un texte de huit bits. Complète les trous pour le lire en nombre,
+  puis pour trouver le caractère qui porte ce numéro.
+depart: |
+  octet = "01110101"
+  nombre = int(octet, _____)
+  lettre = chr(_____)
+indices:
+  - La base du binaire est 2. Écris-la en second nombre de int().
+  - chr() attend le nombre obtenu à la ligne précédente.
+tests:
+  - type: variable
+    nom: nombre
+    valeur_attendue: '117'
+    type_attendu: int
+  - type: variable
+    nom: lettre
+    valeur_attendue: '''u'''
+    type_attendu: str
+solution: |
+  octet = "01110101"
+  nombre = int(octet, 2)
+  lettre = chr(nombre)

@@ -1,0 +1,33 @@
+id: s4-23
+concept: binaire
+notion: binaire
+seance: 4
+niveau: normal
+type: predire
+titre: Un nombre et son caractère
+obligatoire: true
+enonce: |
+  Chaque caractère a un numéro, selon la table ASCII. `chr()` donne le caractère
+  d'un numéro, et `ord()` donne le numéro d'un caractère. Que montre l'écran ?
+depart: |
+  print(chr(65))
+  print(ord("a"))
+indices:
+  - chr() part d'un numéro et rend un caractère. ord() fait le chemin inverse.
+  - 65 est le numéro de la lettre A majuscule. Le numéro de la minuscule a est 97.
+tests:
+  - type: qcm
+    options:
+      - |-
+        65
+        a
+      - |-
+        a
+        97
+      - |-
+        A
+        97
+    bonne_reponse: 2
+solution: |
+  print(chr(65))
+  print(ord("a"))

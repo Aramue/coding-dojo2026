@@ -1,0 +1,36 @@
+id: s4-02
+concept: range
+notion: reprise
+seance: 4
+niveau: normal
+type: predire
+titre: Un range avec un pas
+obligatoire: true
+enonce: |
+  `range()` accepte trois nombres : le départ, la fin (exclue) et le pas.
+  Que montre l'écran ?
+depart: |
+  for i in range(0, 10, 4):
+      print(i)
+indices:
+  - Le premier nombre est 0. Ensuite, on ajoute 4 à chaque tour.
+  - 'La fin est exclue : la boucle s''arrête avant d''atteindre 10.'
+tests:
+  - type: qcm
+    options:
+      - |-
+        4
+        8
+      - |-
+        0
+        4
+        8
+        10
+      - |-
+        0
+        4
+        8
+    bonne_reponse: 2
+solution: |
+  for i in range(0, 10, 4):
+      print(i)
