@@ -3,7 +3,7 @@ title: Accueil
 tags:
   - moc
 statut: en-conception
-mis-a-jour: 2026-09-27
+mis-a-jour: 2026-10-27
 ---
 
 # Coding Dojo 2026-2027
@@ -47,6 +47,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Contenu du chapitre 1 | ✅ **écrit** — 112 exercices et 14 leçons, les trois séances, branche `contenu-seance-2` |
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
+| Séance 4 — préparation du TP de stéganographie | ✅ **écrite** — 40 exercices et 5 leçons, voir [[Séance 4]] ; date d'ouverture à confirmer |
 | Intégration continue | ✅ livrée — trois contrôles, [[ADR-017 Une seule branche, des releases par tag]] |
 | Mise en production sur la VM | 🔶 en cours — [[Déploiement UNIGE]] |
 | Revue finale de branche | ⬜ à faire |
@@ -92,7 +93,7 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 - **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]] · [[ADR-015 Quiz en direct et classement encadré]] · [[ADR-016 Temps réel par sonnette WebSocket]] · [[ADR-017 Une seule branche, des releases par tag]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Tableau de bord]] · [[Déploiement UNIGE]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
-- **Pédagogie** — [[Chapitre 1]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
+- **Pédagogie** — [[Chapitre 1]] · [[Séance 4]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
 - **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]]
 - **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]]
