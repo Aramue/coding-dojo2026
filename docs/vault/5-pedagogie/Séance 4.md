@@ -118,10 +118,9 @@ prennent ce dossier pour racine par défaut : un autre emplacement exigerait de 
 l'outillage pour rien. Le chapitre `stegano` de [[Modèle de contenu]] est, lui, indépendant du
 dossier.
 
-> [!warning] La date d'ouverture est une hypothèse
-> `CHAPITRES["stegano"]["ouverture"]` vaut `2026-11-04`, un mercredi, dans la suite des mercredis
-> 16, 23 et 30 septembre. ==À confirmer avant le déploiement== : une séance publiée d'avance ne
-> s'ouvre qu'à sa date ([[ADR-013 Une séance s'ouvre à sa date]]).
+> [!note] Ouverture le 27 octobre 2026
+> `CHAPITRES["stegano"]["ouverture"]` vaut `2026-10-27`, un mardi : la séance est ouverte dès
+> sa publication, sans attendre un mercredi ([[ADR-013 Une séance s'ouvre à sa date]]).
 
 ## Outillage touché
 

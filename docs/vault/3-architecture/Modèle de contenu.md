@@ -170,7 +170,7 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | `bases` | Les bases de Python | 1 | d'emblée | `afficher`, `variables`, `types`, `saisie` |
 | `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner`, `decider` |
 | `boucles` | Répéter, parcourir, compter | 3 | 30 septembre 2026 | `rappels`, `repeter`, `parcourir`, `compter`, `tantque` |
-| `stegano` | Listes, bits et caractères | 4 | 4 novembre 2026 (à confirmer) | `reprise`, `listes`, `matrices`, `binaire`, `decoder` |
+| `stegano` | Listes, bits et caractères | 4 | 27 octobre 2026 | `reprise`, `listes`, `matrices`, `binaire`, `decoder` |
 
 > [!note] Cinq notions au plus par chapitre
 > Il n'existe que cinq familles de couleur, et un test refuse deux notions voisines de la même

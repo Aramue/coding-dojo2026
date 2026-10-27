@@ -311,7 +311,7 @@ CHAPITRES: dict[str, dict] = {
         "ordre": 4,
         "titre": "Listes, bits et caractères",
         "seance": 4,
-        "ouverture": "2026-11-04",
+        "ouverture": "2026-10-27",
     },
 }
 
