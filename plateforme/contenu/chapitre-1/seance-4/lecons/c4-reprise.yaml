@@ -1,0 +1,30 @@
+id: c4-reprise
+notion: reprise
+ordre: 15
+titre: Rappels avant les listes
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: 'Cette séance prépare le TP de stéganographie : retrouver un message caché dans les pixels d''une image. Avant de commencer, trois réflexes des séances précédentes méritent d''être revus, parce que le TP s''appuie dessus à chaque ligne.'
+  - type: paragraphe
+    texte: '**Un texte se construit morceau par morceau.** On part du texte vide, et on y ajoute quelque chose à chaque tour de boucle. On ne peut ajouter qu''un texte à un texte : un nombre passe d''abord par `str()`.'
+  - type: code
+    legende: Un texte qui grandit
+    executable: true
+    python: |
+      resultat = ""
+      for i in range(4):
+          resultat = resultat + str(i)
+      print(resultat)
+  - type: paragraphe
+    texte: '**`range()` accepte un pas.** Avec trois nombres, il donne le départ, la fin (exclue) et l''écart entre deux valeurs.'
+  - type: code
+    legende: De quatre en quatre
+    executable: true
+    python: |
+      for i in range(0, 12, 4):
+          print(i)
+  - type: paragraphe
+    texte: '**On compte à partir de 0.** `range(3)` donne 0, 1 et 2, jamais 3. Retiens cette habitude : dans la suite, les positions d''une liste suivent la même règle.'
+  - type: attention
+    texte: '**Une boucle ne s''arrête pas sur la dernière valeur demandée.** La fin de `range()` est exclue : `range(0, 12, 4)` s''arrête avant 12, et ne donne que 0, 4 et 8.'

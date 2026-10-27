@@ -1,0 +1,58 @@
+id: c4-matrices
+notion: matrices
+ordre: 17
+titre: Listes de listes
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: 'Une liste peut contenir d''autres listes. C''est exactement la forme d''une **image** : une image est une liste de **lignes**, une ligne est une liste de **pixels**, et un pixel est une liste de trois **couleurs**.'
+  - type: code
+    legende: Une petite image
+    executable: true
+    python: |
+      image = [
+          [[25, 200, 10], [203, 5, 7]],
+          [[59, 77, 1], [121, 9, 9]],
+      ]
+      print(image[0])
+  - type: paragraphe
+    texte: 'Pour atteindre une valeur, on lit **de l''extérieur vers l''intérieur** : d''abord la ligne, puis le pixel dans la ligne, puis la couleur dans le pixel.'
+  - type: code
+    legende: Ligne, colonne, couleur
+    executable: true
+    python: |
+      image = [
+          [[25, 200, 10], [203, 5, 7]],
+          [[59, 77, 1], [121, 9, 9]],
+      ]
+      pixel = image[0][1]
+      print(pixel)
+      print(pixel[0])
+      print(image[1][0][2])
+  - type: attention
+    texte: '**Chaque position a ses propres crochets.** Dans le TP, la bibliothèque NumPy accepte aussi l''écriture `image[0, 1]`. Avec des listes ordinaires, elle arrête le programme : écris toujours `image[0][1]`, qui marche partout.'
+  - type: paragraphe
+    texte: '`len()` compte à chaque niveau : `len(image)` donne le nombre de lignes, et `len(image[0])` le nombre de pixels de la première ligne.'
+  - type: code
+    legende: La taille de l'image
+    executable: true
+    python: |
+      image = [
+          [[25, 200, 10], [203, 5, 7], [59, 77, 1]],
+          [[121, 9, 9], [40, 40, 40], [8, 90, 250]],
+      ]
+      print(len(image))
+      print(len(image[0]))
+  - type: paragraphe
+    texte: 'Pour parcourir toute l''image, on place une boucle **dans** une autre : la première prend chaque ligne, la seconde prend chaque pixel de cette ligne.'
+  - type: code
+    legende: Deux boucles imbriquées
+    executable: true
+    python: |
+      image = [
+          [[25, 200, 10], [203, 5, 7]],
+          [[59, 77, 1], [121, 9, 9]],
+      ]
+      for ligne in image:
+          for pixel in ligne:
+              print(pixel[0])
