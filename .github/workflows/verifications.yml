@@ -45,7 +45,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: 257 tests
+      - name: 420 tests
         run: python -m pytest -q
 
   contenu:
@@ -67,7 +67,7 @@ jobs:
 
       # pytest.ini porte `--cov-fail-under=82` : le plancher de couverture des
       # outils est vérifié ici, pas à la main.
-      - name: 151 tests
+      - name: 154 tests
         run: python -m pytest -q
 
       # Exécute la solution de référence de chaque exercice et rejoue chaque
