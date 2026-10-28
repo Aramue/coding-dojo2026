@@ -572,3 +572,47 @@
   font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
+
+/* L'historique, sous le catalogue : la memoire de la classe, sans projection. */
+.quiz-prof__historique {
+  margin-top: var(--e-5);
+  padding-top: var(--e-3);
+  border-top: 1px solid var(--rule);
+}
+
+.quiz-prof__historique h2 {
+  margin-bottom: var(--e-2);
+}
+
+.quiz-prof__historique th {
+  text-align: left;
+}
+
+/* Une action par ligne, mais lisible sans survol : c'est la seule de la ligne. */
+.quiz-prof__historique .bouton--menu {
+  color: var(--ink);
+  border-color: var(--rule);
+  background: var(--surface);
+}
+
+/* Le classement aligne ses colonnes 3 et 4 (des nombres) a droite ; ici la 5, des noms, va a gauche. */
+.quiz-prof__historique .classement__table th:nth-child(5),
+.quiz-prof__historique .classement__table td:nth-child(5) {
+  text-align: left;
+  padding-left: var(--e-3);
+}
+
+/*
+ * Les marches de fin de partie, reprises en tete des resultats relus. Sans
+ * largeur, la colonne des resultats les serrait a trois etroits piliers.
+ */
+.quiz-prof__podium {
+  align-self: stretch;
+  width: 100%;
+  max-width: 40rem;
+  margin: var(--e-3) auto var(--e-4);
+}
+
+.quiz-prof__podium .marches__place {
+  min-width: 0;
+}

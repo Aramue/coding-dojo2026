@@ -55,6 +55,18 @@ const EXERCICES = [
   },
 ]
 
+const TPS = [
+  {
+    id: 'stegano',
+    chapitre: 'bases',
+    titre: "Le message caché dans l'image",
+    dureeMin: 90,
+    introduction: [{ type: 'paragraphe', texte: 'Une image cache un message.' }],
+    materiel: [],
+    etapes: [{ titre: 'Charger', objectif: 'Ouvrir.', blocs: [{ type: 'paragraphe', texte: 'Go.' }] }],
+  },
+]
+
 let etatDuQuiz: unknown
 
 function poserLeReseau() {
@@ -66,6 +78,7 @@ function poserLeReseau() {
         if (url.includes('chapitres')) return CHAPITRES
         if (url.includes('notions')) return NOTIONS
         if (url.includes('lecons')) return []
+        if (url.includes('tps')) return TPS
         if (url.includes('parcours')) return { reussis: [] }
         if (url.includes('session')) return { jeton: 'DOJO-TEST.sig', code_acces: 'DOJO-TEST' }
         if (url.includes('quiz/etat')) return etatDuQuiz
@@ -471,4 +484,25 @@ describe('App — une séance s’ouvre à sa date', () => {
     expect(await screen.findByText('Calculer')).toBeInTheDocument()
     expect(screen.getByText('Séance 2 — Calculer, comparer, décider')).toBeInTheDocument()
   })
+
+  it('ouvre les consignes d un TP depuis le menu, et refuse un TP inconnu', async () => {
+    sessionStorage.setItem('dojo.code-acces', 'DOJO-TEST')
+    history.pushState(null, '', '/tp/stegano')
+    render(<App />)
+    expect(
+      await screen.findByRole('heading', { level: 1, name: "Le message caché dans l'image" }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Le message caché dans l'image/ })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
+
+    act(() => naviguerVers('/tp/inconnu'))
+    expect(await screen.findByText("Cette page n'existe pas")).toBeInTheDocument()
+  })
 })
+
+function naviguerVers(chemin: string) {
+  history.pushState(null, '', chemin)
+  dispatchEvent(new PopStateEvent('popstate'))
+}

@@ -11,6 +11,8 @@ export type Destination =
   | { vue: 'cours'; notion: string }
   | { vue: 'exercices'; notion: string }
   | { vue: 'exercice'; notion: string; numero: number }
+  /** Les consignes d'un travail pratique, `/tp/<id>`. */
+  | { vue: 'tp'; tp: string }
   | { vue: 'inconnue' }
 
 // Le routeur valide la FORME d'un identifiant de notion, jamais son
@@ -30,6 +32,13 @@ export function analyser(chemin: string): Destination {
   if (morceaux.length === 1 && morceaux[0] === 'quiz') return { vue: 'quiz' }
   if (morceaux.length === 2 && morceaux[0] === 'prof' && morceaux[1] === 'quiz') {
     return { vue: 'prof-quiz' }
+  }
+
+  // Avant les notions : `/tp/stegano` a la forme d'une notion suivie d'une
+  // page. Une notion qui s'appellerait « tp » perdrait donc ses pages — on
+  // n'en crée pas.
+  if (morceaux.length === 2 && morceaux[0] === 'tp' && MOTIF_NOTION.test(morceaux[1]!)) {
+    return { vue: 'tp', tp: morceaux[1]! }
   }
 
   const [notion, page, numero] = morceaux
@@ -62,6 +71,8 @@ export function versChemin(destination: Destination): string {
       return '/prof/quiz'
     case 'quiz':
       return '/quiz'
+    case 'tp':
+      return `/tp/${destination.tp}`
     default:
       return '/'
   }

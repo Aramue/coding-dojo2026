@@ -1,0 +1,390 @@
+# Les consignes du TP de steganographie, en version texte. Elles suivent les
+# slides « TP Steganographie » une a une, et les completent : chaque etape dit
+# ce qu'elle fait obtenir, comment, et ce que l'eleve doit voir a l'ecran avant
+# de passer a la suivante.
+#
+# Le TP se fait dans un vrai Python, sur la machine de l'eleve (PIL et NumPy).
+# Les seuls blocs « Essayer » sont ceux qui tournent sans image : le binaire,
+# get_lsb, int(..., 2) et chr().
+id: stegano
+chapitre: stegano
+titre: Le message caché dans l'image
+duree_min: 90
+introduction:
+  - type: paragraphe
+    texte: >-
+      La **stéganographie**, c'est l'art de cacher un message à l'intérieur d'autre
+      chose — ici, une image. Contrairement à la cryptographie, le message n'est pas
+      brouillé : il est **invisible**. Personne ne se doute qu'il est là.
+  - type: paragraphe
+    texte: >-
+      Ta mission : retrouver le message caché dans l'image `image_with_message.png`.
+      Ce que l'on sait de lui :
+  - type: paragraphe
+    texte: >-
+      1. c'est une phrase qui a du sens, écrite en **lettres majuscules et espaces** ;
+  - type: paragraphe
+    texte: >-
+      2. il est caché dans le canal **rouge** des pixels ;
+  - type: paragraphe
+    texte: >-
+      3. il se trouve sur la **première ligne** de l'image, dans les **960 premiers
+      pixels** ;
+  - type: paragraphe
+    texte: >-
+      4. chaque pixel en cache **2 bits** : ses deux bits de poids faible.
+  - type: attention
+    texte: >-
+      Ne convertis jamais l'image dans un autre format, et ne l'ouvre pas pour
+      l'enregistrer dans un logiciel de dessin. Le PNG garde chaque pixel à
+      l'identique ; un JPEG les modifie légèrement, et le message est perdu.
+  - type: paragraphe
+    texte: >-
+      Les étapes ci-dessous te mènent jusqu'au message. Fais-les **dans l'ordre**,
+      et ne passe à la suivante que quand le point « À vérifier » est juste. Si tu
+      bloques, ouvre l'indice avant d'appeler le professeur.
+materiel:
+  - L'image `image_with_message.png`, à télécharger sur Classroom
+  - Le fichier `requirements_steno.py`, à télécharger sur Classroom
+  - Python 3 sur ta machine, avec les bibliothèques Pillow et NumPy
+etapes:
+  - titre: Préparer ton dossier
+    objectif: Avoir l'image et le fichier Python au même endroit, et un programme qui démarre sans erreur.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Crée un dossier `tp_stegano` et mets-y **les deux fichiers** téléchargés.
+          Ouvre `requirements_steno.py` dans ton éditeur : il contient déjà les
+          imports et les deux fonctions dont tu auras besoin,
+          `open_image_np_array` et `get_lsb`. Tu écris ton code **à la fin de ce
+          fichier**, sous les fonctions.
+      - type: paragraphe
+        texte: >-
+          Si les bibliothèques ne sont pas installées, tape dans un terminal :
+      - type: code
+        legende: Dans un terminal, pas dans Python
+        python: |
+          pip install pillow numpy
+      - type: verifier
+        texte: >-
+          Lance le fichier tel quel. Il ne doit rien afficher, et surtout aucune
+          erreur. Un `ModuleNotFoundError: No module named 'PIL'` veut dire que
+          Pillow n'est pas installé.
+      - type: indice
+        texte: >-
+          Un `FileNotFoundError` plus tard, à l'étape 2, veut presque toujours dire
+          que Python n'est pas lancé depuis le dossier `tp_stegano`. Vérifie que
+          l'image et le fichier `.py` sont vraiment côte à côte.
+
+  - titre: Charger l'image
+    objectif: Obtenir la matrice des pixels, la hauteur et la largeur de l'image.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          La fonction `open_image_np_array` ouvre l'image et rend **trois valeurs**
+          d'un coup. On les range dans trois variables, séparées par des virgules,
+          dans cet ordre exact :
+      - type: code
+        legende: À écrire à la fin de requirements_steno.py
+        python: |
+          image_path_extract = "image_with_message.png"
+          pixels_image, height_img, width_img = open_image_np_array(image_path_extract)
+
+          print(height_img, width_img)
+      - type: verifier
+        texte: >-
+          Deux nombres s'affichent : la hauteur puis la largeur de l'image, en
+          pixels. La largeur doit être **au moins 960**.
+      - type: indice
+        texte: >-
+          L'ordre compte : la fonction rend `pixels_image, height_img, width_img`.
+          Si tu écris `largeur, hauteur = ...`, les noms ne veulent plus rien dire,
+          et la suite se trompe de dimension.
+
+  - titre: Lire un pixel
+    objectif: Savoir retrouver la valeur du rouge de n'importe quel pixel.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          `pixels_image` est une **matrice** : un tableau de lignes, chaque ligne
+          étant un tableau de pixels. On l'indexe toujours `[ligne][colonne]`, en
+          commençant à **0**. Chaque pixel est lui-même une petite liste
+          `[r, g, b]` : rouge en position 0, vert en 1, bleu en 2.
+      - type: schema
+        nom: pixels
+        legende: >-
+          Une image est une grille. D'abord la ligne i, puis la colonne j, puis le
+          canal de couleur.
+      - type: paragraphe
+        texte: >-
+          Attention au sens : `i` compte les lignes en **descendant**, `j` compte les
+          colonnes vers la **droite**. Le pixel de la ligne 1, colonne 4, c'est donc
+          `pixels_image[1][4]` — la deuxième ligne, la cinquième case.
+      - type: code
+        legende: Le premier pixel, puis son rouge
+        python: |
+          premier_pixel = pixels_image[0][0]
+          print(premier_pixel)
+
+          rouge = pixels_image[0][0][0]
+          print(rouge)
+      - type: verifier
+        texte: >-
+          La première ligne affiche une liste de trois nombres entre 0 et 255 (ou
+          quatre, si l'image a une transparence : ce n'est pas grave). La seconde
+          affiche le premier de ces nombres.
+      - type: paragraphe
+        texte: >-
+          Exerce-toi : affiche le rouge du **dixième** pixel de la première ligne,
+          puis celui du **dernier** pixel utile, le 960e.
+      - type: indice
+        texte: >-
+          On compte à partir de 0 : le dixième pixel est à la colonne 9, le 960e à
+          la colonne 959. La ligne, elle, reste toujours 0.
+
+  - titre: Comprendre les deux bits de poids faible
+    objectif: Savoir ce que rend get_lsb pour une valeur de rouge, et pourquoi.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Une valeur de couleur va de 0 à 255 : elle s'écrit sur **8 bits**. Les
+          deux derniers bits, à droite, sont les **bits de poids faible** (LSB, pour
+          *Least Significant Bits*). Les changer modifie la couleur de 3 au plus :
+          l'œil ne voit rien. C'est là que le message a été caché.
+      - type: paragraphe
+        texte: >-
+          **Du binaire au décimal.** En décimal, chaque chiffre vaut dix fois plus que
+          son voisin de droite : unités, dizaines, centaines. En binaire, c'est la même
+          idée avec **deux** : chaque case vaut le **double** de sa voisine de droite —
+          1, 2, 4, 8, 16, 32, 64, 128. Pour lire un nombre binaire, on additionne les
+          valeurs des cases qui contiennent un 1.
+      - type: schema
+        nom: binaire
+        legende: >-
+          10101101 en binaire : 128 + 32 + 8 + 4 + 1 = 173 en décimal.
+      - type: paragraphe
+        texte: >-
+          Les deux cases de droite valent 2 et 1 : ensemble, au plus 2 + 1 = **3**.
+          C'est pour cela que changer les deux bits de poids faible ne bouge la couleur
+          que de 3 au maximum.
+      - type: paragraphe
+        texte: >-
+          Exemple : 25 s'écrit `00011001`. Ses deux bits de poids faible sont `0` et
+          `1`. Essaie avec d'autres nombres :
+      - type: code
+        legende: Voir les 8 bits d'un nombre
+        executable: true
+        python: |
+          valeur = 25
+          print(format(valeur, "08b"))
+      - type: paragraphe
+        texte: >-
+          La fonction `get_lsb` fait ce travail pour toi : elle prend une valeur et
+          rend **deux** bits, `lsb1` puis `lsb2`. Tu n'as pas à la modifier, juste à
+          l'appeler et à ranger ses deux résultats dans deux variables.
+      - type: code
+        legende: Appeler get_lsb
+        executable: true
+        python: |
+          def get_lsb(value_of_color):
+              ex_value = int(value_of_color) & 0b11  # récupérer 2 LSB
+              lsb1 = (ex_value >> 1) & 1
+              lsb2 = ex_value & 1
+              return lsb1, lsb2
+
+          bit1, bit2 = get_lsb(25)
+          print(bit1, bit2)
+      - type: verifier
+        texte: >-
+          `get_lsb(25)` affiche `0 1`. Avec 203, qui s'écrit `11001011`, tu dois
+          obtenir `1 1`.
+      - type: paragraphe
+        texte: >-
+          **Pourquoi un ET logique ?** `& 0b11` compare la valeur bit à bit avec le
+          masque `00000011`. Le ET ne garde un 1 que là où les deux bits valent 1 :
+          tous les bits de gauche tombent à 0, seuls les deux derniers survivent.
+          C'est exactement « garder les deux derniers bits », sur le nombre lui-même,
+          sans jamais passer par du texte.
+      - type: schema
+        nom: masque
+        legende: >-
+          Le ET colonne par colonne : un 1 ne reste que là où les deux lignes ont un 1.
+      - type: paragraphe
+        texte: >-
+          **Une méthode plus simple à comprendre : le reste de la division par 4.**
+          Les deux derniers bits valent au plus 2 + 1 = 3. Diviser par 4, c'est
+          enlever tout ce qui est à gauche d'eux : le **reste** de la division est
+          donc exactement le nombre qu'ils forment. `25 % 4` vaut 1, c'est-à-dire
+          `01`. Les deux méthodes donnent le même résultat :
+      - type: code
+        legende: ET logique et reste de la division, côte à côte
+        executable: true
+        python: |
+          valeur = 203
+          print(valeur & 0b11)   # le ET logique
+          print(valeur % 4)      # le reste de la division par 4
+          print(format(valeur % 4, "02b"))  # les deux bits, en texte
+      - type: attention
+        texte: >-
+          Pourquoi pas simplement prendre les deux derniers caractères de
+          `bin(valeur)` ? Parce que `bin` n'écrit pas les zéros de gauche :
+          `bin(1)` donne `0b1`, et ses deux derniers caractères sont `b1`, pas
+          `01`. Une sélection dans le texte marche donc presque toujours — et se
+          trompe sans prévenir sur les petites valeurs.
+
+  - titre: Récupérer tous les bits cachés
+    objectif: Construire la liste des 1920 bits cachés dans les 960 premiers pixels.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Il faut maintenant faire l'étape 4 pour **chaque** pixel de la première
+          ligne, de la colonne 0 à la colonne 959, et garder les bits **dans l'ordre**
+          : d'abord `lsb1`, puis `lsb2`, pixel après pixel.
+      - type: schema
+        nom: ligne
+        legende: >-
+          On lit la première ligne de gauche à droite. Tous les quatre pixels, une
+          lettre complète.
+      - type: code
+        legende: Le squelette à compléter
+        python: |
+          bits = []
+          for j in range(960):
+              rouge = ...                    # le rouge du pixel (ligne 0, colonne j)
+              bit1, bit2 = get_lsb(rouge)
+              bits.append(bit1)
+              ...                            # ajoute aussi bit2
+
+          print(len(bits))
+          print(bits[:8])
+      - type: verifier
+        texte: >-
+          `len(bits)` affiche **1920** : 960 pixels, 2 bits chacun. Les huit premiers
+          bits sont une liste de 0 et de 1.
+      - type: indice
+        texte: >-
+          Le rouge du pixel de la colonne `j`, sur la ligne 0, c'est
+          `pixels_image[0][j][0]`. Une seule boucle suffit : la ligne ne change
+          jamais.
+      - type: indice
+        texte: >-
+          Si tu obtiens 960 et pas 1920, tu as oublié d'ajouter `bit2`. Si tu
+          obtiens un nombre énorme, ta boucle parcourt toute l'image au lieu des 960
+          premiers pixels.
+
+  - titre: Regrouper les bits en lettres
+    objectif: Transformer chaque groupe de 8 bits en une lettre.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Une lettre se code sur **8 bits**, donc sur **4 pixels**. Le chemin d'un
+          octet jusqu'à sa lettre a trois marches :
+      - type: paragraphe
+        texte: >-
+          1. coller les 8 bits en un **texte** : `"01110101"` ;
+      - type: paragraphe
+        texte: >-
+          2. lire ce texte comme un nombre écrit en base 2 : `int("01110101", 2)`
+          vaut 117 ;
+      - type: paragraphe
+        texte: >-
+          3. trouver la lettre de ce nombre dans la table ASCII : `chr(117)` vaut
+          `"u"`.
+      - type: schema
+        nom: octet
+        legende: >-
+          L'exemple des slides : quatre pixels, quatre paires de bits, une lettre.
+      - type: code
+        legende: Les trois marches sur l'exemple des slides
+        executable: true
+        python: |
+          octet = [0, 1, 1, 1, 0, 1, 0, 1]
+
+          texte_binaire = ""
+          for bit in octet:
+              texte_binaire = texte_binaire + str(bit)
+
+          nombre = int(texte_binaire, 2)
+          lettre = chr(nombre)
+          print(texte_binaire, nombre, lettre)
+      - type: verifier
+        texte: >-
+          L'exemple affiche `01110101 117 u`. Change un bit et regarde la lettre
+          changer.
+      - type: paragraphe
+        texte: >-
+          À toi de le faire pour toute ta liste `bits`, par paquets de 8. La boucle
+          `range(0, len(bits), 8)` donne la position du début de chaque paquet :
+          0, 8, 16, 24…
+      - type: code
+        legende: Le squelette à compléter
+        python: |
+          message = ""
+          for i in range(0, len(bits), 8):
+              octet = bits[i:i + 8]           # les 8 bits de ce paquet
+              texte_binaire = ""
+              ...                             # colle les 8 bits en un texte
+              message = message + chr(int(texte_binaire, 2))
+      - type: indice
+        texte: >-
+          `TypeError: can only concatenate str (not "int") to str` : tu colles un
+          nombre à un texte. Un bit est un `int` ; il faut `str(bit)` pour le coller.
+      - type: indice
+        texte: >-
+          Pense à remettre `texte_binaire` à `""` au début de **chaque** paquet :
+          sinon il grandit sans fin, et `int(..., 2)` rend des nombres immenses.
+
+  - titre: Afficher le message
+    objectif: Lire le message caché, et savoir quoi corriger s'il est illisible.
+    blocs:
+      - type: code
+        legende: Le dernier pas
+        python: |
+          print(message)
+      - type: verifier
+        texte: >-
+          Une phrase en **majuscules et espaces** s'affiche. Montre-la au professeur.
+      - type: paragraphe
+        texte: >-
+          Si tu obtiens des caractères bizarres, vérifie dans cet ordre :
+      - type: paragraphe
+        texte: >-
+          1. le **canal** : `[0]` à la fin, pour le rouge, pas `[1]` ni `[2]` ;
+      - type: paragraphe
+        texte: >-
+          2. la **ligne** : `pixels_image[0][j]`, pas `pixels_image[j][0]` qui
+          descend la première colonne ;
+      - type: paragraphe
+        texte: >-
+          3. l'**ordre des bits** : `bit1` avant `bit2`, pour chaque pixel ;
+      - type: paragraphe
+        texte: >-
+          4. les **paquets** : 8 bits exactement, en partant de 0.
+      - type: indice
+        texte: >-
+          Affiche les trois premières lettres, `message[:3]`, et teste une correction
+          à la fois. Si les trois premières lettres sont des majuscules, tout le reste
+          suit.
+
+  - titre: Pour aller plus loin — cacher ton propre message
+    objectif: Faire le chemin inverse, et cacher une phrase dans une image.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Cette étape est un **bonus**. Pour cacher deux bits dans un rouge, on efface
+          d'abord ses deux derniers bits, puis on y pose les nôtres : `rouge & 0b11111100`
+          met les deux derniers bits à 0, et `| deux_bits` les remplit.
+      - type: code
+        legende: Cacher les bits 1 et 0 dans le rouge 203
+        executable: true
+        python: |
+          rouge = 203
+          deux_bits = 0b10
+          nouveau = (rouge & 0b11111100) | deux_bits
+          print(rouge, "devient", nouveau)
+      - type: paragraphe
+        texte: >-
+          Le plan : transformer chaque lettre de ta phrase en 8 bits avec `ord()` et
+          `format(..., "08b")`, puis écrire ces bits deux par deux dans les rouges de
+          la première ligne, et enregistrer l'image **en PNG** avec Pillow. Donne-la à
+          un camarade : saura-t-il retrouver ta phrase ?

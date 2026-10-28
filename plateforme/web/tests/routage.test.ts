@@ -1,6 +1,18 @@
 import { describe, expect, it, vi } from 'vitest'
 import { analyser, naviguer, versChemin } from '../src/routage'
 
+describe('analyser — les TP', () => {
+  it('reconnait les consignes d un TP, et y revient', () => {
+    expect(analyser('/tp/stegano')).toEqual({ vue: 'tp', tp: 'stegano' })
+    expect(versChemin({ vue: 'tp', tp: 'stegano' })).toBe('/tp/stegano')
+  })
+
+  it('refuse un identifiant de TP mal forme', () => {
+    expect(analyser('/tp/Stegano')).toEqual({ vue: 'inconnue' })
+    expect(analyser('/tp/stegano/2')).toEqual({ vue: 'inconnue' })
+  })
+})
+
 describe('analyser', () => {
   it('reconnait la racine comme la connexion', () => {
     expect(analyser('/')).toEqual({ vue: 'connexion' })

@@ -147,6 +147,14 @@ export type PlaceResultat = {
   rang: number
 }
 
+/** Une partie de l'historique : quand, quel quiz, combien, et qui a gagné. */
+export type PartieHistorique = DernierePartie & {
+  quiz_id: string
+  titre: string
+  /** Le podium : trois au plus, jamais un élève à zéro point (ADR-015). */
+  gagnants: PlaceResultat[]
+}
+
 export type ResultatsQuiz = DernierePartie & {
   quiz_id: string
   titre: string

@@ -25,7 +25,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-02",
@@ -55,7 +55,7 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-03",
@@ -80,7 +80,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-04",
@@ -108,7 +108,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-05",
@@ -136,7 +136,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-06",
@@ -161,7 +161,7 @@
         "exigeExact": true
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-07",
@@ -186,7 +186,7 @@
         "exigeExact": true
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-08",
@@ -221,7 +221,7 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "s1-09",
@@ -811,7 +811,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-28",
@@ -838,7 +838,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-29",
@@ -870,7 +870,7 @@
         "maitrise": false
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-30",
@@ -905,7 +905,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-31",
@@ -953,7 +953,7 @@
         "maitrise": true
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-32",
@@ -981,7 +981,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-33",
@@ -1024,7 +1024,7 @@
         "maitrise": true
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s1-34",
@@ -1077,7 +1077,7 @@
         "maitrise": true
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "s2-01",
@@ -1105,7 +1105,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "s2-02",
@@ -1140,7 +1140,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "s2-03",
@@ -1188,7 +1188,7 @@
         "maitrise": true
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "s2-04",
@@ -1493,7 +1493,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-14",
@@ -1528,7 +1528,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-15",
@@ -1556,7 +1556,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-16",
@@ -1584,7 +1584,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-17",
@@ -1627,7 +1627,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-18",
@@ -1655,7 +1655,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-19",
@@ -1690,7 +1690,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-20",
@@ -1718,7 +1718,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-21",
@@ -1782,7 +1782,7 @@
         "maitrise": false
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "s2-22",
@@ -1810,7 +1810,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-23",
@@ -1866,7 +1866,7 @@
         "maitrise": false
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-24",
@@ -1894,7 +1894,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-25",
@@ -1940,7 +1940,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-26",
@@ -1968,7 +1968,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-27",
@@ -1996,7 +1996,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-28",
@@ -2065,7 +2065,7 @@
         "maitrise": false
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "s2-29",
@@ -2559,7 +2559,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "s3-02",
@@ -2618,7 +2618,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "s3-03",
@@ -2646,7 +2646,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "s3-04",
@@ -2924,7 +2924,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-14",
@@ -2959,7 +2959,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-15",
@@ -2989,7 +2989,7 @@
         "maitrise": false
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-16",
@@ -3017,7 +3017,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-17",
@@ -3065,7 +3065,7 @@
         "maitrise": false
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-18",
@@ -3093,7 +3093,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-19",
@@ -3128,7 +3128,7 @@
         "maitrise": false
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-20",
@@ -3164,7 +3164,7 @@
         "maitrise": false
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "s3-21",
@@ -3492,7 +3492,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-31",
@@ -3517,7 +3517,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-32",
@@ -3554,7 +3554,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-33",
@@ -3582,7 +3582,7 @@
         "bonneReponse": 0
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-34",
@@ -3607,7 +3607,7 @@
         "exigeExact": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-35",
@@ -3668,7 +3668,7 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-36",
@@ -3731,7 +3731,7 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-37",
@@ -3762,7 +3762,7 @@
         "typeAttendu": "float"
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-38",
@@ -3792,7 +3792,7 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-39",
@@ -3866,7 +3866,7 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "s3-40",
@@ -3956,6 +3956,1280 @@
         "maitrise": false
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
+  },
+  {
+    "id": "s4-01",
+    "concept": "accumulateur",
+    "notion": "reprise",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un texte qui grandit",
+    "obligatoire": true,
+    "enonce": "Un texte se construit morceau par morceau : on part du texte vide, et on y\najoute quelque chose à chaque tour. Que montre l'écran ?\n",
+    "depart": "bits = \"\"\nfor i in range(3):\n    bits = bits + str(i)\nprint(bits)\n",
+    "indices": [
+      "Au premier tour, i vaut 0. À chaque tour, str(i) est ajouté à la fin du texte.",
+      "Les valeurs de range(3) sont 0, 1 et 2. Elles sont collées les unes aux autres, sans espace."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "3",
+          "012",
+          "0\n1\n2"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "rappels"
+  },
+  {
+    "id": "s4-02",
+    "concept": "range",
+    "notion": "reprise",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un range avec un pas",
+    "obligatoire": true,
+    "enonce": "`range()` accepte trois nombres : le départ, la fin (exclue) et le pas.\nQue montre l'écran ?\n",
+    "depart": "for i in range(0, 10, 4):\n    print(i)\n",
+    "indices": [
+      "Le premier nombre est 0. Ensuite, on ajoute 4 à chaque tour.",
+      "La fin est exclue : la boucle s'arrête avant d'atteindre 10."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "4\n8",
+          "0\n4\n8\n10",
+          "0\n4\n8"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "rappels"
+  },
+  {
+    "id": "s4-03",
+    "concept": "conversion",
+    "notion": "reprise",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Les chiffres rassemblés",
+    "obligatoire": true,
+    "enonce": "Ce programme doit rassembler les chiffres 0, 1 et 2 dans un seul texte, mais\nil s'arrête avec une erreur. Lis le message, puis répare le programme.\n",
+    "depart": "texte = \"\"\nfor i in range(3):\n    texte = texte + i\nprint(texte)\n",
+    "indices": [
+      "On ne peut ajouter qu'un texte à un texte. La variable i contient un nombre.",
+      "Il manque la fonction qui transforme un nombre en texte, autour de i."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "texte",
+        "valeurAttendue": "'012'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "012",
+        "exigeExact": false
+      }
+    ],
+    "famille": "rappels"
+  },
+  {
+    "id": "s4-04",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Lire dans une liste",
+    "obligatoire": true,
+    "enonce": "Une liste range plusieurs valeurs dans une seule variable. Chaque valeur a une\nposition, et la première position est 0. Que montre l'écran ?\n",
+    "depart": "notes = [12, 15, 9]\nprint(notes[0])\nprint(notes[2])\n",
+    "indices": [
+      "notes[0] est le premier élément de la liste, pas le deuxième.",
+      "La liste a trois éléments, aux positions 0, 1 et 2. La position 2 est donc la dernière."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "12\n15",
+          "12\n9",
+          "15\n12"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-05",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Ajouter à la fin d'une liste",
+    "obligatoire": true,
+    "enonce": "`append()` ajoute une valeur à la fin d'une liste, et `len()` compte ses\néléments. Que montre l'écran ?\n",
+    "depart": "bits = []\nbits.append(1)\nbits.append(0)\nbits.append(1)\nprint(bits)\nprint(len(bits))\n",
+    "indices": [
+      "La liste part vide, puis reçoit trois valeurs, dans l'ordre où on les ajoute.",
+      "Quand on affiche une liste entière, les crochets et les virgules s'affichent aussi."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "[]\n3",
+          "1 0 1\n3",
+          "[1, 0, 1]\n3"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-06",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Les trois couleurs d'un pixel",
+    "obligatoire": true,
+    "enonce": "Un pixel est une liste de trois nombres : rouge, vert, bleu, dans cet ordre.\nComplète les trois trous pour ranger chaque couleur dans sa variable.\n",
+    "depart": "pixel = [153, 50, 204]\nrouge = pixel[_____]\nvert = pixel[_____]\nbleu = pixel[_____]\n",
+    "indices": [
+      "Le rouge est le premier élément de la liste. Quelle position porte le premier élément ?",
+      "Les positions sont 0, 1 et 2, dans l'ordre rouge, vert, bleu."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "rouge",
+        "valeurAttendue": "153",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "vert",
+        "valeurAttendue": "50",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "bleu",
+        "valeurAttendue": "204",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-07",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le dernier nombre de la liste",
+    "obligatoire": true,
+    "enonce": "Ce programme doit ranger le dernier nombre de la liste dans `dernier`, mais il\ns'arrête avec une erreur. Lis le message, puis répare le programme.\n",
+    "depart": "valeurs = [10, 20, 30]\ndernier = valeurs[3]\nprint(dernier)\n",
+    "indices": [
+      "La liste a trois éléments. Quelle est la position du dernier, sachant qu'on commence à 0 ?",
+      "Les positions existantes sont 0, 1 et 2. La position 3 est une de trop."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "dernier",
+        "valeurAttendue": "30",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-08",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Construire une liste avec append",
+    "obligatoire": true,
+    "enonce": "Complète le programme pour que la liste `carres` contienne les carrés des\nentiers de 1 à 5 : 1, 4, 9, 16 et 25. Construis-la avec une boucle et\n`append()`, en partant de la liste vide.\n",
+    "depart": "carres = []\n",
+    "indices": [
+      "La boucle doit passer par les entiers de 1 à 5. range(1, 6) s'arrête avant 6.",
+      "À chaque tour, calcule le carré de n et ajoute-le avec carres.append(...)."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "carres",
+        "valeurAttendue": "[1, 4, 9, 16, 25]"
+      },
+      {
+        "type": "contient",
+        "motif": "append(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "[1, 4",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "16",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-09",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Additionner les valeurs d'une liste",
+    "obligatoire": true,
+    "enonce": "La variable `prix` contient les prix de quatre articles. Calcule dans `total`\nla somme de tous les prix, en parcourant la liste avec une boucle.\n",
+    "depart": "prix = [12, 5, 8, 20]\ntotal = 0\n",
+    "indices": [
+      "for peut parcourir une liste comme il parcourt un texte : la variable prend chaque valeur à son tour.",
+      "Le total part de 0 et augmente de la valeur du tour, dans la boucle."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "total",
+        "valeurAttendue": "45",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "45",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "sum(",
+        "message": "sum() fait le calcul à ta place : ici, c'est la boucle qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-10",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Les positions avec range et len",
+    "obligatoire": false,
+    "enonce": "`range(len(mots))` donne toutes les positions d'une liste : 0, 1, 2... Que\nmontre l'écran ?\n",
+    "depart": "mots = [\"un\", \"deux\", \"trois\"]\nfor i in range(len(mots)):\n    print(i, mots[i])\n",
+    "indices": [
+      "len(mots) vaut 3. Les valeurs de i sont donc 0, 1 et 2.",
+      "À chaque tour, print affiche la position, puis l'élément qui s'y trouve."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1 un\n2 deux\n3 trois",
+          "0 un\n1 deux\n2 trois",
+          "un\ndeux\ntrois"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-11",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Compter depuis la fin",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : Python accepte aussi des positions négatives, qui comptent\ndepuis la fin. Que montre l'écran ?\n",
+    "depart": "lettres = [\"a\", \"b\", \"c\", \"d\"]\nprint(lettres[-1])\nprint(lettres[len(lettres) - 1])\n",
+    "indices": [
+      "lettres[-1] désigne le dernier élément de la liste.",
+      "len(lettres) - 1 vaut 3, la position du dernier élément."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "a\nd",
+          "d\nc",
+          "d\nd"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-12",
+    "concept": "listes",
+    "notion": "listes",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le plus grand sans max",
+    "obligatoire": false,
+    "enonce": "Défi : trouve le plus grand nombre de la liste `valeurs` sans utiliser\n`max()`. Range-le dans la variable `plus_grand`. Pars du premier élément, puis\ncompare-le avec chacun des autres.\n",
+    "depart": "valeurs = [4, 17, 9, 12]\nplus_grand = valeurs[0]\n",
+    "indices": [
+      "plus_grand part du premier élément. Dans la boucle, un if compare chaque valeur à plus_grand.",
+      "Quand une valeur dépasse plus_grand, c'est elle qui devient le nouveau plus_grand."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "plus_grand",
+        "valeurAttendue": "17",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "plus_grand = 17",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "max(",
+        "message": "max() trouve le plus grand à ta place : ici, c'est la comparaison qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-13",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Ligne, puis colonne",
+    "obligatoire": true,
+    "enonce": "Une liste peut contenir d'autres listes. On lit alors de l'extérieur vers\nl'intérieur : d'abord la ligne, puis la colonne. Que montre l'écran ?\n",
+    "depart": "grille = [[1, 2, 3], [4, 5, 6]]\nprint(grille[1][0])\nprint(grille[0][2])\n",
+    "indices": [
+      "grille[1] est la deuxième ligne : [4, 5, 6]. Ensuite, [0] prend le premier élément de cette ligne.",
+      "grille[0] est la première ligne : [1, 2, 3]. Ensuite, [2] en prend le troisième élément."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "2\n4",
+          "4\n3",
+          "4\n6"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-14",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un pixel dans une ligne",
+    "obligatoire": true,
+    "enonce": "Une ligne d'image est une liste de pixels, et chaque pixel est une liste de\ntrois nombres. Que montre l'écran ?\n",
+    "depart": "ligne = [[153, 50, 204], [10, 20, 30], [255, 0, 0]]\nprint(ligne[1])\nprint(ligne[2][0])\n",
+    "indices": [
+      "ligne[1] est le deuxième pixel, une liste entière de trois nombres.",
+      "ligne[2] est le troisième pixel : [255, 0, 0]. Son premier nombre est le rouge."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "[153, 50, 204]\n255",
+          "[10, 20, 30]\n0",
+          "[10, 20, 30]\n255"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-15",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Trois positions, un seul nombre",
+    "obligatoire": true,
+    "enonce": "`image[ligne][colonne][couleur]` donne un seul nombre. Complète les trois trous\npour ranger dans `vert` le canal vert du dernier pixel de la deuxième ligne.\nLe vert est la deuxième couleur d'un pixel.\n",
+    "depart": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\n\nvert = image[_____][_____][_____]\n",
+    "indices": [
+      "La deuxième ligne a la position 1. Le dernier de ses trois pixels a la position 2.",
+      "Les couleurs sont dans l'ordre rouge (0), vert (1), bleu (2)."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "vert",
+        "valeurAttendue": "90",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-16",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Lire un pixel dans l'image",
+    "obligatoire": true,
+    "enonce": "Ce programme doit ranger dans `pixel` le deuxième pixel de la première ligne,\nmais il s'arrête avec une erreur. Lis le message, puis répare le programme.\n",
+    "depart": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\npixel = image[0, 1]\nprint(pixel)\n",
+    "indices": [
+      "Avec des listes ordinaires, chaque position a ses propres crochets : l'une après l'autre.",
+      "La forme image[0, 1] existe dans la bibliothèque NumPy du TP, pas pour une liste ordinaire."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "pixel",
+        "valeurAttendue": "[203, 5, 7]"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-17",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Les rouges de la première ligne",
+    "obligatoire": true,
+    "enonce": "La variable `image` contient deux lignes de trois pixels. Range dans la liste\n`rouges` le canal rouge de chaque pixel de la **première** ligne, en partant\nd'une liste vide.\n",
+    "depart": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\n\nrouges = []\n",
+    "indices": [
+      "image[0] est la première ligne : une liste de trois pixels. for peut la parcourir.",
+      "À chaque tour, pixel est une liste [rouge, vert, bleu]. Le rouge est pixel[0]."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "rouges",
+        "valeurAttendue": "[25, 203, 59]"
+      },
+      {
+        "type": "contient",
+        "motif": "append(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "[25, 203, 59]",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-18",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Tous les pixels, ligne après ligne",
+    "obligatoire": true,
+    "enonce": "Calcule dans `total_rouge` la somme du canal rouge de **tous** les pixels de\nl'image, lignes comprises. Il te faut deux boucles : l'une dans l'autre.\n",
+    "depart": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\n\ntotal_rouge = 0\n",
+    "indices": [
+      "La première boucle prend chaque ligne de l'image. La seconde prend chaque pixel de cette ligne.",
+      "La seconde boucle est décalée sous la première. Le total augmente du rouge du pixel, dans la seconde."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "total_rouge",
+        "valeurAttendue": "456",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "456",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "sum(",
+        "message": "sum() fait le calcul à ta place : ici, ce sont les deux boucles qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-19",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "La taille de l'image",
+    "obligatoire": false,
+    "enonce": "Calcule dans `hauteur` le nombre de lignes de l'image, et dans `largeur` le\nnombre de pixels d'une ligne, avec `len()`.\n",
+    "depart": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\n\nhauteur =\nlargeur =\n",
+    "indices": [
+      "len(image) compte les éléments de la liste image. Que contient-elle ?",
+      "Pour la largeur, compte les éléments d'une seule ligne, par exemple la première : image[0]."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "hauteur",
+        "valeurAttendue": "2",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "largeur",
+        "valeurAttendue": "3",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "len(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "hauteur = 2",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "largeur = 3",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-20",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Une colonne de l'image",
+    "obligatoire": false,
+    "enonce": "Défi : range dans la liste `colonne` le canal rouge du **premier pixel de\nchaque ligne** de l'image, c'est-à-dire sa première colonne.\n",
+    "depart": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\n\ncolonne = []\n",
+    "indices": [
+      "Cette fois, on parcourt les lignes, et on ne garde qu'un seul pixel par ligne : le premier.",
+      "ligne[0] est le premier pixel d'une ligne, et ligne[0][0] est son rouge."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "colonne",
+        "valeurAttendue": "[25, 121]"
+      },
+      {
+        "type": "contient",
+        "motif": "append(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "[25, 121]",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-21",
+    "concept": "matrices",
+    "notion": "matrices",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Changer une valeur dans l'image",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : on peut aussi changer une valeur à l'intérieur d'une liste de\nlistes, en la désignant par ses positions. Que montre l'écran ?\n",
+    "depart": "image = [[[1, 2, 3], [4, 5, 6]]]\nimage[0][1][2] = 0\nprint(image[0][1])\n",
+    "indices": [
+      "image[0][1] est le deuxième pixel de la première ligne : [4, 5, 6].",
+      "L'affectation remplace la troisième valeur de ce pixel, celle à la position 2."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "[4, 5, 0]",
+          "[4, 5, 6]",
+          "[1, 2, 0]"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s4-22",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Lire un octet",
+    "obligatoire": true,
+    "enonce": "`int()` peut lire un texte écrit en binaire : le second nombre donne la base,\net 2 veut dire « binaire ». Rappel : les bits valent 8, 4, 2, 1 en partant de\nla droite. Que montre l'écran ?\n",
+    "depart": "print(int(\"101\", 2))\n",
+    "indices": [
+      "101 en binaire : 1 fois 4, plus 0 fois 2, plus 1 fois 1.",
+      "Le résultat est écrit en décimal."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "101",
+          "5",
+          "6"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-23",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Un nombre et son caractère",
+    "obligatoire": true,
+    "enonce": "Chaque caractère a un numéro, selon la table ASCII. `chr()` donne le caractère\nd'un numéro, et `ord()` donne le numéro d'un caractère. Que montre l'écran ?\n",
+    "depart": "print(chr(65))\nprint(ord(\"a\"))\n",
+    "indices": [
+      "chr() part d'un numéro et rend un caractère. ord() fait le chemin inverse.",
+      "65 est le numéro de la lettre A majuscule. Le numéro de la minuscule a est 97."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "65\na",
+          "a\n97",
+          "A\n97"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-24",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Un octet devient une lettre",
+    "obligatoire": true,
+    "enonce": "Un octet est un texte de huit bits. Complète les trous pour le lire en nombre,\npuis pour trouver le caractère qui porte ce numéro.\n",
+    "depart": "octet = \"01110101\"\nnombre = int(octet, _____)\nlettre = chr(_____)\n",
+    "indices": [
+      "La base du binaire est 2. Écris-la en second nombre de int().",
+      "chr() attend le nombre obtenu à la ligne précédente."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nombre",
+        "valeurAttendue": "117",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "lettre",
+        "valeurAttendue": "'u'",
+        "typeAttendu": "str"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-25",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Une lettre depuis un octet",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher la lettre cachée dans l'octet, mais il s'arrête avec\nune erreur. Lis le message, puis répare le programme.\n",
+    "depart": "octet = \"01000001\"\nlettre = chr(octet)\nprint(lettre)\n",
+    "indices": [
+      "chr() attend un nombre, et octet est un texte. Il faut convertir avant d'appeler chr().",
+      "Le texte est écrit en binaire : int() a besoin de la base 2."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "lettre",
+        "valeurAttendue": "'A'",
+        "typeAttendu": "str"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-26",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Lire deux octets",
+    "obligatoire": true,
+    "enonce": "La liste `octets` contient deux octets écrits en binaire. Construis dans le\ntexte `message` les deux lettres qu'ils représentent, dans l'ordre, avec une\nboucle.\n",
+    "depart": "octets = [\"01001111\", \"01001011\"]\nmessage = \"\"\n",
+    "indices": [
+      "Pour chaque octet : int(octet, 2) donne le nombre, et chr() donne la lettre.",
+      "Ajoute chaque lettre à la fin de message, qui part du texte vide."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'OK'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "chr(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "OK",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-27",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Avec ou sans la base",
+    "obligatoire": false,
+    "enonce": "Sans la base, `int()` lit un texte comme un nombre ordinaire, écrit en\ndécimal. Que montre l'écran ?\n",
+    "depart": "a = int(\"11\", 2)\nb = int(\"11\")\nprint(a, b)\n",
+    "indices": [
+      "int(\"11\", 2) lit 11 en binaire : 1 fois 2, plus 1 fois 1.",
+      "int(\"11\") lit 11 comme le nombre onze."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "3 11",
+          "3 3",
+          "11 11"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-28",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "De la base 10 au binaire",
+    "obligatoire": false,
+    "enonce": "Défi : écris le nombre 173 en binaire, dans le texte `binaire`, sans `bin()`.\nDivise le nombre par 2 jusqu'à ce qu'il tombe à 0 : à chaque tour, le reste\nde la division est le prochain bit, à placer **devant** les autres.\n",
+    "depart": "nombre = 173\nbinaire = \"\"\n",
+    "indices": [
+      "Le reste de la division par 2 s'obtient avec %. Le quotient entier s'obtient avec //.",
+      "Chaque nouveau bit se place devant les précédents : str(reste) + binaire."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "binaire",
+        "valeurAttendue": "'10101101'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "while ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "10101101",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "bin(",
+        "message": "bin() fait la conversion à ta place : ici, c'est la boucle qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-29",
+    "concept": "binaire",
+    "notion": "binaire",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Décaler une lettre",
+    "obligatoire": false,
+    "enonce": "Défi : `ord()` et `chr()` permettent de décaler une lettre dans l'alphabet. C'est\nle principe du chiffre de César. Que montre l'écran ?\n",
+    "depart": "lettre = \"a\"\nsuivante = chr(ord(lettre) + 3)\nprint(suivante)\n",
+    "indices": [
+      "ord(\"a\") vaut 97. On y ajoute 3 avant de revenir au caractère.",
+      "Le caractère numéro 100 suit b et c."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "a3",
+          "97",
+          "d"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s4-30",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le ET bit à bit",
+    "obligatoire": true,
+    "enonce": "L'opérateur `&` compare deux nombres bit à bit et ne garde que les bits égaux à\n1 des deux côtés. `& 3` ne garde donc que les deux derniers bits, puisque 3\ns'écrit 00000011. Le nombre 25 s'écrit 00011001. Que montre l'écran ?\n",
+    "depart": "print(25 & 3)\n",
+    "indices": [
+      "Les deux derniers bits de 00011001 sont 01.",
+      "01 en binaire vaut 1."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1",
+          "25",
+          "3"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-31",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le décalage de bits",
+    "obligatoire": true,
+    "enonce": "L'opérateur `>>` décale les bits vers la droite : le dernier bit disparaît. Le\nnombre 6 s'écrit 110. Que montre l'écran ?\n",
+    "depart": "valeur = 6\nprint(valeur >> 1)\nprint(valeur & 1)\n",
+    "indices": [
+      "110 décalé d'un cran à droite devient 11.",
+      "valeur & 1 ne garde que le dernier bit de 110."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "3\n1",
+          "3\n0",
+          "0\n3"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-32",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Appeler une fonction toute faite",
+    "obligatoire": true,
+    "enonce": "Le TP fournit une fonction, `get_lsb`. On ne l'écrit pas : on lit sa\ndescription, et on l'appelle avec une valeur. Elle rend **deux** valeurs, que\nl'on range dans deux variables séparées par une virgule. Le nombre 25 s'écrit\n00011001. Que montre l'écran ?\n",
+    "depart": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\ngauche, droite = get_lsb(25)\nprint(gauche, droite)\n",
+    "indices": [
+      "get_lsb rend les deux derniers bits de la valeur : ici, ceux de 00011001.",
+      "Les deux derniers bits sont 0 puis 1. gauche reçoit le premier, droite le second."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1 0",
+          "1",
+          "0 1"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-33",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Les bits d'un pixel, mal rangés",
+    "obligatoire": true,
+    "enonce": "Ce programme doit ranger les deux bits de poids faible de 203 dans `lsb1` et\n`lsb2`, mais il s'arrête avec une erreur. Lis le message, puis répare le\nprogramme. La fonction `get_lsb` est fournie, ne la modifie pas.\n",
+    "depart": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\nlsb1, lsb2, lsb3 = get_lsb(203)\nprint(lsb1, lsb2)\n",
+    "indices": [
+      "get_lsb rend deux valeurs. Combien de variables faut-il à gauche du signe égal ?",
+      "Il y a une variable de trop dans la ligne qui appelle get_lsb."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "lsb1",
+        "valeurAttendue": "1",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "lsb2",
+        "valeurAttendue": "1",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-34",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Les bits cachés dans un pixel",
+    "obligatoire": true,
+    "enonce": "La fonction `get_lsb` est fournie. Appelle-la avec la valeur 121, et range les\ndeux bits rendus dans `bit1` et `bit2`.\n",
+    "depart": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\n# Appelle get_lsb avec 121 et range les deux bits dans bit1 et bit2\n",
+    "indices": [
+      "L'appel s'écrit get_lsb(121). Il rend deux valeurs.",
+      "Écris deux variables séparées par une virgule à gauche du signe égal."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "bit1",
+        "valeurAttendue": "0",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "bit2",
+        "valeurAttendue": "1",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "get_lsb(121)",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "bit2 = 1",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-35",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Récolter les bits d'une ligne",
+    "obligatoire": true,
+    "enonce": "Ce programme lit les deux bits de poids faible de chaque valeur rouge d'une\nligne, et les ajoute un par un à la liste `bits`. Complète les deux trous.\n",
+    "depart": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\nrouges = [25, 203, 57, 121]\nbits = []\nfor valeur in rouges:\n    bit1, bit2 = get_lsb(valeur)\n    bits.append(_____)\n    bits.append(_____)\nprint(bits)\n",
+    "indices": [
+      "get_lsb rend deux bits, rangés dans bit1 et bit2. Il faut les ajouter à la liste, l'un après l'autre.",
+      "Les deux trous contiennent le nom d'une variable créée par la ligne précédente."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "bits",
+        "valeurAttendue": "[0, 1, 1, 1, 0, 1, 0, 1]"
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-36",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Regrouper les bits par huit",
+    "obligatoire": true,
+    "enonce": "La liste `bits` contient seize bits : deux octets. Construis la liste `octets`\ndes deux textes de huit chiffres, dans l'ordre. Pour chaque paquet de huit :\nune boucle `range(0, len(bits), 8)` donne le début, et une boucle interne\najoute huit bits à un texte, en les convertissant avec `str()`.\n",
+    "depart": "bits = [0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1]\noctets = []\n",
+    "indices": [
+      "Pour chaque paquet, repars d'un texte vide, ajoute huit bits, puis ajoute le texte obtenu à la liste octets.",
+      "Dans la boucle interne, j va de 0 à 7 : le bit à lire se trouve à la position i + j."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "octets",
+        "valeurAttendue": "['01001111', '01001011']"
+      },
+      {
+        "type": "contient",
+        "motif": "range(0,",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "01001111",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "01001011",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-37",
+    "concept": "programme",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Le message caché dans l'image",
+    "obligatoire": true,
+    "enonce": "Dernier exercice obligatoire de la séance : un programme complet, qui réunit ce\nque tu as appris. L'image ci-dessous cache un mot dans les deux derniers bits du\ncanal **rouge** (la position 0 de chaque pixel), sur tous les pixels de la\n**première ligne** seulement. Quatre pixels cachent une lettre.\n\nLe programme doit :\n\n1. lire les deux bits de poids faible du rouge de chaque pixel de la première ligne, avec `get_lsb`, et les ajouter à une liste de bits ;\n2. regrouper les bits par huit, en un texte pour chaque octet ;\n3. convertir chaque octet en lettre et construire le texte `message` ;\n4. afficher `message`.\n",
+    "depart": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\nimage = [\n    [  # ligne 0\n        [25, 77, 202], [28, 48, 187], [221, 19, 44], [44, 35, 123],\n        [113, 30, 63], [112, 203, 25], [215, 68, 148], [95, 60, 157],\n        [49, 96, 190], [252, 30, 105], [234, 160, 238], [94, 153, 127],\n        [253, 41, 153], [36, 229, 147], [175, 214, 84], [23, 250, 215],\n    ],\n    [  # ligne 1\n        [39, 160, 174], [179, 254, 233], [35, 47, 138], [242, 33, 31],\n        [158, 228, 145], [197, 177, 11], [236, 181, 86], [59, 252, 30],\n        [111, 147, 66], [126, 203, 200], [254, 41, 85], [229, 205, 142],\n        [70, 220, 142], [212, 183, 194], [118, 77, 42], [90, 77, 118],\n    ],\n]\n\n# 1. liste des bits de poids faible du rouge, première ligne\n\n# 2. regroupement par huit, et conversion de chaque octet en lettre\n\n# 3. afficher le message\n",
+    "indices": [
+      "Une boucle sur image[0] donne chaque pixel de la première ligne. Son rouge est pixel[0].",
+      "Garde le même schéma qu'avant : la liste de bits, puis le regroupement par huit, puis int(octet, 2) et chr()."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "DOJO",
+        "exigeExact": true
+      },
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'DOJO'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "get_lsb(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "chr(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "DOJO",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-38",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Isoler les deux derniers bits",
+    "obligatoire": false,
+    "enonce": "Complète le trou pour que `deux_bits` garde uniquement les deux derniers bits\nde la valeur. Pense au nombre qui s'écrit 00000011.\n",
+    "depart": "valeur = 203\ndeux_bits = valeur & _____\n",
+    "indices": [
+      "L'opérateur qui ne garde que les bits communs est &.",
+      "Le masque 00000011 vaut 3."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "deux_bits",
+        "valeurAttendue": "3",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-39",
+    "concept": "bits",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Cacher deux bits dans une couleur",
+    "obligatoire": false,
+    "enonce": "Défi : voici le chemin inverse. On veut cacher les deux bits `deux_bits` dans\n`valeur`. Calcule dans `nouveau` la valeur dont les deux derniers bits sont\nremplacés par `deux_bits`. Aide : `valeur & 252` met à zéro les deux derniers\nbits (252 s'écrit 11111100), et `|` combine deux nombres bit à bit.\n",
+    "depart": "valeur = 200\ndeux_bits = 2\nnouveau =\n",
+    "indices": [
+      "Commence par vider les deux derniers bits avec & 252. Il reste un nombre dont la fin est 00.",
+      "Combine ensuite ce nombre avec deux_bits grâce à |."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nouveau",
+        "valeurAttendue": "202",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "interdit",
+        "motif": "202",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "s4-40",
+    "concept": "programme",
+    "notion": "decoder",
+    "seance": 4,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Un autre canal",
+    "obligatoire": false,
+    "enonce": "Défi : le même mot caché, mais dans le canal **vert**. Le programme choisit\nson canal avec la variable `canal` : `\"r\"` pour rouge (position 0), `\"g\"` pour\nvert (position 1), `\"b\"` pour bleu (position 2). Écris la suite qui\ntransforme `canal` en position, puis décode le message de la première ligne et\nrange-le dans `message`.\n",
+    "depart": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\nimage = [\n    [  # ligne 0\n        [231, 97, 231], [94, 48, 95], [228, 47, 72], [21, 83, 231],\n        [7, 17, 30], [97, 237, 15], [167, 117, 100], [150, 41, 2],\n        [234, 41, 208], [130, 144, 117], [15, 206, 55], [55, 33, 197],\n    ],\n    [  # ligne 1\n        [8, 0, 109], [107, 26, 240], [192, 203, 214], [37, 101, 138],\n        [172, 44, 159], [170, 7, 209], [60, 68, 126], [51, 5, 30],\n        [238, 249, 90], [96, 229, 97], [67, 214, 196], [59, 202, 215],\n    ],\n]\n\ncanal = \"g\"\n",
+    "indices": [
+      "Un if / elif / else range dans position le nombre qui correspond à la lettre de canal.",
+      "Le reste du programme est celui de l'exercice précédent : seule la position du canal change."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'OUI'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "canal ==",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "get_lsb(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "OUI",
+        "maitrise": false
+      }
+    ],
+    "famille": "operateurs"
   }
 ]

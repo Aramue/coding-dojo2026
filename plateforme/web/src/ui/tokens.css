@@ -10,6 +10,8 @@
   --ope-tint: #C2E8FF; --ope-ink: #004E7A; --ope-deep: #002B43;
   --con-tint: #FFE7C2; --con-ink: #7A4900; --con-deep: #3C2500;
   --bou-tint: #FFD9C2; --bou-ink: #7A2800; --bou-deep: #3C1400;
+  /* Les rappels : un neutre chaud, sans concept propre. */
+  --rap-tint: #E8E1D5; --rap-ink: #4A4136; --rap-deep: #221D17;
 
   /*
    * Fond de l'ecran d'exercice. UN SEUL, pour les cinq familles : les couleurs
@@ -66,3 +68,4 @@
 [data-famille="operateurs"]{ --tint: var(--ope-tint); --encre: var(--ope-ink); --profond: var(--ope-deep); }
 [data-famille="conditions"]{ --tint: var(--con-tint); --encre: var(--con-ink); --profond: var(--con-deep); }
 [data-famille="boucles"]   { --tint: var(--bou-tint); --encre: var(--bou-ink); --profond: var(--bou-deep); }
+[data-famille="rappels"]   { --tint: var(--rap-tint); --encre: var(--rap-ink); --profond: var(--rap-deep); }

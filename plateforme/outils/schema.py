@@ -129,7 +129,8 @@ def charger_exercice(chemin: Path) -> Exercice:
 
 
 def charger_tous(racine: Path) -> list[Exercice]:
-    # Les lecons vivent dans `seance-N/lecons/` et les quiz dans `quiz/` : ce ne
+    # Les lecons vivent dans `seance-N/lecons/`, les quiz dans `quiz/` et les TP
+    # dans `tp/` : ce ne
     # sont PAS des exercices. Les charger ici ferait echouer la validation sur un
     # fichier parfaitement valide, avec un message parlant de champs d'exercice
     # manquants.
@@ -139,7 +140,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     return [
         charger_exercice(p)
         for p in sorted(racine.rglob("*.yaml"))
-        if not {"lecons", "quiz"} & set(p.relative_to(racine).parts)
+        if not {"lecons", "quiz", "tp"} & set(p.relative_to(racine).parts)
     ]
 
 
@@ -153,16 +154,24 @@ MOTIF_LECON = re.compile(r"^c[1234]-[a-z]+$")
 # JSON. Personne ne la recopie — une copie TypeScript divergerait au premier
 # changement de libelle.
 #
-# La couleur suit la NOTION, pas le concept : la seance 1 ne couvre que deux
-# concepts (print et input), ce qui donnerait deux couleurs pour quatre
-# notions, et un menu ou la couleur n'oriente plus. Les noms de famille sont
-# ceux de la palette (variables, types, operateurs, conditions) : ce sont des
-# noms de couleur, pas de sens.
+# La couleur dit le CONCEPT que la notion enseigne, d'un chapitre a l'autre,
+# comme dans les slides. Six familles, et une seule regle — voir la note
+# « Palette » du coffre, section « La couleur dit le concept » :
+#
+#   variables  (violet) ranger des valeurs : variables, listes, matrices
+#   types      (vert)   textes et types : afficher, types, saisie, binaire
+#   operateurs (bleu)   calculer : calculer, compter, bits de poids faible
+#   conditions (ambre)  decider : comparer, combiner, decider
+#   boucles    (corail) repeter : for, parcourir, tant que
+#   rappels    (neutre) revoir : une notion de rappel n'apporte aucun concept
+#
+# Deux notions voisines peuvent donc partager une couleur : c'est voulu, elles
+# parlent de la meme chose. Le numero et le titre les distinguent.
 NOTIONS: dict[str, dict] = {
     "afficher": {
         "ordre": 1,
         "titre": "Afficher un message",
-        "famille": "conditions",
+        "famille": "types",
         "chapitre": "bases",
     },
     "variables": {
@@ -180,7 +189,7 @@ NOTIONS: dict[str, dict] = {
     "saisie": {
         "ordre": 4,
         "titre": "Demander une information",
-        "famille": "operateurs",
+        "famille": "types",
         "chapitre": "bases",
     },
     # --- Seance 2 ---
@@ -191,7 +200,7 @@ NOTIONS: dict[str, dict] = {
     "reveil": {
         "ordre": 5,
         "titre": "Se remettre en route",
-        "famille": "variables",
+        "famille": "rappels",
         "chapitre": "decisions",
     },
     "calculer": {
@@ -203,13 +212,13 @@ NOTIONS: dict[str, dict] = {
     "comparer": {
         "ordre": 7,
         "titre": "Comparer",
-        "famille": "types",
+        "famille": "conditions",
         "chapitre": "decisions",
     },
     "combiner": {
         "ordre": 8,
         "titre": "Combiner des conditions",
-        "famille": "boucles",
+        "famille": "conditions",
         "chapitre": "decisions",
     },
     "decider": {
@@ -225,7 +234,7 @@ NOTIONS: dict[str, dict] = {
     "rappels": {
         "ordre": 10,
         "titre": "Rappels avant les boucles",
-        "famille": "variables",
+        "famille": "rappels",
         "chapitre": "boucles",
     },
     "repeter": {
@@ -237,7 +246,7 @@ NOTIONS: dict[str, dict] = {
     "parcourir": {
         "ordre": 12,
         "titre": "Parcourir un texte",
-        "famille": "types",
+        "famille": "boucles",
         "chapitre": "boucles",
     },
     "compter": {
@@ -249,7 +258,7 @@ NOTIONS: dict[str, dict] = {
     "tantque": {
         "ordre": 14,
         "titre": "Répéter tant que",
-        "famille": "conditions",
+        "famille": "boucles",
         "chapitre": "boucles",
     },
     # --- Seance 4 ---
@@ -259,31 +268,31 @@ NOTIONS: dict[str, dict] = {
     "reprise": {
         "ordre": 15,
         "titre": "Rappels avant les listes",
-        "famille": "variables",
+        "famille": "rappels",
         "chapitre": "stegano",
     },
     "listes": {
         "ordre": 16,
         "titre": "Les listes",
-        "famille": "boucles",
+        "famille": "variables",
         "chapitre": "stegano",
     },
     "matrices": {
         "ordre": 17,
         "titre": "Listes de listes",
-        "famille": "types",
+        "famille": "variables",
         "chapitre": "stegano",
     },
     "binaire": {
         "ordre": 18,
         "titre": "Binaire et caractères",
-        "famille": "operateurs",
+        "famille": "types",
         "chapitre": "stegano",
     },
     "decoder": {
         "ordre": 19,
         "titre": "Bits de poids faible et décodage",
-        "famille": "conditions",
+        "famille": "operateurs",
         "chapitre": "stegano",
     },
 }
@@ -538,4 +547,94 @@ def charger_quiz_tous(racine: Path) -> list[Quiz]:
         charger_quiz(p)
         for p in sorted(racine.rglob("*.yaml"))
         if "quiz" in p.relative_to(racine).parts
+    ]
+
+
+# --- Travaux pratiques -------------------------------------------------------
+#
+# Un TP se fait HORS de la plateforme, dans un vrai Python, sur la machine de
+# l'eleve : PIL et NumPy n'ont rien a faire dans Pyodide. La plateforme porte
+# ses CONSIGNES, decoupees en etapes, et rien d'autre : pas de verdict, pas de
+# progression envoyee au serveur.
+
+MOTIF_TP = re.compile(r"^[a-z]{2,20}$")
+
+
+class BlocIndice(BaseModel):
+    """Un coup de pouce replie : l'eleve l'ouvre quand il bloque, pas avant."""
+
+    type: Literal["indice"]
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un indice")
+
+
+class BlocVerifier(BaseModel):
+    """Ce que l'eleve doit voir a l'ecran avant de passer a l'etape suivante."""
+
+    type: Literal["verifier"]
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un point de controle")
+
+
+class BlocSchema(BaseModel):
+    """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
+
+    type: Literal["schema"]
+    # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
+    # un bloc vide la-bas.
+    nom: Literal["pixels", "binaire", "masque", "octet", "ligne"]
+    legende: str = Field(min_length=1)
+
+
+BlocTp = Annotated[
+    Union[BlocParagraphe, BlocAttention, BlocCode, BlocIndice, BlocVerifier, BlocSchema],
+    Field(discriminator="type"),
+]
+
+
+class EtapeTp(BaseModel):
+    titre: str = Field(min_length=1)
+    # Une phrase : ce que l'etape fait obtenir. C'est elle que l'eleve relit
+    # quand il ne sait plus ce qu'il cherche.
+    objectif: str = Field(min_length=1)
+    blocs: list[BlocTp] = Field(min_length=1)
+
+
+class Tp(BaseModel):
+    """Les consignes d'un travail pratique, etape par etape."""
+
+    id: str
+    chapitre: Literal[tuple(CHAPITRES)]  # type: ignore[valid-type]
+    titre: str = Field(min_length=1)
+    duree_min: int = Field(ge=10, le=240)
+    introduction: list[BlocTp] = Field(min_length=1)
+    materiel: list[str] = Field(default_factory=list)
+    etapes: list[EtapeTp] = Field(min_length=1)
+
+    @field_validator("id")
+    @classmethod
+    def identifiant_bien_forme(cls, v: str) -> str:
+        if not MOTIF_TP.match(v):
+            raise ValueError(f"identifiant de TP invalide : {v!r} (attendu stegano)")
+        return v
+
+
+def charger_tp(chemin: Path) -> Tp:
+    return Tp(**yaml.safe_load(chemin.read_text(encoding="utf-8")))
+
+
+def charger_tps(racine: Path) -> list[Tp]:
+    """Tous les TP sous une racine : les fichiers ranges dans un dossier `tp/`."""
+    return [
+        charger_tp(p)
+        for p in sorted(racine.rglob("*.yaml"))
+        if "tp" in p.relative_to(racine).parts
     ]

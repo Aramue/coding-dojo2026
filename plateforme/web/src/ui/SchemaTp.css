@@ -1,0 +1,223 @@
+/*
+ * Les schemas des TP. Fond chaud de la charte, texte en General Sans, bits en
+ * JetBrains Mono. Un bit a 1 est plein dans la couleur du TP ; un bit a 0
+ * reste en creux : la difference se voit sans lire le chiffre.
+ */
+.schema {
+  margin: var(--e-1) 0;
+}
+
+.schema__cadre {
+  padding: var(--e-3) var(--e-2);
+  background: var(--surface-doux);
+  border: 1px solid var(--rule-doux);
+  border-radius: var(--rayon-3);
+}
+
+.schema svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--police-texte);
+}
+
+.schema__legende {
+  margin-top: var(--e-1);
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.schema text {
+  fill: var(--ink);
+}
+
+.schema__indice,
+.schema__poids,
+.schema__puissance,
+.schema__ajout,
+.schema__lettre,
+.schema__titre-colonne {
+  font-size: 14px;
+  text-anchor: middle;
+}
+
+.schema__indice,
+.schema__poids,
+.schema__titre-colonne {
+  fill: var(--ink-soft) !important;
+}
+
+.schema__titre-colonne {
+  text-anchor: start;
+  font-weight: 600;
+}
+
+.schema__puissance {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.schema__exposant {
+  font-size: 11px;
+}
+
+.schema__axe {
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+  fill: var(--encre) !important;
+}
+
+.schema__axe--vertical {
+  text-anchor: start;
+}
+
+.schema__pixel {
+  fill: var(--ground-2);
+  stroke: var(--rule);
+}
+
+.schema__pixel--cible {
+  fill: #9932cc;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.schema__fleche {
+  fill: none;
+  stroke: var(--encre);
+  stroke-width: 2;
+}
+
+.schema__fleche--fine {
+  stroke-width: 1.4;
+  stroke-dasharray: 4 4;
+  opacity: 0.6;
+}
+
+.schema__pointe {
+  fill: var(--encre);
+}
+
+.schema__code {
+  font-family: var(--police-code);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.schema__code--petit {
+  font-size: 14px;
+}
+
+.schema__code--centre,
+.schema__note--centre,
+.schema__somme {
+  text-anchor: middle;
+}
+
+.schema__canal {
+  font-size: 15px;
+  font-weight: 700;
+  text-anchor: middle;
+  fill: #fff !important;
+}
+
+.schema__canal--valeur {
+  font-family: var(--police-code);
+  font-weight: 600;
+}
+
+.schema__note {
+  font-size: 13px;
+  fill: var(--ink-soft) !important;
+}
+
+.schema__bit {
+  fill: var(--surface);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.schema__bit--un {
+  fill: var(--encre);
+  stroke: var(--encre);
+}
+
+.schema__chiffre {
+  font-family: var(--police-code);
+  font-size: 26px;
+  font-weight: 700;
+  text-anchor: middle;
+  fill: var(--ink-soft) !important;
+}
+
+.schema__chiffre--petit {
+  font-size: 18px;
+}
+
+.schema__chiffre--un {
+  fill: #fff !important;
+}
+
+.schema__ajout {
+  font-family: var(--police-code);
+  font-size: 18px;
+  font-weight: 700;
+  fill: var(--encre) !important;
+}
+
+.schema__somme {
+  font-family: var(--police-code);
+  font-size: 20px;
+}
+
+.schema__resultat {
+  font-weight: 700;
+  fill: var(--encre);
+}
+
+.schema__bandeau {
+  fill: var(--tint);
+  opacity: 0.7;
+}
+
+.schema__nom {
+  font-family: var(--police-code);
+  font-size: 14px;
+  text-anchor: end;
+}
+
+.schema__nom--gauche {
+  text-anchor: start;
+  font-family: var(--police-texte);
+  font-weight: 600;
+}
+
+.schema__trait {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.schema__mono {
+  font-family: var(--police-code);
+  font-size: 22px;
+  letter-spacing: 2px;
+  fill: var(--ink-soft) !important;
+}
+
+.schema__mono--allume {
+  fill: var(--encre);
+  font-weight: 700;
+}
+
+.schema__accolade {
+  fill: none;
+  stroke: var(--encre);
+  stroke-width: 2;
+}
+
+.schema__lettre {
+  font-weight: 600;
+  fill: var(--encre) !important;
+}

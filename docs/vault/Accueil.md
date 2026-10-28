@@ -48,6 +48,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Séance 4 — préparation du TP de stéganographie | ✅ **écrite** — 40 exercices et 5 leçons, voir [[Séance 4]] |
+| Consignes des TP sur la plateforme | ✅ livrées — `/tp/stegano`, huit étapes guidées, voir [[Séance 4]] |
 | Intégration continue | ✅ livrée — trois contrôles, [[ADR-017 Une seule branche, des releases par tag]] |
 | Mise en production sur la VM | 🔶 en cours — [[Déploiement UNIGE]] |
 | Revue finale de branche | ⬜ à faire |

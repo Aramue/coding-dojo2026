@@ -1,5 +1,11 @@
 import { estPhotographie, messageRefus } from '../api/client'
-import type { EtatProf, QuizComplet, ResultatsQuiz, ResumeQuiz } from '../quiz/types'
+import type {
+  EtatProf,
+  PartieHistorique,
+  QuizComplet,
+  ResultatsQuiz,
+  ResumeQuiz,
+} from '../quiz/types'
 
 /**
  * Le client des routes du quiz côté professeur. Toutes portent le jeton de la
@@ -62,6 +68,22 @@ export async function lireResultats(jetonProf: string, quizId: string): Promise<
   // Une API d'avant le classement complet n'en envoie pas : la page reste
   // lisible, sans la liste, plutôt que de devenir blanche.
   return { ...donnees, classement: Array.isArray(donnees.classement) ? donnees.classement : [] }
+}
+
+/** Toutes les parties jouées, la plus récente d'abord, avec leurs gagnants. */
+export async function lireHistorique(jetonProf: string): Promise<PartieHistorique[]> {
+  const donnees = (await appeler(jetonProf, '/historique')) as { parties?: unknown }
+  if (!Array.isArray(donnees?.parties)) throw new Error('Réponse inattendue de la plateforme.')
+  return donnees.parties as PartieHistorique[]
+}
+
+/** Le bilan et le classement complet d'une partie de l'historique. */
+export async function lireResultatsPartie(jetonProf: string, partie: number): Promise<ResultatsQuiz> {
+  const donnees = (await appeler(jetonProf, `/parties/${partie}/resultats`)) as ResultatsQuiz | null
+  if (!Array.isArray(donnees?.bilan) || !Array.isArray(donnees.classement)) {
+    throw new Error('Réponse inattendue de la plateforme.')
+  }
+  return donnees
 }
 
 export function lirePartie(jetonProf: string): Promise<EtatProf> {

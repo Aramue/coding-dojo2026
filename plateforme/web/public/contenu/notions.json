@@ -3,7 +3,7 @@
     "id": "afficher",
     "ordre": 1,
     "titre": "Afficher un message",
-    "famille": "conditions",
+    "famille": "types",
     "chapitre": "bases"
   },
   {
@@ -24,14 +24,14 @@
     "id": "saisie",
     "ordre": 4,
     "titre": "Demander une information",
-    "famille": "operateurs",
+    "famille": "types",
     "chapitre": "bases"
   },
   {
     "id": "reveil",
     "ordre": 5,
     "titre": "Se remettre en route",
-    "famille": "variables",
+    "famille": "rappels",
     "chapitre": "decisions"
   },
   {
@@ -45,14 +45,14 @@
     "id": "comparer",
     "ordre": 7,
     "titre": "Comparer",
-    "famille": "types",
+    "famille": "conditions",
     "chapitre": "decisions"
   },
   {
     "id": "combiner",
     "ordre": 8,
     "titre": "Combiner des conditions",
-    "famille": "boucles",
+    "famille": "conditions",
     "chapitre": "decisions"
   },
   {
@@ -66,7 +66,7 @@
     "id": "rappels",
     "ordre": 10,
     "titre": "Rappels avant les boucles",
-    "famille": "variables",
+    "famille": "rappels",
     "chapitre": "boucles"
   },
   {
@@ -80,7 +80,7 @@
     "id": "parcourir",
     "ordre": 12,
     "titre": "Parcourir un texte",
-    "famille": "types",
+    "famille": "boucles",
     "chapitre": "boucles"
   },
   {
@@ -94,7 +94,42 @@
     "id": "tantque",
     "ordre": 14,
     "titre": "Répéter tant que",
-    "famille": "conditions",
+    "famille": "boucles",
     "chapitre": "boucles"
+  },
+  {
+    "id": "reprise",
+    "ordre": 15,
+    "titre": "Rappels avant les listes",
+    "famille": "rappels",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "listes",
+    "ordre": 16,
+    "titre": "Les listes",
+    "famille": "variables",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "matrices",
+    "ordre": 17,
+    "titre": "Listes de listes",
+    "famille": "variables",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "binaire",
+    "ordre": 18,
+    "titre": "Binaire et caractères",
+    "famille": "types",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "decoder",
+    "ordre": 19,
+    "titre": "Bits de poids faible et décodage",
+    "famille": "operateurs",
+    "chapitre": "stegano"
   }
 ]
