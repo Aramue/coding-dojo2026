@@ -1,5 +1,6 @@
 import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
 import type { GroupeChapitre, GroupeNotion } from '../contenu/notions'
+import type { Tp } from '../contenu/types'
 import { naviguer, versChemin, type Destination } from '../routage'
 import './Menu.css'
 
@@ -16,8 +17,11 @@ export function Menu({
   destination,
   quiz = { ouvert: false },
   verrouille = false,
+  tps = [],
 }: {
   chapitres: GroupeChapitre[]
+  /** Les consignes des TP ouverts, sous les chapitres. */
+  tps?: Tp[]
   destination: Destination
   quiz?: QuizDuMenu
   /**
@@ -40,6 +44,16 @@ export function Menu({
         {chapitres.map((chapitre) => (
           <Chapitre key={chapitre.id} chapitre={chapitre} destination={destination} />
         ))}
+        {tps.length > 0 && (
+          <section className="menu-tp" aria-label="Travaux pratiques">
+            <p className="menu-tp__titre">Travaux pratiques</p>
+            {tps.map((tp) => (
+              <Lien key={tp.id} cible={{ vue: 'tp', tp: tp.id }} destination={destination}>
+                {tp.titre}
+              </Lien>
+            ))}
+          </section>
+        )}
       </div>
     </nav>
   )

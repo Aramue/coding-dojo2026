@@ -1,0 +1,116 @@
+/*
+ * Les consignes d'un TP. Une carte par etape, numerotee : l'eleve sait ou il
+ * en est d'un coup d'oeil, et une etape cochee se replie dans le gris.
+ */
+.tp__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+}
+
+.tp__intro p,
+.tp__etape p {
+  margin: 0;
+  font-size: var(--t-3);
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.tp__materiel h2 {
+  margin: var(--e-2) 0 var(--e-1);
+  font-size: var(--t-3);
+}
+
+.tp__materiel ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.7;
+}
+
+.tp__etapes {
+  list-style: none;
+  margin: var(--e-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.tp__etape {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  padding: var(--e-3);
+  border-left: 4px solid var(--encre);
+}
+
+.tp__etape[data-faite='true'] {
+  border-left-color: var(--ok);
+}
+
+.tp__titre {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  margin: 0;
+  font-size: var(--t-4);
+}
+
+.tp__rang {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--encre);
+  color: #fff;
+  font-size: var(--t-2);
+}
+
+.tp__etape[data-faite='true'] .tp__rang {
+  background: var(--ok);
+}
+
+.tp__objectif {
+  padding: var(--e-1) var(--e-2);
+  background: var(--tint);
+  border-radius: var(--rayon-2);
+}
+
+.tp__verifier {
+  padding: var(--e-1) var(--e-2);
+  border: 1px solid var(--ok);
+  border-radius: var(--rayon-2);
+  background: color-mix(in srgb, var(--ok) 8%, transparent);
+}
+
+.tp__indice {
+  border: 1px dashed var(--rule);
+  border-radius: var(--rayon-2);
+  padding: var(--e-1) var(--e-2);
+}
+
+.tp__indice summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--encre);
+}
+
+.tp__indice p {
+  margin-top: var(--e-1);
+}
+
+.tp__coche {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  align-self: flex-start;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tp__coche input {
+  width: 1.1rem;
+  height: 1.1rem;
+}

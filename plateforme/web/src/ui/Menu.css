@@ -361,3 +361,20 @@ a.menu-quiz .menu-quiz__etat {
     transition: none;
   }
 }
+
+/* Les consignes des TP, sous les chapitres : un TP n'est pas une notion. */
+.menu-tp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: var(--e-2) var(--e-3) 0;
+  padding-top: var(--e-2);
+  border-top: 1px solid var(--rule);
+}
+
+.menu-tp__titre {
+  margin: 0 0 0.2rem;
+  font-size: var(--t-1);
+  font-weight: 600;
+  color: var(--ink-soft);
+}

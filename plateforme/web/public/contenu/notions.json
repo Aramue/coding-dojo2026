@@ -96,5 +96,40 @@
     "titre": "Répéter tant que",
     "famille": "conditions",
     "chapitre": "boucles"
+  },
+  {
+    "id": "reprise",
+    "ordre": 15,
+    "titre": "Rappels avant les listes",
+    "famille": "variables",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "listes",
+    "ordre": 16,
+    "titre": "Les listes",
+    "famille": "boucles",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "matrices",
+    "ordre": 17,
+    "titre": "Listes de listes",
+    "famille": "types",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "binaire",
+    "ordre": 18,
+    "titre": "Binaire et caractères",
+    "famille": "operateurs",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "decoder",
+    "ordre": 19,
+    "titre": "Bits de poids faible et décodage",
+    "famille": "conditions",
+    "chapitre": "stegano"
   }
 ]

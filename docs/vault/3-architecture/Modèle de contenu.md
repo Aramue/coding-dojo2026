@@ -256,7 +256,7 @@ contenu/
 `charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,
 et la charger comme tel ferait échouer la validation sur un fichier parfaitement valide.
 
-Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers, toutes séances
+Ce que la construction publie dans `web/public/contenu/` — **cinq fichiers, toutes séances
 confondues** :
 
 | Fichier | Contenu |
@@ -265,6 +265,19 @@ confondues** :
 | `lecons.json` | les leçons, dans l'ordre du cours — écrit même vide |
 | `notions.json` | la table des notions |
 | `chapitres.json` | la table des chapitres |
+| `tps.json` | les consignes des travaux pratiques — écrit même vide |
+
+> [!note] Les consignes de TP, depuis le 28 octobre 2026
+> Un TP se fait **hors de la plateforme**, dans un vrai Python sur la machine de l'élève (PIL,
+> NumPy). La plateforme n'en porte que les **consignes**, découpées en étapes : `tp/<id>.yaml`,
+> servi sur `/tp/<id>` et listé sous « Travaux pratiques », en bas du sommaire. Un TP suit son
+> chapitre : il n'apparaît qu'à l'ouverture de celui-ci ([[ADR-013 Une séance s'ouvre à sa date]]).
+>
+> Chaque étape a un `titre`, un `objectif` d'une phrase et des blocs : ceux des leçons, plus
+> `verifier` — ce que l'élève doit voir à l'écran avant de continuer — et `indice`, replié tant
+> qu'on ne l'ouvre pas. L'élève coche les étapes faites ; la coche vit dans `sessionStorage`, rien
+> ne part au serveur. `charger_tous()` ignore le dossier `tp/` comme il ignore `lecons/` et
+> `quiz/`. Une notion ne doit jamais s'appeler `tp` : `/tp/<id>` se lit avant les notions.
 
 > [!note] Un fichier par nature de contenu, pas un par séance
 > Jusqu'au 14 septembre 2026, chaque séance publiait les siens (`seance-1.json`,

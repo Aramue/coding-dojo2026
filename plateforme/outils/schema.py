@@ -129,7 +129,8 @@ def charger_exercice(chemin: Path) -> Exercice:
 
 
 def charger_tous(racine: Path) -> list[Exercice]:
-    # Les lecons vivent dans `seance-N/lecons/` et les quiz dans `quiz/` : ce ne
+    # Les lecons vivent dans `seance-N/lecons/`, les quiz dans `quiz/` et les TP
+    # dans `tp/` : ce ne
     # sont PAS des exercices. Les charger ici ferait echouer la validation sur un
     # fichier parfaitement valide, avec un message parlant de champs d'exercice
     # manquants.
@@ -139,7 +140,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     return [
         charger_exercice(p)
         for p in sorted(racine.rglob("*.yaml"))
-        if not {"lecons", "quiz"} & set(p.relative_to(racine).parts)
+        if not {"lecons", "quiz", "tp"} & set(p.relative_to(racine).parts)
     ]
 
 
@@ -536,4 +537,84 @@ def charger_quiz_tous(racine: Path) -> list[Quiz]:
         charger_quiz(p)
         for p in sorted(racine.rglob("*.yaml"))
         if "quiz" in p.relative_to(racine).parts
+    ]
+
+
+# --- Travaux pratiques -------------------------------------------------------
+#
+# Un TP se fait HORS de la plateforme, dans un vrai Python, sur la machine de
+# l'eleve : PIL et NumPy n'ont rien a faire dans Pyodide. La plateforme porte
+# ses CONSIGNES, decoupees en etapes, et rien d'autre : pas de verdict, pas de
+# progression envoyee au serveur.
+
+MOTIF_TP = re.compile(r"^[a-z]{2,20}$")
+
+
+class BlocIndice(BaseModel):
+    """Un coup de pouce replie : l'eleve l'ouvre quand il bloque, pas avant."""
+
+    type: Literal["indice"]
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un indice")
+
+
+class BlocVerifier(BaseModel):
+    """Ce que l'eleve doit voir a l'ecran avant de passer a l'etape suivante."""
+
+    type: Literal["verifier"]
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un point de controle")
+
+
+BlocTp = Annotated[
+    Union[BlocParagraphe, BlocAttention, BlocCode, BlocIndice, BlocVerifier],
+    Field(discriminator="type"),
+]
+
+
+class EtapeTp(BaseModel):
+    titre: str = Field(min_length=1)
+    # Une phrase : ce que l'etape fait obtenir. C'est elle que l'eleve relit
+    # quand il ne sait plus ce qu'il cherche.
+    objectif: str = Field(min_length=1)
+    blocs: list[BlocTp] = Field(min_length=1)
+
+
+class Tp(BaseModel):
+    """Les consignes d'un travail pratique, etape par etape."""
+
+    id: str
+    chapitre: Literal[tuple(CHAPITRES)]  # type: ignore[valid-type]
+    titre: str = Field(min_length=1)
+    duree_min: int = Field(ge=10, le=240)
+    introduction: list[BlocTp] = Field(min_length=1)
+    materiel: list[str] = Field(default_factory=list)
+    etapes: list[EtapeTp] = Field(min_length=1)
+
+    @field_validator("id")
+    @classmethod
+    def identifiant_bien_forme(cls, v: str) -> str:
+        if not MOTIF_TP.match(v):
+            raise ValueError(f"identifiant de TP invalide : {v!r} (attendu stegano)")
+        return v
+
+
+def charger_tp(chemin: Path) -> Tp:
+    return Tp(**yaml.safe_load(chemin.read_text(encoding="utf-8")))
+
+
+def charger_tps(racine: Path) -> list[Tp]:
+    """Tous les TP sous une racine : les fichiers ranges dans un dossier `tp/`."""
+    return [
+        charger_tp(p)
+        for p in sorted(racine.rglob("*.yaml"))
+        if "tp" in p.relative_to(racine).parts
     ]

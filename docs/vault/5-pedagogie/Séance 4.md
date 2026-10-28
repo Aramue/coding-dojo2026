@@ -18,6 +18,26 @@ mis-a-jour: 2026-10-27
 Le TP présenté aux élèves reste celui du dossier `tp_stegano_26` ; ses incohérences connues
 (canal vert ou rouge, 960 pixels ou largeur entière) sont assumées et ne sont pas reprises ici.
 
+## Les consignes du TP, sur la plateforme
+
+Depuis le 28 octobre 2026, les consignes du TP existent **en version texte**, en complément des
+slides : `contenu/chapitre-1/tp/stegano.yaml`, lues sur `/tp/stegano`. Huit étapes, chacune avec
+son objectif, ce qu'il faut vérifier à l'écran et des indices repliés : préparer le dossier,
+charger l'image, lire un pixel, comprendre les deux bits de poids faible, récupérer les 1920 bits,
+les regrouper en lettres, afficher le message — puis un bonus, cacher son propre message.
+
+Elles suivent les slides : canal **rouge**, **première ligne**, **960 premiers pixels**, fichier
+`requirements_steno.py`, fonctions `open_image_np_array` et `get_lsb`.
+
+> [!question] Pourquoi un ET logique pour les deux bits de poids faible ?
+> `valeur & 0b11` agit sur le **nombre** : le masque `00000011` met à 0 tous les bits sauf les
+> deux derniers. Une sélection dans le texte de `bin(valeur)` paraît plus simple mais se trompe
+> sans prévenir : `bin` n'écrit pas les zéros de gauche, et `bin(1)[-2:]` vaut `'b1'`, pas `'01'`.
+> Elle oblige aussi à passer du nombre au texte puis au nombre, quand le ET reste dans les nombres.
+> L'équivalent le plus facile à expliquer en classe est **`valeur % 4`** : les deux derniers bits
+> valent au plus 3, et le reste de la division par 4 est exactement le nombre qu'ils forment. Les
+> consignes montrent les deux, côte à côte.
+
 ## Le volume
 
 | | Séance 4 |

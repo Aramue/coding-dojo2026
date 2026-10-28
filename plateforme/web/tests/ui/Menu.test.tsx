@@ -212,3 +212,28 @@ describe('Menu — l entrée du quiz', () => {
     expect(lien).toHaveTextContent('Aucune partie')
   })
 })
+
+describe('Menu — les travaux pratiques', () => {
+  const TP = {
+    id: 'stegano',
+    chapitre: 'bases',
+    titre: "Le message caché dans l'image",
+    dureeMin: 90,
+    introduction: [],
+    materiel: [],
+    etapes: [],
+  }
+
+  it('range les TP sous les chapitres, et marque celui qu on lit', () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'tp', tp: 'stegano' }} tps={[TP]} />)
+    const section = screen.getByRole('region', { name: 'Travaux pratiques' })
+    const lien = within(section).getByRole('link', { name: TP.titre })
+    expect(lien).toHaveAttribute('href', '/tp/stegano')
+    expect(lien).toHaveAttribute('aria-current', 'page')
+  })
+
+  it("n'affiche pas la section quand aucun TP n'est ouvert", () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'connexion' }} />)
+    expect(screen.queryByRole('region', { name: 'Travaux pratiques' })).toBeNull()
+  })
+})

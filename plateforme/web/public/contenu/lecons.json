@@ -737,5 +737,323 @@
       }
     ],
     "famille": "conditions"
+  },
+  {
+    "id": "c4-reprise",
+    "notion": "reprise",
+    "ordre": 15,
+    "titre": "Rappels avant les listes",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Cette séance prépare le TP de stéganographie : retrouver un message caché dans les pixels d'une image. Avant de commencer, trois réflexes des séances précédentes méritent d'être revus, parce que le TP s'appuie dessus à chaque ligne."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Un texte se construit morceau par morceau.** On part du texte vide, et on y ajoute quelque chose à chaque tour de boucle. On ne peut ajouter qu'un texte à un texte : un nombre passe d'abord par `str()`."
+      },
+      {
+        "type": "code",
+        "legende": "Un texte qui grandit",
+        "python": "resultat = \"\"\nfor i in range(4):\n    resultat = resultat + str(i)\nprint(resultat)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**`range()` accepte un pas.** Avec trois nombres, il donne le départ, la fin (exclue) et l'écart entre deux valeurs."
+      },
+      {
+        "type": "code",
+        "legende": "De quatre en quatre",
+        "python": "for i in range(0, 12, 4):\n    print(i)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**On compte à partir de 0.** `range(3)` donne 0, 1 et 2, jamais 3. Retiens cette habitude : dans la suite, les positions d'une liste suivent la même règle."
+      },
+      {
+        "type": "attention",
+        "texte": "**Une boucle ne s'arrête pas sur la dernière valeur demandée.** La fin de `range()` est exclue : `range(0, 12, 4)` s'arrête avant 12, et ne donne que 0, 4 et 8."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c4-listes",
+    "notion": "listes",
+    "ordre": 16,
+    "titre": "Les listes",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une **liste** range plusieurs valeurs dans une seule variable. On l'écrit entre crochets, avec des virgules entre les valeurs."
+      },
+      {
+        "type": "code",
+        "legende": "Une liste de notes",
+        "python": "notes = [12, 15, 9]\nprint(notes)\nprint(len(notes))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Chaque valeur a une **position**, et la première position est **0**. Pour lire une valeur, on écrit la position entre crochets, collés au nom de la liste."
+      },
+      {
+        "type": "code",
+        "legende": "Lire par la position",
+        "python": "notes = [12, 15, 9]\nprint(notes[0])\nprint(notes[2])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**La dernière position est `len(notes) - 1`, pas `len(notes)`.** Une liste de trois éléments a les positions 0, 1 et 2. Demander `notes[3]` arrête le programme avec une erreur : la position n'existe pas."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un **pixel** d'image est justement une liste de trois nombres : la quantité de rouge, de vert et de bleu, dans cet ordre."
+      },
+      {
+        "type": "code",
+        "legende": "Les trois couleurs d'un pixel",
+        "python": "pixel = [153, 50, 204]\nprint(\"rouge :\", pixel[0])\nprint(\"vert :\", pixel[1])\nprint(\"bleu :\", pixel[2])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "On peut partir d'une liste vide, `[]`, et lui ajouter des valeurs à la fin avec `append()`. C'est la liste qui grandit, comme le texte vide qui grandissait."
+      },
+      {
+        "type": "code",
+        "legende": "Une liste qui grandit",
+        "python": "bits = []\nbits.append(1)\nbits.append(0)\nbits.append(1)\nprint(bits)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**`append()` modifie la liste, et ne rend rien.** On écrit `bits.append(1)` sur une ligne seule. Écrire `bits = bits.append(1)` remplace la liste par le vide."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Comme un texte, une liste se parcourt avec `for` : la variable prend chaque valeur à son tour, de la première à la dernière."
+      },
+      {
+        "type": "code",
+        "legende": "Parcourir une liste",
+        "python": "prix = [12, 5, 8]\ntotal = 0\nfor p in prix:\n    total = total + p\nprint(total)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour connaître la position en même temps que la valeur, parcours les positions avec `range(len(...))`, puis lis la valeur avec la position."
+      },
+      {
+        "type": "code",
+        "legende": "Des positions, pas des valeurs",
+        "python": "mots = [\"un\", \"deux\", \"trois\"]\nfor i in range(len(mots)):\n    print(i, mots[i])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "c4-matrices",
+    "notion": "matrices",
+    "ordre": 17,
+    "titre": "Listes de listes",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une liste peut contenir d'autres listes. C'est exactement la forme d'une **image** : une image est une liste de **lignes**, une ligne est une liste de **pixels**, et un pixel est une liste de trois **couleurs**."
+      },
+      {
+        "type": "code",
+        "legende": "Une petite image",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\nprint(image[0])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour atteindre une valeur, on lit **de l'extérieur vers l'intérieur** : d'abord la ligne, puis le pixel dans la ligne, puis la couleur dans le pixel."
+      },
+      {
+        "type": "code",
+        "legende": "Ligne, colonne, couleur",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\npixel = image[0][1]\nprint(pixel)\nprint(pixel[0])\nprint(image[1][0][2])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Chaque position a ses propres crochets.** Dans le TP, la bibliothèque NumPy accepte aussi l'écriture `image[0, 1]`. Avec des listes ordinaires, elle arrête le programme : écris toujours `image[0][1]`, qui marche partout."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`len()` compte à chaque niveau : `len(image)` donne le nombre de lignes, et `len(image[0])` le nombre de pixels de la première ligne."
+      },
+      {
+        "type": "code",
+        "legende": "La taille de l'image",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\nprint(len(image))\nprint(len(image[0]))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour parcourir toute l'image, on place une boucle **dans** une autre : la première prend chaque ligne, la seconde prend chaque pixel de cette ligne."
+      },
+      {
+        "type": "code",
+        "legende": "Deux boucles imbriquées",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\nfor ligne in image:\n    for pixel in ligne:\n        print(pixel[0])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c4-binaire",
+    "notion": "binaire",
+    "ordre": 18,
+    "titre": "Binaire et caractères",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un ordinateur écrit les nombres avec des **bits**, qui valent 0 ou 1. Huit bits forment un **octet**. De droite à gauche, chaque bit vaut le double du précédent : 1, 2, 4, 8, 16, 32, 64, 128."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "L'octet `01110101` vaut donc 64 + 32 + 16 + 4 + 1, soit **117**. En Python, `int()` fait ce calcul si on lui donne la base en second nombre : 2 veut dire « binaire »."
+      },
+      {
+        "type": "code",
+        "legende": "Du binaire au nombre",
+        "python": "octet = \"01110101\"\nprint(int(octet, 2))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Sans la base, `int()` lit du décimal.** `int(\"101\")` donne cent un, et `int(\"101\", 2)` donne cinq. Le texte est le même : seule la base change le résultat."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Chaque caractère a un numéro, fixé par la table **ASCII**. `chr()` rend le caractère d'un numéro, et `ord()` rend le numéro d'un caractère."
+      },
+      {
+        "type": "code",
+        "legende": "Un numéro, un caractère",
+        "python": "print(chr(117))\nprint(ord(\"u\"))\nprint(chr(65))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour passer d'un octet à une lettre, on enchaîne deux conversions : du texte binaire au nombre avec `int(..., 2)`, puis du nombre à la lettre avec `chr()`. Une expression imbriquée se lit de l'intérieur vers l'extérieur."
+      },
+      {
+        "type": "code",
+        "legende": "D'un octet à une lettre",
+        "python": "octet = \"01110101\"\nnombre = int(octet, 2)\nlettre = chr(nombre)\nprint(lettre)\nprint(chr(int(octet, 2)))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les lettres majuscules occupent les numéros 65 à 90, et l'espace porte le numéro 32. Un message fait de majuscules et d'espaces se lit donc octet par octet."
+      },
+      {
+        "type": "code",
+        "legende": "Les premières majuscules",
+        "python": "for n in range(65, 70):\n    print(n, chr(n))\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c4-decoder",
+    "notion": "decoder",
+    "ordre": 19,
+    "titre": "Bits de poids faible et décodage",
+    "dureeMin": 6,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "La **stéganographie** cache une information dans une autre. Ici, le message se cache dans les **deux derniers bits** d'une couleur, qu'on appelle les bits de poids faible, ou LSB. Les modifier change la couleur d'au plus 3 sur 255 : l'œil ne voit rien."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour isoler ces deux bits, on utilise l'opérateur **`&`**. Il compare deux nombres bit à bit, et ne garde que les bits qui valent 1 des deux côtés. Comme 3 s'écrit `00000011`, `valeur & 3` efface tout, sauf les deux derniers bits."
+      },
+      {
+        "type": "code",
+        "legende": "Garder les deux derniers bits",
+        "python": "print(bin(25))\nprint(25 & 3)\nprint(203 & 3)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`bin()` affiche un nombre en binaire, précédé de `0b`. Ici, 25 s'écrit `0b11001`, soit `00011001` sur huit bits : ses deux derniers bits sont 01, qui valent 1."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour séparer ces deux bits, l'opérateur **`>>`** décale les bits vers la droite : le dernier disparaît. `3 >> 1` donne 1 (le bit de gauche), et `3 & 1` donne 1 (le bit de droite)."
+      },
+      {
+        "type": "code",
+        "legende": "Séparer les deux bits",
+        "python": "valeur = 2\nprint(valeur >> 1)\nprint(valeur & 1)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tout ce travail est déjà écrit dans une **fonction** du TP, `get_lsb`. Tu n'as pas à l'écrire : tu lis sa description, et tu l'**appelles** avec une valeur entre parenthèses. Elle rend **deux** valeurs, que l'on range dans deux variables séparées par une virgule."
+      },
+      {
+        "type": "code",
+        "legende": "Appeler get_lsb",
+        "python": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\ngauche, droite = get_lsb(25)\nprint(gauche, droite)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Il faut autant de variables que de valeurs rendues.** `get_lsb` en rend deux : en écrire trois ou une seule arrête le programme."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Décoder un message revient alors à enchaîner tout ce que tu sais : récolter les bits de chaque pixel dans une liste, les regrouper par huit, convertir chaque octet en lettre. Quatre pixels fournissent huit bits, donc une lettre."
+      },
+      {
+        "type": "code",
+        "legende": "Quatre pixels, une lettre",
+        "python": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\nrouges = [25, 203, 57, 121]\n\nbits = []\nfor valeur in rouges:\n    bit1, bit2 = get_lsb(valeur)\n    bits.append(bit1)\n    bits.append(bit2)\n\noctet = \"\"\nfor bit in bits:\n    octet = octet + str(bit)\n\nprint(octet)\nprint(chr(int(octet, 2)))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Avec plusieurs lettres, regroupe les bits par huit.** Une boucle `range(0, len(bits), 8)` donne le début de chaque paquet, et une boucle interne lit les huit bits à partir de ce début, à la position `i + j`."
+      }
+    ],
+    "famille": "conditions"
   }
 ]

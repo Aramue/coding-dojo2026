@@ -15,7 +15,8 @@ import { EcranQuiz } from './ui/EcranQuiz'
 import { Menu } from './ui/Menu'
 import { PageCours } from './ui/PageCours'
 import { PageExercices } from './ui/PageExercices'
-import type { Chapitre, ContenuPublie } from './contenu/types'
+import { PageTp } from './ui/PageTp'
+import type { Chapitre, ContenuPublie, Tp } from './contenu/types'
 import type { GroupeNotion } from './contenu/notions'
 import type { Reussite, ResultatTest } from './validation/types'
 
@@ -74,6 +75,7 @@ export function App() {
     notions: [],
     exercices: [],
     lecons: [],
+    tps: [],
   })
   const [reussis, setReussis] = useState<Reussite[]>([])
   const [alerte, setAlerte] = useState<string | null>(null)
@@ -189,6 +191,7 @@ export function App() {
           titre: quizOuvert && quiz.etat?.partie !== null ? quiz.etat?.titre : undefined,
         }}
         verrouille={quizOuvert}
+        tps={contenu.tps}
       />
       {alerte && (
         <p role="alert" className="alerte">
@@ -208,6 +211,7 @@ export function App() {
           key={versChemin(destination)}
           destination={destination}
           groupes={groupes}
+          tps={contenu.tps}
           reussis={reussis}
           executeur={executeur}
           client={client}
@@ -236,6 +240,7 @@ export function App() {
 type ProprietesVue = {
   destination: Destination
   groupes: GroupeNotion[]
+  tps: Tp[]
   reussis: Reussite[]
   executeur: Executeur
   client: ClientApi
@@ -251,6 +256,7 @@ type ProprietesVue = {
 function Vue({
   destination,
   groupes,
+  tps,
   reussis,
   executeur,
   client,
@@ -259,6 +265,10 @@ function Vue({
   onRetourCours,
 }: ProprietesVue) {
   if (destination.vue === 'quiz') return <EcranQuiz client={client} onRetourCours={onRetourCours} />
+  if (destination.vue === 'tp') {
+    const tp = tps.find((t) => t.id === destination.tp)
+    return tp ? <PageTp tp={tp} executeur={executeur} /> : <Introuvable />
+  }
 
   const groupe =
     'notion' in destination ? groupes.find((g) => g.id === destination.notion) : undefined
