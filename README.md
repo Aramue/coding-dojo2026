@@ -91,8 +91,8 @@ lancent les commandes ci-dessus, pas d'autres :
 
 | Job | Ce qu'il lance |
 |---|---|
-| API | les 257 tests de `plateforme/api` |
-| Contenu | les 151 tests de `plateforme/outils`, la validation du contenu, les trois constructions |
+| API | les 420 tests de `plateforme/api` |
+| Contenu | les 154 tests de `plateforme/outils`, la validation du contenu, les trois constructions |
 | Interface | les 566 tests **avec les seuils de couverture**, puis `tsc` et `vite build` |
 
 Une minute de calcul en tout. Une release est un **tag** `vX.Y.Z` posé sur

@@ -45,6 +45,17 @@ def test_un_quiz_valide_se_charge():
     assert q.questions[0].explication == ""
 
 
+def test_un_quiz_de_la_seance_4_se_charge():
+    """La seance 4 existe pour les exercices depuis le 27 octobre 2026 : ses quiz aussi."""
+    assert Quiz(**quiz(id="q4-stegano", seance=4)).seance == 4
+
+
+@pytest.mark.parametrize("seance", [0, 5])
+def test_une_seance_hors_du_cours_est_rejetee(seance):
+    with pytest.raises(ValidationError):
+        Quiz(**quiz(seance=seance))
+
+
 def test_identifiant_de_quiz_mal_forme_rejete():
     with pytest.raises(ValidationError, match="identifiant de quiz"):
         Quiz(**quiz(id="bases"))
