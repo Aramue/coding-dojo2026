@@ -1,0 +1,136 @@
+/*
+ * La patte du dojo : ce qui fait qu'on reconnait les slides dans l'interface.
+ *
+ * Charge APRES app.css, et seulement des retouches de surface — aucune
+ * mise en page ne change ici. Trois idees, tirees de la charte :
+ *
+ * 1. Le papier. Le canevas n'est plus un aplat numerique : un grain tres
+ *    leger, fixe, qui ne defile pas et ne capte aucun clic.
+ * 2. Le trait de main. Le soulignement trace main des decks, sous chaque
+ *    titre de page, dans l'encre de la notion. Il etait dans la charte
+ *    (Composants signature) et n'avait jamais ete dessine.
+ * 3. Moins de boites. Une carte sans bordure, posee par une ombre chaude ;
+ *    un menu qui se fond dans le canevas au lieu d'etre un panneau de plus ;
+ *    le quiz eteint sans pointilles de formulaire.
+ */
+
+/* ---------- 1. Le papier ---------- */
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  /*
+   * PAR-DESSUS tout, mais transparent aux clics : .appli peint son propre
+   * fond, un grain pose dessous ne se verrait jamais. En `multiply`, il
+   * assombrit a peine le blanc des cartes et ne voile pas le texte.
+   */
+  z-index: 50;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.12 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 2. Le trait de main ---------- */
+
+.page__titre {
+  font-size: clamp(2rem, 1.4rem + 1.8vw, 2.7rem);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+
+/*
+ * Un trait irregulier, epais au depart, qui s'affine : un feutre, pas une
+ * regle. Le dessin est un masque, la couleur vient de --encre — le meme
+ * trait prend la teinte de chaque notion sans un fichier par famille.
+ */
+.page__titre::after {
+  content: '';
+  display: block;
+  width: min(9.5rem, 40%);
+  height: 0.6rem;
+  margin-top: 0.55rem;
+  background: var(--encre, var(--ink));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9.5c22-4.6 47-6.2 74-5.4 27 .7 53 3.1 82 2.2 13-.4 25-1.6 38-3.6' fill='none' stroke='black' stroke-width='5.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center / 100% 100%;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9.5c22-4.6 47-6.2 74-5.4 27 .7 53 3.1 82 2.2 13-.4 25-1.6 38-3.6' fill='none' stroke='black' stroke-width='5.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center / 100% 100%;
+  opacity: 0.85;
+}
+
+/* Le sur-titre : du texte dans l'encre de la notion, sans pastille posee devant. */
+.page__notion {
+  font-size: var(--t-2);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.page__notion::before {
+  display: none;
+}
+
+.page__meta {
+  margin-top: var(--e-2);
+}
+
+/* ---------- 3. Moins de boites ---------- */
+
+/*
+ * Plus de bordure : l'ombre suffit, et elle est chaude — teintee de brun,
+ * comme une feuille posee sur du papier, au lieu d'un gris neutre.
+ * Rayon plus grand dehors que dedans : la carte contient, ses blocs suivent.
+ */
+.carte {
+  border-color: transparent;
+  border-radius: 22px;
+  box-shadow:
+    0 1px 1px rgb(60 37 0 / 4%),
+    0 2px 6px -2px rgb(60 37 0 / 6%),
+    0 18px 40px -22px rgb(60 37 0 / 22%);
+}
+
+/* Le menu se fond dans le canevas : un filet suffit a le separer. */
+.menu {
+  background: transparent;
+  border-right-color: var(--rule);
+}
+
+/* Le quiz eteint : une information calme, pas un champ de formulaire. */
+.menu-quiz[aria-disabled='true'] {
+  border-style: solid;
+  border-color: transparent;
+  background: var(--ground-2);
+}
+
+/* L'en-tete laisse deviner le papier qui defile dessous. */
+.entete {
+  background: rgb(255 255 255 / 82%);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom-color: var(--rule);
+}
+
+.entete__marque {
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- Le geste ---------- */
+
+/* Un bouton s'enfonce sous le doigt : 1 px, assez pour qu'on le sente. */
+.bouton {
+  transition:
+    background 150ms ease-out,
+    border-color 150ms ease-out,
+    transform 120ms ease-out;
+}
+
+.bouton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Un paragraphe ne laisse pas un mot seul sur sa derniere ligne. */
+.cours__corps p,
+.enonce p {
+  text-wrap: pretty;
+}

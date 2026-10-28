@@ -3,7 +3,7 @@ title: Composants signature
 tags:
   - direction-artistique
   - composants
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-10-28
 ---
 
 # Composants signature
@@ -25,6 +25,19 @@ Dans l'interface, cette carte devient **l'éditeur**.
 ## Le soulignement tracé main
 
 Un trait légèrement irrégulier sous les titres de section, en SVG. Repris tel quel des decks.
+
+> [!success] Dessiné le 28 octobre 2026
+> Sous chaque titre de page (`.page__titre::after`, dans `signature.css`) : un trait de feutre,
+> épais au départ, qui s'affine. Le dessin est un **masque** SVG, la couleur vient de `--encre` —
+> le même trait prend la teinte de chaque notion.
+
+## Le papier
+
+Depuis le 28 octobre 2026, le canevas porte un grain très léger (`body::before`, en `multiply`,
+transparent aux clics). Avec lui, les cartes perdent leur bordure et se posent par une ombre
+**chaude**, teintée de brun ; le menu se fond dans le canevas, et le quiz éteint perd ses
+pointillés de champ de formulaire. Tout vit dans `signature.css`, chargé après `app.css` : des
+retouches de surface, aucune mise en page.
 
 ## Les flèches courbes dessinées à la main
 
