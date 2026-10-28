@@ -395,6 +395,8 @@ describe('QuizProf', () => {
       ['3', 'Élève', '0', '0 / 1'],
     ])
     expect(lignes[1]).toHaveAttribute('data-vide')
+    // Le podium ne nomme personne à zéro point : une seule marche.
+    expect(within(screen.getByRole('list', { name: 'Podium' })).getAllByRole('listitem')).toHaveLength(1)
     // Rien n'a été lancé pour les lire.
     expect(postes()).toEqual([])
 
@@ -510,6 +512,9 @@ describe('QuizProf', () => {
     await userEvent.click(within(lignes[0]!).getByRole('button', { name: 'Classement' }))
     expect(await screen.findByText('Historique des quiz')).toBeInTheDocument()
     expect(await screen.findByText('Camille Rey')).toBeInTheDocument()
+    // Les marches du podium, en plus du tableau : un seul joueur a marqué.
+    const marches = screen.getByRole('list', { name: 'Podium' })
+    expect(within(marches).getAllByRole('listitem')).toHaveLength(1)
     expect(postes()).toEqual([])
 
     await userEvent.click(screen.getByRole('button', { name: 'Revenir aux quiz' }))

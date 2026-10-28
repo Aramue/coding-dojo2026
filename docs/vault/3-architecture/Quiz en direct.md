@@ -150,7 +150,7 @@ l'écran de la partie, ni la fin de partie n'ont. Ceux-là s'en tiennent au podi
 
 Sous le catalogue de l'écran quiz du professeur : chaque partie jouée, la plus récente d'abord,
 avec sa date, son quiz, son nombre d'élèves, son taux de réussite et ses **gagnants**. Un clic
-sur « Classement » rouvre la page de résultats de cette partie-là, classement complet compris.
+sur « Classement » rouvre la page de résultats de cette partie-là, classement complet compris. Cette page — comme « Derniers résultats » — s'ouvre sur **les marches du podium de fin de partie**, réutilisées telles quelles, au-dessus du tableau de tous les joueurs.
 
 - **Derrière la porte professeur seulement**, comme « Derniers résultats » : c'est la mémoire de
   la classe, pas un tableau d'honneur projeté. Les routes refusent un jeton élève.

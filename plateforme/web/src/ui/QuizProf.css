@@ -601,3 +601,18 @@
   text-align: left;
   padding-left: var(--e-3);
 }
+
+/*
+ * Les marches de fin de partie, reprises en tete des resultats relus. Sans
+ * largeur, la colonne des resultats les serrait a trois etroits piliers.
+ */
+.quiz-prof__podium {
+  align-self: stretch;
+  width: 100%;
+  max-width: 40rem;
+  margin: var(--e-3) auto var(--e-4);
+}
+
+.quiz-prof__podium .marches__place {
+  min-width: 0;
+}

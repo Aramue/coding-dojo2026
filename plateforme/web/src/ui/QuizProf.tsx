@@ -422,6 +422,11 @@ function Resultats({
               {accord(resultats.reponses, 'réponse', 'réponses')}
             </span>
           </p>
+          {podiumDe(resultats.classement).length > 0 && (
+            <div className="quiz-prof__podium">
+              <Marches places={podiumDe(resultats.classement)} />
+            </div>
+          )}
           {resultats.classement.length > 0 && (
             <Classement places={resultats.classement} questions={resultats.bilan.length} />
           )}
@@ -476,6 +481,19 @@ function Classement({ places, questions }: { places: PlaceResultat[]; questions:
       </table>
     </section>
   )
+}
+
+/**
+ * Les marches du podium, tirées du classement complet : les mêmes que celles
+ * de la fin de partie, avec la même règle — trois au plus, jamais un élève à
+ * zéro point (ADR-015). Le classement n'a pas de code d'accès ; la clé de
+ * chaque marche est donc son rang dans la liste.
+ */
+function podiumDe(classement: PlaceResultat[]): PlaceProjetee[] {
+  return classement
+    .filter((place) => place.points > 0 && place.rang <= 3)
+    .slice(0, 3)
+    .map((place, i) => ({ ...place, code_acces: `marche-${i}` }))
 }
 
 function nomComplet(place: PlaceResultat): string {
