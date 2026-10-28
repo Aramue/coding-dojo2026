@@ -646,3 +646,81 @@ def test_les_resultats_sont_reserves_au_professeur_et_valides(client, catalogue,
     assert client.get("/prof/quiz/q2-absent/resultats", headers=PROF).status_code == 404
     assert client.get("/prof/quiz/..%2Fetc/resultats", headers=PROF).status_code in (404, 422)
     assert client.get("/prof/quiz/Q1-BASES/resultats", headers=PROF).status_code == 422
+
+
+# --- Historique des parties ---------------------------------------------------
+
+
+def _jouer(client, partie_id, joueurs, choix, horloge):
+    for entetes in joueurs:
+        client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    for entetes, option in zip(joueurs, choix):
+        horloge.avancer(1)
+        repondre(client, entetes, partie_id, 0, option)
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+
+
+def test_l_historique_liste_chaque_partie_jouee_avec_ses_gagnants(client, partie, eleve, horloge):
+    camille, alex = eleve("DOJO-K7M2"), eleve("DOJO-M3QP", "Alex", "Morel")
+    _jouer(client, partie["partie"], [camille, alex], [1, 0], horloge)
+    seconde = client.post("/prof/quiz/parties", json={"quiz_id": "q1-bases"}, headers=PROF).json()
+    _jouer(client, seconde["partie"], [camille, alex], [0, 1], horloge)
+
+    parties = client.get("/prof/quiz/historique", headers=PROF).json()["parties"]
+    # La plus recente d'abord.
+    assert [p["partie"] for p in parties] == [seconde["partie"], partie["partie"]]
+    assert parties[0]["titre"] == "Les bases"
+    assert parties[0]["joueurs"] == 2
+    assert "bilan" not in parties[0]
+    # Le gagnant de chaque partie, et personne a zero point.
+    assert [g["prenom"] for g in parties[0]["gagnants"]] == ["Alex"]
+    assert [g["prenom"] for g in parties[1]["gagnants"]] == ["Camille"]
+    assert "DOJO-" not in str(parties)
+
+
+def test_l_historique_ignore_les_parties_sans_reponse(client, partie, horloge):
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+    assert client.get("/prof/quiz/historique", headers=PROF).json() == {"parties": []}
+
+
+def test_l_historique_ignore_une_partie_encore_en_cours(client, partie, eleve, horloge):
+    entetes = eleve("DOJO-K7M2")
+    client.post("/quiz/rejoindre", headers=entetes)
+    suivante(client, -1)
+    repondre(client, entetes, partie["partie"], 0, 1)
+    assert client.get("/prof/quiz/historique", headers=PROF).json() == {"parties": []}
+
+
+def test_l_historique_ignore_un_quiz_retire_du_catalogue(client, partie, eleve, horloge, catalogue):
+    _jouer(client, partie["partie"], [eleve("DOJO-K7M2")], [1], horloge)
+    catalogue.clear()
+    assert client.get("/prof/quiz/historique", headers=PROF).json() == {"parties": []}
+    reponse = client.get(f"/prof/quiz/parties/{partie['partie']}/resultats", headers=PROF)
+    assert reponse.status_code == 404
+
+
+def test_le_classement_complet_d_une_partie_de_l_historique(client, partie, eleve, horloge):
+    camille, alex = eleve("DOJO-K7M2"), eleve("DOJO-M3QP", "Alex", "Morel")
+    _jouer(client, partie["partie"], [camille, alex], [1, 0], horloge)
+
+    resultats = client.get(f"/prof/quiz/parties/{partie['partie']}/resultats", headers=PROF).json()
+    assert resultats["titre"] == "Les bases"
+    assert [(c["prenom"], c["rang"]) for c in resultats["classement"]] == [("Camille", 1), ("Alex", 2)]
+    assert len(resultats["bilan"]) == 1
+
+
+def test_une_partie_inconnue_vide_ou_en_cours_n_a_pas_de_resultats(client, partie, eleve, horloge):
+    assert client.get("/prof/quiz/parties/999/resultats", headers=PROF).status_code == 404
+    # En cours : pas encore de resultats a relire.
+    assert client.get(f"/prof/quiz/parties/{partie['partie']}/resultats", headers=PROF).status_code == 404
+    client.post("/prof/quiz/partie/terminer", headers=PROF)
+    reponse = client.get(f"/prof/quiz/parties/{partie['partie']}/resultats", headers=PROF)
+    assert reponse.status_code == 404
+    assert reponse.json()["detail"] == "Personne n'a répondu à cette partie."
+
+
+def test_l_historique_est_reserve_au_professeur(client, catalogue, eleve):
+    assert client.get("/prof/quiz/historique").status_code == 401
+    assert client.get("/prof/quiz/historique", headers=eleve("DOJO-K7M2")).status_code == 401
+    assert client.get("/prof/quiz/parties/1/resultats").status_code == 401

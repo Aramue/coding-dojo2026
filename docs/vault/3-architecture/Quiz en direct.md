@@ -146,6 +146,20 @@ l'écran de la partie, ni la fin de partie n'ont. Ceux-là s'en tiennent au podi
 > « Derniers résultats » s'ouvre depuis `/prof/quiz`, l'écran qu'on projette. Si la salle le
 > regarde, elle lit le classement complet : à ouvrir projecteur coupé, ou depuis un autre écran.
 
+## L'historique des quiz — 28 octobre 2026
+
+Sous le catalogue de l'écran quiz du professeur : chaque partie jouée, la plus récente d'abord,
+avec sa date, son quiz, son nombre d'élèves, son taux de réussite et ses **gagnants**. Un clic
+sur « Classement » rouvre la page de résultats de cette partie-là, classement complet compris.
+
+- **Derrière la porte professeur seulement**, comme « Derniers résultats » : c'est la mémoire de
+  la classe, pas un tableau d'honneur projeté. Les routes refusent un jeton élève.
+- **Les gagnants sont ceux du podium** : trois au plus, et jamais un élève à zéro point —
+  la règle d'ADR-015 vaut aussi après coup.
+- Rien de neuf n'est stocké : les parties et leurs réponses étaient déjà gardées en base, le
+  classement se recalcule à la lecture. Une partie sans réponse, ou d'un quiz retiré du
+  catalogue, n'apparaît pas.
+
 ## Le barème
 
 1000 points pour une réponse juste immédiate, 500 à la dernière seconde, linéaire entre les deux ;
@@ -184,6 +198,8 @@ deploiement/charge_quiz.py       le test de charge
 | `POST /quiz/reponse` | élève | `{partie, question, choix}` — répondre vaut rejoindre |
 | `GET /prof/quiz` | prof | le catalogue, et pour chaque quiz le taux de réussite de sa dernière partie |
 | `GET /prof/quiz/{id}/resultats` | prof | le bilan anonyme de la dernière partie jouée de ce quiz |
+| `GET /prof/quiz/historique` | prof | toutes les parties jouées, la plus récente d'abord, avec leurs gagnants (podium, trois au plus, jamais à zéro) |
+| `GET /prof/quiz/parties/{id}/resultats` | prof | bilan et classement complet d'une partie de l'historique |
 | `POST /prof/quiz/parties` | prof | une partie à la fois, sinon 409 |
 | `GET /prof/quiz/partie` | prof | la dernière partie, même terminée : son bilan reste lisible |
 | `POST /prof/quiz/partie/suivante` · `corriger` | prof | portent le rang que l'écran croit courant : un double clic est refusé |
