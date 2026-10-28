@@ -132,3 +132,11 @@
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/*
+ * `.page__corps` remet ses marges a `0 auto` : sans cette regle plus precise,
+ * la carte d'introduction et la premiere etape se touchaient.
+ */
+.tp .tp__etapes.page__corps {
+  margin-top: var(--e-5);
+}
