@@ -52,8 +52,9 @@ export function PageTp({ tp, executeur }: { tp: Tp; executeur: Executeur }) {
   }
 
   return (
-    // Une couleur fixe : un TP réunit plusieurs notions, il n'en a pas une à lui.
-    <main className="page tp" data-famille="boucles">
+    // Le TP de stéganographie travaille des textes et des caractères : le vert
+    // des types. Voir « Palette », section « La couleur dit le concept ».
+    <main className="page tp" data-famille="types">
       <header className="page__entete">
         <p className="page__notion">Travail pratique</p>
         <h1 className="page__titre">{tp.titre}</h1>

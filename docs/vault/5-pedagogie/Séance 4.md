@@ -51,8 +51,8 @@ Elles suivent les slides : canal **rouge**, **première ligne**, **960 premiers 
 | `completer` | 5 |
 | `ecrire` | 14 |
 
-Cinq notions, **pas six** : il n'existe que cinq couleurs de notion, et deux notions voisines de
-la même couleur se lisent comme une seule (test `test_les_notions_d_un_meme_chapitre_ont_des_couleurs_distinctes`).
+Cinq notions. Leur couleur suit le concept enseigné, voir [[Palette]] — « La couleur dit le
+concept » : la reprise est neutre, listes et matrices violettes, binaire vert, décodage bleu.
 
 | Notion | Exercices | Leçon | Durée |
 |---|---|---|---|

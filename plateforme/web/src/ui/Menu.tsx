@@ -127,7 +127,7 @@ function TravauxPratiques({ tps, destination }: { tps: Tp[]; destination: Destin
               <li
                 key={tp.id}
                 className={'notion' + (courant ? ' notion--courante' : '')}
-                data-famille="boucles"
+                data-famille="types"
               >
                 <Lien
                   cible={{ vue: 'tp', tp: tp.id }}

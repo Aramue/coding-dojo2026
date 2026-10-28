@@ -52,7 +52,7 @@
         "texte": "Un message doit s'afficher **exactement** comme demandé : une majuscule oubliée, une espace en trop ou un point manquant, et ce n'est plus le même texte. Python compare caractère par caractère, il ne devine rien."
       }
     ],
-    "famille": "conditions"
+    "famille": "types"
   },
   {
     "id": "c1-variables",
@@ -214,7 +214,7 @@
         "texte": "Oublier `int()` ne provoque pas toujours une erreur — parfois le programme tourne et donne un résultat faux. `age + 1` sur du texte s'arrête net, mais `age + age` colle deux fois la réponse au lieu de la doubler."
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "c2-reveil",
@@ -267,7 +267,7 @@
         "texte": "Ces trois règles reviennent partout dans la séance d'aujourd'hui. Si l'une d'elles te semble floue, relis la leçon correspondante de la séance 1 avant de continuer."
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "c2-calculer",
@@ -398,7 +398,7 @@
         "entrees": []
       }
     ],
-    "famille": "types"
+    "famille": "conditions"
   },
   {
     "id": "c2-combiner",
@@ -453,7 +453,7 @@
         "texte": "Un `or` écrit à la place d'un `and` ne provoque aucune erreur : le programme tourne, et il répond juste pour certaines valeurs. **Essaie toujours plusieurs cas**, et surtout ceux où une seule des conditions est remplie."
       }
     ],
-    "famille": "boucles"
+    "famille": "conditions"
   },
   {
     "id": "c2-decider",
@@ -550,7 +550,7 @@
         ]
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "c3-repeter",
@@ -648,7 +648,7 @@
         "entrees": []
       }
     ],
-    "famille": "types"
+    "famille": "boucles"
   },
   {
     "id": "c3-compter",
@@ -736,7 +736,7 @@
         "texte": "Pour choisir, une seule question : sait-on d'avance combien de tours faire ? Si oui, `for` et `range()` comptent à ta place. Sinon, c'est `while`, et c'est à toi de faire changer la condition."
       }
     ],
-    "famille": "conditions"
+    "famille": "boucles"
   },
   {
     "id": "c4-reprise",
@@ -780,7 +780,7 @@
         "texte": "**Une boucle ne s'arrête pas sur la dernière valeur demandée.** La fin de `range()` est exclue : `range(0, 12, 4)` s'arrête avant 12, et ne donne que 0, 4 et 8."
       }
     ],
-    "famille": "variables"
+    "famille": "rappels"
   },
   {
     "id": "c4-listes",
@@ -864,7 +864,7 @@
         "entrees": []
       }
     ],
-    "famille": "boucles"
+    "famille": "variables"
   },
   {
     "id": "c4-matrices",
@@ -922,7 +922,7 @@
         "entrees": []
       }
     ],
-    "famille": "types"
+    "famille": "variables"
   },
   {
     "id": "c4-binaire",
@@ -984,7 +984,7 @@
         "entrees": []
       }
     ],
-    "famille": "operateurs"
+    "famille": "types"
   },
   {
     "id": "c4-decoder",
@@ -1054,6 +1054,6 @@
         "texte": "**Avec plusieurs lettres, regroupe les bits par huit.** Une boucle `range(0, len(bits), 8)` donne le début de chaque paquet, et une boucle interne lit les huit bits à partir de ce début, à la position `i + j`."
       }
     ],
-    "famille": "conditions"
+    "famille": "operateurs"
   }
 ]

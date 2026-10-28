@@ -154,16 +154,24 @@ MOTIF_LECON = re.compile(r"^c[1234]-[a-z]+$")
 # JSON. Personne ne la recopie — une copie TypeScript divergerait au premier
 # changement de libelle.
 #
-# La couleur suit la NOTION, pas le concept : la seance 1 ne couvre que deux
-# concepts (print et input), ce qui donnerait deux couleurs pour quatre
-# notions, et un menu ou la couleur n'oriente plus. Les noms de famille sont
-# ceux de la palette (variables, types, operateurs, conditions) : ce sont des
-# noms de couleur, pas de sens.
+# La couleur dit le CONCEPT que la notion enseigne, d'un chapitre a l'autre,
+# comme dans les slides. Six familles, et une seule regle — voir la note
+# « Palette » du coffre, section « La couleur dit le concept » :
+#
+#   variables  (violet) ranger des valeurs : variables, listes, matrices
+#   types      (vert)   textes et types : afficher, types, saisie, binaire
+#   operateurs (bleu)   calculer : calculer, compter, bits de poids faible
+#   conditions (ambre)  decider : comparer, combiner, decider
+#   boucles    (corail) repeter : for, parcourir, tant que
+#   rappels    (neutre) revoir : une notion de rappel n'apporte aucun concept
+#
+# Deux notions voisines peuvent donc partager une couleur : c'est voulu, elles
+# parlent de la meme chose. Le numero et le titre les distinguent.
 NOTIONS: dict[str, dict] = {
     "afficher": {
         "ordre": 1,
         "titre": "Afficher un message",
-        "famille": "conditions",
+        "famille": "types",
         "chapitre": "bases",
     },
     "variables": {
@@ -181,7 +189,7 @@ NOTIONS: dict[str, dict] = {
     "saisie": {
         "ordre": 4,
         "titre": "Demander une information",
-        "famille": "operateurs",
+        "famille": "types",
         "chapitre": "bases",
     },
     # --- Seance 2 ---
@@ -192,7 +200,7 @@ NOTIONS: dict[str, dict] = {
     "reveil": {
         "ordre": 5,
         "titre": "Se remettre en route",
-        "famille": "variables",
+        "famille": "rappels",
         "chapitre": "decisions",
     },
     "calculer": {
@@ -204,13 +212,13 @@ NOTIONS: dict[str, dict] = {
     "comparer": {
         "ordre": 7,
         "titre": "Comparer",
-        "famille": "types",
+        "famille": "conditions",
         "chapitre": "decisions",
     },
     "combiner": {
         "ordre": 8,
         "titre": "Combiner des conditions",
-        "famille": "boucles",
+        "famille": "conditions",
         "chapitre": "decisions",
     },
     "decider": {
@@ -226,7 +234,7 @@ NOTIONS: dict[str, dict] = {
     "rappels": {
         "ordre": 10,
         "titre": "Rappels avant les boucles",
-        "famille": "variables",
+        "famille": "rappels",
         "chapitre": "boucles",
     },
     "repeter": {
@@ -238,7 +246,7 @@ NOTIONS: dict[str, dict] = {
     "parcourir": {
         "ordre": 12,
         "titre": "Parcourir un texte",
-        "famille": "types",
+        "famille": "boucles",
         "chapitre": "boucles",
     },
     "compter": {
@@ -250,7 +258,7 @@ NOTIONS: dict[str, dict] = {
     "tantque": {
         "ordre": 14,
         "titre": "Répéter tant que",
-        "famille": "conditions",
+        "famille": "boucles",
         "chapitre": "boucles",
     },
     # --- Seance 4 ---
@@ -260,31 +268,31 @@ NOTIONS: dict[str, dict] = {
     "reprise": {
         "ordre": 15,
         "titre": "Rappels avant les listes",
-        "famille": "variables",
+        "famille": "rappels",
         "chapitre": "stegano",
     },
     "listes": {
         "ordre": 16,
         "titre": "Les listes",
-        "famille": "boucles",
+        "famille": "variables",
         "chapitre": "stegano",
     },
     "matrices": {
         "ordre": 17,
         "titre": "Listes de listes",
-        "famille": "types",
+        "famille": "variables",
         "chapitre": "stegano",
     },
     "binaire": {
         "ordre": 18,
         "titre": "Binaire et caractères",
-        "famille": "operateurs",
+        "famille": "types",
         "chapitre": "stegano",
     },
     "decoder": {
         "ordre": 19,
         "titre": "Bits de poids faible et décodage",
-        "famille": "conditions",
+        "famille": "operateurs",
         "chapitre": "stegano",
     },
 }

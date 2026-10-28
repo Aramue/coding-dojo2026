@@ -6,7 +6,8 @@ export type Exercice = {
   concept: string
   /** L'unité de navigation : une leçon, un groupe d'exercices, une couleur. */
   notion: string
-  famille: 'variables' | 'types' | 'operateurs' | 'conditions' | 'boucles'
+  /** Le concept enseigné, donc la couleur. `rappels` est neutre. Voir « Palette ». */
+  famille: 'variables' | 'types' | 'operateurs' | 'conditions' | 'boucles' | 'rappels'
   seance: 1 | 2 | 3 | 4
   niveau: 'normal' | 'expert'
   type: 'predire' | 'debug' | 'completer' | 'ecrire'
