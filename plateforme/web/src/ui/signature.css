@@ -232,3 +232,131 @@ body::before {
     height: calc(100dvh - 3.5rem);
   }
 }
+
+/* ---------- Le contenu, sans cartes ---------- */
+
+/*
+ * La page s'est elargie, la prose non : au-dela de ~70 caracteres, l'oeil
+ * perd la ligne suivante. Le code, les schemas et les listes d'exercices,
+ * eux, prennent toute la largeur — c'est ce qui donne du relief a la page.
+ */
+.zone-cours .cours__corps > p,
+.zone-cours .cours__corps > .tp__liste,
+.zone-cours .cours__corps > .tp__materiel,
+.zone-cours .cours__corps > aside,
+.zone-cours .cours__corps > .tp__objectif,
+.zone-cours .cours__corps > .tp__indice,
+.zone-cours .page__meta {
+  max-width: 70ch;
+}
+
+/* Le rythme : plus d'air entre les blocs, moins dans un paragraphe. */
+.zone-cours .cours__corps {
+  gap: var(--e-3);
+  padding-top: var(--e-2);
+}
+
+/*
+ * L'encadre « attention » : un filet dans l'encre de la notion et une teinte
+ * pastel, sans boite autour. Arrondi du seul cote ouvert.
+ */
+.zone-cours .attention {
+  margin: 0;
+  padding: var(--e-2) var(--e-3);
+  border-left: 3px solid var(--encre);
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--tint) 70%, var(--surface));
+}
+
+/* Le point a verifier : meme forme que l'attention, en vert de reussite. */
+.zone-cours .tp__verifier {
+  border-left-width: 3px;
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--ok) 6%, var(--surface));
+}
+
+/* L'indice replie : une ligne discrete en pointilles, qu'on ouvre. */
+.zone-cours .tp__indice {
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--encre) 35%, var(--rule));
+  border-radius: 14px;
+  transition: background 150ms ease-out;
+}
+
+.zone-cours .tp__indice[open] {
+  background: var(--surface);
+  border-style: solid;
+}
+
+/* L'objectif d'etape : une note blanche, posee juste sous le titre. */
+.zone-cours .tp__objectif {
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgb(60 37 0 / 6%);
+}
+
+/* Les figures se detachent du creme par du blanc, pas par une bordure. */
+.zone-cours .schema__cadre {
+  background: var(--surface);
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgb(60 37 0 / 5%), 0 10px 30px -20px rgb(60 37 0 / 25%);
+}
+
+/* La carte de code : la meme ombre chaude, un cran plus marquee. */
+.zone-cours .carte-code {
+  box-shadow: 0 2px 4px rgb(40 42 54 / 12%), 0 14px 32px -18px rgb(40 42 54 / 45%);
+}
+
+/*
+ * « Essayer » : une action secondaire, dans l'encre de la notion, au lieu
+ * d'un bouton blanc generique pose sur le creme.
+ */
+.zone-cours .cours__exemple button.bouton:not(.bouton--primaire):not(.bouton--sombre) {
+  min-height: 2.4rem;
+  padding: 0.45rem var(--e-2);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--encre) 45%, var(--rule));
+  color: var(--encre);
+  font-weight: 600;
+}
+
+.zone-cours .cours__exemple button.bouton:not(.bouton--primaire):not(.bouton--sombre):hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--encre);
+}
+
+/* Un titre d'etape ouvre une section : de l'air au-dessus, un filet entre deux. */
+.zone-cours .tp__etapes {
+  gap: 0;
+}
+
+.zone-cours .tp__etapes > .carte {
+  padding: var(--e-4) 0;
+}
+
+.zone-cours .tp__titre {
+  font-size: 1.65rem;
+  letter-spacing: -0.03em;
+}
+
+/* La liste des exercices : sur le creme, la ligne survolee passe au blanc. */
+.zone-cours .exercices__ligne:hover {
+  background: var(--surface);
+}
+
+/* Le pied de page : un vrai lien, blanc, pose sur le creme. */
+.zone-cours .pied__lien {
+  background: var(--surface);
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgb(60 37 0 / 6%), 0 8px 20px -14px rgb(60 37 0 / 30%);
+}
+
+/* Un schema garde des proportions de figure : pleine largeur, il devenait affiche. */
+.zone-cours .schema {
+  max-width: 48rem;
+}
+
+/* Une etape atteinte par le defilement ne se cache pas sous l'en-tete collant. */
+.zone-cours .tp__etapes > li {
+  scroll-margin-top: 5rem;
+}
