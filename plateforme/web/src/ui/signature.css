@@ -314,14 +314,14 @@ body::before {
 .zone-cours .cours__exemple button.bouton:not(.bouton--primaire):not(.bouton--sombre) {
   min-height: 2.4rem;
   padding: 0.45rem var(--e-2);
-  background: transparent;
+  background: var(--surface);
   border-color: color-mix(in srgb, var(--encre) 45%, var(--rule));
   color: var(--encre);
   font-weight: 600;
 }
 
 .zone-cours .cours__exemple button.bouton:not(.bouton--primaire):not(.bouton--sombre):hover:not(:disabled) {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--tint) 45%, var(--surface));
   border-color: var(--encre);
 }
 

@@ -13,7 +13,10 @@ from .securite import creer_jeton, lire_jeton
 
 routeur = APIRouter()
 MOTIF_CODE = re.compile(r"^DOJO-[A-Z0-9]{4}$")
-MOTIF_EXERCICE = re.compile(r"^s[123]-[0-9]{2}(-expert)?$")
+# Meme borne que MOTIF_ID dans outils/schema.py. Restee a s[123] quand la
+# seance 4 est arrivee, elle refusait en 422 toutes ses tentatives : l'eleve
+# voyait « Ta progression n'a pas pu etre enregistree » a chaque exercice.
+MOTIF_EXERCICE = re.compile(r"^s[1234]-[0-9]{2}(-expert)?$")
 
 # Liste blanche des types d'erreur acceptés. Elle double celle du navigateur
 # (web/src/execution/exceptions.ts) — et c'est CELLE-CI qui protège.

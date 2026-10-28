@@ -61,6 +61,28 @@ def test_tentative_verte_marque_l_exercice_reussi(client, jeton):
     assert [l["exercice_id"] for l in reussis] == ["s1-01"]
 
 
+def test_une_tentative_de_la_seance_4_est_acceptee(client, jeton):
+    # La borne suivait trois seances : s4-37 repondait 422, et la progression
+    # de toute la seance 4 ne s'enregistrait pas.
+    reponse = client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={"exercice_id": "s4-37", "verdict": "vert", "type_erreur": None, "duree_ms": 42},
+    )
+    assert reponse.status_code < 300
+    reussis = client.get("/parcours", headers=entetes(jeton)).json()["reussis"]
+    assert [l["exercice_id"] for l in reussis] == ["s4-37"]
+
+
+def test_une_seance_hors_du_contenu_reste_refusee(client, jeton):
+    reponse = client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={"exercice_id": "s5-01", "verdict": "vert", "type_erreur": None, "duree_ms": 42},
+    )
+    assert reponse.status_code == 422
+
+
 def test_tentative_bleue_marque_aussi_l_exercice_reussi(client, jeton):
     client.post(
         "/tentative",
