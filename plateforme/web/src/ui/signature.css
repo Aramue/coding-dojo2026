@@ -25,7 +25,7 @@ body::before {
    * fond, un grain pose dessous ne se verrait jamais. En `multiply`, il
    * assombrit a peine le blanc des cartes et ne voile pas le texte.
    */
-  z-index: 50;
+  z-index: 20;
   pointer-events: none;
   mix-blend-mode: multiply;
   opacity: 0.55;
@@ -212,12 +212,12 @@ body::before {
 /* Le menu passe au-dessus du grain : blanc, il reste vraiment blanc. */
 .menu {
   position: relative;
-  z-index: 60;
+  z-index: 30;
 }
 
 /* L'en-tete reste au-dessus du menu, du grain et de la barre de lecture. */
 .entete {
-  z-index: 70;
+  z-index: 40;
 }
 
 /*
@@ -360,4 +360,44 @@ body::before {
 /* Une etape atteinte par le defilement ne se cache pas sous l'en-tete collant. */
 .zone-cours .tp__etapes > li {
   scroll-margin-top: 5rem;
+}
+
+/*
+ * L'echelle des plans, du fond vers l'avant : grain 20, menu 30, en-tete 40,
+ * apercu du professeur 50. L'apercu passe donc par-dessus tout — l'en-tete de
+ * l'application ne doit pas recouvrir sa barre.
+ *
+ * Dans l'apercu, il n'y a pas d'en-tete d'application : le menu ne se colle
+ * pas a 3,5 rem du haut, il suit le cadre qui defile.
+ */
+.appli--apercu .menu {
+  position: relative;
+  top: auto;
+  height: auto;
+  align-self: stretch;
+}
+
+/*
+ * Dans l'apercu, la grille defile dans un cadre : le menu, plus court que la
+ * page, laissait sa colonne blanche s'arreter en plein ecran. Le fond de la
+ * grille peint donc lui-meme la colonne du menu, du haut jusqu'en bas.
+ */
+@media (min-width: 901px) {
+  .appli--apercu {
+    background: linear-gradient(to right, var(--surface) 272px, #f5f0e6 272px);
+  }
+}
+
+/*
+ * L'ecran d'exercice est sombre jusqu'en bas de la fenetre, cote eleve comme
+ * dans l'apercu : la zone de contenu s'etire, et l'ecran avec elle. Sans cela,
+ * un exercice court laissait une bande creme sous son pied de page.
+ */
+.zone-cours {
+  display: flex;
+  flex-direction: column;
+}
+
+.zone-cours > main {
+  flex: 1 0 auto;
 }
