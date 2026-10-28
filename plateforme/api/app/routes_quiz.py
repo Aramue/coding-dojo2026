@@ -48,7 +48,9 @@ from .securite import jeton_prof_valide, lire_jeton
 routeur = APIRouter()
 routeur_prof = APIRouter(prefix="/prof/quiz", dependencies=[Depends(verifier_prof)])
 
-MOTIF_QUIZ = r"^q[123]-[a-z]+(-[a-z]+)*$"
+# De 1 a 9, comme MOTIF_EXERCICE : le schema du contenu dit quelles seances
+# existent. Voir tests/test_parite_contenu.py.
+MOTIF_QUIZ = r"^q[1-9]-[a-z]+(-[a-z]+)*$"
 
 # Une partie terminee reste visible un quart d'heure : le temps pour chacun de
 # lire son resultat, pas celui de le retrouver la semaine suivante.

@@ -13,7 +13,11 @@ from .securite import creer_jeton, lire_jeton
 
 routeur = APIRouter()
 MOTIF_CODE = re.compile(r"^DOJO-[A-Z0-9]{4}$")
-MOTIF_EXERCICE = re.compile(r"^s[123]-[0-9]{2}(-expert)?$")
+# Le motif de l'API accepte toute seance de 1 a 9 : c'est le schema du contenu
+# (outils/schema.py) qui dit lesquelles existent. Il ne valait que s1 a s3 quand
+# la seance 4 a ete publiee, et chacune de ses validations repondait 422 sans
+# rien enregistrer. tests/test_parite_contenu.py le compare au contenu reel.
+MOTIF_EXERCICE = re.compile(r"^s[1-9]-[0-9]{2}(-expert)?$")
 
 # Liste blanche des types d'erreur acceptés. Elle double celle du navigateur
 # (web/src/execution/exceptions.ts) — et c'est CELLE-CI qui protège.
