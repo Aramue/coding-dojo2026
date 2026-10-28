@@ -583,3 +583,21 @@
 .quiz-prof__historique h2 {
   margin-bottom: var(--e-2);
 }
+
+.quiz-prof__historique th {
+  text-align: left;
+}
+
+/* Une action par ligne, mais lisible sans survol : c'est la seule de la ligne. */
+.quiz-prof__historique .bouton--menu {
+  color: var(--ink);
+  border-color: var(--rule);
+  background: var(--surface);
+}
+
+/* Le classement aligne ses colonnes 3 et 4 (des nombres) a droite ; ici la 5, des noms, va a gauche. */
+.quiz-prof__historique .classement__table th:nth-child(5),
+.quiz-prof__historique .classement__table td:nth-child(5) {
+  text-align: left;
+  padding-left: var(--e-3);
+}
