@@ -275,7 +275,7 @@ confondues** :
 >
 > Chaque étape a un `titre`, un `objectif` d'une phrase et des blocs : ceux des leçons, plus
 > `verifier` — ce que l'élève doit voir à l'écran avant de continuer — et `indice`, replié tant
-> qu'on ne l'ouvre pas. L'élève coche les étapes faites ; la coche vit dans `sessionStorage`, rien
+> qu'on ne l'ouvre pas. S'y ajoute `schema`, qui désigne par son `nom` un dessin SVG de `SchemaTp.tsx` — `pixels`, `binaire`, `masque`, `octet`, `ligne` : les coordonnées vivent dans le code, jamais dans le YAML. L'élève coche les étapes faites ; la coche vit dans `sessionStorage`, rien
 > ne part au serveur. `charger_tous()` ignore le dossier `tp/` comme il ignore `lecons/` et
 > `quiz/`. Une notion ne doit jamais s'appeler `tp` : `/tp/<id>` se lit avant les notions.
 

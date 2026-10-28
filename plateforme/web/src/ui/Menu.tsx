@@ -44,16 +44,7 @@ export function Menu({
         {chapitres.map((chapitre) => (
           <Chapitre key={chapitre.id} chapitre={chapitre} destination={destination} />
         ))}
-        {tps.length > 0 && (
-          <section className="menu-tp" aria-label="Travaux pratiques">
-            <p className="menu-tp__titre">Travaux pratiques</p>
-            {tps.map((tp) => (
-              <Lien key={tp.id} cible={{ vue: 'tp', tp: tp.id }} destination={destination}>
-                {tp.titre}
-              </Lien>
-            ))}
-          </section>
-        )}
+        {tps.length > 0 && <TravauxPratiques tps={tps} destination={destination} />}
       </div>
     </nav>
   )
@@ -103,6 +94,55 @@ function Chapitre({
           {chapitre.notions.map((notion, rang) => (
             <Notion key={notion.id} notion={notion} rang={rang + 1} destination={destination} />
           ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * Les TP, rangés comme un chapitre : même tête dépliante, mêmes rangées que
+ * les notions. Un TP n'a pas d'exercices à compter, il mène droit à ses
+ * consignes.
+ */
+function TravauxPratiques({ tps, destination }: { tps: Tp[]; destination: Destination }) {
+  const [ouvert, setOuvert] = useState(true)
+  return (
+    <section className="chapitre" aria-label="Travaux pratiques">
+      <button
+        type="button"
+        className="chapitre__tete"
+        aria-expanded={ouvert}
+        onClick={() => setOuvert((o) => !o)}
+      >
+        <Chevron ouvert={ouvert} />
+        <span className="chapitre__titre">Travaux pratiques</span>
+        <span className="chapitre__compte">{tps.length}</span>
+      </button>
+      <div className="chapitre__corps" data-ouvert={ouvert}>
+        <ol className="chapitre__notions">
+          {tps.map((tp, rang) => {
+            const courant = destination.vue === 'tp' && destination.tp === tp.id
+            return (
+              <li
+                key={tp.id}
+                className={'notion' + (courant ? ' notion--courante' : '')}
+                data-famille="boucles"
+              >
+                <Lien
+                  cible={{ vue: 'tp', tp: tp.id }}
+                  destination={destination}
+                  className="notion__tete menu-tp__lien"
+                >
+                  <span className="notion__rang" aria-hidden="true">
+                    {rang + 1}
+                  </span>
+                  <span className="notion__titre">{tp.titre}</span>
+                  <span className="notion__compte">{tp.dureeMin} min</span>
+                </Lien>
+              </li>
+            )
+          })}
         </ol>
       </div>
     </section>

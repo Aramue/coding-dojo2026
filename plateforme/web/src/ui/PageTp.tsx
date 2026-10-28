@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { BlocTp, Tp } from '../contenu/types'
 import type { Executeur } from '../execution/executeur'
 import { BacASable } from './BacASable'
 import { CarteCode } from './CarteCode'
+import { SchemaTp } from './SchemaTp'
 import { formaterTexte } from './texte'
 import './PageTp.css'
 
@@ -62,11 +63,10 @@ export function PageTp({ tp, executeur }: { tp: Tp; executeur: Executeur }) {
         </p>
       </header>
 
-      <div className="page__corps carte tp__intro">
-        {tp.introduction.map((bloc, index) => (
-          <BlocRendu key={index} bloc={bloc} executeur={executeur} />
-        ))}
-        {tp.materiel.length > 0 && (
+      <div className="page__corps carte">
+        <article className="cours__corps">
+          <Blocs blocs={tp.introduction} executeur={executeur} />
+          {tp.materiel.length > 0 && (
           <section className="tp__materiel" aria-label="Ce qu'il te faut">
             <h2>Ce qu'il te faut</h2>
             <ul>
@@ -75,14 +75,16 @@ export function PageTp({ tp, executeur }: { tp: Tp; executeur: Executeur }) {
               ))}
             </ul>
           </section>
-        )}
+          )}
+        </article>
       </div>
 
-      <ol className="tp__etapes">
+      <ol className="page__corps tp__etapes">
         {tp.etapes.map((etape, rang) => {
           const faite = cochees.includes(rang)
           return (
-            <li key={etape.titre} className="tp__etape carte" data-faite={faite}>
+            <li key={etape.titre} className="carte" data-faite={faite}>
+              <article className="cours__corps tp__etape">
               <h2 className="tp__titre" aria-label={`Étape ${rang + 1} : ${etape.titre}`}>
                 <span className="tp__rang" aria-hidden="true">
                   {rang + 1}
@@ -92,19 +94,51 @@ export function PageTp({ tp, executeur }: { tp: Tp; executeur: Executeur }) {
               <p className="tp__objectif">
                 <strong>Objectif :</strong> {formaterTexte(etape.objectif)}
               </p>
-              {etape.blocs.map((bloc, index) => (
-                <BlocRendu key={index} bloc={bloc} executeur={executeur} />
-              ))}
+              <Blocs blocs={etape.blocs} executeur={executeur} />
               <label className="tp__coche">
                 <input type="checkbox" checked={faite} onChange={() => basculer(rang)} />
                 J'ai terminé l'étape {rang + 1}
               </label>
+              </article>
             </li>
           )
         })}
       </ol>
     </main>
   )
+}
+
+const MOTIF_ITEM = /^[0-9]+\.\s+/
+
+/**
+ * Les paragraphes qui commencent par « 1. », « 2. »… se suivent : ils forment
+ * une vraie liste numérotée, alignée, au lieu de paragraphes isolés dont le
+ * numéro colle au bord.
+ */
+function Blocs({ blocs, executeur }: { blocs: BlocTp[]; executeur: Executeur }) {
+  const rendus: ReactNode[] = []
+  let liste: string[] = []
+  const fermer = () => {
+    if (liste.length === 0) return
+    rendus.push(
+      <ol key={`liste-${rendus.length}`} className="tp__liste">
+        {liste.map((item) => (
+          <li key={item}>{formaterTexte(item)}</li>
+        ))}
+      </ol>,
+    )
+    liste = []
+  }
+  blocs.forEach((bloc, index) => {
+    if (bloc.type === 'paragraphe' && MOTIF_ITEM.test(bloc.texte)) {
+      liste.push(bloc.texte.replace(MOTIF_ITEM, ''))
+      return
+    }
+    fermer()
+    rendus.push(<BlocRendu key={index} bloc={bloc} executeur={executeur} />)
+  })
+  fermer()
+  return <>{rendus}</>
 }
 
 function BlocRendu({ bloc, executeur }: { bloc: BlocTp; executeur: Executeur }) {
@@ -127,6 +161,7 @@ function BlocRendu({ bloc, executeur }: { bloc: BlocTp; executeur: Executeur }) 
       </aside>
     )
   }
+  if (bloc.type === 'schema') return <SchemaTp nom={bloc.nom} legende={bloc.legende} />
   if (bloc.type === 'indice') {
     return (
       <details className="tp__indice">

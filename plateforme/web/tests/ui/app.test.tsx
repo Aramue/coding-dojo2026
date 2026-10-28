@@ -492,7 +492,7 @@ describe('App — une séance s’ouvre à sa date', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: "Le message caché dans l'image" }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: "Le message caché dans l'image" })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /Le message caché dans l'image/ })).toHaveAttribute(
       'aria-current',
       'page',
     )

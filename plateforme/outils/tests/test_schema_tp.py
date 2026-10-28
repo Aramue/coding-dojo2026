@@ -63,6 +63,14 @@ def test_un_bloc_de_tp_vide_ou_avec_emoji_est_refuse(sorte):
             Tp(**{**TP, "etapes": [etape]})
 
 
+def test_un_schema_porte_un_nom_connu():
+    etape = {**TP["etapes"][0], "blocs": [{"type": "schema", "nom": "binaire", "legende": "173"}]}
+    assert Tp(**{**TP, "etapes": [etape]}).etapes[0].blocs[0].nom == "binaire"
+    etape["blocs"] = [{"type": "schema", "nom": "inconnu", "legende": "x"}]
+    with pytest.raises(ValidationError):
+        Tp(**{**TP, "etapes": [etape]})
+
+
 def test_les_tp_ne_sont_pas_pris_pour_des_exercices(tmp_path):
     _ecrire_tp(tmp_path)
     assert charger_tous(tmp_path) == []

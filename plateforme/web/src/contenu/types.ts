@@ -73,7 +73,12 @@ export type Lecon = {
  * `indice` se replie, l'élève l'ouvre quand il bloque ; `verifier` dit ce
  * qu'il doit voir à l'écran avant de passer à l'étape suivante.
  */
-export type BlocTp = Bloc | { type: 'indice'; texte: string } | { type: 'verifier'; texte: string }
+export type BlocTp =
+  | Bloc
+  | { type: 'indice'; texte: string }
+  | { type: 'verifier'; texte: string }
+  /** Un schéma dessiné par `SchemaTp`, choisi par son nom. */
+  | { type: 'schema'; nom: 'pixels' | 'binaire' | 'masque' | 'octet' | 'ligne'; legende: string }
 
 export type EtapeTp = {
   titre: string

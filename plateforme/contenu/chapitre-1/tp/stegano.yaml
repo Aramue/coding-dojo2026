@@ -110,6 +110,16 @@ etapes:
           étant un tableau de pixels. On l'indexe toujours `[ligne][colonne]`, en
           commençant à **0**. Chaque pixel est lui-même une petite liste
           `[r, g, b]` : rouge en position 0, vert en 1, bleu en 2.
+      - type: schema
+        nom: pixels
+        legende: >-
+          Une image est une grille. D'abord la ligne i, puis la colonne j, puis le
+          canal de couleur.
+      - type: paragraphe
+        texte: >-
+          Attention au sens : `i` compte les lignes en **descendant**, `j` compte les
+          colonnes vers la **droite**. Le pixel de la ligne 1, colonne 4, c'est donc
+          `pixels_image[1][4]` — la deuxième ligne, la cinquième case.
       - type: code
         legende: Le premier pixel, puis son rouge
         python: |
@@ -141,6 +151,22 @@ etapes:
           deux derniers bits, à droite, sont les **bits de poids faible** (LSB, pour
           *Least Significant Bits*). Les changer modifie la couleur de 3 au plus :
           l'œil ne voit rien. C'est là que le message a été caché.
+      - type: paragraphe
+        texte: >-
+          **Du binaire au décimal.** En décimal, chaque chiffre vaut dix fois plus que
+          son voisin de droite : unités, dizaines, centaines. En binaire, c'est la même
+          idée avec **deux** : chaque case vaut le **double** de sa voisine de droite —
+          1, 2, 4, 8, 16, 32, 64, 128. Pour lire un nombre binaire, on additionne les
+          valeurs des cases qui contiennent un 1.
+      - type: schema
+        nom: binaire
+        legende: >-
+          10101101 en binaire : 128 + 32 + 8 + 4 + 1 = 173 en décimal.
+      - type: paragraphe
+        texte: >-
+          Les deux cases de droite valent 2 et 1 : ensemble, au plus 2 + 1 = **3**.
+          C'est pour cela que changer les deux bits de poids faible ne bouge la couleur
+          que de 3 au maximum.
       - type: paragraphe
         texte: >-
           Exemple : 25 s'écrit `00011001`. Ses deux bits de poids faible sont `0` et
@@ -179,6 +205,10 @@ etapes:
           tous les bits de gauche tombent à 0, seuls les deux derniers survivent.
           C'est exactement « garder les deux derniers bits », sur le nombre lui-même,
           sans jamais passer par du texte.
+      - type: schema
+        nom: masque
+        legende: >-
+          Le ET colonne par colonne : un 1 ne reste que là où les deux lignes ont un 1.
       - type: paragraphe
         texte: >-
           **Une méthode plus simple à comprendre : le reste de la division par 4.**
@@ -210,6 +240,11 @@ etapes:
           Il faut maintenant faire l'étape 4 pour **chaque** pixel de la première
           ligne, de la colonne 0 à la colonne 959, et garder les bits **dans l'ordre**
           : d'abord `lsb1`, puis `lsb2`, pixel après pixel.
+      - type: schema
+        nom: ligne
+        legende: >-
+          On lit la première ligne de gauche à droite. Tous les quatre pixels, une
+          lettre complète.
       - type: code
         legende: Le squelette à compléter
         python: |
@@ -255,6 +290,10 @@ etapes:
         texte: >-
           3. trouver la lettre de ce nombre dans la table ASCII : `chr(117)` vaut
           `"u"`.
+      - type: schema
+        nom: octet
+        legende: >-
+          L'exemple des slides : quatre pixels, quatre paires de bits, une lettre.
       - type: code
         legende: Les trois marches sur l'exemple des slides
         executable: true

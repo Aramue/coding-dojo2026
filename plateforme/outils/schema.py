@@ -574,8 +574,18 @@ class BlocVerifier(BaseModel):
         return _texte_utilisable(v, "un point de controle")
 
 
+class BlocSchema(BaseModel):
+    """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
+
+    type: Literal["schema"]
+    # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
+    # un bloc vide la-bas.
+    nom: Literal["pixels", "binaire", "masque", "octet", "ligne"]
+    legende: str = Field(min_length=1)
+
+
 BlocTp = Annotated[
-    Union[BlocParagraphe, BlocAttention, BlocCode, BlocIndice, BlocVerifier],
+    Union[BlocParagraphe, BlocAttention, BlocCode, BlocIndice, BlocVerifier, BlocSchema],
     Field(discriminator="type"),
 ]
 

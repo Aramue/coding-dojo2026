@@ -33,6 +33,7 @@ const TP: Tp = {
         { type: 'code', legende: 'Charger', python: 'print(1)\n', executable: false, entrees: [] },
         { type: 'verifier', texte: "Deux nombres s'affichent." },
         { type: 'indice', texte: "Regarde l'ordre des variables." },
+        { type: 'schema', nom: 'pixels', legende: 'La grille des pixels.' },
       ],
     },
     {
@@ -54,6 +55,12 @@ describe('PageTp', () => {
     expect(screen.getByText(/Environ 90 min · 2 étapes · 0 terminée$/)).toBeInTheDocument()
     expect(screen.getByText('message').tagName).toBe('STRONG')
     expect(screen.getByText('Garde le PNG.')).toBeInTheDocument()
+  })
+
+  it('montre les schémas avec leur légende', () => {
+    render(<PageTp tp={TP} executeur={executeur} />)
+    expect(screen.getByRole('img', { name: /grille de pixels/ })).toBeInTheDocument()
+    expect(screen.getByText('La grille des pixels.')).toBeInTheDocument()
   })
 
   it('liste le matériel', () => {
@@ -127,5 +134,33 @@ describe('PageTp', () => {
     fireEvent.click(screen.getByRole('checkbox', { name: "J'ai terminé l'étape 1" }))
     expect(screen.getByRole('checkbox', { name: "J'ai terminé l'étape 1" })).toBeChecked()
     ecrire.mockRestore()
+  })
+})
+
+describe('PageTp — les listes', () => {
+  it('réunit les paragraphes numérotés en une vraie liste', () => {
+    const tp: Tp = {
+      ...TP,
+      introduction: [
+        { type: 'paragraphe', texte: 'Ce que l on sait :' },
+        { type: 'paragraphe', texte: '1. en **majuscules** ;' },
+        { type: 'paragraphe', texte: '2. dans le rouge.' },
+      ],
+    }
+    render(<PageTp tp={tp} executeur={executeur} />)
+    const liste = screen.getAllByRole('list').find((l) => l.classList.contains('tp__liste'))!
+    expect(within(liste).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+      'en majuscules ;',
+      'dans le rouge.',
+    ])
+  })
+
+  it('termine une étape sur une liste', () => {
+    const tp: Tp = {
+      ...TP,
+      etapes: [{ titre: 'Seule', objectif: 'Rien.', blocs: [{ type: 'paragraphe', texte: '1. un.' }] }],
+    }
+    render(<PageTp tp={tp} executeur={executeur} />)
+    expect(screen.getByText('un.')).toBeInTheDocument()
   })
 })
