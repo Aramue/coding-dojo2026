@@ -35,6 +35,16 @@ compris un ordre d'arrêt. Le seul recours est `terminate()` **depuis l'extérie
 interne au worker ne se déclencherait jamais. Or le chapitre 1 enseigne `while` : il y **aura**
 des boucles infinies.
 
+### Ne pas faire partir les 5 secondes du clic
+
+La minuterie du programme ne démarre qu'au message `demarre` du worker, envoyé juste avant le code
+de l'élève. Le démarrage de Python a sa propre minuterie, de 60 s, et son propre message.
+
+**Ce qui casse :** comptée depuis le clic, la minuterie inclut le chargement de Pyodide — 3,5 à
+4 s sur une machine rapide, plus de 5 sur un PC de salle. Un programme juste y était déclaré
+« Ton programme tourne en rond », et comme le worker repart à froid après chaque dépassement,
+l'exercice suivant retombait dans le piège. Voir [[Moteur d'exécution]].
+
 ### Ne pas lancer deux exécutions en parallèle
 
 `Executeur` réaffecte `worker.onmessage` à chaque appel.

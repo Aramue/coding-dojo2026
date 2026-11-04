@@ -117,6 +117,13 @@ export function App() {
 
   useEffect(() => () => executeur.detruire(), [executeur])
 
+  // Python démarre dès que l'élève est connecté, pendant qu'il lit sa page :
+  // sa première validation n'aura pas à attendre le chargement.
+  useEffect(() => {
+    // `Worker` n'existe pas partout (jsdom, tests) : sans lui, rien à préchauffer.
+    if (identite && typeof Worker !== "undefined") executeur.prechauffer()
+  }, [identite, executeur])
+
   // Reconnexion silencieuse au chargement : sans elle, un rafraichissement
   // renvoie l'eleve a la saisie du code et lui fait perdre sa page.
   useEffect(() => {

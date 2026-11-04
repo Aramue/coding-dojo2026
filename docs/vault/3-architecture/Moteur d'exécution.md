@@ -30,12 +30,26 @@ Application de [[ADR-001 Exécution du code dans le navigateur]].
 
 ## Cycle d'exécution
 
-1. Le worker charge Pyodide une fois, au premier chargement de la page (**13,1 Mo**, mis en cache).
+1. Le worker charge Pyodide une fois (**13,1 Mo**, mis en cache), **dès que l'élève est connecté**,
+   sans attendre sa première validation.
 2. À chaque validation, on crée un **espace de noms neuf** — aucune fuite d'état entre deux essais.
 3. `stdin` est branché sur les entrées de test de l'exercice, ce qui fait fonctionner `input()`.
 4. `stdout` est **retenu** pour comparaison par le [[Moteur de validation]] et **diffusé** au fil
    de l'eau vers le fil principal.
-5. Minuterie de 5 s ; au-delà, le worker est terminé puis relancé.
+5. Minuterie de 5 s **sur le programme seul** ; au-delà, le worker est terminé, et un remplaçant
+   démarre aussitôt.
+
+> [!danger] Les 5 secondes ne comptent que le programme — 4 novembre 2026
+> Démarrer Pyodide prend 3,5 à 4 s sur une machine rapide (mesuré : 3,4 à 3,9 s, cache plein), bien
+> davantage sur un PC de salle. La minuterie partait du clic sur « Valider » : sur un PC lent, le
+> seul chargement dépassait les 5 s, et un programme juste — d'une milliseconde — était déclaré
+> ==« Ton programme tourne en rond »==. Pire, le worker relancé à froid après chaque dépassement,
+> l'exercice suivant retombait dans le même piège : l'élève le voyait « sur plusieurs exercices,
+> mais pas partout ».
+>
+> Il y a donc deux minuteries. Le démarrage de Python a 60 s, et s'il échoue l'élève lit « Python
+> n'a pas réussi à démarrer — ce n'est pas ton code ». Les 5 s du programme ne partent qu'au
+> message `demarre` que le worker envoie juste avant d'exécuter le code de l'élève.
 
 ## La console en direct
 

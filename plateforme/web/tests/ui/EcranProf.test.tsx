@@ -367,5 +367,7 @@ describe('EcranProf — le bouton Retour dans l aperçu', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
     expect(location.pathname).toBe('/prof')
     expect(history.state).toBeNull()
-  })
+    // Un parcours complet dans l'aperçu : sous la mesure de couverture, il frôle
+    // les 5 s par défaut de vitest, et la CI échouait au hasard.
+  }, 15_000)
 })

@@ -147,6 +147,13 @@ const GENERIQUE: MessageErreur = {
 
 /** Le message obtenu par un élève doit toujours être en français, sans jargon. */
 export function traduireErreur(erreur: ErreurPython): MessageErreur {
+  if (erreur.type === 'DemarrageImpossible') {
+    return {
+      titre: 'Python n\'a pas réussi à démarrer',
+      explication: `Ton navigateur n'a pas fini de charger Python : ton programme n'a pas encore été exécuté.`,
+      piste: `Ce n'est pas ton code. Clique de nouveau sur « Valider » ; si ça recommence, recharge la page.`,
+    }
+  }
   if (erreur.type === 'TimeoutError') {
     return {
       titre: 'Ton programme tourne en rond',
