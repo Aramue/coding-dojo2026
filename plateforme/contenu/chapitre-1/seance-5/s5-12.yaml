@@ -1,0 +1,30 @@
+id: s5-12
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: completer
+titre: La clé et la valeur ensemble
+obligatoire: true
+enonce: |
+  Ce programme doit afficher chaque matière suivie de sa note, sur le modèle
+  `maths : 14`. Complète le trou avec la méthode qui donne la clé et la valeur
+  en même temps.
+depart: |
+  notes = {"maths": 14, "sport": 17, "art": 12}
+  for matiere, note in notes._____():
+      print(matiere, ":", note)
+indices:
+  - La méthode a un nom en cinq lettres, et se termine par s. Relis le dernier exemple de la leçon.
+  - Elle s'écrit avec des parenthèses vides, comme append() mais sans rien dedans.
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |
+      maths : 14
+      sport : 17
+      art : 12
+solution: |
+  notes = {"maths": 14, "sport": 17, "art": 12}
+  for matiere, note in notes.items():
+      print(matiere, ":", note)

@@ -1,0 +1,40 @@
+id: s5-36
+concept: json
+notion: json
+seance: 5
+niveau: expert
+type: ecrire
+titre: Des notes manquantes
+obligatoire: false
+enonce: |
+  Défi : dans ce tableau JSON, une note vaut `null`, donc `None` en Python. Calcule
+  dans `total` la somme des notes **qui existent**, sans faire planter le
+  programme.
+depart: |
+  import json
+
+  texte = '[{"nom": "Alice", "note": 15}, {"nom": "Bob", "note": null}, {"nom": "Clara", "note": 12}]'
+  total = 0
+indices:
+  - On ne peut pas additionner None et un nombre. Il faut sauter l'élève dont la note est None.
+  - 'Dans la boucle, un if compare la note à None : if e["note"] != None.'
+tests:
+  - type: variable
+    nom: total
+    valeur_attendue: '27'
+    type_attendu: int
+  - type: contient
+    motif: json.loads(
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: '27'
+solution: |
+  import json
+
+  texte = '[{"nom": "Alice", "note": 15}, {"nom": "Bob", "note": null}, {"nom": "Clara", "note": 12}]'
+  total = 0
+  eleves = json.loads(texte)
+  for e in eleves:
+      if e["note"] != None:
+          total = total + e["note"]

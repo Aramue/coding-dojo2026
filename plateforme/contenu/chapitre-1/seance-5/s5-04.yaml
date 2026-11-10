@@ -1,0 +1,35 @@
+id: s5-04
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: predire
+titre: Lire par la clé
+obligatoire: true
+enonce: |
+  Un dictionnaire range des valeurs sous des noms, les clés. Pour lire une
+  valeur, on écrit sa clé entre crochets. Que montre l'écran ?
+depart: |
+  eleve = {"nom": "Camille", "age": 17}
+  print(eleve["nom"])
+  print(eleve["age"] + 1)
+indices:
+  - eleve["nom"] donne la valeur rangée sous la clé "nom", pas le mot nom.
+  - eleve["age"] vaut 17, un nombre. On peut donc lui ajouter 1.
+tests:
+  - type: qcm
+    options:
+      - |-
+        Camille
+        17
+      - |-
+        Camille
+        18
+      - |-
+        nom
+        18
+    bonne_reponse: 1
+solution: |
+  eleve = {"nom": "Camille", "age": 17}
+  print(eleve["nom"])
+  print(eleve["age"] + 1)

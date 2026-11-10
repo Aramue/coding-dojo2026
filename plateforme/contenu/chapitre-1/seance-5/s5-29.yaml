@@ -1,0 +1,31 @@
+id: s5-29
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: predire
+titre: Du dictionnaire au texte JSON
+obligatoire: true
+enonce: |
+  `json.dumps()` transforme un dictionnaire en texte JSON, et JSON ne s'écrit pas
+  comme Python. Que montre l'écran ?
+depart: |
+  import json
+
+  data = {"actif": True, "email": None}
+  print(json.dumps(data))
+indices:
+  - Le JSON écrit true et null, en minuscules, là où Python écrit True et None.
+  - Le JSON utilise des guillemets doubles, jamais d'apostrophes.
+tests:
+  - type: qcm
+    options:
+      - '{"actif": true, "email": null}'
+      - '{''actif'': True, ''email'': None}'
+      - '{"actif": True, "email": None}'
+    bonne_reponse: 0
+solution: |
+  import json
+
+  data = {"actif": True, "email": None}
+  print(json.dumps(data))

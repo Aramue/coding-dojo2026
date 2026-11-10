@@ -1,0 +1,30 @@
+id: s5-02
+concept: listes
+notion: avantdict
+seance: 5
+niveau: normal
+type: debug
+titre: Une position qui n'existe pas
+obligatoire: true
+enonce: |
+  Ce programme doit afficher la ville de la fiche, mais il s'arrête avec une
+  erreur. Lis le message, puis répare le programme.
+depart: |
+  fiche = ["Camille", 17, "Genève"]
+  ville = fiche[3]
+  print(ville)
+indices:
+  - La fiche a trois éléments. Quelle est la dernière position qui existe ?
+  - La ville est le troisième élément de la fiche. Les positions commencent à 0.
+tests:
+  - type: variable
+    nom: ville
+    valeur_attendue: '''Genève'''
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: Genève
+solution: |
+  fiche = ["Camille", 17, "Genève"]
+  ville = fiche[2]
+  print(ville)

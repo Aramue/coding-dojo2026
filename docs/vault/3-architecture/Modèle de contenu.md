@@ -171,6 +171,8 @@ lui, quatre notions flottaient côte à côte sans dire de quoi elles parlaient 
 | `decisions` | Calculer, comparer, décider | 2 | 23 septembre 2026 | `reveil`, `calculer`, `comparer`, `combiner`, `decider` |
 | `boucles` | Répéter, parcourir, compter | 3 | 30 septembre 2026 | `rappels`, `repeter`, `parcourir`, `compter`, `tantque` |
 | `stegano` | Listes, bits et caractères | 4 | 27 octobre 2026 | `reprise`, `listes`, `matrices`, `binaire`, `decoder` |
+| `donnees` | Dictionnaires et JSON | 5 | 10 novembre 2026 | `avantdict`, `dictionnaires`, `imbriques`, `json` |
+| `services` | Interroger un service web | 6 | **provisoire : 31 décembre 2099** | `web`, `requetes`, `explorer`, `meteo` |
 
 > [!note] Cinq notions au plus par chapitre
 > Il n'existe que cinq familles de couleur, et un test refuse deux notions voisines de la même
@@ -210,6 +212,14 @@ que le front n'en garde aucune copie.
 | `matrices` | Listes de listes | vert | 9 |
 | `binaire` | Binaire et caractères | bleu | 8 |
 | `decoder` | Bits de poids faible et décodage | ambre | 11 |
+| `avantdict` | Rappels avant les dictionnaires | indigo | 3 |
+| `dictionnaires` | Les dictionnaires | ambre | 13 |
+| `imbriques` | Des données imbriquées | vert | 11 |
+| `json` | Lire et écrire du JSON | corail | 10 |
+| `web` | Réseau, URL et HTTP | indigo | 8 |
+| `requetes` | Envoyer une requête | ambre | 8 |
+| `explorer` | Faire varier la requête | vert | 9 |
+| `meteo` | Un programme météo | bleu | 3 |
 
 ==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
 `print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour
@@ -251,13 +261,27 @@ contenu/
         c4-matrices.yaml
         c4-binaire.yaml
         c4-decoder.yaml
+    seance-5/
+      s5-01.yaml … s5-37.yaml     37 exercices, dont 28 obligatoires
+      lecons/
+        c5-avantdict.yaml
+        c5-dictionnaires.yaml
+        c5-imbriques.yaml
+        c5-json.yaml
+    seance-6/
+      s6-01.yaml … s6-28.yaml     28 exercices, dont 19 obligatoires
+      lecons/
+        c6-web.yaml
+        c6-requetes.yaml
+        c6-explorer.yaml
+        c6-meteo.yaml
 ```
 
 `charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,
 et la charger comme tel ferait échouer la validation sur un fichier parfaitement valide.
 
-Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers, toutes séances
-confondues** :
+Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers de contenu, toutes
+séances confondues**, plus deux fichiers pour les exercices d'API ([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) :
 
 | Fichier | Contenu |
 |---|---|
@@ -265,6 +289,8 @@ confondues** :
 | `lecons.json` | les leçons, dans l'ordre du cours — écrit même vide |
 | `notions.json` | la table des notions |
 | `chapitres.json` | la table des chapitres |
+| `requests_dojo.py` | le `requests` du dojo, que le worker installe — voir [[Moteur d'exécution]] |
+| `api_enregistree.json` | les réponses d'Open-Meteo enregistrées, rejouées si le réseau bloque le service |
 
 > [!note] Un fichier par nature de contenu, pas un par séance
 > Jusqu'au 14 septembre 2026, chaque séance publiait les siens (`seance-1.json`,

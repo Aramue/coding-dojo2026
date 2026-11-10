@@ -1,0 +1,34 @@
+id: s6-04
+concept: url
+notion: web
+seance: 6
+niveau: normal
+type: ecrire
+titre: L'URL de Zurich
+obligatoire: false
+enonce: |
+  Écris l'URL qui demande la météo de Zurich : le `base`, un `?`, puis la
+  latitude et la longitude données, séparées par un `&`. Range-la dans `url`, en
+  utilisant les variables.
+depart: |
+  base = "https://api.open-meteo.com/v1/forecast"
+  latitude = 47.37
+  longitude = 8.54
+
+  url =
+indices:
+  - Un f-string met les variables entre accolades. Le texte autour reste tel quel.
+  - 'Le modèle est : base, puis ?latitude=, puis la latitude, puis &longitude=, puis la longitude.'
+tests:
+  - type: variable
+    nom: url
+    valeur_attendue: '''https://api.open-meteo.com/v1/forecast?latitude=47.37&longitude=8.54'''
+    type_attendu: str
+  - type: interdit
+    motif: latitude=47
+solution: |
+  base = "https://api.open-meteo.com/v1/forecast"
+  latitude = 47.37
+  longitude = 8.54
+
+  url = f"{base}?latitude={latitude}&longitude={longitude}"

@@ -1,0 +1,30 @@
+id: s6-05
+concept: http
+notion: web
+seance: 6
+niveau: normal
+type: debug
+titre: Le code 404 est un nombre
+obligatoire: true
+enonce: |
+  Ce programme doit ranger dans `message` ce que veut dire le code 404, mais il
+  s'arrête avec une erreur. Lis le message, puis répare le programme.
+depart: |
+  statuts = {200: "tout va bien", 404: "introuvable", 500: "erreur du serveur"}
+  message = statuts["404"]
+  print(message)
+indices:
+  - Compare la clé demandée à celles du dictionnaire. L'une est entre guillemets, l'autre non.
+  - Dans le dictionnaire, 404 est un nombre. Le texte "404" est une autre clé.
+tests:
+  - type: variable
+    nom: message
+    valeur_attendue: '''introuvable'''
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: introuvable
+solution: |
+  statuts = {200: "tout va bien", 404: "introuvable", 500: "erreur du serveur"}
+  message = statuts[404]
+  print(message)

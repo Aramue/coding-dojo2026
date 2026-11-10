@@ -1,0 +1,27 @@
+id: s6-20
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: predire
+titre: Des jours aux heures
+obligatoire: false
+enonce: |
+  Avec `hourly`, le service envoie une valeur par heure, pour chaque jour demandé.
+  Que montre l'écran ?
+depart: |
+  jours = 2
+  print(jours * 24)
+indices:
+  - Une journée compte 24 heures.
+  - Le nombre d'heures reçues est le nombre de jours multiplié par 24.
+tests:
+  - type: qcm
+    options:
+      - '2'
+      - '24'
+      - '48'
+    bonne_reponse: 2
+solution: |
+  jours = 2
+  print(jours * 24)

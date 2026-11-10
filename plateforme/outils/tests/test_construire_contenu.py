@@ -204,3 +204,15 @@ def test_chaque_notion_declare_son_chapitre(tmp_path):
 
     notions = _lire(sortie, "notions.json")
     assert {n["chapitre"] for n in notions} == set(CHAPITRES)
+
+
+def test_la_construction_publie_le_requests_du_dojo_et_ses_reponses_enregistrees(tmp_path):
+    racine, sortie = tmp_path / "contenu", tmp_path / "public"
+    _ecrire(racine / "seance-1", BASE)
+    construire(racine, sortie)
+
+    source = (sortie / "requests_dojo.py").read_text(encoding="utf-8")
+    # Le worker verifie ce marqueur : Caddy repond index.html en 200 a un fichier
+    # absent, et la page d'accueil ne doit jamais etre compilee comme du Python.
+    assert source.startswith("# DOJO-REQUESTS")
+    assert isinstance(_lire(sortie, "api_enregistree.json"), dict)

@@ -1,0 +1,39 @@
+id: s5-15
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: expert
+type: ecrire
+titre: Compter chaque lettre
+obligatoire: false
+enonce: |
+  Défi : remplis le dictionnaire `effectifs` pour qu'il donne, pour chaque lettre
+  de `texte`, le nombre de fois où elle apparaît. Pour chaque lettre, si ce n'est
+  pas encore une clé, crée-la avec la valeur 1 ; sinon, ajoute 1 à sa valeur.
+  C'est la première étape pour casser un chiffrement de César.
+depart: |
+  texte = "banane"
+  effectifs = {}
+indices:
+  - Dans la boucle, un if teste si la lettre est déjà une clé de effectifs, avec in.
+  - 'Si oui, effectifs[lettre] = effectifs[lettre] + 1. Sinon, effectifs[lettre] = 1.'
+tests:
+  - type: variable
+    nom: effectifs
+    valeur_attendue: |-
+      {'b': 1, 'a': 2, 'n': 2, 'e': 1}
+  - type: contient
+    motif: 'for '
+  - type: contient
+    motif: in effectifs
+  - type: interdit
+    motif: count(
+    message: 'count() compte à ta place : ici, c''est le dictionnaire qu''on veut voir grandir.'
+solution: |
+  texte = "banane"
+  effectifs = {}
+  for lettre in texte:
+      if lettre in effectifs:
+          effectifs[lettre] = effectifs[lettre] + 1
+      else:
+          effectifs[lettre] = 1

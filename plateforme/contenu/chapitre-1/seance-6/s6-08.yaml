@@ -1,0 +1,41 @@
+id: s6-08
+concept: http
+notion: web
+seance: 6
+niveau: expert
+type: ecrire
+titre: Un code inconnu
+obligatoire: false
+enonce: |
+  Défi : le dictionnaire `statuts` donne le sens de quelques codes. Le programme
+  lit un code, et affiche son sens, ou `code inconnu` s'il n'est pas dans le
+  dictionnaire. Pas de `if` : utilise `get()`, qui prend la clé, puis la valeur à
+  rendre quand elle n'existe pas.
+depart: |
+  statuts = {200: "tout va bien", 404: "introuvable", 500: "erreur du serveur"}
+  code = int(input())
+indices:
+  - statuts.get(code, ...) rend la valeur de la clé, ou le second argument si la clé n'existe pas.
+  - Le résultat de get() est un texte. Affiche-le avec print().
+tests:
+  - type: sortie
+    entrees:
+      - '404'
+    attendu: |
+      404
+      introuvable
+  - type: sortie
+    entrees:
+      - '418'
+    attendu: |
+      418
+      code inconnu
+  - type: contient
+    motif: .get(
+  - type: interdit
+    motif: 'if '
+    message: Ici, get() remplace le if.
+solution: |
+  statuts = {200: "tout va bien", 404: "introuvable", 500: "erreur du serveur"}
+  code = int(input())
+  print(statuts.get(code, "code inconnu"))

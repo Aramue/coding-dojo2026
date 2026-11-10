@@ -1,0 +1,33 @@
+id: s5-34
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: ecrire
+titre: Écrire un profil en JSON
+obligatoire: true
+enonce: |
+  Le dictionnaire `profil` décrit un utilisateur. Range dans `texte` le **texte
+  JSON** qui le représente.
+depart: |
+  import json
+
+  profil = {"nom": "Alice", "amis": ["Bob", "Claire"], "actif": True}
+indices:
+  - Pour obtenir un texte JSON à partir d'un dictionnaire, il y a une fonction du module json qui finit par s.
+  - Tu n'as rien à écrire à la main. La fonction se charge des guillemets doubles et de true.
+tests:
+  - type: variable
+    nom: texte
+    valeur_attendue: |-
+      '{"nom": "Alice", "amis": ["Bob", "Claire"], "actif": true}'
+    type_attendu: str
+  - type: contient
+    motif: json.dumps(
+  - type: interdit
+    motif: 'true'
+solution: |
+  import json
+
+  profil = {"nom": "Alice", "amis": ["Bob", "Claire"], "actif": True}
+  texte = json.dumps(profil)

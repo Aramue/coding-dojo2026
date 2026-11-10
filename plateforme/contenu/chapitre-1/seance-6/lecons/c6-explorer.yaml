@@ -1,0 +1,95 @@
+id: c6-explorer
+notion: explorer
+ordre: 26
+titre: Faire varier la requête
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Une requête, c'est une URL plus des paramètres. **Change un paramètre, et la réponse change.** C'est comme ça qu'on interroge un service : chaque exemple ci-dessous est à modifier avec « Essayer ». Regarde ce qui bouge.
+  - type: code
+    legende: Changer l'unité de température
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {
+          "latitude": 46.2044,
+          "longitude": 6.1432,
+          "current_weather": True,
+          "temperature_unit": "fahrenheit",
+      }
+      data = requests.get(url, params=params).json()
+      print(data["current_weather_units"]["temperature"])
+      print(data["current_weather"]["temperature"])
+  - type: paragraphe
+    texte: >-
+      Essaie `"celsius"`, puis `"fahrenheit"`. Essaie aussi `windspeed_unit`, avec `"kmh"`, `"ms"`, `"mph"` ou `"kn"`. Les unités affichées suivent.
+  - type: paragraphe
+    texte: >-
+      `hourly` demande des valeurs **heure par heure**. La réponse contient une liste `time`, et une liste de la même longueur pour chaque variable demandée. `forecast_days` choisit le nombre de jours.
+  - type: code
+    legende: Des prévisions heure par heure
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {
+          "latitude": 46.2044,
+          "longitude": 6.1432,
+          "hourly": "temperature_2m",
+          "forecast_days": 2,
+          "timezone": "Europe/Zurich",
+      }
+      data = requests.get(url, params=params).json()
+      print(len(data["hourly"]["time"]))
+      print(data["hourly"]["time"][0])
+      print(data["hourly_units"]["temperature_2m"])
+  - type: paragraphe
+    texte: >-
+      Essaie `forecast_days` à 1, puis à 3 : le nombre d'heures reçues suit. Essaie `"hourly": "temperature_2m,windspeed_10m"` : une seconde liste apparaît.
+  - type: attention
+    texte: >-
+      **Chaque valeur différente est une nouvelle requête.** Garde un œil sur le nombre de requêtes que tu envoies : au-delà de la limite de la minute, le service répond `429`, et il faut attendre.
+  - type: paragraphe
+    texte: >-
+      `daily` donne **une valeur par jour**, par exemple la température la plus haute et la plus basse.
+  - type: code
+    legende: Une valeur par jour
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {
+          "latitude": 46.2044,
+          "longitude": 6.1432,
+          "daily": "temperature_2m_max,temperature_2m_min",
+          "forecast_days": 3,
+          "timezone": "Europe/Zurich",
+      }
+      data = requests.get(url, params=params).json()
+      print(data["daily"]["time"])
+      print(data["daily"]["temperature_2m_max"])
+  - type: paragraphe
+    texte: >-
+      Une requête peut aussi **en nourrir une autre** : on cherche d'abord les coordonnées d'une ville, puis on s'en sert pour demander sa météo.
+  - type: code
+    legende: Deux requêtes à la suite
+    executable: true
+    python: |
+      import requests
+
+      recherche = {"name": "Zürich", "count": 1, "language": "fr"}
+      ville = requests.get("https://geocoding-api.open-meteo.com/v1/search", params=recherche).json()["results"][0]
+
+      params = {
+          "latitude": ville["latitude"],
+          "longitude": ville["longitude"],
+          "current_weather": True,
+          "timezone": "auto",
+      }
+      data = requests.get("https://api.open-meteo.com/v1/forecast", params=params).json()
+      print(ville["name"], data["timezone"])

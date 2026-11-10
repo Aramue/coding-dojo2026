@@ -1,0 +1,40 @@
+id: s5-18
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: completer
+titre: Le chemin vers une valeur
+obligatoire: true
+enonce: |
+  La variable `classe` contient une fiche par élève. Complète les trous pour
+  ranger dans `age_clara` l'âge de Clara, et dans `matiere` le deuxième cours de
+  Marc.
+depart: |
+  classe = {
+      "Marc": {"age": 18, "cours": ["mathématiques", "informatique"]},
+      "Clara": {"age": 17, "cours": ["physique", "chimie", "sport"]},
+  }
+
+  age_clara = classe[_____][_____]
+  matiere = classe["Marc"]["cours"][_____]
+indices:
+  - 'Premier niveau : le nom de l''élève. Deuxième niveau : la clé de l''information voulue. Les deux sont des textes.'
+  - 'Les cours de Marc forment une liste. Le deuxième cours est à la position 1, pas 2.'
+tests:
+  - type: variable
+    nom: age_clara
+    valeur_attendue: '17'
+    type_attendu: int
+  - type: variable
+    nom: matiere
+    valeur_attendue: '''informatique'''
+    type_attendu: str
+solution: |
+  classe = {
+      "Marc": {"age": 18, "cours": ["mathématiques", "informatique"]},
+      "Clara": {"age": 17, "cours": ["physique", "chimie", "sport"]},
+  }
+
+  age_clara = classe["Clara"]["age"]
+  matiere = classe["Marc"]["cours"][1]

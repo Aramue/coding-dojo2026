@@ -1,0 +1,39 @@
+id: s5-31
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: debug
+titre: Un JSON avec des apostrophes
+obligatoire: true
+enonce: |
+  Ce programme doit lire le nom dans le texte JSON, mais il s'arrête avec une
+  erreur. Lis le message, puis répare le programme **sans supprimer
+  `json.loads`**.
+depart: |
+  import json
+
+  texte = "{'nom': 'Alice', 'age': 25}"
+  data = json.loads(texte)
+  nom = data["nom"]
+  print(nom)
+indices:
+  - Le message parle de guillemets doubles. Regarde ceux qui entourent les clés et les textes dans le JSON.
+  - Le JSON n'accepte pas les apostrophes. Il faut les remplacer par des guillemets doubles, et entourer tout le texte d'apostrophes.
+tests:
+  - type: variable
+    nom: nom
+    valeur_attendue: '''Alice'''
+    type_attendu: str
+  - type: contient
+    motif: json.loads(
+  - type: sortie
+    entrees: []
+    attendu: Alice
+solution: |
+  import json
+
+  texte = '{"nom": "Alice", "age": 25}'
+  data = json.loads(texte)
+  nom = data["nom"]
+  print(nom)

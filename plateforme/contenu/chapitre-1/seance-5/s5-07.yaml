@@ -1,0 +1,39 @@
+id: s5-07
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: predire
+titre: Modifier et ajouter une paire
+obligatoire: true
+enonce: |
+  Écrire une clé qui existe remplace sa valeur ; écrire une clé nouvelle ajoute
+  une paire. Que montre l'écran ?
+depart: |
+  stock = {"pommes": 5}
+  stock["pommes"] = 8
+  stock["poires"] = 3
+  print(stock)
+  print(len(stock))
+indices:
+  - La clé "pommes" existe déjà. Sa valeur est remplacée, il n'y a pas deux paires "pommes".
+  - Le dictionnaire se termine avec deux clés. len() les compte.
+tests:
+  - type: qcm
+    options:
+      - |-
+        {'pommes': 5, 'poires': 3}
+        2
+      - |-
+        {'pommes': 8, 'poires': 3}
+        2
+      - |-
+        {'pommes': 8, 'poires': 3}
+        3
+    bonne_reponse: 1
+solution: |
+  stock = {"pommes": 5}
+  stock["pommes"] = 8
+  stock["poires"] = 3
+  print(stock)
+  print(len(stock))

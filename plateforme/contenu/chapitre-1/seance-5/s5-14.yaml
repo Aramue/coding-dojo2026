@@ -1,0 +1,34 @@
+id: s5-14
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: predire
+titre: Parcourir les clés
+obligatoire: false
+enonce: |
+  Un `for` sur un dictionnaire passe par les clés. Que montre l'écran ?
+depart: |
+  notes = {"maths": 14, "sport": 17}
+  for matiere in notes:
+      print(matiere, notes[matiere])
+indices:
+  - À chaque tour, matiere est une clé du dictionnaire, pas une note.
+  - notes[matiere] donne la valeur rangée sous cette clé.
+tests:
+  - type: qcm
+    options:
+      - |-
+        maths 14
+        sport 17
+      - |-
+        14
+        17
+      - |-
+        maths
+        sport
+    bonne_reponse: 0
+solution: |
+  notes = {"maths": 14, "sport": 17}
+  for matiere in notes:
+      print(matiere, notes[matiere])

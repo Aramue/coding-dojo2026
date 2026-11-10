@@ -1,0 +1,73 @@
+id: c6-requetes
+notion: requetes
+ordre: 25
+titre: Envoyer une requête
+duree_min: 5
+blocs:
+  - type: paragraphe
+    texte: >-
+      La bibliothèque `requests` envoie une requête et rend la réponse. Ici, **les requêtes partent pour de vrai**, vers un service météo gratuit, **Open-Meteo**. Les réponses sont donc celles d'aujourd'hui, et changent d'une heure à l'autre.
+  - type: code
+    legende: Envoyer une requête
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+      reponse = requests.get(url, params=params)
+      print(reponse.status_code)
+  - type: paragraphe
+    texte: >-
+      `requests.get()` prend l'URL, et les **paramètres** dans un dictionnaire : c'est lui qui écrit le `?latitude=...&longitude=...` à ta place. `reponse.status_code` est le code de statut : 200 veut dire que tout s'est bien passé.
+  - type: paragraphe
+    texte: >-
+      Les données, elles, sont dans `reponse.json()`, qui rend un dictionnaire, comme `json.loads()` le faisait sur un texte.
+  - type: code
+    legende: Lire la réponse
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+      reponse = requests.get(url, params=params)
+      data = reponse.json()
+      print(data["current_weather"]["temperature"])
+      print(data["current_weather_units"]["temperature"])
+  - type: attention
+    texte: >-
+      **`reponse` n'est pas un dictionnaire.** C'est la réponse complète, avec son statut et ses en-têtes. Pour lire les données, on passe par `reponse.json()`.
+  - type: paragraphe
+    texte: >-
+      Une requête peut échouer. `reponse.ok` vaut `True` quand le statut est inférieur à 400. Dans le cas contraire, le service explique en général le problème dans sa réponse.
+  - type: code
+    legende: Une requête refusée
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {"latitude": 200, "longitude": 6.1, "current_weather": True}
+      reponse = requests.get(url, params=params)
+      print(reponse.status_code)
+      print(reponse.ok)
+      print(reponse.json()["reason"])
+  - type: attention
+    texte: >-
+      **Les requêtes sont comptées.** Un programme en envoie au plus 6, et le service en accepte un nombre limité à la minute, pour toute la salle. Au-delà, il répond `429`, et il suffit d'attendre un instant. Deux requêtes identiques ne partent qu'une fois.
+  - type: paragraphe
+    texte: >-
+      Une ville s'écrit avec ses coordonnées, `latitude` et `longitude`. Un second service d'Open-Meteo les donne à partir du nom d'une ville : sa réponse contient une liste `results`.
+  - type: code
+    legende: Chercher une ville
+    executable: true
+    python: |
+      import requests
+
+      url = "https://geocoding-api.open-meteo.com/v1/search"
+      params = {"name": "Genève", "count": 1, "language": "fr"}
+      data = requests.get(url, params=params).json()
+      premier = data["results"][0]
+      print(premier["name"], premier["country_code"])
+      print(premier["latitude"], premier["longitude"])

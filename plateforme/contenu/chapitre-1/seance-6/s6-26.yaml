@@ -1,0 +1,69 @@
+id: s6-26
+concept: programme
+notion: meteo
+seance: 6
+niveau: normal
+type: ecrire
+titre: Le temps dans une ville
+obligatoire: true
+enonce: |
+  Dernier exercice obligatoire de la séance : un programme complet, qui réunit ce
+  que tu as appris. À partir du nom de la ville dans `ville`, le programme doit :
+
+  1. chercher la ville avec `https://geocoding-api.open-meteo.com/v1/search` (`count` à 1, `language` à `fr`), et ranger le code de son pays dans `pays` ;
+  2. demander la météo actuelle à `https://api.open-meteo.com/v1/forecast`, avec sa latitude et sa longitude, et `timezone` réglé sur `auto` ;
+  3. ranger la température dans `temperature` et son unité dans `unite` ;
+  4. afficher une phrase du genre `Genève (CH) : 10.9 °C`.
+depart: |
+  import requests
+
+  ville = "Genève"
+
+  # 1. chercher la ville : son pays, sa latitude, sa longitude
+
+  # 2. demander la météo actuelle à cet endroit
+
+  # 3. ranger la température et son unité
+
+  # 4. afficher la phrase
+indices:
+  - Deux requêtes à la suite. La première donne data["results"][0], dont country_code, latitude et longitude.
+  - La seconde reprend latitude et longitude. La température est dans current_weather, son unité dans current_weather_units.
+tests:
+  - type: variable
+    nom: pays
+    valeur_attendue: '''CH'''
+    type_attendu: str
+  - type: variable
+    nom: temperature
+    type_attendu: float
+  - type: variable
+    nom: unite
+    valeur_attendue: '''°C'''
+    type_attendu: str
+  - type: contient
+    motif: requests.get(
+  - type: contient
+    motif: print(
+  - type: interdit
+    motif: '46.'
+solution: |
+  import requests
+
+  ville = "Genève"
+
+  recherche = {"name": ville, "count": 1, "language": "fr"}
+  trouvee = requests.get("https://geocoding-api.open-meteo.com/v1/search", params=recherche).json()["results"][0]
+  pays = trouvee["country_code"]
+
+  params = {
+      "latitude": trouvee["latitude"],
+      "longitude": trouvee["longitude"],
+      "current_weather": True,
+      "timezone": "auto",
+  }
+  data = requests.get("https://api.open-meteo.com/v1/forecast", params=params).json()
+  temperature = data["current_weather"]["temperature"]
+  unite = data["current_weather_units"]["temperature"]
+
+  print(ville, "(" + pays + ") :", temperature, unite)

@@ -737,5 +737,810 @@
       }
     ],
     "famille": "conditions"
+  },
+  {
+    "id": "c4-reprise",
+    "notion": "reprise",
+    "ordre": 15,
+    "titre": "Rappels avant les listes",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Cette séance prépare le TP de stéganographie : retrouver un message caché dans les pixels d'une image. Avant de commencer, trois réflexes des séances précédentes méritent d'être revus, parce que le TP s'appuie dessus à chaque ligne."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**Un texte se construit morceau par morceau.** On part du texte vide, et on y ajoute quelque chose à chaque tour de boucle. On ne peut ajouter qu'un texte à un texte : un nombre passe d'abord par `str()`."
+      },
+      {
+        "type": "code",
+        "legende": "Un texte qui grandit",
+        "python": "resultat = \"\"\nfor i in range(4):\n    resultat = resultat + str(i)\nprint(resultat)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**`range()` accepte un pas.** Avec trois nombres, il donne le départ, la fin (exclue) et l'écart entre deux valeurs."
+      },
+      {
+        "type": "code",
+        "legende": "De quatre en quatre",
+        "python": "for i in range(0, 12, 4):\n    print(i)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**On compte à partir de 0.** `range(3)` donne 0, 1 et 2, jamais 3. Retiens cette habitude : dans la suite, les positions d'une liste suivent la même règle."
+      },
+      {
+        "type": "attention",
+        "texte": "**Une boucle ne s'arrête pas sur la dernière valeur demandée.** La fin de `range()` est exclue : `range(0, 12, 4)` s'arrête avant 12, et ne donne que 0, 4 et 8."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c4-listes",
+    "notion": "listes",
+    "ordre": 16,
+    "titre": "Les listes",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une **liste** range plusieurs valeurs dans une seule variable. On l'écrit entre crochets, avec des virgules entre les valeurs."
+      },
+      {
+        "type": "code",
+        "legende": "Une liste de notes",
+        "python": "notes = [12, 15, 9]\nprint(notes)\nprint(len(notes))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Chaque valeur a une **position**, et la première position est **0**. Pour lire une valeur, on écrit la position entre crochets, collés au nom de la liste."
+      },
+      {
+        "type": "code",
+        "legende": "Lire par la position",
+        "python": "notes = [12, 15, 9]\nprint(notes[0])\nprint(notes[2])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**La dernière position est `len(notes) - 1`, pas `len(notes)`.** Une liste de trois éléments a les positions 0, 1 et 2. Demander `notes[3]` arrête le programme avec une erreur : la position n'existe pas."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un **pixel** d'image est justement une liste de trois nombres : la quantité de rouge, de vert et de bleu, dans cet ordre."
+      },
+      {
+        "type": "code",
+        "legende": "Les trois couleurs d'un pixel",
+        "python": "pixel = [153, 50, 204]\nprint(\"rouge :\", pixel[0])\nprint(\"vert :\", pixel[1])\nprint(\"bleu :\", pixel[2])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "On peut partir d'une liste vide, `[]`, et lui ajouter des valeurs à la fin avec `append()`. C'est la liste qui grandit, comme le texte vide qui grandissait."
+      },
+      {
+        "type": "code",
+        "legende": "Une liste qui grandit",
+        "python": "bits = []\nbits.append(1)\nbits.append(0)\nbits.append(1)\nprint(bits)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**`append()` modifie la liste, et ne rend rien.** On écrit `bits.append(1)` sur une ligne seule. Écrire `bits = bits.append(1)` remplace la liste par le vide."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Comme un texte, une liste se parcourt avec `for` : la variable prend chaque valeur à son tour, de la première à la dernière."
+      },
+      {
+        "type": "code",
+        "legende": "Parcourir une liste",
+        "python": "prix = [12, 5, 8]\ntotal = 0\nfor p in prix:\n    total = total + p\nprint(total)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour connaître la position en même temps que la valeur, parcours les positions avec `range(len(...))`, puis lis la valeur avec la position."
+      },
+      {
+        "type": "code",
+        "legende": "Des positions, pas des valeurs",
+        "python": "mots = [\"un\", \"deux\", \"trois\"]\nfor i in range(len(mots)):\n    print(i, mots[i])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "c4-matrices",
+    "notion": "matrices",
+    "ordre": 17,
+    "titre": "Listes de listes",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une liste peut contenir d'autres listes. C'est exactement la forme d'une **image** : une image est une liste de **lignes**, une ligne est une liste de **pixels**, et un pixel est une liste de trois **couleurs**."
+      },
+      {
+        "type": "code",
+        "legende": "Une petite image",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\nprint(image[0])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour atteindre une valeur, on lit **de l'extérieur vers l'intérieur** : d'abord la ligne, puis le pixel dans la ligne, puis la couleur dans le pixel."
+      },
+      {
+        "type": "code",
+        "legende": "Ligne, colonne, couleur",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\npixel = image[0][1]\nprint(pixel)\nprint(pixel[0])\nprint(image[1][0][2])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Chaque position a ses propres crochets.** Dans le TP, la bibliothèque NumPy accepte aussi l'écriture `image[0, 1]`. Avec des listes ordinaires, elle arrête le programme : écris toujours `image[0][1]`, qui marche partout."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`len()` compte à chaque niveau : `len(image)` donne le nombre de lignes, et `len(image[0])` le nombre de pixels de la première ligne."
+      },
+      {
+        "type": "code",
+        "legende": "La taille de l'image",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7], [59, 77, 1]],\n    [[121, 9, 9], [40, 40, 40], [8, 90, 250]],\n]\nprint(len(image))\nprint(len(image[0]))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour parcourir toute l'image, on place une boucle **dans** une autre : la première prend chaque ligne, la seconde prend chaque pixel de cette ligne."
+      },
+      {
+        "type": "code",
+        "legende": "Deux boucles imbriquées",
+        "python": "image = [\n    [[25, 200, 10], [203, 5, 7]],\n    [[59, 77, 1], [121, 9, 9]],\n]\nfor ligne in image:\n    for pixel in ligne:\n        print(pixel[0])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c4-binaire",
+    "notion": "binaire",
+    "ordre": 18,
+    "titre": "Binaire et caractères",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un ordinateur écrit les nombres avec des **bits**, qui valent 0 ou 1. Huit bits forment un **octet**. De droite à gauche, chaque bit vaut le double du précédent : 1, 2, 4, 8, 16, 32, 64, 128."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "L'octet `01110101` vaut donc 64 + 32 + 16 + 4 + 1, soit **117**. En Python, `int()` fait ce calcul si on lui donne la base en second nombre : 2 veut dire « binaire »."
+      },
+      {
+        "type": "code",
+        "legende": "Du binaire au nombre",
+        "python": "octet = \"01110101\"\nprint(int(octet, 2))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Sans la base, `int()` lit du décimal.** `int(\"101\")` donne cent un, et `int(\"101\", 2)` donne cinq. Le texte est le même : seule la base change le résultat."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Chaque caractère a un numéro, fixé par la table **ASCII**. `chr()` rend le caractère d'un numéro, et `ord()` rend le numéro d'un caractère."
+      },
+      {
+        "type": "code",
+        "legende": "Un numéro, un caractère",
+        "python": "print(chr(117))\nprint(ord(\"u\"))\nprint(chr(65))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour passer d'un octet à une lettre, on enchaîne deux conversions : du texte binaire au nombre avec `int(..., 2)`, puis du nombre à la lettre avec `chr()`. Une expression imbriquée se lit de l'intérieur vers l'extérieur."
+      },
+      {
+        "type": "code",
+        "legende": "D'un octet à une lettre",
+        "python": "octet = \"01110101\"\nnombre = int(octet, 2)\nlettre = chr(nombre)\nprint(lettre)\nprint(chr(int(octet, 2)))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les lettres majuscules occupent les numéros 65 à 90, et l'espace porte le numéro 32. Un message fait de majuscules et d'espaces se lit donc octet par octet."
+      },
+      {
+        "type": "code",
+        "legende": "Les premières majuscules",
+        "python": "for n in range(65, 70):\n    print(n, chr(n))\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c4-decoder",
+    "notion": "decoder",
+    "ordre": 19,
+    "titre": "Bits de poids faible et décodage",
+    "dureeMin": 6,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "La **stéganographie** cache une information dans une autre. Ici, le message se cache dans les **deux derniers bits** d'une couleur, qu'on appelle les bits de poids faible, ou LSB. Les modifier change la couleur d'au plus 3 sur 255 : l'œil ne voit rien."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour isoler ces deux bits, on utilise l'opérateur **`&`**. Il compare deux nombres bit à bit, et ne garde que les bits qui valent 1 des deux côtés. Comme 3 s'écrit `00000011`, `valeur & 3` efface tout, sauf les deux derniers bits."
+      },
+      {
+        "type": "code",
+        "legende": "Garder les deux derniers bits",
+        "python": "print(bin(25))\nprint(25 & 3)\nprint(203 & 3)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`bin()` affiche un nombre en binaire, précédé de `0b`. Ici, 25 s'écrit `0b11001`, soit `00011001` sur huit bits : ses deux derniers bits sont 01, qui valent 1."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour séparer ces deux bits, l'opérateur **`>>`** décale les bits vers la droite : le dernier disparaît. `3 >> 1` donne 1 (le bit de gauche), et `3 & 1` donne 1 (le bit de droite)."
+      },
+      {
+        "type": "code",
+        "legende": "Séparer les deux bits",
+        "python": "valeur = 2\nprint(valeur >> 1)\nprint(valeur & 1)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tout ce travail est déjà écrit dans une **fonction** du TP, `get_lsb`. Tu n'as pas à l'écrire : tu lis sa description, et tu l'**appelles** avec une valeur entre parenthèses. Elle rend **deux** valeurs, que l'on range dans deux variables séparées par une virgule."
+      },
+      {
+        "type": "code",
+        "legende": "Appeler get_lsb",
+        "python": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\ngauche, droite = get_lsb(25)\nprint(gauche, droite)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Il faut autant de variables que de valeurs rendues.** `get_lsb` en rend deux : en écrire trois ou une seule arrête le programme."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Décoder un message revient alors à enchaîner tout ce que tu sais : récolter les bits de chaque pixel dans une liste, les regrouper par huit, convertir chaque octet en lettre. Quatre pixels fournissent huit bits, donc une lettre."
+      },
+      {
+        "type": "code",
+        "legende": "Quatre pixels, une lettre",
+        "python": "def get_lsb(value_of_color):\n    \"\"\"Rend les 2 derniers bits (LSB) d'une valeur de couleur, sous la forme (lsb1, lsb2).\"\"\"\n    ex_value = int(value_of_color) & 0b11\n    lsb1 = (ex_value >> 1) & 1\n    lsb2 = ex_value & 1\n    return lsb1, lsb2\n\nrouges = [25, 203, 57, 121]\n\nbits = []\nfor valeur in rouges:\n    bit1, bit2 = get_lsb(valeur)\n    bits.append(bit1)\n    bits.append(bit2)\n\noctet = \"\"\nfor bit in bits:\n    octet = octet + str(bit)\n\nprint(octet)\nprint(chr(int(octet, 2)))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Avec plusieurs lettres, regroupe les bits par huit.** Une boucle `range(0, len(bits), 8)` donne le début de chaque paquet, et une boucle interne lit les huit bits à partir de ce début, à la position `i + j`."
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "c5-avantdict",
+    "notion": "avantdict",
+    "ordre": 20,
+    "titre": "Rappels avant les dictionnaires",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Avant les dictionnaires, un dernier tour de **listes**. Une liste range des valeurs, et on les retrouve par leur **position**, qui commence à 0."
+      },
+      {
+        "type": "code",
+        "legende": "Une fiche rangée dans une liste",
+        "python": "fiche = [\"Camille\", 17, \"Genève\"]\nprint(fiche[0])\nprint(fiche[2])\nprint(len(fiche))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour lire la ville, il faut savoir qu'elle est à la position 2. Rien dans la liste ne le dit : c'est à toi de t'en souvenir."
+      },
+      {
+        "type": "attention",
+        "texte": "**La dernière position est `len(fiche) - 1`.** Une fiche de trois valeurs a les positions 0, 1 et 2. Demander `fiche[3]` arrête le programme avec une erreur."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une liste se parcourt avec `for`, et on peut y chercher, compter ou cumuler, exactement comme avec un texte."
+      },
+      {
+        "type": "code",
+        "legende": "Compter dans une liste",
+        "python": "prenoms = [\"Camille\", \"Alice\", \"Marc\"]\ncompteur = 0\nfor p in prenoms:\n    if p[0] == \"A\":\n        compteur = compteur + 1\nprint(compteur)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Retenir « la ville est à la position 2 » devient vite pénible quand une fiche compte dix valeurs. Les **dictionnaires** règlent ce problème : à la place d'un numéro, chaque valeur reçoit un **nom**."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c5-dictionnaires",
+    "notion": "dictionnaires",
+    "ordre": 21,
+    "titre": "Les dictionnaires",
+    "dureeMin": 6,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un **dictionnaire** range des valeurs sous des noms, qu'on appelle des **clés**. Il s'écrit entre accolades, et chaque paire s'écrit `clé: valeur`. Comme dans un vrai dictionnaire, on cherche par le mot, pas par le numéro de page."
+      },
+      {
+        "type": "code",
+        "legende": "Une fiche avec des clés",
+        "python": "fiche = {\"nom\": \"Camille\", \"age\": 17, \"ville\": \"Genève\"}\nprint(fiche)\nprint(len(fiche))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les clés sont des textes, donc entre guillemets. Python affiche le dictionnaire avec des apostrophes, et garde les paires dans l'ordre où tu les as écrites."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour lire une valeur, on écrit sa clé entre crochets, comme on écrivait une position pour une liste."
+      },
+      {
+        "type": "code",
+        "legende": "Lire par la clé",
+        "python": "fiche = {\"nom\": \"Camille\", \"age\": 17, \"ville\": \"Genève\"}\nprint(fiche[\"nom\"])\nprint(fiche[\"age\"] + 1)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Une clé qui n'existe pas arrête le programme** avec une erreur `KeyError`. Les majuscules et les accents comptent : la clé `\"Nom\"` n'est pas la clé `\"nom\"`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "La même écriture sert à **modifier** une valeur et à **ajouter** une paire : si la clé existe, sa valeur est remplacée ; sinon, la paire est créée."
+      },
+      {
+        "type": "code",
+        "legende": "Modifier et ajouter",
+        "python": "fiche = {\"nom\": \"Camille\", \"age\": 17}\nfiche[\"age\"] = 18\nfiche[\"classe\"] = \"3e\"\nprint(fiche)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour savoir si une clé existe **sans risquer d'erreur**, on écrit `clé in dictionnaire`. La réponse est `True` ou `False`, et se range très bien dans un `if`."
+      },
+      {
+        "type": "code",
+        "legende": "Tester une clé avec in",
+        "python": "fiche = {\"nom\": \"Camille\", \"age\": 17}\nprint(\"age\" in fiche)\nprint(\"pays\" in fiche)\nif \"pays\" in fiche:\n    print(fiche[\"pays\"])\nelse:\n    print(\"pays inconnu\")\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un `for` sur un dictionnaire passe par les **clés**, une à une. Avec la clé, on retrouve la valeur."
+      },
+      {
+        "type": "code",
+        "legende": "Parcourir les clés",
+        "python": "notes = {\"maths\": 14, \"sport\": 17}\nfor matiere in notes:\n    print(matiere, notes[matiere])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`items()` donne la clé et la valeur **ensemble**, à chaque tour. On les range dans deux variables, comme quand une fonction rendait deux valeurs."
+      },
+      {
+        "type": "code",
+        "legende": "Clé et valeur avec items()",
+        "python": "notes = {\"maths\": 14, \"sport\": 17}\nfor matiere, note in notes.items():\n    print(matiere, \":\", note)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Une clé n'existe qu'une fois.** Écrire `notes[\"maths\"] = 10` remplace la note de maths, il n'en crée pas une deuxième."
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "c5-imbriques",
+    "notion": "imbriques",
+    "ordre": 22,
+    "titre": "Des données imbriquées",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "La valeur d'une clé peut être n'importe quoi : un nombre, un texte, une **liste**, ou même **un autre dictionnaire**. C'est ainsi que sont écrites presque toutes les données qui circulent sur Internet."
+      },
+      {
+        "type": "code",
+        "legende": "Un dictionnaire dans un dictionnaire",
+        "python": "data = {\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}\nprint(data[\"user\"])\nprint(data[\"user\"][\"nom\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "On lit de l'extérieur vers l'intérieur : **une paire de crochets par niveau**. D'abord `data[\"user\"]`, qui est un dictionnaire, puis la clé `\"nom\"` de ce dictionnaire."
+      },
+      {
+        "type": "code",
+        "legende": "Descendre jusqu'à une liste",
+        "python": "data = {\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}\nprint(data[\"user\"][\"amis\"])\nprint(data[\"user\"][\"amis\"][1])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Quand ça plante, affiche le niveau d'avant.** `print(data[\"user\"])` montre ce qu'il reste à lire. Une clé qui manque donne `KeyError` ; une position de liste qui n'existe pas donne `IndexError`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une liste qui se trouve dans un dictionnaire se modifie **sur place**, avec les mêmes méthodes que d'habitude."
+      },
+      {
+        "type": "code",
+        "legende": "Ajouter un ami",
+        "python": "data = {\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}\ndata[\"user\"][\"amis\"].append(\"David\")\nprint(data[\"user\"][\"amis\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "L'inverse est tout aussi courant : une **liste de dictionnaires**, un par élève, un par article, un par ville."
+      },
+      {
+        "type": "code",
+        "legende": "Parcourir une liste de dictionnaires",
+        "python": "eleves = [{\"nom\": \"Alice\", \"age\": 17}, {\"nom\": \"Bob\", \"age\": 16}]\nfor e in eleves:\n    print(e[\"nom\"], e[\"age\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Dans `for e in eleves`, la variable `e` est un dictionnaire entier**, pas un nom. Pour lire le nom, on écrit `e[\"nom\"]`."
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c5-json",
+    "notion": "json",
+    "ordre": 23,
+    "titre": "Lire et écrire du JSON",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "**JSON** est un format de **texte** pour échanger des données entre programmes. Il ressemble beaucoup à un dictionnaire Python, mais c'est bien un texte : un programme peut l'écrire, un autre peut le lire."
+      },
+      {
+        "type": "code",
+        "legende": "Un texte JSON n'est qu'un texte",
+        "python": "texte = '{\"nom\": \"Alice\", \"age\": 25}'\nprint(texte)\nprint(texte[0])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour s'en servir, on le transforme en dictionnaire avec `json.loads()`. Le module `json` fait partie de Python : on l'appelle avec `import json`, comme `math`."
+      },
+      {
+        "type": "code",
+        "legende": "Du texte au dictionnaire, et retour",
+        "python": "import json\n\ntexte = '{\"nom\": \"Alice\", \"age\": 25}'\ndata = json.loads(texte)\nprint(data[\"nom\"])\n\ndata[\"age\"] = 26\nnouveau = json.dumps(data)\nprint(nouveau)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`json.loads()` **lit** un texte et rend un dictionnaire. `json.dumps()` fait l'inverse : il prend un dictionnaire et rend un **texte**. Les deux « s » veulent dire *string*, un texte."
+      },
+      {
+        "type": "attention",
+        "texte": "**Le JSON exige des guillemets doubles.** `'{'nom': 'Alice'}'` n'est pas du JSON valide : `json.loads()` arrête le programme avec une erreur `JSONDecodeError`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les types ne s'écrivent pas pareil des deux côtés. Un objet JSON devient un dictionnaire, un tableau devient une liste, `true` et `false` deviennent `True` et `False`, et `null` devient `None`."
+      },
+      {
+        "type": "code",
+        "legende": "Les types passent de JSON à Python",
+        "python": "import json\n\ntexte = '{\"actif\": true, \"email\": null, \"amis\": [\"Bob\", \"Claire\"]}'\ndata = json.loads(texte)\nprint(data[\"actif\"])\nprint(data[\"email\"])\nprint(data[\"amis\"][0])\nprint(json.dumps(data))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**`print(data)` n'affiche pas du JSON.** Il montre du Python, avec des apostrophes et `True`. Seul `json.dumps(data)` rend le vrai texte JSON, avec des guillemets doubles et `true`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un service renvoie souvent un **tableau d'objets** : une liste de dictionnaires, qui se parcourt avec `for`."
+      },
+      {
+        "type": "code",
+        "legende": "Un tableau d'objets",
+        "python": "import json\n\ntexte = '[{\"nom\": \"Alice\", \"age\": 17}, {\"nom\": \"Bob\", \"age\": 16}]'\neleves = json.loads(texte)\nfor e in eleves:\n    print(e[\"nom\"], e[\"age\"])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "boucles"
+  },
+  {
+    "id": "c6-web",
+    "notion": "web",
+    "ordre": 24,
+    "titre": "Réseau, URL et HTTP",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Quand ton navigateur ouvre une page, ou quand un programme interroge un service, il envoie une **requête** à un autre ordinateur, le **serveur**, qui renvoie une **réponse**. L'adresse du serveur s'appelle une **URL**."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une URL se découpe en parties : le protocole (`https`), le serveur (`api.open-meteo.com`), le chemin (`/v1/forecast`), puis, après un `?`, les **paramètres**, séparés par des `&`. Chaque paramètre s'écrit `nom=valeur`."
+      },
+      {
+        "type": "code",
+        "legende": "Une URL est un texte",
+        "python": "base = \"https://api.open-meteo.com/v1/forecast\"\nurl = base + \"?latitude=46.2&longitude=6.1\"\nprint(url)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Comme tout texte, une URL se fabrique avec un f-string : les valeurs des variables se glissent entre les accolades."
+      },
+      {
+        "type": "code",
+        "legende": "Construire une URL avec des variables",
+        "python": "base = \"https://api.open-meteo.com/v1/forecast\"\nlatitude = 46.2\nlongitude = 6.1\nurl = f\"{base}?latitude={latitude}&longitude={longitude}\"\nprint(url)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Chaque requête porte une **méthode**, qui dit ce qu'on veut faire : `GET` pour obtenir, `POST` pour créer, `PUT` pour mettre à jour, `DELETE` pour supprimer. Un dictionnaire les range très bien."
+      },
+      {
+        "type": "code",
+        "legende": "Les quatre méthodes",
+        "python": "methodes = {\"GET\": \"obtenir\", \"POST\": \"créer\", \"PUT\": \"mettre à jour\", \"DELETE\": \"supprimer\"}\nprint(methodes[\"GET\"])\nfor m in methodes:\n    print(m, \":\", methodes[m])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "La réponse commence toujours par un **code de statut**, un nombre qui dit si ça a marché. Un code qui commence par **2** est un succès, par **4** une erreur de **ta** requête, par **5** une erreur du **serveur**."
+      },
+      {
+        "type": "code",
+        "legende": "Les codes de statut",
+        "python": "statuts = {200: \"tout va bien\", 400: \"requête invalide\", 404: \"introuvable\", 429: \"trop de requêtes\", 500: \"erreur du serveur\"}\nprint(statuts[404])\ncode = 429\nprint(code // 100)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Les clés d'un dictionnaire ont un type.** `statuts[404]` marche, `statuts[\"404\"]` donne `KeyError` : le nombre 404 et le texte `\"404\"` sont deux clés différentes."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Pour tester une API, certains outils permettent d'envoyer des requêtes à la main, comme Postman. Ici, tu enverras tes requêtes directement depuis Python."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c6-requetes",
+    "notion": "requetes",
+    "ordre": 25,
+    "titre": "Envoyer une requête",
+    "dureeMin": 5,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "La bibliothèque `requests` envoie une requête et rend la réponse. Ici, **les requêtes partent pour de vrai**, vers un service météo gratuit, **Open-Meteo**. Les réponses sont donc celles d'aujourd'hui, et changent d'une heure à l'autre."
+      },
+      {
+        "type": "code",
+        "legende": "Envoyer une requête",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\nreponse = requests.get(url, params=params)\nprint(reponse.status_code)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`requests.get()` prend l'URL, et les **paramètres** dans un dictionnaire : c'est lui qui écrit le `?latitude=...&longitude=...` à ta place. `reponse.status_code` est le code de statut : 200 veut dire que tout s'est bien passé."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les données, elles, sont dans `reponse.json()`, qui rend un dictionnaire, comme `json.loads()` le faisait sur un texte."
+      },
+      {
+        "type": "code",
+        "legende": "Lire la réponse",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\nreponse = requests.get(url, params=params)\ndata = reponse.json()\nprint(data[\"current_weather\"][\"temperature\"])\nprint(data[\"current_weather_units\"][\"temperature\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**`reponse` n'est pas un dictionnaire.** C'est la réponse complète, avec son statut et ses en-têtes. Pour lire les données, on passe par `reponse.json()`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une requête peut échouer. `reponse.ok` vaut `True` quand le statut est inférieur à 400. Dans le cas contraire, le service explique en général le problème dans sa réponse."
+      },
+      {
+        "type": "code",
+        "legende": "Une requête refusée",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 200, \"longitude\": 6.1, \"current_weather\": True}\nreponse = requests.get(url, params=params)\nprint(reponse.status_code)\nprint(reponse.ok)\nprint(reponse.json()[\"reason\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Les requêtes sont comptées.** Un programme en envoie au plus 6, et le service en accepte un nombre limité à la minute, pour toute la salle. Au-delà, il répond `429`, et il suffit d'attendre un instant. Deux requêtes identiques ne partent qu'une fois."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une ville s'écrit avec ses coordonnées, `latitude` et `longitude`. Un second service d'Open-Meteo les donne à partir du nom d'une ville : sa réponse contient une liste `results`."
+      },
+      {
+        "type": "code",
+        "legende": "Chercher une ville",
+        "python": "import requests\n\nurl = \"https://geocoding-api.open-meteo.com/v1/search\"\nparams = {\"name\": \"Genève\", \"count\": 1, \"language\": \"fr\"}\ndata = requests.get(url, params=params).json()\npremier = data[\"results\"][0]\nprint(premier[\"name\"], premier[\"country_code\"])\nprint(premier[\"latitude\"], premier[\"longitude\"])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "conditions"
+  },
+  {
+    "id": "c6-explorer",
+    "notion": "explorer",
+    "ordre": 26,
+    "titre": "Faire varier la requête",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une requête, c'est une URL plus des paramètres. **Change un paramètre, et la réponse change.** C'est comme ça qu'on interroge un service : chaque exemple ci-dessous est à modifier avec « Essayer ». Regarde ce qui bouge."
+      },
+      {
+        "type": "code",
+        "legende": "Changer l'unité de température",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\n    \"latitude\": 46.2044,\n    \"longitude\": 6.1432,\n    \"current_weather\": True,\n    \"temperature_unit\": \"fahrenheit\",\n}\ndata = requests.get(url, params=params).json()\nprint(data[\"current_weather_units\"][\"temperature\"])\nprint(data[\"current_weather\"][\"temperature\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Essaie `\"celsius\"`, puis `\"fahrenheit\"`. Essaie aussi `windspeed_unit`, avec `\"kmh\"`, `\"ms\"`, `\"mph\"` ou `\"kn\"`. Les unités affichées suivent."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`hourly` demande des valeurs **heure par heure**. La réponse contient une liste `time`, et une liste de la même longueur pour chaque variable demandée. `forecast_days` choisit le nombre de jours."
+      },
+      {
+        "type": "code",
+        "legende": "Des prévisions heure par heure",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\n    \"latitude\": 46.2044,\n    \"longitude\": 6.1432,\n    \"hourly\": \"temperature_2m\",\n    \"forecast_days\": 2,\n    \"timezone\": \"Europe/Zurich\",\n}\ndata = requests.get(url, params=params).json()\nprint(len(data[\"hourly\"][\"time\"]))\nprint(data[\"hourly\"][\"time\"][0])\nprint(data[\"hourly_units\"][\"temperature_2m\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Essaie `forecast_days` à 1, puis à 3 : le nombre d'heures reçues suit. Essaie `\"hourly\": \"temperature_2m,windspeed_10m\"` : une seconde liste apparaît."
+      },
+      {
+        "type": "attention",
+        "texte": "**Chaque valeur différente est une nouvelle requête.** Garde un œil sur le nombre de requêtes que tu envoies : au-delà de la limite de la minute, le service répond `429`, et il faut attendre."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`daily` donne **une valeur par jour**, par exemple la température la plus haute et la plus basse."
+      },
+      {
+        "type": "code",
+        "legende": "Une valeur par jour",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\n    \"latitude\": 46.2044,\n    \"longitude\": 6.1432,\n    \"daily\": \"temperature_2m_max,temperature_2m_min\",\n    \"forecast_days\": 3,\n    \"timezone\": \"Europe/Zurich\",\n}\ndata = requests.get(url, params=params).json()\nprint(data[\"daily\"][\"time\"])\nprint(data[\"daily\"][\"temperature_2m_max\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une requête peut aussi **en nourrir une autre** : on cherche d'abord les coordonnées d'une ville, puis on s'en sert pour demander sa météo."
+      },
+      {
+        "type": "code",
+        "legende": "Deux requêtes à la suite",
+        "python": "import requests\n\nrecherche = {\"name\": \"Zürich\", \"count\": 1, \"language\": \"fr\"}\nville = requests.get(\"https://geocoding-api.open-meteo.com/v1/search\", params=recherche).json()[\"results\"][0]\n\nparams = {\n    \"latitude\": ville[\"latitude\"],\n    \"longitude\": ville[\"longitude\"],\n    \"current_weather\": True,\n    \"timezone\": \"auto\",\n}\ndata = requests.get(\"https://api.open-meteo.com/v1/forecast\", params=params).json()\nprint(ville[\"name\"], data[\"timezone\"])\n",
+        "executable": true,
+        "entrees": []
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c6-meteo",
+    "notion": "meteo",
+    "ordre": 27,
+    "titre": "Un programme météo",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un programme qui interroge un service suit presque toujours **les mêmes quatre étapes**. Les connaître évite de se perdre devant une réponse de cinquante lignes."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**1. Envoyer** la requête, avec ses paramètres. **2. Vérifier** que la réponse est bonne, avec `reponse.ok`. **3. Lire** les données avec `reponse.json()`. **4. Extraire** ce qu'on cherche, un niveau de crochets après l'autre."
+      },
+      {
+        "type": "code",
+        "legende": "Les quatre étapes",
+        "python": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\n\nreponse = requests.get(url, params=params)\nif reponse.ok:\n    data = reponse.json()\n    temperature = data[\"current_weather\"][\"temperature\"]\n    print(\"Il fait\", temperature, \"degrés\")\nelse:\n    print(\"Le service a répondu\", reponse.status_code)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Quand tu ne sais pas où se trouve une valeur, affiche `data`.** Une réponse est un dictionnaire imbriqué : `print(data)` te montre où descendre, un niveau après l'autre."
+      }
+    ],
+    "famille": "operateurs"
   }
 ]

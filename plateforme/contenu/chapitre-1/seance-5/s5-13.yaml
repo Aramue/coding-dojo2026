@@ -1,0 +1,35 @@
+id: s5-13
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: ecrire
+titre: Additionner les valeurs d'un dictionnaire
+obligatoire: true
+enonce: |
+  Le dictionnaire `notes` contient les notes de trois matières. Calcule dans
+  `total` la somme de toutes les notes, en parcourant le dictionnaire avec une
+  boucle.
+depart: |
+  notes = {"maths": 14, "sport": 17, "art": 12}
+  total = 0
+indices:
+  - 'for sur un dictionnaire donne les clés. Avec une clé, notes[matiere] donne la note.'
+  - Le total part de 0 et augmente de la note, dans la boucle.
+tests:
+  - type: variable
+    nom: total
+    valeur_attendue: '43'
+    type_attendu: int
+  - type: contient
+    motif: 'for '
+  - type: interdit
+    motif: '43'
+  - type: interdit
+    motif: sum(
+    message: 'sum() fait le calcul à ta place : ici, c''est la boucle qu''on veut voir.'
+solution: |
+  notes = {"maths": 14, "sport": 17, "art": 12}
+  total = 0
+  for matiere in notes:
+      total = total + notes[matiere]

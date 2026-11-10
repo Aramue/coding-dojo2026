@@ -116,6 +116,24 @@ bloc littéral `|` en chaîne échappée sur une ligne. Or `enonce:` et `solutio
 blocs `|`, et ces fichiers sont édités à la main. Sans `indent()`, ruamel réaligne en plus les
 tirets de **toutes** les listes, y compris celles qu'on ne modifie pas.
 
+### Un indice qui contient « : » s'écrit entre apostrophes
+
+Un élément de `indices` ou un `message` écrit sans guillemets YAML, et qui contient deux-points
+suivi d'une espace, devient un **dictionnaire** au lieu d'un texte.
+
+**Ce qui casse :** la construction échoue avec `Input should be a valid string … input_type=dict`,
+sans nommer la ligne. Trouvé en écrivant `s5-19` (« Affiche data avec print() : la clé… »). Entre
+apostrophes, l'apostrophe française se double (`n''est`).
+
+### Une date d'ouverture provisoire s'écrit 2099, jamais « bientôt »
+
+`CHAPITRES["services"]["ouverture"]` vaut `2099-12-31` tant que la date de la séance 6 est
+inconnue. Sans date, un chapitre est **ouvert d'emblée** ([[ADR-013 Une séance s'ouvre à sa date]]).
+
+**Ce qui casse :** un chapitre sans date, déployé par mégarde, apparaît dans le menu des élèves au
+milieu de la séance en cours, et gonfle le total de leur jauge de 21 exercices. ==Le chapitre est
+déjà fermé aux élèves== avec 2099, et visible dans l'aperçu du professeur. À remplacer avant le tag.
+
 ### Un motif `interdit` ne contient jamais de guillemet
 
 Le validateur le refuse désormais.
@@ -140,6 +158,46 @@ validation et la construction de l'image, sans un message. Et un compteur instal
 `sys.settrace` prend la place du traceur de coverage : la mesure des fonctions qui appellent
 `_executer` s'arrête net après chaque exécution. `generer_attendu.py` était tombé de 77 % à 65 %
 sans qu'une ligne de test ait changé.
+
+### Un exercice d'API ne teste jamais une valeur qui change avec la date
+
+Un test `variable` ou `sortie` d'un exercice qui appelle Open-Meteo porte sur une **unité**, une
+**taille**, un **fuseau**, un **code de pays**, ou le **type** d'une valeur (`type_attendu: float`).
+
+**Ce qui casse :** `valeur_attendue: '10.9'` valide à la construction, sur la réponse enregistrée,
+et recale toute la classe le lendemain, sur la vraie. Les solutions des exercices passent contre le
+vrai service — vérifié le 10 novembre 2026 — mais seule une assertion qui ne dépend pas de la météo
+le reste. Voir [[ADR-018 Open-Meteo en réseau réel, borné par le dojo]].
+
+### Une requête d'une solution est enregistrée, sinon la construction échoue
+
+`api_enregistree.transport` ne rejoue que ce qu'il a déjà vu, et dit comment l'enregistrer :
+`DOJO_ENREGISTRER=1 python valider_contenu.py ../contenu/chapitre-1`.
+
+**Ce qui casse :** changer un paramètre d'une solution (une latitude, un `forecast_days`) change
+l'adresse, donc la clé : la construction refuse avec « aucune réponse enregistrée ». C'est voulu.
+Une construction qui appellerait le vrai service dépendrait du réseau et de la météo du jour. Les
+requêtes que l'élève **invente** ne sont pas enregistrées, et n'ont pas besoin de l'être : elles
+partent pour de vrai.
+
+### Il n'y a qu'un seul `requests_dojo.py`
+
+Le worker le lit dans `/contenu/requests_dojo.py`, le validateur l'importe depuis `outils/`.
+`construire_contenu.py` copie l'un vers l'autre.
+
+**Ce qui casse :** une copie de plus. Le plafond d'appels ou le secours divergerait entre le
+navigateur et la construction, et un exercice validerait à la construction un comportement que la
+classe n'aurait pas. Le fichier commence par `# DOJO-REQUESTS` : le worker vérifie ce marqueur,
+parce que Caddy répond `index.html` en **200** à un fichier absent — sans lui, la page d'accueil
+serait compilée comme du Python.
+
+### Un cache ne se met jamais devant un `429` ni une erreur du serveur
+
+Les réponses `429` et `5xx` ne sont pas gardées ; une réponse `400` l'est.
+
+**Ce qui casse :** un `429` mis en cache dirait « trop de requêtes » à l'élève qui réessaie, pendant
+cinq minutes, alors que la limite s'est levée au bout d'une. Un `400`, lui, est la réponse
+juste à cette requête-là : la garder évite de la repayer.
 
 ## Serveur
 

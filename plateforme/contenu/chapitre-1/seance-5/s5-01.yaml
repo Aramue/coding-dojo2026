@@ -1,0 +1,35 @@
+id: s5-01
+concept: listes
+notion: avantdict
+seance: 5
+niveau: normal
+type: predire
+titre: Une fiche dans une liste
+obligatoire: true
+enonce: |
+  Une liste range des valeurs, qu'on retrouve par leur position. La première
+  position est 0. Que montre l'écran ?
+depart: |
+  fiche = ["Camille", 17, "Genève"]
+  print(fiche[2])
+  print(len(fiche))
+indices:
+  - La fiche a trois éléments, aux positions 0, 1 et 2. La position 2 est donc le dernier.
+  - len() compte les éléments de la liste, pas leur dernière position.
+tests:
+  - type: qcm
+    options:
+      - |-
+        17
+        3
+      - |-
+        Genève
+        3
+      - |-
+        Genève
+        2
+    bonne_reponse: 1
+solution: |
+  fiche = ["Camille", 17, "Genève"]
+  print(fiche[2])
+  print(len(fiche))

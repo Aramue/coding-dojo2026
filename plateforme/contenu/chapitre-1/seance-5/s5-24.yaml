@@ -1,0 +1,45 @@
+id: s5-24
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: ecrire
+titre: Les noms des majeurs
+obligatoire: true
+enonce: |
+  Parmi les élèves, trouve ceux qui ont **18 ans ou plus**. Range leurs noms, dans
+  l'ordre de la liste, dans la liste `majeurs`, en partant de la liste vide.
+depart: |
+  eleves = [
+      {"nom": "Alice", "age": 17},
+      {"nom": "Bob", "age": 18},
+      {"nom": "Clara", "age": 16},
+      {"nom": "Dina", "age": 19},
+  ]
+  majeurs = []
+indices:
+  - Dans la boucle, un if compare l'âge de l'élève à 18. L'âge est e["age"].
+  - Quand l'élève est majeur, ajoute son nom à la liste avec majeurs.append(...).
+tests:
+  - type: variable
+    nom: majeurs
+    valeur_attendue: |-
+      ['Bob', 'Dina']
+  - type: contient
+    motif: append(
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: print(
+    message: Range les noms dans la liste majeurs, sans les afficher.
+solution: |
+  eleves = [
+      {"nom": "Alice", "age": 17},
+      {"nom": "Bob", "age": 18},
+      {"nom": "Clara", "age": 16},
+      {"nom": "Dina", "age": 19},
+  ]
+  majeurs = []
+  for e in eleves:
+      if e["age"] >= 18:
+          majeurs.append(e["nom"])

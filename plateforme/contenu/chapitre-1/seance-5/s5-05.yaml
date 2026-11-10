@@ -1,0 +1,37 @@
+id: s5-05
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: completer
+titre: Les trois couleurs d'un pixel
+obligatoire: true
+enonce: |
+  Cette fois, le pixel est un dictionnaire : chaque couleur a son nom. Complète
+  les trois trous pour ranger chaque couleur dans sa variable.
+depart: |
+  pixel = {"rouge": 153, "vert": 50, "bleu": 204}
+  rouge = pixel[_____]
+  vert = pixel[_____]
+  bleu = pixel[_____]
+indices:
+  - Une clé est un texte, donc entre guillemets. Regarde les clés écrites dans le dictionnaire.
+  - 'Pour le rouge, la clé est "rouge" : le mot et ses guillemets vont entre les crochets.'
+tests:
+  - type: variable
+    nom: rouge
+    valeur_attendue: '153'
+    type_attendu: int
+  - type: variable
+    nom: vert
+    valeur_attendue: '50'
+    type_attendu: int
+  - type: variable
+    nom: bleu
+    valeur_attendue: '204'
+    type_attendu: int
+solution: |
+  pixel = {"rouge": 153, "vert": 50, "bleu": 204}
+  rouge = pixel["rouge"]
+  vert = pixel["vert"]
+  bleu = pixel["bleu"]

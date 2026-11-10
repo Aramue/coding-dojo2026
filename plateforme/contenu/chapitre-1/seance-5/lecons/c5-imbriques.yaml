@@ -1,0 +1,52 @@
+id: c5-imbriques
+notion: imbriques
+ordre: 22
+titre: Des données imbriquées
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      La valeur d'une clé peut être n'importe quoi : un nombre, un texte, une **liste**, ou même **un autre dictionnaire**. C'est ainsi que sont écrites presque toutes les données qui circulent sur Internet.
+  - type: code
+    legende: Un dictionnaire dans un dictionnaire
+    executable: true
+    python: |
+      data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+      print(data["user"])
+      print(data["user"]["nom"])
+  - type: paragraphe
+    texte: >-
+      On lit de l'extérieur vers l'intérieur : **une paire de crochets par niveau**. D'abord `data["user"]`, qui est un dictionnaire, puis la clé `"nom"` de ce dictionnaire.
+  - type: code
+    legende: Descendre jusqu'à une liste
+    executable: true
+    python: |
+      data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+      print(data["user"]["amis"])
+      print(data["user"]["amis"][1])
+  - type: attention
+    texte: >-
+      **Quand ça plante, affiche le niveau d'avant.** `print(data["user"])` montre ce qu'il reste à lire. Une clé qui manque donne `KeyError` ; une position de liste qui n'existe pas donne `IndexError`.
+  - type: paragraphe
+    texte: >-
+      Une liste qui se trouve dans un dictionnaire se modifie **sur place**, avec les mêmes méthodes que d'habitude.
+  - type: code
+    legende: Ajouter un ami
+    executable: true
+    python: |
+      data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+      data["user"]["amis"].append("David")
+      print(data["user"]["amis"])
+  - type: paragraphe
+    texte: >-
+      L'inverse est tout aussi courant : une **liste de dictionnaires**, un par élève, un par article, un par ville.
+  - type: code
+    legende: Parcourir une liste de dictionnaires
+    executable: true
+    python: |
+      eleves = [{"nom": "Alice", "age": 17}, {"nom": "Bob", "age": 16}]
+      for e in eleves:
+          print(e["nom"], e["age"])
+  - type: attention
+    texte: >-
+      **Dans `for e in eleves`, la variable `e` est un dictionnaire entier**, pas un nom. Pour lire le nom, on écrit `e["nom"]`.

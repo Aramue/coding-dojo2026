@@ -1,0 +1,40 @@
+id: s6-16
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: debug
+titre: Une ville qui n'existe pas
+obligatoire: true
+enonce: |
+  Cette ville n'existe pas : le service répond, mais sans la clé `results`, et le
+  programme s'arrête. Modifie-le pour qu'il affiche `Ville inconnue` au lieu de
+  planter. Quand la ville existe, il affiche toujours son nom.
+depart: |
+  import requests
+
+  url = "https://geocoding-api.open-meteo.com/v1/search"
+  params = {"name": "Zzqxwv", "count": 1, "language": "fr"}
+  data = requests.get(url, params=params).json()
+  premier = data["results"][0]
+  print(premier["name"])
+indices:
+  - Le message nomme la clé qui manque. Affiche data pour voir ce que le service a répondu.
+  - 'On teste si une clé existe avec in, avant de la lire : if "results" in data.'
+tests:
+  - type: sortie
+    entrees: []
+    attendu: Ville inconnue
+  - type: contient
+    motif: in data
+solution: |
+  import requests
+
+  url = "https://geocoding-api.open-meteo.com/v1/search"
+  params = {"name": "Zzqxwv", "count": 1, "language": "fr"}
+  data = requests.get(url, params=params).json()
+  if "results" in data:
+      premier = data["results"][0]
+      print(premier["name"])
+  else:
+      print("Ville inconnue")

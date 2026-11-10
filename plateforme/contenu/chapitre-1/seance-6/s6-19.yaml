@@ -1,0 +1,43 @@
+id: s6-19
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: ecrire
+titre: Trois jours, heure par heure
+obligatoire: true
+enonce: |
+  Demande la température de l'air heure par heure (`hourly`, avec la variable
+  `temperature_2m`) pour **3 jours** (`forecast_days`). Range dans `nb_heures` le
+  nombre d'heures reçues : la liste `time` de `hourly`.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432}
+indices:
+  - 'Deux paramètres de plus : "hourly" avec le texte "temperature_2m", et "forecast_days" avec un nombre.'
+  - La réponse contient une liste data["hourly"]["time"]. len() compte ses éléments.
+tests:
+  - type: variable
+    nom: nb_heures
+    valeur_attendue: '72'
+    type_attendu: int
+  - type: contient
+    motif: forecast_days
+  - type: contient
+    motif: hourly
+  - type: interdit
+    motif: '72'
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "hourly": "temperature_2m",
+      "forecast_days": 3,
+  }
+  data = requests.get(url, params=params).json()
+  nb_heures = len(data["hourly"]["time"])

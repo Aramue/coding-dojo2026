@@ -1,0 +1,37 @@
+id: s5-32
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: ecrire
+titre: Modifier un JSON
+obligatoire: true
+enonce: |
+  Charge le texte JSON dans `data`, change l'âge à 26, puis range dans `nouveau`
+  le texte JSON mis à jour.
+depart: |
+  import json
+
+  texte = '{"nom": "Alice", "age": 25}'
+indices:
+  - json.loads() rend un dictionnaire. L'âge se change comme dans n'importe quel dictionnaire.
+  - json.dumps() fait le chemin inverse, et rend un texte.
+tests:
+  - type: variable
+    nom: nouveau
+    valeur_attendue: |-
+      '{"nom": "Alice", "age": 26}'
+    type_attendu: str
+  - type: contient
+    motif: json.loads(
+  - type: contient
+    motif: json.dumps(
+  - type: interdit
+    motif: 26}
+solution: |
+  import json
+
+  texte = '{"nom": "Alice", "age": 25}'
+  data = json.loads(texte)
+  data["age"] = 26
+  nouveau = json.dumps(data)

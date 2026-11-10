@@ -96,5 +96,96 @@
     "titre": "Répéter tant que",
     "famille": "conditions",
     "chapitre": "boucles"
+  },
+  {
+    "id": "reprise",
+    "ordre": 15,
+    "titre": "Rappels avant les listes",
+    "famille": "variables",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "listes",
+    "ordre": 16,
+    "titre": "Les listes",
+    "famille": "boucles",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "matrices",
+    "ordre": 17,
+    "titre": "Listes de listes",
+    "famille": "types",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "binaire",
+    "ordre": 18,
+    "titre": "Binaire et caractères",
+    "famille": "operateurs",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "decoder",
+    "ordre": 19,
+    "titre": "Bits de poids faible et décodage",
+    "famille": "conditions",
+    "chapitre": "stegano"
+  },
+  {
+    "id": "avantdict",
+    "ordre": 20,
+    "titre": "Rappels avant les dictionnaires",
+    "famille": "variables",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "dictionnaires",
+    "ordre": 21,
+    "titre": "Les dictionnaires",
+    "famille": "conditions",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "imbriques",
+    "ordre": 22,
+    "titre": "Des données imbriquées",
+    "famille": "types",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "json",
+    "ordre": 23,
+    "titre": "Lire et écrire du JSON",
+    "famille": "boucles",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "web",
+    "ordre": 24,
+    "titre": "Réseau, URL et HTTP",
+    "famille": "variables",
+    "chapitre": "services"
+  },
+  {
+    "id": "requetes",
+    "ordre": 25,
+    "titre": "Envoyer une requête",
+    "famille": "conditions",
+    "chapitre": "services"
+  },
+  {
+    "id": "explorer",
+    "ordre": 26,
+    "titre": "Faire varier la requête",
+    "famille": "types",
+    "chapitre": "services"
+  },
+  {
+    "id": "meteo",
+    "ordre": 27,
+    "titre": "Un programme météo",
+    "famille": "operateurs",
+    "chapitre": "services"
   }
 ]

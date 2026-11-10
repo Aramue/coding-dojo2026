@@ -1,0 +1,33 @@
+id: s6-09
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: completer
+titre: Ma première requête
+obligatoire: true
+enonce: |
+  Cette requête part vraiment vers Open-Meteo. Complète les deux trous pour
+  envoyer la requête, puis ranger son code de statut dans `statut`.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests._____(url, params=params)
+  statut = reponse._____
+indices:
+  - La méthode HTTP qui sert à obtenir une information porte le même nom en Python, en minuscules.
+  - Le code de statut est un attribut de la réponse, sans parenthèses. Il s'écrit en trois mots reliés par des tirets bas.
+tests:
+  - type: variable
+    nom: statut
+    valeur_attendue: '200'
+    type_attendu: int
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests.get(url, params=params)
+  statut = reponse.status_code

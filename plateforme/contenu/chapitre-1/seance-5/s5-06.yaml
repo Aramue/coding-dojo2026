@@ -1,0 +1,30 @@
+id: s5-06
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: debug
+titre: Une clé qui n'existe pas
+obligatoire: true
+enonce: |
+  Ce programme doit afficher le nom de l'élève, mais il s'arrête avec une erreur.
+  Lis le message, puis répare le programme.
+depart: |
+  eleve = {"nom": "Camille", "age": 17}
+  prenom = eleve["prenom"]
+  print(prenom)
+indices:
+  - Le message nomme la clé qui n'existe pas. Compare-la aux clés écrites dans le dictionnaire.
+  - Le dictionnaire ne contient que les clés "nom" et "age". Laquelle range le nom de l'élève ?
+tests:
+  - type: variable
+    nom: prenom
+    valeur_attendue: '''Camille'''
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: Camille
+solution: |
+  eleve = {"nom": "Camille", "age": 17}
+  prenom = eleve["nom"]
+  print(prenom)

@@ -81,12 +81,34 @@ tests:
 Le premier `input()` reçoit `"Corbeau"`, le second `"17"`. C'est ce qui permet de reprendre tels
 quels les énoncés de l'an dernier.
 
+## Le réseau — depuis le 10 novembre 2026
+
+Décision : [[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]. `import requests` rend un
+module écrit pour le dojo, `outils/requests_dojo.py`, que le worker installe au démarrage dans
+`sys.modules` après avoir lu `/contenu/requests_dojo.py` en synchrone.
+
+- **L'appel réel est un `XMLHttpRequest` synchrone**, permis dans un worker. Le worker est de toute
+  façon bloqué le temps de la requête, et le minuteur de 5 s tourne sur le fil principal.
+- **Les compteurs d'un programme repartent à zéro** à chaque exécution
+  (`reinitialiser()`, appelé par `_qg_executer`). **Le cache et la limite par minute survivent** :
+  un exercice évalué en plusieurs exécutions, une par test, ne paie le réseau qu'une fois.
+- **Le validateur installe le même fichier** avec un transport qui rejoue des réponses enregistrées.
+  C'est la raison pour laquelle il n'y a qu'**une seule source** : sans elle, ce serait une
+  troisième duplication délibérée, après les deux `normaliser` et la tolérance du quiz
+  ([[Pièges et invariants]]).
+
+> [!danger] Un service lent ne doit jamais ressembler à une boucle infinie
+> Si le service met 6 secondes à répondre, le minuteur de 5 s tue le worker et l'élève lit « Ton
+> programme tourne en rond », sans rapport avec son code. Le délai d'un appel (2 s) et le budget de
+> réseau d'un programme (3,5 s) lèvent donc une erreur **nommée** (`ConnectionError`, `Timeout`)
+> avant que le minuteur ne tranche.
+
 ## Limites connues
 
 | Limite | Effet | Traitement |
 |---|---|---|
 | **13,1 Mo** au premier chargement | 24 élèves simultanés en début de séance 1 | Servi depuis la machine UNIGE, pas d'un CDN ; en-têtes de cache d'un an |
-| Pas de `requests` | Sans effet chapitres 1 et 2 | À traiter au chapitre 3 |
+| Le vrai `requests` : déclaré dans le lock de Pyodide, **non livré** dans `public/pyodide/` | Sans effet séances 1 à 5 ; la séance 6 en a besoin | Le `requests` du dojo, qui le remplace — voir « Le réseau » ci-dessous |
 | Le client peut être trafiqué | Un élève peut forcer un verdict | Assumé — la certification repose sur les problèmes rendus |
 
 ## Voir aussi

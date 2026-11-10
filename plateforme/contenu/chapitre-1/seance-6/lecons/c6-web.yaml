@@ -1,0 +1,59 @@
+id: c6-web
+notion: web
+ordre: 24
+titre: Réseau, URL et HTTP
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      Quand ton navigateur ouvre une page, ou quand un programme interroge un service, il envoie une **requête** à un autre ordinateur, le **serveur**, qui renvoie une **réponse**. L'adresse du serveur s'appelle une **URL**.
+  - type: paragraphe
+    texte: >-
+      Une URL se découpe en parties : le protocole (`https`), le serveur (`api.open-meteo.com`), le chemin (`/v1/forecast`), puis, après un `?`, les **paramètres**, séparés par des `&`. Chaque paramètre s'écrit `nom=valeur`.
+  - type: code
+    legende: Une URL est un texte
+    executable: true
+    python: |
+      base = "https://api.open-meteo.com/v1/forecast"
+      url = base + "?latitude=46.2&longitude=6.1"
+      print(url)
+  - type: paragraphe
+    texte: >-
+      Comme tout texte, une URL se fabrique avec un f-string : les valeurs des variables se glissent entre les accolades.
+  - type: code
+    legende: Construire une URL avec des variables
+    executable: true
+    python: |
+      base = "https://api.open-meteo.com/v1/forecast"
+      latitude = 46.2
+      longitude = 6.1
+      url = f"{base}?latitude={latitude}&longitude={longitude}"
+      print(url)
+  - type: paragraphe
+    texte: >-
+      Chaque requête porte une **méthode**, qui dit ce qu'on veut faire : `GET` pour obtenir, `POST` pour créer, `PUT` pour mettre à jour, `DELETE` pour supprimer. Un dictionnaire les range très bien.
+  - type: code
+    legende: Les quatre méthodes
+    executable: true
+    python: |
+      methodes = {"GET": "obtenir", "POST": "créer", "PUT": "mettre à jour", "DELETE": "supprimer"}
+      print(methodes["GET"])
+      for m in methodes:
+          print(m, ":", methodes[m])
+  - type: paragraphe
+    texte: >-
+      La réponse commence toujours par un **code de statut**, un nombre qui dit si ça a marché. Un code qui commence par **2** est un succès, par **4** une erreur de **ta** requête, par **5** une erreur du **serveur**.
+  - type: code
+    legende: Les codes de statut
+    executable: true
+    python: |
+      statuts = {200: "tout va bien", 400: "requête invalide", 404: "introuvable", 429: "trop de requêtes", 500: "erreur du serveur"}
+      print(statuts[404])
+      code = 429
+      print(code // 100)
+  - type: attention
+    texte: >-
+      **Les clés d'un dictionnaire ont un type.** `statuts[404]` marche, `statuts["404"]` donne `KeyError` : le nombre 404 et le texte `"404"` sont deux clés différentes.
+  - type: paragraphe
+    texte: >-
+      Pour tester une API, certains outils permettent d'envoyer des requêtes à la main, comme Postman. Ici, tu enverras tes requêtes directement depuis Python.

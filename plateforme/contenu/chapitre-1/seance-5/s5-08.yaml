@@ -1,0 +1,27 @@
+id: s5-08
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: ecrire
+titre: Une fiche d'élève
+obligatoire: true
+enonce: |
+  Crée un dictionnaire `fiche` qui contient trois paires, dans cet ordre : la clé
+  `"nom"` avec la valeur `"Camille"`, la clé `"age"` avec le nombre `17`, et la
+  clé `"ville"` avec la valeur `"Genève"`.
+depart: |
+  fiche =
+indices:
+  - Un dictionnaire s'écrit entre accolades, et chaque paire s'écrit clé, deux-points, valeur.
+  - Les paires sont séparées par des virgules. Un nombre s'écrit sans guillemets.
+tests:
+  - type: variable
+    nom: fiche
+    valeur_attendue: |-
+      {'nom': 'Camille', 'age': 17, 'ville': 'Genève'}
+  - type: interdit
+    motif: dict(
+    message: Ici, on écrit le dictionnaire avec des accolades.
+solution: |
+  fiche = {"nom": "Camille", "age": 17, "ville": "Genève"}

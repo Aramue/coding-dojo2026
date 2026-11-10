@@ -1,0 +1,42 @@
+id: s6-15
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: ecrire
+titre: Chercher une ville
+obligatoire: true
+enonce: |
+  Un second service d'Open-Meteo trouve une ville à partir de son nom. Envoie la
+  requête, puis range dans `pays` le code du pays du **premier** résultat
+  (`country_code`), et dans `latitude` sa latitude. Les résultats forment la
+  liste `results`.
+depart: |
+  import requests
+
+  url = "https://geocoding-api.open-meteo.com/v1/search"
+  params = {"name": "Genève", "count": 1, "language": "fr"}
+indices:
+  - 'La réponse contient une liste results. Le premier résultat est à la position 0.'
+  - Un résultat est un dictionnaire. Ses clés incluent country_code et latitude.
+tests:
+  - type: variable
+    nom: pays
+    valeur_attendue: '''CH'''
+    type_attendu: str
+  - type: variable
+    nom: latitude
+    type_attendu: float
+  - type: contient
+    motif: '["results"]'
+  - type: interdit
+    motif: CH
+solution: |
+  import requests
+
+  url = "https://geocoding-api.open-meteo.com/v1/search"
+  params = {"name": "Genève", "count": 1, "language": "fr"}
+  data = requests.get(url, params=params).json()
+  premier = data["results"][0]
+  pays = premier["country_code"]
+  latitude = premier["latitude"]

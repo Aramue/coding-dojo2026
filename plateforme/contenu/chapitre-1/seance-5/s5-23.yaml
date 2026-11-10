@@ -1,0 +1,42 @@
+id: s5-23
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: ecrire
+titre: Additionner les âges
+obligatoire: true
+enonce: |
+  La liste `eleves` contient un dictionnaire par élève. Calcule dans `total` la
+  somme des âges de tous les élèves, en parcourant la liste avec une boucle.
+depart: |
+  eleves = [
+      {"nom": "Alice", "age": 17},
+      {"nom": "Bob", "age": 16},
+      {"nom": "Clara", "age": 18},
+  ]
+  total = 0
+indices:
+  - Dans for e in eleves, la variable e est un dictionnaire entier. Son âge est e["age"].
+  - Le total part de 0 et augmente de l'âge de chaque élève.
+tests:
+  - type: variable
+    nom: total
+    valeur_attendue: '51'
+    type_attendu: int
+  - type: contient
+    motif: 'for '
+  - type: interdit
+    motif: '51'
+  - type: interdit
+    motif: sum(
+    message: 'sum() fait le calcul à ta place : ici, c''est la boucle qu''on veut voir.'
+solution: |
+  eleves = [
+      {"nom": "Alice", "age": 17},
+      {"nom": "Bob", "age": 16},
+      {"nom": "Clara", "age": 18},
+  ]
+  total = 0
+  for e in eleves:
+      total = total + e["age"]

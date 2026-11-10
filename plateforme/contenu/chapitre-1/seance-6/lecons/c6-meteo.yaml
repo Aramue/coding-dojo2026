@@ -1,0 +1,31 @@
+id: c6-meteo
+notion: meteo
+ordre: 27
+titre: Un programme météo
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Un programme qui interroge un service suit presque toujours **les mêmes quatre étapes**. Les connaître évite de se perdre devant une réponse de cinquante lignes.
+  - type: paragraphe
+    texte: >-
+      **1. Envoyer** la requête, avec ses paramètres. **2. Vérifier** que la réponse est bonne, avec `reponse.ok`. **3. Lire** les données avec `reponse.json()`. **4. Extraire** ce qu'on cherche, un niveau de crochets après l'autre.
+  - type: code
+    legende: Les quatre étapes
+    executable: true
+    python: |
+      import requests
+
+      url = "https://api.open-meteo.com/v1/forecast"
+      params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+
+      reponse = requests.get(url, params=params)
+      if reponse.ok:
+          data = reponse.json()
+          temperature = data["current_weather"]["temperature"]
+          print("Il fait", temperature, "degrés")
+      else:
+          print("Le service a répondu", reponse.status_code)
+  - type: attention
+    texte: >-
+      **Quand tu ne sais pas où se trouve une valeur, affiche `data`.** Une réponse est un dictionnaire imbriqué : `print(data)` te montre où descendre, un niveau après l'autre.

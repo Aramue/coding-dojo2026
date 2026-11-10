@@ -1,0 +1,41 @@
+id: s6-21
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: ecrire
+titre: Deux variables à la fois
+obligatoire: true
+enonce: |
+  Demande, heure par heure, la température (`temperature_2m`) **et** la vitesse du
+  vent (`windspeed_10m`), dans cet ordre, séparées par une virgule dans un seul
+  texte. Range dans `cles` la liste des clés de `data["hourly"]` : l'expression
+  `list(dictionnaire.keys())` la donne.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432}
+indices:
+  - 'La valeur du paramètre hourly est un seul texte : "temperature_2m,windspeed_10m".'
+  - La réponse contient une clé time, puis une clé par variable demandée, dans l'ordre de la demande.
+tests:
+  - type: variable
+    nom: cles
+    valeur_attendue: |-
+      ['time', 'temperature_2m', 'windspeed_10m']
+  - type: contient
+    motif: windspeed_10m
+  - type: interdit
+    motif: 'cles = ['
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "hourly": "temperature_2m,windspeed_10m",
+  }
+  data = requests.get(url, params=params).json()
+  cles = list(data["hourly"].keys())

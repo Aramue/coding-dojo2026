@@ -1,0 +1,63 @@
+id: s6-27
+concept: programme
+notion: meteo
+seance: 6
+niveau: normal
+type: ecrire
+titre: Le jour le plus chaud
+obligatoire: true
+enonce: |
+  Le service donne la température maximale de chaque jour de la semaine. Trouve
+  le jour **le plus chaud** : range sa date, un texte, dans `jour`, et sa
+  température dans `maximum`. Parcours les positions avec `range(len(...))`, sans
+  `max()`.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "daily": "temperature_2m_max",
+      "forecast_days": 7,
+      "timezone": "Europe/Zurich",
+  }
+  jour = ""
+  maximum = -100
+indices:
+  - data["daily"]["time"] est la liste des dates, data["daily"]["temperature_2m_max"] celle des températures. Elles ont la même longueur.
+  - Dans la boucle, un if compare la température de la position i à maximum. Si elle le dépasse, maximum et jour changent tous les deux.
+tests:
+  - type: variable
+    nom: jour
+    type_attendu: str
+  - type: variable
+    nom: maximum
+    type_attendu: float
+  - type: contient
+    motif: 'for '
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: max(
+    message: 'max() trouve le plus grand à ta place : ici, c''est la comparaison qu''on veut voir.'
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "daily": "temperature_2m_max",
+      "forecast_days": 7,
+      "timezone": "Europe/Zurich",
+  }
+  jour = ""
+  maximum = -100
+  data = requests.get(url, params=params).json()
+  dates = data["daily"]["time"]
+  temperatures = data["daily"]["temperature_2m_max"]
+  for i in range(len(dates)):
+      if temperatures[i] > maximum:
+          maximum = temperatures[i]
+          jour = dates[i]

@@ -75,6 +75,12 @@ service :
   `main` seule, une release est un tag, la VM tourne sur un tag et ne construit rien. Trois
   contrôles en CI — les premiers de ce dépôt.
 
+Le 10 novembre 2026, en préparant la séance 6 sur les API :
+
+- **018** — [[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]
+  Les requêtes partent pour de vrai vers Open-Meteo, par un `requests` du dojo qui borne les appels
+  (hôtes, plafond, quota par minute, cache). La construction rejoue des réponses enregistrées.
+
 ## Le fil conducteur
 
 Cinq de ces six décisions découlent d'un même constat, établi dans [[Bilan 2025-2026]] :
@@ -120,3 +126,5 @@ Elles n'ont pas d'alternative sérieuse à consigner, mais elles se voient dans 
       deux coches, ni points ni classement ; le quiz en direct y déroge, dans les limites
       d'[[ADR-015 Quiz en direct et classement encadré]]
 - [ ] Le découpage du livrable de la séance 1 par rapport au reste
+- [x] Comment les exercices d'API atteignent un « service » sans charger la VM — tranché par
+      [[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]
