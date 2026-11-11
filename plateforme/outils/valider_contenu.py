@@ -28,6 +28,7 @@ from schema import (
     Lecon,
     Quiz,
     TestMotif,
+    TestQcm,
     TestSortie,
     TestVariable,
     charger_lecons,
@@ -169,6 +170,34 @@ def _passe(ex: Exercice, code: str, *, exiger_maitrise: bool = True) -> bool:
     return True
 
 
+def _verifier_prediction(ex: Exercice) -> list[str]:
+    """La bonne reponse d'un « predire » est ce que le programme affiche vraiment.
+
+    Toutes les options ne sont pas des sorties : « Une erreur », une phrase qui
+    decrit deux lignes, un programme qui attend une saisie. On ne juge donc que
+    ce qui se juge sans ambiguite : un programme qui tourne sans erreur et
+    affiche UNE ligne. Cette ligne doit etre l'option juste. Si c'est une autre
+    option, la classe entiere est corrigee a tort ; si ce n'est aucune, la
+    bonne reponse annoncee est fausse. Le 11 novembre 2026, s5-37 annoncait
+    « Genève » avec son accent, la ou json.dumps ecrit l'accent sous forme de
+    code.
+    """
+    qcm = next((t for t in ex.tests if isinstance(t, TestQcm)), None)
+    if qcm is None:
+        return []
+    affiche, _, erreur = _executer(ex.depart, [])
+    affiche = affiche.rstrip()
+    if erreur or "\n" in affiche:
+        return []
+    juste = qcm.options[qcm.bonne_reponse].rstrip()
+    if affiche == juste:
+        return []
+    return [
+        f"{ex.id} : le programme affiche {affiche!r}, "
+        f"la bonne reponse annoncee est {juste!r}"
+    ]
+
+
 def verifier_coherence(ex: Exercice) -> list[str]:
     problemes: list[str] = []
 
@@ -190,6 +219,9 @@ def verifier_coherence(ex: Exercice) -> list[str]:
                 f"{ex.id} : le motif interdit {test.motif!r} contient un guillemet, "
                 "il se contourne en changeant de ponctuation"
             )
+
+    if ex.type == "predire":
+        problemes += _verifier_prediction(ex)
 
     if ex.type != "predire" and not _passe(ex, ex.solution):
         problemes.append(f"{ex.id} : la solution de reference ne passe pas ses propres tests")

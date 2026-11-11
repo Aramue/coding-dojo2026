@@ -1120,7 +1120,7 @@
       },
       {
         "type": "paragraphe",
-        "texte": "Les clés sont des textes, donc entre guillemets. Python affiche le dictionnaire avec des apostrophes, et garde les paires dans l'ordre où tu les as écrites."
+        "texte": "Ici, les clés sont des textes, donc entre guillemets. Python affiche le dictionnaire avec des apostrophes, et garde les paires dans l'ordre où tu les as écrites."
       },
       {
         "type": "paragraphe",
@@ -1281,11 +1281,11 @@
       },
       {
         "type": "paragraphe",
-        "texte": "`json.loads()` **lit** un texte et rend un dictionnaire. `json.dumps()` fait l'inverse : il prend un dictionnaire et rend un **texte**. Les deux « s » veulent dire *string*, un texte."
+        "texte": "`json.loads()` **lit** un texte et rend un dictionnaire, ou une liste si le texte est un tableau. `json.dumps()` fait l'inverse : il prend un dictionnaire et rend un **texte**. Les deux « s » veulent dire *string*, un texte."
       },
       {
         "type": "attention",
-        "texte": "**Le JSON exige des guillemets doubles.** `'{'nom': 'Alice'}'` n'est pas du JSON valide : `json.loads()` arrête le programme avec une erreur `JSONDecodeError`."
+        "texte": "**Le JSON exige des guillemets doubles.** `\"{'nom': 'Alice'}\"` n'est pas du JSON valide : `json.loads()` arrête le programme avec une erreur `JSONDecodeError`."
       },
       {
         "type": "paragraphe",
@@ -1325,7 +1325,7 @@
     "blocs": [
       {
         "type": "paragraphe",
-        "texte": "Quand ton navigateur ouvre une page, ou quand un programme interroge un service, il envoie une **requête** à un autre ordinateur, le **serveur**, qui renvoie une **réponse**. L'adresse du serveur s'appelle une **URL**."
+        "texte": "Quand ton navigateur ouvre une page, ou quand un programme interroge un service, il envoie une **requête** à un autre ordinateur, le **serveur**, qui renvoie une **réponse**. L'adresse de ce qu'on demande s'appelle une **URL**."
       },
       {
         "type": "paragraphe",
@@ -1432,7 +1432,7 @@
       },
       {
         "type": "attention",
-        "texte": "**Les requêtes sont comptées.** Un programme en envoie au plus 6, et le service en accepte un nombre limité à la minute, pour toute la salle. Au-delà, il répond `429`, et il suffit d'attendre un instant. Deux requêtes identiques ne partent qu'une fois."
+        "texte": "**Les requêtes sont comptées.** Un programme en envoie au plus 6 : au-delà, il s'arrête avec une erreur. Et tu ne peux pas en envoyer plus d'une vingtaine par minute : au-delà, tu reçois un `429`, et il suffit d'attendre un instant. Deux requêtes identiques ne partent qu'une fois."
       },
       {
         "type": "paragraphe",
@@ -1468,7 +1468,7 @@
       },
       {
         "type": "paragraphe",
-        "texte": "Essaie `\"celsius\"`, puis `\"fahrenheit\"`. Essaie aussi `windspeed_unit`, avec `\"kmh\"`, `\"ms\"`, `\"mph\"` ou `\"kn\"`. Les unités affichées suivent."
+        "texte": "Essaie `\"celsius\"`, puis `\"fahrenheit\"`. Essaie aussi `windspeed_unit`, avec `\"kmh\"`, `\"ms\"`, `\"mph\"` ou `\"kn\"`, et ajoute `print(data[\"current_weather_units\"][\"windspeed\"])` pour voir l'unité du vent changer."
       },
       {
         "type": "paragraphe",
@@ -1487,7 +1487,7 @@
       },
       {
         "type": "attention",
-        "texte": "**Chaque valeur différente est une nouvelle requête.** Garde un œil sur le nombre de requêtes que tu envoies : au-delà de la limite de la minute, le service répond `429`, et il faut attendre."
+        "texte": "**Chaque valeur différente est une nouvelle requête.** Garde un œil sur le nombre de requêtes que tu envoies : au-delà d'une vingtaine par minute, tu reçois un `429`, et il faut attendre un instant."
       },
       {
         "type": "paragraphe",

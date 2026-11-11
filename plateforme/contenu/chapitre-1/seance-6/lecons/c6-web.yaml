@@ -6,7 +6,7 @@ duree_min: 4
 blocs:
   - type: paragraphe
     texte: >-
-      Quand ton navigateur ouvre une page, ou quand un programme interroge un service, il envoie une **requête** à un autre ordinateur, le **serveur**, qui renvoie une **réponse**. L'adresse du serveur s'appelle une **URL**.
+      Quand ton navigateur ouvre une page, ou quand un programme interroge un service, il envoie une **requête** à un autre ordinateur, le **serveur**, qui renvoie une **réponse**. L'adresse de ce qu'on demande s'appelle une **URL**.
   - type: paragraphe
     texte: >-
       Une URL se découpe en parties : le protocole (`https`), le serveur (`api.open-meteo.com`), le chemin (`/v1/forecast`), puis, après un `?`, les **paramètres**, séparés par des `&`. Chaque paramètre s'écrit `nom=valeur`.

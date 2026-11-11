@@ -32,10 +32,10 @@ blocs:
       print(nouveau)
   - type: paragraphe
     texte: >-
-      `json.loads()` **lit** un texte et rend un dictionnaire. `json.dumps()` fait l'inverse : il prend un dictionnaire et rend un **texte**. Les deux « s » veulent dire *string*, un texte.
+      `json.loads()` **lit** un texte et rend un dictionnaire, ou une liste si le texte est un tableau. `json.dumps()` fait l'inverse : il prend un dictionnaire et rend un **texte**. Les deux « s » veulent dire *string*, un texte.
   - type: attention
     texte: >-
-      **Le JSON exige des guillemets doubles.** `'{'nom': 'Alice'}'` n'est pas du JSON valide : `json.loads()` arrête le programme avec une erreur `JSONDecodeError`.
+      **Le JSON exige des guillemets doubles.** `"{'nom': 'Alice'}"` n'est pas du JSON valide : `json.loads()` arrête le programme avec une erreur `JSONDecodeError`.
   - type: paragraphe
     texte: >-
       Les types ne s'écrivent pas pareil des deux côtés. Un objet JSON devient un dictionnaire, un tableau devient une liste, `true` et `false` deviennent `True` et `False`, et `null` devient `None`.

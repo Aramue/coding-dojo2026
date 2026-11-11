@@ -126,6 +126,10 @@ describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
     const m = traduireErreur(erreur('IndexError', 'string index out of range'))
     expect(m.explication).toContain('0')
     expect(m.piste).toContain('len(')
+    // Le meme message sert aux listes depuis la seance 5 : il ne parle pas que
+    // de caracteres.
+    const liste = traduireErreur(erreur('IndexError', 'list index out of range'))
+    expect(liste.explication).toMatch(/liste/)
   })
 
   it('nomme la cle absente sur un KeyError, sans recrire la ligne', () => {

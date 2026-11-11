@@ -5371,7 +5371,7 @@
     "enonce": "Cette fois, le pixel est un dictionnaire : chaque couleur a son nom. Complète\nles trois trous pour ranger chaque couleur dans sa variable.\n",
     "depart": "pixel = {\"rouge\": 153, \"vert\": 50, \"bleu\": 204}\nrouge = pixel[_____]\nvert = pixel[_____]\nbleu = pixel[_____]\n",
     "indices": [
-      "Une clé est un texte, donc entre guillemets. Regarde les clés écrites dans le dictionnaire.",
+      "Ici, les clés sont des textes, donc entre guillemets. Regarde les clés écrites dans le dictionnaire.",
       "Pour le rouge, la clé est \"rouge\" : le mot et ses guillemets vont entre les crochets."
     ],
     "tests": [
@@ -6345,7 +6345,7 @@
     "enonce": "Le dictionnaire `profil` décrit un utilisateur. Range dans `texte` le **texte\nJSON** qui le représente.\n",
     "depart": "import json\n\nprofil = {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"], \"actif\": True}\n",
     "indices": [
-      "Pour obtenir un texte JSON à partir d'un dictionnaire, il y a une fonction du module json qui finit par s.",
+      "Pour obtenir un texte JSON à partir d'un dictionnaire, il y a une fonction du module json qui fait le chemin inverse de loads.",
       "Tu n'as rien à écrire à la main. La fonction se charge des guillemets doubles et de true."
     ],
     "tests": [
@@ -6456,7 +6456,7 @@
         "type": "qcm",
         "options": [
           "{\"ville\": \"Genève\"}",
-          "{\"ville\": \"Genève\"}",
+          "{\"ville\": \"Gen\\u00e8ve\"}",
           "{\"ville\": \"Geneve\"}"
         ],
         "bonneReponse": 1
@@ -6756,7 +6756,7 @@
     "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\nreponse = requests._____(url, params=params)\nstatut = reponse._____\n",
     "indices": [
       "La méthode HTTP qui sert à obtenir une information porte le même nom en Python, en minuscules.",
-      "Le code de statut est un attribut de la réponse, sans parenthèses. Il s'écrit en trois mots reliés par des tirets bas."
+      "Le code de statut est un attribut de la réponse, sans parenthèses. Il s'écrit en deux mots reliés par un tiret bas."
     ],
     "tests": [
       {

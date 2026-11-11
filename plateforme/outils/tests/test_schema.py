@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from schema import Exercice, TestSortie, TestVariable
+from schema import Exercice, TestQcm, TestSortie, TestVariable
 
 
 def exercice_minimal(**remplacements):
@@ -150,3 +150,10 @@ def test_un_motif_est_exigeant_par_defaut():
         )
     )
     assert ex.tests[2].maitrise is False
+
+
+def test_un_qcm_a_deux_options_identiques_est_rejete():
+    # Deux boutons identiques : celui qui clique sur l'autre a raison et se
+    # fait dire qu'il a tort.
+    with pytest.raises(ValidationError, match="deux options identiques"):
+        TestQcm(type="qcm", options=["Genève", "Genève", "Geneve"], bonne_reponse=1)

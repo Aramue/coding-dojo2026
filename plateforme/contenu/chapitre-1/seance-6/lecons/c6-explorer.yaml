@@ -25,7 +25,7 @@ blocs:
       print(data["current_weather"]["temperature"])
   - type: paragraphe
     texte: >-
-      Essaie `"celsius"`, puis `"fahrenheit"`. Essaie aussi `windspeed_unit`, avec `"kmh"`, `"ms"`, `"mph"` ou `"kn"`. Les unités affichées suivent.
+      Essaie `"celsius"`, puis `"fahrenheit"`. Essaie aussi `windspeed_unit`, avec `"kmh"`, `"ms"`, `"mph"` ou `"kn"`, et ajoute `print(data["current_weather_units"]["windspeed"])` pour voir l'unité du vent changer.
   - type: paragraphe
     texte: >-
       `hourly` demande des valeurs **heure par heure**. La réponse contient une liste `time`, et une liste de la même longueur pour chaque variable demandée. `forecast_days` choisit le nombre de jours.
@@ -52,7 +52,7 @@ blocs:
       Essaie `forecast_days` à 1, puis à 3 : le nombre d'heures reçues suit. Essaie `"hourly": "temperature_2m,windspeed_10m"` : une seconde liste apparaît.
   - type: attention
     texte: >-
-      **Chaque valeur différente est une nouvelle requête.** Garde un œil sur le nombre de requêtes que tu envoies : au-delà de la limite de la minute, le service répond `429`, et il faut attendre.
+      **Chaque valeur différente est une nouvelle requête.** Garde un œil sur le nombre de requêtes que tu envoies : au-delà d'une vingtaine par minute, tu reçois un `429`, et il faut attendre un instant.
   - type: paragraphe
     texte: >-
       `daily` donne **une valeur par jour**, par exemple la température la plus haute et la plus basse.

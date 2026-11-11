@@ -14,7 +14,7 @@ depart: |
 
   profil = {"nom": "Alice", "amis": ["Bob", "Claire"], "actif": True}
 indices:
-  - Pour obtenir un texte JSON à partir d'un dictionnaire, il y a une fonction du module json qui finit par s.
+  - Pour obtenir un texte JSON à partir d'un dictionnaire, il y a une fonction du module json qui fait le chemin inverse de loads.
   - Tu n'as rien à écrire à la main. La fonction se charge des guillemets doubles et de true.
 tests:
   - type: variable
