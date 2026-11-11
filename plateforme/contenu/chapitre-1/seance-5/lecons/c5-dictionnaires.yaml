@@ -1,0 +1,80 @@
+id: c5-dictionnaires
+notion: dictionnaires
+ordre: 21
+titre: Les dictionnaires
+duree_min: 6
+blocs:
+  - type: paragraphe
+    texte: >-
+      Un **dictionnaire** range des valeurs sous des noms, qu'on appelle des **clés**. Il s'écrit entre accolades, et chaque paire s'écrit `clé: valeur`. Comme dans un vrai dictionnaire, on cherche par le mot, pas par le numéro de page.
+  - type: code
+    legende: Une fiche avec des clés
+    executable: true
+    python: |
+      fiche = {"nom": "Camille", "age": 17, "ville": "Genève"}
+      print(fiche)
+      print(len(fiche))
+  - type: paragraphe
+    texte: >-
+      Les clés sont des textes, donc entre guillemets. Python affiche le dictionnaire avec des apostrophes, et garde les paires dans l'ordre où tu les as écrites.
+  - type: paragraphe
+    texte: >-
+      Pour lire une valeur, on écrit sa clé entre crochets, comme on écrivait une position pour une liste.
+  - type: code
+    legende: Lire par la clé
+    executable: true
+    python: |
+      fiche = {"nom": "Camille", "age": 17, "ville": "Genève"}
+      print(fiche["nom"])
+      print(fiche["age"] + 1)
+  - type: attention
+    texte: >-
+      **Une clé qui n'existe pas arrête le programme** avec une erreur `KeyError`. Les majuscules et les accents comptent : la clé `"Nom"` n'est pas la clé `"nom"`.
+  - type: paragraphe
+    texte: >-
+      La même écriture sert à **modifier** une valeur et à **ajouter** une paire : si la clé existe, sa valeur est remplacée ; sinon, la paire est créée.
+  - type: code
+    legende: Modifier et ajouter
+    executable: true
+    python: |
+      fiche = {"nom": "Camille", "age": 17}
+      fiche["age"] = 18
+      fiche["classe"] = "3e"
+      print(fiche)
+  - type: paragraphe
+    texte: >-
+      Pour savoir si une clé existe **sans risquer d'erreur**, on écrit `clé in dictionnaire`. La réponse est `True` ou `False`, et se range très bien dans un `if`.
+  - type: code
+    legende: Tester une clé avec in
+    executable: true
+    python: |
+      fiche = {"nom": "Camille", "age": 17}
+      print("age" in fiche)
+      print("pays" in fiche)
+      if "pays" in fiche:
+          print(fiche["pays"])
+      else:
+          print("pays inconnu")
+  - type: paragraphe
+    texte: >-
+      Un `for` sur un dictionnaire passe par les **clés**, une à une. Avec la clé, on retrouve la valeur.
+  - type: code
+    legende: Parcourir les clés
+    executable: true
+    python: |
+      notes = {"maths": 14, "sport": 17}
+      for matiere in notes:
+          print(matiere, notes[matiere])
+  - type: paragraphe
+    texte: >-
+      `items()` donne la clé et la valeur **ensemble**, à chaque tour. On les range dans deux variables, comme quand une fonction rendait deux valeurs.
+  - type: code
+    legende: Clé et valeur avec items()
+    executable: true
+    python: |
+      notes = {"maths": 14, "sport": 17}
+      for matiere, note in notes.items():
+          print(matiere, ":", note)
+  - type: attention
+    texte: >-
+      **Une clé n'existe qu'une fois.** Écrire `notes["maths"] = 10` remplace la note de maths, il n'en crée pas une deuxième.

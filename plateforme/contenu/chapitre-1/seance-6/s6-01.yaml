@@ -1,0 +1,33 @@
+id: s6-01
+concept: url
+notion: web
+seance: 6
+niveau: normal
+type: predire
+titre: Construire une URL
+obligatoire: true
+enonce: |
+  Une URL est un texte : le serveur et le chemin, puis un `?`, puis les paramètres
+  séparés par des `&`. Que montre l'écran ?
+depart: |
+  base = "https://api.open-meteo.com/v1/forecast"
+  latitude = 46.2
+  longitude = 6.1
+  url = f"{base}?latitude={latitude}&longitude={longitude}"
+  print(url)
+indices:
+  - Le f-string remplace chaque accolade par la valeur de sa variable, et laisse le reste du texte tel quel.
+  - Le ? et le & sont écrits dans le texte. Ils s'affichent donc tels quels.
+tests:
+  - type: qcm
+    options:
+      - https://api.open-meteo.com/v1/forecast?latitude=46.2&longitude=6.1
+      - https://api.open-meteo.com/v1/forecast?latitude=46.2,longitude=6.1
+      - https://api.open-meteo.com/v1/forecast&latitude=46.2&longitude=6.1
+    bonne_reponse: 0
+solution: |
+  base = "https://api.open-meteo.com/v1/forecast"
+  latitude = 46.2
+  longitude = 6.1
+  url = f"{base}?latitude={latitude}&longitude={longitude}"
+  print(url)

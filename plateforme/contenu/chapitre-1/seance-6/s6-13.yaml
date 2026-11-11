@@ -1,0 +1,48 @@
+id: s6-13
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: ecrire
+titre: Une requête refusée
+obligatoire: true
+enonce: |
+  La latitude 200 n'existe pas : elle va de -90 à 90. Envoie quand même la
+  requête, puis affiche son code de statut. Affiche ensuite `OK` si la réponse est
+  bonne, ou `Erreur` sinon. Dans ce dernier cas, range dans `raison` le message du
+  service, qui se trouve dans la clé `reason` de la réponse.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 200, "longitude": 6.1432, "current_weather": True}
+  raison = ""
+indices:
+  - La réponse a un code de statut et un booléen ok. Teste ok dans un if.
+  - 'Quand la requête est refusée, reponse.json() est un dictionnaire qui contient la clé "reason".'
+tests:
+  - type: sortie
+    entrees: []
+    attendu: |
+      400
+      Erreur
+  - type: variable
+    nom: raison
+    type_attendu: str
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: print(400
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 200, "longitude": 6.1432, "current_weather": True}
+  raison = ""
+  reponse = requests.get(url, params=params)
+  print(reponse.status_code)
+  if reponse.ok:
+      print("OK")
+  else:
+      print("Erreur")
+      raison = reponse.json()["reason"]

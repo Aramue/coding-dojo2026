@@ -1,0 +1,43 @@
+id: s6-22
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: ecrire
+titre: Cinq jours de maximales
+obligatoire: false
+enonce: |
+  Demande la température maximale **par jour** (`daily`, variable
+  `temperature_2m_max`) pour **5 jours**, avec le fuseau `Europe/Zurich` dans le
+  paramètre `timezone`. Range dans `nb_jours` le nombre de jours reçus : la liste
+  `time` de `daily`.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432}
+indices:
+  - 'Trois paramètres de plus : "daily", "forecast_days" et "timezone".'
+  - La réponse contient data["daily"]["time"], une date par jour.
+tests:
+  - type: variable
+    nom: nb_jours
+    valeur_attendue: '5'
+    type_attendu: int
+  - type: contient
+    motif: daily
+  - type: interdit
+    motif: nb_jours = 5
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "daily": "temperature_2m_max",
+      "forecast_days": 5,
+      "timezone": "Europe/Zurich",
+  }
+  data = requests.get(url, params=params).json()
+  nb_jours = len(data["daily"]["time"])

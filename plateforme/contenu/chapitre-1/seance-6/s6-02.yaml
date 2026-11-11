@@ -1,0 +1,33 @@
+id: s6-02
+concept: http
+notion: web
+seance: 6
+niveau: normal
+type: predire
+titre: Quelle méthode HTTP ?
+obligatoire: true
+enonce: |
+  Le dictionnaire `methodes` associe chaque méthode HTTP à ce qu'elle fait. Ce
+  programme cherche la méthode qui correspond à une action. Que montre l'écran ?
+depart: |
+  methodes = {"GET": "obtenir", "POST": "créer", "PUT": "modifier", "DELETE": "supprimer"}
+  action = "supprimer"
+  for m in methodes:
+      if methodes[m] == action:
+          print(m)
+indices:
+  - La boucle passe par les clés. À chaque tour, methodes[m] est la valeur de la clé m.
+  - Le print n'a lieu que pour la clé dont la valeur est "supprimer".
+tests:
+  - type: qcm
+    options:
+      - GET
+      - POST
+      - DELETE
+    bonne_reponse: 2
+solution: |
+  methodes = {"GET": "obtenir", "POST": "créer", "PUT": "modifier", "DELETE": "supprimer"}
+  action = "supprimer"
+  for m in methodes:
+      if methodes[m] == action:
+          print(m)

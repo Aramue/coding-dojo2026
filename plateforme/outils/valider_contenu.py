@@ -17,6 +17,8 @@ from contextlib import redirect_stdout
 from datetime import date
 from pathlib import Path
 
+import api_enregistree
+import requests_dojo
 from schema import (
     CHAPITRES,
     MOTIF_EMOJI,
@@ -78,12 +80,26 @@ def _executer(code: str, entrees: list[str]) -> tuple[str, dict, str | None]:
             raise TimeoutError("le programme ne s'arrête pas")
 
     espace: dict = {"__name__": "__main__", "input": _input, "__tour__": _tour}
+
+    # `import requests` rend le requests du dojo, jamais celui du poste de build :
+    # c'est ce qu'installe le worker dans le navigateur. Le transport rejoue des
+    # reponses enregistrees, sans limite par minute — la construction n'est pas
+    # une classe de 24 eleves derriere une seule adresse.
+    requests_dojo.configurer(transport=api_enregistree.transport, limite_minute=None)
+    requests_dojo.reinitialiser()
+    ancien_requests = sys.modules.get("requests")
+    sys.modules["requests"] = requests_dojo
     try:
         arbre = ast.fix_missing_locations(_CompteurDeTours().visit(ast.parse(code, "<solution>")))
         with redirect_stdout(sortie):
             exec(compile(arbre, "<solution>", "exec"), espace)
     except BaseException as e:  # noqa: BLE001 — on rapporte, on ne relance pas
         return sortie.getvalue(), espace, f"{type(e).__name__}: {e}"
+    finally:
+        if ancien_requests is None:
+            sys.modules.pop("requests", None)
+        else:
+            sys.modules["requests"] = ancien_requests
     return sortie.getvalue(), espace, None
 
 

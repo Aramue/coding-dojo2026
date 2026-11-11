@@ -1,0 +1,32 @@
+id: s5-30
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: completer
+titre: Lire un ami dans un JSON
+obligatoire: true
+enonce: |
+  Le texte JSON décrit un utilisateur et ses amis. Complète les deux trous pour
+  transformer le texte en dictionnaire, puis ranger dans `ami` le **deuxième**
+  ami de la liste.
+depart: |
+  import json
+
+  texte = '{"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}'
+  data = json._____(texte)
+  ami = data["user"]["amis"][_____]
+indices:
+  - La fonction qui lit un texte JSON et rend un dictionnaire s'appelle loads.
+  - Le deuxième ami est à la position 1, parce que la première position est 0.
+tests:
+  - type: variable
+    nom: ami
+    valeur_attendue: '''Claire'''
+    type_attendu: str
+solution: |
+  import json
+
+  texte = '{"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}'
+  data = json.loads(texte)
+  ami = data["user"]["amis"][1]

@@ -1,0 +1,36 @@
+id: s5-17
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: predire
+titre: Descendre dans un dictionnaire
+obligatoire: true
+enonce: |
+  Une valeur peut elle-même être un dictionnaire ou une liste. On lit de
+  l'extérieur vers l'intérieur, avec une paire de crochets par niveau. Que
+  montre l'écran ?
+depart: |
+  data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+  print(data["user"]["nom"])
+  print(data["user"]["amis"][1])
+indices:
+  - data["user"] est un dictionnaire. Sa clé "nom" donne le nom d'Alice.
+  - data["user"]["amis"] est une liste. Sa position 1 est le deuxième ami.
+tests:
+  - type: qcm
+    options:
+      - |-
+        Alice
+        Bob
+      - |-
+        Alice
+        Claire
+      - |-
+        user
+        Claire
+    bonne_reponse: 1
+solution: |
+  data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+  print(data["user"]["nom"])
+  print(data["user"]["amis"][1])

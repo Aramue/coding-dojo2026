@@ -1,0 +1,49 @@
+id: s5-11
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: ecrire
+titre: Le prix d'un article
+obligatoire: true
+enonce: |
+  Le dictionnaire `prix` donne le prix de chaque article. Le programme lit le nom
+  d'un article avec `input()`. Si l'article existe dans `prix`, affiche son prix ;
+  sinon, affiche `Article inconnu`.
+depart: |
+  prix = {"pain": 2, "lait": 3, "beurre": 4}
+  article = input()
+indices:
+  - 'Teste d''abord si l''article est une clé de prix : if article in prix.'
+  - Dans le if, affiche prix[article]. Dans le else, affiche le message.
+tests:
+  - type: sortie
+    entrees:
+      - lait
+    attendu: |
+      lait
+      3
+  - type: sortie
+    entrees:
+      - miel
+    attendu: |
+      miel
+      Article inconnu
+  - type: sortie
+    entrees:
+      - pain
+    attendu: |
+      pain
+      2
+  - type: contient
+    motif: in prix
+  - type: interdit
+    motif: elif
+    message: Pas besoin d'un cas par article. Le dictionnaire contient déjà tous les prix.
+solution: |
+  prix = {"pain": 2, "lait": 3, "beurre": 4}
+  article = input()
+  if article in prix:
+      print(prix[article])
+  else:
+      print("Article inconnu")

@@ -1,0 +1,69 @@
+id: c5-json
+notion: json
+ordre: 23
+titre: Lire et écrire du JSON
+duree_min: 4
+blocs:
+  - type: paragraphe
+    texte: >-
+      **JSON** est un format de **texte** pour échanger des données entre programmes. Il ressemble beaucoup à un dictionnaire Python, mais c'est bien un texte : un programme peut l'écrire, un autre peut le lire.
+  - type: code
+    legende: Un texte JSON n'est qu'un texte
+    executable: true
+    python: |
+      texte = '{"nom": "Alice", "age": 25}'
+      print(texte)
+      print(texte[0])
+  - type: paragraphe
+    texte: >-
+      Pour s'en servir, on le transforme en dictionnaire avec `json.loads()`. Le module `json` fait partie de Python : on l'appelle avec `import json`, comme `math`.
+  - type: code
+    legende: Du texte au dictionnaire, et retour
+    executable: true
+    python: |
+      import json
+
+      texte = '{"nom": "Alice", "age": 25}'
+      data = json.loads(texte)
+      print(data["nom"])
+
+      data["age"] = 26
+      nouveau = json.dumps(data)
+      print(nouveau)
+  - type: paragraphe
+    texte: >-
+      `json.loads()` **lit** un texte et rend un dictionnaire. `json.dumps()` fait l'inverse : il prend un dictionnaire et rend un **texte**. Les deux « s » veulent dire *string*, un texte.
+  - type: attention
+    texte: >-
+      **Le JSON exige des guillemets doubles.** `'{'nom': 'Alice'}'` n'est pas du JSON valide : `json.loads()` arrête le programme avec une erreur `JSONDecodeError`.
+  - type: paragraphe
+    texte: >-
+      Les types ne s'écrivent pas pareil des deux côtés. Un objet JSON devient un dictionnaire, un tableau devient une liste, `true` et `false` deviennent `True` et `False`, et `null` devient `None`.
+  - type: code
+    legende: Les types passent de JSON à Python
+    executable: true
+    python: |
+      import json
+
+      texte = '{"actif": true, "email": null, "amis": ["Bob", "Claire"]}'
+      data = json.loads(texte)
+      print(data["actif"])
+      print(data["email"])
+      print(data["amis"][0])
+      print(json.dumps(data))
+  - type: attention
+    texte: >-
+      **`print(data)` n'affiche pas du JSON.** Il montre du Python, avec des apostrophes et `True`. Seul `json.dumps(data)` rend le vrai texte JSON, avec des guillemets doubles et `true`.
+  - type: paragraphe
+    texte: >-
+      Un service renvoie souvent un **tableau d'objets** : une liste de dictionnaires, qui se parcourt avec `for`.
+  - type: code
+    legende: Un tableau d'objets
+    executable: true
+    python: |
+      import json
+
+      texte = '[{"nom": "Alice", "age": 17}, {"nom": "Bob", "age": 16}]'
+      eleves = json.loads(texte)
+      for e in eleves:
+          print(e["nom"], e["age"])

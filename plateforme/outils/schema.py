@@ -9,7 +9,7 @@ from typing import Annotated, Literal, Union
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-MOTIF_ID = re.compile(r"^s[1234]-[0-9]{2}(-expert)?$")
+MOTIF_ID = re.compile(r"^s[123456]-[0-9]{2}(-expert)?$")
 
 # Construit a partir de points de code explicites plutot que recopie depuis des
 # emoji litteraux : un selecteur de variation invisible (U+FE0F) s'etait glisse
@@ -84,7 +84,7 @@ class Exercice(BaseModel):
     # d'exercices et une couleur. Le concept, lui, reste libre et sert au
     # regroupement pedagogique fin. Voir NOTIONS plus bas.
     notion: str
-    seance: int = Field(ge=1, le=4)
+    seance: int = Field(ge=1, le=6)
     niveau: Literal["normal", "expert"]
     type: Literal["predire", "debug", "completer", "ecrire"]
     titre: str
@@ -144,7 +144,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     ]
 
 
-MOTIF_LECON = re.compile(r"^c[1234]-[a-z]+$")
+MOTIF_LECON = re.compile(r"^c[123456]-[a-z]+$")
 
 # Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
 # navigation : elle porte une lecon et un groupe d'exercices.
@@ -295,6 +295,60 @@ NOTIONS: dict[str, dict] = {
         "famille": "operateurs",
         "chapitre": "stegano",
     },
+    # --- Seance 5 ---
+    # Dictionnaires et JSON. La couleur dit le concept (voir plus haut) : ranger des
+    # valeurs pour les dictionnaires, textes et types pour le JSON.
+    "avantdict": {
+        "ordre": 20,
+        "titre": "Rappels avant les dictionnaires",
+        "famille": "rappels",
+        "chapitre": "donnees",
+    },
+    "dictionnaires": {
+        "ordre": 21,
+        "titre": "Les dictionnaires",
+        "famille": "variables",
+        "chapitre": "donnees",
+    },
+    "imbriques": {
+        "ordre": 22,
+        "titre": "Des données imbriquées",
+        "famille": "variables",
+        "chapitre": "donnees",
+    },
+    "json": {
+        "ordre": 23,
+        "titre": "Lire et écrire du JSON",
+        "famille": "types",
+        "chapitre": "donnees",
+    },
+    # --- Seance 6 ---
+    # Services web et API (Open-Meteo, en reseau reel). Les URL sont des textes ;
+    # les parametres et les reponses sont des dictionnaires, donc des valeurs rangees.
+    "web": {
+        "ordre": 24,
+        "titre": "Réseau, URL et HTTP",
+        "famille": "types",
+        "chapitre": "services",
+    },
+    "requetes": {
+        "ordre": 25,
+        "titre": "Envoyer une requête",
+        "famille": "variables",
+        "chapitre": "services",
+    },
+    "explorer": {
+        "ordre": 26,
+        "titre": "Faire varier la requête",
+        "famille": "variables",
+        "chapitre": "services",
+    },
+    "meteo": {
+        "ordre": 27,
+        "titre": "Un programme météo",
+        "famille": "variables",
+        "chapitre": "services",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
@@ -321,6 +375,21 @@ CHAPITRES: dict[str, dict] = {
         "titre": "Listes, bits et caractères",
         "seance": 4,
         "ouverture": "2026-10-27",
+    },
+    "donnees": {
+        "ordre": 5,
+        "titre": "Dictionnaires et JSON",
+        "seance": 5,
+        "ouverture": "2026-11-10",
+    },
+    "services": {
+        "ordre": 6,
+        "titre": "Interroger un service web",
+        "seance": 6,
+        # PROVISOIRE : la date de la seance 6 n'est pas connue. 2099 la garde
+        # fermee pour les eleves (seul l'apercu du professeur la montre) tant
+        # qu'on n'a pas ecrit la vraie date. A REMPLACER avant la release.
+        "ouverture": "2099-12-31",
     },
 }
 

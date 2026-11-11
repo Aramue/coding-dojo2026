@@ -1,0 +1,41 @@
+id: s6-18
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: ecrire
+titre: Le vent en miles par heure
+obligatoire: true
+enonce: |
+  Demande la vitesse du vent en **miles par heure**. Le paramètre s'appelle
+  `windspeed_unit` et accepte `kmh`, `ms`, `mph` ou `kn`. Range dans `unite_vent`
+  l'unité annoncée par le service (`current_weather_units`, clé `windspeed`).
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+indices:
+  - Ajoute une paire au dictionnaire params. Sa clé est le nom du paramètre, sa valeur est un texte.
+  - Les unités de la réponse sont dans current_weather_units. Compare avec ce que tu obtiens sans le paramètre.
+tests:
+  - type: variable
+    nom: unite_vent
+    valeur_attendue: '''mp/h'''
+    type_attendu: str
+  - type: contient
+    motif: windspeed_unit
+  - type: interdit
+    motif: mp/h
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "current_weather": True,
+      "windspeed_unit": "mph",
+  }
+  data = requests.get(url, params=params).json()
+  unite_vent = data["current_weather_units"]["windspeed"]

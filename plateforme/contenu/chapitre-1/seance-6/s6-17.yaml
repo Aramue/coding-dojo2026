@@ -1,0 +1,44 @@
+id: s6-17
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: completer
+titre: Des degrés Fahrenheit
+obligatoire: true
+enonce: |
+  Le paramètre `temperature_unit` change l'unité de la température. Complète le
+  trou pour demander des degrés **Fahrenheit** : la valeur est un texte, qui
+  s'écrit `fahrenheit`. Regarde ensuite l'unité que le service t'annonce.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "current_weather": True,
+      "temperature_unit": _____,
+  }
+  data = requests.get(url, params=params).json()
+  unite = data["current_weather_units"]["temperature"]
+indices:
+  - Une valeur de paramètre qui est un mot s'écrit comme un texte, entre guillemets.
+  - Le mot attendu est fahrenheit, en minuscules. Les degrés Celsius se demandent avec celsius.
+tests:
+  - type: variable
+    nom: unite
+    valeur_attendue: '''°F'''
+    type_attendu: str
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "current_weather": True,
+      "temperature_unit": "fahrenheit",
+  }
+  data = requests.get(url, params=params).json()
+  unite = data["current_weather_units"]["temperature"]

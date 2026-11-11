@@ -1,0 +1,41 @@
+id: s5-16
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: expert
+type: predire
+titre: Une valeur par défaut avec get
+obligatoire: false
+enonce: |
+  Pour les curieux : `get(clé, défaut)` rend la valeur de la clé, ou la valeur par
+  défaut si la clé n'existe pas, sans rien ajouter au dictionnaire. Que montre
+  l'écran ?
+depart: |
+  d = {"a": 1}
+  print(d.get("a", 0))
+  print(d.get("b", 0))
+  print(len(d))
+indices:
+  - get("a", 0) trouve la clé "a". get("b", 0) ne la trouve pas et rend le défaut.
+  - get() ne crée jamais de clé. Le dictionnaire garde une seule paire.
+tests:
+  - type: qcm
+    options:
+      - |-
+        1
+        0
+        2
+      - |-
+        1
+        0
+        1
+      - |-
+        1
+        1
+        1
+    bonne_reponse: 1
+solution: |
+  d = {"a": 1}
+  print(d.get("a", 0))
+  print(d.get("b", 0))
+  print(len(d))

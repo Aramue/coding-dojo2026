@@ -49,6 +49,29 @@ Une quinzaine d'entrées couvrent l'essentiel de ce que produit un débutant.
 > la plus fréquente de la séance 2== : les exercices `s2-14` et `s2-19` la font rencontrer sous
 > contrôle, puis chaque `if` peut la reproduire. Ajoutée le 14 septembre 2026.
 
+> [!note] `KeyError`, ajouté avec la séance 5 (10 novembre 2026)
+> Les dictionnaires rendent `KeyError` fréquent : une clé mal orthographiée, une majuscule, un
+> niveau oublié dans une donnée imbriquée. Sans règle, le message tombait sur le générique
+> « Relis la ligne signalée ». La règle nomme la clé telle que Python la rend (`'prenom'`),
+> rappelle que ==les majuscules et les accents comptent==, et conseille `print()` sur le
+> dictionnaire — jamais la ligne corrigée. `s5-06` et `s5-19` la font rencontrer sous contrôle.
+> Le message `IndexError` parle encore de « caractère » : exact pour un texte, approximatif pour une
+> liste ; non repris.
+
+> [!note] Séances 5 et 6 : JSON et requêtes (10 novembre 2026)
+> Cinq règles de plus, dont les exercices `s5-31`, `s6-11` et `s6-23` font rencontrer l'erreur :
+>
+> | Exception | Message |
+> |---|---|
+> | `JSONDecodeError` | *Ce texte n'est pas du JSON valide* — guillemets doubles, virgules ; l'apostrophe est la cause la plus fréquente |
+> | `TypeError` (`'Response' object is not subscriptable`) | *Une réponse ne se lit pas comme un dictionnaire* — la piste renvoie à la leçon, sans écrire `.json()` |
+> | `ConnectionError` | *Le service ne répond pas* — attendre, puis appeler le professeur : c'est peut-être le réseau de la salle |
+> | `Timeout` | *Le service met trop de temps à répondre* |
+> | `HTTPError`, `RequestException` | le message du dojo, déjà en français : adresse refusée, trop de requêtes, méthode non proposée |
+>
+> Ces noms ne figurent **pas** dans la liste blanche de `exceptions.ts` : le tableau de bord les
+> compte sous `AutreErreur`. Les ajouter exigerait aussi la liste de l'API (`routes_eleve.py`).
+
 ## Ce que le message ne fait jamais
 
 > [!warning] Ne pas donner la réponse

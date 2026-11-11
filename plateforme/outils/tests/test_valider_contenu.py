@@ -2,6 +2,7 @@ from pathlib import Path
 
 import yaml
 
+import valider_contenu
 from schema import Exercice
 from valider_contenu import verifier_coherence
 
@@ -173,3 +174,25 @@ def test_l_input_simule_repond_toujours_avec_le_compteur_de_tours():
     assert erreur is None
     assert sortie == "Nom : Camille\nCamille\n"
     assert espace["nom"] == "Camille"
+
+
+def test_import_requests_rend_le_requests_du_dojo_puis_restitue_l_ancien():
+    import sys
+
+    import requests_dojo
+
+    avant = sys.modules.get("requests")
+    sortie, espace, erreur = valider_contenu._executer(
+        "import requests\nprint(requests.APPELS_PAR_EXECUTION)", []
+    )
+    assert erreur is None and sortie.strip() == str(requests_dojo.APPELS_PAR_EXECUTION)
+    assert espace["requests"] is requests_dojo
+    assert sys.modules.get("requests") is avant
+
+
+def test_une_requete_sans_enregistrement_dit_comment_l_enregistrer(monkeypatch):
+    monkeypatch.delenv("DOJO_ENREGISTRER", raising=False)
+    _, _, erreur = valider_contenu._executer(
+        'import requests\nrequests.get("https://api.open-meteo.com/v1/forecast?zz=1")', []
+    )
+    assert erreur is not None and "DOJO_ENREGISTRER=1" in erreur

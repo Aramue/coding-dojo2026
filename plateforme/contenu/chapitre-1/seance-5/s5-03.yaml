@@ -1,0 +1,34 @@
+id: s5-03
+concept: listes
+notion: avantdict
+seance: 5
+niveau: normal
+type: ecrire
+titre: Compter les prénoms en A
+obligatoire: true
+enonce: |
+  Compte dans `compteur` combien de prénoms de la liste commencent par la lettre
+  `A`, en parcourant la liste avec une boucle.
+depart: |
+  prenoms = ["Camille", "Alice", "Marc", "Adèle"]
+  compteur = 0
+indices:
+  - for parcourt la liste, et la variable prend chaque prénom à son tour.
+  - 'La première lettre d''un texte s''obtient avec la position 0 : p[0]. Compare-la à "A" dans un if.'
+tests:
+  - type: variable
+    nom: compteur
+    valeur_attendue: '2'
+    type_attendu: int
+  - type: contient
+    motif: 'for '
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: '= 2'
+solution: |
+  prenoms = ["Camille", "Alice", "Marc", "Adèle"]
+  compteur = 0
+  for p in prenoms:
+      if p[0] == "A":
+          compteur = compteur + 1

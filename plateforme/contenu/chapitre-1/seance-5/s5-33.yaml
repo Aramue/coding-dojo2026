@@ -1,0 +1,41 @@
+id: s5-33
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: ecrire
+titre: Additionner les prix d'un tableau JSON
+obligatoire: true
+enonce: |
+  Le texte JSON est un tableau de produits. Charge-le, puis calcule dans `total`
+  la somme de tous les prix, en parcourant la liste avec une boucle.
+depart: |
+  import json
+
+  texte = '[{"produit": "pain", "prix": 2}, {"produit": "lait", "prix": 3}, {"produit": "miel", "prix": 7}]'
+  total = 0
+indices:
+  - Un tableau JSON devient une liste de dictionnaires. for la parcourt un dictionnaire à la fois.
+  - Le prix d'un produit est e["prix"] si ta variable de boucle s'appelle e.
+tests:
+  - type: variable
+    nom: total
+    valeur_attendue: '12'
+    type_attendu: int
+  - type: contient
+    motif: json.loads(
+  - type: contient
+    motif: 'for '
+  - type: interdit
+    motif: '12'
+  - type: interdit
+    motif: sum(
+    message: 'sum() fait le calcul à ta place : ici, c''est la boucle qu''on veut voir.'
+solution: |
+  import json
+
+  texte = '[{"produit": "pain", "prix": 2}, {"produit": "lait", "prix": 3}, {"produit": "miel", "prix": 7}]'
+  total = 0
+  produits = json.loads(texte)
+  for p in produits:
+      total = total + p["prix"]

@@ -1,0 +1,61 @@
+id: s6-28
+concept: programme
+notion: meteo
+seance: 6
+niveau: expert
+type: ecrire
+titre: La ville la plus chaude
+obligatoire: false
+enonce: |
+  Défi : parmi les trois villes du dictionnaire `villes`, laquelle est **la plus
+  chaude en ce moment** ? Range son nom dans `plus_chaude`, et sa température dans
+  `record`. Une requête par ville, `current_weather` à `True`, et pas de `max()`.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  villes = {
+      "Genève": {"latitude": 46.2, "longitude": 6.14},
+      "Tokyo": {"latitude": 35.69, "longitude": 139.69},
+      "Quito": {"latitude": -0.23, "longitude": -78.52},
+  }
+  plus_chaude = ""
+  record = -100
+indices:
+  - Comme pour le fuseau, une boucle for sur villes envoie une requête par ville.
+  - À chaque tour, si la température dépasse record, record et plus_chaude changent tous les deux.
+tests:
+  - type: variable
+    nom: plus_chaude
+    type_attendu: str
+  - type: variable
+    nom: record
+    type_attendu: float
+  - type: contient
+    motif: 'for '
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: max(
+    message: 'max() trouve le plus grand à ta place : ici, c''est la comparaison qu''on veut voir.'
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  villes = {
+      "Genève": {"latitude": 46.2, "longitude": 6.14},
+      "Tokyo": {"latitude": 35.69, "longitude": 139.69},
+      "Quito": {"latitude": -0.23, "longitude": -78.52},
+  }
+  plus_chaude = ""
+  record = -100
+  for nom in villes:
+      params = {
+          "latitude": villes[nom]["latitude"],
+          "longitude": villes[nom]["longitude"],
+          "current_weather": True,
+      }
+      temperature = requests.get(url, params=params).json()["current_weather"]["temperature"]
+      if temperature > record:
+          record = temperature
+          plus_chaude = nom

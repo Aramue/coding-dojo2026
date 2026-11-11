@@ -131,5 +131,61 @@
     "titre": "Bits de poids faible et décodage",
     "famille": "operateurs",
     "chapitre": "stegano"
+  },
+  {
+    "id": "avantdict",
+    "ordre": 20,
+    "titre": "Rappels avant les dictionnaires",
+    "famille": "rappels",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "dictionnaires",
+    "ordre": 21,
+    "titre": "Les dictionnaires",
+    "famille": "variables",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "imbriques",
+    "ordre": 22,
+    "titre": "Des données imbriquées",
+    "famille": "variables",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "json",
+    "ordre": 23,
+    "titre": "Lire et écrire du JSON",
+    "famille": "types",
+    "chapitre": "donnees"
+  },
+  {
+    "id": "web",
+    "ordre": 24,
+    "titre": "Réseau, URL et HTTP",
+    "famille": "types",
+    "chapitre": "services"
+  },
+  {
+    "id": "requetes",
+    "ordre": 25,
+    "titre": "Envoyer une requête",
+    "famille": "variables",
+    "chapitre": "services"
+  },
+  {
+    "id": "explorer",
+    "ordre": 26,
+    "titre": "Faire varier la requête",
+    "famille": "variables",
+    "chapitre": "services"
+  },
+  {
+    "id": "meteo",
+    "ordre": 27,
+    "titre": "Un programme météo",
+    "famille": "variables",
+    "chapitre": "services"
   }
 ]

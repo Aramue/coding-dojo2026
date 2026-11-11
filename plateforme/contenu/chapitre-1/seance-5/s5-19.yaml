@@ -1,0 +1,30 @@
+id: s5-19
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: debug
+titre: Un niveau oublié
+obligatoire: true
+enonce: |
+  Ce programme doit afficher le nom de l'utilisateur, mais il s'arrête avec une
+  erreur. Lis le message, puis répare le programme.
+depart: |
+  data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+  nom = data["nom"]
+  print(nom)
+indices:
+  - 'Affiche data avec print() : la clé "nom" n''est pas au premier niveau.'
+  - Le nom d'Alice se trouve à l'intérieur de la valeur de la clé "user". Il faut descendre d'un niveau.
+tests:
+  - type: variable
+    nom: nom
+    valeur_attendue: '''Alice'''
+    type_attendu: str
+  - type: sortie
+    entrees: []
+    attendu: Alice
+solution: |
+  data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+  nom = data["user"]["nom"]
+  print(nom)

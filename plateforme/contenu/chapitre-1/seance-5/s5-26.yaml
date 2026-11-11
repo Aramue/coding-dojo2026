@@ -1,0 +1,31 @@
+id: s5-26
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: expert
+type: predire
+titre: Deux noms pour un même dictionnaire
+obligatoire: false
+enonce: |
+  Pour les curieux : `b = a` ne copie pas le dictionnaire, il lui donne un
+  deuxième nom. Que montre l'écran ?
+depart: |
+  a = {"x": [1]}
+  b = a
+  b["x"].append(2)
+  print(a)
+indices:
+  - a et b désignent le même dictionnaire, rangé une seule fois en mémoire.
+  - Modifier la liste par b la modifie aussi quand on la lit par a.
+tests:
+  - type: qcm
+    options:
+      - '{''x'': [1]}'
+      - '{''x'': [1, 2]}'
+      - '{''x'': [2]}'
+    bonne_reponse: 1
+solution: |
+  a = {"x": [1]}
+  b = a
+  b["x"].append(2)
+  print(a)

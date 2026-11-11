@@ -1,0 +1,39 @@
+id: c5-avantdict
+notion: avantdict
+ordre: 20
+titre: Rappels avant les dictionnaires
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Avant les dictionnaires, un dernier tour de **listes**. Une liste range des valeurs, et on les retrouve par leur **position**, qui commence à 0.
+  - type: code
+    legende: Une fiche rangée dans une liste
+    executable: true
+    python: |
+      fiche = ["Camille", 17, "Genève"]
+      print(fiche[0])
+      print(fiche[2])
+      print(len(fiche))
+  - type: paragraphe
+    texte: >-
+      Pour lire la ville, il faut savoir qu'elle est à la position 2. Rien dans la liste ne le dit : c'est à toi de t'en souvenir.
+  - type: attention
+    texte: >-
+      **La dernière position est `len(fiche) - 1`.** Une fiche de trois valeurs a les positions 0, 1 et 2. Demander `fiche[3]` arrête le programme avec une erreur.
+  - type: paragraphe
+    texte: >-
+      Une liste se parcourt avec `for`, et on peut y chercher, compter ou cumuler, exactement comme avec un texte.
+  - type: code
+    legende: Compter dans une liste
+    executable: true
+    python: |
+      prenoms = ["Camille", "Alice", "Marc"]
+      compteur = 0
+      for p in prenoms:
+          if p[0] == "A":
+              compteur = compteur + 1
+      print(compteur)
+  - type: paragraphe
+    texte: >-
+      Retenir « la ville est à la position 2 » devient vite pénible quand une fiche compte dix valeurs. Les **dictionnaires** règlent ce problème : à la place d'un numéro, chaque valeur reçoit un **nom**.

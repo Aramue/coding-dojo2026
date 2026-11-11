@@ -1,0 +1,44 @@
+id: s6-24
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: ecrire
+titre: Une requête qui nourrit l'autre
+obligatoire: true
+enonce: |
+  Deux requêtes à la suite. D'abord, cherche **Zürich** avec le service de recherche
+  (`https://geocoding-api.open-meteo.com/v1/search`). Ensuite, avec la latitude et
+  la longitude trouvées, demande la météo actuelle sur
+  `https://api.open-meteo.com/v1/forecast`, en réglant `timezone` sur `auto`. Range
+  dans `fuseau` le fuseau horaire de la réponse (clé `timezone`).
+depart: |
+  import requests
+
+  recherche = {"name": "Zürich", "count": 1, "language": "fr"}
+indices:
+  - Le premier résultat de la recherche est data["results"][0]. Il contient latitude et longitude.
+  - 'Les paramètres de la seconde requête reprennent ces deux valeurs, avec "current_weather": True et "timezone": "auto".'
+tests:
+  - type: variable
+    nom: fuseau
+    valeur_attendue: '''Europe/Zurich'''
+    type_attendu: str
+  - type: contient
+    motif: current_weather
+  - type: interdit
+    motif: Europe/Zurich
+solution: |
+  import requests
+
+  recherche = {"name": "Zürich", "count": 1, "language": "fr"}
+  ville = requests.get("https://geocoding-api.open-meteo.com/v1/search", params=recherche).json()["results"][0]
+
+  params = {
+      "latitude": ville["latitude"],
+      "longitude": ville["longitude"],
+      "current_weather": True,
+      "timezone": "auto",
+  }
+  data = requests.get("https://api.open-meteo.com/v1/forecast", params=params).json()
+  fuseau = data["timezone"]

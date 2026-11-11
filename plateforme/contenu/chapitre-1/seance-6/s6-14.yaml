@@ -1,0 +1,39 @@
+id: s6-14
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: predire
+titre: Ce que vaut ok
+obligatoire: false
+enonce: |
+  `reponse.ok` vaut `True` quand le code de statut est inférieur à 400. Voici la
+  même règle sur quatre codes. Que montre l'écran ?
+depart: |
+  for statut in [200, 400, 404, 500]:
+      print(statut < 400)
+indices:
+  - Seul le premier code est inférieur à 400.
+  - Une erreur du client, comme 404, ou du serveur, comme 500, n'est jamais « ok ».
+tests:
+  - type: qcm
+    options:
+      - |-
+        True
+        False
+        False
+        False
+      - |-
+        True
+        True
+        False
+        False
+      - |-
+        False
+        False
+        False
+        False
+    bonne_reponse: 0
+solution: |
+  for statut in [200, 400, 404, 500]:
+      print(statut < 400)

@@ -1,0 +1,43 @@
+id: s5-27
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: expert
+type: ecrire
+titre: Le meilleur total
+obligatoire: false
+enonce: |
+  Défi : chaque élève a une liste de scores. Trouve celui dont la **somme** de
+  scores est la plus grande, sans `max()` ni `sum()`. Range son nom dans
+  `meilleur`, et pars de `record = 0`.
+depart: |
+  scores = {"Alice": [12, 15], "Bob": [20, 5], "Clara": [9, 19]}
+  meilleur = ""
+  record = 0
+indices:
+  - 'Deux boucles imbriquées : une sur les noms, une sur la liste de scores de chaque nom, pour calculer son total.'
+  - Après le calcul du total d'un élève, un if le compare à record. S'il le dépasse, record et meilleur changent tous les deux.
+tests:
+  - type: variable
+    nom: meilleur
+    valeur_attendue: '''Clara'''
+    type_attendu: str
+  - type: contient
+    motif: 'if '
+  - type: interdit
+    motif: max(
+    message: 'max() trouve le plus grand à ta place : ici, c''est la comparaison qu''on veut voir.'
+  - type: interdit
+    motif: sum(
+    message: 'sum() fait le calcul à ta place : ici, c''est la boucle qu''on veut voir.'
+solution: |
+  scores = {"Alice": [12, 15], "Bob": [20, 5], "Clara": [9, 19]}
+  meilleur = ""
+  record = 0
+  for nom in scores:
+      total = 0
+      for s in scores[nom]:
+          total = total + s
+      if total > record:
+          record = total
+          meilleur = nom

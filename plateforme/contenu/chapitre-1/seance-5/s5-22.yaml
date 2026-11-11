@@ -1,0 +1,35 @@
+id: s5-22
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: predire
+titre: Une liste de dictionnaires
+obligatoire: true
+enonce: |
+  Une liste peut contenir des dictionnaires, un par élève. On choisit d'abord
+  l'élève par sa position, puis l'information par sa clé. Que montre l'écran ?
+depart: |
+  eleves = [{"nom": "Alice", "age": 17}, {"nom": "Bob", "age": 16}]
+  print(eleves[1]["nom"])
+  print(len(eleves))
+indices:
+  - eleves[1] est le deuxième élève, un dictionnaire. Les positions commencent à 0.
+  - len(eleves) compte les dictionnaires de la liste, pas les paires de chacun.
+tests:
+  - type: qcm
+    options:
+      - |-
+        Alice
+        2
+      - |-
+        Bob
+        2
+      - |-
+        Bob
+        16
+    bonne_reponse: 1
+solution: |
+  eleves = [{"nom": "Alice", "age": 17}, {"nom": "Bob", "age": 16}]
+  print(eleves[1]["nom"])
+  print(len(eleves))

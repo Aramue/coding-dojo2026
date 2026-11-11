@@ -1,0 +1,54 @@
+id: s6-25
+concept: parametres
+notion: explorer
+seance: 6
+niveau: expert
+type: ecrire
+titre: Le fuseau de trois villes
+obligatoire: false
+enonce: |
+  Défi : le dictionnaire `villes` donne les coordonnées de trois villes. Pour
+  **chaque** ville, envoie une requête avec `current_weather` à `True` et
+  `timezone` à `auto`, et range dans le dictionnaire `fuseaux` le fuseau horaire
+  reçu, sous le nom de la ville.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  villes = {
+      "Genève": {"latitude": 46.2, "longitude": 6.14},
+      "Tokyo": {"latitude": 35.69, "longitude": 139.69},
+      "Quito": {"latitude": -0.23, "longitude": -78.52},
+  }
+  fuseaux = {}
+indices:
+  - 'Une boucle for sur villes donne chaque nom. villes[nom]["latitude"] donne sa latitude.'
+  - 'À chaque tour, fuseaux[nom] = ... ajoute une paire au dictionnaire.'
+tests:
+  - type: variable
+    nom: fuseaux
+    valeur_attendue: |-
+      {'Genève': 'Europe/Zurich', 'Tokyo': 'Asia/Tokyo', 'Quito': 'America/Guayaquil'}
+  - type: contient
+    motif: 'for '
+  - type: interdit
+    motif: Asia/
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  villes = {
+      "Genève": {"latitude": 46.2, "longitude": 6.14},
+      "Tokyo": {"latitude": 35.69, "longitude": 139.69},
+      "Quito": {"latitude": -0.23, "longitude": -78.52},
+  }
+  fuseaux = {}
+  for nom in villes:
+      params = {
+          "latitude": villes[nom]["latitude"],
+          "longitude": villes[nom]["longitude"],
+          "current_weather": True,
+          "timezone": "auto",
+      }
+      data = requests.get(url, params=params).json()
+      fuseaux[nom] = data["timezone"]

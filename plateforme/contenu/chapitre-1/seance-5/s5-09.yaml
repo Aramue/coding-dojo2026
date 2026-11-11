@@ -1,0 +1,28 @@
+id: s5-09
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: ecrire
+titre: Mettre le stock à jour
+obligatoire: true
+enonce: |
+  Quatre pommes viennent d'arriver, ainsi qu'un premier arrivage de six kiwis.
+  Mets le dictionnaire `stock` à jour : ajoute 4 au nombre de pommes sans écrire
+  le nouveau total toi-même, et crée la clé `"kiwis"` avec la valeur 6.
+depart: |
+  stock = {"pommes": 5, "poires": 2}
+indices:
+  - 'Pour changer une valeur, on la relit puis on la réécrit : stock["pommes"] = stock["pommes"] + ...'
+  - 'Écrire une clé qui n''existe pas la crée : stock["kiwis"] = ...'
+tests:
+  - type: variable
+    nom: stock
+    valeur_attendue: |-
+      {'pommes': 9, 'poires': 2, 'kiwis': 6}
+  - type: interdit
+    motif: '9'
+solution: |
+  stock = {"pommes": 5, "poires": 2}
+  stock["pommes"] = stock["pommes"] + 4
+  stock["kiwis"] = 6

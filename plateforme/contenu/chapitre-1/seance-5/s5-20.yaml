@@ -1,0 +1,38 @@
+id: s5-20
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: ecrire
+titre: Lire la météo
+obligatoire: true
+enonce: |
+  Le dictionnaire `meteo` décrit le temps qu'il fait. Range dans `temperature` la
+  température actuelle, et dans `vent` la vitesse du vent actuel. Lis-les dans
+  `meteo`, sans recopier leur valeur.
+depart: |
+  meteo = {"ville": "Genève", "actuel": {"temperature": 12.5, "vent": 8}}
+
+  temperature =
+  vent =
+indices:
+  - Les deux valeurs sont à l'intérieur de la clé "actuel". Il faut donc deux paires de crochets.
+  - 'Pour la température : meteo["actuel"] puis la clé de la température.'
+tests:
+  - type: variable
+    nom: temperature
+    valeur_attendue: '12.5'
+    type_attendu: float
+  - type: variable
+    nom: vent
+    valeur_attendue: '8'
+    type_attendu: int
+  - type: interdit
+    motif: '= 12.5'
+  - type: interdit
+    motif: '= 8'
+solution: |
+  meteo = {"ville": "Genève", "actuel": {"temperature": 12.5, "vent": 8}}
+
+  temperature = meteo["actuel"]["temperature"]
+  vent = meteo["actuel"]["vent"]

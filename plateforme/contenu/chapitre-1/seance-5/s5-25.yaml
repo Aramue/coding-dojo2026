@@ -1,0 +1,35 @@
+id: s5-25
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: predire
+titre: Afficher une liste imbriquée
+obligatoire: false
+enonce: |
+  Quand on affiche une liste entière, Python montre les crochets, les virgules et
+  les apostrophes. Que montre l'écran ?
+depart: |
+  data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+  print(data["user"]["amis"])
+  print(len(data["user"]["amis"]))
+indices:
+  - data["user"]["amis"] est la liste entière des amis, pas un seul d'entre eux.
+  - len() compte les éléments de cette liste.
+tests:
+  - type: qcm
+    options:
+      - |-
+        ['Bob', 'Claire']
+        2
+      - |-
+        ['Bob', 'Claire']
+        1
+      - |-
+        Bob Claire
+        2
+    bonne_reponse: 0
+solution: |
+  data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+  print(data["user"]["amis"])
+  print(len(data["user"]["amis"]))

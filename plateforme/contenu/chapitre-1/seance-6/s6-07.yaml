@@ -1,0 +1,35 @@
+id: s6-07
+concept: http
+notion: web
+seance: 6
+niveau: normal
+type: predire
+titre: Le premier chiffre d'un code
+obligatoire: false
+enonce: |
+  Un code qui commence par 4 est une erreur du client. La division entière `//`
+  donne le premier chiffre d'un code à trois chiffres. Que montre l'écran ?
+depart: |
+  code = 404
+  print(code // 100)
+  print(code // 100 == 4)
+indices:
+  - 404 divisé par 100, sans les décimales, donne 4.
+  - La deuxième ligne compare ce chiffre à 4. La réponse est un booléen.
+tests:
+  - type: qcm
+    options:
+      - |-
+        4
+        True
+      - |-
+        404
+        True
+      - |-
+        4
+        False
+    bonne_reponse: 0
+solution: |
+  code = 404
+  print(code // 100)
+  print(code // 100 == 4)

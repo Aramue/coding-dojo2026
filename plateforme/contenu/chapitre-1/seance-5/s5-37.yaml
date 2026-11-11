@@ -1,0 +1,29 @@
+id: s5-37
+concept: json
+notion: json
+seance: 5
+niveau: expert
+type: predire
+titre: Les accents dans json.dumps
+obligatoire: false
+enonce: |
+  Pour les curieux : par défaut, `json.dumps()` n'écrit que des caractères sans
+  accent, et remplace les autres par un code. Que montre l'écran ?
+depart: |
+  import json
+
+  print(json.dumps({"ville": "Genève"}))
+indices:
+  - Le è n'est pas un caractère sans accent. json.dumps() le remplace par son code.
+  - Le code d'un caractère s'écrit \u suivi de quatre chiffres hexadécimaux.
+tests:
+  - type: qcm
+    options:
+      - '{"ville": "Genève"}'
+      - '{"ville": "Genève"}'
+      - '{"ville": "Geneve"}'
+    bonne_reponse: 1
+solution: |
+  import json
+
+  print(json.dumps({"ville": "Genève"}))

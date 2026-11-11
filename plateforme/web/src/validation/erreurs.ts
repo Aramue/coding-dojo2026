@@ -129,6 +129,76 @@ const REGLES: Regle[] = [
     }),
   },
   {
+    type: 'KeyError',
+    // Python rend la cle telle qu'elle est ecrite : 'prenom' avec ses
+    // apostrophes, ou 3 pour une cle numerique. On l'affiche sans les modifier.
+    motif: /^(.+)$/s,
+    construire: (c) => ({
+      titre: `La clé ${c[1]} n'existe pas dans ce dictionnaire`,
+      explication: `Un dictionnaire ne connaît que les clés qu'on y a écrites, exactement comme on les a écrites : les majuscules et les accents comptent.`,
+      piste: `Affiche le dictionnaire avec print() pour voir ses clés, puis compare avec celle que tu demandes.`,
+    }),
+  },
+  {
+    type: 'TypeError',
+    // La leçon « Envoyer une requête » : reponse est l'objet complet renvoyé par
+    // le service, pas ses données. La piste renvoie à la leçon sans écrire la
+    // ligne corrigée.
+    motif: /'Response' object is not subscriptable/,
+    construire: () => ({
+      titre: 'Une réponse ne se lit pas comme un dictionnaire',
+      explication: `La variable contient la réponse complète du service : son code de statut, ses en-têtes, son texte. Les données, elles, sont à l'intérieur.`,
+      piste: `Relis dans la leçon comment extraire les données d'une réponse, puis lis-les comme un dictionnaire.`,
+    }),
+  },
+  {
+    type: 'JSONDecodeError',
+    motif: /.*/s,
+    construire: () => ({
+      titre: `Ce texte n'est pas du JSON valide`,
+      explication: `json.loads() attend du JSON : les clés et les textes entre guillemets doubles, une virgule entre deux éléments, et aucune virgule en trop à la fin.`,
+      piste: `Compare ton texte à l'exemple de la leçon. Une apostrophe à la place d'un guillemet double suffit à le rendre invalide.`,
+    }),
+  },
+  {
+    type: 'ConnectionError',
+    motif: /.*/s,
+    construire: () => ({
+      titre: 'Le service ne répond pas',
+      explication: `Ton programme a envoyé sa requête, mais aucune réponse n'est revenue.`,
+      piste: `Attends quelques secondes et réessaie. Si ça ne change rien, appelle le professeur : c'est peut-être le réseau de la salle.`,
+    }),
+  },
+  {
+    type: 'Timeout',
+    motif: /.*/s,
+    construire: () => ({
+      titre: 'Le service met trop de temps à répondre',
+      explication: `Les requêtes de ton programme ont pris plus de temps que prévu.`,
+      piste: `Réessaie. Si tu envoies plusieurs requêtes, vérifie que tu n'en demandes pas plus qu'il n'en faut.`,
+    }),
+  },
+  {
+    type: 'HTTPError',
+    motif: /.*/s,
+    construire: (c) => ({
+      titre: 'Le service a répondu par une erreur',
+      explication: c[0],
+      piste: `Affiche le code de statut de la réponse, puis son texte : le service dit lui-même ce qui ne va pas dans ta requête.`,
+    }),
+  },
+  {
+    type: 'RequestException',
+    // Le message vient du requests du dojo, déjà écrit en français : adresse
+    // refusée, trop de requêtes, méthode non proposée.
+    motif: /.*/s,
+    construire: (c) => ({
+      titre: 'Ta requête ne peut pas partir',
+      explication: c[0],
+      piste: `Relis l'adresse et les paramètres de ta requête.`,
+    }),
+  },
+  {
     type: 'AttributeError',
     motif: /'(\w+)' object has no attribute '(\w+)'/,
     construire: (c) => ({

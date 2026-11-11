@@ -8,7 +8,7 @@ export type Exercice = {
   notion: string
   /** Le concept enseigné, donc la couleur. `rappels` est neutre. Voir « Palette ». */
   famille: 'variables' | 'types' | 'operateurs' | 'conditions' | 'boucles' | 'rappels'
-  seance: 1 | 2 | 3 | 4
+  seance: 1 | 2 | 3 | 4 | 5 | 6
   niveau: 'normal' | 'expert'
   type: 'predire' | 'debug' | 'completer' | 'ecrire'
   titre: string

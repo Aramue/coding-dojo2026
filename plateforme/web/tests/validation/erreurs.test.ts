@@ -128,6 +128,39 @@ describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
     expect(m.piste).toContain('len(')
   })
 
+  it('nomme la cle absente sur un KeyError, sans recrire la ligne', () => {
+    const m = traduireErreur(erreur('KeyError', "'prenom'"))
+    expect(m.titre).toContain("'prenom'")
+    expect(m.titre).toMatch(/n'existe pas/)
+    expect(m.explication).toMatch(/majuscules/i)
+    expect(m.piste).toContain('print(')
+  })
+
+  it('explique qu une reponse n est pas un dictionnaire, sans ecrire la ligne', () => {
+    const m = traduireErreur(erreur('TypeError', "'Response' object is not subscriptable"))
+    expect(m.titre).toMatch(/réponse/i)
+    expect(m.piste).not.toContain('.json()')
+  })
+
+  it('traduit un JSON invalide', () => {
+    const m = traduireErreur(
+      erreur('JSONDecodeError', 'Expecting property name enclosed in double quotes: line 1 column 2 (char 1)'),
+    )
+    expect(m.titre).toMatch(/JSON/)
+    expect(m.explication).toMatch(/guillemets doubles/)
+  })
+
+  it('traduit les erreurs de requete, et reprend le message du dojo', () => {
+    expect(traduireErreur(erreur('ConnectionError', 'Le service ne répond pas.')).titre).toMatch(
+      /ne répond pas/,
+    )
+    expect(traduireErreur(erreur('Timeout', 'trop long')).titre).toMatch(/trop de temps/)
+    const refus = traduireErreur(erreur('RequestException', "L'adresse doit commencer par https://"))
+    expect(refus.explication).toContain('https://')
+    const http = traduireErreur(erreur('HTTPError', 'Le service a répondu 400 Bad Request'))
+    expect(http.explication).toContain('400')
+  })
+
   it("nomme le type et l'attribut sur un AttributeError", () => {
     const m = traduireErreur(erreur('AttributeError', "'int' object has no attribute 'upper'"))
     expect(m.titre).toContain('int')

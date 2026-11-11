@@ -1,0 +1,55 @@
+id: s6-06
+concept: http
+notion: web
+seance: 6
+niveau: normal
+type: ecrire
+titre: Lire un code de statut
+obligatoire: true
+enonce: |
+  Le programme lit un code de statut HTTP. Affiche `erreur du serveur` si le code
+  est 500 ou plus, `erreur du client` s'il est 400 ou plus, et `succès` sinon.
+depart: |
+  code = int(input())
+indices:
+  - Teste d'abord la plus grande borne. Un code de 503 est aussi supérieur à 400, mais c'est une erreur du serveur.
+  - 'Trois cas : if code >= 500, puis elif code >= 400, puis else.'
+tests:
+  - type: sortie
+    entrees:
+      - '200'
+    attendu: |
+      200
+      succès
+  - type: sortie
+    entrees:
+      - '404'
+    attendu: |
+      404
+      erreur du client
+  - type: sortie
+    entrees:
+      - '503'
+    attendu: |
+      503
+      erreur du serveur
+  - type: sortie
+    entrees:
+      - '201'
+    attendu: |
+      201
+      succès
+  - type: interdit
+    motif: '404'
+    message: Un seul code ne suffit pas. Il faut tester une borne, pas un code précis.
+  - type: interdit
+    motif: '503'
+    message: Un seul code ne suffit pas. Il faut tester une borne, pas un code précis.
+solution: |
+  code = int(input())
+  if code >= 500:
+      print("erreur du serveur")
+  elif code >= 400:
+      print("erreur du client")
+  else:
+      print("succès")

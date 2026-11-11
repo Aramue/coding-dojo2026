@@ -1,0 +1,39 @@
+id: s5-35
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: predire
+titre: true devient True
+obligatoire: false
+enonce: |
+  Quand `json.loads()` lit un texte, `true` devient `True` et `null` devient
+  `None`. Que montre l'écran ?
+depart: |
+  import json
+
+  data = json.loads('{"actif": true, "email": null}')
+  print(data["actif"])
+  print(data["email"])
+indices:
+  - Après loads(), on est en Python. Un booléen s'y écrit True, avec une majuscule.
+  - null n'existe pas en Python. Il devient None.
+tests:
+  - type: qcm
+    options:
+      - |-
+        true
+        null
+      - |-
+        True
+        None
+      - |-
+        True
+        null
+    bonne_reponse: 1
+solution: |
+  import json
+
+  data = json.loads('{"actif": true, "email": null}')
+  print(data["actif"])
+  print(data["email"])

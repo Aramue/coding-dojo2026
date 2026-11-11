@@ -5231,5 +5231,2219 @@
       }
     ],
     "famille": "operateurs"
+  },
+  {
+    "id": "s5-01",
+    "concept": "listes",
+    "notion": "avantdict",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Une fiche dans une liste",
+    "obligatoire": true,
+    "enonce": "Une liste range des valeurs, qu'on retrouve par leur position. La première\nposition est 0. Que montre l'écran ?\n",
+    "depart": "fiche = [\"Camille\", 17, \"Genève\"]\nprint(fiche[2])\nprint(len(fiche))\n",
+    "indices": [
+      "La fiche a trois éléments, aux positions 0, 1 et 2. La position 2 est donc le dernier.",
+      "len() compte les éléments de la liste, pas leur dernière position."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "17\n3",
+          "Genève\n3",
+          "Genève\n2"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "rappels"
+  },
+  {
+    "id": "s5-02",
+    "concept": "listes",
+    "notion": "avantdict",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Une position qui n'existe pas",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher la ville de la fiche, mais il s'arrête avec une\nerreur. Lis le message, puis répare le programme.\n",
+    "depart": "fiche = [\"Camille\", 17, \"Genève\"]\nville = fiche[3]\nprint(ville)\n",
+    "indices": [
+      "La fiche a trois éléments. Quelle est la dernière position qui existe ?",
+      "La ville est le troisième élément de la fiche. Les positions commencent à 0."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "ville",
+        "valeurAttendue": "'Genève'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Genève",
+        "exigeExact": false
+      }
+    ],
+    "famille": "rappels"
+  },
+  {
+    "id": "s5-03",
+    "concept": "listes",
+    "notion": "avantdict",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Compter les prénoms en A",
+    "obligatoire": true,
+    "enonce": "Compte dans `compteur` combien de prénoms de la liste commencent par la lettre\n`A`, en parcourant la liste avec une boucle.\n",
+    "depart": "prenoms = [\"Camille\", \"Alice\", \"Marc\", \"Adèle\"]\ncompteur = 0\n",
+    "indices": [
+      "for parcourt la liste, et la variable prend chaque prénom à son tour.",
+      "La première lettre d'un texte s'obtient avec la position 0 : p[0]. Compare-la à \"A\" dans un if."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "compteur",
+        "valeurAttendue": "2",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "= 2",
+        "maitrise": false
+      }
+    ],
+    "famille": "rappels"
+  },
+  {
+    "id": "s5-04",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Lire par la clé",
+    "obligatoire": true,
+    "enonce": "Un dictionnaire range des valeurs sous des noms, les clés. Pour lire une\nvaleur, on écrit sa clé entre crochets. Que montre l'écran ?\n",
+    "depart": "eleve = {\"nom\": \"Camille\", \"age\": 17}\nprint(eleve[\"nom\"])\nprint(eleve[\"age\"] + 1)\n",
+    "indices": [
+      "eleve[\"nom\"] donne la valeur rangée sous la clé \"nom\", pas le mot nom.",
+      "eleve[\"age\"] vaut 17, un nombre. On peut donc lui ajouter 1."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Camille\n17",
+          "Camille\n18",
+          "nom\n18"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-05",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Les trois couleurs d'un pixel",
+    "obligatoire": true,
+    "enonce": "Cette fois, le pixel est un dictionnaire : chaque couleur a son nom. Complète\nles trois trous pour ranger chaque couleur dans sa variable.\n",
+    "depart": "pixel = {\"rouge\": 153, \"vert\": 50, \"bleu\": 204}\nrouge = pixel[_____]\nvert = pixel[_____]\nbleu = pixel[_____]\n",
+    "indices": [
+      "Une clé est un texte, donc entre guillemets. Regarde les clés écrites dans le dictionnaire.",
+      "Pour le rouge, la clé est \"rouge\" : le mot et ses guillemets vont entre les crochets."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "rouge",
+        "valeurAttendue": "153",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "vert",
+        "valeurAttendue": "50",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "bleu",
+        "valeurAttendue": "204",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-06",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Une clé qui n'existe pas",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher le nom de l'élève, mais il s'arrête avec une erreur.\nLis le message, puis répare le programme.\n",
+    "depart": "eleve = {\"nom\": \"Camille\", \"age\": 17}\nprenom = eleve[\"prenom\"]\nprint(prenom)\n",
+    "indices": [
+      "Le message nomme la clé qui n'existe pas. Compare-la aux clés écrites dans le dictionnaire.",
+      "Le dictionnaire ne contient que les clés \"nom\" et \"age\". Laquelle range le nom de l'élève ?"
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "prenom",
+        "valeurAttendue": "'Camille'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Camille",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-07",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Modifier et ajouter une paire",
+    "obligatoire": true,
+    "enonce": "Écrire une clé qui existe remplace sa valeur ; écrire une clé nouvelle ajoute\nune paire. Que montre l'écran ?\n",
+    "depart": "stock = {\"pommes\": 5}\nstock[\"pommes\"] = 8\nstock[\"poires\"] = 3\nprint(stock)\nprint(len(stock))\n",
+    "indices": [
+      "La clé \"pommes\" existe déjà. Sa valeur est remplacée, il n'y a pas deux paires \"pommes\".",
+      "Le dictionnaire se termine avec deux clés. len() les compte."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "{'pommes': 5, 'poires': 3}\n2",
+          "{'pommes': 8, 'poires': 3}\n2",
+          "{'pommes': 8, 'poires': 3}\n3"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-08",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Une fiche d'élève",
+    "obligatoire": true,
+    "enonce": "Crée un dictionnaire `fiche` qui contient trois paires, dans cet ordre : la clé\n`\"nom\"` avec la valeur `\"Camille\"`, la clé `\"age\"` avec le nombre `17`, et la\nclé `\"ville\"` avec la valeur `\"Genève\"`.\n",
+    "depart": "fiche =\n",
+    "indices": [
+      "Un dictionnaire s'écrit entre accolades, et chaque paire s'écrit clé, deux-points, valeur.",
+      "Les paires sont séparées par des virgules. Un nombre s'écrit sans guillemets."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "fiche",
+        "valeurAttendue": "{'nom': 'Camille', 'age': 17, 'ville': 'Genève'}"
+      },
+      {
+        "type": "interdit",
+        "motif": "dict(",
+        "message": "Ici, on écrit le dictionnaire avec des accolades.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-09",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Mettre le stock à jour",
+    "obligatoire": true,
+    "enonce": "Quatre pommes viennent d'arriver, ainsi qu'un premier arrivage de six kiwis.\nMets le dictionnaire `stock` à jour : ajoute 4 au nombre de pommes sans écrire\nle nouveau total toi-même, et crée la clé `\"kiwis\"` avec la valeur 6.\n",
+    "depart": "stock = {\"pommes\": 5, \"poires\": 2}\n",
+    "indices": [
+      "Pour changer une valeur, on la relit puis on la réécrit : stock[\"pommes\"] = stock[\"pommes\"] + ...",
+      "Écrire une clé qui n'existe pas la crée : stock[\"kiwis\"] = ..."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "stock",
+        "valeurAttendue": "{'pommes': 9, 'poires': 2, 'kiwis': 6}"
+      },
+      {
+        "type": "interdit",
+        "motif": "9",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-10",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Tester une clé avec in",
+    "obligatoire": true,
+    "enonce": "`clé in dictionnaire` répond `True` si la clé existe, `False` sinon, sans jamais\narrêter le programme. Que montre l'écran ?\n",
+    "depart": "stock = {\"pommes\": 5}\nprint(\"pommes\" in stock)\nprint(\"kiwis\" in stock)\nprint(len(stock))\n",
+    "indices": [
+      "in cherche parmi les clés du dictionnaire. \"pommes\" en est une, \"kiwis\" non.",
+      "Tester une clé n'en ajoute pas. Le dictionnaire garde la même taille."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "True\nTrue\n1",
+          "True\nFalse\n1",
+          "True\nFalse\n2"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-11",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Le prix d'un article",
+    "obligatoire": true,
+    "enonce": "Le dictionnaire `prix` donne le prix de chaque article. Le programme lit le nom\nd'un article avec `input()`. Si l'article existe dans `prix`, affiche son prix ;\nsinon, affiche `Article inconnu`.\n",
+    "depart": "prix = {\"pain\": 2, \"lait\": 3, \"beurre\": 4}\narticle = input()\n",
+    "indices": [
+      "Teste d'abord si l'article est une clé de prix : if article in prix.",
+      "Dans le if, affiche prix[article]. Dans le else, affiche le message."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "lait"
+        ],
+        "attendu": "lait\n3\n",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "miel"
+        ],
+        "attendu": "miel\nArticle inconnu\n",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "pain"
+        ],
+        "attendu": "pain\n2\n",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "in prix",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "elif",
+        "message": "Pas besoin d'un cas par article. Le dictionnaire contient déjà tous les prix.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-12",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "La clé et la valeur ensemble",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher chaque matière suivie de sa note, sur le modèle\n`maths : 14`. Complète le trou avec la méthode qui donne la clé et la valeur\nen même temps.\n",
+    "depart": "notes = {\"maths\": 14, \"sport\": 17, \"art\": 12}\nfor matiere, note in notes._____():\n    print(matiere, \":\", note)\n",
+    "indices": [
+      "La méthode a un nom en cinq lettres, et se termine par s. Relis le dernier exemple de la leçon.",
+      "Elle s'écrit avec des parenthèses vides, comme append() mais sans rien dedans."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "maths : 14\nsport : 17\nart : 12\n",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-13",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Additionner les valeurs d'un dictionnaire",
+    "obligatoire": true,
+    "enonce": "Le dictionnaire `notes` contient les notes de trois matières. Calcule dans\n`total` la somme de toutes les notes, en parcourant le dictionnaire avec une\nboucle.\n",
+    "depart": "notes = {\"maths\": 14, \"sport\": 17, \"art\": 12}\ntotal = 0\n",
+    "indices": [
+      "for sur un dictionnaire donne les clés. Avec une clé, notes[matiere] donne la note.",
+      "Le total part de 0 et augmente de la note, dans la boucle."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "total",
+        "valeurAttendue": "43",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "43",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "sum(",
+        "message": "sum() fait le calcul à ta place : ici, c'est la boucle qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-14",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Parcourir les clés",
+    "obligatoire": false,
+    "enonce": "Un `for` sur un dictionnaire passe par les clés. Que montre l'écran ?\n",
+    "depart": "notes = {\"maths\": 14, \"sport\": 17}\nfor matiere in notes:\n    print(matiere, notes[matiere])\n",
+    "indices": [
+      "À chaque tour, matiere est une clé du dictionnaire, pas une note.",
+      "notes[matiere] donne la valeur rangée sous cette clé."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "maths 14\nsport 17",
+          "14\n17",
+          "maths\nsport"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-15",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Compter chaque lettre",
+    "obligatoire": false,
+    "enonce": "Défi : remplis le dictionnaire `effectifs` pour qu'il donne, pour chaque lettre\nde `texte`, le nombre de fois où elle apparaît. Pour chaque lettre, si ce n'est\npas encore une clé, crée-la avec la valeur 1 ; sinon, ajoute 1 à sa valeur.\nC'est la première étape pour casser un chiffrement de César.\n",
+    "depart": "texte = \"banane\"\neffectifs = {}\n",
+    "indices": [
+      "Dans la boucle, un if teste si la lettre est déjà une clé de effectifs, avec in.",
+      "Si oui, effectifs[lettre] = effectifs[lettre] + 1. Sinon, effectifs[lettre] = 1."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "effectifs",
+        "valeurAttendue": "{'b': 1, 'a': 2, 'n': 2, 'e': 1}"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "in effectifs",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "count(",
+        "message": "count() compte à ta place : ici, c'est le dictionnaire qu'on veut voir grandir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-16",
+    "concept": "dictionnaires",
+    "notion": "dictionnaires",
+    "seance": 5,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Une valeur par défaut avec get",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : `get(clé, défaut)` rend la valeur de la clé, ou la valeur par\ndéfaut si la clé n'existe pas, sans rien ajouter au dictionnaire. Que montre\nl'écran ?\n",
+    "depart": "d = {\"a\": 1}\nprint(d.get(\"a\", 0))\nprint(d.get(\"b\", 0))\nprint(len(d))\n",
+    "indices": [
+      "get(\"a\", 0) trouve la clé \"a\". get(\"b\", 0) ne la trouve pas et rend le défaut.",
+      "get() ne crée jamais de clé. Le dictionnaire garde une seule paire."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "1\n0\n2",
+          "1\n0\n1",
+          "1\n1\n1"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-17",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Descendre dans un dictionnaire",
+    "obligatoire": true,
+    "enonce": "Une valeur peut elle-même être un dictionnaire ou une liste. On lit de\nl'extérieur vers l'intérieur, avec une paire de crochets par niveau. Que\nmontre l'écran ?\n",
+    "depart": "data = {\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}\nprint(data[\"user\"][\"nom\"])\nprint(data[\"user\"][\"amis\"][1])\n",
+    "indices": [
+      "data[\"user\"] est un dictionnaire. Sa clé \"nom\" donne le nom d'Alice.",
+      "data[\"user\"][\"amis\"] est une liste. Sa position 1 est le deuxième ami."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alice\nBob",
+          "Alice\nClaire",
+          "user\nClaire"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-18",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Le chemin vers une valeur",
+    "obligatoire": true,
+    "enonce": "La variable `classe` contient une fiche par élève. Complète les trous pour\nranger dans `age_clara` l'âge de Clara, et dans `matiere` le deuxième cours de\nMarc.\n",
+    "depart": "classe = {\n    \"Marc\": {\"age\": 18, \"cours\": [\"mathématiques\", \"informatique\"]},\n    \"Clara\": {\"age\": 17, \"cours\": [\"physique\", \"chimie\", \"sport\"]},\n}\n\nage_clara = classe[_____][_____]\nmatiere = classe[\"Marc\"][\"cours\"][_____]\n",
+    "indices": [
+      "Premier niveau : le nom de l'élève. Deuxième niveau : la clé de l'information voulue. Les deux sont des textes.",
+      "Les cours de Marc forment une liste. Le deuxième cours est à la position 1, pas 2."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "age_clara",
+        "valeurAttendue": "17",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "variable",
+        "nom": "matiere",
+        "valeurAttendue": "'informatique'",
+        "typeAttendu": "str"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-19",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Un niveau oublié",
+    "obligatoire": true,
+    "enonce": "Ce programme doit afficher le nom de l'utilisateur, mais il s'arrête avec une\nerreur. Lis le message, puis répare le programme.\n",
+    "depart": "data = {\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}\nnom = data[\"nom\"]\nprint(nom)\n",
+    "indices": [
+      "Affiche data avec print() : la clé \"nom\" n'est pas au premier niveau.",
+      "Le nom d'Alice se trouve à l'intérieur de la valeur de la clé \"user\". Il faut descendre d'un niveau."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nom",
+        "valeurAttendue": "'Alice'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Alice",
+        "exigeExact": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-20",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Lire la météo",
+    "obligatoire": true,
+    "enonce": "Le dictionnaire `meteo` décrit le temps qu'il fait. Range dans `temperature` la\ntempérature actuelle, et dans `vent` la vitesse du vent actuel. Lis-les dans\n`meteo`, sans recopier leur valeur.\n",
+    "depart": "meteo = {\"ville\": \"Genève\", \"actuel\": {\"temperature\": 12.5, \"vent\": 8}}\n\ntemperature =\nvent =\n",
+    "indices": [
+      "Les deux valeurs sont à l'intérieur de la clé \"actuel\". Il faut donc deux paires de crochets.",
+      "Pour la température : meteo[\"actuel\"] puis la clé de la température."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "temperature",
+        "valeurAttendue": "12.5",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "variable",
+        "nom": "vent",
+        "valeurAttendue": "8",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "interdit",
+        "motif": "= 12.5",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "= 8",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-21",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Ajouter à une liste dans un dictionnaire",
+    "obligatoire": true,
+    "enonce": "Alice vient de réaliser un score de 30. Ajoute-le à la fin de la liste\n`\"scores\"` du dictionnaire `profil`, avec `append()`.\n",
+    "depart": "profil = {\"nom\": \"Alice\", \"scores\": [10, 20]}\n",
+    "indices": [
+      "profil[\"scores\"] est une liste. Elle se modifie comme n'importe quelle liste.",
+      "La méthode s'écrit après la liste : profil[\"scores\"].append(...)"
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "profil",
+        "valeurAttendue": "{'nom': 'Alice', 'scores': [10, 20, 30]}"
+      },
+      {
+        "type": "contient",
+        "motif": "append(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "20, 30",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-22",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Une liste de dictionnaires",
+    "obligatoire": true,
+    "enonce": "Une liste peut contenir des dictionnaires, un par élève. On choisit d'abord\nl'élève par sa position, puis l'information par sa clé. Que montre l'écran ?\n",
+    "depart": "eleves = [{\"nom\": \"Alice\", \"age\": 17}, {\"nom\": \"Bob\", \"age\": 16}]\nprint(eleves[1][\"nom\"])\nprint(len(eleves))\n",
+    "indices": [
+      "eleves[1] est le deuxième élève, un dictionnaire. Les positions commencent à 0.",
+      "len(eleves) compte les dictionnaires de la liste, pas les paires de chacun."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alice\n2",
+          "Bob\n2",
+          "Bob\n16"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-23",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Additionner les âges",
+    "obligatoire": true,
+    "enonce": "La liste `eleves` contient un dictionnaire par élève. Calcule dans `total` la\nsomme des âges de tous les élèves, en parcourant la liste avec une boucle.\n",
+    "depart": "eleves = [\n    {\"nom\": \"Alice\", \"age\": 17},\n    {\"nom\": \"Bob\", \"age\": 16},\n    {\"nom\": \"Clara\", \"age\": 18},\n]\ntotal = 0\n",
+    "indices": [
+      "Dans for e in eleves, la variable e est un dictionnaire entier. Son âge est e[\"age\"].",
+      "Le total part de 0 et augmente de l'âge de chaque élève."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "total",
+        "valeurAttendue": "51",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "51",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "sum(",
+        "message": "sum() fait le calcul à ta place : ici, c'est la boucle qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-24",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Les noms des majeurs",
+    "obligatoire": true,
+    "enonce": "Parmi les élèves, trouve ceux qui ont **18 ans ou plus**. Range leurs noms, dans\nl'ordre de la liste, dans la liste `majeurs`, en partant de la liste vide.\n",
+    "depart": "eleves = [\n    {\"nom\": \"Alice\", \"age\": 17},\n    {\"nom\": \"Bob\", \"age\": 18},\n    {\"nom\": \"Clara\", \"age\": 16},\n    {\"nom\": \"Dina\", \"age\": 19},\n]\nmajeurs = []\n",
+    "indices": [
+      "Dans la boucle, un if compare l'âge de l'élève à 18. L'âge est e[\"age\"].",
+      "Quand l'élève est majeur, ajoute son nom à la liste avec majeurs.append(...)."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "majeurs",
+        "valeurAttendue": "['Bob', 'Dina']"
+      },
+      {
+        "type": "contient",
+        "motif": "append(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "print(",
+        "message": "Range les noms dans la liste majeurs, sans les afficher.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-25",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Afficher une liste imbriquée",
+    "obligatoire": false,
+    "enonce": "Quand on affiche une liste entière, Python montre les crochets, les virgules et\nles apostrophes. Que montre l'écran ?\n",
+    "depart": "data = {\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}\nprint(data[\"user\"][\"amis\"])\nprint(len(data[\"user\"][\"amis\"]))\n",
+    "indices": [
+      "data[\"user\"][\"amis\"] est la liste entière des amis, pas un seul d'entre eux.",
+      "len() compte les éléments de cette liste."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "['Bob', 'Claire']\n2",
+          "['Bob', 'Claire']\n1",
+          "Bob Claire\n2"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-26",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Deux noms pour un même dictionnaire",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : `b = a` ne copie pas le dictionnaire, il lui donne un\ndeuxième nom. Que montre l'écran ?\n",
+    "depart": "a = {\"x\": [1]}\nb = a\nb[\"x\"].append(2)\nprint(a)\n",
+    "indices": [
+      "a et b désignent le même dictionnaire, rangé une seule fois en mémoire.",
+      "Modifier la liste par b la modifie aussi quand on la lit par a."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "{'x': [1]}",
+          "{'x': [1, 2]}",
+          "{'x': [2]}"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-27",
+    "concept": "imbriques",
+    "notion": "imbriques",
+    "seance": 5,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le meilleur total",
+    "obligatoire": false,
+    "enonce": "Défi : chaque élève a une liste de scores. Trouve celui dont la **somme** de\nscores est la plus grande, sans `max()` ni `sum()`. Range son nom dans\n`meilleur`, et pars de `record = 0`.\n",
+    "depart": "scores = {\"Alice\": [12, 15], \"Bob\": [20, 5], \"Clara\": [9, 19]}\nmeilleur = \"\"\nrecord = 0\n",
+    "indices": [
+      "Deux boucles imbriquées : une sur les noms, une sur la liste de scores de chaque nom, pour calculer son total.",
+      "Après le calcul du total d'un élève, un if le compare à record. S'il le dépasse, record et meilleur changent tous les deux."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "meilleur",
+        "valeurAttendue": "'Clara'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "max(",
+        "message": "max() trouve le plus grand à ta place : ici, c'est la comparaison qu'on veut voir.",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "sum(",
+        "message": "sum() fait le calcul à ta place : ici, c'est la boucle qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s5-28",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Du texte JSON au dictionnaire",
+    "obligatoire": true,
+    "enonce": "`json.loads()` transforme un texte JSON en dictionnaire Python. Que montre\nl'écran ?\n",
+    "depart": "import json\n\ntexte = '{\"nom\": \"Alice\", \"age\": 25}'\ndata = json.loads(texte)\nprint(data[\"nom\"])\nprint(data[\"age\"] + 1)\n",
+    "indices": [
+      "Après json.loads(), data est un dictionnaire. On lit ses valeurs par leur clé.",
+      "data[\"age\"] vaut 25, un nombre. On peut donc lui ajouter 1."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "Alice\n25",
+          "Alice\n26",
+          "nom\n26"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-29",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Du dictionnaire au texte JSON",
+    "obligatoire": true,
+    "enonce": "`json.dumps()` transforme un dictionnaire en texte JSON, et JSON ne s'écrit pas\ncomme Python. Que montre l'écran ?\n",
+    "depart": "import json\n\ndata = {\"actif\": True, \"email\": None}\nprint(json.dumps(data))\n",
+    "indices": [
+      "Le JSON écrit true et null, en minuscules, là où Python écrit True et None.",
+      "Le JSON utilise des guillemets doubles, jamais d'apostrophes."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "{\"actif\": true, \"email\": null}",
+          "{'actif': True, 'email': None}",
+          "{\"actif\": True, \"email\": None}"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-30",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Lire un ami dans un JSON",
+    "obligatoire": true,
+    "enonce": "Le texte JSON décrit un utilisateur et ses amis. Complète les deux trous pour\ntransformer le texte en dictionnaire, puis ranger dans `ami` le **deuxième**\nami de la liste.\n",
+    "depart": "import json\n\ntexte = '{\"user\": {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"]}}'\ndata = json._____(texte)\nami = data[\"user\"][\"amis\"][_____]\n",
+    "indices": [
+      "La fonction qui lit un texte JSON et rend un dictionnaire s'appelle loads.",
+      "Le deuxième ami est à la position 1, parce que la première position est 0."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "ami",
+        "valeurAttendue": "'Claire'",
+        "typeAttendu": "str"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-31",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Un JSON avec des apostrophes",
+    "obligatoire": true,
+    "enonce": "Ce programme doit lire le nom dans le texte JSON, mais il s'arrête avec une\nerreur. Lis le message, puis répare le programme **sans supprimer\n`json.loads`**.\n",
+    "depart": "import json\n\ntexte = \"{'nom': 'Alice', 'age': 25}\"\ndata = json.loads(texte)\nnom = data[\"nom\"]\nprint(nom)\n",
+    "indices": [
+      "Le message parle de guillemets doubles. Regarde ceux qui entourent les clés et les textes dans le JSON.",
+      "Le JSON n'accepte pas les apostrophes. Il faut les remplacer par des guillemets doubles, et entourer tout le texte d'apostrophes."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nom",
+        "valeurAttendue": "'Alice'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "json.loads(",
+        "maitrise": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Alice",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-32",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Modifier un JSON",
+    "obligatoire": true,
+    "enonce": "Charge le texte JSON dans `data`, change l'âge à 26, puis range dans `nouveau`\nle texte JSON mis à jour.\n",
+    "depart": "import json\n\ntexte = '{\"nom\": \"Alice\", \"age\": 25}'\n",
+    "indices": [
+      "json.loads() rend un dictionnaire. L'âge se change comme dans n'importe quel dictionnaire.",
+      "json.dumps() fait le chemin inverse, et rend un texte."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nouveau",
+        "valeurAttendue": "'{\"nom\": \"Alice\", \"age\": 26}'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "json.loads(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "json.dumps(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "26}",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-33",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Additionner les prix d'un tableau JSON",
+    "obligatoire": true,
+    "enonce": "Le texte JSON est un tableau de produits. Charge-le, puis calcule dans `total`\nla somme de tous les prix, en parcourant la liste avec une boucle.\n",
+    "depart": "import json\n\ntexte = '[{\"produit\": \"pain\", \"prix\": 2}, {\"produit\": \"lait\", \"prix\": 3}, {\"produit\": \"miel\", \"prix\": 7}]'\ntotal = 0\n",
+    "indices": [
+      "Un tableau JSON devient une liste de dictionnaires. for la parcourt un dictionnaire à la fois.",
+      "Le prix d'un produit est e[\"prix\"] si ta variable de boucle s'appelle e."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "total",
+        "valeurAttendue": "12",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "json.loads(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "12",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "sum(",
+        "message": "sum() fait le calcul à ta place : ici, c'est la boucle qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-34",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Écrire un profil en JSON",
+    "obligatoire": true,
+    "enonce": "Le dictionnaire `profil` décrit un utilisateur. Range dans `texte` le **texte\nJSON** qui le représente.\n",
+    "depart": "import json\n\nprofil = {\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"], \"actif\": True}\n",
+    "indices": [
+      "Pour obtenir un texte JSON à partir d'un dictionnaire, il y a une fonction du module json qui finit par s.",
+      "Tu n'as rien à écrire à la main. La fonction se charge des guillemets doubles et de true."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "texte",
+        "valeurAttendue": "'{\"nom\": \"Alice\", \"amis\": [\"Bob\", \"Claire\"], \"actif\": true}'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "json.dumps(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "true",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-35",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "true devient True",
+    "obligatoire": false,
+    "enonce": "Quand `json.loads()` lit un texte, `true` devient `True` et `null` devient\n`None`. Que montre l'écran ?\n",
+    "depart": "import json\n\ndata = json.loads('{\"actif\": true, \"email\": null}')\nprint(data[\"actif\"])\nprint(data[\"email\"])\n",
+    "indices": [
+      "Après loads(), on est en Python. Un booléen s'y écrit True, avec une majuscule.",
+      "null n'existe pas en Python. Il devient None."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "true\nnull",
+          "True\nNone",
+          "True\nnull"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-36",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Des notes manquantes",
+    "obligatoire": false,
+    "enonce": "Défi : dans ce tableau JSON, une note vaut `null`, donc `None` en Python. Calcule\ndans `total` la somme des notes **qui existent**, sans faire planter le\nprogramme.\n",
+    "depart": "import json\n\ntexte = '[{\"nom\": \"Alice\", \"note\": 15}, {\"nom\": \"Bob\", \"note\": null}, {\"nom\": \"Clara\", \"note\": 12}]'\ntotal = 0\n",
+    "indices": [
+      "On ne peut pas additionner None et un nombre. Il faut sauter l'élève dont la note est None.",
+      "Dans la boucle, un if compare la note à None : if e[\"note\"] != None."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "total",
+        "valeurAttendue": "27",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "json.loads(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "27",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s5-37",
+    "concept": "json",
+    "notion": "json",
+    "seance": 5,
+    "niveau": "expert",
+    "type": "predire",
+    "titre": "Les accents dans json.dumps",
+    "obligatoire": false,
+    "enonce": "Pour les curieux : par défaut, `json.dumps()` n'écrit que des caractères sans\naccent, et remplace les autres par un code. Que montre l'écran ?\n",
+    "depart": "import json\n\nprint(json.dumps({\"ville\": \"Genève\"}))\n",
+    "indices": [
+      "Le è n'est pas un caractère sans accent. json.dumps() le remplace par son code.",
+      "Le code d'un caractère s'écrit \\u suivi de quatre chiffres hexadécimaux."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "{\"ville\": \"Genève\"}",
+          "{\"ville\": \"Genève\"}",
+          "{\"ville\": \"Geneve\"}"
+        ],
+        "bonneReponse": 1
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-01",
+    "concept": "url",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Construire une URL",
+    "obligatoire": true,
+    "enonce": "Une URL est un texte : le serveur et le chemin, puis un `?`, puis les paramètres\nséparés par des `&`. Que montre l'écran ?\n",
+    "depart": "base = \"https://api.open-meteo.com/v1/forecast\"\nlatitude = 46.2\nlongitude = 6.1\nurl = f\"{base}?latitude={latitude}&longitude={longitude}\"\nprint(url)\n",
+    "indices": [
+      "Le f-string remplace chaque accolade par la valeur de sa variable, et laisse le reste du texte tel quel.",
+      "Le ? et le & sont écrits dans le texte. Ils s'affichent donc tels quels."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "https://api.open-meteo.com/v1/forecast?latitude=46.2&longitude=6.1",
+          "https://api.open-meteo.com/v1/forecast?latitude=46.2,longitude=6.1",
+          "https://api.open-meteo.com/v1/forecast&latitude=46.2&longitude=6.1"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-02",
+    "concept": "http",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Quelle méthode HTTP ?",
+    "obligatoire": true,
+    "enonce": "Le dictionnaire `methodes` associe chaque méthode HTTP à ce qu'elle fait. Ce\nprogramme cherche la méthode qui correspond à une action. Que montre l'écran ?\n",
+    "depart": "methodes = {\"GET\": \"obtenir\", \"POST\": \"créer\", \"PUT\": \"modifier\", \"DELETE\": \"supprimer\"}\naction = \"supprimer\"\nfor m in methodes:\n    if methodes[m] == action:\n        print(m)\n",
+    "indices": [
+      "La boucle passe par les clés. À chaque tour, methodes[m] est la valeur de la clé m.",
+      "Le print n'a lieu que pour la clé dont la valeur est \"supprimer\"."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-03",
+    "concept": "url",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Remplir une URL",
+    "obligatoire": true,
+    "enonce": "Complète les deux trous pour que `url` contienne la latitude et la longitude\ndonnées, sur le modèle de la leçon.\n",
+    "depart": "base = \"https://api.open-meteo.com/v1/forecast\"\nlatitude = 46.2\nlongitude = 6.1\nurl = f\"{base}?latitude={_____}&longitude={_____}\"\n",
+    "indices": [
+      "Entre accolades, on écrit le nom d'une variable. Laquelle donne la latitude ?",
+      "Le premier trou est la latitude, le second la longitude. Les deux sont déjà des variables."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "url",
+        "valeurAttendue": "'https://api.open-meteo.com/v1/forecast?latitude=46.2&longitude=6.1'",
+        "typeAttendu": "str"
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-04",
+    "concept": "url",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "L'URL de Zurich",
+    "obligatoire": false,
+    "enonce": "Écris l'URL qui demande la météo de Zurich : le `base`, un `?`, puis la\nlatitude et la longitude données, séparées par un `&`. Range-la dans `url`, en\nutilisant les variables.\n",
+    "depart": "base = \"https://api.open-meteo.com/v1/forecast\"\nlatitude = 47.37\nlongitude = 8.54\n\nurl =\n",
+    "indices": [
+      "Un f-string met les variables entre accolades. Le texte autour reste tel quel.",
+      "Le modèle est : base, puis ?latitude=, puis la latitude, puis &longitude=, puis la longitude."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "url",
+        "valeurAttendue": "'https://api.open-meteo.com/v1/forecast?latitude=47.37&longitude=8.54'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "interdit",
+        "motif": "latitude=47",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-05",
+    "concept": "http",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Le code 404 est un nombre",
+    "obligatoire": true,
+    "enonce": "Ce programme doit ranger dans `message` ce que veut dire le code 404, mais il\ns'arrête avec une erreur. Lis le message, puis répare le programme.\n",
+    "depart": "statuts = {200: \"tout va bien\", 404: \"introuvable\", 500: \"erreur du serveur\"}\nmessage = statuts[\"404\"]\nprint(message)\n",
+    "indices": [
+      "Compare la clé demandée à celles du dictionnaire. L'une est entre guillemets, l'autre non.",
+      "Dans le dictionnaire, 404 est un nombre. Le texte \"404\" est une autre clé."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "message",
+        "valeurAttendue": "'introuvable'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "introuvable",
+        "exigeExact": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-06",
+    "concept": "http",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Lire un code de statut",
+    "obligatoire": true,
+    "enonce": "Le programme lit un code de statut HTTP. Affiche `erreur du serveur` si le code\nest 500 ou plus, `erreur du client` s'il est 400 ou plus, et `succès` sinon.\n",
+    "depart": "code = int(input())\n",
+    "indices": [
+      "Teste d'abord la plus grande borne. Un code de 503 est aussi supérieur à 400, mais c'est une erreur du serveur.",
+      "Trois cas : if code >= 500, puis elif code >= 400, puis else."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "200"
+        ],
+        "attendu": "200\nsuccès\n",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "404"
+        ],
+        "attendu": "404\nerreur du client\n",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "503"
+        ],
+        "attendu": "503\nerreur du serveur\n",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "201"
+        ],
+        "attendu": "201\nsuccès\n",
+        "exigeExact": false
+      },
+      {
+        "type": "interdit",
+        "motif": "404",
+        "message": "Un seul code ne suffit pas. Il faut tester une borne, pas un code précis.",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "503",
+        "message": "Un seul code ne suffit pas. Il faut tester une borne, pas un code précis.",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-07",
+    "concept": "http",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Le premier chiffre d'un code",
+    "obligatoire": false,
+    "enonce": "Un code qui commence par 4 est une erreur du client. La division entière `//`\ndonne le premier chiffre d'un code à trois chiffres. Que montre l'écran ?\n",
+    "depart": "code = 404\nprint(code // 100)\nprint(code // 100 == 4)\n",
+    "indices": [
+      "404 divisé par 100, sans les décimales, donne 4.",
+      "La deuxième ligne compare ce chiffre à 4. La réponse est un booléen."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "4\nTrue",
+          "404\nTrue",
+          "4\nFalse"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-08",
+    "concept": "http",
+    "notion": "web",
+    "seance": 6,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Un code inconnu",
+    "obligatoire": false,
+    "enonce": "Défi : le dictionnaire `statuts` donne le sens de quelques codes. Le programme\nlit un code, et affiche son sens, ou `code inconnu` s'il n'est pas dans le\ndictionnaire. Pas de `if` : utilise `get()`, qui prend la clé, puis la valeur à\nrendre quand elle n'existe pas.\n",
+    "depart": "statuts = {200: \"tout va bien\", 404: \"introuvable\", 500: \"erreur du serveur\"}\ncode = int(input())\n",
+    "indices": [
+      "statuts.get(code, ...) rend la valeur de la clé, ou le second argument si la clé n'existe pas.",
+      "Le résultat de get() est un texte. Affiche-le avec print()."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [
+          "404"
+        ],
+        "attendu": "404\nintrouvable\n",
+        "exigeExact": false
+      },
+      {
+        "type": "sortie",
+        "entrees": [
+          "418"
+        ],
+        "attendu": "418\ncode inconnu\n",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": ".get(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "if ",
+        "message": "Ici, get() remplace le if.",
+        "maitrise": false
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "s6-09",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Ma première requête",
+    "obligatoire": true,
+    "enonce": "Cette requête part vraiment vers Open-Meteo. Complète les deux trous pour\nenvoyer la requête, puis ranger son code de statut dans `statut`.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\nreponse = requests._____(url, params=params)\nstatut = reponse._____\n",
+    "indices": [
+      "La méthode HTTP qui sert à obtenir une information porte le même nom en Python, en minuscules.",
+      "Le code de statut est un attribut de la réponse, sans parenthèses. Il s'écrit en trois mots reliés par des tirets bas."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "statut",
+        "valeurAttendue": "200",
+        "typeAttendu": "int"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-10",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "La température à Genève",
+    "obligatoire": true,
+    "enonce": "Envoie la requête, range les données de la réponse dans `data`, puis range dans\n`temperature` la température **actuelle** de Genève. Elle se trouve dans\n`current_weather`.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\n",
+    "indices": [
+      "requests.get(url, params=params) rend la réponse. Ses données s'obtiennent avec .json().",
+      "data est un dictionnaire : descends d'abord dans \"current_weather\", puis cherche la température."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "temperature",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "contient",
+        "motif": "requests.get(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": ".json()",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "urllib",
+        "message": "Ici, on envoie la requête avec requests.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-11",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "La réponse n'est pas un dictionnaire",
+    "obligatoire": true,
+    "enonce": "Ce programme doit ranger la température actuelle dans `temperature`, mais il\ns'arrête avec une erreur. Lis le message, puis répare le programme.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\nreponse = requests.get(url, params=params)\ntemperature = reponse[\"current_weather\"][\"temperature\"]\n",
+    "indices": [
+      "Le message dit qu'on ne peut pas lire une réponse avec des crochets. Qu'est-ce qu'on lit avec des crochets ?",
+      "Les données de la réponse s'obtiennent avec une méthode de reponse, comme dans la leçon."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "temperature",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "contient",
+        "motif": ".json()",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-12",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "L'unité et le vent",
+    "obligatoire": false,
+    "enonce": "Envoie la requête, puis range dans `unite` l'unité de la température (elle se\ntrouve dans `current_weather_units`), et dans `vent` la vitesse du vent\nactuelle (`windspeed`, dans `current_weather`).\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\n",
+    "indices": [
+      "Les unités sont dans un dictionnaire à part, current_weather_units, qui a les mêmes clés que current_weather.",
+      "Garde la réponse dans une variable, puis lis-y deux valeurs."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "unite",
+        "valeurAttendue": "'°C'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "vent",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "interdit",
+        "motif": "°C",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-13",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Une requête refusée",
+    "obligatoire": true,
+    "enonce": "La latitude 200 n'existe pas : elle va de -90 à 90. Envoie quand même la\nrequête, puis affiche son code de statut. Affiche ensuite `OK` si la réponse est\nbonne, ou `Erreur` sinon. Dans ce dernier cas, range dans `raison` le message du\nservice, qui se trouve dans la clé `reason` de la réponse.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 200, \"longitude\": 6.1432, \"current_weather\": True}\nraison = \"\"\n",
+    "indices": [
+      "La réponse a un code de statut et un booléen ok. Teste ok dans un if.",
+      "Quand la requête est refusée, reponse.json() est un dictionnaire qui contient la clé \"reason\"."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "400\nErreur\n",
+        "exigeExact": false
+      },
+      {
+        "type": "variable",
+        "nom": "raison",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "print(400",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-14",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Ce que vaut ok",
+    "obligatoire": false,
+    "enonce": "`reponse.ok` vaut `True` quand le code de statut est inférieur à 400. Voici la\nmême règle sur quatre codes. Que montre l'écran ?\n",
+    "depart": "for statut in [200, 400, 404, 500]:\n    print(statut < 400)\n",
+    "indices": [
+      "Seul le premier code est inférieur à 400.",
+      "Une erreur du client, comme 404, ou du serveur, comme 500, n'est jamais « ok »."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "True\nFalse\nFalse\nFalse",
+          "True\nTrue\nFalse\nFalse",
+          "False\nFalse\nFalse\nFalse"
+        ],
+        "bonneReponse": 0
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-15",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Chercher une ville",
+    "obligatoire": true,
+    "enonce": "Un second service d'Open-Meteo trouve une ville à partir de son nom. Envoie la\nrequête, puis range dans `pays` le code du pays du **premier** résultat\n(`country_code`), et dans `latitude` sa latitude. Les résultats forment la\nliste `results`.\n",
+    "depart": "import requests\n\nurl = \"https://geocoding-api.open-meteo.com/v1/search\"\nparams = {\"name\": \"Genève\", \"count\": 1, \"language\": \"fr\"}\n",
+    "indices": [
+      "La réponse contient une liste results. Le premier résultat est à la position 0.",
+      "Un résultat est un dictionnaire. Ses clés incluent country_code et latitude."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "pays",
+        "valeurAttendue": "'CH'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "latitude",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "contient",
+        "motif": "[\"results\"]",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "CH",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-16",
+    "concept": "requests",
+    "notion": "requetes",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Une ville qui n'existe pas",
+    "obligatoire": true,
+    "enonce": "Cette ville n'existe pas : le service répond, mais sans la clé `results`, et le\nprogramme s'arrête. Modifie-le pour qu'il affiche `Ville inconnue` au lieu de\nplanter. Quand la ville existe, il affiche toujours son nom.\n",
+    "depart": "import requests\n\nurl = \"https://geocoding-api.open-meteo.com/v1/search\"\nparams = {\"name\": \"Zzqxwv\", \"count\": 1, \"language\": \"fr\"}\ndata = requests.get(url, params=params).json()\npremier = data[\"results\"][0]\nprint(premier[\"name\"])\n",
+    "indices": [
+      "Le message nomme la clé qui manque. Affiche data pour voir ce que le service a répondu.",
+      "On teste si une clé existe avec in, avant de la lire : if \"results\" in data."
+    ],
+    "tests": [
+      {
+        "type": "sortie",
+        "entrees": [],
+        "attendu": "Ville inconnue",
+        "exigeExact": false
+      },
+      {
+        "type": "contient",
+        "motif": "in data",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-17",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Des degrés Fahrenheit",
+    "obligatoire": true,
+    "enonce": "Le paramètre `temperature_unit` change l'unité de la température. Complète le\ntrou pour demander des degrés **Fahrenheit** : la valeur est un texte, qui\ns'écrit `fahrenheit`. Regarde ensuite l'unité que le service t'annonce.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\n    \"latitude\": 46.2044,\n    \"longitude\": 6.1432,\n    \"current_weather\": True,\n    \"temperature_unit\": _____,\n}\ndata = requests.get(url, params=params).json()\nunite = data[\"current_weather_units\"][\"temperature\"]\n",
+    "indices": [
+      "Une valeur de paramètre qui est un mot s'écrit comme un texte, entre guillemets.",
+      "Le mot attendu est fahrenheit, en minuscules. Les degrés Celsius se demandent avec celsius."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "unite",
+        "valeurAttendue": "'°F'",
+        "typeAttendu": "str"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-18",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Le vent en miles par heure",
+    "obligatoire": true,
+    "enonce": "Demande la vitesse du vent en **miles par heure**. Le paramètre s'appelle\n`windspeed_unit` et accepte `kmh`, `ms`, `mph` ou `kn`. Range dans `unite_vent`\nl'unité annoncée par le service (`current_weather_units`, clé `windspeed`).\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\n",
+    "indices": [
+      "Ajoute une paire au dictionnaire params. Sa clé est le nom du paramètre, sa valeur est un texte.",
+      "Les unités de la réponse sont dans current_weather_units. Compare avec ce que tu obtiens sans le paramètre."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "unite_vent",
+        "valeurAttendue": "'mp/h'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "windspeed_unit",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "mp/h",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-19",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Trois jours, heure par heure",
+    "obligatoire": true,
+    "enonce": "Demande la température de l'air heure par heure (`hourly`, avec la variable\n`temperature_2m`) pour **3 jours** (`forecast_days`). Range dans `nb_heures` le\nnombre d'heures reçues : la liste `time` de `hourly`.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432}\n",
+    "indices": [
+      "Deux paramètres de plus : \"hourly\" avec le texte \"temperature_2m\", et \"forecast_days\" avec un nombre.",
+      "La réponse contient une liste data[\"hourly\"][\"time\"]. len() compte ses éléments."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nb_heures",
+        "valeurAttendue": "72",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "forecast_days",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "hourly",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "72",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-20",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "predire",
+    "titre": "Des jours aux heures",
+    "obligatoire": false,
+    "enonce": "Avec `hourly`, le service envoie une valeur par heure, pour chaque jour demandé.\nQue montre l'écran ?\n",
+    "depart": "jours = 2\nprint(jours * 24)\n",
+    "indices": [
+      "Une journée compte 24 heures.",
+      "Le nombre d'heures reçues est le nombre de jours multiplié par 24."
+    ],
+    "tests": [
+      {
+        "type": "qcm",
+        "options": [
+          "2",
+          "24",
+          "48"
+        ],
+        "bonneReponse": 2
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-21",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Deux variables à la fois",
+    "obligatoire": true,
+    "enonce": "Demande, heure par heure, la température (`temperature_2m`) **et** la vitesse du\nvent (`windspeed_10m`), dans cet ordre, séparées par une virgule dans un seul\ntexte. Range dans `cles` la liste des clés de `data[\"hourly\"]` : l'expression\n`list(dictionnaire.keys())` la donne.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432}\n",
+    "indices": [
+      "La valeur du paramètre hourly est un seul texte : \"temperature_2m,windspeed_10m\".",
+      "La réponse contient une clé time, puis une clé par variable demandée, dans l'ordre de la demande."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "cles",
+        "valeurAttendue": "['time', 'temperature_2m', 'windspeed_10m']"
+      },
+      {
+        "type": "contient",
+        "motif": "windspeed_10m",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "cles = [",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-22",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Cinq jours de maximales",
+    "obligatoire": false,
+    "enonce": "Demande la température maximale **par jour** (`daily`, variable\n`temperature_2m_max`) pour **5 jours**, avec le fuseau `Europe/Zurich` dans le\nparamètre `timezone`. Range dans `nb_jours` le nombre de jours reçus : la liste\n`time` de `daily`.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitude\": 46.2044, \"longitude\": 6.1432}\n",
+    "indices": [
+      "Trois paramètres de plus : \"daily\", \"forecast_days\" et \"timezone\".",
+      "La réponse contient data[\"daily\"][\"time\"], une date par jour."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "nb_jours",
+        "valeurAttendue": "5",
+        "typeAttendu": "int"
+      },
+      {
+        "type": "contient",
+        "motif": "daily",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "nb_jours = 5",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-23",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "debug",
+    "titre": "Un paramètre mal écrit",
+    "obligatoire": true,
+    "enonce": "Ce programme doit ranger la température actuelle dans `temperature`, mais il\ns'arrête avec une erreur. Le service a refusé la requête : trouve pourquoi, puis\nrépare le programme.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\"latitud\": 46.2044, \"longitude\": 6.1432, \"current_weather\": True}\nreponse = requests.get(url, params=params)\ndata = reponse.json()\ntemperature = data[\"current_weather\"][\"temperature\"]\n",
+    "indices": [
+      "Affiche reponse.status_code, puis data : le service dit lui-même ce qui ne va pas.",
+      "Compare chaque nom de paramètre à ceux de la leçon, lettre par lettre."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "temperature",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "contient",
+        "motif": "latitude",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-24",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Une requête qui nourrit l'autre",
+    "obligatoire": true,
+    "enonce": "Deux requêtes à la suite. D'abord, cherche **Zürich** avec le service de recherche\n(`https://geocoding-api.open-meteo.com/v1/search`). Ensuite, avec la latitude et\nla longitude trouvées, demande la météo actuelle sur\n`https://api.open-meteo.com/v1/forecast`, en réglant `timezone` sur `auto`. Range\ndans `fuseau` le fuseau horaire de la réponse (clé `timezone`).\n",
+    "depart": "import requests\n\nrecherche = {\"name\": \"Zürich\", \"count\": 1, \"language\": \"fr\"}\n",
+    "indices": [
+      "Le premier résultat de la recherche est data[\"results\"][0]. Il contient latitude et longitude.",
+      "Les paramètres de la seconde requête reprennent ces deux valeurs, avec \"current_weather\": True et \"timezone\": \"auto\"."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "fuseau",
+        "valeurAttendue": "'Europe/Zurich'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "current_weather",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Europe/Zurich",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-25",
+    "concept": "parametres",
+    "notion": "explorer",
+    "seance": 6,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "Le fuseau de trois villes",
+    "obligatoire": false,
+    "enonce": "Défi : le dictionnaire `villes` donne les coordonnées de trois villes. Pour\n**chaque** ville, envoie une requête avec `current_weather` à `True` et\n`timezone` à `auto`, et range dans le dictionnaire `fuseaux` le fuseau horaire\nreçu, sous le nom de la ville.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nvilles = {\n    \"Genève\": {\"latitude\": 46.2, \"longitude\": 6.14},\n    \"Tokyo\": {\"latitude\": 35.69, \"longitude\": 139.69},\n    \"Quito\": {\"latitude\": -0.23, \"longitude\": -78.52},\n}\nfuseaux = {}\n",
+    "indices": [
+      "Une boucle for sur villes donne chaque nom. villes[nom][\"latitude\"] donne sa latitude.",
+      "À chaque tour, fuseaux[nom] = ... ajoute une paire au dictionnaire."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "fuseaux",
+        "valeurAttendue": "{'Genève': 'Europe/Zurich', 'Tokyo': 'Asia/Tokyo', 'Quito': 'America/Guayaquil'}"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "Asia/",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-26",
+    "concept": "programme",
+    "notion": "meteo",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Le temps dans une ville",
+    "obligatoire": true,
+    "enonce": "Dernier exercice obligatoire de la séance : un programme complet, qui réunit ce\nque tu as appris. À partir du nom de la ville dans `ville`, le programme doit :\n\n1. chercher la ville avec `https://geocoding-api.open-meteo.com/v1/search` (`count` à 1, `language` à `fr`), et ranger le code de son pays dans `pays` ;\n2. demander la météo actuelle à `https://api.open-meteo.com/v1/forecast`, avec sa latitude et sa longitude, et `timezone` réglé sur `auto` ;\n3. ranger la température dans `temperature` et son unité dans `unite` ;\n4. afficher une phrase du genre `Genève (CH) : 10.9 °C`.\n",
+    "depart": "import requests\n\nville = \"Genève\"\n\n# 1. chercher la ville : son pays, sa latitude, sa longitude\n\n# 2. demander la météo actuelle à cet endroit\n\n# 3. ranger la température et son unité\n\n# 4. afficher la phrase\n",
+    "indices": [
+      "Deux requêtes à la suite. La première donne data[\"results\"][0], dont country_code, latitude et longitude.",
+      "La seconde reprend latitude et longitude. La température est dans current_weather, son unité dans current_weather_units."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "pays",
+        "valeurAttendue": "'CH'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "temperature",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "variable",
+        "nom": "unite",
+        "valeurAttendue": "'°C'",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "contient",
+        "motif": "requests.get(",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "print(",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "46.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-27",
+    "concept": "programme",
+    "notion": "meteo",
+    "seance": 6,
+    "niveau": "normal",
+    "type": "ecrire",
+    "titre": "Le jour le plus chaud",
+    "obligatoire": true,
+    "enonce": "Le service donne la température maximale de chaque jour de la semaine. Trouve\nle jour **le plus chaud** : range sa date, un texte, dans `jour`, et sa\ntempérature dans `maximum`. Parcours les positions avec `range(len(...))`, sans\n`max()`.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nparams = {\n    \"latitude\": 46.2044,\n    \"longitude\": 6.1432,\n    \"daily\": \"temperature_2m_max\",\n    \"forecast_days\": 7,\n    \"timezone\": \"Europe/Zurich\",\n}\njour = \"\"\nmaximum = -100\n",
+    "indices": [
+      "data[\"daily\"][\"time\"] est la liste des dates, data[\"daily\"][\"temperature_2m_max\"] celle des températures. Elles ont la même longueur.",
+      "Dans la boucle, un if compare la température de la position i à maximum. Si elle le dépasse, maximum et jour changent tous les deux."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "jour",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "maximum",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "max(",
+        "message": "max() trouve le plus grand à ta place : ici, c'est la comparaison qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s6-28",
+    "concept": "programme",
+    "notion": "meteo",
+    "seance": 6,
+    "niveau": "expert",
+    "type": "ecrire",
+    "titre": "La ville la plus chaude",
+    "obligatoire": false,
+    "enonce": "Défi : parmi les trois villes du dictionnaire `villes`, laquelle est **la plus\nchaude en ce moment** ? Range son nom dans `plus_chaude`, et sa température dans\n`record`. Une requête par ville, `current_weather` à `True`, et pas de `max()`.\n",
+    "depart": "import requests\n\nurl = \"https://api.open-meteo.com/v1/forecast\"\nvilles = {\n    \"Genève\": {\"latitude\": 46.2, \"longitude\": 6.14},\n    \"Tokyo\": {\"latitude\": 35.69, \"longitude\": 139.69},\n    \"Quito\": {\"latitude\": -0.23, \"longitude\": -78.52},\n}\nplus_chaude = \"\"\nrecord = -100\n",
+    "indices": [
+      "Comme pour le fuseau, une boucle for sur villes envoie une requête par ville.",
+      "À chaque tour, si la température dépasse record, record et plus_chaude changent tous les deux."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "plus_chaude",
+        "typeAttendu": "str"
+      },
+      {
+        "type": "variable",
+        "nom": "record",
+        "typeAttendu": "float"
+      },
+      {
+        "type": "contient",
+        "motif": "for ",
+        "maitrise": false
+      },
+      {
+        "type": "contient",
+        "motif": "if ",
+        "maitrise": false
+      },
+      {
+        "type": "interdit",
+        "motif": "max(",
+        "message": "max() trouve le plus grand à ta place : ici, c'est la comparaison qu'on veut voir.",
+        "maitrise": false
+      }
+    ],
+    "famille": "variables"
   }
 ]

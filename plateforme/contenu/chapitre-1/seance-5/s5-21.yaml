@@ -1,0 +1,28 @@
+id: s5-21
+concept: imbriques
+notion: imbriques
+seance: 5
+niveau: normal
+type: ecrire
+titre: Ajouter à une liste dans un dictionnaire
+obligatoire: true
+enonce: |
+  Alice vient de réaliser un score de 30. Ajoute-le à la fin de la liste
+  `"scores"` du dictionnaire `profil`, avec `append()`.
+depart: |
+  profil = {"nom": "Alice", "scores": [10, 20]}
+indices:
+  - 'profil["scores"] est une liste. Elle se modifie comme n''importe quelle liste.'
+  - 'La méthode s''écrit après la liste : profil["scores"].append(...)'
+tests:
+  - type: variable
+    nom: profil
+    valeur_attendue: |-
+      {'nom': 'Alice', 'scores': [10, 20, 30]}
+  - type: contient
+    motif: append(
+  - type: interdit
+    motif: 20, 30
+solution: |
+  profil = {"nom": "Alice", "scores": [10, 20]}
+  profil["scores"].append(30)

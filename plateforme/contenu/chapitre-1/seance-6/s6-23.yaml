@@ -1,0 +1,37 @@
+id: s6-23
+concept: parametres
+notion: explorer
+seance: 6
+niveau: normal
+type: debug
+titre: Un paramètre mal écrit
+obligatoire: true
+enonce: |
+  Ce programme doit ranger la température actuelle dans `temperature`, mais il
+  s'arrête avec une erreur. Le service a refusé la requête : trouve pourquoi, puis
+  répare le programme.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitud": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests.get(url, params=params)
+  data = reponse.json()
+  temperature = data["current_weather"]["temperature"]
+indices:
+  - 'Affiche reponse.status_code, puis data : le service dit lui-même ce qui ne va pas.'
+  - Compare chaque nom de paramètre à ceux de la leçon, lettre par lettre.
+tests:
+  - type: variable
+    nom: temperature
+    type_attendu: float
+  - type: contient
+    motif: latitude
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests.get(url, params=params)
+  data = reponse.json()
+  temperature = data["current_weather"]["temperature"]

@@ -71,7 +71,23 @@ class _QgSortie(io.StringIO):
         js.postMessage(js.Object.fromEntries([["id", self._identifiant], ["flux", texte]]))
 
 
+def _qg_installer_requests(source):
+    """Installe le requests du dojo sous le nom \`requests\`. Voir requests_dojo.py :
+    c'est lui qui borne les appels, et il est la seule source de ce module."""
+    import types
+
+    module = types.ModuleType("requests")
+    exec(compile(source, "<requests>", "exec"), module.__dict__)
+    sys.modules["requests"] = module
+
+
 def _qg_executer(code, entrees, noms, identifiant):
+    # Les compteurs d'appels sont ceux d'UN programme. Le cache, lui, survit :
+    # un exercice evalue en plusieurs executions ne paie le reseau qu'une fois.
+    requests_dojo = sys.modules.get("requests")
+    if requests_dojo is not None and hasattr(requests_dojo, "reinitialiser"):
+        requests_dojo.reinitialiser()
+
     sortie = _QgSortie(identifiant)
     restantes = list(entrees)
 
@@ -115,9 +131,32 @@ def _qg_executer(code, entrees, noms, identifiant):
 // doit attendre CE chargement-là, pas en lancer un second.
 let demarrage: Promise<PyodideLike> | null = null
 
+/**
+ * Le texte de requests_dojo.py, publié avec le contenu. Lu en synchrone : un
+ * worker peut, et il n'y a rien d'autre à faire pendant qu'il démarre.
+ *
+ * Le marqueur est vérifié parce que Caddy répond `index.html` en 200 à un fichier
+ * absent : sans ce contrôle, la page d'accueil serait compilée comme du Python.
+ * Un échec n'arrête rien — `import requests` échouera, et seuls les exercices
+ * d'API en souffrent.
+ */
+function lireRequestsDojo(): string | null {
+  try {
+    const requete = new XMLHttpRequest()
+    requete.open('GET', '/contenu/requests_dojo.py', false)
+    requete.send()
+    const texte = requete.responseText
+    return requete.status === 200 && texte.startsWith('# DOJO-REQUESTS') ? texte : null
+  } catch {
+    return null
+  }
+}
+
 function demarrer(): Promise<PyodideLike> {
   demarrage ??= loadPyodide({ indexURL: '/pyodide/' }).then((instance) => {
     instance.runPython(HARNAIS)
+    const source = lireRequestsDojo()
+    if (source) instance.runPython(`_qg_installer_requests(${JSON.stringify(source)})`)
     return instance
   })
   return demarrage

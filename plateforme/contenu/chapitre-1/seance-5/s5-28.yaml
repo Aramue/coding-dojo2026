@@ -1,0 +1,41 @@
+id: s5-28
+concept: json
+notion: json
+seance: 5
+niveau: normal
+type: predire
+titre: Du texte JSON au dictionnaire
+obligatoire: true
+enonce: |
+  `json.loads()` transforme un texte JSON en dictionnaire Python. Que montre
+  l'écran ?
+depart: |
+  import json
+
+  texte = '{"nom": "Alice", "age": 25}'
+  data = json.loads(texte)
+  print(data["nom"])
+  print(data["age"] + 1)
+indices:
+  - Après json.loads(), data est un dictionnaire. On lit ses valeurs par leur clé.
+  - data["age"] vaut 25, un nombre. On peut donc lui ajouter 1.
+tests:
+  - type: qcm
+    options:
+      - |-
+        Alice
+        25
+      - |-
+        Alice
+        26
+      - |-
+        nom
+        26
+    bonne_reponse: 1
+solution: |
+  import json
+
+  texte = '{"nom": "Alice", "age": 25}'
+  data = json.loads(texte)
+  print(data["nom"])
+  print(data["age"] + 1)

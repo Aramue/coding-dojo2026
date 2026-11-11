@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 from pathlib import Path
 
+import api_enregistree
 from schema import CHAPITRES, NOTIONS, charger_tps
 from valider_contenu import verifier_racine
 
@@ -94,6 +96,12 @@ def construire(racine: Path, sortie: Path) -> int:
 
     # Les consignes des TP. Ecrit meme vide, pour la meme raison que les lecons.
     _publier(sortie / "tps.json", [_convertir_cles(tp.model_dump()) for tp in charger_tps(racine)])
+
+    # Le `requests` du dojo et les reponses enregistrees : le worker charge le
+    # premier au demarrage, et retombe sur les secondes quand le reseau d'un
+    # etablissement bloque le service. Voir requests_dojo.py.
+    shutil.copyfile(Path(__file__).parent / "requests_dojo.py", sortie / "requests_dojo.py")
+    _publier(sortie / "api_enregistree.json", api_enregistree.charger())
 
     return len(exercices)
 

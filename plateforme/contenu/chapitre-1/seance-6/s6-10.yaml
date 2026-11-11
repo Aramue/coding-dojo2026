@@ -1,0 +1,39 @@
+id: s6-10
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: ecrire
+titre: La température à Genève
+obligatoire: true
+enonce: |
+  Envoie la requête, range les données de la réponse dans `data`, puis range dans
+  `temperature` la température **actuelle** de Genève. Elle se trouve dans
+  `current_weather`.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+indices:
+  - requests.get(url, params=params) rend la réponse. Ses données s'obtiennent avec .json().
+  - 'data est un dictionnaire : descends d''abord dans "current_weather", puis cherche la température.'
+tests:
+  - type: variable
+    nom: temperature
+    type_attendu: float
+  - type: contient
+    motif: requests.get(
+  - type: contient
+    motif: .json()
+  - type: interdit
+    motif: urllib
+    message: Ici, on envoie la requête avec requests.
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests.get(url, params=params)
+  data = reponse.json()
+  temperature = data["current_weather"]["temperature"]

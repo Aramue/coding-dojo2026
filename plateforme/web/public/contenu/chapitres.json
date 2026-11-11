@@ -25,5 +25,19 @@
     "titre": "Listes, bits et caractères",
     "seance": 4,
     "ouverture": "2026-10-27"
+  },
+  {
+    "id": "donnees",
+    "ordre": 5,
+    "titre": "Dictionnaires et JSON",
+    "seance": 5,
+    "ouverture": "2026-11-10"
+  },
+  {
+    "id": "services",
+    "ordre": 6,
+    "titre": "Interroger un service web",
+    "seance": 6,
+    "ouverture": "2099-12-31"
   }
 ]

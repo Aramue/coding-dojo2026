@@ -28,6 +28,34 @@ Dépôt Git d'origine : `gitlab.unige.ch/coding-dojo-25-eq/introduction-python`.
 
 Historique Git : 30 commits, du 1ᵉʳ septembre au 27 octobre 2025.
 
+## Slides de la séance 5 — 10 novembre 2026
+
+`IntroductionauxserviceswebavecPython.pdf`, 16 pages, fourni par le professeur. Le texte s'extrait
+avec `pypdf` ; **les exemples de code sont des images**, lues à la main. Elles établissent ce que
+la séance suppose connu — voir [[Séance 5]].
+
+| Slide | Exemple de code (reconstitué) |
+|---|---|
+| 8 | `{"Marc": {"age": 18, "cours": ["mathématiques", "informatique", "..."]}, "Clara": {...}}` |
+| 9 | `data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}` puis `data["user"]["nom"]`, `data["user"]["amis"]`, `data["user"]["amis"][1]` |
+| 10 | types JSON : objets `{}`, tableaux `[]`, chaîne, nombre, booléen `true`/`false`, `null` |
+| 10 | `json.loads(txt)`, `data["age"] = 26`, `json.dumps(data)` |
+| 15 | `requests.get(url, params=params)`, `response.json()`, avec `latitude`, `longitude`, `current_weather`, `timezone` sur `api.open-meteo.com/v1/forecast` |
+
+Aucun de ces exemples n'est un secret ni une donnée personnelle : « Alice », « Marc » et « Clara » sont
+des prénoms d'illustration.
+
+## Open-Meteo — vérifié le 10 novembre 2026
+
+| Ce qui est établi | Source |
+|---|---|
+| Limites gratuites : moins de 10 000 appels par jour, 5 000 par heure, 600 par minute, **par adresse IP**, usage non commercial, pas de clé | [open-meteo.com/en/terms](https://open-meteo.com/en/terms) |
+| CORS ouvert (`access-control-allow-origin: *`) et quota lisible dans les en-têtes `X-RateLimit-*` | un appel direct à `api.open-meteo.com/v1/forecast` |
+| Une requête invalide répond `400` avec `{"error": true, "reason": "..."}` ; une ville inconnue répond `200` sans clé `results` | idem, et `geocoding-api.open-meteo.com/v1/search` |
+| OpenWeather : clé obligatoire, 60 appels par minute **par compte** | [openweathermap.org/price](https://openweathermap.org/price) |
+
+Les réponses rejouées à la construction sont dans `plateforme/outils/enregistrements/open-meteo.json`.
+
 ## Métadonnées des decks
 
 Format 1440×810, créés sous Canva, auteur « Edu », *brand kit* commun `BAGEGa96lIU`.

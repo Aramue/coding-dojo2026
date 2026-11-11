@@ -1,0 +1,40 @@
+id: s5-10
+concept: dictionnaires
+notion: dictionnaires
+seance: 5
+niveau: normal
+type: predire
+titre: Tester une clé avec in
+obligatoire: true
+enonce: |
+  `clé in dictionnaire` répond `True` si la clé existe, `False` sinon, sans jamais
+  arrêter le programme. Que montre l'écran ?
+depart: |
+  stock = {"pommes": 5}
+  print("pommes" in stock)
+  print("kiwis" in stock)
+  print(len(stock))
+indices:
+  - in cherche parmi les clés du dictionnaire. "pommes" en est une, "kiwis" non.
+  - Tester une clé n'en ajoute pas. Le dictionnaire garde la même taille.
+tests:
+  - type: qcm
+    options:
+      - |-
+        True
+        True
+        1
+      - |-
+        True
+        False
+        1
+      - |-
+        True
+        False
+        2
+    bonne_reponse: 1
+solution: |
+  stock = {"pommes": 5}
+  print("pommes" in stock)
+  print("kiwis" in stock)
+  print(len(stock))

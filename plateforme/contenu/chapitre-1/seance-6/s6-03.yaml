@@ -1,0 +1,29 @@
+id: s6-03
+concept: url
+notion: web
+seance: 6
+niveau: normal
+type: completer
+titre: Remplir une URL
+obligatoire: true
+enonce: |
+  Complète les deux trous pour que `url` contienne la latitude et la longitude
+  données, sur le modèle de la leçon.
+depart: |
+  base = "https://api.open-meteo.com/v1/forecast"
+  latitude = 46.2
+  longitude = 6.1
+  url = f"{base}?latitude={_____}&longitude={_____}"
+indices:
+  - Entre accolades, on écrit le nom d'une variable. Laquelle donne la latitude ?
+  - Le premier trou est la latitude, le second la longitude. Les deux sont déjà des variables.
+tests:
+  - type: variable
+    nom: url
+    valeur_attendue: '''https://api.open-meteo.com/v1/forecast?latitude=46.2&longitude=6.1'''
+    type_attendu: str
+solution: |
+  base = "https://api.open-meteo.com/v1/forecast"
+  latitude = 46.2
+  longitude = 6.1
+  url = f"{base}?latitude={latitude}&longitude={longitude}"

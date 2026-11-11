@@ -1,0 +1,34 @@
+id: s6-11
+concept: requests
+notion: requetes
+seance: 6
+niveau: normal
+type: debug
+titre: La réponse n'est pas un dictionnaire
+obligatoire: true
+enonce: |
+  Ce programme doit ranger la température actuelle dans `temperature`, mais il
+  s'arrête avec une erreur. Lis le message, puis répare le programme.
+depart: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests.get(url, params=params)
+  temperature = reponse["current_weather"]["temperature"]
+indices:
+  - Le message dit qu'on ne peut pas lire une réponse avec des crochets. Qu'est-ce qu'on lit avec des crochets ?
+  - Les données de la réponse s'obtiennent avec une méthode de reponse, comme dans la leçon.
+tests:
+  - type: variable
+    nom: temperature
+    type_attendu: float
+  - type: contient
+    motif: .json()
+solution: |
+  import requests
+
+  url = "https://api.open-meteo.com/v1/forecast"
+  params = {"latitude": 46.2044, "longitude": 6.1432, "current_weather": True}
+  reponse = requests.get(url, params=params)
+  temperature = reponse.json()["current_weather"]["temperature"]
