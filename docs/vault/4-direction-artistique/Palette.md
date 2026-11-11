@@ -39,12 +39,12 @@ Chaque concept a un fond pastel (`tint`), une encre (`ink`) et un fond d'exercic
 
 | Famille | Couleur | Ce qu'elle veut dire | Notions |
 |---|---|---|---|
-| `variables` | violet | **ranger** des valeurs | Les variables · Les listes · Listes de listes |
-| `types` | vert | **textes et types** : ce qu'est une valeur | Afficher un message · Types et conversion · Demander une information · Binaire et caractères |
+| `variables` | violet | **ranger** des valeurs | Les variables · Les listes · Listes de listes · Les dictionnaires · Des données imbriquées · Envoyer une requête · Faire varier la requête · Un programme météo |
+| `types` | vert | **textes et types** : ce qu'est une valeur | Afficher un message · Types et conversion · Demander une information · Binaire et caractères · Lire et écrire du JSON · Réseau, URL et HTTP |
 | `operateurs` | bleu | **calculer** | Calculer · Compter et cumuler · Bits de poids faible et décodage |
 | `conditions` | ambre | **décider** | Comparer · Combiner des conditions · Décider |
 | `boucles` | corail | **répéter** | Répéter avec for · Parcourir un texte · Répéter tant que |
-| `rappels` | neutre chaud | **revoir** : aucun concept nouveau | Se remettre en route · Rappels avant les boucles · Rappels avant les listes |
+| `rappels` | neutre chaud | **revoir** : aucun concept nouveau | Se remettre en route · Rappels avant les boucles · Rappels avant les listes · Rappels avant les dictionnaires |
 
 `rappels` est la sixième famille, ajoutée ce jour-là : `--rap-tint #E8E1D5`, `--rap-ink
 #4A4136` (contraste ≥ 4,5, vérifié par `tokens.test.ts`), `--rap-deep #221D17`. Une notion de
