@@ -1,0 +1,270 @@
+# Le quiz des séances 5 et 6 : dictionnaires, données imbriquées, JSON, puis
+# interroger un service web.
+#
+# Quatre parties, dans l'ordre où le cours les construit :
+#
+# - questions 1 à 5 : le dictionnaire. Lire par la clé, modifier et ajouter,
+#   la clé qui n'existe pas, `in`, puis compter avec un dictionnaire ;
+# - questions 6 à 8 : les données imbriquées. Descendre d'un niveau à l'autre,
+#   parcourir une liste de dictionnaires, deux noms pour un même dictionnaire ;
+# - questions 9 à 11 : JSON. loads() rend des nombres, true devient True,
+#   dumps() rend le vrai texte JSON ;
+# - questions 12 à 15 : le web. Construire une URL, lire un code de statut,
+#   passer par reponse.json(), puis un programme météo entier.
+#
+# Les exemples sont ceux des leçons : la fiche de Camille, les amis d'Alice, le
+# texte JSON d'Alice, Open-Meteo. Un élève qui a suivi le cours retrouve ce
+# qu'il a vu.
+#
+# Aucune question n'envoie de vraie requête : la réponse d'Open-Meteo change
+# d'une heure à l'autre, et une bonne réponse ne doit pas dépendre de la météo.
+# Le programme final travaille sur un dictionnaire écrit à la main, de la même
+# forme que la réponse du service.
+#
+# Les règles de q1-bases valent ici :
+#
+# - la bonne réponse change de place d'une question à l'autre ;
+# - toute question qui montre du code est exécutée à la construction, et
+#   `sortie: true` vérifie que l'option juste est exactement ce qui s'affiche.
+id: q5-donnees-web
+titre: Dictionnaires, JSON et services web
+seance: 5
+questions:
+  # --- Le dictionnaire --------------------------------------------------------
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      fiche = {"nom": "Camille", "age": 17, "ville": "Genève"}
+      print(fiche["ville"])
+    options:
+      - Genève
+      - ville
+      - "2"
+      - Une erreur
+    bonne_reponse: 0
+    sortie: true
+    explication: On lit une valeur par sa clé, entre crochets. Pas besoin de savoir à quelle position elle est rangée.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      fiche = {"nom": "Camille", "age": 17}
+      fiche["age"] = 18
+      fiche["classe"] = "3e"
+      print(len(fiche))
+    options:
+      - "2"
+      - "4"
+      - "3"
+    bonne_reponse: 2
+    duree_s: 30
+    sortie: true
+    explication: La clé age existait, sa valeur est remplacée. La clé classe n'existait pas, la paire est ajoutée. Trois paires.
+
+  - enonce: Que se passe-t-il ?
+    code: |
+      fiche = {"nom": "Camille", "age": 17}
+      print(fiche["Nom"])
+    options:
+      - Camille
+      - Le programme s'arrête sur une KeyError
+      - None
+      - Nom
+    bonne_reponse: 1
+    duree_s: 30
+    erreur: KeyError
+    explication: Les majuscules comptent. La clé "Nom" n'est pas la clé "nom", et une clé qui n'existe pas arrête le programme.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      notes = {"maths": 14, "sport": 17}
+      print(14 in notes)
+    options:
+      - "True"
+      - "14"
+      - Une erreur
+      - "False"
+    bonne_reponse: 3
+    duree_s: 30
+    sortie: true
+    explication: in cherche parmi les CLÉS, pas parmi les valeurs. 14 est une note, pas une clé.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      compte = {}
+      for lettre in "abba":
+          if lettre in compte:
+              compte[lettre] = compte[lettre] + 1
+          else:
+              compte[lettre] = 1
+      print(compte)
+    options:
+      - "{'a': 1, 'b': 1}"
+      - "{'a': 2, 'b': 2}"
+      - "{'abba': 1}"
+      - "{'a': 2}"
+    bonne_reponse: 1
+    duree_s: 60
+    sortie: true
+    explication: La première fois qu'on voit une lettre, on crée sa clé à 1. Les fois suivantes, on ajoute 1. Chaque lettre n'a qu'une clé.
+
+  # --- Les données imbriquées -------------------------------------------------
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      data = {"user": {"nom": "Alice", "amis": ["Bob", "Claire"]}}
+      print(data["user"]["amis"][1])
+    options:
+      - Claire
+      - Bob
+      - amis
+      - Une erreur
+    bonne_reponse: 0
+    duree_s: 30
+    sortie: true
+    explication: Une paire de crochets par niveau. data["user"] est un dictionnaire, ["amis"] une liste, et [1] sa deuxième position.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      eleves = [
+          {"nom": "Alice", "age": 17},
+          {"nom": "Bob", "age": 19},
+          {"nom": "Lina", "age": 18},
+      ]
+      majeurs = 0
+      for e in eleves:
+          if e["age"] >= 18:
+              majeurs = majeurs + 1
+      print(majeurs)
+    options:
+      - "3"
+      - "37"
+      - "2"
+      - "1"
+    bonne_reponse: 2
+    duree_s: 45
+    sortie: true
+    explication: À chaque tour, e est un dictionnaire entier. e["age"] lit son âge. Bob et Lina ont 18 ans ou plus.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      a = {"x": [1]}
+      b = a
+      b["x"].append(2)
+      print(a)
+    options:
+      - "{'x': [1, 2]}"
+      - "{'x': [1]}"
+      - "{'x': [2]}"
+    bonne_reponse: 0
+    duree_s: 45
+    sortie: true
+    explication: b = a ne copie rien. a et b sont deux noms pour le même dictionnaire, donc modifier par b se voit par a.
+
+  # --- JSON -------------------------------------------------------------------
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      import json
+
+      texte = '{"nom": "Alice", "age": 25}'
+      data = json.loads(texte)
+      print(data["age"] + 1)
+    options:
+      - "251"
+      - "26"
+      - Une erreur
+      - "25"
+    bonne_reponse: 1
+    duree_s: 30
+    sortie: true
+    explication: json.loads() transforme le texte en dictionnaire. Le 25 y redevient un nombre, et 25 plus 1 donne 26.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      import json
+
+      data = json.loads('{"actif": true, "email": null}')
+      print(data["actif"], data["email"])
+    options:
+      - true null
+      - true None
+      - True null
+      - True None
+    bonne_reponse: 3
+    duree_s: 30
+    sortie: true
+    explication: Après loads(), on est en Python. true devient True, avec une majuscule, et null devient None.
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      import json
+
+      data = {"nom": "Alice", "actif": True}
+      print(json.dumps(data))
+    options:
+      - '{"nom": "Alice", "actif": True}'
+      - "{'nom': 'Alice', 'actif': True}"
+      - '{"nom": "Alice", "actif": true}'
+    bonne_reponse: 2
+    duree_s: 45
+    sortie: true
+    explication: dumps() rend le vrai texte JSON. Guillemets doubles, et true en minuscules. C'est print(data) qui aurait montré du Python.
+
+  # --- Le web -----------------------------------------------------------------
+
+  - enonce: Qu'affiche ce programme ?
+    code: |
+      lat = 46.2
+      lon = 6.1
+      print(f"forecast?latitude={lat}&longitude={lon}")
+    options:
+      - forecast?latitude=46.2&longitude=6.1
+      - forecast?latitude=lat&longitude=lon
+      - forecast?latitude={lat}&longitude={lon}
+    bonne_reponse: 0
+    duree_s: 30
+    sortie: true
+    explication: Le f devant les guillemets glisse la valeur de chaque variable à la place des accolades. Après le ?, les paramètres sont séparés par &.
+
+  - enonce: Le service répond avec le code de statut 500. Qui s'est trompé ?
+    options:
+      - Ma requête
+      - Le serveur
+      - Personne, tout va bien
+    bonne_reponse: 1
+    explication: Un code qui commence par 2 est un succès, par 4 une erreur de ta requête, par 5 une erreur du serveur.
+
+  - enonce: Après reponse = requests.get(url, params=params), comment lit-on la température actuelle ?
+    options:
+      - reponse["current_weather"]["temperature"]
+      - reponse.status_code["temperature"]
+      - json.dumps(reponse)["temperature"]
+      - reponse.json()["current_weather"]["temperature"]
+    bonne_reponse: 3
+    duree_s: 30
+    explication: reponse n'est pas un dictionnaire, c'est la réponse complète. reponse.json() rend les données, puis on descend un niveau de crochets après l'autre.
+
+  - enonce: Voici une réponse d'Open-Meteo, écrite à la main. Qu'affiche ce programme ?
+    code: |
+      data = {
+          "daily": {
+              "time": ["lun", "mar", "mer"],
+              "temperature_2m_max": [9.5, 13.1, 11.0],
+          }
+      }
+      jours = data["daily"]["time"]
+      maxi = data["daily"]["temperature_2m_max"]
+      meilleur = 0
+      for i in range(len(jours)):
+          if maxi[i] > maxi[meilleur]:
+              meilleur = i
+      print(jours[meilleur], maxi[meilleur])
+    options:
+      - lun 9.5
+      - "13.1"
+      - mar 13.1
+      - 1 13.1
+    bonne_reponse: 2
+    duree_s: 60
+    sortie: true
+    explication: Les deux listes ont la même longueur, la position i va dans les deux. meilleur retient la position du maximum, 1, qui est mardi.

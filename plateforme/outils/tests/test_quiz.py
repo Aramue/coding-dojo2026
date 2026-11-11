@@ -50,7 +50,13 @@ def test_un_quiz_de_la_seance_4_se_charge():
     assert Quiz(**quiz(id="q4-stegano", seance=4)).seance == 4
 
 
-@pytest.mark.parametrize("seance", [0, 5])
+def test_un_quiz_des_seances_5_et_6_se_charge():
+    """Les seances 5 et 6 existent pour les exercices depuis le 11 novembre 2026 : leurs quiz aussi."""
+    assert Quiz(**quiz(id="q5-donnees-web", seance=5)).seance == 5
+    assert Quiz(**quiz(id="q6-services", seance=6)).seance == 6
+
+
+@pytest.mark.parametrize("seance", [0, 7])
 def test_une_seance_hors_du_cours_est_rejetee(seance):
     with pytest.raises(ValidationError):
         Quiz(**quiz(seance=seance))
