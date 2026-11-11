@@ -55,7 +55,7 @@ blocs:
       print(reponse.json()["reason"])
   - type: attention
     texte: >-
-      **Les requêtes sont comptées.** Un programme en envoie au plus 6, et le service en accepte un nombre limité à la minute, pour toute la salle. Au-delà, il répond `429`, et il suffit d'attendre un instant. Deux requêtes identiques ne partent qu'une fois.
+      **Les requêtes sont comptées.** Un programme en envoie au plus 6 : au-delà, il s'arrête avec une erreur. Et tu ne peux pas en envoyer plus d'une vingtaine par minute : au-delà, tu reçois un `429`, et il suffit d'attendre un instant. Deux requêtes identiques ne partent qu'une fois.
   - type: paragraphe
     texte: >-
       Une ville s'écrit avec ses coordonnées, `latitude` et `longitude`. Un second service d'Open-Meteo les donne à partir du nom d'une ville : sa réponse contient une liste `results`.

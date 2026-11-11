@@ -49,6 +49,11 @@ class TestQcm(BaseModel):
     def indice_dans_les_bornes(self) -> "TestQcm":
         if not 0 <= self.bonne_reponse < len(self.options):
             raise ValueError("bonne_reponse hors des options")
+        # Deux boutons identiques : l'eleve qui clique sur le « mauvais » des
+        # deux a raison et se fait dire qu'il a tort. Arrive en s5-37, ou une
+        # sequence d'echappement (antislash, u, 00e8) etait redevenue un è.
+        if len(set(self.options)) != len(self.options):
+            raise ValueError("deux options identiques")
         return self
 
 

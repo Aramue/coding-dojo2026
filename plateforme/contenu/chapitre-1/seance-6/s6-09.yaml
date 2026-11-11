@@ -18,7 +18,7 @@ depart: |
   statut = reponse._____
 indices:
   - La méthode HTTP qui sert à obtenir une information porte le même nom en Python, en minuscules.
-  - Le code de statut est un attribut de la réponse, sans parenthèses. Il s'écrit en trois mots reliés par des tirets bas.
+  - Le code de statut est un attribut de la réponse, sans parenthèses. Il s'écrit en deux mots reliés par un tiret bas.
 tests:
   - type: variable
     nom: statut

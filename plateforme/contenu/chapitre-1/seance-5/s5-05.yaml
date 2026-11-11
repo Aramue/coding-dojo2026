@@ -15,7 +15,7 @@ depart: |
   vert = pixel[_____]
   bleu = pixel[_____]
 indices:
-  - Une clé est un texte, donc entre guillemets. Regarde les clés écrites dans le dictionnaire.
+  - Ici, les clés sont des textes, donc entre guillemets. Regarde les clés écrites dans le dictionnaire.
   - 'Pour le rouge, la clé est "rouge" : le mot et ses guillemets vont entre les crochets.'
 tests:
   - type: variable

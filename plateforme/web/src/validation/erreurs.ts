@@ -124,7 +124,7 @@ const REGLES: Regle[] = [
     motif: /.*/,
     construire: () => ({
       titre: 'Tu demandes une position qui n\'existe pas',
-      explication: `Le premier caractère est à la position 0, pas 1. Le dernier est à la longueur moins 1.`,
+      explication: `La première position est 0, pas 1, dans un texte comme dans une liste. La dernière est la longueur moins 1.`,
       piste: `Affiche la longueur avec len() pour voir jusqu'où tu peux aller.`,
     }),
   },

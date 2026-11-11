@@ -16,7 +16,7 @@ blocs:
       print(len(fiche))
   - type: paragraphe
     texte: >-
-      Les clés sont des textes, donc entre guillemets. Python affiche le dictionnaire avec des apostrophes, et garde les paires dans l'ordre où tu les as écrites.
+      Ici, les clés sont des textes, donc entre guillemets. Python affiche le dictionnaire avec des apostrophes, et garde les paires dans l'ordre où tu les as écrites.
   - type: paragraphe
     texte: >-
       Pour lire une valeur, on écrit sa clé entre crochets, comme on écrivait une position pour une liste.

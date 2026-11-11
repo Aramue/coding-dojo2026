@@ -20,7 +20,7 @@ tests:
   - type: qcm
     options:
       - '{"ville": "Genève"}'
-      - '{"ville": "Genève"}'
+      - '{"ville": "Gen\u00e8ve"}'
       - '{"ville": "Geneve"}'
     bonne_reponse: 1
 solution: |

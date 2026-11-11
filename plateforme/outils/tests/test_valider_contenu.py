@@ -196,3 +196,52 @@ def test_une_requete_sans_enregistrement_dit_comment_l_enregistrer(monkeypatch):
         'import requests\nrequests.get("https://api.open-meteo.com/v1/forecast?zz=1")', []
     )
     assert erreur is not None and "DOJO_ENREGISTRER=1" in erreur
+
+
+PREDIRE = dict(
+    BASE,
+    id="s5-90",
+    concept="json",
+    notion="json",
+    seance=5,
+    type="predire",
+    titre="Que montre l'ecran",
+    obligatoire=False,
+    enonce="Que montre l'ecran ?",
+    depart='print(3 + 4)',
+    tests=[{"type": "qcm", "options": ["34", "7", "3 + 4"], "bonne_reponse": 1}],
+    solution='print(3 + 4)',
+)
+
+
+def test_un_predire_juste_ne_remonte_rien(tmp_path):
+    assert verifier_coherence(ecrire(tmp_path, dict(PREDIRE))) == []
+
+
+def test_un_predire_qui_annonce_une_autre_option_est_signale(tmp_path):
+    tests = [{"type": "qcm", "options": ["34", "7", "3 + 4"], "bonne_reponse": 0}]
+    problemes = verifier_coherence(ecrire(tmp_path, dict(PREDIRE, tests=tests)))
+    assert any("le programme affiche '7'" in p for p in problemes)
+
+
+def test_un_predire_dont_aucune_option_n_est_la_sortie_est_signale(tmp_path):
+    # Le cas reel de s5-37 : json.dumps ecrit l'accent sous forme de code, et
+    # l'option annoncee juste montrait l'accent.
+    depart = 'import json\nprint(json.dumps({"ville": "Genève"}))'
+    tests = [
+        {
+            "type": "qcm",
+            "options": ['{"ville": "Genève"}', '{"ville": "Geneve"}'],
+            "bonne_reponse": 0,
+        }
+    ]
+    ex = ecrire(tmp_path, dict(PREDIRE, depart=depart, solution=depart, tests=tests))
+    assert any("annoncee" in p for p in verifier_coherence(ex))
+
+
+def test_un_predire_sur_plusieurs_lignes_ou_une_erreur_n_est_pas_juge(tmp_path):
+    # Les options y decrivent la sortie avec des mots : rien a comparer.
+    for depart in ['print("a")\nprint("b")', 'print(1 / 0)']:
+        tests = [{"type": "qcm", "options": ["a puis b", "Une erreur"], "bonne_reponse": 0}]
+        ex = ecrire(tmp_path, dict(PREDIRE, depart=depart, solution=depart, tests=tests))
+        assert verifier_coherence(ex) == []
