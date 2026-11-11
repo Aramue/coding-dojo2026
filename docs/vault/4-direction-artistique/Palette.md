@@ -3,7 +3,7 @@ title: Palette
 tags:
   - direction-artistique
   - tokens
-mis-a-jour: 2026-09-03
+mis-a-jour: 2026-10-28
 ---
 
 # Palette
@@ -29,6 +29,40 @@ Chaque concept a un fond pastel (`tint`), une encre (`ink`) et un fond d'exercic
 > - Les trois autres `deep` sont **extrapolés**, en reproduisant l'écart `#FFE7C2 → #3C2500`.
 > - La famille **corail** est un **ajout** : conditions et boucles partageaient l'ambre faute de
 >   couleur disponible, alors que ce sont deux concepts que les élèves confondent.
+
+## La couleur dit le concept
+
+> [!important] Décidé le 28 octobre 2026
+> La couleur d'une notion n'est pas choisie au cas par cas : elle dit **le concept que la notion
+> enseigne**, et garde ce sens d'un chapitre à l'autre — c'est ce que faisaient les slides, où
+> chaque famille de couleur couvrait une partie du deck.
+
+| Famille | Couleur | Ce qu'elle veut dire | Notions |
+|---|---|---|---|
+| `variables` | violet | **ranger** des valeurs | Les variables · Les listes · Listes de listes |
+| `types` | vert | **textes et types** : ce qu'est une valeur | Afficher un message · Types et conversion · Demander une information · Binaire et caractères |
+| `operateurs` | bleu | **calculer** | Calculer · Compter et cumuler · Bits de poids faible et décodage |
+| `conditions` | ambre | **décider** | Comparer · Combiner des conditions · Décider |
+| `boucles` | corail | **répéter** | Répéter avec for · Parcourir un texte · Répéter tant que |
+| `rappels` | neutre chaud | **revoir** : aucun concept nouveau | Se remettre en route · Rappels avant les boucles · Rappels avant les listes |
+
+`rappels` est la sixième famille, ajoutée ce jour-là : `--rap-tint #E8E1D5`, `--rap-ink
+#4A4136` (contraste ≥ 4,5, vérifié par `tokens.test.ts`), `--rap-deep #221D17`. Une notion de
+rappel colorée ferait croire qu'elle ouvre un concept.
+
+**Les TP** prennent la couleur du concept qui les porte : le TP de stéganographie, qui lit des
+textes et des caractères, est **vert**.
+
+> [!warning] Ce qu'on a abandonné, et pourquoi
+> L'ancienne règle imposait cinq couleurs **distinctes** dans un chapitre. Elle obligeait à
+> distribuer les couleurs sans rapport avec le contenu : « Afficher un message » était ambre
+> comme les décisions, « Les listes » corail comme les boucles. Deux notions voisines peuvent
+> désormais partager une couleur — c'est voulu : elles parlent de la même chose, et le numéro et
+> le titre les distinguent dans le menu.
+
+La table vit dans `outils/schema.py` (`NOTIONS`), et nulle part ailleurs. Trois tests la
+tiennent : toute famille appartient à la palette, une notion de rappel est neutre, et décider
+reste ambre, répéter corail, d'un chapitre à l'autre.
 
 ## Code — thème Dracula
 

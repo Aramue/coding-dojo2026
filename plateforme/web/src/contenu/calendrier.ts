@@ -45,6 +45,8 @@ export function contenuDisponible(contenu: ContenuPublie, jour: string): Contenu
     notions: contenu.notions.filter((n) => !cachees.has(n.id)),
     exercices: contenu.exercices.filter((e) => !cachees.has(e.notion)),
     lecons: contenu.lecons.filter((l) => !cachees.has(l.notion)),
+    // Un TP suit son chapitre : ses consignes ne paraissent qu'à son ouverture.
+    tps: contenu.tps.filter((t) => !fermes.has(t.chapitre)),
   }
 }
 

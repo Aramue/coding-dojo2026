@@ -1,3 +1,6 @@
+import pytest
+
+
 def entetes(jeton: str) -> dict:
     return {"Authorization": f"Bearer {jeton}"}
 
@@ -59,6 +62,33 @@ def test_tentative_verte_marque_l_exercice_reussi(client, jeton):
     )
     reussis = client.get("/parcours", headers=entetes(jeton)).json()["reussis"]
     assert [l["exercice_id"] for l in reussis] == ["s1-01"]
+
+
+@pytest.mark.parametrize("exercice", ["s4-01", "s4-12-expert"])
+def test_un_exercice_de_la_seance_4_s_enregistre(client, jeton, entetes_prof, exercice):
+    """Il repondait 422 : la seance 4 etait publiee, l'API ne la connaissait pas."""
+    reponse = client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={"exercice_id": exercice, "verdict": "vert", "type_erreur": None, "duree_ms": 42},
+    )
+    assert reponse.status_code == 200
+    reussis = client.get("/parcours", headers=entetes(jeton)).json()["reussis"]
+    assert [l["exercice_id"] for l in reussis] == [exercice]
+    # Et le tableau de bord du professeur le compte.
+    ligne = client.get("/prof/seance", headers=entetes_prof).json()["eleves"][0]
+    assert [r["exercice_id"] for r in ligne["reussis"]] == [exercice]
+
+
+@pytest.mark.parametrize("exercice", ["s0-01", "s10-01", "sX-01", "s4-1", "s4-001", "s4-01-bonus"])
+def test_un_identifiant_hors_motif_reste_refuse(client, jeton, exercice):
+    """Elargir aux seances 1 a 9 ne doit rien ouvrir d'autre : le champ reste etroit."""
+    reponse = client.post(
+        "/tentative",
+        headers=entetes(jeton),
+        json={"exercice_id": exercice, "verdict": "vert", "type_erreur": None, "duree_ms": 42},
+    )
+    assert reponse.status_code == 422
 
 
 def test_tentative_bleue_marque_aussi_l_exercice_reussi(client, jeton):

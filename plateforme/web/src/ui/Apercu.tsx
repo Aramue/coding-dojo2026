@@ -215,13 +215,19 @@ export function Apercu({
           <ContexteDefilement.Provider value={cadre}>
             <div className="appli appli--apercu">
               <Menu chapitres={chapitres} destination={destination} />
-              <Vue
-                destination={destination}
-                groupes={groupes}
-                executeur={executeur}
-                solutions={solutions ?? null}
-                solutionsOuvertes={pourLesSolutions}
-              />
+              {/*
+                `zone-cours`, comme côté élève : les pages y prennent la même
+                mise en page — sans cartes, sur le crème — que la classe voit.
+              */}
+              <div className="zone-cours">
+                <Vue
+                  destination={destination}
+                  groupes={groupes}
+                  executeur={executeur}
+                  solutions={solutions ?? null}
+                  solutionsOuvertes={pourLesSolutions}
+                />
+              </div>
             </div>
           </ContexteDefilement.Provider>
         </div>

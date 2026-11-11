@@ -361,3 +361,12 @@ a.menu-quiz .menu-quiz__etat {
     transition: none;
   }
 }
+
+/* Un TP est un lien, pas un bouton : il garde l'allure d'une rangee de notion. */
+.menu-tp__lien {
+  text-decoration: none;
+}
+
+.menu-tp__lien:hover .notion__titre {
+  color: var(--encre);
+}

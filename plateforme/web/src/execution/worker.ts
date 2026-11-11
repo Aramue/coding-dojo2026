@@ -126,7 +126,10 @@ def _qg_executer(code, entrees, noms, identifiant):
     return json.dumps({"stdout": sortie.getvalue(), "erreur": erreur, "variables": variables})
 `
 
-let pyodide: PyodideLike | null = null
+// La PROMESSE est mémorisée, pas l'instance : le démarrage commence dès la
+// création du worker (voir plus bas), et une demande arrivée pendant ce temps
+// doit attendre CE chargement-là, pas en lancer un second.
+let demarrage: Promise<PyodideLike> | null = null
 
 /**
  * Le texte de requests_dojo.py, publié avec le contenu. Lu en synchrone : un
@@ -149,21 +152,29 @@ function lireRequestsDojo(): string | null {
   }
 }
 
-async function demarrer(): Promise<PyodideLike> {
-  if (!pyodide) {
-    const instance = await loadPyodide({ indexURL: '/pyodide/' })
+function demarrer(): Promise<PyodideLike> {
+  demarrage ??= loadPyodide({ indexURL: '/pyodide/' }).then((instance) => {
     instance.runPython(HARNAIS)
     const source = lireRequestsDojo()
     if (source) instance.runPython(`_qg_installer_requests(${JSON.stringify(source)})`)
-    pyodide = instance
-  }
-  return pyodide
+    return instance
+  })
+  return demarrage
 }
+
+// Python démarre dès que le worker existe, avant toute demande : quelques
+// secondes de chargement que l'élève passe à lire l'énoncé, au lieu de les
+// attendre après avoir cliqué sur « Valider ». Un échec ici se retrouve à la
+// première demande, qui l'attend.
+void demarrer().catch(() => undefined)
 
 self.onmessage = async (evenement: MessageEvent) => {
   const { id, code, entrees, nomsVariables } = evenement.data
   try {
     const py = await demarrer()
+    // Le programme de l'élève commence MAINTENANT : c'est à partir d'ici que
+    // l'Executeur compte ses 5 secondes, pas depuis le clic. Voir executeur.ts.
+    self.postMessage({ id, demarre: true })
     const appel = py.runPython(
       `_qg_executer(${JSON.stringify(code)}, ${JSON.stringify(entrees)}, ${JSON.stringify(nomsVariables)}, ${JSON.stringify(id)})`,
     ) as string

@@ -173,6 +173,17 @@ describe('traduireErreur — les regles qui n etaient pas couvertes', () => {
     expect(m.piste).toContain('while')
   })
 
+  it('ne fait pas passer un Python qui ne demarre pas pour une boucle infinie', () => {
+    // Le navigateur n'a pas fini de charger Python : le code de l'eleve n'a
+    // meme pas tourne. Lui parler de sa condition de while l'enverrait
+    // chercher une faute qu'il n'a pas faite.
+    const m = traduireErreur(erreur('DemarrageImpossible', ''))
+    expect(m.titre).toMatch(/pas réussi à démarrer/)
+    expect(m.titre).not.toMatch(/tourne en rond/i)
+    expect(m.piste).toMatch(/Ce n'est pas ton code/)
+    expect(m.piste).not.toContain('while')
+  })
+
   it('retombe sur le generique quand le type est connu mais le message inattendu', () => {
     // Une regle n'est retenue que si son motif accroche : un TypeError d'une
     // autre forme ne doit pas emprunter le message d'une regle voisine.

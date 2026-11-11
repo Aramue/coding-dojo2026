@@ -48,7 +48,9 @@ from .securite import jeton_prof_valide, lire_jeton
 routeur = APIRouter()
 routeur_prof = APIRouter(prefix="/prof/quiz", dependencies=[Depends(verifier_prof)])
 
-MOTIF_QUIZ = r"^q[123]-[a-z]+(-[a-z]+)*$"
+# De 1 a 9, comme MOTIF_EXERCICE : le schema du contenu dit quelles seances
+# existent. Voir tests/test_parite_contenu.py.
+MOTIF_QUIZ = r"^q[1-9]-[a-z]+(-[a-z]+)*$"
 
 # Une partie terminee reste visible un quart d'heure : le temps pour chacun de
 # lire son resultat, pas celui de le retrouver la semaine suivante.
@@ -169,16 +171,31 @@ def _derniere_jouee(session: Session, quiz: QuizPublie) -> dict | None:
         .order_by(PartieQuiz.id.desc())  # type: ignore[union-attr]
     ).all()
     for partie in parties:
-        reponses = _reponses(session, partie.id)  # type: ignore[arg-type]
-        if not reponses:
-            continue
-        joueurs = len(_identites(session, partie.id))  # type: ignore[arg-type]
-        return {
-            "partie": partie.id,
-            "terminee_le": iso(partie.terminee_le),
-            **resultats(quiz, reponses, partie.question + 1, joueurs),
-        }
+        resume_partie = _resultats_partie(session, partie, quiz)
+        if resume_partie is not None:
+            return resume_partie
     return None
+
+
+def _resultats_partie(session: Session, partie: PartieQuiz, quiz: QuizPublie) -> dict | None:
+    """Les resultats d'une partie terminee, ou `None` si personne n'y a repondu."""
+    reponses = _reponses(session, partie.id)  # type: ignore[arg-type]
+    if not reponses:
+        return None
+    joueurs = len(_identites(session, partie.id))  # type: ignore[arg-type]
+    return {
+        "partie": partie.id,
+        "terminee_le": iso(partie.terminee_le),
+        **resultats(quiz, reponses, partie.question + 1, joueurs),
+    }
+
+
+def _classement_partie(session: Session, partie: PartieQuiz) -> list[dict]:
+    return classement_complet(
+        _identites(session, partie.id),  # type: ignore[arg-type]
+        _reponses(session, partie.id),  # type: ignore[arg-type]
+        jouees=partie.question + 1,
+    )
 
 
 def _vue_prof(session: Session, partie: PartieQuiz, quiz: QuizPublie, quand: datetime) -> dict:
@@ -347,11 +364,77 @@ def lire_resultats(
         "quiz_id": quiz.id,
         "titre": quiz.titre,
         **derniere,
-        "classement": classement_complet(
-            _identites(session, partie.id),  # type: ignore[arg-type]
-            _reponses(session, partie.id),  # type: ignore[arg-type]
-            jouees=partie.question + 1,
-        ),
+        "classement": _classement_partie(session, partie),
+    }
+
+
+@routeur_prof.get("/historique")
+def lire_historique(session: SessionBdd, catalogue: Catalogue) -> dict:
+    """Toutes les parties jouees, de la plus recente a la plus ancienne, avec leurs gagnants.
+
+    Derriere la porte professeur, comme « Derniers resultats » : c'est la
+    memoire de la classe, pas un tableau d'honneur projete. Les gagnants sont
+    ceux du podium — trois au plus, jamais un eleve a zero point (ADR-015).
+
+    Une partie sans reponse (annulee en salle d'attente) n'y figure pas, ni
+    celle d'un quiz retire du catalogue : on ne saurait plus en lire les
+    questions.
+    """
+    parties = session.exec(
+        select(PartieQuiz)
+        .where(PartieQuiz.phase == "terminee")
+        .order_by(PartieQuiz.id.desc())  # type: ignore[union-attr]
+    ).all()
+    lignes = []
+    for partie in parties:
+        quiz = catalogue.get(partie.quiz_id)
+        if quiz is None:
+            continue
+        resume_partie = _resultats_partie(session, partie, quiz)
+        if resume_partie is None:
+            continue
+        resume_partie.pop("bilan", None)
+        gagnants = [p for p in _classement_partie(session, partie) if p["points"] > 0 and p["rang"] <= 3]
+        lignes.append({"quiz_id": quiz.id, "titre": quiz.titre, **resume_partie, "gagnants": gagnants})
+    return {"parties": lignes}
+
+
+@routeur_prof.get("/parties/{partie_id}/resultats")
+def lire_resultats_partie(partie_id: int, session: SessionBdd, catalogue: Catalogue) -> dict:
+    """Le bilan et le classement complet d'une partie de l'historique."""
+    partie = session.get(PartieQuiz, partie_id)
+    if partie is None or partie.phase != "terminee" or partie.quiz_id not in catalogue:
+        raise HTTPException(404, "Partie inconnue.")
+    quiz = catalogue[partie.quiz_id]
+    resume_partie = _resultats_partie(session, partie, quiz)
+    if resume_partie is None:
+        raise HTTPException(404, "Personne n'a répondu à cette partie.")
+    return {
+        "quiz_id": quiz.id,
+        "titre": quiz.titre,
+        **resume_partie,
+        "classement": _classement_partie(session, partie),
+    }
+
+
+@routeur_prof.get("/{quiz_id}/questions")
+def lire_questions(
+    quiz_id: Annotated[str, Path(pattern=MOTIF_QUIZ)],
+    catalogue: Catalogue,
+) -> dict:
+    """Toutes les questions d'un quiz, bonnes reponses comprises, sans lancer de partie.
+
+    Pour que le professeur relise un quiz avant de le jouer — ou entre deux
+    seances — sans le derouler question par question devant personne. Derriere
+    la session professeur, comme tout ce routeur : les bonnes reponses ne
+    sortent jamais vers un eleve avant la correction (ADR-015).
+    """
+    quiz = catalogue.get(quiz_id)
+    if quiz is None:
+        raise HTTPException(404, "Quiz inconnu.")
+    return {
+        **resume(quiz),
+        "questions": [question.model_dump() for question in quiz.questions],
     }
 
 

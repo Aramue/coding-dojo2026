@@ -1,0 +1,142 @@
+/*
+ * Les consignes d'un TP, mises en page comme une lecon : meme carte blanche,
+ * meme mesure de 72 caracteres, meme corps de texte (.cours__corps). Ce qui
+ * s'ajoute : un numero par etape, l'objectif, le point a verifier, l'indice
+ * replie et la case « terminee ».
+ */
+.tp .cours__corps p,
+.tp .cours__corps li {
+  margin: 0;
+  font-size: var(--t-4);
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.tp__liste {
+  margin: 0;
+  padding-left: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+}
+
+.tp__liste li::marker {
+  color: var(--encre);
+  font-weight: 700;
+}
+
+.tp__materiel h2 {
+  margin: 0 0 var(--e-1);
+  font-size: var(--t-4);
+}
+
+.tp__materiel ul {
+  margin: 0;
+  padding-left: 1.4rem;
+}
+
+.tp__etapes {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--e-4);
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-4);
+}
+
+.tp__titre {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.tp__rang {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--encre);
+  color: #fff;
+  font-size: var(--t-3);
+}
+
+[data-faite='true'] .tp__rang {
+  background: var(--ok);
+}
+
+.tp__objectif {
+  padding: var(--e-2) var(--e-3);
+  background: var(--ground-2);
+  border-radius: var(--rayon-2);
+}
+
+.tp__verifier {
+  margin: 0;
+  padding: var(--e-2) var(--e-3);
+  border-left: 3px solid var(--ok);
+  background: color-mix(in srgb, var(--ok) 7%, var(--surface));
+  border-radius: 0 var(--rayon-2) var(--rayon-2) 0;
+}
+
+.tp__indice {
+  padding: var(--e-1) var(--e-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--rayon-2);
+}
+
+.tp__indice summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--encre);
+  padding: 0.3rem 0;
+}
+
+.tp .tp__indice p {
+  margin: var(--e-1) 0 var(--e-1);
+}
+
+.tp__coche {
+  display: flex;
+  align-items: center;
+  gap: var(--e-1);
+  align-self: flex-start;
+  padding-top: var(--e-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tp__coche input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--ok);
+}
+
+/*
+ * Un enfant de colonne flex prend par defaut la largeur de son contenu : une
+ * longue ligne de code faisait deborder sa carte hors de la page. Borne, il
+ * defile a l'interieur de sa carte, comme dans les lecons.
+ */
+.tp .cours__corps > *,
+.tp .cours__exemple {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.tp .cours__exemple > .carte-code {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/*
+ * `.page__corps` remet ses marges a `0 auto` : sans cette regle plus precise,
+ * la carte d'introduction et la premiere etape se touchaient.
+ */
+.tp .tp__etapes.page__corps {
+  margin-top: var(--e-5);
+}

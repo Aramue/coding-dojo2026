@@ -1,0 +1,403 @@
+/*
+ * La patte du dojo : ce qui fait qu'on reconnait les slides dans l'interface.
+ *
+ * Charge APRES app.css, et seulement des retouches de surface — aucune
+ * mise en page ne change ici. Trois idees, tirees de la charte :
+ *
+ * 1. Le papier. Le canevas n'est plus un aplat numerique : un grain tres
+ *    leger, fixe, qui ne defile pas et ne capte aucun clic.
+ * 2. Le trait de main. Le soulignement trace main des decks, sous chaque
+ *    titre de page, dans l'encre de la notion. Il etait dans la charte
+ *    (Composants signature) et n'avait jamais ete dessine.
+ * 3. Moins de boites. Une carte sans bordure, posee par une ombre chaude ;
+ *    un menu qui se fond dans le canevas au lieu d'etre un panneau de plus ;
+ *    le quiz eteint sans pointilles de formulaire.
+ */
+
+/* ---------- 1. Le papier ---------- */
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  /*
+   * PAR-DESSUS tout, mais transparent aux clics : .appli peint son propre
+   * fond, un grain pose dessous ne se verrait jamais. En `multiply`, il
+   * assombrit a peine le blanc des cartes et ne voile pas le texte.
+   */
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.12 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 2. Le trait de main ---------- */
+
+.page__titre {
+  font-size: clamp(2rem, 1.4rem + 1.8vw, 2.7rem);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+
+/*
+ * Un trait irregulier, epais au depart, qui s'affine : un feutre, pas une
+ * regle. Le dessin est un masque, la couleur vient de --encre — le meme
+ * trait prend la teinte de chaque notion sans un fichier par famille.
+ */
+.page__titre::after {
+  content: '';
+  display: block;
+  width: min(9.5rem, 40%);
+  height: 0.6rem;
+  margin-top: 0.55rem;
+  background: var(--encre, var(--ink));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9.5c22-4.6 47-6.2 74-5.4 27 .7 53 3.1 82 2.2 13-.4 25-1.6 38-3.6' fill='none' stroke='black' stroke-width='5.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center / 100% 100%;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9.5c22-4.6 47-6.2 74-5.4 27 .7 53 3.1 82 2.2 13-.4 25-1.6 38-3.6' fill='none' stroke='black' stroke-width='5.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat center / 100% 100%;
+  opacity: 0.85;
+}
+
+/* Le sur-titre : du texte dans l'encre de la notion, sans pastille posee devant. */
+.page__notion {
+  font-size: var(--t-2);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.page__notion::before {
+  display: none;
+}
+
+.page__meta {
+  margin-top: var(--e-2);
+}
+
+/* ---------- 3. Moins de boites ---------- */
+
+/*
+ * Plus de bordure : l'ombre suffit, et elle est chaude — teintee de brun,
+ * comme une feuille posee sur du papier, au lieu d'un gris neutre.
+ * Rayon plus grand dehors que dedans : la carte contient, ses blocs suivent.
+ */
+.carte {
+  border-color: transparent;
+  border-radius: 22px;
+  box-shadow:
+    0 1px 1px rgb(60 37 0 / 4%),
+    0 2px 6px -2px rgb(60 37 0 / 6%),
+    0 18px 40px -22px rgb(60 37 0 / 22%);
+}
+
+/* Le menu se fond dans le canevas : un filet suffit a le separer. */
+.menu {
+  background: transparent;
+  border-right-color: var(--rule);
+}
+
+/* Le quiz eteint : une information calme, pas un champ de formulaire. */
+.menu-quiz[aria-disabled='true'] {
+  border-style: solid;
+  border-color: transparent;
+  background: var(--ground-2);
+}
+
+/* L'en-tete laisse deviner le papier qui defile dessous. */
+.entete {
+  background: rgb(255 255 255 / 82%);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom-color: var(--rule);
+}
+
+.entete__marque {
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- Le geste ---------- */
+
+/* Un bouton s'enfonce sous le doigt : 1 px, assez pour qu'on le sente. */
+.bouton {
+  transition:
+    background 150ms ease-out,
+    border-color 150ms ease-out,
+    transform 120ms ease-out;
+}
+
+.bouton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Un paragraphe ne laisse pas un mot seul sur sa derniere ligne. */
+.cours__corps p,
+.enonce p {
+  text-wrap: pretty;
+}
+
+/* ---------- Mise en page : le contenu respire, le menu reste blanc ---------- */
+
+/*
+ * Deux surfaces, pas trois : le menu en blanc, le contenu directement sur le
+ * creme du canevas. Les cartes blanches autour du texte disparaissent cote
+ * eleve — le creme suffit a porter le texte, et le blanc du menu le cadre.
+ */
+.menu {
+  background: var(--surface);
+  border-right-color: var(--rule-doux);
+}
+
+.menu-quiz[aria-disabled='true'] {
+  background: var(--ground);
+}
+
+:root {
+  /* La mesure du contenu : plus large qu'avant (72ch), encore lisible. */
+  --mesure: 62rem;
+}
+
+.zone-cours .page__entete,
+.zone-cours .page__corps,
+.zone-cours .pied:not(.pied--sombre) {
+  max-width: var(--mesure);
+}
+
+.zone-cours .page .carte {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Sans carte, le texte s'aligne sur le bord du titre au lieu d'etre en retrait. */
+.zone-cours .page .carte > .cours__corps {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Une etape de TP se separe de la suivante par un filet, plus par une carte. */
+.zone-cours .tp__etapes > .carte + .carte {
+  border-top: 1px solid var(--rule);
+}
+
+/*
+ * La barre de lecture traverse toute la zone de contenu : elle annule les
+ * marges interieures de la page au lieu de s'arreter a leur bord.
+ */
+.page > .lecture {
+  margin: calc(-1 * var(--e-5)) calc(-1 * var(--e-4)) calc(var(--e-5) - 3px);
+}
+
+@media (max-width: 720px) {
+  .page > .lecture {
+    margin: calc(-1 * var(--e-3)) calc(-1 * var(--e-2)) calc(var(--e-3) - 3px);
+  }
+}
+
+/*
+ * Le creme du contenu, un cran plus soutenu que le canevas d'origine : a cote
+ * du menu blanc, #FBF8F3 se confondait avec lui. Les petites surfaces qui
+ * vivaient sur ce gris-beige — code en ligne, objectif d'etape — passent au
+ * blanc, pour ressortir du creme au lieu de s'y fondre.
+ */
+.appli {
+  background: #f5f0e6;
+}
+
+.zone-cours .cours__corps code,
+.zone-cours .tp__objectif {
+  background: var(--surface);
+}
+
+/* Le menu passe au-dessus du grain : blanc, il reste vraiment blanc. */
+.menu {
+  position: relative;
+  z-index: 30;
+}
+
+/* L'en-tete reste au-dessus du menu, du grain et de la barre de lecture. */
+.entete {
+  z-index: 40;
+}
+
+/*
+ * Le menu suit la lecture : colle sous l'en-tete, il defile pour lui-meme.
+ * Sans cela, une longue page laissait une colonne blanche vide a gauche.
+ */
+@media (min-width: 901px) {
+  .menu {
+    position: sticky;
+    top: 3.5rem;
+    align-self: start;
+    height: calc(100dvh - 3.5rem);
+  }
+}
+
+/* ---------- Le contenu, sans cartes ---------- */
+
+/*
+ * La page s'est elargie, la prose non : au-dela de ~70 caracteres, l'oeil
+ * perd la ligne suivante. Le code, les schemas et les listes d'exercices,
+ * eux, prennent toute la largeur — c'est ce qui donne du relief a la page.
+ */
+.zone-cours .cours__corps > p,
+.zone-cours .cours__corps > .tp__liste,
+.zone-cours .cours__corps > .tp__materiel,
+.zone-cours .cours__corps > aside,
+.zone-cours .cours__corps > .tp__objectif,
+.zone-cours .cours__corps > .tp__indice,
+.zone-cours .page__meta {
+  max-width: 70ch;
+}
+
+/* Le rythme : plus d'air entre les blocs, moins dans un paragraphe. */
+.zone-cours .cours__corps {
+  gap: var(--e-3);
+  padding-top: var(--e-2);
+}
+
+/*
+ * L'encadre « attention » : un filet dans l'encre de la notion et une teinte
+ * pastel, sans boite autour. Arrondi du seul cote ouvert.
+ */
+.zone-cours .attention {
+  margin: 0;
+  padding: var(--e-2) var(--e-3);
+  border-left: 3px solid var(--encre);
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--tint) 70%, var(--surface));
+}
+
+/* Le point a verifier : meme forme que l'attention, en vert de reussite. */
+.zone-cours .tp__verifier {
+  border-left-width: 3px;
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--ok) 6%, var(--surface));
+}
+
+/* L'indice replie : une ligne discrete en pointilles, qu'on ouvre. */
+.zone-cours .tp__indice {
+  background: transparent;
+  border: 1px dashed color-mix(in srgb, var(--encre) 35%, var(--rule));
+  border-radius: 14px;
+  transition: background 150ms ease-out;
+}
+
+.zone-cours .tp__indice[open] {
+  background: var(--surface);
+  border-style: solid;
+}
+
+/* L'objectif d'etape : une note blanche, posee juste sous le titre. */
+.zone-cours .tp__objectif {
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgb(60 37 0 / 6%);
+}
+
+/* Les figures se detachent du creme par du blanc, pas par une bordure. */
+.zone-cours .schema__cadre {
+  background: var(--surface);
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgb(60 37 0 / 5%), 0 10px 30px -20px rgb(60 37 0 / 25%);
+}
+
+/* La carte de code : la meme ombre chaude, un cran plus marquee. */
+.zone-cours .carte-code {
+  box-shadow: 0 2px 4px rgb(40 42 54 / 12%), 0 14px 32px -18px rgb(40 42 54 / 45%);
+}
+
+/*
+ * « Essayer » : une action secondaire, dans l'encre de la notion, au lieu
+ * d'un bouton blanc generique pose sur le creme.
+ */
+.zone-cours .cours__exemple button.bouton:not(.bouton--primaire):not(.bouton--sombre) {
+  min-height: 2.4rem;
+  padding: 0.45rem var(--e-2);
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--encre) 45%, var(--rule));
+  color: var(--encre);
+  font-weight: 600;
+}
+
+.zone-cours .cours__exemple button.bouton:not(.bouton--primaire):not(.bouton--sombre):hover:not(:disabled) {
+  background: color-mix(in srgb, var(--tint) 45%, var(--surface));
+  border-color: var(--encre);
+}
+
+/* Un titre d'etape ouvre une section : de l'air au-dessus, un filet entre deux. */
+.zone-cours .tp__etapes {
+  gap: 0;
+}
+
+.zone-cours .tp__etapes > .carte {
+  padding: var(--e-4) 0;
+}
+
+.zone-cours .tp__titre {
+  font-size: 1.65rem;
+  letter-spacing: -0.03em;
+}
+
+/* La liste des exercices : sur le creme, la ligne survolee passe au blanc. */
+.zone-cours .exercices__ligne:hover {
+  background: var(--surface);
+}
+
+/* Le pied de page : un vrai lien, blanc, pose sur le creme. */
+/* Seulement sur le creme : le pied de l'ecran d'exercice, sombre, garde le sien. */
+.zone-cours .pied:not(.pied--sombre) .pied__lien {
+  background: var(--surface);
+  border-color: transparent;
+  box-shadow: 0 1px 2px rgb(60 37 0 / 6%), 0 8px 20px -14px rgb(60 37 0 / 30%);
+}
+
+/* Un schema garde des proportions de figure : pleine largeur, il devenait affiche. */
+.zone-cours .schema {
+  max-width: 48rem;
+}
+
+/* Une etape atteinte par le defilement ne se cache pas sous l'en-tete collant. */
+.zone-cours .tp__etapes > li {
+  scroll-margin-top: 5rem;
+}
+
+/*
+ * L'echelle des plans, du fond vers l'avant : grain 20, menu 30, en-tete 40,
+ * apercu du professeur 50. L'apercu passe donc par-dessus tout — l'en-tete de
+ * l'application ne doit pas recouvrir sa barre.
+ *
+ * Dans l'apercu, il n'y a pas d'en-tete d'application : le menu ne se colle
+ * pas a 3,5 rem du haut, il suit le cadre qui defile.
+ */
+.appli--apercu .menu {
+  position: relative;
+  top: auto;
+  height: auto;
+  align-self: stretch;
+}
+
+/*
+ * Dans l'apercu, la grille defile dans un cadre : le menu, plus court que la
+ * page, laissait sa colonne blanche s'arreter en plein ecran. Le fond de la
+ * grille peint donc lui-meme la colonne du menu, du haut jusqu'en bas.
+ */
+@media (min-width: 901px) {
+  .appli--apercu {
+    background: linear-gradient(to right, var(--surface) 272px, #f5f0e6 272px);
+  }
+}
+
+/*
+ * L'ecran d'exercice est sombre jusqu'en bas de la fenetre, cote eleve comme
+ * dans l'apercu : la zone de contenu s'etire, et l'ecran avec elle. Sans cela,
+ * un exercice court laissait une bande creme sous son pied de page.
+ */
+.zone-cours {
+  display: flex;
+  flex-direction: column;
+}
+
+.zone-cours > main {
+  flex: 1 0 auto;
+}

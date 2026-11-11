@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 import api_enregistree
-from schema import CHAPITRES, NOTIONS
+from schema import CHAPITRES, NOTIONS, charger_tps
 from valider_contenu import verifier_racine
 
 def _en_camel(nom: str) -> str:
@@ -93,6 +93,9 @@ def construire(racine: Path, sortie: Path) -> int:
             for l in lecons
         ],
     )
+
+    # Les consignes des TP. Ecrit meme vide, pour la meme raison que les lecons.
+    _publier(sortie / "tps.json", [_convertir_cles(tp.model_dump()) for tp in charger_tps(racine)])
 
     # Le `requests` du dojo et les reponses enregistrees : le worker charge le
     # premier au demarrage, et retombe sur les secondes quand le reseau d'un

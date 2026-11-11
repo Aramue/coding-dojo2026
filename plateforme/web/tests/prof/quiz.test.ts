@@ -3,7 +3,10 @@ import {
   corriger,
   creerPartie,
   lirePartie,
+  lireQuestions,
+  lireHistorique,
   lireResultats,
+  lireResultatsPartie,
   listerQuiz,
   questionSuivante,
   SessionProfRefusee,
@@ -43,6 +46,18 @@ describe('client du quiz, côté professeur', () => {
     expect(fetchFactice.mock.calls[0]![0]).toBe('/api/prof/quiz')
   })
 
+  it('lit toutes les questions d un quiz', async () => {
+    const questions = [{ enonce: 'Q', code: '', options: ['a', 'b'], bonne_reponse: 1, duree_s: 20, explication: '' }]
+    fetchFactice.mockResolvedValue(reponse({ id: 'q1-bases', titre: 'Les bases', questions }))
+    expect((await lireQuestions('jeton-prof', 'q1-bases')).questions).toEqual(questions)
+    expect(fetchFactice.mock.calls[0]![0]).toBe('/api/prof/quiz/q1-bases/questions')
+  })
+
+  it('refuse des questions d une autre forme', async () => {
+    fetchFactice.mockResolvedValue(reponse({ titre: 'Les bases' }))
+    await expect(lireQuestions('jeton-prof', 'q1-bases')).rejects.toThrow(/inattendue/)
+  })
+
   it('lit les derniers résultats avec le classement complet', async () => {
     const classement = [{ prenom: 'Camille', nom: 'Rey', points: 910, bonnes: 1, rang: 1 }]
     fetchFactice.mockResolvedValue(reponse({ titre: 'Les bases', bilan: [], classement }))
@@ -55,6 +70,30 @@ describe('client du quiz, côté professeur', () => {
     // Une API d'avant le classement complet, pendant un déploiement.
     fetchFactice.mockResolvedValue(reponse({ titre: 'Les bases', bilan: [] }))
     expect((await lireResultats('jeton-prof', 'q1-bases')).classement).toEqual([])
+  })
+
+  it("lit l'historique des parties", async () => {
+    fetchFactice.mockResolvedValue(reponse({ parties: [{ partie: 7, gagnants: [] }] }))
+    expect(await lireHistorique('jeton-prof')).toEqual([{ partie: 7, gagnants: [] }])
+    expect(fetchFactice.mock.calls[0]![0]).toBe('/api/prof/quiz/historique')
+  })
+
+  it("refuse un historique d'une autre forme", async () => {
+    fetchFactice.mockResolvedValue(reponse({ autre: 1 }))
+    await expect(lireHistorique('jeton-prof')).rejects.toThrow(/inattendue/)
+  })
+
+  it("lit les résultats d'une partie de l'historique", async () => {
+    fetchFactice.mockResolvedValue(reponse({ titre: 'Les bases', bilan: [], classement: [] }))
+    expect((await lireResultatsPartie('jeton-prof', 7)).titre).toBe('Les bases')
+    expect(fetchFactice.mock.calls[0]![0]).toBe('/api/prof/quiz/parties/7/resultats')
+  })
+
+  it("refuse les résultats d'une partie sans classement", async () => {
+    fetchFactice.mockResolvedValue(reponse({ titre: 'Les bases', bilan: [] }))
+    await expect(lireResultatsPartie('jeton-prof', 7)).rejects.toThrow(/inattendue/)
+    fetchFactice.mockResolvedValue(reponse(null))
+    await expect(lireResultatsPartie('jeton-prof', 7)).rejects.toThrow(/inattendue/)
   })
 
   it('refuse un catalogue d une autre forme', async () => {

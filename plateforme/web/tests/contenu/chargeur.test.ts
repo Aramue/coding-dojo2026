@@ -63,7 +63,7 @@ describe('chargerJson', () => {
 })
 
 describe('chargerContenu', () => {
-  it('range chacun des quatre fichiers publies a sa place', async () => {
+  it('range chacun des cinq fichiers publies a sa place', async () => {
     const { chargerContenu } = await import('../../src/contenu/chargeur')
     // Chaque fichier repond son propre chemin : une inversion se verrait.
     vi.stubGlobal(
@@ -76,6 +76,7 @@ describe('chargerContenu', () => {
       notions: ['/contenu/notions.json'],
       exercices: ['/contenu/exercices.json'],
       lecons: ['/contenu/lecons.json'],
+      tps: ['/contenu/tps.json'],
     })
     vi.unstubAllGlobals()
   })

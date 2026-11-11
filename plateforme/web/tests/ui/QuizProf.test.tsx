@@ -26,13 +26,19 @@ let etat: EtatProf
 let apresAction: ReturnType<typeof reponse>
 let catalogue: unknown
 let resultats: ReturnType<typeof reponse>
+let questionsDuQuiz: ReturnType<typeof reponse>
 let fetchFactice: ReturnType<typeof vi.fn>
+let historique: ReturnType<typeof reponse>
+let resultatsPartie: ReturnType<typeof reponse>
 
 function monter() {
   fetchFactice = vi.fn(async (url: string, options?: RequestInit) => {
     if (url === '/api/prof/eleves') return reponse({ eleves: INSCRITS })
     if (url === '/api/prof/quiz') return reponse({ quiz: catalogue })
     if (url === '/api/prof/quiz/q1-bases/resultats') return resultats
+    if (url === '/api/prof/quiz/q1-bases/questions') return questionsDuQuiz
+    if (url === '/api/prof/quiz/historique') return historique
+    if (url === '/api/prof/quiz/parties/7/resultats') return resultatsPartie
     if (url === '/api/prof/quiz/partie') return reponse(etat)
     if (options?.method === 'POST') {
       // Comme le serveur : une action acceptée change ce que la relecture rend.
@@ -56,6 +62,7 @@ function postes() {
 beforeEach(() => {
   poserSonnetteMuette()
   catalogue = CATALOGUE
+  historique = reponse({ parties: [] })
   history.pushState(null, '', '/prof/quiz')
 })
 
@@ -372,7 +379,7 @@ describe('QuizProf', () => {
     expect(ligne).toHaveTextContent('Dernière partie le 30 septembre : 68 % de bonnes réponses, 21 élèves')
     const boutons = within(ligne).getAllByRole('button').map((b) => b.textContent)
     // Juste à gauche de « Lancer ».
-    expect(boutons).toEqual(['Derniers résultats', 'Lancer'])
+    expect(boutons).toEqual(['Voir les questions', 'Derniers résultats', 'Lancer'])
 
     await userEvent.click(within(ligne).getByRole('button', { name: 'Derniers résultats' }))
     expect(await screen.findByText('68 %')).toBeInTheDocument()
@@ -388,6 +395,43 @@ describe('QuizProf', () => {
       ['3', 'Élève', '0', '0 / 1'],
     ])
     expect(lignes[1]).toHaveAttribute('data-vide')
+    // Le podium ne nomme personne à zéro point : une seule marche.
+    expect(within(screen.getByRole('list', { name: 'Podium' })).getAllByRole('listitem')).toHaveLength(1)
+    // Rien n'a été lancé pour les lire.
+    expect(postes()).toEqual([])
+
+    await userEvent.click(screen.getByRole('button', { name: 'Revenir aux quiz' }))
+    expect(screen.getByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+  })
+
+  it('montre toutes les questions sans lancer de partie, réponses masquées d abord', async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    questionsDuQuiz = reponse({
+      id: 'q1-bases',
+      titre: 'Les bases de la séance 1',
+      seance: 1,
+      duree_s: 40,
+      questions: [
+        { enonce: 'Q une', code: 'print(1)', options: ['1', '2'], bonne_reponse: 0, duree_s: 20, explication: 'Parce que.' },
+        { enonce: 'Q deux', code: '', options: ['a', 'b', 'c'], bonne_reponse: 2, duree_s: 30, explication: '' },
+      ],
+    })
+    monter()
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Voir les questions' }))
+    const liste = await screen.findByRole('list', { name: 'Questions du quiz' })
+    const questions = within(liste).getAllByText(/^Q (une|deux)$/)
+    expect(questions).toHaveLength(2)
+    expect(within(liste).getByText('print(1)')).toBeInTheDocument()
+    // L'écran est projeté : aucune bonne réponse ni explication avant le clic.
+    expect(liste.querySelector('[data-bonne]')).toBeNull()
+    expect(screen.queryByText('Parce que.')).toBeNull()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Afficher les réponses' }))
+    const bonnes = [...liste.querySelectorAll('[data-bonne]')].map((li) => li.textContent)
+    expect(bonnes).toEqual(['A1', 'Cc'])
+    expect(screen.getByText('Parce que.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Masquer les réponses' })).toHaveAttribute('aria-pressed', 'true')
     // Rien n'a été lancé pour les lire.
     expect(postes()).toEqual([])
 
@@ -428,6 +472,58 @@ describe('QuizProf', () => {
     })
     vi.stubGlobal('fetch', fetchFactice)
     render(<QuizProf jetonProf="jeton-prof" />)
-    expect(await screen.findByText('panne')).toBeInTheDocument()
+    // Le catalogue et l'historique disent chacun leur panne.
+    expect(await screen.findAllByText('panne')).toHaveLength(2)
+  })
+
+  it("garde l'historique des parties, avec leurs gagnants, et relit chacune", async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    historique = reponse({
+      parties: [
+        {
+          ...DERNIERE,
+          partie: 7,
+          quiz_id: 'q1-bases',
+          titre: 'Les bases de la séance 1',
+          gagnants: [
+            { prenom: 'Camille', nom: 'Rey', points: 910, bonnes: 1, rang: 1 },
+            { prenom: 'Alex', nom: 'Morel', points: 640, bonnes: 1, rang: 2 },
+          ],
+        },
+        { ...DERNIERE, partie: 3, quiz_id: 'q3-chiffrement', titre: 'Chiffrer', reussite: 0, gagnants: [] },
+      ],
+    })
+    resultatsPartie = reponse({
+      ...DERNIERE,
+      partie: 7,
+      quiz_id: 'q1-bases',
+      titre: 'Les bases de la séance 1',
+      bilan: [],
+      classement: [{ prenom: 'Camille', nom: 'Rey', points: 910, bonnes: 1, rang: 1 }],
+    })
+    monter()
+
+    const section = await screen.findByRole('region', { name: 'Historique des quiz' })
+    const lignes = (await within(section).findAllByRole('row')).slice(1)
+    expect(lignes[0]).toHaveTextContent('1. Camille Rey · 2. Alex Morel')
+    expect(lignes[0]).toHaveTextContent('68 %')
+    expect(lignes[1]).toHaveTextContent("Personne n'a marqué")
+
+    await userEvent.click(within(lignes[0]!).getByRole('button', { name: 'Classement' }))
+    expect(await screen.findByText('Historique des quiz')).toBeInTheDocument()
+    expect(await screen.findByText('Camille Rey')).toBeInTheDocument()
+    // Les marches du podium, en plus du tableau : un seul joueur a marqué.
+    const marches = screen.getByRole('list', { name: 'Podium' })
+    expect(within(marches).getAllByRole('listitem')).toHaveLength(1)
+    expect(postes()).toEqual([])
+
+    await userEvent.click(screen.getByRole('button', { name: 'Revenir aux quiz' }))
+    expect(screen.getByRole('heading', { name: 'Lancer un quiz' })).toBeInTheDocument()
+  })
+
+  it("dit quand aucune partie n'a encore été jouée", async () => {
+    etat = { partie: null, maintenant: new Date().toISOString() }
+    monter()
+    expect(await screen.findByText("Aucune partie jouée pour l'instant.")).toBeInTheDocument()
   })
 })

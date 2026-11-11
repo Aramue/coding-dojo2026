@@ -132,12 +132,27 @@ def test_chaque_notion_appartient_a_un_chapitre_declare():
         assert details["chapitre"] in CHAPITRES, notion
 
 
-def test_les_notions_d_un_meme_chapitre_ont_des_couleurs_distinctes():
-    # Deux notions voisines de la meme couleur se lisent comme une seule : le
-    # menu cesse d'orienter. D'un chapitre a l'autre, les couleurs se reprennent.
-    for chapitre in CHAPITRES:
-        familles = [d["famille"] for d in NOTIONS.values() if d["chapitre"] == chapitre]
-        assert len(familles) == len(set(familles)), chapitre
+FAMILLES = {"variables", "types", "operateurs", "conditions", "boucles", "rappels"}
+
+
+def test_chaque_notion_porte_une_famille_de_la_palette():
+    # La couleur dit le concept : une famille hors palette serait une notion
+    # sans couleur dans le menu.
+    assert {d["famille"] for d in NOTIONS.values()} <= FAMILLES
+
+
+def test_une_notion_de_rappel_est_neutre():
+    # Un rappel n'apporte aucun concept : lui donner une couleur ferait croire
+    # qu'il en ouvre un.
+    for notion, details in NOTIONS.items():
+        rappel = details["titre"].startswith(("Rappels", "Se remettre"))
+        assert (details["famille"] == "rappels") == rappel, notion
+
+
+def test_une_meme_couleur_garde_le_meme_sens_d_un_chapitre_a_l_autre():
+    # Les notions de decision sont ambre partout, les boucles corail partout.
+    assert {NOTIONS[n]["famille"] for n in ("comparer", "combiner", "decider")} == {"conditions"}
+    assert {NOTIONS[n]["famille"] for n in ("repeter", "tantque")} == {"boucles"}
 
 
 def test_chaque_notion_est_acceptee_comme_valeur():

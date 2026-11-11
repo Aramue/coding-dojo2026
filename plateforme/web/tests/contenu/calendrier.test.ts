@@ -6,7 +6,7 @@ import {
   dateLongue,
   estDisponible,
 } from '../../src/contenu/calendrier'
-import type { Chapitre, ContenuPublie, Exercice, Lecon, Notion } from '../../src/contenu/types'
+import type { Chapitre, ContenuPublie, Exercice, Lecon, Notion, Tp } from '../../src/contenu/types'
 
 const BASES: Chapitre = { id: 'bases', ordre: 1, titre: 'Les bases de Python', seance: 1 }
 const DECISIONS: Chapitre = {
@@ -51,11 +51,22 @@ const lecon = (id: string, notionId: string): Lecon => ({
   blocs: [],
 })
 
+const tp = (chapitre: string): Tp => ({
+  id: chapitre,
+  chapitre,
+  titre: chapitre,
+  dureeMin: 60,
+  introduction: [],
+  materiel: [],
+  etapes: [],
+})
+
 const CONTENU: ContenuPublie = {
   chapitres: [BASES, DECISIONS],
   notions: [notion('saisie', 'bases'), notion('calculer', 'decisions')],
   exercices: [exercice('s1-29', 'saisie'), exercice('s2-04', 'calculer')],
   lecons: [lecon('c1-saisie', 'saisie'), lecon('c2-calculer', 'calculer')],
+  tps: [tp('bases'), tp('decisions')],
 }
 
 describe('aujourdhui', () => {
@@ -102,6 +113,8 @@ describe('contenuDisponible', () => {
       notions: [CONTENU.notions[0]],
       exercices: [CONTENU.exercices[0]],
       lecons: [CONTENU.lecons[0]],
+      // Un TP suit son chapitre : ses consignes attendent son ouverture.
+      tps: [CONTENU.tps[0]],
     })
   })
 

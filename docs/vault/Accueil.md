@@ -48,6 +48,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Séance 4 — préparation du TP de stéganographie | ✅ **écrite** — 40 exercices et 5 leçons, voir [[Séance 4]] |
+| Consignes des TP sur la plateforme | ✅ livrées — `/tp/stegano`, huit étapes guidées, voir [[Séance 4]] |
 | Séance 5 — dictionnaires et JSON | ✅ **écrite** — 37 exercices et 4 leçons, voir [[Séance 5]] ; **ouverte le 10 novembre 2026** |
 | Séance 6 — API et `requests` | ✅ **écrite** — 28 exercices et 4 leçons, voir [[Séance 6]] ; réseau réel d'Open-Meteo ([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) ; date d'ouverture provisoire |
 | Intégration continue | ✅ livrée — trois contrôles, [[ADR-017 Une seule branche, des releases par tag]] |

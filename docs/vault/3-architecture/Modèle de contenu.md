@@ -212,18 +212,20 @@ que le front n'en garde aucune copie.
 | `matrices` | Listes de listes | vert | 9 |
 | `binaire` | Binaire et caractères | bleu | 8 |
 | `decoder` | Bits de poids faible et décodage | ambre | 11 |
-| `avantdict` | Rappels avant les dictionnaires | indigo | 3 |
-| `dictionnaires` | Les dictionnaires | ambre | 13 |
-| `imbriques` | Des données imbriquées | vert | 11 |
-| `json` | Lire et écrire du JSON | corail | 10 |
-| `web` | Réseau, URL et HTTP | indigo | 8 |
-| `requetes` | Envoyer une requête | ambre | 8 |
-| `explorer` | Faire varier la requête | vert | 9 |
-| `meteo` | Un programme météo | bleu | 3 |
+| `avantdict` | Rappels avant les dictionnaires | neutre | 3 |
+| `dictionnaires` | Les dictionnaires | violet | 13 |
+| `imbriques` | Des données imbriquées | violet | 11 |
+| `json` | Lire et écrire du JSON | vert | 10 |
+| `web` | Réseau, URL et HTTP | vert | 8 |
+| `requetes` | Envoyer une requête | violet | 8 |
+| `explorer` | Faire varier la requête | violet | 9 |
+| `meteo` | Un programme météo | violet | 3 |
 
-==La couleur suit la notion, pas le concept.== La table `FAMILLES` d'origine mappait
-`print → variables` et `input → types` : la séance 1 n'aurait affiché que deux couleurs pour
-quatre notions. Voir [[Spécification interface]].
+==La couleur dit le concept que la notion enseigne== (décidé le 28 octobre 2026) : violet pour
+ranger des valeurs, vert pour les textes et les types, bleu pour calculer, ambre pour décider,
+corail pour répéter, neutre pour les rappels. Les couleurs de ce tableau datent d'avant cette
+règle, sauf celles des séances 5 et 6 ; la table qui fait foi est `NOTIONS` dans `outils/schema.py`,
+et la règle est dans [[Palette]].
 
 ## Arborescence
 
@@ -280,8 +282,9 @@ contenu/
 `charger_tous()` ignore tout fichier sous un dossier `lecons/` : une leçon n'est pas un exercice,
 et la charger comme tel ferait échouer la validation sur un fichier parfaitement valide.
 
-Ce que la construction publie dans `web/public/contenu/` — **quatre fichiers de contenu, toutes
-séances confondues**, plus deux fichiers pour les exercices d'API ([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) :
+Ce que la construction publie dans `web/public/contenu/` — **cinq fichiers de contenu, toutes
+séances confondues**, plus deux fichiers pour les exercices d'API
+([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) :
 
 | Fichier | Contenu |
 |---|---|
@@ -289,8 +292,21 @@ séances confondues**, plus deux fichiers pour les exercices d'API ([[ADR-018 Op
 | `lecons.json` | les leçons, dans l'ordre du cours — écrit même vide |
 | `notions.json` | la table des notions |
 | `chapitres.json` | la table des chapitres |
+| `tps.json` | les consignes des travaux pratiques — écrit même vide |
 | `requests_dojo.py` | le `requests` du dojo, que le worker installe — voir [[Moteur d'exécution]] |
 | `api_enregistree.json` | les réponses d'Open-Meteo enregistrées, rejouées si le réseau bloque le service |
+
+> [!note] Les consignes de TP, depuis le 28 octobre 2026
+> Un TP se fait **hors de la plateforme**, dans un vrai Python sur la machine de l'élève (PIL,
+> NumPy). La plateforme n'en porte que les **consignes**, découpées en étapes : `tp/<id>.yaml`,
+> servi sur `/tp/<id>` et listé sous « Travaux pratiques », en bas du sommaire. Un TP suit son
+> chapitre : il n'apparaît qu'à l'ouverture de celui-ci ([[ADR-013 Une séance s'ouvre à sa date]]).
+>
+> Chaque étape a un `titre`, un `objectif` d'une phrase et des blocs : ceux des leçons, plus
+> `verifier` — ce que l'élève doit voir à l'écran avant de continuer — et `indice`, replié tant
+> qu'on ne l'ouvre pas. S'y ajoute `schema`, qui désigne par son `nom` un dessin SVG de `SchemaTp.tsx` — `pixels`, `binaire`, `masque`, `octet`, `ligne` : les coordonnées vivent dans le code, jamais dans le YAML. L'élève coche les étapes faites ; la coche vit dans `sessionStorage`, rien
+> ne part au serveur. `charger_tous()` ignore le dossier `tp/` comme il ignore `lecons/` et
+> `quiz/`. Une notion ne doit jamais s'appeler `tp` : `/tp/<id>` se lit avant les notions.
 
 > [!note] Un fichier par nature de contenu, pas un par séance
 > Jusqu'au 14 septembre 2026, chaque séance publiait les siens (`seance-1.json`,

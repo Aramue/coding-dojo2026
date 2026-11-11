@@ -7,8 +7,11 @@ import {
   creerPartie,
   SessionProfRefusee,
   lirePartie,
+  lireQuestions,
   lireResultats,
   listerQuiz,
+  lireHistorique,
+  lireResultatsPartie,
   questionSuivante,
   terminerPartie,
 } from '../prof/quiz'
@@ -19,7 +22,9 @@ import type {
   LigneBilan,
   Participant,
   PlaceProjetee,
+  PartieHistorique,
   PlaceResultat,
+  QuizComplet,
   ResultatsQuiz,
   ResumeQuiz,
 } from '../quiz/types'
@@ -97,6 +102,9 @@ export function QuizProf({
   const [nouvelle, setNouvelle] = useState(false)
   const [inscrits, setInscrits] = useState<number | null>(null)
   const [resultatsDe, setResultatsDe] = useState<string | null>(null)
+  // Une partie de l'historique qu'on relit : son classement complet.
+  const [partieRelue, setPartieRelue] = useState<number | null>(null)
+  const [questionsDe, setQuestionsDe] = useState<string | null>(null)
 
   useEffect(() => {
     // Le nombre d'inscrits, pour lire « 18 sur 24 » plutôt que « 18 ». Sans
@@ -162,15 +170,33 @@ export function QuizProf({
 
       {!etat && <p className="quiz__attente">Chargement…</p>}
       {choisir && resultatsDe && (
-        <Resultats jetonProf={jetonProf} quizId={resultatsDe} onRetour={() => setResultatsDe(null)} />
+        <Resultats
+          charger={() => lireResultats(jetonProf, resultatsDe)}
+          surtitre="Derniers résultats"
+          onRetour={() => setResultatsDe(null)}
+        />
       )}
-      {choisir && !resultatsDe && (
+      {choisir && partieRelue !== null && !resultatsDe && (
+        <Resultats
+          charger={() => lireResultatsPartie(jetonProf, partieRelue)}
+          surtitre="Historique des quiz"
+          onRetour={() => setPartieRelue(null)}
+        />
+      )}
+      {choisir && questionsDe && !resultatsDe && partieRelue === null && (
+        <Questions jetonProf={jetonProf} quizId={questionsDe} onRetour={() => setQuestionsDe(null)} />
+      )}
+      {choisir && !resultatsDe && !questionsDe && partieRelue === null && (
+        <>
         <Catalogue
           jetonProf={jetonProf}
           envoi={envoi}
           onLancer={(id) => void agir(() => creerPartie(jetonProf, id))}
           onResultats={setResultatsDe}
+          onQuestions={setQuestionsDe}
         />
+        <Historique jetonProf={jetonProf} onRelire={setPartieRelue} />
+        </>
       )}
       {partie && !choisir && (
         <Deroule
@@ -201,11 +227,13 @@ function Catalogue({
   envoi,
   onLancer,
   onResultats,
+  onQuestions,
 }: {
   jetonProf: string
   envoi: boolean
   onLancer: (id: string) => void
   onResultats: (id: string) => void
+  onQuestions: (id: string) => void
 }) {
   const [quiz, setQuiz] = useState<ResumeQuiz[] | null>(null)
   const [erreur, setErreur] = useState<string | null>(null)
@@ -221,8 +249,8 @@ function Catalogue({
       <h1 id="titre-catalogue">Lancer un quiz</h1>
       <p className="quiz__aide">
         Les élèves rejoignent depuis leur espace : un bandeau les y invite dès que la partie est
-        créée. Le classement ne montre que les cinq premiers, et le score ne compte nulle part
-        ailleurs.
+        créée. L'écran de la partie ne montre que les trois premiers, et le score ne compte nulle
+        part ailleurs.
       </p>
       {erreur && <p className="quiz__aide">{erreur}</p>}
       {quiz && quiz.length === 0 && (
@@ -245,6 +273,9 @@ function Catalogue({
                   {q.derniere ? <ResumeDerniere derniere={q.derniere} /> : 'Pas encore joué'}
                 </span>
               </span>
+              <button type="button" className="bouton" onClick={() => onQuestions(q.id)}>
+                Voir les questions
+              </button>
               {q.derniere && (
                 <button type="button" className="bouton" onClick={() => onResultats(q.id)}>
                   Derniers résultats
@@ -261,6 +292,79 @@ function Catalogue({
             </li>
           ))}
         </ul>
+      )}
+    </section>
+  )
+}
+
+/**
+ * L'historique : chaque partie jouée, la plus récente d'abord, avec ses
+ * gagnants. Il n'existe que derrière la porte professeur, sous le catalogue —
+ * la mémoire de la classe, pas un tableau d'honneur projeté. Les gagnants sont
+ * ceux du podium : trois au plus, jamais un élève à zéro (ADR-015).
+ */
+function Historique({
+  jetonProf,
+  onRelire,
+}: {
+  jetonProf: string
+  onRelire: (partie: number) => void
+}) {
+  const [parties, setParties] = useState<PartieHistorique[] | null>(null)
+  const [erreur, setErreur] = useState<string | null>(null)
+
+  useEffect(() => {
+    lireHistorique(jetonProf)
+      .then(setParties)
+      .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Historique indisponible.'))
+  }, [jetonProf])
+
+  return (
+    <section className="quiz-prof__historique" aria-labelledby="titre-historique">
+      <h2 id="titre-historique">Historique des quiz</h2>
+      {erreur && <p className="quiz__aide">{erreur}</p>}
+      {parties && parties.length === 0 && (
+        <p className="quiz__aide">Aucune partie jouée pour l'instant.</p>
+      )}
+      {parties && parties.length > 0 && (
+        <table className="classement__table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Quiz</th>
+              <th scope="col">Élèves</th>
+              <th scope="col">Réussite</th>
+              <th scope="col">Gagnants</th>
+              <th scope="col">
+                <span className="sr-only">Classement</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {parties.map((p) => (
+              <tr key={p.partie}>
+                <td>{date(p.terminee_le)}</td>
+                <td>{p.titre}</td>
+                <td className="classement__nombre">{p.joueurs}</td>
+                <td className="classement__nombre">{pourcent(p.reussite)}</td>
+                <td>
+                  {p.gagnants.length === 0
+                    ? "Personne n'a marqué"
+                    : p.gagnants.map((g) => `${g.rang}. ${nomComplet(g)}`).join(' · ')}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    className="bouton bouton--menu"
+                    onClick={() => onRelire(p.partie)}
+                  >
+                    Classement
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </section>
   )
@@ -283,26 +387,29 @@ function ResumeDerniere({ derniere }: { derniere: DernierePartie }) {
  * l'autre —, puis le bilan anonyme, question par question.
  */
 function Resultats({
-  jetonProf,
-  quizId,
+  charger,
+  surtitre,
   onRetour,
 }: {
-  jetonProf: string
-  quizId: string
+  /** Ceux de la dernière partie d'un quiz, ou d'une partie de l'historique. */
+  charger: () => Promise<ResultatsQuiz>
+  surtitre: string
   onRetour: () => void
 }) {
   const [resultats, setResultats] = useState<ResultatsQuiz | null>(null)
   const [erreur, setErreur] = useState<string | null>(null)
 
   useEffect(() => {
-    lireResultats(jetonProf, quizId)
+    charger()
       .then(setResultats)
       .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Résultats indisponibles.'))
-  }, [jetonProf, quizId])
+    // Chargé une fois, à l'ouverture : `charger` est une fonction neuve à chaque rendu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <section className="quiz-prof__resultats" aria-labelledby="titre-resultats">
-      <p className="quiz__surtitre">Derniers résultats</p>
+      <p className="quiz__surtitre">{surtitre}</p>
       <h1 id="titre-resultats">{resultats?.titre ?? 'Résultats'}</h1>
       {erreur && <p className="quiz__aide">{erreur}</p>}
       {resultats && (
@@ -315,6 +422,11 @@ function Resultats({
               {accord(resultats.reponses, 'réponse', 'réponses')}
             </span>
           </p>
+          {podiumDe(resultats.classement).length > 0 && (
+            <div className="quiz-prof__podium">
+              <Marches places={podiumDe(resultats.classement)} />
+            </div>
+          )}
           {resultats.classement.length > 0 && (
             <Classement places={resultats.classement} questions={resultats.bilan.length} />
           )}
@@ -371,9 +483,108 @@ function Classement({ places, questions }: { places: PlaceResultat[]; questions:
   )
 }
 
+/**
+ * Les marches du podium, tirées du classement complet : les mêmes que celles
+ * de la fin de partie, avec la même règle — trois au plus, jamais un élève à
+ * zéro point (ADR-015). Le classement n'a pas de code d'accès ; la clé de
+ * chaque marche est donc son rang dans la liste.
+ */
+function podiumDe(classement: PlaceResultat[]): PlaceProjetee[] {
+  return classement
+    .filter((place) => place.points > 0 && place.rang <= 3)
+    .slice(0, 3)
+    .map((place, i) => ({ ...place, code_acces: `marche-${i}` }))
+}
+
 function nomComplet(place: PlaceResultat): string {
   const nom = [place.prenom?.trim(), place.nom?.trim()].filter(Boolean).join(' ')
   return nom || 'Élève'
+}
+
+/**
+ * Toutes les questions d'un quiz, d'un coup, sans lancer de partie : pour le
+ * relire avant de le jouer, ou repérer une question à réexpliquer.
+ *
+ * Les bonnes réponses sont **masquées à l'ouverture**. Cette page s'ouvre
+ * depuis l'écran du quiz, celui qu'on projette : visibles d'emblée, elles
+ * seraient données à la classe avant la partie. Un bouton les montre.
+ */
+function Questions({
+  jetonProf,
+  quizId,
+  onRetour,
+}: {
+  jetonProf: string
+  quizId: string
+  onRetour: () => void
+}) {
+  const [quiz, setQuiz] = useState<QuizComplet | null>(null)
+  const [erreur, setErreur] = useState<string | null>(null)
+  const [reponses, setReponses] = useState(false)
+
+  useEffect(() => {
+    lireQuestions(jetonProf, quizId)
+      .then(setQuiz)
+      .catch((e: unknown) => setErreur(e instanceof Error ? e.message : 'Questions indisponibles.'))
+  }, [jetonProf, quizId])
+
+  return (
+    <section className="quiz-prof__resultats" aria-labelledby="titre-questions">
+      <p className="quiz__surtitre">Les questions</p>
+      <h1 id="titre-questions">{quiz?.titre ?? 'Questions'}</h1>
+      {erreur && <p className="quiz__aide">{erreur}</p>}
+      {quiz && (
+        <>
+          <div className="quiz-prof__actions quiz-prof__actions--debut">
+            <p className="quiz__aide">
+              {accord(quiz.questions.length, 'question', 'questions')} · séance {quiz.seance}. Rien
+              n'est lancé : les élèves ne voient rien.
+            </p>
+            <button
+              type="button"
+              className="bouton bouton--pause"
+              aria-pressed={reponses}
+              onClick={() => setReponses((r) => !r)}
+            >
+              {reponses ? 'Masquer les réponses' : 'Afficher les réponses'}
+            </button>
+          </div>
+          <ol className="bilan__liste" aria-label="Questions du quiz">
+            {quiz.questions.map((question, rang) => (
+              <li key={rang} className="bilan__ligne">
+                <div className="bilan__entete">
+                  <span className="bilan__numero">Q{rang + 1}</span>
+                  <span className="bilan__enonce">{question.enonce}</span>
+                  <span className="bilan__taux">{question.duree_s} s</span>
+                </div>
+                {question.code && <pre className="bilan__code mono">{question.code}</pre>}
+                <ul className="bilan__repartition">
+                  {question.options.map((option, i) => (
+                    <li
+                      key={i}
+                      data-option={i}
+                      data-bonne={(reponses && i === question.bonne_reponse) || undefined}
+                    >
+                      <span className="bilan__lettre">{LETTRES[i]}</span>
+                      <span className="bilan__option">{option}</span>
+                    </li>
+                  ))}
+                </ul>
+                {reponses && question.explication && (
+                  <p className="quiz-prof__explication">{question.explication}</p>
+                )}
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+      <div className="quiz-prof__actions">
+        <button type="button" className="bouton" onClick={onRetour}>
+          Revenir aux quiz
+        </button>
+      </div>
+    </section>
+  )
 }
 
 function Deroule({

@@ -22,6 +22,7 @@ describe('charte visuelle', () => {
     ['--ope-tint', '--ope-ink'],
     ['--con-tint', '--con-ink'],
     ['--bou-tint', '--bou-ink'],
+    ['--rap-tint', '--rap-ink'],
   ] as const
 
   it.each(familles)('%s / %s atteint AA', (tint, ink) => {

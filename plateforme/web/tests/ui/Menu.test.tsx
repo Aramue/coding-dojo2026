@@ -212,3 +212,36 @@ describe('Menu — l entrée du quiz', () => {
     expect(lien).toHaveTextContent('Aucune partie')
   })
 })
+
+describe('Menu — les travaux pratiques', () => {
+  const TP = {
+    id: 'stegano',
+    chapitre: 'bases',
+    titre: "Le message caché dans l'image",
+    dureeMin: 90,
+    introduction: [],
+    materiel: [],
+    etapes: [],
+  }
+
+  it('range les TP sous les chapitres, et marque celui qu on lit', () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'tp', tp: 'stegano' }} tps={[TP]} />)
+    const section = screen.getByRole('region', { name: 'Travaux pratiques' })
+    const lien = within(section).getByRole('link', { name: /Le message caché dans l'image/ })
+    expect(lien).toHaveAttribute('href', '/tp/stegano')
+    expect(lien).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('se replie comme un chapitre', async () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'connexion' }} tps={[TP]} />)
+    const tete = screen.getByRole('button', { name: /Travaux pratiques/ })
+    expect(tete).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.click(tete)
+    expect(tete).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it("n'affiche pas la section quand aucun TP n'est ouvert", () => {
+    render(<Menu chapitres={CHAPITRES} destination={{ vue: 'connexion' }} />)
+    expect(screen.queryByRole('region', { name: 'Travaux pratiques' })).toBeNull()
+  })
+})
