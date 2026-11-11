@@ -498,7 +498,7 @@ def charger_lecons(racine: Path) -> list[Lecon]:
 
 
 # Un quiz se nomme comme une lecon, avec un q : q1-bases, q2-conditions.
-MOTIF_QUIZ = re.compile(r"^q[1234]-[a-z]+(-[a-z]+)*$")
+MOTIF_QUIZ = re.compile(r"^q[1-6]-[a-z]+(-[a-z]+)*$")
 
 # Le nom d'une exception Python, et rien d'autre : pas de texte libre.
 MOTIF_EXCEPTION = re.compile(r"^[A-Z][A-Za-z]*(Error|Exception)$")
@@ -595,7 +595,7 @@ class Quiz(BaseModel):
     titre: str = Field(min_length=1)
     # Les memes seances que les exercices : un quiz de la seance 4 doit pouvoir
     # s'ecrire des qu'elle existe.
-    seance: int = Field(ge=1, le=4)
+    seance: int = Field(ge=1, le=6)
     questions: list[QuestionQuiz] = Field(min_length=1, max_length=30)
 
     @field_validator("id")
