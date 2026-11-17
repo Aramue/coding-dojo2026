@@ -1,0 +1,23 @@
+id: c7-suivis
+notion: suivis
+ordre: 32
+titre: Les fichiers suivis
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Git ne regarde pas tout ce qui traîne dans le dossier : il **suit** certains fichiers, et seulement ceux-là. Un fichier que tu viens de créer est **non suivi** : git le voit, mais ne le met dans aucun commit tant que tu ne l'as pas ajouté avec `git add`.
+  - type: paragraphe
+    texte: >-
+      Un fichier suivi passe par trois états : **modifié** (tu l'as changé), **indexé** (tu l'as choisi avec `git add`, il entrera dans le prochain commit), puis **validé** (le commit est fait). La commande `git status` te dit où en est chaque fichier.
+  - type: code
+    legende: L'état de chaque fichier
+    executable: true
+    python: |
+      etat = {"moyenne.py": "modifié", "notes.md": "non suivi", "README.md": "validé"}
+      for fichier in etat:
+          print(fichier, "->", etat[fichier])
+      print(len(etat))
+  - type: attention
+    texte: >-
+      **Un fichier non suivi n'arrive jamais sur GitHub.** C'est la raison la plus fréquente du « mon fichier n'est pas dans le dépôt » : il a été créé, jamais ajouté. Au moindre doute, lance `git status` avant de committer.

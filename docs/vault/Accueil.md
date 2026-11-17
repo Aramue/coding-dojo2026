@@ -51,6 +51,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Consignes des TP sur la plateforme | ✅ livrées — `/tp/stegano`, huit étapes guidées, voir [[Séance 4]] |
 | Séance 5 — dictionnaires et JSON | ✅ **écrite** — 37 exercices et 4 leçons, voir [[Séance 5]] ; **ouverte le 10 novembre 2026** |
 | Séance 6 — API et `requests` | ✅ **écrite** — 28 exercices et 4 leçons, voir [[Séance 6]] ; réseau réel d'Open-Meteo ([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) ; date d'ouverture provisoire |
+| Séance 7 — git et GitHub | 🔶 **cours et exercices écrits** — 35 exercices (21 obligatoires, 14 bonus) et 10 leçons, voir [[Séance 7]] ; dépôt modèle, consignes `/tp/git` et slides à faire ; date d'ouverture provisoire |
 | Intégration continue | ✅ livrée — trois contrôles, [[ADR-017 Une seule branche, des releases par tag]] |
 | Mise en production sur la VM | 🔶 en cours — [[Déploiement UNIGE]] |
 | Revue finale de branche | ⬜ à faire |
@@ -96,7 +97,7 @@ Un parcours complet a été joué dans un navigateur : connexion par code d'acc�
 - **Décisions** — [[Journal de décisions]] · [[ADR-009 Routage maison sans bibliothèque]] · [[ADR-010 Abandon de la fiction narrative]] · [[ADR-011 Trois niveaux de réussite]] · [[ADR-012 Le professeur tient la liste de sa classe]] · [[ADR-013 Une séance s'ouvre à sa date]] · [[ADR-014 Le compte professeur se crée au premier lancement]] · [[ADR-015 Quiz en direct et classement encadré]] · [[ADR-016 Temps réel par sonnette WebSocket]] · [[ADR-017 Une seule branche, des releases par tag]] · [[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]
 - **Architecture** — [[Vue d'ensemble]] · [[Moteur d'exécution]] · [[Moteur de validation]] · [[Modèle de contenu]] · [[Messages d'erreur en français]] · [[Tableau de bord]] · [[Déploiement UNIGE]] · [[Exercices d'API et charge machine]] · [[Pièges et invariants]]
 - **Direction artistique** — [[Charte visuelle]] · [[Palette]] · [[Typographie]] · [[Composants signature]]
-- **Pédagogie** — [[Chapitre 1]] · [[Séance 4]] · [[Séance 5]] · [[Séance 6]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
+- **Pédagogie** — [[Chapitre 1]] · [[Séance 4]] · [[Séance 5]] · [[Séance 6]] · [[Séance 7]] · [[Programme d'assemblage]] · [[Bugs réels de la promotion 2025]] · [[Types d'exercices]] · [[Plan de production]]
 - **Références** — [[Sources]] · [[Glossaire]]
 - **Spécifications** — [[Spécification chapitre 1]] · [[Spécification interface]]
 - **Plans** — [[Plan palier 1]] · [[Plan interface]] · [[Plan compte professeur]]

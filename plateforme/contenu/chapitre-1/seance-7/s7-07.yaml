@@ -1,0 +1,33 @@
+id: s7-07
+concept: commit
+notion: commit
+seance: 7
+niveau: normal
+type: predire
+titre: Un commit qui ne prend rien
+obligatoire: true
+enonce: Camille a modifié `moyenne.py`, puis lance cette commande. Pourquoi git ne committe-t-il rien ?
+depart: |-
+  $ git commit -m "fix: corrige le calcul"
+  On branch main
+  Changes not staged for commit:
+          modified:   moyenne.py
+
+  no changes added to commit
+indices:
+- 'Lis la ligne « Changes not staged for commit » : le fichier est modifié, mais pas indexé.'
+- '`git commit` ne prend que les fichiers choisis avec `git add`.'
+tests:
+- type: qcm
+  options:
+  - Le message de commit est mal écrit.
+  - '`moyenne.py` est modifié, mais il n''a pas été choisi avec `git add`.'
+  - Il faut faire un `git push` avant le commit.
+  bonne_reponse: 1
+solution: |-
+  $ git commit -m "fix: corrige le calcul"
+  On branch main
+  Changes not staged for commit:
+          modified:   moyenne.py
+
+  no changes added to commit

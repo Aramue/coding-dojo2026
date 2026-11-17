@@ -1,0 +1,21 @@
+id: s7-25
+concept: branches
+notion: branches
+seance: 7
+niveau: expert
+type: predire
+titre: À quoi sert une branche ?
+obligatoire: false
+enonce: Léo veut essayer une idée risquée sans gêner les autres. Que lui apporte une branche ?
+depart: ''
+indices:
+- Une branche est une ligne parallèle, pas une autre copie du dépôt.
+- '`main` ne bouge pas tant qu''on ne la rejoint pas.'
+tests:
+- type: qcm
+  options:
+  - 'Une ligne d''historique parallèle : il y committe sans toucher à `main`.'
+  - Une copie du dépôt sur le compte d'un autre.
+  - Une sauvegarde qui efface `main`.
+  bonne_reponse: 0
+solution: (aucun)

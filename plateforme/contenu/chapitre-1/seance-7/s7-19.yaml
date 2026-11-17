@@ -1,0 +1,31 @@
+id: s7-19
+concept: diff
+notion: diff
+seance: 7
+niveau: normal
+type: predire
+titre: Un diff qui reste vide
+obligatoire: true
+enonce: Camille a modifié `moyenne.py`, puis lance ces commandes. Pourquoi le premier `git diff` n'affiche-t-il rien ?
+depart: |-
+  $ git add moyenne.py
+  $ git diff
+  $ git diff --staged
+  -    return sum(notes) / len(notes)
+  +    return round(sum(notes) / len(notes), 1)
+indices:
+- Regarde ce que montre le troisième appel, et ce qui a changé entre les deux.
+- '`git diff` compare le dossier à l''index. Après `git add`, il n''y a plus de différence entre eux.'
+tests:
+- type: qcm
+  options:
+  - 'Le fichier est ajouté à l''index : seul `git diff --staged` montre ce changement.'
+  - Git a perdu la modification.
+  - Il faut d'abord faire un `git push`.
+  bonne_reponse: 0
+solution: |-
+  $ git add moyenne.py
+  $ git diff
+  $ git diff --staged
+  -    return sum(notes) / len(notes)
+  +    return round(sum(notes) / len(notes), 1)

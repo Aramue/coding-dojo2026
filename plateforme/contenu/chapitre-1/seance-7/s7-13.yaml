@@ -1,0 +1,29 @@
+id: s7-13
+concept: push
+notion: push
+seance: 7
+niveau: normal
+type: predire
+titre: Un push refusé
+obligatoire: true
+enonce: Léo lance ce push et GitHub le refuse. Que doit-il faire ?
+depart: |-
+  $ git push
+   ! [rejected]        main -> main (fetch first)
+  error: failed to push some refs to 'github.com/leo/tp-git.git'
+  hint: Updates were rejected because the remote contains work that you do not have locally.
+indices:
+- Le message dit que GitHub contient du travail que Léo n'a pas chez lui.
+- On récupère d'abord ce travail, on ne l'écrase jamais.
+tests:
+- type: qcm
+  options:
+  - '`git push --force`, pour écraser ce qu''il y a sur GitHub.'
+  - '`git pull`, puis recommencer son `git push`.'
+  - Supprimer son dépôt et recommencer.
+  bonne_reponse: 1
+solution: |-
+  $ git push
+   ! [rejected]        main -> main (fetch first)
+  error: failed to push some refs to 'github.com/leo/tp-git.git'
+  hint: Updates were rejected because the remote contains work that you do not have locally.

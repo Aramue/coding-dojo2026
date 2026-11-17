@@ -1,0 +1,22 @@
+id: s7-14
+concept: push
+notion: push
+seance: 7
+niveau: normal
+type: predire
+titre: Une habitude dangereuse
+obligatoire: true
+enonce: Une seule de ces habitudes est dangereuse. Laquelle ?
+depart: ''
+indices:
+- Pense à ce que l'historique garde, même quand on supprime un fichier ensuite.
+- Un mot de passe poussé reste lisible dans l'ancien commit.
+tests:
+- type: qcm
+  options:
+  - Faire un `git pull` avant de se mettre au travail.
+  - Pousser souvent de petits commits.
+  - Pousser le mot de passe de la base de données dans un fichier, en se promettant de l'effacer après.
+  - Écrire un message de commit qui dit la vérité.
+  bonne_reponse: 2
+solution: (aucun)

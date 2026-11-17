@@ -1,0 +1,31 @@
+id: s7-18
+concept: diff
+notion: diff
+seance: 7
+niveau: normal
+type: predire
+titre: Lire un diff
+obligatoire: true
+enonce: Voici ce que montre `git diff`. Qu'est-ce qui a changé dans `moyenne.py` ?
+depart: |-
+  $ git diff moyenne.py
+  @@ -1,2 +1,2 @@
+   def moyenne(notes):
+  -    return sum(notes) / len(notes)
+  +    return round(sum(notes) / len(notes), 1)
+indices:
+- Une ligne en `-` a été retirée, une ligne en `+` a été ajoutée à sa place.
+- 'La ligne qui commence par un espace n''a pas changé : c''est du contexte.'
+tests:
+- type: qcm
+  options:
+  - La ligne `def moyenne(notes):` a été retirée.
+  - La moyenne est maintenant arrondie à une décimale.
+  - 'Rien : les lignes `-` et `+` sont identiques.'
+  bonne_reponse: 1
+solution: |-
+  $ git diff moyenne.py
+  @@ -1,2 +1,2 @@
+   def moyenne(notes):
+  -    return sum(notes) / len(notes)
+  +    return round(sum(notes) / len(notes), 1)

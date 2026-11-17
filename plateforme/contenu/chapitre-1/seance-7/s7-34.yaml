@@ -1,0 +1,29 @@
+id: s7-34
+concept: equipe
+notion: equipe
+seance: 7
+niveau: expert
+type: predire
+titre: Qui a corrigé ça ?
+obligatoire: false
+enonce: Léo se demande qui a corrigé la division par zéro. Que lui répond cet historique ?
+depart: |-
+  $ git log --format="%an : %s"
+  Camille : feat: ajoute le menu
+  Léo : fix: corrige la division par zéro
+  Camille : docs: explique le menu
+indices:
+- Chaque ligne donne l'auteur, puis le message du commit.
+- Le message `fix:` dit ce qui a été corrigé.
+tests:
+- type: qcm
+  options:
+  - Camille.
+  - Léo.
+  - On ne peut pas le savoir.
+  bonne_reponse: 1
+solution: |-
+  $ git log --format="%an : %s"
+  Camille : feat: ajoute le menu
+  Léo : fix: corrige la division par zéro
+  Camille : docs: explique le menu

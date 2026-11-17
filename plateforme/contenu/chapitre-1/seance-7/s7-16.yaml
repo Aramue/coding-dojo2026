@@ -1,0 +1,21 @@
+id: s7-16
+concept: suivis
+notion: suivis
+seance: 7
+niveau: normal
+type: predire
+titre: Le fichier qui n'est pas parti
+obligatoire: true
+enonce: Camille crée `notes.md`, modifie `moyenne.py`, puis fait `git add moyenne.py`, `git commit` et `git push`. Sur GitHub, `notes.md` n'apparaît pas. Pourquoi ?
+depart: ''
+indices:
+- Quels fichiers Camille a-t-elle ajoutés avec `git add` ?
+- Un fichier non suivi n'entre dans aucun commit.
+tests:
+- type: qcm
+  options:
+  - GitHub refuse les fichiers `.md`.
+  - '`notes.md` n''a jamais été ajouté avec `git add` : il est resté non suivi.'
+  - Il faut attendre quelques minutes.
+  bonne_reponse: 1
+solution: (aucun)

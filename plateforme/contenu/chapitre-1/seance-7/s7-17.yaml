@@ -1,0 +1,28 @@
+id: s7-17
+concept: suivis
+notion: suivis
+seance: 7
+niveau: normal
+type: completer
+titre: Les fichiers à ajouter
+obligatoire: true
+enonce: 'Le dictionnaire `etat` donne l''état de chaque fichier. Complète les trous pour ranger dans `a_ajouter` les fichiers « modifié » ou « non suivi » : ceux qu''il faut encore ajouter avec `git add`.'
+depart: |-
+  etat = {"moyenne.py": "modifié", "notes.md": "non suivi", "README.md": "validé"}
+  a_ajouter = []
+  for fichier in etat:
+      if etat[fichier] == _____ or etat[fichier] == _____:
+          a_ajouter._____(fichier)
+indices:
+- 'Les deux premiers trous sont des textes : regarde les états écrits dans le dictionnaire.'
+- Pour ajouter un élément à la fin d'une liste, on écrit `liste.append(valeur)`.
+tests:
+- type: variable
+  nom: a_ajouter
+  valeur_attendue: '[''moyenne.py'', ''notes.md'']'
+solution: |-
+  etat = {"moyenne.py": "modifié", "notes.md": "non suivi", "README.md": "validé"}
+  a_ajouter = []
+  for fichier in etat:
+      if etat[fichier] == "modifié" or etat[fichier] == "non suivi":
+          a_ajouter.append(fichier)

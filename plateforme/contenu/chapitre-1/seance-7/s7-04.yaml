@@ -1,0 +1,21 @@
+id: s7-04
+concept: fork
+notion: fork
+seance: 7
+niveau: normal
+type: predire
+titre: Où est la copie ?
+obligatoire: true
+enonce: Tu cliques sur le bouton **Fork** de la page GitHub du dépôt du professeur. Où se trouve la copie ?
+depart: ''
+indices:
+- 'Le fork est un bouton de GitHub : il agit sur le site, pas sur ton ordinateur.'
+- C'est le clone qui copie un dépôt sur ta machine.
+tests:
+- type: qcm
+  options:
+  - Dans ton compte GitHub, sur le site.
+  - Dans un nouveau dossier sur ton ordinateur.
+  - Chez le professeur, dans un second dépôt.
+  bonne_reponse: 0
+solution: (aucun)

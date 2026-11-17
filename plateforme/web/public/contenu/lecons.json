@@ -1542,5 +1542,319 @@
       }
     ],
     "famille": "variables"
+  },
+  {
+    "id": "c7-pourquoi",
+    "notion": "pourquoi",
+    "ordre": 28,
+    "titre": "À quoi sert git",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Tu connais cette situation : `rendu.py`, puis `rendu_v2.py`, puis `rendu_final.py`, puis `rendu_final_VRAI.py`. Lequel est le bon ? À deux, c'est pire : chacun modifie sa copie, et la dernière qu'on enregistre écrase l'autre."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "**git** est un logiciel installé sur ton ordinateur. Il garde l'**historique** d'un dossier : chaque étape que tu décides de conserver s'appelle un **commit**. Il n'y a qu'un seul fichier `rendu.py`, mais git se souvient de toutes ses versions, avec la date, l'auteur et une phrase qui explique le changement."
+      },
+      {
+        "type": "code",
+        "legende": "Un historique, c'est une liste de commits",
+        "python": "historique = [\n    {\"auteur\": \"Camille\", \"message\": \"feat: ajoute le calcul de la moyenne\"},\n    {\"auteur\": \"Leo\", \"message\": \"fix: corrige la division par zéro\"},\n    {\"auteur\": \"Camille\", \"message\": \"docs: explique comment lancer le programme\"},\n]\nfor commit in historique:\n    print(commit[\"auteur\"], \":\", commit[\"message\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ce que git résout : **retrouver** une ancienne version quand on a cassé quelque chose, **savoir** qui a changé quoi et pourquoi, et **travailler à plusieurs** sur les mêmes fichiers sans s'écraser."
+      },
+      {
+        "type": "attention",
+        "texte": "**git n'est pas GitHub.** git est le logiciel, sur ton ordinateur : il marche sans internet. GitHub est un site qui héberge des dépôts git pour les partager. On peut utiliser git sans GitHub, jamais l'inverse."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c7-fork",
+    "notion": "fork",
+    "ordre": 29,
+    "titre": "Fork et clone",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un dossier suivi par git s'appelle un **dépôt** (en anglais, *repository*, ou *repo*). Le dépôt du TP appartient au professeur, et tu n'as pas le droit d'y écrire. Il te faut donc ta propre copie."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le **fork** est un bouton de GitHub : il copie un dépôt dans **ton** compte, sur GitHub. Le **clone** (`git clone adresse`) copie ensuite ce dépôt de GitHub **sur ta machine**, dans un dossier. Deux copies, deux endroits différents."
+      },
+      {
+        "type": "code",
+        "legende": "Trois copies, indépendantes l'une de l'autre",
+        "python": "depots = {\"professeur\": [\"README.md\", \"moyenne.py\"], \"mon fork\": [], \"ma machine\": []}\n\nfor fichier in depots[\"professeur\"]:\n    depots[\"mon fork\"].append(fichier)\nfor fichier in depots[\"mon fork\"]:\n    depots[\"ma machine\"].append(fichier)\n\ndepots[\"ma machine\"].append(\"notes.md\")\nprint(depots[\"ma machine\"])\nprint(depots[\"mon fork\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le fichier `notes.md` n'existe que sur ta machine : ton fork et le dépôt du professeur ne le voient pas. Pour l'envoyer, il faudra un **push**, que tu verras dans deux leçons."
+      },
+      {
+        "type": "attention",
+        "texte": "**On clone son fork, jamais l'original.** Sur l'original, tu n'as pas le droit d'envoyer quoi que ce soit : ton premier push serait refusé."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c7-commit",
+    "notion": "commit",
+    "ordre": 30,
+    "titre": "Le commit et ses conventions",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un **commit** est une photo du projet à un instant, accompagnée d'un message. Il se fait en deux gestes : `git add fichier` choisit ce qui entrera dans la photo, puis `git commit -m \"message\"` la prend."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un historique de messages comme « modif », « truc » ou « fini » ne sert à personne, pas même à toi dans trois semaines. On suit donc une **convention** : `type: description`. Le type dit la nature du changement."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "`feat` ajoute une fonctionnalité · `fix` corrige un bug · `docs` touche à la documentation · `refactor` réécrit sans changer le résultat · `chore` range ou règle (tâche annexe)."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "La description commence par un **verbe** (ajoute, corrige, explique), tient en **50 caractères** environ et ne finit pas par un point. Exemple : `fix: corrige la division par zéro`."
+      },
+      {
+        "type": "code",
+        "legende": "Découper un message de commit",
+        "python": "message = \"fix: corrige la division par zéro\"\nmorceaux = message.split(\": \")\nprint(morceaux[0])\nprint(morceaux[1])\nprint(len(message))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Le message est entre guillemets.** `git commit -m fix: corrige` sans guillemets est mal lu par le terminal. Et sans `git add` avant, git répond qu'il n'y a rien à valider."
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c7-push",
+    "notion": "push",
+    "ordre": 31,
+    "titre": "Envoyer et recevoir",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un commit vit d'abord **sur ta machine**. GitHub ne le sait pas, et tes camarades non plus. `git push` envoie tes commits vers GitHub (le dépôt distant, nommé `origin`) ; `git pull` rapporte ceux que d'autres y ont envoyés."
+      },
+      {
+        "type": "code",
+        "legende": "Ce qu'un push envoie",
+        "python": "local = [\"premier commit\", \"ajoute moyenne.py\", \"corrige le calcul\"]\ngithub = [\"premier commit\", \"ajoute moyenne.py\"]\n\na_pousser = []\nfor commit in local:\n    if commit not in github:\n        a_pousser.append(commit)\nprint(a_pousser)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Si quelqu'un a poussé avant toi, GitHub refuse ton push avec le message `rejected ... fetch first`. Ce n'est pas une panne : ton historique est en retard. Fais un `git pull`, puis recommence ton push."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les habitudes qui évitent les ennuis : **un `git pull` avant de se mettre au travail**, des commits **petits et cohérents** poussés souvent, et un message qui dit la vérité."
+      },
+      {
+        "type": "attention",
+        "texte": "**Ne pousse jamais un mot de passe, une clé ou un fichier personnel.** L'historique garde tout : même supprimé dans le commit suivant, le secret reste lisible dans l'ancien. Et n'utilise pas `git push --force` sur un dépôt partagé : il efface le travail des autres."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c7-suivis",
+    "notion": "suivis",
+    "ordre": 32,
+    "titre": "Les fichiers suivis",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Git ne regarde pas tout ce qui traîne dans le dossier : il **suit** certains fichiers, et seulement ceux-là. Un fichier que tu viens de créer est **non suivi** : git le voit, mais ne le met dans aucun commit tant que tu ne l'as pas ajouté avec `git add`."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un fichier suivi passe par trois états : **modifié** (tu l'as changé), **indexé** (tu l'as choisi avec `git add`, il entrera dans le prochain commit), puis **validé** (le commit est fait). La commande `git status` te dit où en est chaque fichier."
+      },
+      {
+        "type": "code",
+        "legende": "L'état de chaque fichier",
+        "python": "etat = {\"moyenne.py\": \"modifié\", \"notes.md\": \"non suivi\", \"README.md\": \"validé\"}\nfor fichier in etat:\n    print(fichier, \"->\", etat[fichier])\nprint(len(etat))\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Un fichier non suivi n'arrive jamais sur GitHub.** C'est la raison la plus fréquente du « mon fichier n'est pas dans le dépôt » : il a été créé, jamais ajouté. Au moindre doute, lance `git status` avant de committer."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c7-diff",
+    "notion": "diff",
+    "ordre": 33,
+    "titre": "Voir la différence",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Avant de committer, on regarde ce qui a changé : `git diff` compare ton fichier à sa dernière version validée, ligne par ligne. Une ligne qui commence par `-` a été **retirée**, une ligne qui commence par `+` a été **ajoutée**. Une ligne modifiée apparaît deux fois : l'ancienne en `-`, la nouvelle en `+`."
+      },
+      {
+        "type": "code",
+        "legende": "Calculer une différence à la main",
+        "python": "avant = [\"a = 10\", \"b = 5\", \"print(a + b)\"]\napres = [\"a = 10\", \"b = 6\", \"print(a + b)\"]\n\nfor ligne in avant:\n    if ligne not in apres:\n        print(\"-\", ligne)\nfor ligne in apres:\n    if ligne not in avant:\n        print(\"+\", ligne)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Une fois le fichier ajouté avec `git add`, `git diff` ne montre plus rien : le changement est dans l'index. Pour le voir, on écrit `git diff --staged`."
+      },
+      {
+        "type": "attention",
+        "texte": "**Lis toujours le diff avant un commit.** C'est là qu'on découvre le `print` de débogage oublié, ou la ligne qu'on n'avait pas l'intention de toucher."
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c7-gitignore",
+    "notion": "gitignore",
+    "ordre": 34,
+    "titre": "Bonus : ignorer des fichiers",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Dès que tu lances ton programme dans ton éditeur, des fichiers apparaissent que personne n'a envie de partager : le dossier `.idea/` de l'éditeur, le dossier `__pycache__/` de Python, parfois un fichier de mots de passe. Dans `git status`, ils traînent en « non suivi », et un `git add .` distrait les enverrait sur GitHub."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Le fichier **`.gitignore`**, à la racine du dépôt, liste ce que git doit ignorer, une règle par ligne : `.idea/` pour un dossier, `*.pyc` pour tous les fichiers qui finissent par `.pyc`, `secret.txt` pour un fichier précis. On le committe comme un autre."
+      },
+      {
+        "type": "code",
+        "legende": "Quels fichiers sont ignorés ?",
+        "python": "regles = [\"*.pyc\", \"secret.txt\", \".idea/\"]\nfichiers = [\"moyenne.py\", \"moyenne.pyc\", \"secret.txt\", \".idea/workspace.xml\"]\n\nfor fichier in fichiers:\n    ignore = False\n    for regle in regles:\n        if regle.startswith(\"*\"):\n            if fichier.endswith(regle[1:]):\n                ignore = True\n        elif regle in fichier:\n            ignore = True\n    print(fichier, ignore)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Le `.gitignore` n'agit que sur les fichiers non suivis.** Si un fichier a déjà été committé, l'ajouter ensuite au `.gitignore` ne change rien : git continue de le suivre. Il faut d'abord le retirer du suivi avec `git rm --cached fichier`."
+      }
+    ],
+    "famille": "types"
+  },
+  {
+    "id": "c7-branches",
+    "notion": "branches",
+    "ordre": 35,
+    "titre": "Bonus : les branches",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Tout le monde travaille sur la même ligne d'historique, la branche **`main`**. Si tu essaies une idée risquée, tu peux casser le travail de tous. Une **branche** est une ligne parallèle : tu y fais des commits à ton rythme, et `main` ne bouge pas tant que tu ne décides pas de l'y rejoindre."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "On crée une branche et on s'y place avec `git switch -c ma-fonction`. On revient à `main` avec `git switch main`. `git branch` liste les branches, et une étoile marque celle où tu es. Pour publier ta branche : `git push -u origin ma-fonction`."
+      },
+      {
+        "type": "code",
+        "legende": "Deux lignes d'historique",
+        "python": "branches = {\n    \"main\": [\"premier commit\", \"ajoute moyenne.py\"],\n    \"ma-fonction\": [\"premier commit\", \"ajoute moyenne.py\"],\n}\nbranches[\"ma-fonction\"].append(\"feat: ajoute la médiane\")\n\nprint(branches[\"main\"])\nprint(branches[\"ma-fonction\"])\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Un commit va sur la branche où tu te trouves.** Avant de committer, vérifie avec `git branch` ou `git status` que tu n'es pas sur `main` par mégarde."
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "c7-fusion",
+    "notion": "fusion",
+    "ordre": 36,
+    "titre": "Bonus : fusionner et résoudre un conflit",
+    "dureeMin": 4,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Une fois ta branche poussée, tu demandes à la rejoindre à `main` : c'est une **pull request** sur GitHub (une *merge request*, ou MR, sur GitLab : c'est la même idée). Les autres lisent tes changements, commentent, puis quelqu'un **fusionne**. `main` ne reçoit que du travail relu."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Quand deux personnes modifient **la même ligne** du même fichier, git ne peut pas choisir : c'est un **conflit**. Il écrit les deux versions dans le fichier, entre des marqueurs."
+      },
+      {
+        "type": "code",
+        "legende": "Un fichier en conflit",
+        "python": "fichier = [\n    \"def moyenne(notes):\",\n    \"<<<<<<< HEAD\",\n    \"    return sum(notes) / len(notes)\",\n    \"=======\",\n    \"    return round(sum(notes) / len(notes), 1)\",\n    \">>>>>>> ma-fonction\",\n]\nfor ligne in fichier:\n    print(ligne)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Entre `<<<<<<<` et `=======` : **ta** version, celle de la branche où tu es. Entre `=======` et `>>>>>>>` : celle de l'**autre**. Résoudre, c'est ouvrir le fichier, garder ce qui est juste, **effacer les trois lignes de marqueurs**, puis faire `git add` et un commit."
+      },
+      {
+        "type": "attention",
+        "texte": "**Un fichier qui contient encore `<<<<<<<` n'est pas résolu.** Si tu le committes ainsi, les marqueurs deviennent du code, et le programme plante."
+      }
+    ],
+    "famille": "operateurs"
+  },
+  {
+    "id": "c7-equipe",
+    "notion": "equipe",
+    "ordre": 37,
+    "titre": "Bonus : travailler en équipe",
+    "dureeMin": 3,
+    "blocs": [
+      {
+        "type": "paragraphe",
+        "texte": "Un dépôt partagé tient grâce à quelques habitudes : **on tire avant de travailler** (`git pull`), **on ne committe pas directement sur `main`** (on passe par une branche et une pull request), **on fait des commits petits** avec un message clair, et **on relit** le travail des autres avant de fusionner."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Un historique bien tenu répond à des questions : qui a écrit cette ligne, et pourquoi ? Quand ce bug est-il apparu ? Les messages `feat:` et `fix:` en font un journal que n'importe qui peut relire."
+      },
+      {
+        "type": "code",
+        "legende": "Combien de commits par personne ?",
+        "python": "commits = [\n    {\"auteur\": \"Camille\", \"message\": \"feat: ajoute le menu\"},\n    {\"auteur\": \"Leo\", \"message\": \"fix: corrige le calcul\"},\n    {\"auteur\": \"Camille\", \"message\": \"docs: explique le menu\"},\n]\ncompte = {}\nfor commit in commits:\n    auteur = commit[\"auteur\"]\n    if auteur in compte:\n        compte[auteur] += 1\n    else:\n        compte[auteur] = 1\nprint(compte)\n",
+        "executable": true,
+        "entrees": []
+      },
+      {
+        "type": "attention",
+        "texte": "**Une critique porte sur le code, jamais sur la personne.** Dans une pull request, on écrit « cette ligne plantera si la liste est vide », pas « tu n'as pas réfléchi »."
+      }
+    ],
+    "famille": "variables"
   }
 ]

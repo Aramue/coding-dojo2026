@@ -187,5 +187,75 @@
     "titre": "Un programme météo",
     "famille": "variables",
     "chapitre": "services"
+  },
+  {
+    "id": "pourquoi",
+    "ordre": 28,
+    "titre": "À quoi sert git",
+    "famille": "variables",
+    "chapitre": "versions"
+  },
+  {
+    "id": "fork",
+    "ordre": 29,
+    "titre": "Fork et clone",
+    "famille": "variables",
+    "chapitre": "versions"
+  },
+  {
+    "id": "commit",
+    "ordre": 30,
+    "titre": "Le commit et ses conventions",
+    "famille": "types",
+    "chapitre": "versions"
+  },
+  {
+    "id": "push",
+    "ordre": 31,
+    "titre": "Envoyer et recevoir",
+    "famille": "variables",
+    "chapitre": "versions"
+  },
+  {
+    "id": "suivis",
+    "ordre": 32,
+    "titre": "Les fichiers suivis",
+    "famille": "variables",
+    "chapitre": "versions"
+  },
+  {
+    "id": "diff",
+    "ordre": 33,
+    "titre": "Voir la différence",
+    "famille": "operateurs",
+    "chapitre": "versions"
+  },
+  {
+    "id": "gitignore",
+    "ordre": 34,
+    "titre": "Bonus : ignorer des fichiers",
+    "famille": "types",
+    "chapitre": "versions"
+  },
+  {
+    "id": "branches",
+    "ordre": 35,
+    "titre": "Bonus : les branches",
+    "famille": "variables",
+    "chapitre": "versions"
+  },
+  {
+    "id": "fusion",
+    "ordre": 36,
+    "titre": "Bonus : fusionner et résoudre un conflit",
+    "famille": "operateurs",
+    "chapitre": "versions"
+  },
+  {
+    "id": "equipe",
+    "ordre": 37,
+    "titre": "Bonus : travailler en équipe",
+    "famille": "variables",
+    "chapitre": "versions"
   }
 ]

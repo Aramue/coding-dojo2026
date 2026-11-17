@@ -1,0 +1,31 @@
+id: s7-01
+concept: pourquoi
+notion: pourquoi
+seance: 7
+niveau: normal
+type: predire
+titre: Laquelle est la bonne version ?
+obligatoire: true
+enonce: Camille range ses rendus dans un dossier, sans git. Quel est le principal problème de cette façon de faire ?
+depart: |-
+  rendu.py
+  rendu_v2.py
+  rendu_final.py
+  rendu_final_VRAI.py
+  rendu_final_VRAI_corrige.py
+indices:
+- 'Regarde les noms : peux-tu dire sans les ouvrir lequel est le plus récent ?'
+- Un historique git remplace ces fichiers par un seul fichier et la liste de ses versions.
+tests:
+- type: qcm
+  options:
+  - Les noms de fichiers sont trop longs.
+  - On ne sait pas laquelle est la dernière version, ni ce qui a changé de l'une à l'autre.
+  - Il y a trop de fichiers pour l'ordinateur.
+  bonne_reponse: 1
+solution: |-
+  rendu.py
+  rendu_v2.py
+  rendu_final.py
+  rendu_final_VRAI.py
+  rendu_final_VRAI_corrige.py

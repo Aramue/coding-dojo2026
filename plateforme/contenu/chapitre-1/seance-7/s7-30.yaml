@@ -1,0 +1,31 @@
+id: s7-30
+concept: fusion
+notion: fusion
+seance: 7
+niveau: expert
+type: predire
+titre: Lire un conflit
+obligatoire: false
+enonce: Camille est sur `main` et fusionne `ma-fonction`. Git s'arrête sur ce fichier. Quelle ligne vient de la branche `ma-fonction` ?
+depart: |-
+  <<<<<<< HEAD
+  prix = 10
+  =======
+  prix = 12
+  >>>>>>> ma-fonction
+indices:
+- 'Entre `<<<<<<<` et `=======` : la branche où l''on est. Après `=======` : l''autre branche.'
+- Le nom de la branche est écrit sur la dernière ligne.
+tests:
+- type: qcm
+  options:
+  - '`prix = 10`'
+  - '`prix = 12`'
+  - Les deux.
+  bonne_reponse: 1
+solution: |-
+  <<<<<<< HEAD
+  prix = 10
+  =======
+  prix = 12
+  >>>>>>> ma-fonction

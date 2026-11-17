@@ -1,0 +1,21 @@
+id: s7-23
+concept: gitignore
+notion: gitignore
+seance: 7
+niveau: expert
+type: predire
+titre: Déjà suivi, donc plus ignoré
+obligatoire: false
+enonce: '`secret.txt` a déjà été committé. Léo l''ajoute ensuite au `.gitignore`, puis le modifie. Que montre `git status` ?'
+depart: ''
+indices:
+- Le `.gitignore` ne s'applique qu'aux fichiers que git ne suit pas encore.
+- 'Pour arrêter de suivre un fichier : `git rm --cached secret.txt`.'
+tests:
+- type: qcm
+  options:
+  - 'Rien : le `.gitignore` l''ignore désormais.'
+  - '`secret.txt` apparaît toujours comme modifié : git le suit déjà.'
+  - Git supprime `secret.txt`.
+  bonne_reponse: 1
+solution: (aucun)

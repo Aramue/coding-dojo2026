@@ -1,0 +1,27 @@
+id: s7-02
+concept: pourquoi
+notion: pourquoi
+seance: 7
+niveau: normal
+type: predire
+titre: Deux personnes, un fichier
+obligatoire: true
+enonce: Camille et Léo modifient chacun leur copie de `moyenne.py`, puis s'envoient le fichier par mail. Camille enregistre celui de Léo à la place du sien. Que devient le travail de Camille ?
+depart: |-
+  Camille : ajoute la médiane
+  Léo : corrige la division par zéro
+  Camille enregistre le fichier de Léo dans son dossier.
+indices:
+- Un fichier enregistré à la place d'un autre remplace son contenu.
+- Sans historique, rien ne se souvient de l'ancienne version.
+tests:
+- type: qcm
+  options:
+  - Il est fusionné avec celui de Léo.
+  - 'Il est perdu : le fichier de Léo l''a écrasé.'
+  - Les deux versions sont gardées automatiquement.
+  bonne_reponse: 1
+solution: |-
+  Camille : ajoute la médiane
+  Léo : corrige la division par zéro
+  Camille enregistre le fichier de Léo dans son dossier.

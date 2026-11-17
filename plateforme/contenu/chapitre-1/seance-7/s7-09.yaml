@@ -1,0 +1,38 @@
+id: s7-09
+concept: commit
+notion: commit
+seance: 7
+niveau: normal
+type: debug
+titre: Un compteur trop généreux
+obligatoire: true
+enonce: 'Ce programme compte les messages de commit qui commencent par un type connu (`feat`, `fix` ou `docs`). Il en trouve trop : `ajoute fix pour le menu` ne suit pas la convention. Répare-le.'
+depart: |-
+  messages = ["feat: ajoute le menu", "ajoute fix pour le menu", "docs: explique le menu", "fini"]
+  types = ["feat", "fix", "docs"]
+  valides = 0
+  for message in messages:
+      for type_commit in types:
+          if type_commit in message:
+              valides = valides + 1
+  print(valides)
+indices:
+- '`in` cherche le type n''importe où dans le message. Où doit-il se trouver ?'
+- 'Un type valide est au **début** du message, suivi de deux-points : `message.startswith(type_commit + ":")`.'
+tests:
+- type: variable
+  nom: valides
+  valeur_attendue: '2'
+  type_attendu: int
+- type: sortie
+  entrees: []
+  attendu: '2'
+solution: |-
+  messages = ["feat: ajoute le menu", "ajoute fix pour le menu", "docs: explique le menu", "fini"]
+  types = ["feat", "fix", "docs"]
+  valides = 0
+  for message in messages:
+      for type_commit in types:
+          if message.startswith(type_commit + ":"):
+              valides = valides + 1
+  print(valides)

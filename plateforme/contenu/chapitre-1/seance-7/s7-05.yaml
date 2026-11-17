@@ -1,0 +1,21 @@
+id: s7-05
+concept: fork
+notion: fork
+seance: 7
+niveau: normal
+type: predire
+titre: Dans quel ordre ?
+obligatoire: true
+enonce: Tu dois modifier le dépôt du professeur et envoyer ton travail. Quel ordre est le bon ?
+depart: ''
+indices:
+- Tu n'as pas le droit d'envoyer quoi que ce soit dans le dépôt du professeur.
+- On commence par obtenir sa propre copie sur GitHub, puis on la rapporte chez soi.
+tests:
+- type: qcm
+  options:
+  - Cloner le dépôt du professeur, faire un fork, modifier, envoyer.
+  - Faire un fork, cloner **ton** fork, modifier, committer, envoyer.
+  - Modifier, faire un fork, cloner, committer.
+  bonne_reponse: 1
+solution: (aucun)

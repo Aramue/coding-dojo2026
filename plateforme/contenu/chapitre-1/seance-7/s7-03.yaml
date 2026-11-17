@@ -1,0 +1,21 @@
+id: s7-03
+concept: pourquoi
+notion: pourquoi
+seance: 7
+niveau: normal
+type: predire
+titre: git ou GitHub ?
+obligatoire: true
+enonce: Tu es dans le train, sans internet, avec un projet suivi par git sur ton ordinateur. Que peux-tu faire ?
+depart: ''
+indices:
+- git est un logiciel installé chez toi. GitHub est un site.
+- Envoyer des commits vers un site demande une connexion. En faire, non.
+tests:
+- type: qcm
+  options:
+  - 'Rien : git a besoin de GitHub pour fonctionner.'
+  - 'Des commits : git marche sur ta machine, et seul l''envoi vers GitHub a besoin d''internet.'
+  - 'Des commits et des envois : GitHub les recevra plus tard tout seul.'
+  bonne_reponse: 1
+solution: (aucun)

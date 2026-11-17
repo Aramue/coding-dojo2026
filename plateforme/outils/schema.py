@@ -9,7 +9,7 @@ from typing import Annotated, Literal, Union
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-MOTIF_ID = re.compile(r"^s[123456]-[0-9]{2}(-expert)?$")
+MOTIF_ID = re.compile(r"^s[1234567]-[0-9]{2}(-expert)?$")
 
 # Construit a partir de points de code explicites plutot que recopie depuis des
 # emoji litteraux : un selecteur de variation invisible (U+FE0F) s'etait glisse
@@ -89,7 +89,7 @@ class Exercice(BaseModel):
     # d'exercices et une couleur. Le concept, lui, reste libre et sert au
     # regroupement pedagogique fin. Voir NOTIONS plus bas.
     notion: str
-    seance: int = Field(ge=1, le=6)
+    seance: int = Field(ge=1, le=7)
     niveau: Literal["normal", "expert"]
     type: Literal["predire", "debug", "completer", "ecrire"]
     titre: str
@@ -149,7 +149,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     ]
 
 
-MOTIF_LECON = re.compile(r"^c[123456]-[a-z]+$")
+MOTIF_LECON = re.compile(r"^c[1234567]-[a-z]+$")
 
 # Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
 # navigation : elle porte une lecon et un groupe d'exercices.
@@ -354,6 +354,71 @@ NOTIONS: dict[str, dict] = {
         "famille": "variables",
         "chapitre": "services",
     },
+    # --- Seance 7 ---
+    # Git et GitHub. Aucune de ces notions n'est du Python : la couleur suit donc ce
+    # que l'exercice manipule — des textes pour les messages et les motifs, des
+    # valeurs rangees pour les etats et les historiques, une comparaison pour les
+    # differences et les conflits. Les quatre dernieres sont le bonus.
+    "pourquoi": {
+        "ordre": 28,
+        "titre": "À quoi sert git",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "fork": {
+        "ordre": 29,
+        "titre": "Fork et clone",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "commit": {
+        "ordre": 30,
+        "titre": "Le commit et ses conventions",
+        "famille": "types",
+        "chapitre": "versions",
+    },
+    "push": {
+        "ordre": 31,
+        "titre": "Envoyer et recevoir",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "suivis": {
+        "ordre": 32,
+        "titre": "Les fichiers suivis",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "diff": {
+        "ordre": 33,
+        "titre": "Voir la différence",
+        "famille": "operateurs",
+        "chapitre": "versions",
+    },
+    "gitignore": {
+        "ordre": 34,
+        "titre": "Bonus : ignorer des fichiers",
+        "famille": "types",
+        "chapitre": "versions",
+    },
+    "branches": {
+        "ordre": 35,
+        "titre": "Bonus : les branches",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "fusion": {
+        "ordre": 36,
+        "titre": "Bonus : fusionner et résoudre un conflit",
+        "famille": "operateurs",
+        "chapitre": "versions",
+    },
+    "equipe": {
+        "ordre": 37,
+        "titre": "Bonus : travailler en équipe",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
@@ -394,6 +459,14 @@ CHAPITRES: dict[str, dict] = {
         # PROVISOIRE : la date de la seance 6 n'est pas connue. 2099 la garde
         # fermee pour les eleves (seul l'apercu du professeur la montre) tant
         # qu'on n'a pas ecrit la vraie date. A REMPLACER avant la release.
+        "ouverture": "2099-12-31",
+    },
+    "versions": {
+        "ordre": 7,
+        "titre": "Git et GitHub",
+        "seance": 7,
+        # PROVISOIRE, comme `services` : la date de la seance 7 n'est pas connue.
+        # A REMPLACER avant la release.
         "ouverture": "2099-12-31",
     },
 }

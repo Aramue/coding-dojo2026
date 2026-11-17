@@ -39,5 +39,12 @@
     "titre": "Interroger un service web",
     "seance": 6,
     "ouverture": "2099-12-31"
+  },
+  {
+    "id": "versions",
+    "ordre": 7,
+    "titre": "Git et GitHub",
+    "seance": 7,
+    "ouverture": "2099-12-31"
   }
 ]

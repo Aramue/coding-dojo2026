@@ -1,0 +1,27 @@
+id: c7-branches
+notion: branches
+ordre: 35
+titre: "Bonus : les branches"
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Tout le monde travaille sur la même ligne d'historique, la branche **`main`**. Si tu essaies une idée risquée, tu peux casser le travail de tous. Une **branche** est une ligne parallèle : tu y fais des commits à ton rythme, et `main` ne bouge pas tant que tu ne décides pas de l'y rejoindre.
+  - type: paragraphe
+    texte: >-
+      On crée une branche et on s'y place avec `git switch -c ma-fonction`. On revient à `main` avec `git switch main`. `git branch` liste les branches, et une étoile marque celle où tu es. Pour publier ta branche : `git push -u origin ma-fonction`.
+  - type: code
+    legende: Deux lignes d'historique
+    executable: true
+    python: |
+      branches = {
+          "main": ["premier commit", "ajoute moyenne.py"],
+          "ma-fonction": ["premier commit", "ajoute moyenne.py"],
+      }
+      branches["ma-fonction"].append("feat: ajoute la médiane")
+
+      print(branches["main"])
+      print(branches["ma-fonction"])
+  - type: attention
+    texte: >-
+      **Un commit va sur la branche où tu te trouves.** Avant de committer, vérifie avec `git branch` ou `git status` que tu n'es pas sur `main` par mégarde.

@@ -1,0 +1,37 @@
+id: s7-10
+concept: commit
+notion: commit
+seance: 7
+niveau: normal
+type: ecrire
+titre: Découper un message
+obligatoire: true
+enonce: '`message` contient un message de commit. Affiche son type sur une première ligne, puis sa description sur une seconde.'
+depart: |
+  message = "feat: ajoute le menu"
+indices:
+- '`message.split(": ")` coupe le message à chaque `: ` et rend une liste.'
+- Le type est à la position 0 de la liste, la description à la position 1.
+tests:
+- type: sortie
+  entrees: []
+  attendu: |-
+    feat
+    ajoute le menu
+- type: contient
+  motif: split(
+  message: Découpe le message avec split.
+- type: contient
+  motif: '[0]'
+  message: Le type est le premier morceau de la liste, à la position 0.
+- type: contient
+  motif: '[1]'
+  message: La description est le second morceau, à la position 1.
+- type: interdit
+  motif: partition(
+  message: Ici, c'est split qu'on travaille.
+solution: |-
+  message = "feat: ajoute le menu"
+  morceaux = message.split(": ")
+  print(morceaux[0])
+  print(morceaux[1])

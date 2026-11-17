@@ -1,0 +1,31 @@
+id: s7-32
+concept: fusion
+notion: fusion
+seance: 7
+niveau: expert
+type: ecrire
+titre: Résoudre un conflit
+obligatoire: false
+enonce: '`fichier` est une liste de lignes qui contient un conflit. Les deux versions sont bonnes : garde-les toutes les deux. Range dans `resolu` toutes les lignes sauf les trois lignes de marqueurs, qui commencent par `<`, `=` ou `>`.'
+depart: |
+  fichier = ["nom = 'Camille'", "<<<<<<< HEAD", "age = 17", "=======", "classe = '3e'", ">>>>>>> ma-fonction"]
+  resolu = []
+indices:
+- '`ligne[0]` est le premier caractère de la ligne.'
+- '`ligne[0] not in "<=>"` est vrai quand le premier caractère n''est ni `<`, ni `=`, ni `>`.'
+tests:
+- type: variable
+  nom: resolu
+  valeur_attendue: '["nom = ''Camille''", ''age = 17'', "classe = ''3e''"]'
+- type: contient
+  motif: append(
+  message: Ajoute chaque ligne gardée avec append.
+- type: interdit
+  motif: .remove(
+  message: Construis la liste résolue, ne retire rien de fichier.
+solution: |-
+  fichier = ["nom = 'Camille'", "<<<<<<< HEAD", "age = 17", "=======", "classe = '3e'", ">>>>>>> ma-fonction"]
+  resolu = []
+  for ligne in fichier:
+      if ligne[0] not in "<=>":
+          resolu.append(ligne)

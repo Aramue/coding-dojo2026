@@ -1,0 +1,31 @@
+id: s7-22
+concept: gitignore
+notion: gitignore
+seance: 7
+niveau: expert
+type: predire
+titre: Des fichiers venus de nulle part
+obligatoire: false
+enonce: Camille vient de lancer son programme dans son éditeur, puis fait `git status`. D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?
+depart: |-
+  $ git status
+  Untracked files:
+          .idea/
+          __pycache__/
+          moyenne.py
+indices:
+- 'Camille n''a pas écrit ces dossiers : quelque chose les a créés quand elle a lancé le programme.'
+- Un fichier de règles, `.gitignore`, dit à git ce qu'il doit laisser de côté.
+tests:
+- type: qcm
+  options:
+  - 'Son éditeur et Python les ont créés : on les range dans un `.gitignore`.'
+  - 'Ils font partie du projet : il faut les committer.'
+  - GitHub les a ajoutés pendant la nuit.
+  bonne_reponse: 0
+solution: |-
+  $ git status
+  Untracked files:
+          .idea/
+          __pycache__/
+          moyenne.py

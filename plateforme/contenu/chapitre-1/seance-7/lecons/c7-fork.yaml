@@ -1,0 +1,32 @@
+id: c7-fork
+notion: fork
+ordre: 29
+titre: Fork et clone
+duree_min: 3
+blocs:
+  - type: paragraphe
+    texte: >-
+      Un dossier suivi par git s'appelle un **dépôt** (en anglais, *repository*, ou *repo*). Le dépôt du TP appartient au professeur, et tu n'as pas le droit d'y écrire. Il te faut donc ta propre copie.
+  - type: paragraphe
+    texte: >-
+      Le **fork** est un bouton de GitHub : il copie un dépôt dans **ton** compte, sur GitHub. Le **clone** (`git clone adresse`) copie ensuite ce dépôt de GitHub **sur ta machine**, dans un dossier. Deux copies, deux endroits différents.
+  - type: code
+    legende: Trois copies, indépendantes l'une de l'autre
+    executable: true
+    python: |
+      depots = {"professeur": ["README.md", "moyenne.py"], "mon fork": [], "ma machine": []}
+
+      for fichier in depots["professeur"]:
+          depots["mon fork"].append(fichier)
+      for fichier in depots["mon fork"]:
+          depots["ma machine"].append(fichier)
+
+      depots["ma machine"].append("notes.md")
+      print(depots["ma machine"])
+      print(depots["mon fork"])
+  - type: paragraphe
+    texte: >-
+      Le fichier `notes.md` n'existe que sur ta machine : ton fork et le dépôt du professeur ne le voient pas. Pour l'envoyer, il faudra un **push**, que tu verras dans deux leçons.
+  - type: attention
+    texte: >-
+      **On clone son fork, jamais l'original.** Sur l'original, tu n'as pas le droit d'envoyer quoi que ce soit : ton premier push serait refusé.
