@@ -26,11 +26,6 @@ introduction:
       dictionnaires et JSON, requêtes à une API, et git.
   - type: paragraphe
     texte: >-
-      Ce TP est **noté** et se fait **chez toi**, sur deux semaines. Le professeur
-      lira ton historique git, le résultat des tests, et pourra t'interroger à l'oral
-      sur l'une de tes corrections.
-  - type: paragraphe
-    texte: >-
       Les étapes ci-dessous te mettent en route et te donnent une méthode. Les
       issues, elles, ne te disent pas où est l'erreur : **c'est à toi de la
       chercher**. Chacune contient des indices repliés, à n'ouvrir que si tu es
