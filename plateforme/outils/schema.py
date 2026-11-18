@@ -485,9 +485,9 @@ CHAPITRES: dict[str, dict] = {
         "ordre": 7,
         "titre": "Git et GitHub",
         "seance": 7,
-        # PROVISOIRE, comme `services` : la date de la seance 7 n'est pas connue.
-        # A REMPLACER avant la release.
-        "ouverture": "2099-12-31",
+        # Ouverte le jour de sa publication, comme les seances 4 et 5 : un mercredi
+        # ou non, elle est visible des la mise en ligne. Voir ADR-013.
+        "ouverture": "2026-11-18",
     },
 }
 
