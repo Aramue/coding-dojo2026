@@ -447,3 +447,18 @@ button.options-quiz__bouton:disabled {
   font-weight: 400;
   color: var(--ink-soft);
 }
+
+/* Un schema de lecon dans le quiz : la taille d'une figure, pas d'une affiche. */
+.quiz__question .schema,
+.quiz-prof__principal .schema,
+.quiz-prof__resultats .schema,
+.quiz__correction .schema {
+  width: 100%;
+  max-width: 44rem;
+  margin: var(--e-2) auto;
+}
+
+/* Dans la relecture, la carte Terminal garde la taille du reste de la liste. */
+.quiz-prof__resultats .terminal {
+  font-size: var(--t-2);
+}

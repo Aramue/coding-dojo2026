@@ -71,6 +71,26 @@ describe('EcranQuiz', () => {
     expect(fetchFactice.mock.calls.some(([url]) => String(url).endsWith('/quiz/rejoindre'))).toBe(true)
   })
 
+  it('montre une session git dans la carte « Terminal », sans la prendre pour du Python', async () => {
+    etat = etatEleve({
+      phase: 'question',
+      question: question({ code: '$ git status\nUntracked files:', terminal: true }),
+    })
+    await monter()
+    expect(await screen.findByText('Terminal')).toBeInTheDocument()
+    expect(screen.getByText('git status')).toBeInTheDocument()
+  })
+
+  it('montre le schéma de la question, et garde celui de la correction pour la correction', async () => {
+    etat = etatEleve({
+      phase: 'question',
+      question: question({ schema_question: 'zones', schema_correction: 'fork' }),
+    })
+    await monter()
+    expect(await screen.findByRole('img', { name: /dossier de travail/ })).toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /fork copie/ })).toBeNull()
+  })
+
   it('propose de rejoindre en cours de route une partie déjà lancée', async () => {
     etat = etatEleve({ rejoint: false, moi: null, phase: 'question', question: question() })
     await monter()
@@ -143,7 +163,7 @@ describe('EcranQuiz', () => {
   it('à la correction, dit si c était juste, pourquoi, et où il en est', async () => {
     etat = etatEleve({
       phase: 'correction',
-      question: question({ bonne_reponse: 1, explication: 'Deux textes se collent.' }),
+      question: question({ bonne_reponse: 1, explication: 'Deux textes se collent.', schema_correction: 'fork' }),
       ma_reponse: { choix: 1, correcte: true, points: 875 },
       moi: { points: 1750, bonnes: 2, questions_closes: 2, rang: 2, participants: 21 },
     })
@@ -151,6 +171,7 @@ describe('EcranQuiz', () => {
 
     expect(await screen.findByText('Juste : +875 points.')).toBeInTheDocument()
     expect(screen.getByText('Deux textes se collent.')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /fork copie/ })).toBeInTheDocument()
     expect(screen.getByText(/2e sur 21/)).toBeInTheDocument()
     const juste = screen.getByText('22').closest('li')!
     expect(within(juste).getByText('Ta réponse')).toBeInTheDocument()

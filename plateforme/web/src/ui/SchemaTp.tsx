@@ -35,16 +35,28 @@ const ROUGE = '#C8372D'
 const VERT = '#2E8B57'
 const BLEU = '#3A6BC9'
 
-export function SchemaTp({ nom, legende }: { nom: NomSchema; legende: string }) {
+/**
+ * `famille` : la couleur des flèches et des cases d'accent, hors d'une page de
+ * cours. Une leçon la donne par sa notion ; le quiz, qui n'en a pas, la passe ici.
+ */
+export function SchemaTp({
+  nom,
+  legende,
+  famille,
+}: {
+  nom: NomSchema
+  legende?: string
+  famille?: string
+}) {
   const { dessin, description } = DESSINS[nom]
   return (
-    <figure className="schema">
+    <figure className="schema" data-famille={famille}>
       <div className="schema__cadre">
         <svg viewBox={dessin.viewBox} role="img" aria-label={description}>
           {dessin.contenu}
         </svg>
       </div>
-      <figcaption className="schema__legende">{legende}</figcaption>
+      {legende && <figcaption className="schema__legende">{legende}</figcaption>}
     </figure>
   )
 }

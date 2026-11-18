@@ -31,6 +31,8 @@ import type {
 import { useFluxQuiz } from '../quiz/useFluxQuiz'
 import { naviguer } from '../routage'
 import { CarteCode } from './CarteCode'
+import { SchemaTp } from './SchemaTp'
+import { Terminal } from './Terminal'
 import { CompteARebours } from './CompteARebours'
 import { LETTRES } from './FormeOption'
 import { OptionsQuiz } from './OptionsQuiz'
@@ -557,7 +559,11 @@ function Questions({
                   <span className="bilan__enonce">{question.enonce}</span>
                   <span className="bilan__taux">{question.duree_s} s</span>
                 </div>
-                {question.code && <pre className="bilan__code mono">{question.code}</pre>}
+                {question.code && question.terminal && <Terminal legende="Terminal" texte={question.code} />}
+                {question.code && !question.terminal && (
+                  <pre className="bilan__code mono">{question.code}</pre>
+                )}
+                {question.schema_question && <SchemaTp nom={question.schema_question} famille="variables" />}
                 <ul className="bilan__repartition">
                   {question.options.map((option, i) => (
                     <li
@@ -572,6 +578,9 @@ function Questions({
                 </ul>
                 {reponses && question.explication && (
                   <p className="quiz-prof__explication">{question.explication}</p>
+                )}
+                {reponses && question.schema_correction && (
+                  <SchemaTp nom={question.schema_correction} famille="variables" />
                 )}
               </li>
             ))}
@@ -660,16 +669,21 @@ function Deroule({
             <h1 id="enonce-projete" className="quiz-prof__enonce">
               {question.enonce}
             </h1>
-            {question.code && (
+            {question.code && !question.terminal && (
               <CarteCode>
                 <pre>{question.code}</pre>
               </CarteCode>
             )}
+            {question.code && question.terminal && <Terminal legende="Terminal" texte={question.code} />}
+            {question.schema_question && <SchemaTp nom={question.schema_question} famille="variables" />}
             <OptionsQuiz
               options={question.options}
               bonneReponse={corrigee ? question.bonne_reponse : undefined}
               repartition={corrigee ? partie.repartition : null}
             />
+            {corrigee && question.schema_correction && (
+              <SchemaTp nom={question.schema_correction} famille="variables" />
+            )}
             {corrigee && question.explication && (
               <p className="quiz-prof__explication">{question.explication}</p>
             )}
