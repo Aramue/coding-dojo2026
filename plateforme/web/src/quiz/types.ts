@@ -13,6 +13,8 @@ export type QuestionVue = {
   total: number
   enonce: string
   code: string
+  /** Une session de terminal (git) plutôt que du Python. */
+  terminal?: boolean
   options: string[]
   duree_s: number
   ouverte_le: string
@@ -76,6 +78,8 @@ export type LigneBilan = {
   rang: number
   enonce: string
   code: string
+  /** Une session de terminal (git) plutôt que du Python. */
+  terminal?: boolean
   options: string[]
   bonne_reponse: number
   repartition: number[]
@@ -115,6 +119,8 @@ export type DernierePartie = {
 export type QuestionComplete = {
   enonce: string
   code: string
+  /** Une session de terminal (git) plutôt que du Python. */
+  terminal?: boolean
   options: string[]
   bonne_reponse: number
   duree_s: number

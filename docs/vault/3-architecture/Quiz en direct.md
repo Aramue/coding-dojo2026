@@ -160,6 +160,14 @@ sur « Classement » rouvre la page de résultats de cette partie-là, classemen
   classement se recalcule à la lecture. Une partie sans réponse, ou d'un quiz retiré du
   catalogue, n'apparaît pas.
 
+## Les questions « terminal » — 18 novembre 2026
+
+Une question peut montrer une session de terminal plutôt que du Python : `terminal: true`. Le
+`code` s'affiche dans la carte « Terminal » des leçons (lignes `$`, `+`, `-`, marqueurs de
+conflit colorés) et la construction ne l'exécute pas. Une telle question ne peut porter ni
+`sortie`, ni `erreur`, ni `entrees`. Premier usage : `q7-git`, vingt questions sur git et le TP
+git, de « à quoi sert git » jusqu'au conflit des bonus.
+
 ## Le barème
 
 1000 points pour une réponse juste immédiate, 500 à la dernière seconde, linéaire entre les deux ;

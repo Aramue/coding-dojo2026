@@ -49,6 +49,8 @@ class QuestionPublie(BaseModel):
 
     enonce: str
     code: str = ""
+    # Une session de terminal plutot que du Python : affichee sous « Terminal ».
+    terminal: bool = False
     options: list[str] = Field(min_length=2, max_length=4)
     bonne_reponse: int
     duree_s: int = Field(ge=1)
@@ -301,6 +303,7 @@ def _vue_question(partie: PartieQuiz, quiz: QuizPublie, corrigee: bool) -> dict:
         "total": len(quiz.questions),
         "enonce": question.enonce,
         "code": question.code,
+        "terminal": question.terminal,
         "options": question.options,
         "duree_s": question.duree_s,
         "ouverte_le": iso(partie.ouverte_le),

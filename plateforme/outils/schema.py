@@ -629,7 +629,7 @@ def charger_lecons(racine: Path) -> list[Lecon]:
 
 
 # Un quiz se nomme comme une lecon, avec un q : q1-bases, q2-conditions.
-MOTIF_QUIZ = re.compile(r"^q[1-6]-[a-z]+(-[a-z]+)*$")
+MOTIF_QUIZ = re.compile(r"^q[1-7]-[a-z]+(-[a-z]+)*$")
 
 # Le nom d'une exception Python, et rien d'autre : pas de texte libre.
 MOTIF_EXCEPTION = re.compile(r"^[A-Z][A-Za-z]*(Error|Exception)$")
@@ -666,6 +666,10 @@ class QuestionQuiz(BaseModel):
     # `erreur` : le code doit lever cette exception. La question porte alors sur
     # le plantage, et la validation verifie qu'il a bien lieu.
     erreur: str | None = None
+    # `terminal` : le code est une session de terminal (git, pip), pas du
+    # Python. Il s'affiche tel quel, sous la legende « Terminal », et la
+    # validation ne l'execute pas.
+    terminal: bool = False
 
     @field_validator("enonce")
     @classmethod
@@ -716,6 +720,8 @@ class QuestionQuiz(BaseModel):
             raise ValueError("sortie, erreur et entrees supposent un code a executer")
         if self.sortie and self.erreur:
             raise ValueError("une question ne peut pas attendre a la fois une sortie et une erreur")
+        if self.terminal and (not self.code or self.sortie or self.erreur or self.entrees):
+            raise ValueError("une question terminal montre un code, et rien ne l'execute")
         return self
 
 
@@ -726,7 +732,7 @@ class Quiz(BaseModel):
     titre: str = Field(min_length=1)
     # Les memes seances que les exercices : un quiz de la seance 4 doit pouvoir
     # s'ecrire des qu'elle existe.
-    seance: int = Field(ge=1, le=6)
+    seance: int = Field(ge=1, le=7)
     questions: list[QuestionQuiz] = Field(min_length=1, max_length=30)
 
     @field_validator("id")

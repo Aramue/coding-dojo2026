@@ -4,6 +4,7 @@ import { restant } from '../quiz/horloge'
 import type { EtatEleve } from '../quiz/types'
 import { useFluxQuiz } from '../quiz/useFluxQuiz'
 import { CarteCode } from './CarteCode'
+import { Terminal } from './Terminal'
 import { CompteARebours } from './CompteARebours'
 import { OptionsQuiz } from './OptionsQuiz'
 import { PastillesJoueurs } from './PastillesJoueurs'
@@ -237,11 +238,12 @@ function Partie({
       <h1 id="enonce-quiz" className="quiz__enonce">
         {question.enonce}
       </h1>
-      {question.code && (
+      {question.code && !question.terminal && (
         <CarteCode>
           <pre>{question.code}</pre>
         </CarteCode>
       )}
+      {question.code && question.terminal && <Terminal legende="Terminal" texte={question.code} />}
 
       <OptionsQuiz
         options={question.options}

@@ -291,7 +291,7 @@ def verifier_quiz(quiz: Quiz) -> list[str]:
     """
     problemes: list[str] = []
     for rang, question in enumerate(quiz.questions, start=1):
-        if not question.code:
+        if not question.code or question.terminal:
             continue
         ou = f"{quiz.id} question {rang}"
         stdout, _, erreur = _executer(question.code, question.entrees)

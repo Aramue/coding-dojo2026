@@ -56,10 +56,34 @@ def test_un_quiz_des_seances_5_et_6_se_charge():
     assert Quiz(**quiz(id="q6-services", seance=6)).seance == 6
 
 
-@pytest.mark.parametrize("seance", [0, 7])
+@pytest.mark.parametrize("seance", [0, 8])
 def test_une_seance_hors_du_cours_est_rejetee(seance):
     with pytest.raises(ValidationError):
         Quiz(**quiz(seance=seance))
+
+
+def test_la_seance_7_a_son_quiz():
+    assert Quiz(**quiz(id="q7-git", seance=7)).seance == 7
+
+
+def _question_terminal(**champs):
+    return {"enonce": "Que dit git ?", "code": "$ git status", "terminal": True,
+            "options": ["a", "b"], "bonne_reponse": 0, **champs}
+
+
+def test_une_question_terminal_n_est_jamais_executee():
+    # Une session git n'est pas du Python : la valider l'executerait, et
+    # « $ git status » leverait une SyntaxError.
+    from valider_contenu import verifier_quiz
+    q = Quiz(**quiz(questions=[_question_terminal()]))
+    assert q.questions[0].terminal
+    assert verifier_quiz(q) == []
+
+
+@pytest.mark.parametrize("champs", [{"code": ""}, {"sortie": True}, {"erreur": "ValueError"}])
+def test_une_question_terminal_ne_promet_rien_a_executer(champs):
+    with pytest.raises(ValidationError, match="terminal"):
+        Quiz(**quiz(questions=[_question_terminal(**champs)]))
 
 
 def test_identifiant_de_quiz_mal_forme_rejete():

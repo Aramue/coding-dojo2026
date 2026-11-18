@@ -71,6 +71,16 @@ describe('EcranQuiz', () => {
     expect(fetchFactice.mock.calls.some(([url]) => String(url).endsWith('/quiz/rejoindre'))).toBe(true)
   })
 
+  it('montre une session git dans la carte « Terminal », sans la prendre pour du Python', async () => {
+    etat = etatEleve({
+      phase: 'question',
+      question: question({ code: '$ git status\nUntracked files:', terminal: true }),
+    })
+    await monter()
+    expect(await screen.findByText('Terminal')).toBeInTheDocument()
+    expect(screen.getByText('git status')).toBeInTheDocument()
+  })
+
   it('propose de rejoindre en cours de route une partie déjà lancée', async () => {
     etat = etatEleve({ rejoint: false, moi: null, phase: 'question', question: question() })
     await monter()

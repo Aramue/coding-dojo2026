@@ -1,0 +1,313 @@
+# Le quiz de la séance 7 : git, et le TP git (/tp/git).
+#
+# Cinq parties, dans l'ordre où le cours les construit, puis le TP :
+#
+# - questions 1 et 2 : à quoi sert git, et git n'est pas GitHub ;
+# - questions 3 à 6 : les fichiers suivis. Lire un `git status`, ce que fait
+#   `git add`, le fichier neuf qui n'arrive jamais sur GitHub ;
+# - questions 7 à 10 : le commit. Ses conventions (`type: description`), lire
+#   un `git log`, lire un `git diff` ;
+# - questions 11 et 12 : push et pull, le push refusé ;
+# - questions 13 à 16 : le TP lui-même, étape par étape — fork puis clone, le
+#   bon ordre des commandes, une erreur de manipulation à corriger ;
+# - questions 17 à 20 : les bonus du TP — .gitignore, branche, conflit.
+#
+# Les exemples sont ceux des leçons et du TP : moyenne.py, la fiche
+# eleves/ton-pseudo.md, la branche feat-mediane, le conflit de prix.py.
+#
+# Les blocs de commandes portent `terminal: true` : ils s'affichent dans la
+# carte « Terminal », comme dans les leçons, et la construction ne les exécute
+# pas — ce n'est pas du Python. La bonne réponse change de place d'une
+# question à l'autre.
+id: q7-git
+titre: Git, du commit à la pull request
+seance: 7
+questions:
+  # --- À quoi sert git -------------------------------------------------------
+
+  - enonce: Camille a rendu_v2.py, rendu_final.py et rendu_final_VRAI.py. Que lui apporte git ?
+    options:
+      - Un seul fichier, dont git garde toutes les versions
+      - Un dossier de sauvegarde sur une clé USB
+      - Un fichier qui s'enregistre tout seul toutes les minutes
+      - Le droit de nommer ses fichiers comme elle veut
+    bonne_reponse: 0
+    explication: >-
+      Git garde l'historique d'un dossier : chaque étape qu'on décide de
+      conserver est un commit, et on peut revenir à n'importe laquelle.
+
+  - enonce: Quelle phrase est juste ?
+    options:
+      - git et GitHub sont deux noms pour le même logiciel
+      - GitHub est installé sur ton ordinateur, git est un site
+      - git marche sans internet ; GitHub est un site qui héberge des dépôts git
+      - Sans compte GitHub, git ne fonctionne pas
+    bonne_reponse: 2
+    explication: >-
+      git est le logiciel, sur ta machine. GitHub est un site où l'on partage
+      ses dépôts git — il en existe d'autres, comme GitLab.
+
+  # --- Les fichiers suivis ---------------------------------------------------
+
+  - enonce: Tu viens de créer notes.md. Que dit git ?
+    code: |
+      $ git status
+      On branch main
+      Untracked files:
+              notes.md
+    terminal: true
+    options:
+      - notes.md est prêt à être committé
+      - notes.md n'est pas encore suivi par git
+      - notes.md est déjà sur GitHub
+      - notes.md a été supprimé
+    bonne_reponse: 1
+    explication: >-
+      « Untracked » : git voit le fichier mais ne le suit pas. Il faut un
+      git add pour qu'il entre dans le prochain commit.
+
+  - enonce: À quoi sert git add moyenne.py ?
+    options:
+      - À envoyer moyenne.py sur GitHub
+      - À créer le fichier moyenne.py
+      - À enregistrer moyenne.py dans l'historique, avec un message
+      - À choisir moyenne.py pour le prochain commit
+    bonne_reponse: 3
+    explication: >-
+      git add place le fichier dans l'index : la liste de ce qui entrera dans
+      la prochaine sauvegarde. C'est git commit qui enregistre, git push qui envoie.
+
+  - enonce: Après git add, dans quelle liste moyenne.py apparaît-il ?
+    code: |
+      $ git add moyenne.py
+      $ git status
+      On branch main
+      Changes to be committed:
+              modified:   moyenne.py
+    terminal: true
+    options:
+      - Changes to be committed
+      - Untracked files
+      - Changes not staged for commit
+      - Aucune, il a disparu
+    bonne_reponse: 0
+    explication: >-
+      « Changes to be committed » : le fichier est indexé, il entrera dans le
+      prochain commit.
+
+  - enonce: Léo a créé sa fiche, committé, poussé. Elle n'est pas sur GitHub. Pourquoi ?
+    code: |
+      $ git commit -m "docs: ajoute ma fiche"
+      nothing added to commit but untracked files present
+      $ git push
+      Everything up-to-date
+    terminal: true
+    options:
+      - GitHub met une heure à afficher les fichiers
+      - "Il a oublié git add : la fiche n'est jamais entrée dans un commit"
+      - Son message de commit est mal écrit
+      - Il faut supprimer le dépôt et recommencer
+    bonne_reponse: 1
+    explication: >-
+      Un fichier non suivi n'arrive jamais sur GitHub. git add eleves/leo.md,
+      puis git commit, puis git push.
+
+  # --- Le commit -------------------------------------------------------------
+
+  - enonce: Quel message de commit respecte la convention du cours ?
+    options:
+      - modif
+      - Fix bug.
+      - "j'ai corrigé des trucs dans le fichier moyenne"
+      - "fix: corrige la division par zéro"
+    bonne_reponse: 3
+    explication: >-
+      type: description. Le type dit la nature du changement, la description
+      commence par un verbe, tient en une cinquantaine de caractères, sans point final.
+
+  - enonce: Tu ajoutes le calcul de la médiane. Quel type choisis-tu ?
+    options:
+      - fix
+      - feat
+      - docs
+      - chore
+    bonne_reponse: 1
+    explication: >-
+      feat ajoute une fonctionnalité, fix corrige un bug, docs touche la
+      documentation, chore range ou configure le projet.
+
+  - enonce: Dans ce git log, quel est le commit le plus récent ?
+    code: |
+      $ git log --oneline
+      4b2e9d1 fix: corrige la division par zéro
+      8a41b07 feat: ajoute la médiane
+      1c07e3a docs: explique le projet
+    terminal: true
+    options:
+      - 1c07e3a, en bas de la liste
+      - 8a41b07, au milieu
+      - 4b2e9d1, en haut de la liste
+      - On ne peut pas le savoir sans la date
+    bonne_reponse: 2
+    explication: >-
+      git log commence par le plus récent. Le plus ancien est tout en bas.
+
+  - enonce: Que s'est-il passé dans moyenne.py ?
+    code: |
+      $ git diff moyenne.py
+      @@ -1,2 +1,2 @@
+       def moyenne(notes):
+      -    return sum(notes) / len(notes)
+      +    return round(sum(notes) / len(notes), 1)
+    terminal: true
+    options:
+      - Une ligne a été remplacée par une version qui arrondit
+      - Une ligne a été ajoutée, rien n'a été retiré
+      - La fonction moyenne a été supprimée
+      - Le fichier a été renommé
+    bonne_reponse: 0
+    explication: >-
+      Une ligne qui commence par - est retirée, une ligne qui commence par +
+      est ajoutée. Ensemble, elles disent : cette ligne a changé.
+
+  # --- Envoyer et recevoir ---------------------------------------------------
+
+  - enonce: Tu as committé sur ta machine. Ton camarade le voit-il sur GitHub ?
+    options:
+      - Oui, un commit part tout seul sur GitHub
+      - Oui, mais seulement s'il recharge la page
+      - Non, il faut d'abord un git push
+      - Non, il faut d'abord un git pull
+    bonne_reponse: 2
+    explication: >-
+      Un commit vit d'abord sur ta machine. git push l'envoie vers GitHub ;
+      git pull ramène ce qui s'y trouve.
+
+  - enonce: Ton push est refusé. Que fais-tu ?
+    code: |
+      $ git push
+      ! [rejected]        main -> main (fetch first)
+      error: failed to push some refs
+    terminal: true
+    options:
+      - Supprimer le dépôt et le cloner à nouveau
+      - git pull, puis git push
+      - Attendre que GitHub soit réparé
+      - Renommer le fichier, puis git push
+    bonne_reponse: 1
+    explication: >-
+      Ce n'est pas une panne : quelqu'un a poussé avant toi. git pull récupère
+      son travail, puis ton push passe.
+
+  # --- Le TP, étape par étape -------------------------------------------------
+
+  - enonce: Pour le TP, dans quel ordre fais-tu le fork et le clone ?
+    options:
+      - Cloner le dépôt du professeur, puis forker ta copie
+      - Forker sur GitHub, puis cloner ton fork sur ta machine
+      - "Forker seulement : le fork apparaît sur ta machine"
+      - "Cloner seulement : le clone crée une copie sur GitHub"
+    bonne_reponse: 1
+    explication: >-
+      Le fork copie le dépôt dans ton compte GitHub ; le clone rapporte ce fork
+      sur ta machine. On clone son fork, jamais l'original.
+
+  - enonce: Pourquoi clone-t-on son fork et pas le dépôt du professeur ?
+    options:
+      - Le dépôt du professeur est plus lent à télécharger
+      - Le clone du dépôt du professeur n'a pas les fichiers
+      - Sur le dépôt du professeur, ton push serait refusé
+      - Le fork contient déjà les corrections
+    bonne_reponse: 2
+    explication: >-
+      Tu n'as pas le droit d'écrire dans le dépôt du professeur. Ton fork, lui,
+      t'appartient.
+    duree_s: 25
+
+  - enonce: Tu as corrigé moyenne.py. Quel est le bon ordre ?
+    options:
+      - git commit, git add, git push
+      - git push, git add, git commit
+      - git add, git push, git commit
+      - git add, git commit, git push
+    bonne_reponse: 3
+    explication: >-
+      Choisir (add), enregistrer (commit), envoyer (push). Et avant tout ça :
+      relire le git diff.
+
+  - enonce: Avant git commit, quelle commande montre exactement ce que tu as changé ?
+    options:
+      - git diff
+      - git log
+      - git clone
+      - git push
+    bonne_reponse: 0
+    explication: >-
+      git diff compare ton fichier à sa dernière version validée. C'est là
+      qu'on repère le print de débogage oublié.
+
+  # --- Les bonus du TP ---------------------------------------------------------
+
+  - enonce: "Que fait la ligne __pycache__/ dans .gitignore ?"
+    code: |
+      __pycache__/
+      .idea/
+      *.pyc
+    terminal: true
+    options:
+      - Elle supprime le dossier __pycache__
+      - Elle demande à git de ne pas suivre ce dossier
+      - Elle envoie ce dossier sur GitHub
+      - Elle protège ce dossier par un mot de passe
+    bonne_reponse: 1
+    explication: >-
+      .gitignore liste ce que git doit ignorer. Le dossier reste sur ta
+      machine ; git ne le propose plus.
+
+  - enonce: Sur quelle branche ira ce commit ?
+    code: |
+      $ git switch -c feat-mediane
+      Switched to a new branch 'feat-mediane'
+      $ git add moyenne.py
+      $ git commit -m "feat: ajoute la médiane"
+    terminal: true
+    options:
+      - main
+      - feat-mediane
+      - Sur les deux à la fois
+      - Sur aucune, il faut d'abord un push
+    bonne_reponse: 1
+    explication: >-
+      Un commit va sur la branche où tu te trouves. git switch -c crée la
+      branche et s'y place. main n'a pas bougé.
+
+  - enonce: Git s'arrête sur un conflit. Quelle version est la tienne ?
+    code: |
+      def prix():
+      <<<<<<< HEAD
+          return 10
+      =======
+          return 12
+      >>>>>>> autre-branche
+    terminal: true
+    options:
+      - "return 12, entre ======= et >>>>>>>"
+      - Aucune des deux, git les a effacées
+      - "return 10, entre <<<<<<< et ======="
+      - Les deux, git les additionne
+    bonne_reponse: 2
+    explication: >-
+      Entre <<<<<<< et ======= : ta version. Entre ======= et >>>>>>> : celle
+      de l'autre. Résoudre, c'est garder la bonne et effacer les marqueurs.
+    duree_s: 30
+
+  - enonce: Le fichier contient encore <<<<<<< HEAD. Tu peux committer ?
+    options:
+      - Oui, git enlèvera les marqueurs tout seul
+      - Oui, les marqueurs sont des commentaires Python
+      - Non, il faut d'abord supprimer le fichier
+      - Non, les marqueurs deviendraient du code et le programme planterait
+    bonne_reponse: 3
+    explication: >-
+      Un fichier qui contient encore <<<<<<< n'est pas résolu. On efface les
+      marqueurs, on relance le programme, puis git add et git commit.

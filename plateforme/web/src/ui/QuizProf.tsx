@@ -31,6 +31,7 @@ import type {
 import { useFluxQuiz } from '../quiz/useFluxQuiz'
 import { naviguer } from '../routage'
 import { CarteCode } from './CarteCode'
+import { Terminal } from './Terminal'
 import { CompteARebours } from './CompteARebours'
 import { LETTRES } from './FormeOption'
 import { OptionsQuiz } from './OptionsQuiz'
@@ -660,11 +661,12 @@ function Deroule({
             <h1 id="enonce-projete" className="quiz-prof__enonce">
               {question.enonce}
             </h1>
-            {question.code && (
+            {question.code && !question.terminal && (
               <CarteCode>
                 <pre>{question.code}</pre>
               </CarteCode>
             )}
+            {question.code && question.terminal && <Terminal legende="Terminal" texte={question.code} />}
             <OptionsQuiz
               options={question.options}
               bonneReponse={corrigee ? question.bonne_reponse : undefined}
