@@ -40,6 +40,9 @@ plateforme ne peut pas valider un `git commit`. La séance combine donc **trois 
 
 ### Comment un exercice de git s'écrit sur cette plateforme
 
+- **Les leçons** n'ont **aucun exemple Python** : elles montrent des blocs `terminal` (les commandes git et leur
+  retour, jamais exécutés) et des blocs `schema` (huit dessins : `versions`, `github`, `fork`, `zones`, `commits`,
+  `etats`, `branches`, `pullrequest`). Voir [[Modèle de contenu]].
 - **`predire`** : le code affiché est une **transcription de terminal** (`git status`, `git log`…) ou un fichier,
   pas un programme. Le validateur n'exécute que ce qu'il sait juger : un code qui n'est pas du Python plante, ce
   qui le fait passer son tour, et un `predire` **sans programme** (`depart` vide) n'est plus comparé à rien.
@@ -188,6 +191,9 @@ TP sur machine et une marge, soit les 120 min.
 - [ ] Un `git push` depuis chaque salle utilisée
 
 ## Outillage touché
+
+Les blocs `terminal` et `schema` des leçons : `BlocTerminal` dans `outils/schema.py`, `Terminal.tsx` et huit
+dessins SVG dans `SchemaTp.tsx` (le même composant que les schémas du TP de stéganographie).
 
 `outils/schema.py` : `seance` jusqu'à 7, `MOTIF_ID` en `s[1234567]`, `MOTIF_LECON` en `c[1234567]`, dix notions
 (ordres 28 à 37) et un chapitre (`versions`), plus les champs `question` et `legende_depart` du `predire`. Le type

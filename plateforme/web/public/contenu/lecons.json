@@ -1555,19 +1555,27 @@
         "texte": "Tu connais cette situation : `rendu.py`, puis `rendu_v2.py`, puis `rendu_final.py`, puis `rendu_final_VRAI.py`. Lequel est le bon ? À deux, c'est pire : chacun modifie sa copie, et la dernière qu'on enregistre écrase l'autre."
       },
       {
+        "type": "schema",
+        "nom": "versions",
+        "legende": "Sans git, on empile des copies. Avec git, un seul fichier garde toutes ses versions."
+      },
+      {
         "type": "paragraphe",
         "texte": "**git** est un logiciel installé sur ton ordinateur. Il garde l'**historique** d'un dossier : chaque étape que tu décides de conserver s'appelle un **commit**. Il n'y a qu'un seul fichier `rendu.py`, mais git se souvient de toutes ses versions, avec la date, l'auteur et une phrase qui explique le changement."
       },
       {
-        "type": "code",
-        "legende": "Un historique, c'est une liste de commits",
-        "python": "historique = [\n    {\"auteur\": \"Camille\", \"message\": \"feat: ajoute le calcul de la moyenne\"},\n    {\"auteur\": \"Leo\", \"message\": \"fix: corrige la division par zéro\"},\n    {\"auteur\": \"Camille\", \"message\": \"docs: explique comment lancer le programme\"},\n]\nfor commit in historique:\n    print(commit[\"auteur\"], \":\", commit[\"message\"])\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Un historique, vu par git",
+        "texte": "$ git log --oneline\nc3d9f21 fix: corrige la division par zéro\n8a41b07 feat: ajoute la médiane\n5e2c6aa feat: ajoute le calcul de la moyenne"
       },
       {
         "type": "paragraphe",
         "texte": "Ce que git résout : **retrouver** une ancienne version quand on a cassé quelque chose, **savoir** qui a changé quoi et pourquoi, et **travailler à plusieurs** sur les mêmes fichiers sans s'écraser."
+      },
+      {
+        "type": "schema",
+        "nom": "github",
+        "legende": "git est sur ton ordinateur ; GitHub est un site où l'on partage des dépôts git."
       },
       {
         "type": "attention",
@@ -1589,18 +1597,21 @@
       },
       {
         "type": "paragraphe",
-        "texte": "Le **fork** est un bouton de GitHub : il copie un dépôt dans **ton** compte, sur GitHub. Le **clone** (`git clone adresse`) copie ensuite ce dépôt de GitHub **sur ta machine**, dans un dossier. Deux copies, deux endroits différents."
+        "texte": "Le **fork** est un bouton de GitHub : il copie un dépôt dans **ton** compte, sur GitHub. Le **clone** copie ensuite ce dépôt de GitHub **sur ta machine**, dans un dossier. Deux copies, deux endroits différents."
       },
       {
-        "type": "code",
-        "legende": "Trois copies, indépendantes l'une de l'autre",
-        "python": "depots = {\"professeur\": [\"README.md\", \"moyenne.py\"], \"mon fork\": [], \"ma machine\": []}\n\nfor fichier in depots[\"professeur\"]:\n    depots[\"mon fork\"].append(fichier)\nfor fichier in depots[\"mon fork\"]:\n    depots[\"ma machine\"].append(fichier)\n\ndepots[\"ma machine\"].append(\"notes.md\")\nprint(depots[\"ma machine\"])\nprint(depots[\"mon fork\"])\n",
-        "executable": true,
-        "entrees": []
+        "type": "schema",
+        "nom": "fork",
+        "legende": "Le fork se fait sur le site ; le clone rapporte le fork sur ta machine."
+      },
+      {
+        "type": "terminal",
+        "legende": "Cloner son fork",
+        "texte": "$ git clone https://github.com/ton-pseudo/tp-git.git\nCloning into 'tp-git'...\n$ cd tp-git"
       },
       {
         "type": "paragraphe",
-        "texte": "Le fichier `notes.md` n'existe que sur ta machine : ton fork et le dépôt du professeur ne le voient pas. Pour l'envoyer, il faudra un **push**, que tu verras plus loin."
+        "texte": "Un fichier que tu ajoutes dans ce dossier n'existe que sur ta machine : ton fork et le dépôt du professeur ne le voient pas. Pour l'envoyer, il faudra un **push**, que tu verras plus loin."
       },
       {
         "type": "attention",
@@ -1621,19 +1632,32 @@
         "texte": "Git ne regarde pas tout ce qui traîne dans le dossier : il **suit** certains fichiers, et seulement ceux-là. Un fichier que tu viens de créer est **non suivi** : git le voit, mais ne le garde dans aucune sauvegarde tant que tu ne le lui as pas demandé avec **`git add`**."
       },
       {
+        "type": "schema",
+        "nom": "zones",
+        "legende": "git add fait passer un fichier du dossier de travail à l'index, la liste de ce qui entrera dans la prochaine sauvegarde."
+      },
+      {
         "type": "paragraphe",
         "texte": "Un fichier suivi passe par trois états : **modifié** (tu l'as changé), **indexé** (tu l'as choisi avec `git add nom-du-fichier`, il est prêt pour la prochaine sauvegarde, qu'on appelle un commit et que tu verras dans la leçon suivante), puis **validé** (la sauvegarde est faite)."
+      },
+      {
+        "type": "schema",
+        "nom": "etats",
+        "legende": "Les états d'un fichier, et la commande qui le fait passer de l'un à l'autre."
       },
       {
         "type": "paragraphe",
         "texte": "La commande **`git status`** te dit où en est chaque fichier. Elle range les fichiers en trois listes : `Untracked files` pour les fichiers non suivis, `Changes not staged for commit` pour les fichiers modifiés, et `Changes to be committed` pour les fichiers indexés."
       },
       {
-        "type": "code",
-        "legende": "L'état de chaque fichier",
-        "python": "etat = {\"moyenne.py\": \"modifié\", \"notes.md\": \"non suivi\", \"README.md\": \"validé\"}\nfor fichier in etat:\n    print(fichier, \"->\", etat[fichier])\nprint(len(etat))\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Avant git add",
+        "texte": "$ git status\nOn branch main\nChanges not staged for commit:\n        modified:   moyenne.py\n\nUntracked files:\n        notes.md"
+      },
+      {
+        "type": "terminal",
+        "legende": "Après git add notes.md",
+        "texte": "$ git add notes.md\n$ git status\nOn branch main\nChanges to be committed:\n        new file:   notes.md\n\nChanges not staged for commit:\n        modified:   moyenne.py"
       },
       {
         "type": "attention",
@@ -1654,38 +1678,44 @@
         "texte": "Un **commit** est une photo du projet à un instant, accompagnée d'un message. Tu as déjà choisi ce qui y entre avec `git add` ; il reste à la prendre : `git commit -m \"message\"`."
       },
       {
-        "type": "paragraphe",
-        "texte": "Un historique de messages comme « modif », « truc » ou « fini » ne sert à personne, pas même à toi dans trois semaines. On suit donc une **convention** : `type: description`. Le type dit la nature du changement."
+        "type": "schema",
+        "nom": "commits",
+        "legende": "Chaque commit garde les fichiers à cet instant, son auteur, sa date et son message."
+      },
+      {
+        "type": "terminal",
+        "legende": "Faire un commit",
+        "texte": "$ git add moyenne.py\n$ git commit -m \"fix: corrige la division par zéro\"\n[main 4b2e9d1] fix: corrige la division par zéro\n 1 file changed, 1 insertion(+), 1 deletion(-)"
       },
       {
         "type": "paragraphe",
-        "texte": "`feat` ajoute une fonctionnalité · `fix` corrige un bug · `docs` touche à la documentation · `refactor` réécrit sans changer le résultat · `chore` range ou règle (tâche annexe)."
+        "texte": "Un historique de messages comme « modif », « truc » ou « fini » ne sert à personne, pas même à toi dans trois semaines."
+      },
+      {
+        "type": "terminal",
+        "legende": "Un historique illisible",
+        "texte": "$ git log --oneline\n9f3a1c2 modif\n7d2b8e4 fini\nc01e5a9 truc"
       },
       {
         "type": "paragraphe",
-        "texte": "La description commence par un **verbe** (ajoute, corrige, explique), tient en **50 caractères** environ et ne finit pas par un point. Exemple : `fix: corrige la division par zéro`."
+        "texte": "On suit donc une **convention** : `type: description`. Le type dit la nature du changement : `feat` ajoute une fonctionnalité · `fix` corrige un bug · `docs` touche à la documentation · `refactor` réécrit sans changer le résultat · `chore` range ou règle (tâche annexe)."
       },
       {
-        "type": "code",
-        "legende": "Découper un message de commit",
-        "python": "message = \"fix: corrige la division par zéro\"\nmorceaux = message.split(\": \")\nprint(morceaux[0])\nprint(morceaux[1])\nprint(len(message))\n",
-        "executable": true,
-        "entrees": []
+        "type": "paragraphe",
+        "texte": "La description commence par un **verbe** (ajoute, corrige, explique), tient en **50 caractères** environ et ne finit pas par un point."
       },
       {
         "type": "paragraphe",
         "texte": "Pour relire ce qui a été fait, on utilise **`git log`**. Il liste les commits un par un, avec leur auteur, leur date et leur message. `git log --oneline` en donne la version courte : une ligne par commit, qui commence par un identifiant de sept caractères (le **hash**), suivi du message."
       },
       {
-        "type": "paragraphe",
-        "texte": "L'historique se lit **du plus récent, en haut, au plus ancien, en bas**. Le premier commit du projet est donc la dernière ligne."
+        "type": "terminal",
+        "legende": "git log --oneline",
+        "texte": "$ git log --oneline\n4b2e9d1 fix: corrige la division par zéro\n8a41b07 feat: ajoute la médiane\n5e2c6aa feat: ajoute le calcul de la moyenne"
       },
       {
-        "type": "code",
-        "legende": "Lire un historique du plus récent au plus ancien",
-        "python": "historique = [\"feat: ajoute la moyenne\", \"feat: ajoute la médiane\", \"fix: corrige le calcul\"]\nfor i in range(len(historique) - 1, -1, -1):\n    print(historique[i])\n",
-        "executable": true,
-        "entrees": []
+        "type": "paragraphe",
+        "texte": "L'historique se lit **du plus récent, en haut, au plus ancien, en bas**. Le premier commit du projet est donc la dernière ligne."
       },
       {
         "type": "attention",
@@ -1706,15 +1736,23 @@
         "texte": "Un commit vit d'abord **sur ta machine**. GitHub ne le sait pas, et tes camarades non plus. `git push` envoie tes commits vers GitHub (le dépôt distant, nommé `origin`) ; `git pull` rapporte ceux que d'autres y ont envoyés."
       },
       {
-        "type": "code",
-        "legende": "Ce qu'un push envoie",
-        "python": "local = [\"premier commit\", \"ajoute moyenne.py\", \"corrige le calcul\"]\ngithub = [\"premier commit\", \"ajoute moyenne.py\"]\n\na_pousser = []\nfor commit in local:\n    if commit not in github:\n        a_pousser.append(commit)\nprint(a_pousser)\n",
-        "executable": true,
-        "entrees": []
+        "type": "schema",
+        "nom": "zones",
+        "legende": "git push envoie le dépôt local vers GitHub ; git pull ramène ce qui s'y trouve dans ton dossier."
+      },
+      {
+        "type": "terminal",
+        "legende": "Envoyer ses commits",
+        "texte": "$ git push\nTo https://github.com/ton-pseudo/tp-git.git\n   8a41b07..4b2e9d1  main -> main"
       },
       {
         "type": "paragraphe",
         "texte": "Si quelqu'un a poussé avant toi, GitHub refuse ton push avec le message `rejected ... fetch first`. Ce n'est pas une panne : ton historique est en retard. Fais un `git pull`, puis recommence ton push."
+      },
+      {
+        "type": "terminal",
+        "legende": "Un push refusé",
+        "texte": "$ git push\n! [rejected]        main -> main (fetch first)\nerror: failed to push some refs to 'https://github.com/ton-pseudo/tp-git.git'\n$ git pull\n$ git push"
       },
       {
         "type": "paragraphe",
@@ -1736,18 +1774,21 @@
     "blocs": [
       {
         "type": "paragraphe",
-        "texte": "Avant de committer, on regarde ce qui a changé : `git diff` compare ton fichier à sa dernière version validée, ligne par ligne. Une ligne qui commence par `-` a été **retirée**, une ligne qui commence par `+` a été **ajoutée**. Une ligne modifiée apparaît deux fois : l'ancienne en `-`, la nouvelle en `+`."
+        "texte": "Avant de committer, on regarde ce qui a changé : `git diff` compare ton fichier à sa dernière version validée, ligne par ligne. Une ligne qui commence par `-` a été **retirée**, une ligne qui commence par `+` a été **ajoutée**. Une ligne modifiée apparaît deux fois : l'ancienne en `-`, la nouvelle en `+`. Les lignes sans signe n'ont pas changé : c'est le contexte."
       },
       {
-        "type": "code",
-        "legende": "Calculer une différence à la main",
-        "python": "avant = [\"a = 10\", \"b = 5\", \"print(a + b)\"]\napres = [\"a = 10\", \"b = 6\", \"print(a + b)\"]\n\nfor ligne in avant:\n    if ligne not in apres:\n        print(\"-\", ligne)\nfor ligne in apres:\n    if ligne not in avant:\n        print(\"+\", ligne)\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Une ligne modifiée",
+        "texte": "$ git diff moyenne.py\n@@ -1,2 +1,2 @@\n def moyenne(notes):\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)"
       },
       {
         "type": "paragraphe",
         "texte": "Une fois le fichier ajouté avec `git add`, `git diff` ne montre plus rien : le changement est dans l'index. Pour le voir, on écrit `git diff --staged`."
+      },
+      {
+        "type": "terminal",
+        "legende": "Avant et après git add",
+        "texte": "$ git diff\n$ git add moyenne.py\n$ git diff\n$ git diff --staged\n@@ -1,2 +1,2 @@\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)"
       },
       {
         "type": "attention",
@@ -1768,19 +1809,32 @@
         "texte": "Dès que tu lances ton programme dans ton éditeur, des fichiers apparaissent que personne n'a envie de partager : le dossier `.idea/` de l'éditeur, le dossier `__pycache__/` de Python, parfois un fichier de mots de passe. Dans `git status`, ils traînent en « non suivi », et un `git add .` distrait les enverrait sur GitHub."
       },
       {
+        "type": "terminal",
+        "legende": "Des fichiers que tu n'as pas écrits",
+        "texte": "$ git status\nUntracked files:\n        .idea/\n        __pycache__/\n        moyenne.py"
+      },
+      {
         "type": "paragraphe",
         "texte": "Le fichier **`.gitignore`**, à la racine du dépôt, liste ce que git doit ignorer, une règle par ligne : `.idea/` pour un dossier, `*.pyc` pour tous les fichiers qui finissent par `.pyc`, `secret.txt` pour un fichier précis. On le committe comme un autre."
       },
       {
-        "type": "code",
-        "legende": "Quels fichiers sont ignorés ?",
-        "python": "regles = [\"*.pyc\", \"secret.txt\", \".idea/\"]\nfichiers = [\"moyenne.py\", \"moyenne.pyc\", \"secret.txt\", \".idea/workspace.xml\"]\n\nfor fichier in fichiers:\n    ignore = False\n    for regle in regles:\n        if regle.startswith(\"*\"):\n            if fichier.endswith(regle[1:]):\n                ignore = True\n        elif regle in fichier:\n            ignore = True\n    print(fichier, ignore)\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Le fichier .gitignore",
+        "texte": "__pycache__/\n.idea/\n*.pyc\nsecret.txt"
+      },
+      {
+        "type": "terminal",
+        "legende": "Après avoir créé .gitignore",
+        "texte": "$ git status\nUntracked files:\n        .gitignore\n        moyenne.py"
       },
       {
         "type": "attention",
         "texte": "**Le `.gitignore` n'agit que sur les fichiers non suivis.** Si un fichier a déjà été committé, l'ajouter ensuite au `.gitignore` ne change rien : git continue de le suivre. Il faut d'abord le retirer du suivi avec `git rm --cached fichier`."
+      },
+      {
+        "type": "terminal",
+        "legende": "Arrêter de suivre un fichier",
+        "texte": "$ git rm --cached secret.txt\nrm 'secret.txt'"
       }
     ],
     "famille": "types"
@@ -1797,15 +1851,18 @@
         "texte": "Tout le monde travaille sur la même ligne d'historique, la branche **`main`**. Si tu essaies une idée risquée, tu peux casser le travail de tous. Une **branche** est une ligne parallèle : tu y fais des commits à ton rythme, et `main` ne bouge pas tant que tu ne décides pas de l'y rejoindre."
       },
       {
+        "type": "schema",
+        "nom": "branches",
+        "legende": "La branche ma-fonction part de main, reçoit deux commits, puis revient dans main."
+      },
+      {
         "type": "paragraphe",
         "texte": "On crée une branche et on s'y place avec `git switch -c ma-fonction`. On revient à `main` avec `git switch main`. `git branch` liste les branches, et une étoile marque celle où tu es. Pour publier ta branche : `git push -u origin ma-fonction`."
       },
       {
-        "type": "code",
-        "legende": "Deux lignes d'historique",
-        "python": "branches = {\n    \"main\": [\"premier commit\", \"ajoute moyenne.py\"],\n    \"ma-fonction\": [\"premier commit\", \"ajoute moyenne.py\"],\n}\nbranches[\"ma-fonction\"].append(\"feat: ajoute la médiane\")\n\nprint(branches[\"main\"])\nprint(branches[\"ma-fonction\"])\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Créer une branche et la publier",
+        "texte": "$ git switch -c ma-fonction\nSwitched to a new branch 'ma-fonction'\n$ git branch\n  main\n* ma-fonction\n$ git push -u origin ma-fonction"
       },
       {
         "type": "attention",
@@ -1826,15 +1883,23 @@
         "texte": "Une fois ta branche poussée, tu demandes à la rejoindre à `main` : c'est une **pull request** sur GitHub (une *merge request*, ou MR, sur GitLab : c'est la même idée). Les autres lisent tes changements, commentent, puis quelqu'un **fusionne**. `main` ne reçoit que du travail relu."
       },
       {
+        "type": "schema",
+        "nom": "pullrequest",
+        "legende": "Le parcours d'une pull request, de la branche poussée à la fusion dans main."
+      },
+      {
         "type": "paragraphe",
         "texte": "Quand deux personnes modifient **la même ligne** du même fichier, git ne peut pas choisir : c'est un **conflit**. Il écrit les deux versions dans le fichier, entre des marqueurs."
       },
       {
-        "type": "code",
-        "legende": "Un fichier en conflit",
-        "python": "fichier = [\n    \"def moyenne(notes):\",\n    \"<<<<<<< HEAD\",\n    \"    return sum(notes) / len(notes)\",\n    \"=======\",\n    \"    return round(sum(notes) / len(notes), 1)\",\n    \">>>>>>> ma-fonction\",\n]\nfor ligne in fichier:\n    print(ligne)\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Git s'arrête",
+        "texte": "$ git merge ma-fonction\nCONFLICT (content): Merge conflict in prix.py\nAutomatic merge failed; fix conflicts and then commit the result."
+      },
+      {
+        "type": "terminal",
+        "legende": "Le fichier en conflit",
+        "texte": "def prix():\n<<<<<<< HEAD\n    return 10\n=======\n    return 12\n>>>>>>> ma-fonction"
       },
       {
         "type": "paragraphe",
@@ -1863,11 +1928,9 @@
         "texte": "Un historique bien tenu répond à des questions : qui a écrit cette ligne, et pourquoi ? Quand ce bug est-il apparu ? Les messages `feat:` et `fix:` en font un journal que n'importe qui peut relire."
       },
       {
-        "type": "code",
-        "legende": "Combien de commits par personne ?",
-        "python": "commits = [\n    {\"auteur\": \"Camille\", \"message\": \"feat: ajoute le menu\"},\n    {\"auteur\": \"Leo\", \"message\": \"fix: corrige le calcul\"},\n    {\"auteur\": \"Camille\", \"message\": \"docs: explique le menu\"},\n]\ncompte = {}\nfor commit in commits:\n    auteur = commit[\"auteur\"]\n    if auteur in compte:\n        compte[auteur] += 1\n    else:\n        compte[auteur] = 1\nprint(compte)\n",
-        "executable": true,
-        "entrees": []
+        "type": "terminal",
+        "legende": "Qui a fait quoi ?",
+        "texte": "$ git log --format=\"%an : %s\"\nCamille : docs: explique le menu\nLéo : fix: corrige le calcul\nCamille : feat: ajoute le menu"
       },
       {
         "type": "attention",

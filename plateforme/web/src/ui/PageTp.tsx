@@ -4,6 +4,7 @@ import type { Executeur } from '../execution/executeur'
 import { BacASable } from './BacASable'
 import { CarteCode } from './CarteCode'
 import { SchemaTp } from './SchemaTp'
+import { Terminal } from './Terminal'
 import { formaterTexte } from './texte'
 import './PageTp.css'
 
@@ -163,6 +164,7 @@ function BlocRendu({ bloc, executeur }: { bloc: BlocTp; executeur: Executeur }) 
     )
   }
   if (bloc.type === 'schema') return <SchemaTp nom={bloc.nom} legende={bloc.legende} />
+  if (bloc.type === 'terminal') return <Terminal legende={bloc.legende} texte={bloc.texte} />
   if (bloc.type === 'indice') {
     return (
       <details className="tp__indice">

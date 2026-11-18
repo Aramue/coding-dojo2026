@@ -247,3 +247,35 @@ def test_un_exemple_avec_entrees_simulees_tourne():
         )
         == []
     )
+
+
+def test_un_bloc_terminal_n_est_pas_execute():
+    # Des commandes git ne sont pas du Python : les executer ferait echouer la lecon
+    # pour un exemple parfaitement juste.
+    terminal = {
+        "type": "terminal",
+        "legende": "Le terminal",
+        "texte": "$ git status\nOn branch main\nnothing to commit",
+    }
+    assert verifier_lecon(lecon([terminal])) == []
+
+
+def test_un_schema_dans_une_lecon_est_accepte():
+    schema = {"type": "schema", "nom": "zones", "legende": "Les trois zones"}
+    assert verifier_lecon(lecon([schema])) == []
+
+
+def test_un_schema_inconnu_est_refuse():
+    import pytest
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        lecon([{"type": "schema", "nom": "inconnu", "legende": "x"}])
+
+
+def test_un_bloc_terminal_vide_est_refuse():
+    import pytest
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        lecon([{"type": "terminal", "legende": "x", "texte": "   "}])

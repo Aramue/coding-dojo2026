@@ -4,27 +4,28 @@ ordre: 32
 titre: Envoyer et recevoir
 duree_min: 4
 blocs:
-  - type: paragraphe
-    texte: >-
-      Un commit vit d'abord **sur ta machine**. GitHub ne le sait pas, et tes camarades non plus. `git push` envoie tes commits vers GitHub (le dépôt distant, nommé `origin`) ; `git pull` rapporte ceux que d'autres y ont envoyés.
-  - type: code
-    legende: Ce qu'un push envoie
-    executable: true
-    python: |
-      local = ["premier commit", "ajoute moyenne.py", "corrige le calcul"]
-      github = ["premier commit", "ajoute moyenne.py"]
-
-      a_pousser = []
-      for commit in local:
-          if commit not in github:
-              a_pousser.append(commit)
-      print(a_pousser)
-  - type: paragraphe
-    texte: >-
-      Si quelqu'un a poussé avant toi, GitHub refuse ton push avec le message `rejected ... fetch first`. Ce n'est pas une panne : ton historique est en retard. Fais un `git pull`, puis recommence ton push.
-  - type: paragraphe
-    texte: >-
-      Les habitudes qui évitent les ennuis : **un `git pull` avant de se mettre au travail**, des commits **petits et cohérents** poussés souvent, et un message qui dit la vérité.
-  - type: attention
-    texte: >-
-      **Ne pousse jamais un mot de passe, une clé ou un fichier personnel.** L'historique garde tout : même supprimé dans le commit suivant, le secret reste lisible dans l'ancien. Et n'utilise pas `git push --force` sur un dépôt partagé : il efface le travail des autres.
+- type: paragraphe
+  texte: Un commit vit d'abord **sur ta machine**. GitHub ne le sait pas, et tes camarades non plus. `git push` envoie tes commits vers GitHub (le dépôt distant, nommé `origin`) ; `git pull` rapporte ceux que d'autres y ont envoyés.
+- type: schema
+  nom: zones
+  legende: git push envoie le dépôt local vers GitHub ; git pull ramène ce qui s'y trouve dans ton dossier.
+- type: terminal
+  legende: Envoyer ses commits
+  texte: |-
+    $ git push
+    To https://github.com/ton-pseudo/tp-git.git
+       8a41b07..4b2e9d1  main -> main
+- type: paragraphe
+  texte: 'Si quelqu''un a poussé avant toi, GitHub refuse ton push avec le message `rejected ... fetch first`. Ce n''est pas une panne : ton historique est en retard. Fais un `git pull`, puis recommence ton push.'
+- type: terminal
+  legende: Un push refusé
+  texte: |-
+    $ git push
+    ! [rejected]        main -> main (fetch first)
+    error: failed to push some refs to 'https://github.com/ton-pseudo/tp-git.git'
+    $ git pull
+    $ git push
+- type: paragraphe
+  texte: 'Les habitudes qui évitent les ennuis : **un `git pull` avant de se mettre au travail**, des commits **petits et cohérents** poussés souvent, et un message qui dit la vérité.'
+- type: attention
+  texte: '**Ne pousse jamais un mot de passe, une clé ou un fichier personnel.** L''historique garde tout : même supprimé dans le commit suivant, le secret reste lisible dans l''ancien. Et n''utilise pas `git push --force` sur un dépôt partagé : il efface le travail des autres.'

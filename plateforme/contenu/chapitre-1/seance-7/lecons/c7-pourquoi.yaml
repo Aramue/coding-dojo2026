@@ -4,26 +4,24 @@ ordre: 28
 titre: À quoi sert git
 duree_min: 3
 blocs:
-  - type: paragraphe
-    texte: >-
-      Tu connais cette situation : `rendu.py`, puis `rendu_v2.py`, puis `rendu_final.py`, puis `rendu_final_VRAI.py`. Lequel est le bon ? À deux, c'est pire : chacun modifie sa copie, et la dernière qu'on enregistre écrase l'autre.
-  - type: paragraphe
-    texte: >-
-      **git** est un logiciel installé sur ton ordinateur. Il garde l'**historique** d'un dossier : chaque étape que tu décides de conserver s'appelle un **commit**. Il n'y a qu'un seul fichier `rendu.py`, mais git se souvient de toutes ses versions, avec la date, l'auteur et une phrase qui explique le changement.
-  - type: code
-    legende: Un historique, c'est une liste de commits
-    executable: true
-    python: |
-      historique = [
-          {"auteur": "Camille", "message": "feat: ajoute le calcul de la moyenne"},
-          {"auteur": "Leo", "message": "fix: corrige la division par zéro"},
-          {"auteur": "Camille", "message": "docs: explique comment lancer le programme"},
-      ]
-      for commit in historique:
-          print(commit["auteur"], ":", commit["message"])
-  - type: paragraphe
-    texte: >-
-      Ce que git résout : **retrouver** une ancienne version quand on a cassé quelque chose, **savoir** qui a changé quoi et pourquoi, et **travailler à plusieurs** sur les mêmes fichiers sans s'écraser.
-  - type: attention
-    texte: >-
-      **git n'est pas GitHub.** git est le logiciel, sur ton ordinateur : il marche sans internet. GitHub est un site qui héberge des dépôts git pour les partager. On peut utiliser git sans GitHub, jamais l'inverse.
+- type: paragraphe
+  texte: 'Tu connais cette situation : `rendu.py`, puis `rendu_v2.py`, puis `rendu_final.py`, puis `rendu_final_VRAI.py`. Lequel est le bon ? À deux, c''est pire : chacun modifie sa copie, et la dernière qu''on enregistre écrase l''autre.'
+- type: schema
+  nom: versions
+  legende: Sans git, on empile des copies. Avec git, un seul fichier garde toutes ses versions.
+- type: paragraphe
+  texte: '**git** est un logiciel installé sur ton ordinateur. Il garde l''**historique** d''un dossier : chaque étape que tu décides de conserver s''appelle un **commit**. Il n''y a qu''un seul fichier `rendu.py`, mais git se souvient de toutes ses versions, avec la date, l''auteur et une phrase qui explique le changement.'
+- type: terminal
+  legende: Un historique, vu par git
+  texte: |-
+    $ git log --oneline
+    c3d9f21 fix: corrige la division par zéro
+    8a41b07 feat: ajoute la médiane
+    5e2c6aa feat: ajoute le calcul de la moyenne
+- type: paragraphe
+  texte: 'Ce que git résout : **retrouver** une ancienne version quand on a cassé quelque chose, **savoir** qui a changé quoi et pourquoi, et **travailler à plusieurs** sur les mêmes fichiers sans s''écraser.'
+- type: schema
+  nom: github
+  legende: git est sur ton ordinateur ; GitHub est un site où l'on partage des dépôts git.
+- type: attention
+  texte: '**git n''est pas GitHub.** git est le logiciel, sur ton ordinateur : il marche sans internet. GitHub est un site qui héberge des dépôts git pour les partager. On peut utiliser git sans GitHub, jamais l''inverse.'

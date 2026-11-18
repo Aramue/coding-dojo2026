@@ -1,4 +1,5 @@
 import type { Test } from '../validation/types'
+import type { NomSchema } from '../ui/SchemaTp'
 
 export type Exercice = {
   id: string
@@ -62,6 +63,10 @@ export type Bloc =
       /** Entrées simulées d'un exemple qui appelle `input()`. Jamais exécutable. */
       entrees: string[]
     }
+  /** Des commandes et leur retour, affichés tels quels : jamais exécutés. */
+  | { type: 'terminal'; legende: string; texte: string }
+  /** Un schéma dessiné par `SchemaTp`, choisi par son nom. */
+  | { type: 'schema'; nom: NomSchema; legende: string }
 
 export type Lecon = {
   id: string
@@ -82,8 +87,6 @@ export type BlocTp =
   | Bloc
   | { type: 'indice'; texte: string }
   | { type: 'verifier'; texte: string }
-  /** Un schéma dessiné par `SchemaTp`, choisi par son nom. */
-  | { type: 'schema'; nom: 'pixels' | 'binaire' | 'masque' | 'octet' | 'ligne'; legende: string }
 
 export type EtapeTp = {
   titre: string

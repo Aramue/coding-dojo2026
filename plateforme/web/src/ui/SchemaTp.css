@@ -221,3 +221,68 @@
   font-weight: 600;
   fill: var(--encre) !important;
 }
+
+/*
+ * Les schemas de git : des boites, des fleches et des etiquettes. Le texte d'une
+ * boite est au-dessus de la regle generale `.schema text`, d'ou le selecteur
+ * plus precis ; une boite d'etat (rouge, cyan, vert, ambre) fixe sa couleur de
+ * texte en ligne, pour rester lisible sur chacune.
+ */
+.schema__boite {
+  fill: var(--surface);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.schema__boite--accent {
+  fill: var(--encre);
+  stroke: var(--encre);
+}
+
+.schema text.schema__titre-boite {
+  font-size: 16.5px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.schema text.schema__sous-boite {
+  font-size: 14px;
+  text-anchor: middle;
+}
+
+.schema text.schema__etiquette {
+  font-family: var(--police-code);
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.schema text.schema__note--g {
+  font-size: 15px;
+}
+
+.schema__note--centre {
+  text-anchor: middle;
+}
+
+.schema__trait {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 2;
+}
+
+.schema__trait--epais {
+  stroke: var(--ink);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.schema__noeud {
+  fill: var(--ink);
+  stroke: var(--surface-doux);
+  stroke-width: 3;
+}
+
+.schema__noeud--fusion {
+  fill: var(--encre);
+}

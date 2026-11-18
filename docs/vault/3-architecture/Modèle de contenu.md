@@ -74,9 +74,20 @@ blocs:
     texte: "Le signe `=` ne veut pas dire « est égal à »."
 ```
 
-**Trois types de bloc, pas davantage** : `paragraphe`, `code`, `attention`. Le formatage des
-paragraphes se limite à `**gras**` et `` `code` `` — une fonction d'une dizaine de lignes,
-aucune bibliothèque de rendu markdown.
+**Cinq types de bloc** : `paragraphe`, `code`, `attention`, et depuis la [[Séance 7]] `terminal` et
+`schema`. Le formatage des paragraphes se limite à `**gras**` et `` `code` `` — une fonction d'une
+dizaine de lignes, aucune bibliothèque de rendu markdown.
+
+| Bloc | Pour quoi | Exécuté ? |
+|---|---|---|
+| `code` | un exemple de **Python** | oui, par le validateur ; `executable: true` ajoute un bouton « Essayer » |
+| `terminal` | des commandes et leur retour (git, un fichier de configuration) : `legende`, `texte` | **jamais** |
+| `schema` | un dessin choisi par son `nom` (`SchemaTp.tsx`) : `nom`, `legende` | non |
+
+Un bloc `terminal` colore ses lignes d'après leur début : `$ ` pour une commande, `+` et `-` pour un
+diff, `!` ou `error` pour un refus, `<<<<<<<` `=======` `>>>>>>>` pour un conflit. Il existe parce
+qu'un exemple de leçon est du Python et que le validateur l'exécute : y mettre `git status` aurait
+fait échouer la construction, ou obligé à simuler git en Python, ce qui n'apprend rien.
 
 > [!warning] Un opérateur s'écrit entre accents graves, dans un énoncé comme dans une leçon
 > `formaterTexte` lit une double étoile comme une ouverture de gras. Un premier jet de `s2-08`

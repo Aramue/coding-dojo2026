@@ -551,8 +551,41 @@ class BlocCode(BaseModel):
         return v
 
 
+class BlocTerminal(BaseModel):
+    """Des commandes et leur retour, affiches tels quels : jamais executes.
+
+    Un exemple de lecon est du Python, et le validateur l'execute. Ce qui ne l'est
+    pas (git, un terminal, un fichier de configuration) n'a pas de sens a
+    executer : il s'affiche, et c'est tout. Les lignes qui commencent par `$ `
+    sont des commandes, les autres leur retour.
+    """
+
+    type: Literal["terminal"]
+    legende: str = Field(min_length=1)
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un bloc terminal")
+
+
+class BlocSchema(BaseModel):
+    """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
+
+    type: Literal["schema"]
+    # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
+    # un bloc vide la-bas.
+    nom: Literal[
+        "pixels", "binaire", "masque", "octet", "ligne",
+        "versions", "github", "fork", "zones", "commits", "etats", "branches", "pullrequest",
+    ]
+    legende: str = Field(min_length=1)
+
+
 BlocLecon = Annotated[
-    Union[BlocParagraphe, BlocAttention, BlocCode], Field(discriminator="type")
+    Union[BlocParagraphe, BlocAttention, BlocCode, BlocTerminal, BlocSchema],
+    Field(discriminator="type"),
 ]
 
 
@@ -751,18 +784,10 @@ class BlocVerifier(BaseModel):
         return _texte_utilisable(v, "un point de controle")
 
 
-class BlocSchema(BaseModel):
-    """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
-
-    type: Literal["schema"]
-    # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
-    # un bloc vide la-bas.
-    nom: Literal["pixels", "binaire", "masque", "octet", "ligne"]
-    legende: str = Field(min_length=1)
-
-
 BlocTp = Annotated[
-    Union[BlocParagraphe, BlocAttention, BlocCode, BlocIndice, BlocVerifier, BlocSchema],
+    Union[
+        BlocParagraphe, BlocAttention, BlocCode, BlocTerminal, BlocIndice, BlocVerifier, BlocSchema
+    ],
     Field(discriminator="type"),
 ]
 

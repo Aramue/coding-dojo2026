@@ -1,32 +1,32 @@
 id: c7-fusion
 notion: fusion
 ordre: 36
-titre: "Bonus : fusionner et résoudre un conflit"
+titre: 'Bonus : fusionner et résoudre un conflit'
 duree_min: 4
 blocs:
-  - type: paragraphe
-    texte: >-
-      Une fois ta branche poussée, tu demandes à la rejoindre à `main` : c'est une **pull request** sur GitHub (une *merge request*, ou MR, sur GitLab : c'est la même idée). Les autres lisent tes changements, commentent, puis quelqu'un **fusionne**. `main` ne reçoit que du travail relu.
-  - type: paragraphe
-    texte: >-
-      Quand deux personnes modifient **la même ligne** du même fichier, git ne peut pas choisir : c'est un **conflit**. Il écrit les deux versions dans le fichier, entre des marqueurs.
-  - type: code
-    legende: Un fichier en conflit
-    executable: true
-    python: |
-      fichier = [
-          "def moyenne(notes):",
-          "<<<<<<< HEAD",
-          "    return sum(notes) / len(notes)",
-          "=======",
-          "    return round(sum(notes) / len(notes), 1)",
-          ">>>>>>> ma-fonction",
-      ]
-      for ligne in fichier:
-          print(ligne)
-  - type: paragraphe
-    texte: >-
-      Entre `<<<<<<<` et `=======` : **ta** version, celle de la branche où tu es. Entre `=======` et `>>>>>>>` : celle de l'**autre**. Résoudre, c'est ouvrir le fichier, garder ce qui est juste, **effacer les trois lignes de marqueurs**, puis faire `git add` et un commit.
-  - type: attention
-    texte: >-
-      **Un fichier qui contient encore `<<<<<<<` n'est pas résolu.** Si tu le committes ainsi, les marqueurs deviennent du code, et le programme plante.
+- type: paragraphe
+  texte: 'Une fois ta branche poussée, tu demandes à la rejoindre à `main` : c''est une **pull request** sur GitHub (une *merge request*, ou MR, sur GitLab : c''est la même idée). Les autres lisent tes changements, commentent, puis quelqu''un **fusionne**. `main` ne reçoit que du travail relu.'
+- type: schema
+  nom: pullrequest
+  legende: Le parcours d'une pull request, de la branche poussée à la fusion dans main.
+- type: paragraphe
+  texte: 'Quand deux personnes modifient **la même ligne** du même fichier, git ne peut pas choisir : c''est un **conflit**. Il écrit les deux versions dans le fichier, entre des marqueurs.'
+- type: terminal
+  legende: Git s'arrête
+  texte: |-
+    $ git merge ma-fonction
+    CONFLICT (content): Merge conflict in prix.py
+    Automatic merge failed; fix conflicts and then commit the result.
+- type: terminal
+  legende: Le fichier en conflit
+  texte: |-
+    def prix():
+    <<<<<<< HEAD
+        return 10
+    =======
+        return 12
+    >>>>>>> ma-fonction
+- type: paragraphe
+  texte: 'Entre `<<<<<<<` et `=======` : **ta** version, celle de la branche où tu es. Entre `=======` et `>>>>>>>` : celle de l''**autre**. Résoudre, c''est ouvrir le fichier, garder ce qui est juste, **effacer les trois lignes de marqueurs**, puis faire `git add` et un commit.'
+- type: attention
+  texte: '**Un fichier qui contient encore `<<<<<<<` n''est pas résolu.** Si tu le committes ainsi, les marqueurs deviennent du code, et le programme plante.'
