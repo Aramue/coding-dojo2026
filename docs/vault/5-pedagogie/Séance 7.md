@@ -16,10 +16,10 @@ mis-a-jour: 2026-11-17
 > conflits et le travail en équipe. La séance prépare le **TP2** (API, JSON et git), qui utilise
 > tout ce qui précède : [[Séance 5]] (JSON) et [[Séance 6]] (API).
 
-> [!warning] Date d'ouverture provisoire
-> Le chapitre `versions` s'ouvre le **31 décembre 2099** dans `outils/schema.py` : fermé aux élèves,
-> visible dans l'aperçu du professeur. À remplacer par la vraie date avant la release, comme pour
-> la [[Séance 6]].
+> [!success] Ouverte le 18 novembre 2026
+> `CHAPITRES["versions"]["ouverture"]` vaut `2026-11-18` : la séance est ouverte dès sa publication
+> ([[ADR-013 Une séance s'ouvre à sa date]]). « Publication » veut dire le déploiement d'un tag : tant
+> qu'il n'est pas fait, rien n'est visible des élèves. La [[Séance 6]], elle, reste fermée (31 décembre 2099).
 
 ## Le choix de la méthode
 
@@ -181,7 +181,7 @@ TP sur machine et une marge, soit les 120 min.
 > - **Comptes GitHub créés avant la séance** : pseudonyme, pas de nom réel ni de photo, comme pour les
 >   codes d'accès ([[ADR-002 Identification par code d'agent]]).
 
-- [ ] Date de la séance 7 dans `CHAPITRES["versions"]["ouverture"]`
+- [x] Date de la séance 7 dans `CHAPITRES["versions"]["ouverture"]` : le 18 novembre 2026
 - [x] Écrire le dépôt modèle (`plateforme/tp-git-modele/`)
 - [x] Publier le dépôt modèle sur GitHub sous le nom `tp-git`, en public : https://github.com/WolfoNeos/tp-git
       (compte personnel du professeur, publié le 17 novembre 2026 ; copie de `plateforme/tp-git-modele/`, à garder
