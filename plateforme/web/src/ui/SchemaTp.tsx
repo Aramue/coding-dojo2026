@@ -13,7 +13,22 @@ import './SchemaTp.css'
  * des coordonnées SVG dans un fichier de consignes seraient illisibles en
  * revue, et un schéma cassé ne s'y verrait pas.
  */
-export const SCHEMAS = ['pixels', 'binaire', 'masque', 'octet', 'ligne'] as const
+export const SCHEMAS = [
+  'pixels',
+  'binaire',
+  'masque',
+  'octet',
+  'ligne',
+  // Les leçons de git (séance 7)
+  'versions',
+  'github',
+  'fork',
+  'zones',
+  'commits',
+  'etats',
+  'branches',
+  'pullrequest',
+] as const
 export type NomSchema = (typeof SCHEMAS)[number]
 
 const ROUGE = '#C8372D'
@@ -345,6 +360,320 @@ function Ligne(): Dessin {
   }
 }
 
+/* ------------------------------------------------------------------- git */
+
+/*
+ * Les schémas de la séance 7. Des boîtes, des flèches et du texte : les mêmes
+ * que les slides, dans les couleurs de la charte. `Boite` écrit un titre en gras
+ * puis des lignes de précision ; `Fleche` trace un trait terminé par une pointe.
+ */
+const ETAT_NON_SUIVI = '#FF5F56'
+const ETAT_INDEXE = '#8BE9FD'
+const ETAT_VALIDE = '#27C93F'
+const ETAT_MODIFIE = '#FFBD2E'
+const ENCRE_ETAT = '#1E1B16'
+
+function Pointe({ id }: { id: string }) {
+  return (
+    <defs>
+      <marker id={id} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 L10 5 L0 10 z" className="schema__pointe" />
+      </marker>
+    </defs>
+  )
+}
+
+function Boite({
+  x,
+  y,
+  w,
+  h,
+  lignes,
+  accent = false,
+  fond,
+}: {
+  x: number
+  y: number
+  w: number
+  h: number
+  lignes: string[]
+  accent?: boolean
+  fond?: string
+}) {
+  const interligne = 18
+  const haut = y + h / 2 - ((lignes.length - 1) * interligne) / 2 + 5
+  const texte = fond ? ENCRE_ETAT : accent ? '#fff' : undefined
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={w}
+        height={h}
+        rx={10}
+        className={accent ? 'schema__boite schema__boite--accent' : 'schema__boite'}
+        style={fond ? { fill: fond, stroke: fond } : undefined}
+      />
+      {lignes.map((ligne, i) => (
+        <text
+          key={i}
+          x={x + w / 2}
+          y={haut + i * interligne}
+          className={i === 0 ? 'schema__titre-boite' : 'schema__sous-boite'}
+          style={texte ? { fill: texte } : undefined}
+        >
+          {ligne}
+        </text>
+      ))}
+    </g>
+  )
+}
+
+function Fleche({ id, depuis, vers }: { id: string; depuis: [number, number]; vers: [number, number] }) {
+  return (
+    <path
+      d={`M ${depuis[0]} ${depuis[1]} L ${vers[0]} ${vers[1]}`}
+      className="schema__fleche"
+      markerEnd={`url(#${id})`}
+    />
+  )
+}
+
+function Etiquette({ x, y, children }: { x: number; y: number; children: string }) {
+  return (
+    <text x={x} y={y} className="schema__etiquette">
+      {children}
+    </text>
+  )
+}
+
+function Versions(): Dessin {
+  const fichiers = ['rendu.py', 'rendu_v2.py', 'rendu_final.py', 'rendu_final_VRAI.py']
+  const commits: [string, string][] = [
+    ['c3d9f21', 'fix: corrige le calcul'],
+    ['8a41b07', 'feat: ajoute la médiane'],
+    ['5e2c6aa', 'feat: ajoute la moyenne'],
+  ]
+  return {
+    viewBox: '0 0 720 270',
+    contenu: (
+      <>
+        <text x={170} y={24} className="schema__axe">
+          Sans git
+        </text>
+        {fichiers.map((nom, i) => (
+          <g key={nom}>
+            <rect x={40} y={44 + i * 50} width={260} height={36} rx={8} className="schema__boite" />
+            <text x={56} y={67 + i * 50} className="schema__code schema__code--petit">
+              {nom}
+            </text>
+          </g>
+        ))}
+        <text x={170} y={256} className="schema__note schema__note--g schema__note--centre">
+          laquelle est la bonne ?
+        </text>
+
+        <text x={540} y={24} className="schema__axe">
+          Avec git
+        </text>
+        <path d="M 430 62 L 430 186" className="schema__trait" />
+        {commits.map(([hash, message], i) => (
+          <g key={hash}>
+            <circle cx={430} cy={62 + i * 62} r={11} className="schema__noeud" />
+            <text x={454} y={59 + i * 62} className="schema__code schema__code--petit">
+              {hash}
+            </text>
+            <text x={454} y={78 + i * 62} className="schema__note schema__note--g">
+              {message}
+            </text>
+          </g>
+        ))}
+        <text x={540} y={256} className="schema__note schema__note--g schema__note--centre">
+          un seul fichier, toutes ses versions
+        </text>
+      </>
+    ),
+  }
+}
+
+function Github(): Dessin {
+  const id = 'pointe-github'
+  return {
+    viewBox: '0 0 720 200',
+    contenu: (
+      <>
+        <Pointe id={id} />
+        <Boite x={20} y={40} w={240} h={120} lignes={['Mon ordinateur', 'git, le logiciel', 'marche sans internet']} />
+        <Boite x={460} y={40} w={240} h={120} lignes={['GitHub', 'un site web', 'héberge les dépôts']} accent />
+        <Etiquette x={360} y={72}>git push</Etiquette>
+        <Fleche id={id} depuis={[272, 84]} vers={[448, 84]} />
+        <Fleche id={id} depuis={[448, 122]} vers={[272, 122]} />
+        <Etiquette x={360} y={150}>git pull</Etiquette>
+      </>
+    ),
+  }
+}
+
+function Fork(): Dessin {
+  const id = 'pointe-fork'
+  return {
+    viewBox: '0 0 720 210',
+    contenu: (
+      <>
+        <Pointe id={id} />
+        <Boite x={0} y={50} w={160} h={110} lignes={['Dépôt du', 'professeur', 'sur GitHub']} />
+        <Boite x={280} y={50} w={160} h={110} lignes={['Mon fork', 'sur GitHub,', 'dans mon compte']} accent />
+        <Boite x={560} y={50} w={160} h={110} lignes={['Ma machine', 'un dossier,', 'chez moi']} />
+        <Etiquette x={220} y={96}>Fork</Etiquette>
+        <Fleche id={id} depuis={[168, 105]} vers={[272, 105]} />
+        <Etiquette x={500} y={96}>git clone</Etiquette>
+        <Fleche id={id} depuis={[448, 105]} vers={[552, 105]} />
+        <text x={360} y={196} className="schema__note schema__note--g schema__note--centre">
+          on clone son fork, jamais l'original
+        </text>
+      </>
+    ),
+  }
+}
+
+function Zones(): Dessin {
+  const id = 'pointe-zones'
+  const xs = [0, 203, 406, 609] as const
+  const col = (i: number): number => xs[i] ?? 0
+  return {
+    viewBox: '0 0 720 250',
+    contenu: (
+      <>
+        <Pointe id={id} />
+        <Boite x={xs[0]} y={40} w={110} h={100} lignes={['Dossier', 'de travail', 'mes fichiers']} />
+        <Boite x={xs[1]} y={40} w={110} h={100} lignes={['Index', 'ce que je', 'choisis']} />
+        <Boite x={xs[2]} y={40} w={110} h={100} lignes={['Dépôt local', 'mon historique']} />
+        <Boite x={xs[3]} y={40} w={110} h={100} lignes={['GitHub', 'le dépôt', 'distant']} accent />
+        {['git add', 'git commit', 'git push'].map((nom, i) => (
+          <g key={nom}>
+            <Etiquette x={col(i) + 156} y={76}>{nom}</Etiquette>
+            <Fleche id={id} depuis={[col(i) + 116, 92]} vers={[col(i) + 197, 92]} />
+          </g>
+        ))}
+        <path d="M 664 146 L 664 200 L 55 200 L 55 148" className="schema__fleche" markerEnd={`url(#${id})`} />
+        <Etiquette x={360} y={224}>git pull</Etiquette>
+      </>
+    ),
+  }
+}
+
+function Commits(): Dessin {
+  const id = 'pointe-commits'
+  return {
+    viewBox: '0 0 720 200',
+    contenu: (
+      <>
+        <Pointe id={id} />
+        <text x={80} y={32} className="schema__note schema__note--g schema__note--centre">
+          le plus ancien
+        </text>
+        <text x={640} y={32} className="schema__note schema__note--g schema__note--centre">
+          le plus récent
+        </text>
+        <Boite x={0} y={46} w={160} h={90} lignes={['5e2c6aa', 'feat: ajoute', 'la moyenne']} />
+        <Boite x={280} y={46} w={160} h={90} lignes={['8a41b07', 'feat: ajoute', 'la médiane']} />
+        <Boite x={560} y={46} w={160} h={90} lignes={['c3d9f21', 'fix: corrige', 'le calcul']} accent />
+        <Fleche id={id} depuis={[552, 91]} vers={[448, 91]} />
+        <Fleche id={id} depuis={[272, 91]} vers={[168, 91]} />
+        <text x={360} y={176} className="schema__note schema__note--g schema__note--centre">
+          chaque commit se souvient du précédent
+        </text>
+      </>
+    ),
+  }
+}
+
+function Etats(): Dessin {
+  const id = 'pointe-etats'
+  const xs = [0, 203, 406, 609] as const
+  const col = (i: number): number => xs[i] ?? 0
+  return {
+    viewBox: '0 0 720 270',
+    contenu: (
+      <>
+        <Pointe id={id} />
+        <Boite x={xs[0]} y={40} w={110} h={110} lignes={['Non suivi', 'git le voit,', 'ne le suit pas']} fond={ETAT_NON_SUIVI} />
+        <Boite x={xs[1]} y={40} w={110} h={110} lignes={['Indexé', 'prêt pour le', 'commit']} fond={ETAT_INDEXE} />
+        <Boite x={xs[2]} y={40} w={110} h={110} lignes={['Validé', 'dans', "l'historique"]} fond={ETAT_VALIDE} />
+        <Boite x={xs[3]} y={40} w={110} h={110} lignes={['Modifié', 'changé depuis', 'le dernier', 'commit']} fond={ETAT_MODIFIE} />
+        {['git add', 'git commit', 'je modifie'].map((nom, i) => (
+          <g key={nom}>
+            <Etiquette x={col(i) + 156} y={90}>{nom}</Etiquette>
+            <Fleche id={id} depuis={[col(i) + 116, 105]} vers={[col(i) + 197, 105]} />
+          </g>
+        ))}
+        <path d="M 664 156 L 664 210 L 258 210 L 258 158" className="schema__fleche" markerEnd={`url(#${id})`} />
+        <Etiquette x={460} y={236}>git add</Etiquette>
+      </>
+    ),
+  }
+}
+
+function Branches(): Dessin {
+  return {
+    viewBox: '0 0 720 240',
+    contenu: (
+      <>
+        <path d="M 60 170 L 660 170" className="schema__trait schema__trait--epais" />
+        <path d="M 190 170 L 320 70 L 430 70 L 540 170" className="schema__trait schema__trait--epais" />
+        {[60, 190, 660].map((x) => (
+          <circle key={x} cx={x} cy={170} r={13} className="schema__noeud" />
+        ))}
+        <circle cx={540} cy={170} r={13} className="schema__noeud schema__noeud--fusion" />
+        {[320, 430].map((x) => (
+          <circle key={x} cx={x} cy={70} r={13} className="schema__noeud" />
+        ))}
+        <text x={60} y={208} className="schema__code schema__code--centre">
+          main
+        </text>
+        <text x={375} y={42} className="schema__code schema__code--centre">
+          ma-fonction
+        </text>
+        <text x={190} y={228} className="schema__note schema__note--g schema__note--centre">
+          git switch -c ma-fonction
+        </text>
+        <text x={540} y={228} className="schema__note schema__note--g schema__note--centre">
+          pull request, puis fusion
+        </text>
+      </>
+    ),
+  }
+}
+
+function PullRequest(): Dessin {
+  const id = 'pointe-pr'
+  const xs = [0, 190, 380, 570] as const
+  const col = (i: number): number => xs[i] ?? 0
+  const etapes: string[][] = [
+    ['1', 'Je pousse', 'ma branche'],
+    ['2', "J'ouvre une", 'pull request'],
+    ['3', 'On relit et', 'on commente'],
+    ['4', 'On fusionne', 'dans main'],
+  ]
+  return {
+    viewBox: '0 0 720 190',
+    contenu: (
+      <>
+        <Pointe id={id} />
+        {etapes.map((lignes, i) => (
+          <Boite key={lignes[0]} x={col(i)} y={30} w={150} h={100} lignes={lignes} accent={i === 3} />
+        ))}
+        {[0, 1, 2].map((i) => (
+          <Fleche key={i} id={id} depuis={[col(i) + 154, 80]} vers={[col(i) + 186, 80]} />
+        ))}
+        <text x={360} y={164} className="schema__note schema__note--g schema__note--centre">
+          sur GitLab : merge request, c'est la même idée
+        </text>
+      </>
+    ),
+  }
+}
+
 const DESSINS: Record<NomSchema, { dessin: Dessin; description: string }> = {
   pixels: {
     dessin: Pixels(),
@@ -370,5 +699,45 @@ const DESSINS: Record<NomSchema, { dessin: Dessin; description: string }> = {
     dessin: Ligne(),
     description:
       "La première ligne de l'image, découpée par groupes de quatre pixels : chaque groupe donne huit bits, donc une lettre.",
+  },
+  versions: {
+    dessin: Versions(),
+    description:
+      'Sans git, quatre fichiers rendu, rendu_v2, rendu_final et rendu_final_VRAI : on ne sait pas lequel est le bon. Avec git, un seul fichier et une liste de commits, du plus récent au plus ancien.',
+  },
+  github: {
+    dessin: Github(),
+    description:
+      'Git est un logiciel sur mon ordinateur, GitHub est un site. git push envoie mes commits vers GitHub, git pull rapporte ceux des autres.',
+  },
+  fork: {
+    dessin: Fork(),
+    description:
+      "Le fork copie le dépôt du professeur dans mon compte GitHub. git clone copie ensuite mon fork sur ma machine. On clone son fork, jamais l'original.",
+  },
+  zones: {
+    dessin: Zones(),
+    description:
+      "Quatre endroits : le dossier de travail, l'index, le dépôt local et GitHub. git add va du dossier à l'index, git commit de l'index au dépôt local, git push du dépôt local à GitHub, et git pull ramène GitHub dans le dossier.",
+  },
+  commits: {
+    dessin: Commits(),
+    description:
+      'Trois commits reliés, du plus ancien au plus récent : 5e2c6aa ajoute la moyenne, 8a41b07 ajoute la médiane, c3d9f21 corrige le calcul. Chaque commit se souvient du précédent.',
+  },
+  etats: {
+    dessin: Etats(),
+    description:
+      "Les états d'un fichier : non suivi, puis indexé avec git add, puis validé avec git commit. Un fichier validé qu'on modifie devient modifié, et git add le remet dans l'index.",
+  },
+  branches: {
+    dessin: Branches(),
+    description:
+      "La branche main est une ligne de commits. La branche ma-fonction part de main, reçoit deux commits, puis revient dans main par une fusion, pendant que main n'a pas bougé entre-temps.",
+  },
+  pullrequest: {
+    dessin: PullRequest(),
+    description:
+      "Une pull request en quatre étapes : je pousse ma branche, j'ouvre la pull request, on relit et on commente, puis on fusionne dans main.",
   },
 }

@@ -9,7 +9,7 @@ from typing import Annotated, Literal, Union
 import yaml
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-MOTIF_ID = re.compile(r"^s[123456]-[0-9]{2}(-expert)?$")
+MOTIF_ID = re.compile(r"^s[1234567]-[0-9]{2}(-expert)?$")
 
 # Construit a partir de points de code explicites plutot que recopie depuis des
 # emoji litteraux : un selecteur de variation invisible (U+FE0F) s'etait glisse
@@ -89,13 +89,19 @@ class Exercice(BaseModel):
     # d'exercices et une couleur. Le concept, lui, reste libre et sert au
     # regroupement pedagogique fin. Voir NOTIONS plus bas.
     notion: str
-    seance: int = Field(ge=1, le=6)
+    seance: int = Field(ge=1, le=7)
     niveau: Literal["normal", "expert"]
     type: Literal["predire", "debug", "completer", "ecrire"]
     titre: str
     obligatoire: bool
     enonce: str
     depart: str = ""
+    # Seulement pour un predire dont la question n'est pas « qu'affiche ce
+    # programme ? » : un historique git, une convention de message, un fichier en
+    # conflit. `question` remplace ce titre au-dessus des propositions, et
+    # `legende_depart` remplace « Le programme » sur la carte qui montre `depart`.
+    question: str | None = None
+    legende_depart: str | None = None
     indices: list[str] = Field(default_factory=list)
     tests: list[TestExercice] = Field(min_length=1)
     solution: str
@@ -114,6 +120,20 @@ class Exercice(BaseModel):
         for champ in (self.enonce, self.depart, self.solution):
             if "getpass" in champ:
                 raise ValueError("getpass est impossible sous Pyodide, il est banni")
+        return self
+
+    @model_validator(mode="after")
+    def question_reservee_au_predire(self) -> "Exercice":
+        for nom in ("question", "legende_depart"):
+            valeur = getattr(self, nom)
+            if valeur is None:
+                continue
+            if self.type != "predire":
+                raise ValueError(f"{nom!r} ne sert qu'a un exercice 'predire'")
+            if not valeur.strip():
+                raise ValueError(f"{nom!r} vide")
+            if MOTIF_EMOJI.search(valeur):
+                raise ValueError(f"aucun emoji dans {nom!r}")
         return self
 
     @model_validator(mode="after")
@@ -149,7 +169,7 @@ def charger_tous(racine: Path) -> list[Exercice]:
     ]
 
 
-MOTIF_LECON = re.compile(r"^c[123456]-[a-z]+$")
+MOTIF_LECON = re.compile(r"^c[1234567]-[a-z]+$")
 
 # Les notions du chapitre 1, dans l'ordre du cours. Une notion est l'unite de
 # navigation : elle porte une lecon et un groupe d'exercices.
@@ -354,6 +374,71 @@ NOTIONS: dict[str, dict] = {
         "famille": "variables",
         "chapitre": "services",
     },
+    # --- Seance 7 ---
+    # Git et GitHub. Aucune de ces notions n'est du Python : la couleur suit donc ce
+    # que l'exercice manipule — des textes pour les messages et les motifs, des
+    # valeurs rangees pour les etats et les historiques, une comparaison pour les
+    # differences et les conflits. Les quatre dernieres sont le bonus.
+    "pourquoi": {
+        "ordre": 28,
+        "titre": "À quoi sert git",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "fork": {
+        "ordre": 29,
+        "titre": "Fork et clone",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "suivis": {
+        "ordre": 30,
+        "titre": "Les fichiers suivis",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "commit": {
+        "ordre": 31,
+        "titre": "Le commit et ses conventions",
+        "famille": "types",
+        "chapitre": "versions",
+    },
+    "push": {
+        "ordre": 32,
+        "titre": "Envoyer et recevoir",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "diff": {
+        "ordre": 33,
+        "titre": "Voir la différence",
+        "famille": "operateurs",
+        "chapitre": "versions",
+    },
+    "gitignore": {
+        "ordre": 34,
+        "titre": "Bonus : ignorer des fichiers",
+        "famille": "types",
+        "chapitre": "versions",
+    },
+    "branches": {
+        "ordre": 35,
+        "titre": "Bonus : les branches",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "fusion": {
+        "ordre": 36,
+        "titre": "Bonus : fusionner et résoudre un conflit",
+        "famille": "operateurs",
+        "chapitre": "versions",
+    },
+    "equipe": {
+        "ordre": 37,
+        "titre": "Bonus : travailler en équipe",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
 }
 
 # Un chapitre regroupe les notions d'un meme sujet, et c'est lui qui structure
@@ -394,6 +479,14 @@ CHAPITRES: dict[str, dict] = {
         # PROVISOIRE : la date de la seance 6 n'est pas connue. 2099 la garde
         # fermee pour les eleves (seul l'apercu du professeur la montre) tant
         # qu'on n'a pas ecrit la vraie date. A REMPLACER avant la release.
+        "ouverture": "2099-12-31",
+    },
+    "versions": {
+        "ordre": 7,
+        "titre": "Git et GitHub",
+        "seance": 7,
+        # PROVISOIRE, comme `services` : la date de la seance 7 n'est pas connue.
+        # A REMPLACER avant la release.
         "ouverture": "2099-12-31",
     },
 }
@@ -458,8 +551,41 @@ class BlocCode(BaseModel):
         return v
 
 
+class BlocTerminal(BaseModel):
+    """Des commandes et leur retour, affiches tels quels : jamais executes.
+
+    Un exemple de lecon est du Python, et le validateur l'execute. Ce qui ne l'est
+    pas (git, un terminal, un fichier de configuration) n'a pas de sens a
+    executer : il s'affiche, et c'est tout. Les lignes qui commencent par `$ `
+    sont des commandes, les autres leur retour.
+    """
+
+    type: Literal["terminal"]
+    legende: str = Field(min_length=1)
+    texte: str = Field(min_length=1)
+
+    @field_validator("texte")
+    @classmethod
+    def utilisable(cls, v: str) -> str:
+        return _texte_utilisable(v, "un bloc terminal")
+
+
+class BlocSchema(BaseModel):
+    """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
+
+    type: Literal["schema"]
+    # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
+    # un bloc vide la-bas.
+    nom: Literal[
+        "pixels", "binaire", "masque", "octet", "ligne",
+        "versions", "github", "fork", "zones", "commits", "etats", "branches", "pullrequest",
+    ]
+    legende: str = Field(min_length=1)
+
+
 BlocLecon = Annotated[
-    Union[BlocParagraphe, BlocAttention, BlocCode], Field(discriminator="type")
+    Union[BlocParagraphe, BlocAttention, BlocCode, BlocTerminal, BlocSchema],
+    Field(discriminator="type"),
 ]
 
 
@@ -658,18 +784,10 @@ class BlocVerifier(BaseModel):
         return _texte_utilisable(v, "un point de controle")
 
 
-class BlocSchema(BaseModel):
-    """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
-
-    type: Literal["schema"]
-    # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
-    # un bloc vide la-bas.
-    nom: Literal["pixels", "binaire", "masque", "octet", "ligne"]
-    legende: str = Field(min_length=1)
-
-
 BlocTp = Annotated[
-    Union[BlocParagraphe, BlocAttention, BlocCode, BlocIndice, BlocVerifier, BlocSchema],
+    Union[
+        BlocParagraphe, BlocAttention, BlocCode, BlocTerminal, BlocIndice, BlocVerifier, BlocSchema
+    ],
     Field(discriminator="type"),
 ]
 

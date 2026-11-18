@@ -160,4 +160,31 @@ describe('PageCours — continuité', () => {
     render(<PageCours groupe={groupe([])} executeur={executeurFactice()} />)
     expect(screen.queryByRole('navigation', { name: /précédente et suivante/i })).toBeNull()
   })
+
+  it("rend un bloc terminal sans bouton « Essayer », jamais exécuté", () => {
+    const executeur = executeurFactice()
+    render(
+      <PageCours
+        groupe={groupe([
+          { type: 'terminal', legende: 'Le terminal', texte: '$ git status\nOn branch main' },
+        ])}
+        executeur={executeur}
+      />,
+    )
+    expect(screen.getByText('Le terminal')).toBeInTheDocument()
+    expect(screen.getByText(/On branch main/)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Essayer' })).toBeNull()
+    expect(executeur.executer).not.toHaveBeenCalled()
+  })
+
+  it('dessine un schéma dans une leçon, avec sa légende', () => {
+    render(
+      <PageCours
+        groupe={groupe([{ type: 'schema', nom: 'zones', legende: 'Les quatre endroits' }])}
+        executeur={executeurFactice()}
+      />,
+    )
+    expect(screen.getByRole('img', { name: /dossier de travail/ })).toBeInTheDocument()
+    expect(screen.getByText('Les quatre endroits')).toBeInTheDocument()
+  })
 })

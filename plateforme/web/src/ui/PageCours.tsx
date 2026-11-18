@@ -6,6 +6,8 @@ import { BacASable } from './BacASable'
 import { CarteCode } from './CarteCode'
 import { PiedNavigation } from './PiedNavigation'
 import { ProgressionLecture } from './ProgressionLecture'
+import { SchemaTp } from './SchemaTp'
+import { Terminal } from './Terminal'
 import { formaterTexte } from './texte'
 import './PageCours.css'
 
@@ -66,6 +68,9 @@ function BlocRendu({ bloc, executeur }: { bloc: Bloc; executeur: Executeur }) {
       </aside>
     )
   }
+
+  if (bloc.type === 'schema') return <SchemaTp nom={bloc.nom} legende={bloc.legende} />
+  if (bloc.type === 'terminal') return <Terminal legende={bloc.legende} texte={bloc.texte} />
 
   return (
     <div className="cours__exemple">

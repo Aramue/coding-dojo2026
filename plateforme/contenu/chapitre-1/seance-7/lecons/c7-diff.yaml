@@ -1,0 +1,30 @@
+id: c7-diff
+notion: diff
+ordre: 33
+titre: Voir la différence
+duree_min: 3
+blocs:
+- type: paragraphe
+  texte: 'Avant de committer, on regarde ce qui a changé : `git diff` compare ton fichier à sa dernière version validée, ligne par ligne. Une ligne qui commence par `-` a été **retirée**, une ligne qui commence par `+` a été **ajoutée**. Une ligne modifiée apparaît deux fois : l''ancienne en `-`, la nouvelle en `+`. Les lignes sans signe n''ont pas changé : c''est le contexte.'
+- type: terminal
+  legende: Une ligne modifiée
+  texte: |-
+    $ git diff moyenne.py
+    @@ -1,2 +1,2 @@
+     def moyenne(notes):
+    -    return sum(notes) / len(notes)
+    +    return round(sum(notes) / len(notes), 1)
+- type: paragraphe
+  texte: 'Une fois le fichier ajouté avec `git add`, `git diff` ne montre plus rien : le changement est dans l''index. Pour le voir, on écrit `git diff --staged`.'
+- type: terminal
+  legende: Avant et après git add
+  texte: |-
+    $ git diff
+    $ git add moyenne.py
+    $ git diff
+    $ git diff --staged
+    @@ -1,2 +1,2 @@
+    -    return sum(notes) / len(notes)
+    +    return round(sum(notes) / len(notes), 1)
+- type: attention
+  texte: '**Lis toujours le diff avant un commit.** C''est là qu''on découvre le `print` de débogage oublié, ou la ligne qu''on n''avait pas l''intention de toucher.'

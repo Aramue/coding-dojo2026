@@ -185,6 +185,10 @@ def _verifier_prediction(ex: Exercice) -> list[str]:
     qcm = next((t for t in ex.tests if isinstance(t, TestQcm)), None)
     if qcm is None:
         return []
+    # Une question de cours n'a pas de programme (la seance 7 sur git en est
+    # faite) : un code vide « affiche » du vide, ce qui n'est la reponse de rien.
+    if not ex.depart.strip():
+        return []
     affiche, _, erreur = _executer(ex.depart, [])
     affiche = affiche.rstrip()
     if erreur or "\n" in affiche:

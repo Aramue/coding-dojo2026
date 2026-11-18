@@ -1,0 +1,27 @@
+id: s7-23
+concept: branches
+notion: branches
+seance: 7
+niveau: expert
+type: ecrire
+titre: Un commit sur la bonne branche
+obligatoire: false
+enonce: Le dictionnaire `branches` range les commits de chaque branche. Ajoute le commit `"c3"` à la branche `"essai"`, sans toucher à `"main"`.
+depart: |
+  branches = {"main": ["c1", "c2"], "essai": ["c1", "c2"]}
+indices:
+- 'branches["essai"] est une liste : on peut lui ajouter un élément.'
+- append ajoute à la fin d'une liste.
+tests:
+- type: variable
+  nom: branches
+  valeur_attendue: '{''main'': [''c1'', ''c2''], ''essai'': [''c1'', ''c2'', ''c3'']}'
+- type: contient
+  motif: append(
+  message: Ajoute le commit à la liste de la branche avec append.
+- type: interdit
+  motif: + [
+  message: Ajoute le commit à la liste, ne la recrée pas.
+solution: |-
+  branches = {"main": ["c1", "c2"], "essai": ["c1", "c2"]}
+  branches["essai"].append("c3")

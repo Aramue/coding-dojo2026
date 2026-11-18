@@ -1,0 +1,22 @@
+id: s7-02
+concept: suivis
+notion: suivis
+seance: 7
+niveau: normal
+type: predire
+titre: Un fichier tout neuf
+obligatoire: true
+enonce: Camille crée un fichier `notes.md` dans son dossier, puis lance `git status`.
+depart: ''
+question: Dans quelle section de git status apparaît notes.md ?
+indices:
+- 'Camille vient de créer ce fichier : git ne le connaissait pas avant.'
+- Un fichier que git ne suit pas encore est dit « untracked ».
+tests:
+- type: qcm
+  options:
+  - '« Untracked files » : git le voit, mais ne le suit pas.'
+  - '« Changes to be committed » : git l''a ajouté tout seul.'
+  - 'Nulle part : git ignore les fichiers neufs.'
+  bonne_reponse: 0
+solution: (aucun)

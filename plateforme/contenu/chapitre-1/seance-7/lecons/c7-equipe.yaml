@@ -1,0 +1,19 @@
+id: c7-equipe
+notion: equipe
+ordre: 37
+titre: 'Bonus : travailler en équipe'
+duree_min: 3
+blocs:
+- type: paragraphe
+  texte: 'Un dépôt partagé tient grâce à quelques habitudes : **on tire avant de travailler** (`git pull`), **on ne committe pas directement sur `main`** (on passe par une branche et une pull request), **on fait des commits petits** avec un message clair, et **on relit** le travail des autres avant de fusionner.'
+- type: paragraphe
+  texte: 'Un historique bien tenu répond à des questions : qui a écrit cette ligne, et pourquoi ? Quand ce bug est-il apparu ? Les messages `feat:` et `fix:` en font un journal que n''importe qui peut relire.'
+- type: terminal
+  legende: Qui a fait quoi ?
+  texte: |-
+    $ git log --format="%an : %s"
+    Camille : docs: explique le menu
+    Léo : fix: corrige le calcul
+    Camille : feat: ajoute le menu
+- type: attention
+  texte: '**Une critique porte sur le code, jamais sur la personne.** Dans une pull request, on écrit « cette ligne plantera si la liste est vide », pas « tu n''as pas réfléchi ».'

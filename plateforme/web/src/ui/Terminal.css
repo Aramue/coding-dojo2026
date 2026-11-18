@@ -1,0 +1,29 @@
+/*
+ * Un bloc terminal : les couleurs de la carte de code des slides. L'invite est
+ * dans le gris de commentaire, la commande en cyan, un ajout en vert et un
+ * retrait en rouge, comme un diff dans un vrai terminal.
+ */
+.terminal__invite {
+  color: var(--d-label);
+}
+
+.terminal__ligne--commande {
+  color: var(--d-cyan);
+}
+
+.terminal__ligne--commentaire {
+  color: var(--d-label);
+}
+
+.terminal__ligne--plus {
+  color: var(--d-green);
+}
+
+.terminal__ligne--moins,
+.terminal__ligne--erreur {
+  color: var(--d-red);
+}
+
+.terminal__ligne--marqueur {
+  color: var(--d-pink);
+}

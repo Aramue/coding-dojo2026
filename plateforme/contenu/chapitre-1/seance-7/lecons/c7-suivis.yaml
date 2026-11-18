@@ -1,0 +1,41 @@
+id: c7-suivis
+notion: suivis
+ordre: 30
+titre: Les fichiers suivis
+duree_min: 4
+blocs:
+- type: paragraphe
+  texte: 'Git ne regarde pas tout ce qui traîne dans le dossier : il **suit** certains fichiers, et seulement ceux-là. Un fichier que tu viens de créer est **non suivi** : git le voit, mais ne le garde dans aucune sauvegarde tant que tu ne le lui as pas demandé avec **`git add`**.'
+- type: schema
+  nom: zones
+  legende: git add fait passer un fichier du dossier de travail à l'index, la liste de ce qui entrera dans la prochaine sauvegarde.
+- type: paragraphe
+  texte: 'Un fichier suivi passe par trois états : **modifié** (tu l''as changé), **indexé** (tu l''as choisi avec `git add nom-du-fichier`, il est prêt pour la prochaine sauvegarde, qu''on appelle un commit et que tu verras dans la leçon suivante), puis **validé** (la sauvegarde est faite).'
+- type: schema
+  nom: etats
+  legende: Les états d'un fichier, et la commande qui le fait passer de l'un à l'autre.
+- type: paragraphe
+  texte: 'La commande **`git status`** te dit où en est chaque fichier. Elle range les fichiers en trois listes : `Untracked files` pour les fichiers non suivis, `Changes not staged for commit` pour les fichiers modifiés, et `Changes to be committed` pour les fichiers indexés.'
+- type: terminal
+  legende: Avant git add
+  texte: |-
+    $ git status
+    On branch main
+    Changes not staged for commit:
+            modified:   moyenne.py
+
+    Untracked files:
+            notes.md
+- type: terminal
+  legende: Après git add notes.md
+  texte: |-
+    $ git add notes.md
+    $ git status
+    On branch main
+    Changes to be committed:
+            new file:   notes.md
+
+    Changes not staged for commit:
+            modified:   moyenne.py
+- type: attention
+  texte: '**Un fichier non suivi n''arrive jamais sur GitHub.** C''est la raison la plus fréquente du « mon fichier n''est pas dans le dépôt » : il a été créé, jamais ajouté. Au moindre doute, lance `git status`.'

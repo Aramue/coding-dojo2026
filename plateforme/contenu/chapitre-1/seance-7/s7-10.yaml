@@ -1,0 +1,29 @@
+id: s7-10
+concept: push
+notion: push
+seance: 7
+niveau: normal
+type: predire
+titre: Qui voit mon commit ?
+obligatoire: true
+enonce: Tu viens de faire ce commit sur ta machine, sans rien envoyer.
+depart: |-
+  $ git commit -m "feat: ajoute le menu"
+  [main 4b2e9d1] feat: ajoute le menu
+   1 file changed, 12 insertions(+)
+question: Qui peut le voir sur GitHub ?
+legende_depart: Le terminal
+indices:
+- Un commit se fait chez toi. GitHub est un autre endroit.
+- C'est git push qui envoie les commits vers GitHub.
+tests:
+- type: qcm
+  options:
+  - Tout le monde, dès le commit.
+  - 'Personne : il n''est que sur ta machine.'
+  - Seulement le professeur.
+  bonne_reponse: 1
+solution: |-
+  $ git commit -m "feat: ajoute le menu"
+  [main 4b2e9d1] feat: ajoute le menu
+   1 file changed, 12 insertions(+)

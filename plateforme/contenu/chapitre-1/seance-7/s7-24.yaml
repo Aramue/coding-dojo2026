@@ -1,0 +1,22 @@
+id: s7-24
+concept: fusion
+notion: fusion
+seance: 7
+niveau: expert
+type: predire
+titre: À quoi sert une pull request ?
+obligatoire: false
+enonce: Léo a poussé sa branche `ma-fonction` sur GitHub et ouvre une **pull request**. (Sur GitLab, on parle de *merge request*.)
+depart: ''
+question: À quoi sert une pull request ?
+indices:
+- 'Le nom dit : on demande à quelqu''un de tirer (pull) ces changements vers main.'
+- 'Le but : que le travail soit relu avant d''entrer dans main.'
+tests:
+- type: qcm
+  options:
+  - À demander que ses commits soient relus, puis fusionnés dans main.
+  - À télécharger ses commits sur sa machine.
+  - À supprimer sa branche.
+  bonne_reponse: 0
+solution: (aucun)

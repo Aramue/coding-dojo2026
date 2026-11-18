@@ -1,0 +1,37 @@
+id: s7-19
+concept: gitignore
+notion: gitignore
+seance: 7
+niveau: expert
+type: ecrire
+titre: Quels fichiers sont ignorés ?
+obligatoire: false
+enonce: '`extensions` liste les fins de nom de fichier que le `.gitignore` ignore. Range dans `ignores` les noms de `fichiers` qui finissent par l''une d''elles, dans l''ordre de la liste.'
+depart: |
+  extensions = [".pyc", ".log"]
+  fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
+  ignores = []
+indices:
+- fichier.endswith(extension) vaut True quand le nom finit par l'extension.
+- 'Deux boucles imbriquées : une sur les fichiers, une sur les extensions.'
+tests:
+- type: variable
+  nom: ignores
+  valeur_attendue: '[''moyenne.pyc'', ''debug.log'']'
+- type: contient
+  motif: endswith(
+  message: Teste la fin du nom avec endswith.
+- type: contient
+  motif: 'for '
+  message: Parcours les fichiers avec une boucle.
+- type: interdit
+  motif: replace(
+  message: Ici, on teste la fin du nom, on ne le modifie pas.
+solution: |-
+  extensions = [".pyc", ".log"]
+  fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
+  ignores = []
+  for fichier in fichiers:
+      for extension in extensions:
+          if fichier.endswith(extension):
+              ignores.append(fichier)

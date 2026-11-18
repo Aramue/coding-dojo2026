@@ -1,0 +1,29 @@
+id: s7-21
+concept: branches
+notion: branches
+seance: 7
+niveau: expert
+type: predire
+titre: Où suis-je ?
+obligatoire: false
+enonce: Camille consulte la liste de ses branches.
+depart: |-
+  $ git branch
+    main
+  * ma-fonction
+question: Sur quelle branche ira son prochain commit ?
+legende_depart: Le terminal
+indices:
+- L'étoile marque la branche où l'on se trouve.
+- Un commit va toujours sur la branche courante, jamais sur plusieurs.
+tests:
+- type: qcm
+  options:
+  - main
+  - ma-fonction
+  - Sur les deux.
+  bonne_reponse: 1
+solution: |-
+  $ git branch
+    main
+  * ma-fonction

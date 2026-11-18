@@ -1,0 +1,23 @@
+id: s7-06
+concept: commit
+notion: commit
+seance: 7
+niveau: normal
+type: predire
+titre: Quel message ?
+obligatoire: true
+enonce: 'Une équipe veut des messages de commit de la forme `type: description`.'
+depart: ''
+question: Quel message de commit suit cette convention ?
+indices:
+- Le message doit commencer par un type, comme feat ou fix, suivi de deux-points.
+- La description commence par un verbe et ne finit pas par un point.
+tests:
+- type: qcm
+  options:
+  - modif
+  - fini
+  - 'feat: ajoute le menu'
+  - Corrigé le menu.
+  bonne_reponse: 2
+solution: (aucun)

@@ -1,0 +1,41 @@
+id: s7-01
+concept: suivis
+notion: suivis
+seance: 7
+niveau: normal
+type: predire
+titre: Ce qui entre dans le commit
+obligatoire: true
+enonce: Camille a modifié trois fichiers de son dossier. Voici ce que montre `git status`.
+depart: |-
+  $ git status
+  Changes to be committed:
+          modified:   README.md
+
+  Changes not staged for commit:
+          modified:   moyenne.py
+
+  Untracked files:
+          notes.md
+question: Quel fichier est prêt pour le prochain commit ?
+legende_depart: Le terminal
+indices:
+- Seule la section « Changes to be committed » entre dans le prochain commit.
+- Les deux autres sections attendent un git add.
+tests:
+- type: qcm
+  options:
+  - README.md
+  - moyenne.py
+  - notes.md
+  bonne_reponse: 0
+solution: |-
+  $ git status
+  Changes to be committed:
+          modified:   README.md
+
+  Changes not staged for commit:
+          modified:   moyenne.py
+
+  Untracked files:
+          notes.md

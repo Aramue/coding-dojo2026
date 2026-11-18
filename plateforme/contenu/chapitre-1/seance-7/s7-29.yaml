@@ -1,0 +1,31 @@
+id: s7-29
+concept: equipe
+notion: equipe
+seance: 7
+niveau: expert
+type: predire
+titre: Qui a corrigé ça ?
+obligatoire: false
+enonce: Voici l'historique d'un dépôt.
+depart: |-
+  $ git log --format="%an : %s"
+  Camille : feat: ajoute le menu
+  Léo : fix: corrige la division par zéro
+  Camille : docs: explique le menu
+question: Qui a corrigé la division par zéro ?
+legende_depart: Le terminal
+indices:
+- Chaque ligne donne l'auteur, puis le message du commit.
+- 'Le message fix: dit ce qui a été corrigé.'
+tests:
+- type: qcm
+  options:
+  - Camille.
+  - Léo.
+  - On ne peut pas le savoir.
+  bonne_reponse: 1
+solution: |-
+  $ git log --format="%an : %s"
+  Camille : feat: ajoute le menu
+  Léo : fix: corrige la division par zéro
+  Camille : docs: explique le menu

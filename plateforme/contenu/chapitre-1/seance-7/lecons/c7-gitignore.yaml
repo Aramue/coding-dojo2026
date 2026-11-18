@@ -1,0 +1,39 @@
+id: c7-gitignore
+notion: gitignore
+ordre: 34
+titre: 'Bonus : ignorer des fichiers'
+duree_min: 3
+blocs:
+- type: paragraphe
+  texte: 'Dès que tu lances ton programme dans ton éditeur, des fichiers apparaissent que personne n''a envie de partager : le dossier `.idea/` de l''éditeur, le dossier `__pycache__/` de Python, parfois un fichier de mots de passe. Dans `git status`, ils traînent en « non suivi », et un `git add .` distrait les enverrait sur GitHub.'
+- type: terminal
+  legende: Des fichiers que tu n'as pas écrits
+  texte: |-
+    $ git status
+    Untracked files:
+            .idea/
+            __pycache__/
+            moyenne.py
+- type: paragraphe
+  texte: 'Le fichier **`.gitignore`**, à la racine du dépôt, liste ce que git doit ignorer, une règle par ligne : `.idea/` pour un dossier, `*.pyc` pour tous les fichiers qui finissent par `.pyc`, `secret.txt` pour un fichier précis. On le committe comme un autre.'
+- type: terminal
+  legende: Le fichier .gitignore
+  texte: |-
+    __pycache__/
+    .idea/
+    *.pyc
+    secret.txt
+- type: terminal
+  legende: Après avoir créé .gitignore
+  texte: |-
+    $ git status
+    Untracked files:
+            .gitignore
+            moyenne.py
+- type: attention
+  texte: '**Le `.gitignore` n''agit que sur les fichiers non suivis.** Si un fichier a déjà été committé, l''ajouter ensuite au `.gitignore` ne change rien : git continue de le suivre. Il faut d''abord le retirer du suivi avec `git rm --cached fichier`.'
+- type: terminal
+  legende: Arrêter de suivre un fichier
+  texte: |-
+    $ git rm --cached secret.txt
+    rm 'secret.txt'

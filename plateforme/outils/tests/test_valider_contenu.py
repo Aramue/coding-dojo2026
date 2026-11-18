@@ -239,6 +239,13 @@ def test_un_predire_dont_aucune_option_n_est_la_sortie_est_signale(tmp_path):
     assert any("annoncee" in p for p in verifier_coherence(ex))
 
 
+def test_un_predire_sans_programme_n_est_pas_juge(tmp_path):
+    # Une question de cours : rien a executer, donc rien a comparer aux options.
+    tests = [{"type": "qcm", "options": ["Dans ton compte", "Sur ta machine"], "bonne_reponse": 0}]
+    ex = ecrire(tmp_path, dict(PREDIRE, depart="", solution="(aucun)", tests=tests))
+    assert verifier_coherence(ex) == []
+
+
 def test_un_predire_sur_plusieurs_lignes_ou_une_erreur_n_est_pas_juge(tmp_path):
     # Les options y decrivent la sortie avec des mots : rien a comparer.
     for depart in ['print("a")\nprint("b")', 'print(1 / 0)']:
