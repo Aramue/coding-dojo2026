@@ -1,12 +1,12 @@
 id: c7-commit
 notion: commit
-ordre: 30
+ordre: 31
 titre: Le commit et ses conventions
-duree_min: 4
+duree_min: 5
 blocs:
   - type: paragraphe
     texte: >-
-      Un **commit** est une photo du projet à un instant, accompagnée d'un message. Il se fait en deux gestes : `git add fichier` choisit ce qui entrera dans la photo, puis `git commit -m "message"` la prend.
+      Un **commit** est une photo du projet à un instant, accompagnée d'un message. Tu as déjà choisi ce qui y entre avec `git add` ; il reste à la prendre : `git commit -m "message"`.
   - type: paragraphe
     texte: >-
       Un historique de messages comme « modif », « truc » ou « fini » ne sert à personne, pas même à toi dans trois semaines. On suit donc une **convention** : `type: description`. Le type dit la nature du changement.
@@ -25,6 +25,19 @@ blocs:
       print(morceaux[0])
       print(morceaux[1])
       print(len(message))
+  - type: paragraphe
+    texte: >-
+      Pour relire ce qui a été fait, on utilise **`git log`**. Il liste les commits un par un, avec leur auteur, leur date et leur message. `git log --oneline` en donne la version courte : une ligne par commit, qui commence par un identifiant de sept caractères (le **hash**), suivi du message.
+  - type: paragraphe
+    texte: >-
+      L'historique se lit **du plus récent, en haut, au plus ancien, en bas**. Le premier commit du projet est donc la dernière ligne.
+  - type: code
+    legende: Lire un historique du plus récent au plus ancien
+    executable: true
+    python: |
+      historique = ["feat: ajoute la moyenne", "feat: ajoute la médiane", "fix: corrige le calcul"]
+      for i in range(len(historique) - 1, -1, -1):
+          print(historique[i])
   - type: attention
     texte: >-
-      **Le message est entre guillemets.** `git commit -m fix: corrige` sans guillemets est mal lu par le terminal. Et sans `git add` avant, git répond qu'il n'y a rien à valider.
+      **Le message est entre guillemets.** `git commit -m fix: corrige` sans guillemets est mal lu par le terminal. Et un fichier modifié mais pas ajouté avec `git add` n'entre pas dans le commit : git répond qu'il n'y a rien à valider.

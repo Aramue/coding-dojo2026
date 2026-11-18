@@ -3,36 +3,58 @@ concept: commit
 notion: commit
 seance: 7
 niveau: normal
-type: debug
-titre: Un compteur trop généreux
+type: ecrire
+titre: Le message est-il valide ?
 obligatoire: true
-enonce: 'Ce programme compte les messages de commit qui commencent par un type connu (`feat`, `fix` ou `docs`). Il en trouve trop : `ajoute fix pour le menu` ne suit pas la convention. Répare-le.'
-depart: |-
-  messages = ["feat: ajoute le menu", "ajoute fix pour le menu", "docs: explique le menu", "fini"]
-  types = ["feat", "fix", "docs"]
-  valides = 0
-  for message in messages:
-      for type_commit in types:
-          if type_commit in message:
-              valides = valides + 1
-  print(valides)
+enonce: 'Lis un message de commit avec `input()`. Affiche `valide` s''il suit la convention, sinon `invalide`. Il est valide si : il contient `: `, son type est `feat`, `fix`, `docs`, `refactor` ou `chore`, sa description n''est pas vide et il fait 50 caractères au plus.'
+depart: |
+  message = input()
 indices:
-- '`in` cherche le type n''importe où dans le message. Où doit-il se trouver ?'
-- 'Un type valide est au **début** du message, suivi de deux-points : `message.startswith(type_commit + ":")`.'
+- 'Trois conditions à vérifier : `: ` présent, longueur, puis type et description. Un drapeau `valide` aide.'
+- 'Découpe avec `split(": ")`, puis teste `morceaux[0] in types` et `morceaux[1] != ""`.'
 tests:
-- type: variable
-  nom: valides
-  valeur_attendue: '2'
-  type_attendu: int
 - type: sortie
-  entrees: []
-  attendu: '2'
+  entrees:
+  - 'feat: ajoute le menu'
+  attendu: |-
+    feat: ajoute le menu
+    valide
+- type: sortie
+  entrees:
+  - modif
+  attendu: |-
+    modif
+    invalide
+- type: sortie
+  entrees:
+  - 'truc: ajoute le menu'
+  attendu: |-
+    truc: ajoute le menu
+    invalide
+- type: sortie
+  entrees:
+  - 'fix: '
+  attendu: |-
+    fix:
+    invalide
+- type: sortie
+  entrees:
+  - 'docs: explique en détail comment lancer le programme chez soi'
+  attendu: |-
+    docs: explique en détail comment lancer le programme chez soi
+    invalide
+- type: interdit
+  motif: 'import '
+  message: Pas besoin d'importer quoi que ce soit.
 solution: |-
-  messages = ["feat: ajoute le menu", "ajoute fix pour le menu", "docs: explique le menu", "fini"]
-  types = ["feat", "fix", "docs"]
-  valides = 0
-  for message in messages:
-      for type_commit in types:
-          if message.startswith(type_commit + ":"):
-              valides = valides + 1
-  print(valides)
+  message = input()
+  types = ["feat", "fix", "docs", "refactor", "chore"]
+  valide = False
+  if ": " in message and len(message) <= 50:
+      morceaux = message.split(": ")
+      if morceaux[0] in types and morceaux[1] != "":
+          valide = True
+  if valide:
+      print("valide")
+  else:
+      print("invalide")

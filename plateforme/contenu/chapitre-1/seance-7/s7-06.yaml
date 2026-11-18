@@ -4,26 +4,20 @@ notion: commit
 seance: 7
 niveau: normal
 type: predire
-titre: Le plus ancien en bas
+titre: Quel message ?
 obligatoire: true
-enonce: Voici l'historique d'un dépôt. Quel commit a été fait en premier ?
-depart: |-
-  $ git log --oneline
-  c3d9f21 fix: corrige la division par zéro
-  8a41b07 feat: ajoute la médiane
-  5e2c6aa feat: ajoute le calcul de la moyenne
+enonce: 'Une équipe veut des messages de commit de la forme `type: description`.'
+depart: ''
+question: Quel message de commit suit cette convention ?
 indices:
-- '`git log` met le commit le plus récent en haut.'
-- Le commit le plus ancien est donc le dernier de la liste.
+- Le message doit commencer par un type, comme feat ou fix, suivi de deux-points.
+- La description commence par un verbe et ne finit pas par un point.
 tests:
 - type: qcm
   options:
-  - 'feat: ajoute le calcul de la moyenne'
-  - 'feat: ajoute la médiane'
-  - 'fix: corrige la division par zéro'
-  bonne_reponse: 0
-solution: |-
-  $ git log --oneline
-  c3d9f21 fix: corrige la division par zéro
-  8a41b07 feat: ajoute la médiane
-  5e2c6aa feat: ajoute le calcul de la moyenne
+  - modif
+  - fini
+  - 'feat: ajoute le menu'
+  - Corrigé le menu.
+  bonne_reponse: 2
+solution: (aucun)

@@ -4,24 +4,20 @@ notion: push
 seance: 7
 niveau: normal
 type: predire
-titre: Qui voit mon commit ?
+titre: Une habitude dangereuse
 obligatoire: true
-enonce: Tu viens de faire ce commit sur ta machine, sans rien envoyer. Qui peut le voir sur GitHub ?
-depart: |-
-  $ git commit -m "feat: ajoute le menu"
-  [main 4b2e9d1] feat: ajoute le menu
-   1 file changed, 12 insertions(+)
+enonce: Voici quatre habitudes d'une équipe qui travaille avec git.
+depart: ''
+question: Laquelle est dangereuse ?
 indices:
-- Un commit se fait chez toi. GitHub est un autre endroit.
-- C'est `git push` qui envoie les commits vers GitHub.
+- Pense à ce que l'historique garde, même quand on supprime un fichier ensuite.
+- Un mot de passe poussé reste lisible dans l'ancien commit.
 tests:
 - type: qcm
   options:
-  - Tout le monde, dès le commit.
-  - 'Personne : il n''est que sur ta machine.'
-  - Seulement le professeur.
-  bonne_reponse: 1
-solution: |-
-  $ git commit -m "feat: ajoute le menu"
-  [main 4b2e9d1] feat: ajoute le menu
-   1 file changed, 12 insertions(+)
+  - Faire un `git pull` avant de se mettre au travail.
+  - Pousser souvent de petits commits.
+  - Pousser le mot de passe de la base de données dans un fichier, en se promettant de l'effacer après.
+  - Écrire un message de commit qui dit la vérité.
+  bonne_reponse: 2
+solution: (aucun)

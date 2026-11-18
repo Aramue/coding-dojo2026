@@ -1,27 +1,22 @@
 id: s7-02
-concept: pourquoi
-notion: pourquoi
+concept: suivis
+notion: suivis
 seance: 7
 niveau: normal
 type: predire
-titre: Deux personnes, un fichier
+titre: Un fichier tout neuf
 obligatoire: true
-enonce: Camille et Léo modifient chacun leur copie de `moyenne.py`, puis s'envoient le fichier par mail. Camille enregistre celui de Léo à la place du sien. Que devient le travail de Camille ?
-depart: |-
-  Camille : ajoute la médiane
-  Léo : corrige la division par zéro
-  Camille enregistre le fichier de Léo dans son dossier.
+enonce: Camille crée un fichier `notes.md` dans son dossier, puis lance `git status`.
+depart: ''
+question: Dans quelle section de `git status` apparaît `notes.md` ?
 indices:
-- Un fichier enregistré à la place d'un autre remplace son contenu.
-- Sans historique, rien ne se souvient de l'ancienne version.
+- 'Camille vient de créer ce fichier : git ne le connaissait pas avant.'
+- Un fichier que git ne suit pas encore est dit « untracked ».
 tests:
 - type: qcm
   options:
-  - Il est fusionné avec celui de Léo.
-  - 'Il est perdu : le fichier de Léo l''a écrasé.'
-  - Les deux versions sont gardées automatiquement.
-  bonne_reponse: 1
-solution: |-
-  Camille : ajoute la médiane
-  Léo : corrige la division par zéro
-  Camille enregistre le fichier de Léo dans son dossier.
+  - '« Untracked files » : git le voit, mais ne le suit pas.'
+  - '« Changes to be committed » : git l''a ajouté tout seul.'
+  - 'Nulle part : git ignore les fichiers neufs.'
+  bonne_reponse: 0
+solution: (aucun)

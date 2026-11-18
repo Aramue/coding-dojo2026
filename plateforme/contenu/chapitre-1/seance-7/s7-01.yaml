@@ -1,31 +1,41 @@
 id: s7-01
-concept: pourquoi
-notion: pourquoi
+concept: suivis
+notion: suivis
 seance: 7
 niveau: normal
 type: predire
-titre: Laquelle est la bonne version ?
+titre: Ce qui entre dans le commit
 obligatoire: true
-enonce: Camille range ses rendus dans un dossier, sans git. Quel est le principal problème de cette façon de faire ?
+enonce: Camille a modifié trois fichiers de son dossier. Voici ce que montre `git status`.
 depart: |-
-  rendu.py
-  rendu_v2.py
-  rendu_final.py
-  rendu_final_VRAI.py
-  rendu_final_VRAI_corrige.py
+  $ git status
+  Changes to be committed:
+          modified:   README.md
+
+  Changes not staged for commit:
+          modified:   moyenne.py
+
+  Untracked files:
+          notes.md
+question: Quel fichier est prêt pour le prochain commit ?
+legende_depart: Le terminal
 indices:
-- 'Regarde les noms : peux-tu dire sans les ouvrir lequel est le plus récent ?'
-- Un historique git remplace ces fichiers par un seul fichier et la liste de ses versions.
+- Seule la section « Changes to be committed » entre dans le prochain commit.
+- Les deux autres sections attendent un `git add`.
 tests:
 - type: qcm
   options:
-  - Les noms de fichiers sont trop longs.
-  - On ne sait pas laquelle est la dernière version, ni ce qui a changé de l'une à l'autre.
-  - Il y a trop de fichiers pour l'ordinateur.
-  bonne_reponse: 1
+  - README.md
+  - moyenne.py
+  - notes.md
+  bonne_reponse: 0
 solution: |-
-  rendu.py
-  rendu_v2.py
-  rendu_final.py
-  rendu_final_VRAI.py
-  rendu_final_VRAI_corrige.py
+  $ git status
+  Changes to be committed:
+          modified:   README.md
+
+  Changes not staged for commit:
+          modified:   moyenne.py
+
+  Untracked files:
+          notes.md

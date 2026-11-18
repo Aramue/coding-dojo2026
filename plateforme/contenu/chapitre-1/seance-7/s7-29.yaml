@@ -1,21 +1,31 @@
 id: s7-29
-concept: fusion
-notion: fusion
+concept: equipe
+notion: equipe
 seance: 7
 niveau: expert
 type: predire
-titre: À quoi sert une pull request ?
+titre: Qui a corrigé ça ?
 obligatoire: false
-enonce: Léo a poussé sa branche `ma-fonction` sur GitHub. À quoi sert la **pull request** qu'il ouvre ? (Sur GitLab, on l'appelle *merge request*.)
-depart: ''
+enonce: Voici l'historique d'un dépôt.
+depart: |-
+  $ git log --format="%an : %s"
+  Camille : feat: ajoute le menu
+  Léo : fix: corrige la division par zéro
+  Camille : docs: explique le menu
+question: Qui a corrigé la division par zéro ?
+legende_depart: Le terminal
 indices:
-- 'Le nom dit : on demande à quelqu''un de tirer (pull) ces changements vers `main`.'
-- 'Le but : que le travail soit relu avant d''entrer dans `main`.'
+- Chaque ligne donne l'auteur, puis le message du commit.
+- Le message `fix:` dit ce qui a été corrigé.
 tests:
 - type: qcm
   options:
-  - À demander que ses commits soient relus, puis fusionnés dans `main`.
-  - À télécharger ses commits sur sa machine.
-  - À supprimer sa branche.
-  bonne_reponse: 0
-solution: (aucun)
+  - Camille.
+  - Léo.
+  - On ne peut pas le savoir.
+  bonne_reponse: 1
+solution: |-
+  $ git log --format="%an : %s"
+  Camille : feat: ajoute le menu
+  Léo : fix: corrige la division par zéro
+  Camille : docs: explique le menu

@@ -1,21 +1,27 @@
 id: s7-23
-concept: gitignore
-notion: gitignore
+concept: branches
+notion: branches
 seance: 7
 niveau: expert
-type: predire
-titre: Déjà suivi, donc plus ignoré
+type: ecrire
+titre: Un commit sur la bonne branche
 obligatoire: false
-enonce: '`secret.txt` a déjà été committé. Léo l''ajoute ensuite au `.gitignore`, puis le modifie. Que montre `git status` ?'
-depart: ''
+enonce: Le dictionnaire `branches` range les commits de chaque branche. Ajoute le commit `"c3"` à la branche `"essai"`, sans toucher à `"main"`.
+depart: |
+  branches = {"main": ["c1", "c2"], "essai": ["c1", "c2"]}
 indices:
-- Le `.gitignore` ne s'applique qu'aux fichiers que git ne suit pas encore.
-- 'Pour arrêter de suivre un fichier : `git rm --cached secret.txt`.'
+- '`branches["essai"]` est une liste : on peut lui ajouter un élément.'
+- '`append` ajoute à la fin d''une liste.'
 tests:
-- type: qcm
-  options:
-  - 'Rien : le `.gitignore` l''ignore désormais.'
-  - '`secret.txt` apparaît toujours comme modifié : git le suit déjà.'
-  - Git supprime `secret.txt`.
-  bonne_reponse: 1
-solution: (aucun)
+- type: variable
+  nom: branches
+  valeur_attendue: '{''main'': [''c1'', ''c2''], ''essai'': [''c1'', ''c2'', ''c3'']}'
+- type: contient
+  motif: append(
+  message: Ajoute le commit à la liste de la branche avec append.
+- type: interdit
+  motif: + [
+  message: Ajoute le commit à la liste, ne la recrée pas.
+solution: |-
+  branches = {"main": ["c1", "c2"], "essai": ["c1", "c2"]}
+  branches["essai"].append("c3")

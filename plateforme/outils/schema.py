@@ -96,6 +96,12 @@ class Exercice(BaseModel):
     obligatoire: bool
     enonce: str
     depart: str = ""
+    # Seulement pour un predire dont la question n'est pas « qu'affiche ce
+    # programme ? » : un historique git, une convention de message, un fichier en
+    # conflit. `question` remplace ce titre au-dessus des propositions, et
+    # `legende_depart` remplace « Le programme » sur la carte qui montre `depart`.
+    question: str | None = None
+    legende_depart: str | None = None
     indices: list[str] = Field(default_factory=list)
     tests: list[TestExercice] = Field(min_length=1)
     solution: str
@@ -114,6 +120,20 @@ class Exercice(BaseModel):
         for champ in (self.enonce, self.depart, self.solution):
             if "getpass" in champ:
                 raise ValueError("getpass est impossible sous Pyodide, il est banni")
+        return self
+
+    @model_validator(mode="after")
+    def question_reservee_au_predire(self) -> "Exercice":
+        for nom in ("question", "legende_depart"):
+            valeur = getattr(self, nom)
+            if valeur is None:
+                continue
+            if self.type != "predire":
+                raise ValueError(f"{nom!r} ne sert qu'a un exercice 'predire'")
+            if not valeur.strip():
+                raise ValueError(f"{nom!r} vide")
+            if MOTIF_EMOJI.search(valeur):
+                raise ValueError(f"aucun emoji dans {nom!r}")
         return self
 
     @model_validator(mode="after")
@@ -371,21 +391,21 @@ NOTIONS: dict[str, dict] = {
         "famille": "variables",
         "chapitre": "versions",
     },
-    "commit": {
+    "suivis": {
         "ordre": 30,
+        "titre": "Les fichiers suivis",
+        "famille": "variables",
+        "chapitre": "versions",
+    },
+    "commit": {
+        "ordre": 31,
         "titre": "Le commit et ses conventions",
         "famille": "types",
         "chapitre": "versions",
     },
     "push": {
-        "ordre": 31,
-        "titre": "Envoyer et recevoir",
-        "famille": "variables",
-        "chapitre": "versions",
-    },
-    "suivis": {
         "ordre": 32,
-        "titre": "Les fichiers suivis",
+        "titre": "Envoyer et recevoir",
         "famille": "variables",
         "chapitre": "versions",
     },

@@ -203,23 +203,23 @@
     "chapitre": "versions"
   },
   {
-    "id": "commit",
+    "id": "suivis",
     "ordre": 30,
+    "titre": "Les fichiers suivis",
+    "famille": "variables",
+    "chapitre": "versions"
+  },
+  {
+    "id": "commit",
+    "ordre": 31,
     "titre": "Le commit et ses conventions",
     "famille": "types",
     "chapitre": "versions"
   },
   {
     "id": "push",
-    "ordre": 31,
-    "titre": "Envoyer et recevoir",
-    "famille": "variables",
-    "chapitre": "versions"
-  },
-  {
-    "id": "suivis",
     "ordre": 32,
-    "titre": "Les fichiers suivis",
+    "titre": "Envoyer et recevoir",
     "famille": "variables",
     "chapitre": "versions"
   },

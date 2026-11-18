@@ -7448,110 +7448,28 @@
   },
   {
     "id": "s7-01",
-    "concept": "pourquoi",
-    "notion": "pourquoi",
+    "concept": "suivis",
+    "notion": "suivis",
     "seance": 7,
     "niveau": "normal",
     "type": "predire",
-    "titre": "Laquelle est la bonne version ?",
+    "titre": "Ce qui entre dans le commit",
     "obligatoire": true,
-    "enonce": "Camille range ses rendus dans un dossier, sans git. Quel est le principal problème de cette façon de faire ?",
-    "depart": "rendu.py\nrendu_v2.py\nrendu_final.py\nrendu_final_VRAI.py\nrendu_final_VRAI_corrige.py",
+    "enonce": "Camille a modifié trois fichiers de son dossier. Voici ce que montre `git status`.",
+    "depart": "$ git status\nChanges to be committed:\n        modified:   README.md\n\nChanges not staged for commit:\n        modified:   moyenne.py\n\nUntracked files:\n        notes.md",
+    "question": "Quel fichier est prêt pour le prochain commit ?",
+    "legendeDepart": "Le terminal",
     "indices": [
-      "Regarde les noms : peux-tu dire sans les ouvrir lequel est le plus récent ?",
-      "Un historique git remplace ces fichiers par un seul fichier et la liste de ses versions."
+      "Seule la section « Changes to be committed » entre dans le prochain commit.",
+      "Les deux autres sections attendent un `git add`."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Les noms de fichiers sont trop longs.",
-          "On ne sait pas laquelle est la dernière version, ni ce qui a changé de l'une à l'autre.",
-          "Il y a trop de fichiers pour l'ordinateur."
-        ],
-        "bonneReponse": 1
-      }
-    ],
-    "famille": "variables"
-  },
-  {
-    "id": "s7-02",
-    "concept": "pourquoi",
-    "notion": "pourquoi",
-    "seance": 7,
-    "niveau": "normal",
-    "type": "predire",
-    "titre": "Deux personnes, un fichier",
-    "obligatoire": true,
-    "enonce": "Camille et Léo modifient chacun leur copie de `moyenne.py`, puis s'envoient le fichier par mail. Camille enregistre celui de Léo à la place du sien. Que devient le travail de Camille ?",
-    "depart": "Camille : ajoute la médiane\nLéo : corrige la division par zéro\nCamille enregistre le fichier de Léo dans son dossier.",
-    "indices": [
-      "Un fichier enregistré à la place d'un autre remplace son contenu.",
-      "Sans historique, rien ne se souvient de l'ancienne version."
-    ],
-    "tests": [
-      {
-        "type": "qcm",
-        "options": [
-          "Il est fusionné avec celui de Léo.",
-          "Il est perdu : le fichier de Léo l'a écrasé.",
-          "Les deux versions sont gardées automatiquement."
-        ],
-        "bonneReponse": 1
-      }
-    ],
-    "famille": "variables"
-  },
-  {
-    "id": "s7-03",
-    "concept": "pourquoi",
-    "notion": "pourquoi",
-    "seance": 7,
-    "niveau": "normal",
-    "type": "predire",
-    "titre": "git ou GitHub ?",
-    "obligatoire": true,
-    "enonce": "Tu es dans le train, sans internet, avec un projet suivi par git sur ton ordinateur. Que peux-tu faire ?",
-    "depart": "",
-    "indices": [
-      "git est un logiciel installé chez toi. GitHub est un site.",
-      "Envoyer des commits vers un site demande une connexion. En faire, non."
-    ],
-    "tests": [
-      {
-        "type": "qcm",
-        "options": [
-          "Rien : git a besoin de GitHub pour fonctionner.",
-          "Des commits : git marche sur ta machine, et seul l'envoi vers GitHub a besoin d'internet.",
-          "Des commits et des envois : GitHub les recevra plus tard tout seul."
-        ],
-        "bonneReponse": 1
-      }
-    ],
-    "famille": "variables"
-  },
-  {
-    "id": "s7-04",
-    "concept": "fork",
-    "notion": "fork",
-    "seance": 7,
-    "niveau": "normal",
-    "type": "predire",
-    "titre": "Où est la copie ?",
-    "obligatoire": true,
-    "enonce": "Tu cliques sur le bouton **Fork** de la page GitHub du dépôt du professeur. Où se trouve la copie ?",
-    "depart": "",
-    "indices": [
-      "Le fork est un bouton de GitHub : il agit sur le site, pas sur ton ordinateur.",
-      "C'est le clone qui copie un dépôt sur ta machine."
-    ],
-    "tests": [
-      {
-        "type": "qcm",
-        "options": [
-          "Dans ton compte GitHub, sur le site.",
-          "Dans un nouveau dossier sur ton ordinateur.",
-          "Chez le professeur, dans un second dépôt."
+          "README.md",
+          "moyenne.py",
+          "notes.md"
         ],
         "bonneReponse": 0
       }
@@ -7559,35 +7477,60 @@
     "famille": "variables"
   },
   {
-    "id": "s7-05",
-    "concept": "fork",
-    "notion": "fork",
+    "id": "s7-02",
+    "concept": "suivis",
+    "notion": "suivis",
     "seance": 7,
     "niveau": "normal",
     "type": "predire",
-    "titre": "Dans quel ordre ?",
+    "titre": "Un fichier tout neuf",
     "obligatoire": true,
-    "enonce": "Tu dois modifier le dépôt du professeur et envoyer ton travail. Quel ordre est le bon ?",
+    "enonce": "Camille crée un fichier `notes.md` dans son dossier, puis lance `git status`.",
     "depart": "",
+    "question": "Dans quelle section de `git status` apparaît `notes.md` ?",
     "indices": [
-      "Tu n'as pas le droit d'envoyer quoi que ce soit dans le dépôt du professeur.",
-      "On commence par obtenir sa propre copie sur GitHub, puis on la rapporte chez soi."
+      "Camille vient de créer ce fichier : git ne le connaissait pas avant.",
+      "Un fichier que git ne suit pas encore est dit « untracked »."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Cloner le dépôt du professeur, faire un fork, modifier, envoyer.",
-          "Faire un fork, cloner **ton** fork, modifier, committer, envoyer.",
-          "Modifier, faire un fork, cloner, committer."
+          "« Untracked files » : git le voit, mais ne le suit pas.",
+          "« Changes to be committed » : git l'a ajouté tout seul.",
+          "Nulle part : git ignore les fichiers neufs."
         ],
-        "bonneReponse": 1
+        "bonneReponse": 0
       }
     ],
     "famille": "variables"
   },
   {
-    "id": "s7-06",
+    "id": "s7-03",
+    "concept": "suivis",
+    "notion": "suivis",
+    "seance": 7,
+    "niveau": "normal",
+    "type": "completer",
+    "titre": "Les fichiers à ajouter",
+    "obligatoire": true,
+    "enonce": "Le dictionnaire `etat` donne l'état de chaque fichier. Complète les trous pour ranger dans `a_ajouter` les fichiers « modifié » ou « non suivi » : ceux qu'il faut encore ajouter avec `git add`.",
+    "depart": "etat = {\"moyenne.py\": \"modifié\", \"notes.md\": \"non suivi\", \"README.md\": \"validé\"}\na_ajouter = []\nfor fichier in etat:\n    if etat[fichier] == _____ or etat[fichier] == _____:\n        a_ajouter._____(fichier)",
+    "indices": [
+      "Les deux premiers trous sont des textes : regarde les états écrits dans le dictionnaire.",
+      "Pour ajouter un élément à la fin d'une liste, on écrit `liste.append(valeur)`."
+    ],
+    "tests": [
+      {
+        "type": "variable",
+        "nom": "a_ajouter",
+        "valeurAttendue": "['moyenne.py', 'notes.md']"
+      }
+    ],
+    "famille": "variables"
+  },
+  {
+    "id": "s7-04",
     "concept": "commit",
     "notion": "commit",
     "seance": 7,
@@ -7595,8 +7538,10 @@
     "type": "predire",
     "titre": "Le plus ancien en bas",
     "obligatoire": true,
-    "enonce": "Voici l'historique d'un dépôt. Quel commit a été fait en premier ?",
+    "enonce": "Voici l'historique d'un dépôt, affiché par `git log --oneline`.",
     "depart": "$ git log --oneline\nc3d9f21 fix: corrige la division par zéro\n8a41b07 feat: ajoute la médiane\n5e2c6aa feat: ajoute le calcul de la moyenne",
+    "question": "Quel commit a été fait en premier ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "`git log` met le commit le plus récent en haut.",
       "Le commit le plus ancien est donc le dernier de la liste."
@@ -7615,7 +7560,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-07",
+    "id": "s7-05",
     "concept": "commit",
     "notion": "commit",
     "seance": 7,
@@ -7623,8 +7568,10 @@
     "type": "predire",
     "titre": "Un commit qui ne prend rien",
     "obligatoire": true,
-    "enonce": "Camille a modifié `moyenne.py`, puis lance cette commande. Pourquoi git ne committe-t-il rien ?",
+    "enonce": "Camille a modifié `moyenne.py`, puis lance cette commande. Git ne committe rien.",
     "depart": "$ git commit -m \"fix: corrige le calcul\"\nOn branch main\nChanges not staged for commit:\n        modified:   moyenne.py\n\nno changes added to commit",
+    "question": "Pourquoi git ne committe-t-il rien ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Lis la ligne « Changes not staged for commit » : le fichier est modifié, mais pas indexé.",
       "`git commit` ne prend que les fichiers choisis avec `git add`."
@@ -7643,7 +7590,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-08",
+    "id": "s7-06",
     "concept": "commit",
     "notion": "commit",
     "seance": 7,
@@ -7651,8 +7598,9 @@
     "type": "predire",
     "titre": "Quel message ?",
     "obligatoire": true,
-    "enonce": "Quel message de commit suit la convention `type: description` ?",
+    "enonce": "Une équipe veut des messages de commit de la forme `type: description`.",
     "depart": "",
+    "question": "Quel message de commit suit cette convention ?",
     "indices": [
       "Le message doit commencer par un type, comme feat ou fix, suivi de deux-points.",
       "La description commence par un verbe et ne finit pas par un point."
@@ -7672,7 +7620,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-09",
+    "id": "s7-07",
     "concept": "commit",
     "notion": "commit",
     "seance": 7,
@@ -7703,7 +7651,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-10",
+    "id": "s7-08",
     "concept": "commit",
     "notion": "commit",
     "seance": 7,
@@ -7752,7 +7700,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-11",
+    "id": "s7-09",
     "concept": "commit",
     "notion": "commit",
     "seance": 7,
@@ -7817,7 +7765,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-12",
+    "id": "s7-10",
     "concept": "push",
     "notion": "push",
     "seance": 7,
@@ -7825,8 +7773,10 @@
     "type": "predire",
     "titre": "Qui voit mon commit ?",
     "obligatoire": true,
-    "enonce": "Tu viens de faire ce commit sur ta machine, sans rien envoyer. Qui peut le voir sur GitHub ?",
+    "enonce": "Tu viens de faire ce commit sur ta machine, sans rien envoyer.",
     "depart": "$ git commit -m \"feat: ajoute le menu\"\n[main 4b2e9d1] feat: ajoute le menu\n 1 file changed, 12 insertions(+)",
+    "question": "Qui peut le voir sur GitHub ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Un commit se fait chez toi. GitHub est un autre endroit.",
       "C'est `git push` qui envoie les commits vers GitHub."
@@ -7845,7 +7795,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-13",
+    "id": "s7-11",
     "concept": "push",
     "notion": "push",
     "seance": 7,
@@ -7853,8 +7803,10 @@
     "type": "predire",
     "titre": "Un push refusé",
     "obligatoire": true,
-    "enonce": "Léo lance ce push et GitHub le refuse. Que doit-il faire ?",
+    "enonce": "Léo lance un push, et GitHub le refuse.",
     "depart": "$ git push\n ! [rejected]        main -> main (fetch first)\nerror: failed to push some refs to 'github.com/leo/tp-git.git'\nhint: Updates were rejected because the remote contains work that you do not have locally.",
+    "question": "Que doit faire Léo ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Le message dit que GitHub contient du travail que Léo n'a pas chez lui.",
       "On récupère d'abord ce travail, on ne l'écrase jamais."
@@ -7873,7 +7825,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-14",
+    "id": "s7-12",
     "concept": "push",
     "notion": "push",
     "seance": 7,
@@ -7881,8 +7833,9 @@
     "type": "predire",
     "titre": "Une habitude dangereuse",
     "obligatoire": true,
-    "enonce": "Une seule de ces habitudes est dangereuse. Laquelle ?",
+    "enonce": "Voici quatre habitudes d'une équipe qui travaille avec git.",
     "depart": "",
+    "question": "Laquelle est dangereuse ?",
     "indices": [
       "Pense à ce que l'historique garde, même quand on supprime un fichier ensuite.",
       "Un mot de passe poussé reste lisible dans l'ancien commit."
@@ -7902,87 +7855,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-15",
-    "concept": "suivis",
-    "notion": "suivis",
-    "seance": 7,
-    "niveau": "normal",
-    "type": "predire",
-    "titre": "Ce qui entre dans le commit",
-    "obligatoire": true,
-    "enonce": "Camille lit ce `git status`, puis fait `git commit -m \"docs: explique le programme\"`. Quel fichier entre dans le commit ?",
-    "depart": "$ git status\nChanges to be committed:\n        modified:   README.md\n\nChanges not staged for commit:\n        modified:   moyenne.py\n\nUntracked files:\n        notes.md",
-    "indices": [
-      "Seule la section « Changes to be committed » entre dans le prochain commit.",
-      "Les deux autres sections attendent un `git add`."
-    ],
-    "tests": [
-      {
-        "type": "qcm",
-        "options": [
-          "README.md",
-          "moyenne.py",
-          "notes.md"
-        ],
-        "bonneReponse": 0
-      }
-    ],
-    "famille": "variables"
-  },
-  {
-    "id": "s7-16",
-    "concept": "suivis",
-    "notion": "suivis",
-    "seance": 7,
-    "niveau": "normal",
-    "type": "predire",
-    "titre": "Le fichier qui n'est pas parti",
-    "obligatoire": true,
-    "enonce": "Camille crée `notes.md`, modifie `moyenne.py`, puis fait `git add moyenne.py`, `git commit` et `git push`. Sur GitHub, `notes.md` n'apparaît pas. Pourquoi ?",
-    "depart": "",
-    "indices": [
-      "Quels fichiers Camille a-t-elle ajoutés avec `git add` ?",
-      "Un fichier non suivi n'entre dans aucun commit."
-    ],
-    "tests": [
-      {
-        "type": "qcm",
-        "options": [
-          "GitHub refuse les fichiers `.md`.",
-          "`notes.md` n'a jamais été ajouté avec `git add` : il est resté non suivi.",
-          "Il faut attendre quelques minutes."
-        ],
-        "bonneReponse": 1
-      }
-    ],
-    "famille": "variables"
-  },
-  {
-    "id": "s7-17",
-    "concept": "suivis",
-    "notion": "suivis",
-    "seance": 7,
-    "niveau": "normal",
-    "type": "completer",
-    "titre": "Les fichiers à ajouter",
-    "obligatoire": true,
-    "enonce": "Le dictionnaire `etat` donne l'état de chaque fichier. Complète les trous pour ranger dans `a_ajouter` les fichiers « modifié » ou « non suivi » : ceux qu'il faut encore ajouter avec `git add`.",
-    "depart": "etat = {\"moyenne.py\": \"modifié\", \"notes.md\": \"non suivi\", \"README.md\": \"validé\"}\na_ajouter = []\nfor fichier in etat:\n    if etat[fichier] == _____ or etat[fichier] == _____:\n        a_ajouter._____(fichier)",
-    "indices": [
-      "Les deux premiers trous sont des textes : regarde les états écrits dans le dictionnaire.",
-      "Pour ajouter un élément à la fin d'une liste, on écrit `liste.append(valeur)`."
-    ],
-    "tests": [
-      {
-        "type": "variable",
-        "nom": "a_ajouter",
-        "valeurAttendue": "['moyenne.py', 'notes.md']"
-      }
-    ],
-    "famille": "variables"
-  },
-  {
-    "id": "s7-18",
+    "id": "s7-13",
     "concept": "diff",
     "notion": "diff",
     "seance": 7,
@@ -7990,8 +7863,10 @@
     "type": "predire",
     "titre": "Lire un diff",
     "obligatoire": true,
-    "enonce": "Voici ce que montre `git diff`. Qu'est-ce qui a changé dans `moyenne.py` ?",
+    "enonce": "Voici ce que montre `git diff` après une modification de `moyenne.py`.",
     "depart": "$ git diff moyenne.py\n@@ -1,2 +1,2 @@\n def moyenne(notes):\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)",
+    "question": "Qu'est-ce qui a changé dans `moyenne.py` ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Une ligne en `-` a été retirée, une ligne en `+` a été ajoutée à sa place.",
       "La ligne qui commence par un espace n'a pas changé : c'est du contexte."
@@ -8010,7 +7885,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-19",
+    "id": "s7-14",
     "concept": "diff",
     "notion": "diff",
     "seance": 7,
@@ -8018,8 +7893,10 @@
     "type": "predire",
     "titre": "Un diff qui reste vide",
     "obligatoire": true,
-    "enonce": "Camille a modifié `moyenne.py`, puis lance ces commandes. Pourquoi le premier `git diff` n'affiche-t-il rien ?",
+    "enonce": "Camille a modifié `moyenne.py`, puis lance ces commandes.",
     "depart": "$ git add moyenne.py\n$ git diff\n$ git diff --staged\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)",
+    "question": "Pourquoi le premier `git diff` n'affiche-t-il rien ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Regarde ce que montre le troisième appel, et ce qui a changé entre les deux.",
       "`git diff` compare le dossier à l'index. Après `git add`, il n'y a plus de différence entre eux."
@@ -8038,7 +7915,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-20",
+    "id": "s7-15",
     "concept": "diff",
     "notion": "diff",
     "seance": 7,
@@ -8063,7 +7940,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-21",
+    "id": "s7-16",
     "concept": "diff",
     "notion": "diff",
     "seance": 7,
@@ -8106,7 +7983,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-22",
+    "id": "s7-17",
     "concept": "gitignore",
     "notion": "gitignore",
     "seance": 7,
@@ -8114,8 +7991,10 @@
     "type": "predire",
     "titre": "Des fichiers venus de nulle part",
     "obligatoire": false,
-    "enonce": "Camille vient de lancer son programme dans son éditeur, puis fait `git status`. D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?",
+    "enonce": "Camille vient de lancer son programme dans son éditeur, puis elle fait `git status`.",
     "depart": "$ git status\nUntracked files:\n        .idea/\n        __pycache__/\n        moyenne.py",
+    "question": "D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Camille n'a pas écrit ces dossiers : quelque chose les a créés quand elle a lancé le programme.",
       "Un fichier de règles, `.gitignore`, dit à git ce qu'il doit laisser de côté."
@@ -8134,7 +8013,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-23",
+    "id": "s7-18",
     "concept": "gitignore",
     "notion": "gitignore",
     "seance": 7,
@@ -8142,8 +8021,9 @@
     "type": "predire",
     "titre": "Déjà suivi, donc plus ignoré",
     "obligatoire": false,
-    "enonce": "`secret.txt` a déjà été committé. Léo l'ajoute ensuite au `.gitignore`, puis le modifie. Que montre `git status` ?",
+    "enonce": "`secret.txt` a déjà été committé. Léo l'ajoute ensuite au `.gitignore`, puis le modifie.",
     "depart": "",
+    "question": "Que montre `git status` ?",
     "indices": [
       "Le `.gitignore` ne s'applique qu'aux fichiers que git ne suit pas encore.",
       "Pour arrêter de suivre un fichier : `git rm --cached secret.txt`."
@@ -8162,7 +8042,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-24",
+    "id": "s7-19",
     "concept": "gitignore",
     "notion": "gitignore",
     "seance": 7,
@@ -8204,7 +8084,7 @@
     "famille": "types"
   },
   {
-    "id": "s7-25",
+    "id": "s7-20",
     "concept": "branches",
     "notion": "branches",
     "seance": 7,
@@ -8212,8 +8092,9 @@
     "type": "predire",
     "titre": "À quoi sert une branche ?",
     "obligatoire": false,
-    "enonce": "Léo veut essayer une idée risquée sans gêner les autres. Que lui apporte une branche ?",
+    "enonce": "Léo veut essayer une idée risquée sans gêner les autres.",
     "depart": "",
+    "question": "Que lui apporte une branche ?",
     "indices": [
       "Une branche est une ligne parallèle, pas une autre copie du dépôt.",
       "`main` ne bouge pas tant qu'on ne la rejoint pas."
@@ -8232,7 +8113,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-26",
+    "id": "s7-21",
     "concept": "branches",
     "notion": "branches",
     "seance": 7,
@@ -8240,8 +8121,10 @@
     "type": "predire",
     "titre": "Où suis-je ?",
     "obligatoire": false,
-    "enonce": "Sur quelle branche ira le prochain commit de Camille ?",
+    "enonce": "Camille consulte la liste de ses branches.",
     "depart": "$ git branch\n  main\n* ma-fonction",
+    "question": "Sur quelle branche ira son prochain commit ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "L'étoile marque la branche où l'on se trouve.",
       "Un commit va toujours sur la branche courante, jamais sur plusieurs."
@@ -8260,7 +8143,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-27",
+    "id": "s7-22",
     "concept": "branches",
     "notion": "branches",
     "seance": 7,
@@ -8268,8 +8151,10 @@
     "type": "predire",
     "titre": "Main n'a pas bougé",
     "obligatoire": false,
-    "enonce": "Camille fait ces commandes. Après le dernier `git switch`, le fichier `idee.py` est-il dans son dossier ?",
+    "enonce": "Camille fait ces commandes.",
     "depart": "$ git switch -c essai\n$ git add idee.py\n$ git commit -m \"feat: ajoute idee.py\"\n$ git switch main",
+    "question": "Après le dernier `git switch`, le fichier `idee.py` est-il dans son dossier ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Sur quelle branche le commit a-t-il été fait ?",
       "Revenir sur `main`, c'est retrouver `main` tel qu'il était."
@@ -8288,7 +8173,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-28",
+    "id": "s7-23",
     "concept": "branches",
     "notion": "branches",
     "seance": 7,
@@ -8324,7 +8209,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-29",
+    "id": "s7-24",
     "concept": "fusion",
     "notion": "fusion",
     "seance": 7,
@@ -8332,8 +8217,9 @@
     "type": "predire",
     "titre": "À quoi sert une pull request ?",
     "obligatoire": false,
-    "enonce": "Léo a poussé sa branche `ma-fonction` sur GitHub. À quoi sert la **pull request** qu'il ouvre ? (Sur GitLab, on l'appelle *merge request*.)",
+    "enonce": "Léo a poussé sa branche `ma-fonction` sur GitHub et ouvre une **pull request**. (Sur GitLab, on parle de *merge request*.)",
     "depart": "",
+    "question": "À quoi sert une pull request ?",
     "indices": [
       "Le nom dit : on demande à quelqu'un de tirer (pull) ces changements vers `main`.",
       "Le but : que le travail soit relu avant d'entrer dans `main`."
@@ -8352,7 +8238,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-30",
+    "id": "s7-25",
     "concept": "fusion",
     "notion": "fusion",
     "seance": 7,
@@ -8360,8 +8246,10 @@
     "type": "predire",
     "titre": "Lire un conflit",
     "obligatoire": false,
-    "enonce": "Camille est sur `main` et fusionne `ma-fonction`. Git s'arrête sur ce fichier. Quelle ligne vient de la branche `ma-fonction` ?",
+    "enonce": "Camille est sur `main` et fusionne la branche `ma-fonction`. Git s'arrête sur ce fichier.",
     "depart": "<<<<<<< HEAD\nprix = 10\n=======\nprix = 12\n>>>>>>> ma-fonction",
+    "question": "Quelle ligne vient de la branche `ma-fonction` ?",
+    "legendeDepart": "Le fichier en conflit",
     "indices": [
       "Entre `<<<<<<<` et `=======` : la branche où l'on est. Après `=======` : l'autre branche.",
       "Le nom de la branche est écrit sur la dernière ligne."
@@ -8380,7 +8268,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-31",
+    "id": "s7-26",
     "concept": "fusion",
     "notion": "fusion",
     "seance": 7,
@@ -8388,8 +8276,10 @@
     "type": "predire",
     "titre": "Est-ce résolu ?",
     "obligatoire": false,
-    "enonce": "Léo a retiré la ligne `=======` et la ligne de `prix = 10`, puis veut committer. Peut-il ?",
+    "enonce": "Léo a retiré la ligne `=======` et la ligne `prix = 10`, et veut committer ce fichier.",
     "depart": "<<<<<<< HEAD\nprix = 12\n>>>>>>> ma-fonction",
+    "question": "Peut-il le committer ?",
+    "legendeDepart": "Le fichier",
     "indices": [
       "Compte les lignes qui commencent par `<` ou `>`.",
       "Un fichier résolu ne contient plus aucun marqueur."
@@ -8408,7 +8298,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-32",
+    "id": "s7-27",
     "concept": "fusion",
     "notion": "fusion",
     "seance": 7,
@@ -8444,7 +8334,7 @@
     "famille": "operateurs"
   },
   {
-    "id": "s7-33",
+    "id": "s7-28",
     "concept": "equipe",
     "notion": "equipe",
     "seance": 7,
@@ -8452,8 +8342,9 @@
     "type": "predire",
     "titre": "La bonne démarche",
     "obligatoire": false,
-    "enonce": "Léo veut ajouter une fonctionnalité à un dépôt partagé. Quelle démarche suit les bonnes pratiques ?",
+    "enonce": "Léo veut ajouter une fonctionnalité à un dépôt partagé.",
     "depart": "",
+    "question": "Quelle démarche suit les bonnes pratiques ?",
     "indices": [
       "Deux mots à retenir : on ne touche pas à `main` directement, et on ne force jamais.",
       "Le travail relu entre dans `main` par une pull request."
@@ -8472,7 +8363,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-34",
+    "id": "s7-29",
     "concept": "equipe",
     "notion": "equipe",
     "seance": 7,
@@ -8480,8 +8371,10 @@
     "type": "predire",
     "titre": "Qui a corrigé ça ?",
     "obligatoire": false,
-    "enonce": "Léo se demande qui a corrigé la division par zéro. Que lui répond cet historique ?",
+    "enonce": "Voici l'historique d'un dépôt.",
     "depart": "$ git log --format=\"%an : %s\"\nCamille : feat: ajoute le menu\nLéo : fix: corrige la division par zéro\nCamille : docs: explique le menu",
+    "question": "Qui a corrigé la division par zéro ?",
+    "legendeDepart": "Le terminal",
     "indices": [
       "Chaque ligne donne l'auteur, puis le message du commit.",
       "Le message `fix:` dit ce qui a été corrigé."
@@ -8500,7 +8393,7 @@
     "famille": "variables"
   },
   {
-    "id": "s7-35",
+    "id": "s7-30",
     "concept": "equipe",
     "notion": "equipe",
     "seance": 7,

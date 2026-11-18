@@ -1,31 +1,31 @@
 id: s7-22
-concept: gitignore
-notion: gitignore
+concept: branches
+notion: branches
 seance: 7
 niveau: expert
 type: predire
-titre: Des fichiers venus de nulle part
+titre: Main n'a pas bougé
 obligatoire: false
-enonce: Camille vient de lancer son programme dans son éditeur, puis fait `git status`. D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?
+enonce: Camille fait ces commandes.
 depart: |-
-  $ git status
-  Untracked files:
-          .idea/
-          __pycache__/
-          moyenne.py
+  $ git switch -c essai
+  $ git add idee.py
+  $ git commit -m "feat: ajoute idee.py"
+  $ git switch main
+question: Après le dernier `git switch`, le fichier `idee.py` est-il dans son dossier ?
+legende_depart: Le terminal
 indices:
-- 'Camille n''a pas écrit ces dossiers : quelque chose les a créés quand elle a lancé le programme.'
-- Un fichier de règles, `.gitignore`, dit à git ce qu'il doit laisser de côté.
+- Sur quelle branche le commit a-t-il été fait ?
+- Revenir sur `main`, c'est retrouver `main` tel qu'il était.
 tests:
 - type: qcm
   options:
-  - 'Son éditeur et Python les ont créés : on les range dans un `.gitignore`.'
-  - 'Ils font partie du projet : il faut les committer.'
-  - GitHub les a ajoutés pendant la nuit.
-  bonne_reponse: 0
+  - 'Oui : les commits sont partagés par toutes les branches.'
+  - 'Non : le commit est sur la branche `essai`, et `main` n''a pas changé.'
+  - Oui, mais vide.
+  bonne_reponse: 1
 solution: |-
-  $ git status
-  Untracked files:
-          .idea/
-          __pycache__/
-          moyenne.py
+  $ git switch -c essai
+  $ git add idee.py
+  $ git commit -m "feat: ajoute idee.py"
+  $ git switch main

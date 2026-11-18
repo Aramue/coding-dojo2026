@@ -1,39 +1,38 @@
 id: s7-15
-concept: suivis
-notion: suivis
+concept: diff
+notion: diff
 seance: 7
 niveau: normal
-type: predire
-titre: Ce qui entre dans le commit
+type: debug
+titre: Il manque les lignes retirées
 obligatoire: true
-enonce: 'Camille lit ce `git status`, puis fait `git commit -m "docs: explique le programme"`. Quel fichier entre dans le commit ?'
+enonce: Ce programme doit afficher les lignes retirées avec `-`, puis les lignes ajoutées avec `+`. Il n'affiche jamais les lignes retirées. Répare-le.
 depart: |-
-  $ git status
-  Changes to be committed:
-          modified:   README.md
+  avant = ["a = 10", "b = 5", "print(a + b)"]
+  apres = ["a = 10", "b = 6", "print(a + b)"]
 
-  Changes not staged for commit:
-          modified:   moyenne.py
-
-  Untracked files:
-          notes.md
+  for ligne in avant:
+      if ligne not in avant:
+          print("-", ligne)
+  for ligne in apres:
+      if ligne not in avant:
+          print("+", ligne)
 indices:
-- Seule la section « Changes to be committed » entre dans le prochain commit.
-- Les deux autres sections attendent un `git add`.
+- Une ligne est retirée si elle était dans `avant` et n'est plus dans... laquelle des deux listes ?
+- 'Dans la première boucle, `ligne` vient de `avant` : elle ne peut pas être absente de `avant`.'
 tests:
-- type: qcm
-  options:
-  - README.md
-  - moyenne.py
-  - notes.md
-  bonne_reponse: 0
+- type: sortie
+  entrees: []
+  attendu: |-
+    - b = 5
+    + b = 6
 solution: |-
-  $ git status
-  Changes to be committed:
-          modified:   README.md
+  avant = ["a = 10", "b = 5", "print(a + b)"]
+  apres = ["a = 10", "b = 6", "print(a + b)"]
 
-  Changes not staged for commit:
-          modified:   moyenne.py
-
-  Untracked files:
-          notes.md
+  for ligne in avant:
+      if ligne not in apres:
+          print("-", ligne)
+  for ligne in apres:
+      if ligne not in avant:
+          print("+", ligne)

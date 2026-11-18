@@ -1,37 +1,22 @@
 id: s7-24
-concept: gitignore
-notion: gitignore
+concept: fusion
+notion: fusion
 seance: 7
 niveau: expert
-type: ecrire
-titre: Quels fichiers sont ignorés ?
+type: predire
+titre: À quoi sert une pull request ?
 obligatoire: false
-enonce: '`extensions` liste les fins de nom de fichier que le `.gitignore` ignore. Range dans `ignores` les noms de `fichiers` qui finissent par l''une d''elles, dans l''ordre de la liste.'
-depart: |
-  extensions = [".pyc", ".log"]
-  fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
-  ignores = []
+enonce: Léo a poussé sa branche `ma-fonction` sur GitHub et ouvre une **pull request**. (Sur GitLab, on parle de *merge request*.)
+depart: ''
+question: À quoi sert une pull request ?
 indices:
-- '`fichier.endswith(extension)` vaut `True` quand le nom finit par l''extension.'
-- 'Deux boucles imbriquées : une sur les fichiers, une sur les extensions.'
+- 'Le nom dit : on demande à quelqu''un de tirer (pull) ces changements vers `main`.'
+- 'Le but : que le travail soit relu avant d''entrer dans `main`.'
 tests:
-- type: variable
-  nom: ignores
-  valeur_attendue: '[''moyenne.pyc'', ''debug.log'']'
-- type: contient
-  motif: endswith(
-  message: Teste la fin du nom avec endswith.
-- type: contient
-  motif: 'for '
-  message: Parcours les fichiers avec une boucle.
-- type: interdit
-  motif: replace(
-  message: Ici, on teste la fin du nom, on ne le modifie pas.
-solution: |-
-  extensions = [".pyc", ".log"]
-  fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
-  ignores = []
-  for fichier in fichiers:
-      for extension in extensions:
-          if fichier.endswith(extension):
-              ignores.append(fichier)
+- type: qcm
+  options:
+  - À demander que ses commits soient relus, puis fusionnés dans `main`.
+  - À télécharger ses commits sur sa machine.
+  - À supprimer sa branche.
+  bonne_reponse: 0
+solution: (aucun)

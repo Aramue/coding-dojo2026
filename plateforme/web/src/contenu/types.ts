@@ -15,6 +15,10 @@ export type Exercice = {
   obligatoire: boolean
   enonce: string
   depart: string
+  /** Un `predire` dont la question n'est pas « Qu'affiche ce programme ? ». */
+  question?: string
+  /** Remplace « Le programme » sur la carte qui montre `depart`. */
+  legendeDepart?: string
   indices: string[]
   tests: Test[]
   expert?: string

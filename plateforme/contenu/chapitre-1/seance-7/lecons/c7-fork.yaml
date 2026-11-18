@@ -26,7 +26,7 @@ blocs:
       print(depots["mon fork"])
   - type: paragraphe
     texte: >-
-      Le fichier `notes.md` n'existe que sur ta machine : ton fork et le dépôt du professeur ne le voient pas. Pour l'envoyer, il faudra un **push**, que tu verras dans deux leçons.
+      Le fichier `notes.md` n'existe que sur ta machine : ton fork et le dépôt du professeur ne le voient pas. Pour l'envoyer, il faudra un **push**, que tu verras plus loin.
   - type: attention
     texte: >-
       **On clone son fork, jamais l'original.** Sur l'original, tu n'as pas le droit d'envoyer quoi que ce soit : ton premier push serait refusé.

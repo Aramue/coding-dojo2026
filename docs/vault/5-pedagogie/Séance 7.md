@@ -28,7 +28,7 @@ plateforme ne peut pas valider un `git commit`. La séance combine donc **trois 
 
 | Support | Rôle | État |
 |---|---|---|
-| Slides, avec des schémas | Le modèle mental : les trois zones, fork et clone, un commit, un diff | ✅ écrites — `docs/slides/git.pptx`, 14 slides (9 + 5 bonus) avec notes de présentation, aperçus `git-1.png` à `git-14.png` |
+| Slides, avec des schémas | Le modèle mental : les trois zones, fork et clone, un commit, un diff | ✅ écrites — `docs/slides/git.pptx`, 14 slides (9 + 5 bonus) dans l'ordre du cours, avec notes de présentation, aperçus `git-1.png` à `git-14.png` |
 | Exercices et leçons de la plateforme | **Prédire avant d'agir** ; la validation est automatique | ✅ écrits |
 | Dépôt modèle | Le geste réel, sur la machine de l'élève, avec son IDE | ✅ écrit dans `plateforme/tp-git-modele/`, **à publier** sur GitHub sous le nom `tp-git` |
 | Consignes `/tp/git` sur la plateforme | Les mêmes étapes, avec points de contrôle | ⬜ à faire (le README du dépôt les porte déjà) |
@@ -40,8 +40,14 @@ plateforme ne peut pas valider un `git commit`. La séance combine donc **trois 
 
 ### Comment un exercice de git s'écrit sur cette plateforme
 
-- **`predire`** : le code affiché est une **transcription de terminal** (`git status`, `git log`…).
-  Le validateur n'exécute pas les `predire`, donc la transcription n'a pas besoin d'être du Python.
+- **`predire`** : le code affiché est une **transcription de terminal** (`git status`, `git log`…) ou un fichier,
+  pas un programme. Le validateur n'exécute que ce qu'il sait juger : un code qui n'est pas du Python plante, ce
+  qui le fait passer son tour, et un `predire` **sans programme** (`depart` vide) n'est plus comparé à rien.
+- **`question` et `legende_depart`** : un `predire` affichait toujours « Qu'affiche ce programme ? » au-dessus des
+  propositions et « Le programme » sur la carte de code. Faux pour un historique git ou une convention de message.
+  Deux champs optionnels, réservés au `predire`, les remplacent : `question` pose la vraie question (« Quel commit
+  a été fait en premier ? »), `legende_depart` nomme le support (« Le terminal », « Le fichier »). `enonce` ne
+  garde que le contexte. Sans eux, l'écran reste celui des séances précédentes.
 - **`completer`, `debug`, `ecrire`** : ils exécutent du Python, donc ils **simulent git** avec les
   structures de la séance 5. Un historique est une liste de dictionnaires, un dépôt est un
   dictionnaire de listes, un diff est une comparaison de deux listes de lignes.
@@ -50,26 +56,31 @@ plateforme ne peut pas valider un `git commit`. La séance combine donc **trois 
 
 | | Séance 7 |
 |---|---|
-| Exercices | **35** |
-| dont obligatoires | **21** |
+| Exercices | **30** |
+| dont obligatoires | **16** |
 | dont bonus (`niveau: expert`) | **14** |
-| `predire` | 25 |
+| `predire` | 20 |
 | `debug` | 2 |
 | `completer` | 1 |
 | `ecrire` | 7 |
 
 | Notion | Exercices | Leçon | Durée |
 |---|---|---|---|
-| À quoi sert git | `s7-01` à `s7-03` | `c7-pourquoi` | 3 min |
-| Fork et clone | `s7-04` à `s7-05` | `c7-fork` | 3 min |
-| Le commit et ses conventions | `s7-06` à `s7-11` | `c7-commit` | 4 min |
-| Envoyer et recevoir | `s7-12` à `s7-14` | `c7-push` | 4 min |
-| Les fichiers suivis | `s7-15` à `s7-17` | `c7-suivis` | 3 min |
-| Voir la différence | `s7-18` à `s7-21` | `c7-diff` | 3 min |
-| *Bonus :* ignorer des fichiers | `s7-22` à `s7-24` | `c7-gitignore` | 3 min |
-| *Bonus :* les branches | `s7-25` à `s7-28` | `c7-branches` | 3 min |
-| *Bonus :* fusionner et résoudre un conflit | `s7-29` à `s7-32` | `c7-fusion` | 4 min |
-| *Bonus :* travailler en équipe | `s7-33` à `s7-35` | `c7-equipe` | 3 min |
+| À quoi sert git | aucun : la leçon suffit | `c7-pourquoi` | 3 min |
+| Fork et clone | aucun : la leçon suffit | `c7-fork` | 3 min |
+| Les fichiers suivis (`git add`, `git status`) | `s7-01` à `s7-03` | `c7-suivis` | 4 min |
+| Le commit et ses conventions (`git log`) | `s7-04` à `s7-09` | `c7-commit` | 5 min |
+| Envoyer et recevoir | `s7-10` à `s7-12` | `c7-push` | 4 min |
+| Voir la différence | `s7-13` à `s7-16` | `c7-diff` | 3 min |
+| *Bonus :* ignorer des fichiers | `s7-17` à `s7-19` | `c7-gitignore` | 3 min |
+| *Bonus :* les branches | `s7-20` à `s7-23` | `c7-branches` | 3 min |
+| *Bonus :* fusionner et résoudre un conflit | `s7-24` à `s7-27` | `c7-fusion` | 4 min |
+| *Bonus :* travailler en équipe | `s7-28` à `s7-30` | `c7-equipe` | 3 min |
+
+> [!important] `git add` s'apprend avant `git commit`
+> Les fichiers suivis passent **avant** le commit : un exercice de commit parle de `git add`, donc sa leçon doit
+> l'avoir enseigné. Les notions `suivis` (ordre 30) et `commit` (ordre 31) ont été échangées pour cela, et les
+> slides suivent le même ordre. La notion `suivis` parle du commit comme d'« une sauvegarde » sans le détailler.
 
 Les bonus sont `obligatoire: false` et `niveau: expert` : ils sont étiquetés « Bonus », ils ne comptent
 pas dans le compteur de progression et ne bloquent personne ([[ADR-004 Mode expert en bonus débloqué]]).
@@ -79,12 +90,12 @@ Les notions bonus affichent donc `0/0` dans le menu.
 
 | Notion antérieure | Où elle revient |
 |---|---|
-| f-string et `split` | découper un message de commit : `s7-10`, `s7-11` |
-| dictionnaire ([[Séance 5]]) | l'état des fichiers (`s7-17`), les branches (`s7-28`), le décompte par auteur (`s7-35`) |
-| liste de dictionnaires | un historique de commits (`c7-pourquoi`, `s7-35`) |
-| `in` et `not in` sur une liste | calculer un diff : `s7-20`, `s7-21` |
-| `startswith` et `endswith` | valider un message (`s7-09`), ignorer des fichiers (`s7-24`) |
-| `input()` | `s7-11` |
+| f-string et `split` | découper un message de commit : `s7-08`, `s7-09` |
+| dictionnaire ([[Séance 5]]) | l'état des fichiers (`s7-03`), les branches (`s7-23`), le décompte par auteur (`s7-30`) |
+| liste de dictionnaires | un historique de commits (`c7-pourquoi`, `s7-30`) |
+| `in` et `not in` sur une liste | calculer un diff : `s7-15`, `s7-16` |
+| `startswith` et `endswith` | valider un message (`s7-07`), ignorer des fichiers (`s7-19`) |
+| `input()` | `s7-09` |
 
 ## Les conventions enseignées
 
@@ -147,12 +158,12 @@ GitHub, elle, n'a pas pu être essayée.
 
 ## Le temps
 
-21 obligatoires = 15 `predire` (1,5 min), 1 `completer` (3,5), 2 `debug` (5) et 3 `ecrire` (≈ 4,5) :
-**≈ 50 min** de pratique sur la plateforme, pour **20 min** de leçons. Il reste ≈ 50 min pour le TP sur
-machine, ≈ 15 min de slides et une marge, soit les 120 min.
+16 obligatoires = 10 `predire` (1,5 min), 1 `completer` (3,5), 2 `debug` (5) et 3 `ecrire` (≈ 4,5) :
+**≈ 42 min** de pratique sur la plateforme, pour **22 min** de leçons. Il reste ≈ 55 min pour les slides, le
+TP sur machine et une marge, soit les 120 min.
 
 > [!note] Plan de coupe
-> Si la salle décroche, couper dans cet ordre : `s7-14`, `s7-19`, `s7-05`. Le bonus se fait à la maison ou
+> Si la salle décroche, couper dans cet ordre : `s7-12`, `s7-14`, `s7-02`. Le bonus se fait à la maison ou
 > en fin de séance. Décidé à l'avance, comme pour les séances précédentes ([[Plan de production]]).
 
 ## Avant la séance
@@ -179,7 +190,9 @@ machine, ≈ 15 min de slides et une marge, soit les 120 min.
 ## Outillage touché
 
 `outils/schema.py` : `seance` jusqu'à 7, `MOTIF_ID` en `s[1234567]`, `MOTIF_LECON` en `c[1234567]`, dix notions
-(ordres 28 à 37) et un chapitre (`versions`). Le type TypeScript `seance` suit. Le dossier reste sous
+(ordres 28 à 37) et un chapitre (`versions`), plus les champs `question` et `legende_depart` du `predire`. Le type
+TypeScript `seance` suit, et `EcranExercice` lit les deux nouveaux champs. `valider_contenu.py` ne compare plus un
+`predire` sans programme à la sortie d'un code vide. Le dossier reste sous
 `chapitre-1/`, comme pour les séances 4 à 6.
 
 ## Voir aussi

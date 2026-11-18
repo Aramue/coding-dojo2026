@@ -51,7 +51,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Consignes des TP sur la plateforme | ✅ livrées — `/tp/stegano`, huit étapes guidées, voir [[Séance 4]] |
 | Séance 5 — dictionnaires et JSON | ✅ **écrite** — 37 exercices et 4 leçons, voir [[Séance 5]] ; **ouverte le 10 novembre 2026** |
 | Séance 6 — API et `requests` | ✅ **écrite** — 28 exercices et 4 leçons, voir [[Séance 6]] ; réseau réel d'Open-Meteo ([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) ; date d'ouverture provisoire |
-| Séance 7 — git et GitHub | 🔶 **cours et exercices écrits** — 35 exercices (21 obligatoires, 14 bonus) et 10 leçons, voir [[Séance 7]] ; dépôt modèle, consignes `/tp/git` et slides à faire ; date d'ouverture provisoire |
+| Séance 7 — git et GitHub | 🔶 **cours et exercices écrits** — 30 exercices (16 obligatoires, 14 bonus) et 10 leçons, voir [[Séance 7]] ; dépôt modèle, consignes `/tp/git` et slides à faire ; date d'ouverture provisoire |
 | Intégration continue | ✅ livrée — trois contrôles, [[ADR-017 Une seule branche, des releases par tag]] |
 | Mise en production sur la VM | 🔶 en cours — [[Déploiement UNIGE]] |
 | Revue finale de branche | ⬜ à faire |

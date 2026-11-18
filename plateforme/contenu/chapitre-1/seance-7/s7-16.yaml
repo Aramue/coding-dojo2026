@@ -1,21 +1,41 @@
 id: s7-16
-concept: suivis
-notion: suivis
+concept: diff
+notion: diff
 seance: 7
 niveau: normal
-type: predire
-titre: Le fichier qui n'est pas parti
+type: ecrire
+titre: Mon propre diff
 obligatoire: true
-enonce: Camille crée `notes.md`, modifie `moyenne.py`, puis fait `git add moyenne.py`, `git commit` et `git push`. Sur GitHub, `notes.md` n'apparaît pas. Pourquoi ?
-depart: ''
+enonce: Les listes `avant` et `apres` contiennent les lignes d'un fichier avant et après une modification. Affiche d'abord chaque ligne retirée, précédée de `- `, puis chaque ligne ajoutée, précédée de `+ `.
+depart: |
+  avant = ["x = 1", "y = 2", "z = 3"]
+  apres = ["x = 1", "y = 5", "z = 3", "t = 9"]
 indices:
-- Quels fichiers Camille a-t-elle ajoutés avec `git add` ?
-- Un fichier non suivi n'entre dans aucun commit.
+- 'Il faut deux boucles : une sur `avant`, une sur `apres`.'
+- Une ligne retirée est dans `avant` et pas dans `apres` ; une ligne ajoutée, l'inverse.
 tests:
-- type: qcm
-  options:
-  - GitHub refuse les fichiers `.md`.
-  - '`notes.md` n''a jamais été ajouté avec `git add` : il est resté non suivi.'
-  - Il faut attendre quelques minutes.
-  bonne_reponse: 1
-solution: (aucun)
+- type: sortie
+  entrees: []
+  attendu: |-
+    - y = 2
+    + y = 5
+    + t = 9
+- type: contient
+  motif: not in
+  message: Teste l'absence d'une ligne dans l'autre liste avec not in.
+- type: interdit
+  motif: '- y = 2'
+  message: Les lignes doivent venir des listes, pas être écrites en dur.
+- type: interdit
+  motif: + y = 5
+  message: Les lignes doivent venir des listes, pas être écrites en dur.
+solution: |-
+  avant = ["x = 1", "y = 2", "z = 3"]
+  apres = ["x = 1", "y = 5", "z = 3", "t = 9"]
+
+  for ligne in avant:
+      if ligne not in apres:
+          print("-", ligne)
+  for ligne in apres:
+      if ligne not in avant:
+          print("+", ligne)

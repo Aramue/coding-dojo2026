@@ -1,21 +1,31 @@
 id: s7-04
-concept: fork
-notion: fork
+concept: commit
+notion: commit
 seance: 7
 niveau: normal
 type: predire
-titre: Où est la copie ?
+titre: Le plus ancien en bas
 obligatoire: true
-enonce: Tu cliques sur le bouton **Fork** de la page GitHub du dépôt du professeur. Où se trouve la copie ?
-depart: ''
+enonce: Voici l'historique d'un dépôt, affiché par `git log --oneline`.
+depart: |-
+  $ git log --oneline
+  c3d9f21 fix: corrige la division par zéro
+  8a41b07 feat: ajoute la médiane
+  5e2c6aa feat: ajoute le calcul de la moyenne
+question: Quel commit a été fait en premier ?
+legende_depart: Le terminal
 indices:
-- 'Le fork est un bouton de GitHub : il agit sur le site, pas sur ton ordinateur.'
-- C'est le clone qui copie un dépôt sur ta machine.
+- '`git log` met le commit le plus récent en haut.'
+- Le commit le plus ancien est donc le dernier de la liste.
 tests:
 - type: qcm
   options:
-  - Dans ton compte GitHub, sur le site.
-  - Dans un nouveau dossier sur ton ordinateur.
-  - Chez le professeur, dans un second dépôt.
+  - 'feat: ajoute le calcul de la moyenne'
+  - 'feat: ajoute la médiane'
+  - 'fix: corrige la division par zéro'
   bonne_reponse: 0
-solution: (aucun)
+solution: |-
+  $ git log --oneline
+  c3d9f21 fix: corrige la division par zéro
+  8a41b07 feat: ajoute la médiane
+  5e2c6aa feat: ajoute le calcul de la moyenne

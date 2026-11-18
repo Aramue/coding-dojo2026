@@ -1,29 +1,31 @@
 id: s7-27
-concept: branches
-notion: branches
+concept: fusion
+notion: fusion
 seance: 7
 niveau: expert
-type: predire
-titre: Main n'a pas bougé
+type: ecrire
+titre: Résoudre un conflit
 obligatoire: false
-enonce: Camille fait ces commandes. Après le dernier `git switch`, le fichier `idee.py` est-il dans son dossier ?
-depart: |-
-  $ git switch -c essai
-  $ git add idee.py
-  $ git commit -m "feat: ajoute idee.py"
-  $ git switch main
+enonce: '`fichier` est une liste de lignes qui contient un conflit. Les deux versions sont bonnes : garde-les toutes les deux. Range dans `resolu` toutes les lignes sauf les trois lignes de marqueurs, qui commencent par `<`, `=` ou `>`.'
+depart: |
+  fichier = ["nom = 'Camille'", "<<<<<<< HEAD", "age = 17", "=======", "classe = '3e'", ">>>>>>> ma-fonction"]
+  resolu = []
 indices:
-- Sur quelle branche le commit a-t-il été fait ?
-- Revenir sur `main`, c'est retrouver `main` tel qu'il était.
+- '`ligne[0]` est le premier caractère de la ligne.'
+- '`ligne[0] not in "<=>"` est vrai quand le premier caractère n''est ni `<`, ni `=`, ni `>`.'
 tests:
-- type: qcm
-  options:
-  - 'Oui : les commits sont partagés par toutes les branches.'
-  - 'Non : le commit est sur la branche `essai`, et `main` n''a pas changé.'
-  - Oui, mais vide.
-  bonne_reponse: 1
+- type: variable
+  nom: resolu
+  valeur_attendue: '["nom = ''Camille''", ''age = 17'', "classe = ''3e''"]'
+- type: contient
+  motif: append(
+  message: Ajoute chaque ligne gardée avec append.
+- type: interdit
+  motif: .remove(
+  message: Construis la liste résolue, ne retire rien de fichier.
 solution: |-
-  $ git switch -c essai
-  $ git add idee.py
-  $ git commit -m "feat: ajoute idee.py"
-  $ git switch main
+  fichier = ["nom = 'Camille'", "<<<<<<< HEAD", "age = 17", "=======", "classe = '3e'", ">>>>>>> ma-fonction"]
+  resolu = []
+  for ligne in fichier:
+      if ligne[0] not in "<=>":
+          resolu.append(ligne)

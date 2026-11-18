@@ -53,6 +53,33 @@ def test_seance_hors_bornes_rejetee():
         Exercice(**exercice_minimal(seance=8))
 
 
+def test_un_predire_peut_poser_sa_propre_question():
+    ex = Exercice(**exercice_minimal(
+        type="predire",
+        question="Quel commit a ete fait en premier ?",
+        legende_depart="Le terminal",
+        tests=[{"type": "qcm", "options": ["a", "b"], "bonne_reponse": 0}],
+    ))
+    assert ex.question == "Quel commit a ete fait en premier ?"
+    assert ex.legende_depart == "Le terminal"
+
+
+def test_la_question_et_la_legende_sont_reservees_au_predire():
+    with pytest.raises(ValidationError):
+        Exercice(**exercice_minimal(question="Une question"))
+    with pytest.raises(ValidationError):
+        Exercice(**exercice_minimal(legende_depart="Le terminal"))
+
+
+def test_une_question_vide_est_rejetee():
+    with pytest.raises(ValidationError):
+        Exercice(**exercice_minimal(
+            type="predire",
+            question="  ",
+            tests=[{"type": "qcm", "options": ["a", "b"], "bonne_reponse": 0}],
+        ))
+
+
 def test_seance_7_acceptee():
     ex = Exercice(**exercice_minimal(id="s7-01", seance=7, notion="pourquoi"))
     assert ex.seance == 7

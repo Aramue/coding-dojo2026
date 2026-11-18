@@ -1,28 +1,33 @@
 id: s7-17
-concept: suivis
-notion: suivis
+concept: gitignore
+notion: gitignore
 seance: 7
-niveau: normal
-type: completer
-titre: Les fichiers à ajouter
-obligatoire: true
-enonce: 'Le dictionnaire `etat` donne l''état de chaque fichier. Complète les trous pour ranger dans `a_ajouter` les fichiers « modifié » ou « non suivi » : ceux qu''il faut encore ajouter avec `git add`.'
+niveau: expert
+type: predire
+titre: Des fichiers venus de nulle part
+obligatoire: false
+enonce: Camille vient de lancer son programme dans son éditeur, puis elle fait `git status`.
 depart: |-
-  etat = {"moyenne.py": "modifié", "notes.md": "non suivi", "README.md": "validé"}
-  a_ajouter = []
-  for fichier in etat:
-      if etat[fichier] == _____ or etat[fichier] == _____:
-          a_ajouter._____(fichier)
+  $ git status
+  Untracked files:
+          .idea/
+          __pycache__/
+          moyenne.py
+question: D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?
+legende_depart: Le terminal
 indices:
-- 'Les deux premiers trous sont des textes : regarde les états écrits dans le dictionnaire.'
-- Pour ajouter un élément à la fin d'une liste, on écrit `liste.append(valeur)`.
+- 'Camille n''a pas écrit ces dossiers : quelque chose les a créés quand elle a lancé le programme.'
+- Un fichier de règles, `.gitignore`, dit à git ce qu'il doit laisser de côté.
 tests:
-- type: variable
-  nom: a_ajouter
-  valeur_attendue: '[''moyenne.py'', ''notes.md'']'
+- type: qcm
+  options:
+  - 'Son éditeur et Python les ont créés : on les range dans un `.gitignore`.'
+  - 'Ils font partie du projet : il faut les committer.'
+  - GitHub les a ajoutés pendant la nuit.
+  bonne_reponse: 0
 solution: |-
-  etat = {"moyenne.py": "modifié", "notes.md": "non suivi", "README.md": "validé"}
-  a_ajouter = []
-  for fichier in etat:
-      if etat[fichier] == "modifié" or etat[fichier] == "non suivi":
-          a_ajouter.append(fichier)
+  $ git status
+  Untracked files:
+          .idea/
+          __pycache__/
+          moyenne.py

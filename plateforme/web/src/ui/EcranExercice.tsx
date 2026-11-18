@@ -222,7 +222,7 @@ export function EcranExercice({
             exercices de ce type sont impossibles à faire.
           */}
           {qcm && exercice.depart.trim() && (
-            <CarteCode legende="Le programme">
+            <CarteCode legende={exercice.legendeDepart ?? 'Le programme'}>
               <pre>{exercice.depart.trimEnd()}</pre>
             </CarteCode>
           )}
@@ -244,7 +244,7 @@ export function EcranExercice({
         <section className="exercice__travail">
           {qcm ? (
             <fieldset className="qcm">
-              <legend>Qu'affiche ce programme&nbsp;?</legend>
+              <legend>{exercice.question ?? <>Qu'affiche ce programme&nbsp;?</>}</legend>
               {qcm.options.map((option, i) => (
                 <label key={i} className="qcm__option">
                   <input

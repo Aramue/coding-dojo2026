@@ -1,31 +1,37 @@
 id: s7-19
-concept: diff
-notion: diff
+concept: gitignore
+notion: gitignore
 seance: 7
-niveau: normal
-type: predire
-titre: Un diff qui reste vide
-obligatoire: true
-enonce: Camille a modifié `moyenne.py`, puis lance ces commandes. Pourquoi le premier `git diff` n'affiche-t-il rien ?
-depart: |-
-  $ git add moyenne.py
-  $ git diff
-  $ git diff --staged
-  -    return sum(notes) / len(notes)
-  +    return round(sum(notes) / len(notes), 1)
+niveau: expert
+type: ecrire
+titre: Quels fichiers sont ignorés ?
+obligatoire: false
+enonce: '`extensions` liste les fins de nom de fichier que le `.gitignore` ignore. Range dans `ignores` les noms de `fichiers` qui finissent par l''une d''elles, dans l''ordre de la liste.'
+depart: |
+  extensions = [".pyc", ".log"]
+  fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
+  ignores = []
 indices:
-- Regarde ce que montre le troisième appel, et ce qui a changé entre les deux.
-- '`git diff` compare le dossier à l''index. Après `git add`, il n''y a plus de différence entre eux.'
+- '`fichier.endswith(extension)` vaut `True` quand le nom finit par l''extension.'
+- 'Deux boucles imbriquées : une sur les fichiers, une sur les extensions.'
 tests:
-- type: qcm
-  options:
-  - 'Le fichier est ajouté à l''index : seul `git diff --staged` montre ce changement.'
-  - Git a perdu la modification.
-  - Il faut d'abord faire un `git push`.
-  bonne_reponse: 0
+- type: variable
+  nom: ignores
+  valeur_attendue: '[''moyenne.pyc'', ''debug.log'']'
+- type: contient
+  motif: endswith(
+  message: Teste la fin du nom avec endswith.
+- type: contient
+  motif: 'for '
+  message: Parcours les fichiers avec une boucle.
+- type: interdit
+  motif: replace(
+  message: Ici, on teste la fin du nom, on ne le modifie pas.
 solution: |-
-  $ git add moyenne.py
-  $ git diff
-  $ git diff --staged
-  -    return sum(notes) / len(notes)
-  +    return round(sum(notes) / len(notes), 1)
+  extensions = [".pyc", ".log"]
+  fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
+  ignores = []
+  for fichier in fichiers:
+      for extension in extensions:
+          if fichier.endswith(extension):
+              ignores.append(fichier)

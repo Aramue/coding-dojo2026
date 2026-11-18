@@ -1,31 +1,42 @@
 id: s7-30
-concept: fusion
-notion: fusion
+concept: equipe
+notion: equipe
 seance: 7
 niveau: expert
-type: predire
-titre: Lire un conflit
+type: ecrire
+titre: Les commits de chacun
 obligatoire: false
-enonce: Camille est sur `main` et fusionne `ma-fonction`. Git s'arrête sur ce fichier. Quelle ligne vient de la branche `ma-fonction` ?
-depart: |-
-  <<<<<<< HEAD
-  prix = 10
-  =======
-  prix = 12
-  >>>>>>> ma-fonction
+enonce: '`commits` est la liste des commits d''un dépôt. Remplis le dictionnaire `compte` : pour chaque auteur, le nombre de commits qu''il a faits.'
+depart: |
+  commits = [
+      {"auteur": "Camille", "message": "feat: ajoute le menu"},
+      {"auteur": "Leo", "message": "fix: corrige le calcul"},
+      {"auteur": "Camille", "message": "docs: explique le menu"},
+  ]
+  compte = {}
 indices:
-- 'Entre `<<<<<<<` et `=======` : la branche où l''on est. Après `=======` : l''autre branche.'
-- Le nom de la branche est écrit sur la dernière ligne.
+- Si l'auteur est déjà une clé de `compte`, on ajoute 1 à sa valeur. Sinon, on crée la clé avec la valeur 1.
+- '`auteur in compte` teste si la clé existe.'
 tests:
-- type: qcm
-  options:
-  - '`prix = 10`'
-  - '`prix = 12`'
-  - Les deux.
-  bonne_reponse: 1
+- type: variable
+  nom: compte
+  valeur_attendue: '{''Camille'': 2, ''Leo'': 1}'
+- type: interdit
+  motif: get(
+  message: Ici, on teste l'existence de la clé avec in.
+- type: contient
+  motif: in compte
+  message: Teste si l'auteur est déjà une clé de compte.
 solution: |-
-  <<<<<<< HEAD
-  prix = 10
-  =======
-  prix = 12
-  >>>>>>> ma-fonction
+  commits = [
+      {"auteur": "Camille", "message": "feat: ajoute le menu"},
+      {"auteur": "Leo", "message": "fix: corrige le calcul"},
+      {"auteur": "Camille", "message": "docs: explique le menu"},
+  ]
+  compte = {}
+  for commit in commits:
+      auteur = commit["auteur"]
+      if auteur in compte:
+          compte[auteur] = compte[auteur] + 1
+      else:
+          compte[auteur] = 1

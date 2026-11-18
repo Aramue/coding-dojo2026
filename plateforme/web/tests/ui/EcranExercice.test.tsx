@@ -177,6 +177,42 @@ describe('EcranExercice — solution de référence', () => {
     await waitFor(() => expect(lancements).toEqual(['print("Bonjour")\n']))
   })
 
+  it("sur un predire, pose « Qu'affiche ce programme ? » et montre « Le programme »", () => {
+    render(
+      <EcranExercice
+        exercice={exercice({
+          type: 'predire',
+          depart: 'print(3 + 4)\n',
+          tests: [{ type: 'qcm', options: ['7', '34'], bonneReponse: 0 }] as Test[],
+        })}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    expect(screen.getByText(/Qu'affiche ce programme/)).toBeInTheDocument()
+    expect(screen.getByText('Le programme')).toBeInTheDocument()
+  })
+
+  it('sur un predire à question propre, la pose à la place de celle du programme', () => {
+    render(
+      <EcranExercice
+        exercice={exercice({
+          type: 'predire',
+          depart: '$ git log --oneline\nc3d9f21 fix: corrige le calcul\n',
+          question: 'Quel commit a été fait en premier ?',
+          legendeDepart: 'Le terminal',
+          tests: [{ type: 'qcm', options: ['fix', 'feat'], bonneReponse: 1 }] as Test[],
+        })}
+        executeur={executeurFactice([])}
+        onTentative={vi.fn()}
+      />,
+    )
+    expect(screen.getByText('Quel commit a été fait en premier ?')).toBeInTheDocument()
+    expect(screen.getByText('Le terminal')).toBeInTheDocument()
+    expect(screen.queryByText(/Qu'affiche ce programme/)).toBeNull()
+    expect(screen.queryByText('Le programme')).toBeNull()
+  })
+
   it('sur un QCM, donne la bonne réponse sans répéter le programme', async () => {
     const programme = 'print("Bonjour", "Camille")\n'
     render(

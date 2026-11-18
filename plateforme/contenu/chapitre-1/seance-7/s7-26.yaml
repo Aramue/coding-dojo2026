@@ -1,27 +1,29 @@
 id: s7-26
-concept: branches
-notion: branches
+concept: fusion
+notion: fusion
 seance: 7
 niveau: expert
 type: predire
-titre: Où suis-je ?
+titre: Est-ce résolu ?
 obligatoire: false
-enonce: Sur quelle branche ira le prochain commit de Camille ?
+enonce: Léo a retiré la ligne `=======` et la ligne `prix = 10`, et veut committer ce fichier.
 depart: |-
-  $ git branch
-    main
-  * ma-fonction
+  <<<<<<< HEAD
+  prix = 12
+  >>>>>>> ma-fonction
+question: Peut-il le committer ?
+legende_depart: Le fichier
 indices:
-- L'étoile marque la branche où l'on se trouve.
-- Un commit va toujours sur la branche courante, jamais sur plusieurs.
+- Compte les lignes qui commencent par `<` ou `>`.
+- Un fichier résolu ne contient plus aucun marqueur.
 tests:
 - type: qcm
   options:
-  - main
-  - ma-fonction
-  - Sur les deux.
+  - 'Oui : il ne reste que `prix = 12`.'
+  - 'Non : il reste des marqueurs, qui feraient planter le programme.'
+  - 'Oui : git nettoiera les marqueurs tout seul.'
   bonne_reponse: 1
 solution: |-
-  $ git branch
-    main
-  * ma-fonction
+  <<<<<<< HEAD
+  prix = 12
+  >>>>>>> ma-fonction
