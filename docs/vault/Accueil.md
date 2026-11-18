@@ -48,7 +48,7 @@ s'exécute et se valide **dans leur navigateur**, sans installation et sans atte
 | Ouverture des séances à leur date | ✅ livrée — [[ADR-013 Une séance s'ouvre à sa date]] |
 | Compte professeur au premier lancement | ✅ livré — [[ADR-014 Le compte professeur se crée au premier lancement]], branche `compte-professeur` |
 | Séance 4 — préparation du TP de stéganographie | ✅ **écrite** — 40 exercices et 5 leçons, voir [[Séance 4]] |
-| Consignes des TP sur la plateforme | ✅ livrées — `/tp/stegano` (huit étapes, voir [[Séance 4]]) `/tp/git` (neuf étapes dont trois bonus, voir [[Séance 7]]) et `/tp/pokedex` (TP2, voir [[TP2]]) |
+| Consignes des TP sur la plateforme | ✅ livrées — `/tp/stegano` (huit étapes, voir [[Séance 4]]), `/tp/git` (dix étapes dont trois bonus, voir [[Séance 7]]) et `/tp/pokedex` (TP2, voir [[TP2]]) |
 | Séance 5 — dictionnaires et JSON | ✅ **écrite** — 37 exercices et 4 leçons, voir [[Séance 5]] ; **ouverte le 10 novembre 2026** |
 | Séance 6 — API et `requests` | ✅ **écrite** — 28 exercices et 4 leçons, voir [[Séance 6]] ; réseau réel d'Open-Meteo ([[ADR-018 Open-Meteo en réseau réel, borné par le dojo]]) ; date d'ouverture provisoire |
 | Séance 7 — git et GitHub | 🔶 **cours et exercices écrits** — 30 exercices (16 obligatoires, 14 bonus) et 10 leçons, voir [[Séance 7]] ; dépôt modèle publié, slides faites, consignes `/tp/git` à faire ; **ouverte le 18 novembre 2026** |
