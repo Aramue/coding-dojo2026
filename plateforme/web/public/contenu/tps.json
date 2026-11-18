@@ -1,5 +1,284 @@
 [
   {
+    "id": "pokedex",
+    "chapitre": "versions",
+    "titre": "Hôpital de code, le Pokédex",
+    "dureeMin": 240,
+    "introduction": [
+      {
+        "type": "paragraphe",
+        "texte": "Tu viens d'hériter d'un petit programme Python qui interroge **PokéAPI**, un service web gratuit qui décrit les Pokémon en JSON. Il a été écrit un peu vite : il contient des bugs, et il lui manque des fonctionnalités. **Douze issues** les décrivent."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ta mission : les trouver dans le code, les corriger, et **raconter ce que tu fais dans l'historique git**. Ce TP réunit tout ce que tu as vu : Python, dictionnaires et JSON, requêtes à une API, et git."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ce TP est **noté** et se fait **chez toi**, sur deux semaines. Le professeur lira ton historique git, le résultat des tests, et pourra t'interroger à l'oral sur l'une de tes corrections."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les étapes ci-dessous te mettent en route et te donnent une méthode. Les issues, elles, ne te disent pas où est l'erreur : **c'est à toi de la chercher**. Chacune contient des indices repliés, à n'ouvrir que si tu es vraiment bloqué."
+      },
+      {
+        "type": "attention",
+        "texte": "Ton fork est **public**. N'y mets jamais de mot de passe, de nom réel ou de photo, comme pour ton compte GitHub."
+      }
+    ],
+    "materiel": [
+      "Python 3 et git installés sur ta machine, et un éditeur de code",
+      "Un compte GitHub, avec un pseudonyme",
+      "Pouvoir envoyer un `git push` depuis ta machine, comme à la séance 7",
+      "La CLI GitHub (`gh`), facultative, pour créer les issues d'un seul coup"
+    ],
+    "etapes": [
+      {
+        "titre": "Récupérer le projet",
+        "objectif": "Avoir ton propre fork du Pokédex, cloné sur ta machine.",
+        "blocs": [
+          {
+            "type": "schema",
+            "nom": "fork",
+            "legende": "Tu forkes le dépôt du professeur sur GitHub, puis tu clones ton fork, pas l'original."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Va sur `https://github.com/WolfoNeos/tp2-pokedex` et clique sur **Fork**. Récupère ensuite l'adresse de **ton** fork (elle contient ton pseudonyme) et clone-le :"
+          },
+          {
+            "type": "terminal",
+            "legende": "Dans un terminal",
+            "texte": "$ git clone https://github.com/ton-pseudo/tp2-pokedex.git\n$ cd tp2-pokedex\n$ pip install -r requirements.txt"
+          },
+          {
+            "type": "verifier",
+            "texte": "`git remote -v` affiche une adresse qui contient **ton pseudonyme**, pas `WolfoNeos`. Si c'est celle du professeur, tu as cloné l'original : recommence avec l'adresse de ton fork."
+          },
+          {
+            "type": "indice",
+            "texte": "Un `pip` introuvable se contourne souvent avec `python -m pip install -r requirements.txt`. Si un message parle de droits, ajoute `--user`."
+          }
+        ]
+      },
+      {
+        "titre": "Lancer le programme et les tests",
+        "objectif": "Voir le programme tourner, et lire ce que racontent les tests qui échouent.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Lance le Pokédex et essaie quelques commandes : `chercher pikachu`, `liste`, `equipe`. Cherche aussi à le faire se tromper."
+          },
+          {
+            "type": "terminal",
+            "legende": "Lancer le programme",
+            "texte": "$ python main.py\nCommandes :\n  chercher <nom>   la fiche d'un Pokémon\n  liste            les 20 premiers Pokémon\n> chercher pikachu"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Lance ensuite les tests. **Beaucoup échouent, c'est normal** : chaque test rouge correspond à un problème à résoudre. Lis les messages : ils disent ce qui était attendu et ce qui a été obtenu, jamais comment corriger."
+          },
+          {
+            "type": "terminal",
+            "legende": "Lancer les tests",
+            "texte": "$ pytest\n...\n34 failed, 8 passed"
+          },
+          {
+            "type": "attention",
+            "texte": "Les tests **n'appellent jamais le vrai réseau** : ils lisent des réponses enregistrées dans `donnees/`. Ne modifie pas `tests/conftest.py`."
+          },
+          {
+            "type": "verifier",
+            "texte": "Le programme affiche son menu, et `pytest` se termine par un nombre de tests échoués (environ 34). Si `pytest` lui-même plante à l'import, une dépendance manque : relance `pip install -r requirements.txt`."
+          }
+        ]
+      },
+      {
+        "titre": "Créer tes issues",
+        "objectif": "Voir les douze issues dans l'onglet Issues de ton fork.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Une **issue**, c'est un ticket : « il y a un problème, voilà comment le voir ». GitHub n'en copie aucune dans un fork, donc le dépôt les fournit sous forme de fichiers, dans `tickets/`. Un script les crée à ta place."
+          },
+          {
+            "type": "terminal",
+            "legende": "Avec la CLI GitHub",
+            "texte": "$ gh auth login\n$ python creer_issues.py\nhttps://github.com/ton-pseudo/tp2-pokedex/issues/1\n...\n12 issues créées dans ton-pseudo/tp2-pokedex."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Pas de `gh` sur ta machine ? Ouvre chaque fichier de `tickets/` et copie-le à la main dans l'onglet **Issues** de ton fork : la première ligne est le titre, le reste est la description. Pense à activer les issues dans les réglages du fork (Settings, puis Features)."
+          },
+          {
+            "type": "verifier",
+            "texte": "L'onglet **Issues** de ton fork affiche douze issues, numérotées de 1 à 12, avec les étiquettes `facile`, `moyen` et `bonus`. Garde bien ces numéros : tes branches et tes commits s'y référeront."
+          },
+          {
+            "type": "indice",
+            "texte": "Le script refuse de tourner si le dépôt n'est pas un fork, ou s'il contient déjà des issues : c'est voulu, pour éviter les doublons. Dans le premier cas, tu as probablement cloné le dépôt du professeur."
+          }
+        ]
+      },
+      {
+        "titre": "Le cycle d'une issue",
+        "objectif": "Connaître la méthode à répéter pour chaque issue, du symptôme au commit.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Chaque issue se traite pareil. Ne saute pas d'étape : c'est ce qui sépare un bug corrigé d'un bug **compris**."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "1. **Reproduis** le problème avec la commande donnée dans l'issue. Tant que tu ne le vois pas, tu ne peux pas savoir si tu l'as réparé."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "2. **Localise** : lis le message d'erreur en partant de sa dernière ligne, lis le code de la fonction concernée, ajoute des `print` pour voir les valeurs."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "3. **Fais une hypothèse**, corrige, puis relance le test indiqué dans l'issue."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "4. **Relance tous les tests** : ta correction ne doit pas en casser un autre."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "5. **Commite** avec un message au format du cours, puis pousse."
+          },
+          {
+            "type": "terminal",
+            "legende": "Un cycle complet, pour l'issue 2",
+            "texte": "$ python main.py\n$ pytest tests/test_issue_02.py\n$ pytest\n$ git add affichage.py\n$ git commit -m \"fix: convertit la taille et le poids de la fiche\"\n$ git push"
+          },
+          {
+            "type": "attention",
+            "texte": "Un commit = **une** correction. Un message comme `fix: modifs` ou un gros commit qui règle quatre issues d'un coup se voit dans l'historique, et se paie à la notation."
+          },
+          {
+            "type": "indice",
+            "texte": "Bloqué sur une erreur ? Reviens aux exercices `debug` de la plateforme : le geste est le même. Lis la **dernière ligne** de la traceback d'abord, puis remonte jusqu'à la première ligne qui parle de ton code."
+          }
+        ]
+      },
+      {
+        "titre": "Les huit issues du socle",
+        "objectif": "Corriger les issues 1 à 8, dans l'ordre que tu veux.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Les issues 1 à 8 forment le **socle** : c'est ce que tout le monde doit réussir. Elles sont **indépendantes** : si tu bloques sur l'une, passe à la suivante et reviens-y plus tard."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Les étiquettes donnent la difficulté. Les `facile` (1, 2 et 8) sont de bons points de départ. Les `moyen` (3 à 7) demandent de lire un peu plus de code et de manipuler des listes, des dictionnaires ou du JSON."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "L'issue **5** n'est pas un bug mais une fonctionnalité à écrire. L'issue **8** ne se règle pas dans le code Python mais **dans git** : relis la leçon sur les fichiers ignorés."
+          },
+          {
+            "type": "attention",
+            "texte": "Le test d'une issue qui passe ne prouve pas que tu as compris. Avant de commiter, sois capable d'expliquer **pourquoi** le bug se produisait : c'est exactement ce que le professeur te demandera à l'oral."
+          },
+          {
+            "type": "verifier",
+            "texte": "Les tests `test_issue_01` à `test_issue_08` passent tous, et chaque issue a son ou ses commits, au format `fix:` ou `feat:`."
+          },
+          {
+            "type": "indice",
+            "texte": "Chaque issue a trois indices repliés, dans l'ordre : **où chercher**, **quelle notion**, **l'idée**. Ouvre-les un par un, et indique dans ta pull request ceux que tu as ouverts. Cela ne te pénalise que s'il y en a beaucoup, et la franchise compte."
+          }
+        ]
+      },
+      {
+        "titre": "Aller plus loin avec les bonus",
+        "objectif": "Choisir parmi les trois bonus ceux que tu veux tenter.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Rien de ce qui suit n'est obligatoire, et chaque bonus rapporte des points en plus. Tu peux en faire un seul ou les trois."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "**Bonus A : les issues 9 à 12.** Gérer les erreurs de l'API, suivre la pagination, ajouter un cache local, et découper une fonction trop longue. Ce sont les plus difficiles, et leurs indices sont plus rares."
+          },
+          {
+            "type": "schema",
+            "nom": "branches",
+            "legende": "Une branche par issue : chaque correction vit à part, puis revient dans `main` quand elle est prête."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "**Bonus B : une branche par issue.** Au lieu de travailler dans `main`, chaque issue est résolue dans **sa propre branche** (par exemple `fix/1-casse-du-nom`), puis fusionnée par une **pull request dans ton propre fork**."
+          },
+          {
+            "type": "terminal",
+            "legende": "Le parcours d'une issue avec une branche",
+            "texte": "$ git switch -c fix/1-casse-du-nom\n$ git add api.py\n$ git commit -m \"fix: normalise la casse du nom du Pokémon\"\n$ git push -u origin fix/1-casse-du-nom"
+          },
+          {
+            "type": "attention",
+            "texte": "Sur GitHub, une pull request propose par défaut le dépôt du professeur. Change le **base repository** pour **ton fork**, et écris `Closes #1` dans la description pour que l'issue se ferme à la fusion."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Plusieurs issues modifient la même fonction. Quand tu fusionneras leurs branches, tu rencontreras des **conflits** : c'est voulu. Tu sais les résoudre, et l'issue 12 est faite pour passer en dernier."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "**Bonus C : tes propres tests.** Dans `tests/test_mes_tests.py`, écris pour chaque bug corrigé un test qui vérifie un cas que les tests fournis ne couvrent pas. Prouve qu'il échouait avant ta correction : un commit `test:` (le test, rouge), puis un commit `fix:` (la correction, verte)."
+          },
+          {
+            "type": "verifier",
+            "texte": "Pour le bonus B, `git log --graph --oneline` montre des branches qui se rejoignent. Pour le bonus C, chaque test est commité **avant** la correction qui le fait passer."
+          }
+        ]
+      },
+      {
+        "titre": "Rendre ton travail",
+        "objectif": "Remettre le lien de ton fork, avec un historique que le professeur peut lire.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Tu rends **le lien de ton fork**, à la date annoncée en classe. Le professeur y lira trois choses :"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "1. le résultat de `pytest`, issue par issue ;"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "2. ton historique git : des commits petits, des messages clairs au format `fix:` ou `feat:`, aucun fichier personnel commité ;"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "3. tes issues et tes pull requests, si tu as fait le bonus B."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Tu pourras aussi être interrogé **à l'oral, quelques minutes**, sur l'une de tes corrections tirée au hasard : le bug, la correction et le test."
+          },
+          {
+            "type": "terminal",
+            "legende": "Les dernières vérifications avant de rendre",
+            "texte": "$ pytest\n$ git status\n$ git log --oneline\n$ git push"
+          },
+          {
+            "type": "verifier",
+            "texte": "`pytest` ne montre plus que des tests réussis (au moins ceux des issues 1 à 8), `git status` annonce un dossier de travail propre, et la page de ton fork sur GitHub affiche bien tes derniers commits."
+          },
+          {
+            "type": "indice",
+            "texte": "Un `git status` qui parle encore de `equipe.json` ou de `__pycache__` veut dire que l'issue 8 n'est pas terminée."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "stegano",
     "chapitre": "stegano",
     "titre": "Le message caché dans l'image",

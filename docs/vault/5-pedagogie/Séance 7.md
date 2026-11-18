@@ -14,7 +14,7 @@ mis-a-jour: 2026-11-17
 > faire un commit avec ses conventions, l'envoyer avec un push, savoir quels fichiers git suit, et
 > lire une différence. Un **bonus** couvre `.gitignore`, les branches, les pull requests, les
 > conflits et le travail en équipe. La séance prépare le **TP2** (API, JSON et git), qui utilise
-> tout ce qui précède : [[Séance 5]] (JSON) et [[Séance 6]] (API).
+> tout ce qui précède : [[Séance 5]] (JSON) et [[Séance 6]] (API). Voir [[TP2]].
 
 > [!success] Ouverte le 18 novembre 2026
 > `CHAPITRES["versions"]["ouverture"]` vaut `2026-11-18` : la séance est ouverte dès sa publication
