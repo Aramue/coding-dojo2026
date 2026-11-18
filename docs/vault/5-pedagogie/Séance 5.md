@@ -85,6 +85,17 @@ exercices d'écriture (`s5-24`, `s5-34`). Le programme qui réunit tout est celu
 À insérer **avant la slide 8** (format JSON), dans le style des slides existantes : cartes de code
 sombres à trois pastilles, une idée par slide. Huit slides, environ 10 minutes.
 
+> [!success] Trois slides sont faites — `docs/slides/dictionnaires.pptx`
+> Elles condensent D1 à D8 en trois : **« Les dictionnaires »** (liste contre dictionnaire, D1 et D2),
+> **« Lire, modifier, ajouter »** (D3 et D4), **« Parcourir un dictionnaire »** (D5 et D7). Aperçus
+> en PNG à côté (`dictionnaires-1.png` à `-3.png`). D6 existe déjà : c'est la slide 9 du deck
+> (`data["user"]["amis"][1]`). D8 (le tableau liste ou dictionnaire) reste à faire.
+>
+> Même DA que le deck : fond `#FFF2C2`, titres League Spartan Bold `#FFC331`, légendes Glacial
+> Indifference, cartes `#282A36` à trois pastilles, flèches jaunes `#FFC231`, numéro `#003D20`.
+> Le `.pptx` est en 1440 × 810 pt, comme le PDF d'origine, et chaque slide porte ses notes de
+> présentation. Le code de chaque carte a été exécuté : les commentaires `# ...` sont les vraies sorties.
+
 | # | Titre | Contenu |
 |---|---|---|
 | D1 | Une liste ne suffit pas | `fiche = ["Camille", 17, "Genève"]` — « quelle est la ville ? » : il faut savoir que c'est la position 2. Un point d'interrogation sur chaque valeur. |
