@@ -203,8 +203,7 @@ etapes:
       - type: attention
         texte: >-
           Le test d'une issue qui passe ne prouve pas que tu as compris. Avant de
-          commiter, sois capable d'expliquer **pourquoi** le bug se produisait : c'est
-          exactement ce que le professeur te demandera à l'oral.
+          commiter, sois capable d'expliquer **pourquoi** le bug se produisait.
       - type: verifier
         texte: >-
           Les tests `test_issue_01` à `test_issue_08` passent tous, et chaque issue a
@@ -269,12 +268,12 @@ etapes:
           qui le fait passer.
 
   - titre: Rendre ton travail
-    objectif: Remettre le lien de ton fork, avec un historique que le professeur peut lire.
+    objectif: Remettre le lien de ton fork, avec un historique lisible.
     blocs:
       - type: paragraphe
         texte: >-
-          Tu rends **le lien de ton fork**, à la date annoncée en classe. Le professeur
-          y lira trois choses :
+          Tu rends **le lien de ton fork**, à la date annoncée en classe. Il doit
+          montrer trois choses :
       - type: paragraphe
         texte: >-
           1. le résultat de `pytest`, issue par issue ;
@@ -285,10 +284,6 @@ etapes:
       - type: paragraphe
         texte: >-
           3. tes issues et tes pull requests, si tu as fait le bonus B.
-      - type: paragraphe
-        texte: >-
-          Tu pourras aussi être interrogé **à l'oral, quelques minutes**, sur l'une de
-          tes corrections tirée au hasard : le bug, la correction et le test.
       - type: terminal
         legende: Les dernières vérifications avant de rendre
         texte: |-
