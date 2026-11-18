@@ -245,7 +245,7 @@ function Partie({
         </CarteCode>
       )}
       {question.code && question.terminal && <Terminal legende="Terminal" texte={question.code} />}
-      {question.schema_question && <SchemaTp nom={question.schema_question} />}
+      {question.schema_question && <SchemaTp nom={question.schema_question} famille="variables" />}
 
       <OptionsQuiz
         options={question.options}
@@ -305,7 +305,7 @@ function Correction({ partie }: { partie: Partie }) {
         {verdict.texte}
       </p>
       {question.explication && <p className="quiz__explication">{question.explication}</p>}
-      {question.schema_correction && <SchemaTp nom={question.schema_correction} />}
+      {question.schema_correction && <SchemaTp nom={question.schema_correction} famille="variables" />}
       {partie.moi && <MonScore moi={partie.moi} />}
     </div>
   )
