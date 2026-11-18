@@ -1,0 +1,309 @@
+# Les consignes du TP git, en version texte.
+#
+# Le TP se fait sur la machine de l'eleve, dans un vrai git, avec un vrai GitHub.
+# Le projet de depart vit sur https://github.com/WolfoNeos/tp-git (copie de
+# plateforme/tp-git-modele/, a garder identique a la main). Aucun bloc
+# « Essayer » : tout ce qui s'ecrit ici se tape dans un terminal.
+id: git
+chapitre: versions
+titre: Ton premier dépôt avec git et GitHub
+duree_min: 90
+introduction:
+  - type: paragraphe
+    texte: >-
+      Ce TP te fait faire, **pour de vrai**, tout ce que tu as vu à la séance 7 :
+      copier un projet sur GitHub, le récupérer sur ta machine, modifier un fichier,
+      en faire un **commit**, puis l'envoyer. Le dépôt sert à ce seul TP.
+  - type: paragraphe
+    texte: >-
+      Tu travailles sur **ta propre copie** du dépôt, un *fork*. Rien de ce que tu
+      fais n'abîme le dépôt d'origine. Les sept étapes sont obligatoires ; les trois
+      bonus (ignorer des fichiers, une branche avec une pull request, un conflit) sont
+      pour aller plus loin.
+  - type: attention
+    texte: >-
+      Ton fork est **public**. Utilise un **pseudonyme** sur GitHub : ni ton nom, ni
+      ton prénom, ni une photo de toi, et n'y mets jamais de mot de passe.
+materiel:
+  - git installé sur ta machine, et un éditeur de code
+  - Python 3, pour lancer le test du TP
+  - Un compte GitHub, avec un pseudonyme
+  - Pouvoir envoyer un `git push` depuis ta machine
+etapes:
+  - titre: Vérifier git et te présenter
+    objectif: Avoir git qui répond, et qui sait qui tu es.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Ouvre un terminal et demande à git son numéro de version. S'il répond par un
+          numéro, c'est bon. Sinon, préviens le professeur.
+      - type: terminal
+        legende: Vérifier que git est installé
+        texte: |-
+          $ git --version
+          git version 2.43.0
+      - type: paragraphe
+        texte: >-
+          Dis ensuite à git qui tu es. Ces deux réglages sont ajoutés à **chaque commit**
+          que tu feras. Remplace `ton-pseudo` par ton pseudonyme GitHub, et
+          `ton-adresse` par l'adresse de ton compte GitHub.
+      - type: terminal
+        legende: Se présenter à git
+        texte: |-
+          $ git config --global user.name "ton-pseudo"
+          $ git config --global user.email "ton-adresse"
+      - type: verifier
+        texte: >-
+          `git --version` affiche un numéro, et `git config --global user.name` affiche
+          ton pseudonyme.
+
+  - titre: Forker le dépôt
+    objectif: Avoir ta propre copie du projet, sur GitHub.
+    blocs:
+      - type: schema
+        nom: fork
+        legende: >-
+          Tu forkes le dépôt du professeur sur GitHub : tu obtiens ta copie, sur le
+          site. Rien n'est encore sur ta machine.
+      - type: paragraphe
+        texte: >-
+          Va sur `https://github.com/WolfoNeos/tp-git`, clique sur **Fork**, puis sur
+          **Create fork**.
+      - type: verifier
+        texte: >-
+          L'adresse de la page que tu vois contient **ton pseudonyme**, pas
+          `WolfoNeos`, et sous le titre apparaît « forked from WolfoNeos/tp-git ».
+
+  - titre: Cloner ton fork
+    objectif: Avoir le projet sur ta machine, dans un dossier.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Sur la page de **ton** fork, clique sur **Code**, copie l'adresse HTTPS, puis
+          clone-la dans ton terminal.
+      - type: terminal
+        legende: Cloner ton fork
+        texte: |-
+          $ git clone https://github.com/ton-pseudo/tp-git.git
+          $ cd tp-git
+      - type: attention
+        texte: >-
+          Clone **ton** fork, pas le dépôt du professeur : tu ne pourras pas envoyer
+          de commit sur le sien.
+      - type: verifier
+        texte: >-
+          `git remote -v` affiche une adresse qui contient ton pseudonyme.
+
+  - titre: Regarder où tu en es
+    objectif: Lire l'état du dépôt et son historique.
+    blocs:
+      - type: terminal
+        legende: L'état et l'historique
+        texte: |-
+          $ git status
+          On branch main
+          nothing to commit, working tree clean
+          $ git log --oneline
+      - type: paragraphe
+        texte: >-
+          `git status` te dit où en sont tes fichiers. `git log --oneline` liste les
+          commits déjà présents, du plus récent au plus ancien.
+      - type: verifier
+        texte: >-
+          Tu vois « nothing to commit, working tree clean » et au moins un commit dans
+          l'historique.
+
+  - titre: Corriger moyenne.py
+    objectif: Modifier un fichier et voir exactement ce qui a changé.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Ouvre `moyenne.py` dans ton éditeur. Le programme affiche la moyenne sans
+          l'arrondir. Fais-le arrondir à **une décimale**.
+      - type: terminal
+        legende: La ligne à écrire dans moyenne.py
+        texte: |-
+          return round(sum(notes) / len(notes), 1)
+      - type: paragraphe
+        texte: >-
+          Lance le test du TP, puis regarde ce qui a changé avec `git diff`.
+      - type: terminal
+        legende: Tester, puis regarder la différence
+        texte: |-
+          $ python test_moyenne.py
+          Tout est bon.
+          $ git diff
+          -    return sum(notes) / len(notes)
+          +    return round(sum(notes) / len(notes), 1)
+      - type: verifier
+        texte: >-
+          Le test répond « Tout est bon. », et `git diff` montre une ligne en `-`
+          (l'ancienne) et une ligne en `+` (la nouvelle).
+      - type: indice
+        texte: >-
+          `python` introuvable ? Essaie `python3 test_moyenne.py`. Sinon, préviens le
+          professeur : Python n'est peut-être pas installé.
+
+  - titre: Faire ton premier commit
+    objectif: Enregistrer ta correction dans l'historique, avec un bon message.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Tu choisis d'abord ce qui entrera dans le commit avec `git add`, tu vérifies
+          avec `git status`, puis tu prends la photo avec `git commit`. Le message suit
+          la convention du cours : `type: description`.
+      - type: terminal
+        legende: Un commit complet
+        texte: |-
+          $ git add moyenne.py
+          $ git status
+          Changes to be committed:
+                  modified:   moyenne.py
+          $ git commit -m "fix: arrondit la moyenne à une décimale"
+          $ git log --oneline
+      - type: attention
+        texte: >-
+          Le message est **entre guillemets**. Et sans `git add`, git répond « nothing
+          added to commit » : il n'enregistre que ce que tu as ajouté.
+      - type: verifier
+        texte: >-
+          `git log --oneline` affiche ton commit **en haut** de la liste, avec ton
+          message.
+
+  - titre: Ajouter ta fiche et l'envoyer sur GitHub
+    objectif: Voir ton travail apparaître sur la page de ton fork.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Crée le fichier `eleves/ton-pseudo.md` (le fichier `eleves/LISEZMOI.md`
+          explique quoi y mettre). Fais ensuite `git status` : ton fichier est dans
+          « Untracked files ». Git le voit, mais ne le suit pas.
+      - type: terminal
+        legende: Suivre le fichier, le commiter, l'envoyer
+        texte: |-
+          $ git status
+          Untracked files:
+                  eleves/ton-pseudo.md
+          $ git add eleves/ton-pseudo.md
+          $ git commit -m "docs: ajoute ma fiche"
+          $ git push
+      - type: paragraphe
+        texte: >-
+          La première fois, GitHub te demande de te connecter : utilise la fenêtre de
+          ton navigateur que git ouvre, ou la connexion GitHub de ton éditeur.
+      - type: verifier
+        texte: >-
+          Sur la page de **ton fork**, tu vois ton commit `docs: ajoute ma fiche` et
+          ton fichier dans le dossier `eleves/`.
+      - type: indice
+        texte: >-
+          `rejected ... fetch first` : fais `git pull`, puis recommence `git push`.
+          `Authentication failed` : GitHub n'accepte plus les mots de passe, reconnecte-
+          toi avec la fenêtre du navigateur. Au moindre doute, lance `git status`.
+
+  - titre: Bonus A, ignorer des fichiers
+    objectif: Empêcher git de suivre les fichiers que Python et ton éditeur créent.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Lance `python test_moyenne.py`, puis `git status`. Si un dossier
+          `__pycache__/` est apparu, c'est Python qui l'a créé tout seul. Un dossier
+          `.idea/` ou `.vscode/` vient de ton éditeur. Aucun n'a sa place dans le
+          dépôt.
+      - type: paragraphe
+        texte: >-
+          Crée un fichier `.gitignore` à la racine du projet, avec une règle par ligne.
+      - type: terminal
+        legende: Le contenu de .gitignore
+        texte: |-
+          __pycache__/
+          .idea/
+          .vscode/
+      - type: terminal
+        legende: Vérifier, puis commiter
+        texte: |-
+          $ git status
+          $ git add .gitignore
+          $ git commit -m "chore: ignore les fichiers de l'éditeur"
+      - type: verifier
+        texte: >-
+          Après avoir créé `.gitignore`, `git status` ne liste plus ces dossiers, et
+          `.gitignore` est commité.
+
+  - titre: Bonus B, une branche et une pull request
+    objectif: Travailler sur une branche, puis la fusionner par une pull request.
+    blocs:
+      - type: schema
+        nom: pullrequest
+        legende: >-
+          Tu travailles sur une branche, tu l'envoies sur GitHub, puis la pull request
+          la fait fusionner dans main.
+      - type: paragraphe
+        texte: >-
+          Crée une branche, ajoute une fonction `mediane(notes)` à `moyenne.py`,
+          commite, puis envoie la branche sur GitHub.
+      - type: terminal
+        legende: Le parcours d'une branche
+        texte: |-
+          $ git switch -c feat-mediane
+          $ git add moyenne.py
+          $ git commit -m "feat: ajoute la médiane"
+          $ git push -u origin feat-mediane
+      - type: paragraphe
+        texte: >-
+          Sur GitHub, ouvre une **pull request** de `feat-mediane` vers `main`,
+          fusionne-la, puis reviens sur `main` et récupère le résultat.
+      - type: terminal
+        legende: Récupérer la fusion
+        texte: |-
+          $ git switch main
+          $ git pull
+      - type: attention
+        texte: >-
+          GitHub propose par défaut d'envoyer la pull request vers le dépôt du
+          professeur. Change le **base repository** pour choisir **ton propre fork** :
+          les pull requests de ce TP restent chez toi.
+      - type: verifier
+        texte: >-
+          La pull request apparaît comme **Merged** sur ton fork, et `moyenne.py` de
+          `main` contient `mediane` après le `git pull`.
+
+  - titre: Bonus C, un conflit
+    objectif: Provoquer un conflit toi-même, et le résoudre.
+    blocs:
+      - type: paragraphe
+        texte: >-
+          Tu vas t'en créer un tout seul, avec deux branches qui modifient la **même
+          ligne** de `equipe.md`.
+      - type: terminal
+        legende: Deux branches, une même ligne
+        texte: |-
+          $ git switch -c devise-a
+          (écris ta devise après « Devise de la classe : », puis)
+          $ git add equipe.md
+          $ git commit -m "docs: ajoute la devise A"
+          $ git switch main
+          $ git switch -c devise-b
+          (écris une autre devise sur la même ligne, puis)
+          $ git add equipe.md
+          $ git commit -m "docs: ajoute la devise B"
+          $ git merge devise-a
+          CONFLICT (content): Merge conflict in equipe.md
+      - type: paragraphe
+        texte: >-
+          Ouvre `equipe.md` : les marqueurs `<<<<<<<`, `=======` et `>>>>>>>`
+          entourent les deux versions. Garde celle que tu veux, **efface les trois
+          lignes de marqueurs**, puis termine la fusion.
+      - type: terminal
+        legende: Terminer la fusion
+        texte: |-
+          $ git add equipe.md
+          $ git commit
+      - type: verifier
+        texte: >-
+          `equipe.md` ne contient plus aucun marqueur, et `git status` annonce un
+          dossier de travail propre.
+      - type: indice
+        texte: >-
+          Tu peux aussi le faire à deux : chacun écrit une devise sur la même ligne
+          dans sa branche, et l'un des deux fusionne celle de l'autre.

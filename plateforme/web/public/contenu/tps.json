@@ -1,5 +1,572 @@
 [
   {
+    "id": "git",
+    "chapitre": "versions",
+    "titre": "Ton premier dépôt avec git et GitHub",
+    "dureeMin": 90,
+    "introduction": [
+      {
+        "type": "paragraphe",
+        "texte": "Ce TP te fait faire, **pour de vrai**, tout ce que tu as vu à la séance 7 : copier un projet sur GitHub, le récupérer sur ta machine, modifier un fichier, en faire un **commit**, puis l'envoyer. Le dépôt sert à ce seul TP."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Tu travailles sur **ta propre copie** du dépôt, un *fork*. Rien de ce que tu fais n'abîme le dépôt d'origine. Les sept étapes sont obligatoires ; les trois bonus (ignorer des fichiers, une branche avec une pull request, un conflit) sont pour aller plus loin."
+      },
+      {
+        "type": "attention",
+        "texte": "Ton fork est **public**. Utilise un **pseudonyme** sur GitHub : ni ton nom, ni ton prénom, ni une photo de toi, et n'y mets jamais de mot de passe."
+      }
+    ],
+    "materiel": [
+      "git installé sur ta machine, et un éditeur de code",
+      "Python 3, pour lancer le test du TP",
+      "Un compte GitHub, avec un pseudonyme",
+      "Pouvoir envoyer un `git push` depuis ta machine"
+    ],
+    "etapes": [
+      {
+        "titre": "Vérifier git et te présenter",
+        "objectif": "Avoir git qui répond, et qui sait qui tu es.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Ouvre un terminal et demande à git son numéro de version. S'il répond par un numéro, c'est bon. Sinon, préviens le professeur."
+          },
+          {
+            "type": "terminal",
+            "legende": "Vérifier que git est installé",
+            "texte": "$ git --version\ngit version 2.43.0"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Dis ensuite à git qui tu es. Ces deux réglages sont ajoutés à **chaque commit** que tu feras. Remplace `ton-pseudo` par ton pseudonyme GitHub, et `ton-adresse` par l'adresse de ton compte GitHub."
+          },
+          {
+            "type": "terminal",
+            "legende": "Se présenter à git",
+            "texte": "$ git config --global user.name \"ton-pseudo\"\n$ git config --global user.email \"ton-adresse\""
+          },
+          {
+            "type": "verifier",
+            "texte": "`git --version` affiche un numéro, et `git config --global user.name` affiche ton pseudonyme."
+          }
+        ]
+      },
+      {
+        "titre": "Forker le dépôt",
+        "objectif": "Avoir ta propre copie du projet, sur GitHub.",
+        "blocs": [
+          {
+            "type": "schema",
+            "nom": "fork",
+            "legende": "Tu forkes le dépôt du professeur sur GitHub : tu obtiens ta copie, sur le site. Rien n'est encore sur ta machine."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Va sur `https://github.com/WolfoNeos/tp-git`, clique sur **Fork**, puis sur **Create fork**."
+          },
+          {
+            "type": "verifier",
+            "texte": "L'adresse de la page que tu vois contient **ton pseudonyme**, pas `WolfoNeos`, et sous le titre apparaît « forked from WolfoNeos/tp-git »."
+          }
+        ]
+      },
+      {
+        "titre": "Cloner ton fork",
+        "objectif": "Avoir le projet sur ta machine, dans un dossier.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Sur la page de **ton** fork, clique sur **Code**, copie l'adresse HTTPS, puis clone-la dans ton terminal."
+          },
+          {
+            "type": "terminal",
+            "legende": "Cloner ton fork",
+            "texte": "$ git clone https://github.com/ton-pseudo/tp-git.git\n$ cd tp-git"
+          },
+          {
+            "type": "attention",
+            "texte": "Clone **ton** fork, pas le dépôt du professeur : tu ne pourras pas envoyer de commit sur le sien."
+          },
+          {
+            "type": "verifier",
+            "texte": "`git remote -v` affiche une adresse qui contient ton pseudonyme."
+          }
+        ]
+      },
+      {
+        "titre": "Regarder où tu en es",
+        "objectif": "Lire l'état du dépôt et son historique.",
+        "blocs": [
+          {
+            "type": "terminal",
+            "legende": "L'état et l'historique",
+            "texte": "$ git status\nOn branch main\nnothing to commit, working tree clean\n$ git log --oneline"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "`git status` te dit où en sont tes fichiers. `git log --oneline` liste les commits déjà présents, du plus récent au plus ancien."
+          },
+          {
+            "type": "verifier",
+            "texte": "Tu vois « nothing to commit, working tree clean » et au moins un commit dans l'historique."
+          }
+        ]
+      },
+      {
+        "titre": "Corriger moyenne.py",
+        "objectif": "Modifier un fichier et voir exactement ce qui a changé.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Ouvre `moyenne.py` dans ton éditeur. Le programme affiche la moyenne sans l'arrondir. Fais-le arrondir à **une décimale**."
+          },
+          {
+            "type": "terminal",
+            "legende": "La ligne à écrire dans moyenne.py",
+            "texte": "return round(sum(notes) / len(notes), 1)"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Lance le test du TP, puis regarde ce qui a changé avec `git diff`."
+          },
+          {
+            "type": "terminal",
+            "legende": "Tester, puis regarder la différence",
+            "texte": "$ python test_moyenne.py\nTout est bon.\n$ git diff\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)"
+          },
+          {
+            "type": "verifier",
+            "texte": "Le test répond « Tout est bon. », et `git diff` montre une ligne en `-` (l'ancienne) et une ligne en `+` (la nouvelle)."
+          },
+          {
+            "type": "indice",
+            "texte": "`python` introuvable ? Essaie `python3 test_moyenne.py`. Sinon, préviens le professeur : Python n'est peut-être pas installé."
+          }
+        ]
+      },
+      {
+        "titre": "Faire ton premier commit",
+        "objectif": "Enregistrer ta correction dans l'historique, avec un bon message.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Tu choisis d'abord ce qui entrera dans le commit avec `git add`, tu vérifies avec `git status`, puis tu prends la photo avec `git commit`. Le message suit la convention du cours : `type: description`."
+          },
+          {
+            "type": "terminal",
+            "legende": "Un commit complet",
+            "texte": "$ git add moyenne.py\n$ git status\nChanges to be committed:\n        modified:   moyenne.py\n$ git commit -m \"fix: arrondit la moyenne à une décimale\"\n$ git log --oneline"
+          },
+          {
+            "type": "attention",
+            "texte": "Le message est **entre guillemets**. Et sans `git add`, git répond « nothing added to commit » : il n'enregistre que ce que tu as ajouté."
+          },
+          {
+            "type": "verifier",
+            "texte": "`git log --oneline` affiche ton commit **en haut** de la liste, avec ton message."
+          }
+        ]
+      },
+      {
+        "titre": "Ajouter ta fiche et l'envoyer sur GitHub",
+        "objectif": "Voir ton travail apparaître sur la page de ton fork.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Crée le fichier `eleves/ton-pseudo.md` (le fichier `eleves/LISEZMOI.md` explique quoi y mettre). Fais ensuite `git status` : ton fichier est dans « Untracked files ». Git le voit, mais ne le suit pas."
+          },
+          {
+            "type": "terminal",
+            "legende": "Suivre le fichier, le commiter, l'envoyer",
+            "texte": "$ git status\nUntracked files:\n        eleves/ton-pseudo.md\n$ git add eleves/ton-pseudo.md\n$ git commit -m \"docs: ajoute ma fiche\"\n$ git push"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "La première fois, GitHub te demande de te connecter : utilise la fenêtre de ton navigateur que git ouvre, ou la connexion GitHub de ton éditeur."
+          },
+          {
+            "type": "verifier",
+            "texte": "Sur la page de **ton fork**, tu vois ton commit `docs: ajoute ma fiche` et ton fichier dans le dossier `eleves/`."
+          },
+          {
+            "type": "indice",
+            "texte": "`rejected ... fetch first` : fais `git pull`, puis recommence `git push`. `Authentication failed` : GitHub n'accepte plus les mots de passe, reconnecte- toi avec la fenêtre du navigateur. Au moindre doute, lance `git status`."
+          }
+        ]
+      },
+      {
+        "titre": "Bonus A, ignorer des fichiers",
+        "objectif": "Empêcher git de suivre les fichiers que Python et ton éditeur créent.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Lance `python test_moyenne.py`, puis `git status`. Si un dossier `__pycache__/` est apparu, c'est Python qui l'a créé tout seul. Un dossier `.idea/` ou `.vscode/` vient de ton éditeur. Aucun n'a sa place dans le dépôt."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Crée un fichier `.gitignore` à la racine du projet, avec une règle par ligne."
+          },
+          {
+            "type": "terminal",
+            "legende": "Le contenu de .gitignore",
+            "texte": "__pycache__/\n.idea/\n.vscode/"
+          },
+          {
+            "type": "terminal",
+            "legende": "Vérifier, puis commiter",
+            "texte": "$ git status\n$ git add .gitignore\n$ git commit -m \"chore: ignore les fichiers de l'éditeur\""
+          },
+          {
+            "type": "verifier",
+            "texte": "Après avoir créé `.gitignore`, `git status` ne liste plus ces dossiers, et `.gitignore` est commité."
+          }
+        ]
+      },
+      {
+        "titre": "Bonus B, une branche et une pull request",
+        "objectif": "Travailler sur une branche, puis la fusionner par une pull request.",
+        "blocs": [
+          {
+            "type": "schema",
+            "nom": "pullrequest",
+            "legende": "Tu travailles sur une branche, tu l'envoies sur GitHub, puis la pull request la fait fusionner dans main."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Crée une branche, ajoute une fonction `mediane(notes)` à `moyenne.py`, commite, puis envoie la branche sur GitHub."
+          },
+          {
+            "type": "terminal",
+            "legende": "Le parcours d'une branche",
+            "texte": "$ git switch -c feat-mediane\n$ git add moyenne.py\n$ git commit -m \"feat: ajoute la médiane\"\n$ git push -u origin feat-mediane"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Sur GitHub, ouvre une **pull request** de `feat-mediane` vers `main`, fusionne-la, puis reviens sur `main` et récupère le résultat."
+          },
+          {
+            "type": "terminal",
+            "legende": "Récupérer la fusion",
+            "texte": "$ git switch main\n$ git pull"
+          },
+          {
+            "type": "attention",
+            "texte": "GitHub propose par défaut d'envoyer la pull request vers le dépôt du professeur. Change le **base repository** pour choisir **ton propre fork** : les pull requests de ce TP restent chez toi."
+          },
+          {
+            "type": "verifier",
+            "texte": "La pull request apparaît comme **Merged** sur ton fork, et `moyenne.py` de `main` contient `mediane` après le `git pull`."
+          }
+        ]
+      },
+      {
+        "titre": "Bonus C, un conflit",
+        "objectif": "Provoquer un conflit toi-même, et le résoudre.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Tu vas t'en créer un tout seul, avec deux branches qui modifient la **même ligne** de `equipe.md`."
+          },
+          {
+            "type": "terminal",
+            "legende": "Deux branches, une même ligne",
+            "texte": "$ git switch -c devise-a\n(écris ta devise après « Devise de la classe : », puis)\n$ git add equipe.md\n$ git commit -m \"docs: ajoute la devise A\"\n$ git switch main\n$ git switch -c devise-b\n(écris une autre devise sur la même ligne, puis)\n$ git add equipe.md\n$ git commit -m \"docs: ajoute la devise B\"\n$ git merge devise-a\nCONFLICT (content): Merge conflict in equipe.md"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Ouvre `equipe.md` : les marqueurs `<<<<<<<`, `=======` et `>>>>>>>` entourent les deux versions. Garde celle que tu veux, **efface les trois lignes de marqueurs**, puis termine la fusion."
+          },
+          {
+            "type": "terminal",
+            "legende": "Terminer la fusion",
+            "texte": "$ git add equipe.md\n$ git commit"
+          },
+          {
+            "type": "verifier",
+            "texte": "`equipe.md` ne contient plus aucun marqueur, et `git status` annonce un dossier de travail propre."
+          },
+          {
+            "type": "indice",
+            "texte": "Tu peux aussi le faire à deux : chacun écrit une devise sur la même ligne dans sa branche, et l'un des deux fusionne celle de l'autre."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pokedex",
+    "chapitre": "versions",
+    "titre": "Workflow de résolution de problèmes",
+    "dureeMin": 240,
+    "introduction": [
+      {
+        "type": "paragraphe",
+        "texte": "Tu viens d'hériter d'un petit programme Python qui interroge **PokéAPI**, un service web gratuit qui décrit les Pokémon en JSON. Il a été écrit un peu vite : il contient des bugs, et il lui manque des fonctionnalités. **Douze issues** les décrivent."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Ta mission : les trouver dans le code, les corriger, et **raconter ce que tu fais dans l'historique git**. Ce TP réunit tout ce que tu as vu : Python, dictionnaires et JSON, requêtes à une API, et git."
+      },
+      {
+        "type": "paragraphe",
+        "texte": "Les étapes ci-dessous te mettent en route et te donnent une méthode. Les issues, elles, ne te disent pas où est l'erreur : **c'est à toi de la chercher**. Chacune contient des indices repliés, à n'ouvrir que si tu es vraiment bloqué."
+      },
+      {
+        "type": "attention",
+        "texte": "Ton fork est **public**. N'y mets jamais de mot de passe, de nom réel ou de photo, comme pour ton compte GitHub."
+      }
+    ],
+    "materiel": [
+      "Python 3 et git installés sur ta machine, et un éditeur de code",
+      "Un compte GitHub, avec un pseudonyme",
+      "Pouvoir envoyer un `git push` depuis ta machine, comme à la séance 7",
+      "La CLI GitHub (`gh`), facultative, pour créer les issues d'un seul coup"
+    ],
+    "etapes": [
+      {
+        "titre": "Récupérer le projet",
+        "objectif": "Avoir ton propre fork du Pokédex, cloné sur ta machine.",
+        "blocs": [
+          {
+            "type": "schema",
+            "nom": "fork",
+            "legende": "Tu forkes le dépôt du professeur sur GitHub, puis tu clones ton fork, pas l'original."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Va sur `https://github.com/WolfoNeos/tp2-pokedex` et clique sur **Fork**. Récupère ensuite l'adresse de **ton** fork (elle contient ton pseudonyme) et clone-le :"
+          },
+          {
+            "type": "terminal",
+            "legende": "Dans un terminal",
+            "texte": "$ git clone https://github.com/ton-pseudo/tp2-pokedex.git\n$ cd tp2-pokedex\n$ pip install -r requirements.txt"
+          },
+          {
+            "type": "verifier",
+            "texte": "`git remote -v` affiche une adresse qui contient **ton pseudonyme**, pas `WolfoNeos`. Si c'est celle du professeur, tu as cloné l'original : recommence avec l'adresse de ton fork."
+          },
+          {
+            "type": "indice",
+            "texte": "Un `pip` introuvable se contourne souvent avec `python -m pip install -r requirements.txt`. Si un message parle de droits, ajoute `--user`."
+          }
+        ]
+      },
+      {
+        "titre": "Lancer le programme et les tests",
+        "objectif": "Voir le programme tourner, et lire ce que racontent les tests qui échouent.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Lance le Pokédex et essaie quelques commandes : `chercher pikachu`, `liste`, `equipe`. Cherche aussi à le faire se tromper."
+          },
+          {
+            "type": "terminal",
+            "legende": "Lancer le programme",
+            "texte": "$ python main.py\nCommandes :\n  chercher <nom>   la fiche d'un Pokémon\n  liste            les 20 premiers Pokémon\n> chercher pikachu"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Lance ensuite les tests. **Beaucoup échouent, c'est normal** : chaque test rouge correspond à un problème à résoudre. Lis les messages : ils disent ce qui était attendu et ce qui a été obtenu, jamais comment corriger."
+          },
+          {
+            "type": "terminal",
+            "legende": "Lancer les tests",
+            "texte": "$ pytest\n...\n34 failed, 8 passed"
+          },
+          {
+            "type": "attention",
+            "texte": "Les tests **n'appellent jamais le vrai réseau** : ils lisent des réponses enregistrées dans `donnees/`. Ne modifie pas `tests/conftest.py`."
+          },
+          {
+            "type": "verifier",
+            "texte": "Le programme affiche son menu, et `pytest` se termine par un nombre de tests échoués (environ 34). Si `pytest` lui-même plante à l'import, une dépendance manque : relance `pip install -r requirements.txt`."
+          }
+        ]
+      },
+      {
+        "titre": "Créer tes issues",
+        "objectif": "Voir les douze issues dans l'onglet Issues de ton fork.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Une **issue**, c'est un ticket : « il y a un problème, voilà comment le voir ». GitHub n'en copie aucune dans un fork, donc le dépôt les fournit sous forme de fichiers, dans `tickets/`. Un script les crée à ta place."
+          },
+          {
+            "type": "terminal",
+            "legende": "Avec la CLI GitHub",
+            "texte": "$ gh auth login\n$ python creer_issues.py\nhttps://github.com/ton-pseudo/tp2-pokedex/issues/1\n...\n12 issues créées dans ton-pseudo/tp2-pokedex."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Pas de `gh` sur ta machine ? Ouvre chaque fichier de `tickets/` et copie-le à la main dans l'onglet **Issues** de ton fork : la première ligne est le titre, le reste est la description. Pense à activer les issues dans les réglages du fork (Settings, puis Features)."
+          },
+          {
+            "type": "verifier",
+            "texte": "L'onglet **Issues** de ton fork affiche douze issues, numérotées de 1 à 12, avec les étiquettes `facile`, `moyen` et `bonus`. Garde bien ces numéros : tes branches et tes commits s'y référeront."
+          },
+          {
+            "type": "indice",
+            "texte": "Le script refuse de tourner si le dépôt n'est pas un fork, ou s'il contient déjà des issues : c'est voulu, pour éviter les doublons. Dans le premier cas, tu as probablement cloné le dépôt du professeur."
+          }
+        ]
+      },
+      {
+        "titre": "Le cycle d'une issue",
+        "objectif": "Connaître la méthode à répéter pour chaque issue, du symptôme au commit.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Chaque issue se traite pareil. Ne saute pas d'étape : c'est ce qui sépare un bug corrigé d'un bug **compris**."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "1. **Reproduis** le problème avec la commande donnée dans l'issue. Tant que tu ne le vois pas, tu ne peux pas savoir si tu l'as réparé."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "2. **Localise** : lis le message d'erreur en partant de sa dernière ligne, lis le code de la fonction concernée, ajoute des `print` pour voir les valeurs."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "3. **Fais une hypothèse**, corrige, puis relance le test indiqué dans l'issue."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "4. **Relance tous les tests** : ta correction ne doit pas en casser un autre."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "5. **Commite** avec un message au format du cours, puis pousse."
+          },
+          {
+            "type": "terminal",
+            "legende": "Un cycle complet, pour l'issue 2",
+            "texte": "$ python main.py\n$ pytest tests/test_issue_02.py\n$ pytest\n$ git add affichage.py\n$ git commit -m \"fix: convertit la taille et le poids de la fiche\"\n$ git push"
+          },
+          {
+            "type": "attention",
+            "texte": "Un commit = **une** correction. Un message comme `fix: modifs` ou un gros commit qui règle quatre issues d'un coup se voit dans l'historique, et se paie à la notation."
+          },
+          {
+            "type": "indice",
+            "texte": "Bloqué sur une erreur ? Reviens aux exercices `debug` de la plateforme : le geste est le même. Lis la **dernière ligne** de la traceback d'abord, puis remonte jusqu'à la première ligne qui parle de ton code."
+          }
+        ]
+      },
+      {
+        "titre": "Les huit issues du socle",
+        "objectif": "Corriger les issues 1 à 8, dans l'ordre que tu veux.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Les issues 1 à 8 forment le **socle** : c'est ce que tout le monde doit réussir. Elles sont **indépendantes** : si tu bloques sur l'une, passe à la suivante et reviens-y plus tard."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Les étiquettes donnent la difficulté. Les `facile` (1, 2 et 8) sont de bons points de départ. Les `moyen` (3 à 7) demandent de lire un peu plus de code et de manipuler des listes, des dictionnaires ou du JSON."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "L'issue **5** n'est pas un bug mais une fonctionnalité à écrire. L'issue **8** ne se règle pas dans le code Python mais **dans git** : relis la leçon sur les fichiers ignorés."
+          },
+          {
+            "type": "attention",
+            "texte": "Le test d'une issue qui passe ne prouve pas que tu as compris. Avant de commiter, sois capable d'expliquer **pourquoi** le bug se produisait."
+          },
+          {
+            "type": "verifier",
+            "texte": "Les tests `test_issue_01` à `test_issue_08` passent tous, et chaque issue a son ou ses commits, au format `fix:` ou `feat:`."
+          },
+          {
+            "type": "indice",
+            "texte": "Chaque issue a trois indices repliés, dans l'ordre : **où chercher**, **quelle notion**, **l'idée**. Ouvre-les un par un, et indique dans ta pull request ceux que tu as ouverts. Cela ne te pénalise que s'il y en a beaucoup, et la franchise compte."
+          }
+        ]
+      },
+      {
+        "titre": "Aller plus loin avec les bonus",
+        "objectif": "Choisir parmi les trois bonus ceux que tu veux tenter.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Rien de ce qui suit n'est obligatoire, et chaque bonus rapporte des points en plus. Tu peux en faire un seul ou les trois."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "**Bonus A : les issues 9 à 12.** Gérer les erreurs de l'API, suivre la pagination, ajouter un cache local, et découper une fonction trop longue. Ce sont les plus difficiles, et leurs indices sont plus rares."
+          },
+          {
+            "type": "schema",
+            "nom": "branches",
+            "legende": "Une branche par issue : chaque correction vit à part, puis revient dans `main` quand elle est prête."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "**Bonus B : une branche par issue.** Au lieu de travailler dans `main`, chaque issue est résolue dans **sa propre branche** (par exemple `fix/1-casse-du-nom`), puis fusionnée par une **pull request dans ton propre fork**."
+          },
+          {
+            "type": "terminal",
+            "legende": "Le parcours d'une issue avec une branche",
+            "texte": "$ git switch -c fix/1-casse-du-nom\n$ git add api.py\n$ git commit -m \"fix: normalise la casse du nom du Pokémon\"\n$ git push -u origin fix/1-casse-du-nom"
+          },
+          {
+            "type": "attention",
+            "texte": "Sur GitHub, une pull request propose par défaut le dépôt du professeur. Change le **base repository** pour **ton fork**, et écris `Closes #1` dans la description pour que l'issue se ferme à la fusion."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "Plusieurs issues modifient la même fonction. Quand tu fusionneras leurs branches, tu rencontreras des **conflits** : c'est voulu. Tu sais les résoudre, et l'issue 12 est faite pour passer en dernier."
+          },
+          {
+            "type": "paragraphe",
+            "texte": "**Bonus C : tes propres tests.** Dans `tests/test_mes_tests.py`, écris pour chaque bug corrigé un test qui vérifie un cas que les tests fournis ne couvrent pas. Prouve qu'il échouait avant ta correction : un commit `test:` (le test, rouge), puis un commit `fix:` (la correction, verte)."
+          },
+          {
+            "type": "verifier",
+            "texte": "Pour le bonus B, `git log --graph --oneline` montre des branches qui se rejoignent. Pour le bonus C, chaque test est commité **avant** la correction qui le fait passer."
+          }
+        ]
+      },
+      {
+        "titre": "Rendre ton travail",
+        "objectif": "Remettre le lien de ton fork, avec un historique lisible.",
+        "blocs": [
+          {
+            "type": "paragraphe",
+            "texte": "Tu rends **le lien de ton fork**, à la date annoncée en classe. Il doit montrer trois choses :"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "1. le résultat de `pytest`, issue par issue ;"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "2. ton historique git : des commits petits, des messages clairs au format `fix:` ou `feat:`, aucun fichier personnel commité ;"
+          },
+          {
+            "type": "paragraphe",
+            "texte": "3. tes issues et tes pull requests, si tu as fait le bonus B."
+          },
+          {
+            "type": "terminal",
+            "legende": "Les dernières vérifications avant de rendre",
+            "texte": "$ pytest\n$ git status\n$ git log --oneline\n$ git push"
+          },
+          {
+            "type": "verifier",
+            "texte": "`pytest` ne montre plus que des tests réussis (au moins ceux des issues 1 à 8), `git status` annonce un dossier de travail propre, et la page de ton fork sur GitHub affiche bien tes derniers commits."
+          },
+          {
+            "type": "indice",
+            "texte": "Un `git status` qui parle encore de `equipe.json` ou de `__pycache__` veut dire que l'issue 8 n'est pas terminée."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "stegano",
     "chapitre": "stegano",
     "titre": "Le message caché dans l'image",

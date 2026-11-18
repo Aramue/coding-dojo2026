@@ -13,8 +13,9 @@ mis-a-jour: 2026-11-17
 > Travailler avec un historique et sur un dépôt partagé : à quoi sert git, forker et cloner un projet,
 > faire un commit avec ses conventions, l'envoyer avec un push, savoir quels fichiers git suit, et
 > lire une différence. Un **bonus** couvre `.gitignore`, les branches, les pull requests, les
-> conflits et le travail en équipe. La séance prépare le **TP2** (API, JSON et git), qui utilise
-> tout ce qui précède : [[Séance 5]] (JSON) et [[Séance 6]] (API).
+> conflits et le travail en équipe. Le TP de la séance est le **TP git** (`/tp/git`). La séance
+> prépare aussi le **TP2**, « Workflow de résolution de problèmes » (API, JSON et git), qui utilise tout ce
+> qui précède : [[Séance 5]] (JSON) et [[Séance 6]] (API). Voir [[TP2]].
 
 > [!success] Ouverte le 18 novembre 2026
 > `CHAPITRES["versions"]["ouverture"]` vaut `2026-11-18` : la séance est ouverte dès sa publication
@@ -136,7 +137,7 @@ Bonus : les branches, le parcours d'une pull request, un conflit annoté, le `.g
 ## Le TP sur machine
 
 Un dépôt modèle propre à cette séance (il est distinct du dépôt du TP2), écrit dans
-`plateforme/tp-git-modele/` : un `README.md` qui porte les consignes, un `moyenne.py` à corriger, un
+`plateforme/tp-git-modele/` : un `README.md` qui porte les consignes (reprises sur la plateforme dans `contenu/chapitre-1/tp/git.yaml`, à garder identiques), un `moyenne.py` à corriger, un
 `test_moyenne.py` qui échoue tant qu'il n'est pas corrigé, un dossier `eleves/` où chacun ajoute sa fiche
 (ce qui évite tout conflit dans la partie obligatoire), et un `equipe.md` réservé au bonus. Il n'a
 volontairement **pas de `.gitignore`** : l'élève l'écrit au bonus.
