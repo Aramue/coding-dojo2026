@@ -12,16 +12,16 @@ depart: |-
   $ git add idee.py
   $ git commit -m "feat: ajoute idee.py"
   $ git switch main
-question: Après le dernier `git switch`, le fichier `idee.py` est-il dans son dossier ?
+question: Après le dernier git switch, le fichier idee.py est-il dans son dossier ?
 legende_depart: Le terminal
 indices:
 - Sur quelle branche le commit a-t-il été fait ?
-- Revenir sur `main`, c'est retrouver `main` tel qu'il était.
+- Revenir sur main, c'est retrouver main tel qu'il était.
 tests:
 - type: qcm
   options:
   - 'Oui : les commits sont partagés par toutes les branches.'
-  - 'Non : le commit est sur la branche `essai`, et `main` n''a pas changé.'
+  - 'Non : le commit est sur la branche essai, et main n''a pas changé.'
   - Oui, mais vide.
   bonne_reponse: 1
 solution: |-

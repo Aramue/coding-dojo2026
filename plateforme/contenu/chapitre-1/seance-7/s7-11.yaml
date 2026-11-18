@@ -20,8 +20,8 @@ indices:
 tests:
 - type: qcm
   options:
-  - '`git push --force`, pour écraser ce qu''il y a sur GitHub.'
-  - '`git pull`, puis recommencer son `git push`.'
+  - git push --force, pour écraser ce qu'il y a sur GitHub.
+  - git pull, puis recommencer son git push.
   - Supprimer son dépôt et recommencer.
   bonne_reponse: 1
 solution: |-

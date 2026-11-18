@@ -14,12 +14,12 @@ depart: |-
 question: Peut-il le committer ?
 legende_depart: Le fichier
 indices:
-- Compte les lignes qui commencent par `<` ou `>`.
+- Compte les lignes qui commencent par < ou >.
 - Un fichier résolu ne contient plus aucun marqueur.
 tests:
 - type: qcm
   options:
-  - 'Oui : il ne reste que `prix = 12`.'
+  - 'Oui : il ne reste que prix = 12.'
   - 'Non : il reste des marqueurs, qui feraient planter le programme.'
   - 'Oui : git nettoiera les marqueurs tout seul.'
   bonne_reponse: 1

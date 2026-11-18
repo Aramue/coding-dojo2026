@@ -18,13 +18,13 @@ question: Pourquoi git ne committe-t-il rien ?
 legende_depart: Le terminal
 indices:
 - 'Lis la ligne « Changes not staged for commit » : le fichier est modifié, mais pas indexé.'
-- '`git commit` ne prend que les fichiers choisis avec `git add`.'
+- git commit ne prend que les fichiers choisis avec git add.
 tests:
 - type: qcm
   options:
   - Le message de commit est mal écrit.
-  - '`moyenne.py` est modifié, mais il n''a pas été choisi avec `git add`.'
-  - Il faut faire un `git push` avant le commit.
+  - moyenne.py est modifié, mais il n'a pas été choisi avec git add.
+  - Il faut faire un git push avant le commit.
   bonne_reponse: 1
 solution: |-
   $ git commit -m "fix: corrige le calcul"

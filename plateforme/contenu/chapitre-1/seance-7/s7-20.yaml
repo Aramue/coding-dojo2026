@@ -11,12 +11,12 @@ depart: ''
 question: Que lui apporte une branche ?
 indices:
 - Une branche est une ligne parallèle, pas une autre copie du dépôt.
-- '`main` ne bouge pas tant qu''on ne la rejoint pas.'
+- main ne bouge pas tant qu'on ne la rejoint pas.
 tests:
 - type: qcm
   options:
-  - 'Une ligne d''historique parallèle : il y committe sans toucher à `main`.'
+  - 'Une ligne d''historique parallèle : il y committe sans toucher à main.'
   - Une copie du dépôt sur le compte d'un autre.
-  - Une sauvegarde qui efface `main`.
+  - Une sauvegarde qui efface main.
   bonne_reponse: 0
 solution: (aucun)

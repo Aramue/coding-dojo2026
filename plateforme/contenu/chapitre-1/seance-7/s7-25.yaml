@@ -13,16 +13,16 @@ depart: |-
   =======
   prix = 12
   >>>>>>> ma-fonction
-question: Quelle ligne vient de la branche `ma-fonction` ?
+question: Quelle ligne vient de la branche ma-fonction ?
 legende_depart: Le fichier en conflit
 indices:
-- 'Entre `<<<<<<<` et `=======` : la branche où l''on est. Après `=======` : l''autre branche.'
+- 'Entre <<<<<<< et ======= : la branche où l''on est. Après ======= : l''autre branche.'
 - Le nom de la branche est écrit sur la dernière ligne.
 tests:
 - type: qcm
   options:
-  - '`prix = 10`'
-  - '`prix = 12`'
+  - prix = 10
+  - prix = 12
   - Les deux.
   bonne_reponse: 1
 solution: |-

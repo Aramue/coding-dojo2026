@@ -10,8 +10,8 @@ enonce: Le dictionnaire `branches` range les commits de chaque branche. Ajoute l
 depart: |
   branches = {"main": ["c1", "c2"], "essai": ["c1", "c2"]}
 indices:
-- '`branches["essai"]` est une liste : on peut lui ajouter un élément.'
-- '`append` ajoute à la fin d''une liste.'
+- 'branches["essai"] est une liste : on peut lui ajouter un élément.'
+- append ajoute à la fin d'une liste.
 tests:
 - type: variable
   nom: branches

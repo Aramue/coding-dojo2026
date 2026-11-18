@@ -21,7 +21,7 @@ question: Quel fichier est prêt pour le prochain commit ?
 legende_depart: Le terminal
 indices:
 - Seule la section « Changes to be committed » entre dans le prochain commit.
-- Les deux autres sections attendent un `git add`.
+- Les deux autres sections attendent un git add.
 tests:
 - type: qcm
   options:

@@ -18,8 +18,8 @@ depart: |-
       if ligne not in avant:
           print("+", ligne)
 indices:
-- Une ligne est retirée si elle était dans `avant` et n'est plus dans... laquelle des deux listes ?
-- 'Dans la première boucle, `ligne` vient de `avant` : elle ne peut pas être absente de `avant`.'
+- Une ligne est retirée si elle était dans avant et n'est plus dans... laquelle des deux listes ?
+- 'Dans la première boucle, ligne vient de avant : elle ne peut pas être absente de avant.'
 tests:
 - type: sortie
   entrees: []

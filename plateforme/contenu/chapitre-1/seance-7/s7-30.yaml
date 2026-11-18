@@ -15,8 +15,8 @@ depart: |
   ]
   compte = {}
 indices:
-- Si l'auteur est déjà une clé de `compte`, on ajoute 1 à sa valeur. Sinon, on crée la clé avec la valeur 1.
-- '`auteur in compte` teste si la clé existe.'
+- Si l'auteur est déjà une clé de compte, on ajoute 1 à sa valeur. Sinon, on crée la clé avec la valeur 1.
+- auteur in compte teste si la clé existe.
 tests:
 - type: variable
   nom: compte

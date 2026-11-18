@@ -15,7 +15,7 @@ indices:
 tests:
 - type: qcm
   options:
-  - Faire un `git pull` avant de se mettre au travail.
+  - Faire un git pull avant de se mettre au travail.
   - Pousser souvent de petits commits.
   - Pousser le mot de passe de la base de données dans un fichier, en se promettant de l'effacer après.
   - Écrire un message de commit qui dit la vérité.

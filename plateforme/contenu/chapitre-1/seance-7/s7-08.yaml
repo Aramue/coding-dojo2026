@@ -10,7 +10,7 @@ enonce: '`message` contient un message de commit. Affiche son type sur une premi
 depart: |
   message = "feat: ajoute le menu"
 indices:
-- '`message.split(": ")` coupe le message à chaque `: ` et rend une liste.'
+- 'message.split(": ") coupe le message à chaque :  et rend une liste.'
 - Le type est à la position 0 de la liste, la description à la position 1.
 tests:
 - type: sortie

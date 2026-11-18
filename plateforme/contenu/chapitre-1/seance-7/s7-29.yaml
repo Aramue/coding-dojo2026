@@ -16,7 +16,7 @@ question: Qui a corrigé la division par zéro ?
 legende_depart: Le terminal
 indices:
 - Chaque ligne donne l'auteur, puis le message du commit.
-- Le message `fix:` dit ce qui a été corrigé.
+- 'Le message fix: dit ce qui a été corrigé.'
 tests:
 - type: qcm
   options:

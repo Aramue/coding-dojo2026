@@ -10,8 +10,8 @@ enonce: 'Lis un message de commit avec `input()`. Affiche `valide` s''il suit la
 depart: |
   message = input()
 indices:
-- 'Trois conditions à vérifier : `: ` présent, longueur, puis type et description. Un drapeau `valide` aide.'
-- 'Découpe avec `split(": ")`, puis teste `morceaux[0] in types` et `morceaux[1] != ""`.'
+- 'Trois conditions à vérifier : :  présent, longueur, puis type et description. Un drapeau valide aide.'
+- 'Découpe avec split(": "), puis teste morceaux[0] in types et morceaux[1] != "".'
 tests:
 - type: sortie
   entrees:

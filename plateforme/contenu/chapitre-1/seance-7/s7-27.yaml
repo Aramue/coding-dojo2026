@@ -11,8 +11,8 @@ depart: |
   fichier = ["nom = 'Camille'", "<<<<<<< HEAD", "age = 17", "=======", "classe = '3e'", ">>>>>>> ma-fonction"]
   resolu = []
 indices:
-- '`ligne[0]` est le premier caractère de la ligne.'
-- '`ligne[0] not in "<=>"` est vrai quand le premier caractère n''est ni `<`, ni `=`, ni `>`.'
+- ligne[0] est le premier caractère de la ligne.
+- ligne[0] not in "<=>" est vrai quand le premier caractère n'est ni <, ni =, ni >.
 tests:
 - type: variable
   nom: resolu

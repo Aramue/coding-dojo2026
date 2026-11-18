@@ -10,12 +10,12 @@ enonce: Léo a poussé sa branche `ma-fonction` sur GitHub et ouvre une **pull r
 depart: ''
 question: À quoi sert une pull request ?
 indices:
-- 'Le nom dit : on demande à quelqu''un de tirer (pull) ces changements vers `main`.'
-- 'Le but : que le travail soit relu avant d''entrer dans `main`.'
+- 'Le nom dit : on demande à quelqu''un de tirer (pull) ces changements vers main.'
+- 'Le but : que le travail soit relu avant d''entrer dans main.'
 tests:
 - type: qcm
   options:
-  - À demander que ses commits soient relus, puis fusionnés dans `main`.
+  - À demander que ses commits soient relus, puis fusionnés dans main.
   - À télécharger ses commits sur sa machine.
   - À supprimer sa branche.
   bonne_reponse: 0

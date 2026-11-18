@@ -15,7 +15,7 @@ question: Qui peut le voir sur GitHub ?
 legende_depart: Le terminal
 indices:
 - Un commit se fait chez toi. GitHub est un autre endroit.
-- C'est `git push` qui envoie les commits vers GitHub.
+- C'est git push qui envoie les commits vers GitHub.
 tests:
 - type: qcm
   options:

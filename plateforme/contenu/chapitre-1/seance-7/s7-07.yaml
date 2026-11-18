@@ -17,8 +17,8 @@ depart: |-
               valides = valides + 1
   print(valides)
 indices:
-- '`in` cherche le type n''importe où dans le message. Où doit-il se trouver ?'
-- 'Un type valide est au **début** du message, suivi de deux-points : `message.startswith(type_commit + ":")`.'
+- in cherche le type n'importe où dans le message. Où doit-il se trouver ?
+- 'Un type valide est au **début** du message, suivi de deux-points : message.startswith(type_commit + ":").'
 tests:
 - type: variable
   nom: valides

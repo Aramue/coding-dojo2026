@@ -13,15 +13,15 @@ depart: |-
           .idea/
           __pycache__/
           moyenne.py
-question: D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?
+question: D'où viennent .idea/ et __pycache__/, et que doit-elle en faire ?
 legende_depart: Le terminal
 indices:
 - 'Camille n''a pas écrit ces dossiers : quelque chose les a créés quand elle a lancé le programme.'
-- Un fichier de règles, `.gitignore`, dit à git ce qu'il doit laisser de côté.
+- Un fichier de règles, .gitignore, dit à git ce qu'il doit laisser de côté.
 tests:
 - type: qcm
   options:
-  - 'Son éditeur et Python les ont créés : on les range dans un `.gitignore`.'
+  - 'Son éditeur et Python les ont créés : on les range dans un .gitignore.'
   - 'Ils font partie du projet : il faut les committer.'
   - GitHub les a ajoutés pendant la nuit.
   bonne_reponse: 0

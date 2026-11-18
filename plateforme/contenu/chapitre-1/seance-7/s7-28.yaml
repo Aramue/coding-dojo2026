@@ -10,13 +10,13 @@ enonce: Léo veut ajouter une fonctionnalité à un dépôt partagé.
 depart: ''
 question: Quelle démarche suit les bonnes pratiques ?
 indices:
-- 'Deux mots à retenir : on ne touche pas à `main` directement, et on ne force jamais.'
-- Le travail relu entre dans `main` par une pull request.
+- 'Deux mots à retenir : on ne touche pas à main directement, et on ne force jamais.'
+- Le travail relu entre dans main par une pull request.
 tests:
 - type: qcm
   options:
-  - Committer directement sur `main`, puis `git push --force`.
-  - '`git pull`, créer une branche, committer, pousser la branche, ouvrir une pull request.'
+  - Committer directement sur main, puis git push --force.
+  - git pull, créer une branche, committer, pousser la branche, ouvrir une pull request.
   - Envoyer son fichier par mail à Camille.
   bonne_reponse: 1
 solution: (aucun)

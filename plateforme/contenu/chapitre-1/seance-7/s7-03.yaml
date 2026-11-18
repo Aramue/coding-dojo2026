@@ -15,7 +15,7 @@ depart: |-
           a_ajouter._____(fichier)
 indices:
 - 'Les deux premiers trous sont des textes : regarde les états écrits dans le dictionnaire.'
-- Pour ajouter un élément à la fin d'une liste, on écrit `liste.append(valeur)`.
+- Pour ajouter un élément à la fin d'une liste, on écrit liste.append(valeur).
 tests:
 - type: variable
   nom: a_ajouter

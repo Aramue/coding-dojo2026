@@ -12,7 +12,7 @@ depart: |
   fichiers = ["moyenne.py", "moyenne.pyc", "debug.log", "README.md"]
   ignores = []
 indices:
-- '`fichier.endswith(extension)` vaut `True` quand le nom finit par l''extension.'
+- fichier.endswith(extension) vaut True quand le nom finit par l'extension.
 - 'Deux boucles imbriquées : une sur les fichiers, une sur les extensions.'
 tests:
 - type: variable

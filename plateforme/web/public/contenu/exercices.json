@@ -7461,7 +7461,7 @@
     "legendeDepart": "Le terminal",
     "indices": [
       "Seule la section « Changes to be committed » entre dans le prochain commit.",
-      "Les deux autres sections attendent un `git add`."
+      "Les deux autres sections attendent un git add."
     ],
     "tests": [
       {
@@ -7487,7 +7487,7 @@
     "obligatoire": true,
     "enonce": "Camille crée un fichier `notes.md` dans son dossier, puis lance `git status`.",
     "depart": "",
-    "question": "Dans quelle section de `git status` apparaît `notes.md` ?",
+    "question": "Dans quelle section de git status apparaît notes.md ?",
     "indices": [
       "Camille vient de créer ce fichier : git ne le connaissait pas avant.",
       "Un fichier que git ne suit pas encore est dit « untracked »."
@@ -7518,7 +7518,7 @@
     "depart": "etat = {\"moyenne.py\": \"modifié\", \"notes.md\": \"non suivi\", \"README.md\": \"validé\"}\na_ajouter = []\nfor fichier in etat:\n    if etat[fichier] == _____ or etat[fichier] == _____:\n        a_ajouter._____(fichier)",
     "indices": [
       "Les deux premiers trous sont des textes : regarde les états écrits dans le dictionnaire.",
-      "Pour ajouter un élément à la fin d'une liste, on écrit `liste.append(valeur)`."
+      "Pour ajouter un élément à la fin d'une liste, on écrit liste.append(valeur)."
     ],
     "tests": [
       {
@@ -7543,7 +7543,7 @@
     "question": "Quel commit a été fait en premier ?",
     "legendeDepart": "Le terminal",
     "indices": [
-      "`git log` met le commit le plus récent en haut.",
+      "git log met le commit le plus récent en haut.",
       "Le commit le plus ancien est donc le dernier de la liste."
     ],
     "tests": [
@@ -7574,15 +7574,15 @@
     "legendeDepart": "Le terminal",
     "indices": [
       "Lis la ligne « Changes not staged for commit » : le fichier est modifié, mais pas indexé.",
-      "`git commit` ne prend que les fichiers choisis avec `git add`."
+      "git commit ne prend que les fichiers choisis avec git add."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
           "Le message de commit est mal écrit.",
-          "`moyenne.py` est modifié, mais il n'a pas été choisi avec `git add`.",
-          "Il faut faire un `git push` avant le commit."
+          "moyenne.py est modifié, mais il n'a pas été choisi avec git add.",
+          "Il faut faire un git push avant le commit."
         ],
         "bonneReponse": 1
       }
@@ -7631,8 +7631,8 @@
     "enonce": "Ce programme compte les messages de commit qui commencent par un type connu (`feat`, `fix` ou `docs`). Il en trouve trop : `ajoute fix pour le menu` ne suit pas la convention. Répare-le.",
     "depart": "messages = [\"feat: ajoute le menu\", \"ajoute fix pour le menu\", \"docs: explique le menu\", \"fini\"]\ntypes = [\"feat\", \"fix\", \"docs\"]\nvalides = 0\nfor message in messages:\n    for type_commit in types:\n        if type_commit in message:\n            valides = valides + 1\nprint(valides)",
     "indices": [
-      "`in` cherche le type n'importe où dans le message. Où doit-il se trouver ?",
-      "Un type valide est au **début** du message, suivi de deux-points : `message.startswith(type_commit + \":\")`."
+      "in cherche le type n'importe où dans le message. Où doit-il se trouver ?",
+      "Un type valide est au **début** du message, suivi de deux-points : message.startswith(type_commit + \":\")."
     ],
     "tests": [
       {
@@ -7662,7 +7662,7 @@
     "enonce": "`message` contient un message de commit. Affiche son type sur une première ligne, puis sa description sur une seconde.",
     "depart": "message = \"feat: ajoute le menu\"\n",
     "indices": [
-      "`message.split(\": \")` coupe le message à chaque `: ` et rend une liste.",
+      "message.split(\": \") coupe le message à chaque :  et rend une liste.",
       "Le type est à la position 0 de la liste, la description à la position 1."
     ],
     "tests": [
@@ -7711,8 +7711,8 @@
     "enonce": "Lis un message de commit avec `input()`. Affiche `valide` s'il suit la convention, sinon `invalide`. Il est valide si : il contient `: `, son type est `feat`, `fix`, `docs`, `refactor` ou `chore`, sa description n'est pas vide et il fait 50 caractères au plus.",
     "depart": "message = input()\n",
     "indices": [
-      "Trois conditions à vérifier : `: ` présent, longueur, puis type et description. Un drapeau `valide` aide.",
-      "Découpe avec `split(\": \")`, puis teste `morceaux[0] in types` et `morceaux[1] != \"\"`."
+      "Trois conditions à vérifier : :  présent, longueur, puis type et description. Un drapeau valide aide.",
+      "Découpe avec split(\": \"), puis teste morceaux[0] in types et morceaux[1] != \"\"."
     ],
     "tests": [
       {
@@ -7779,7 +7779,7 @@
     "legendeDepart": "Le terminal",
     "indices": [
       "Un commit se fait chez toi. GitHub est un autre endroit.",
-      "C'est `git push` qui envoie les commits vers GitHub."
+      "C'est git push qui envoie les commits vers GitHub."
     ],
     "tests": [
       {
@@ -7815,8 +7815,8 @@
       {
         "type": "qcm",
         "options": [
-          "`git push --force`, pour écraser ce qu'il y a sur GitHub.",
-          "`git pull`, puis recommencer son `git push`.",
+          "git push --force, pour écraser ce qu'il y a sur GitHub.",
+          "git pull, puis recommencer son git push.",
           "Supprimer son dépôt et recommencer."
         ],
         "bonneReponse": 1
@@ -7844,7 +7844,7 @@
       {
         "type": "qcm",
         "options": [
-          "Faire un `git pull` avant de se mettre au travail.",
+          "Faire un git pull avant de se mettre au travail.",
           "Pousser souvent de petits commits.",
           "Pousser le mot de passe de la base de données dans un fichier, en se promettant de l'effacer après.",
           "Écrire un message de commit qui dit la vérité."
@@ -7865,19 +7865,19 @@
     "obligatoire": true,
     "enonce": "Voici ce que montre `git diff` après une modification de `moyenne.py`.",
     "depart": "$ git diff moyenne.py\n@@ -1,2 +1,2 @@\n def moyenne(notes):\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)",
-    "question": "Qu'est-ce qui a changé dans `moyenne.py` ?",
+    "question": "Qu'est-ce qui a changé dans moyenne.py ?",
     "legendeDepart": "Le terminal",
     "indices": [
-      "Une ligne en `-` a été retirée, une ligne en `+` a été ajoutée à sa place.",
+      "Une ligne en - a été retirée, une ligne en + a été ajoutée à sa place.",
       "La ligne qui commence par un espace n'a pas changé : c'est du contexte."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "La ligne `def moyenne(notes):` a été retirée.",
+          "La ligne def moyenne(notes): a été retirée.",
           "La moyenne est maintenant arrondie à une décimale.",
-          "Rien : les lignes `-` et `+` sont identiques."
+          "Rien : les lignes - et + sont identiques."
         ],
         "bonneReponse": 1
       }
@@ -7895,19 +7895,19 @@
     "obligatoire": true,
     "enonce": "Camille a modifié `moyenne.py`, puis lance ces commandes.",
     "depart": "$ git add moyenne.py\n$ git diff\n$ git diff --staged\n-    return sum(notes) / len(notes)\n+    return round(sum(notes) / len(notes), 1)",
-    "question": "Pourquoi le premier `git diff` n'affiche-t-il rien ?",
+    "question": "Pourquoi le premier git diff n'affiche-t-il rien ?",
     "legendeDepart": "Le terminal",
     "indices": [
       "Regarde ce que montre le troisième appel, et ce qui a changé entre les deux.",
-      "`git diff` compare le dossier à l'index. Après `git add`, il n'y a plus de différence entre eux."
+      "git diff compare le dossier à l'index. Après git add, il n'y a plus de différence entre eux."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Le fichier est ajouté à l'index : seul `git diff --staged` montre ce changement.",
+          "Le fichier est ajouté à l'index : seul git diff --staged montre ce changement.",
           "Git a perdu la modification.",
-          "Il faut d'abord faire un `git push`."
+          "Il faut d'abord faire un git push."
         ],
         "bonneReponse": 0
       }
@@ -7926,8 +7926,8 @@
     "enonce": "Ce programme doit afficher les lignes retirées avec `-`, puis les lignes ajoutées avec `+`. Il n'affiche jamais les lignes retirées. Répare-le.",
     "depart": "avant = [\"a = 10\", \"b = 5\", \"print(a + b)\"]\napres = [\"a = 10\", \"b = 6\", \"print(a + b)\"]\n\nfor ligne in avant:\n    if ligne not in avant:\n        print(\"-\", ligne)\nfor ligne in apres:\n    if ligne not in avant:\n        print(\"+\", ligne)",
     "indices": [
-      "Une ligne est retirée si elle était dans `avant` et n'est plus dans... laquelle des deux listes ?",
-      "Dans la première boucle, `ligne` vient de `avant` : elle ne peut pas être absente de `avant`."
+      "Une ligne est retirée si elle était dans avant et n'est plus dans... laquelle des deux listes ?",
+      "Dans la première boucle, ligne vient de avant : elle ne peut pas être absente de avant."
     ],
     "tests": [
       {
@@ -7951,8 +7951,8 @@
     "enonce": "Les listes `avant` et `apres` contiennent les lignes d'un fichier avant et après une modification. Affiche d'abord chaque ligne retirée, précédée de `- `, puis chaque ligne ajoutée, précédée de `+ `.",
     "depart": "avant = [\"x = 1\", \"y = 2\", \"z = 3\"]\napres = [\"x = 1\", \"y = 5\", \"z = 3\", \"t = 9\"]\n",
     "indices": [
-      "Il faut deux boucles : une sur `avant`, une sur `apres`.",
-      "Une ligne retirée est dans `avant` et pas dans `apres` ; une ligne ajoutée, l'inverse."
+      "Il faut deux boucles : une sur avant, une sur apres.",
+      "Une ligne retirée est dans avant et pas dans apres ; une ligne ajoutée, l'inverse."
     ],
     "tests": [
       {
@@ -7993,17 +7993,17 @@
     "obligatoire": false,
     "enonce": "Camille vient de lancer son programme dans son éditeur, puis elle fait `git status`.",
     "depart": "$ git status\nUntracked files:\n        .idea/\n        __pycache__/\n        moyenne.py",
-    "question": "D'où viennent `.idea/` et `__pycache__/`, et que doit-elle en faire ?",
+    "question": "D'où viennent .idea/ et __pycache__/, et que doit-elle en faire ?",
     "legendeDepart": "Le terminal",
     "indices": [
       "Camille n'a pas écrit ces dossiers : quelque chose les a créés quand elle a lancé le programme.",
-      "Un fichier de règles, `.gitignore`, dit à git ce qu'il doit laisser de côté."
+      "Un fichier de règles, .gitignore, dit à git ce qu'il doit laisser de côté."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Son éditeur et Python les ont créés : on les range dans un `.gitignore`.",
+          "Son éditeur et Python les ont créés : on les range dans un .gitignore.",
           "Ils font partie du projet : il faut les committer.",
           "GitHub les a ajoutés pendant la nuit."
         ],
@@ -8023,18 +8023,18 @@
     "obligatoire": false,
     "enonce": "`secret.txt` a déjà été committé. Léo l'ajoute ensuite au `.gitignore`, puis le modifie.",
     "depart": "",
-    "question": "Que montre `git status` ?",
+    "question": "Que montre git status ?",
     "indices": [
-      "Le `.gitignore` ne s'applique qu'aux fichiers que git ne suit pas encore.",
-      "Pour arrêter de suivre un fichier : `git rm --cached secret.txt`."
+      "Le .gitignore ne s'applique qu'aux fichiers que git ne suit pas encore.",
+      "Pour arrêter de suivre un fichier : git rm --cached secret.txt."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Rien : le `.gitignore` l'ignore désormais.",
-          "`secret.txt` apparaît toujours comme modifié : git le suit déjà.",
-          "Git supprime `secret.txt`."
+          "Rien : le .gitignore l'ignore désormais.",
+          "secret.txt apparaît toujours comme modifié : git le suit déjà.",
+          "Git supprime secret.txt."
         ],
         "bonneReponse": 1
       }
@@ -8053,7 +8053,7 @@
     "enonce": "`extensions` liste les fins de nom de fichier que le `.gitignore` ignore. Range dans `ignores` les noms de `fichiers` qui finissent par l'une d'elles, dans l'ordre de la liste.",
     "depart": "extensions = [\".pyc\", \".log\"]\nfichiers = [\"moyenne.py\", \"moyenne.pyc\", \"debug.log\", \"README.md\"]\nignores = []\n",
     "indices": [
-      "`fichier.endswith(extension)` vaut `True` quand le nom finit par l'extension.",
+      "fichier.endswith(extension) vaut True quand le nom finit par l'extension.",
       "Deux boucles imbriquées : une sur les fichiers, une sur les extensions."
     ],
     "tests": [
@@ -8097,15 +8097,15 @@
     "question": "Que lui apporte une branche ?",
     "indices": [
       "Une branche est une ligne parallèle, pas une autre copie du dépôt.",
-      "`main` ne bouge pas tant qu'on ne la rejoint pas."
+      "main ne bouge pas tant qu'on ne la rejoint pas."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Une ligne d'historique parallèle : il y committe sans toucher à `main`.",
+          "Une ligne d'historique parallèle : il y committe sans toucher à main.",
           "Une copie du dépôt sur le compte d'un autre.",
-          "Une sauvegarde qui efface `main`."
+          "Une sauvegarde qui efface main."
         ],
         "bonneReponse": 0
       }
@@ -8153,18 +8153,18 @@
     "obligatoire": false,
     "enonce": "Camille fait ces commandes.",
     "depart": "$ git switch -c essai\n$ git add idee.py\n$ git commit -m \"feat: ajoute idee.py\"\n$ git switch main",
-    "question": "Après le dernier `git switch`, le fichier `idee.py` est-il dans son dossier ?",
+    "question": "Après le dernier git switch, le fichier idee.py est-il dans son dossier ?",
     "legendeDepart": "Le terminal",
     "indices": [
       "Sur quelle branche le commit a-t-il été fait ?",
-      "Revenir sur `main`, c'est retrouver `main` tel qu'il était."
+      "Revenir sur main, c'est retrouver main tel qu'il était."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
           "Oui : les commits sont partagés par toutes les branches.",
-          "Non : le commit est sur la branche `essai`, et `main` n'a pas changé.",
+          "Non : le commit est sur la branche essai, et main n'a pas changé.",
           "Oui, mais vide."
         ],
         "bonneReponse": 1
@@ -8184,8 +8184,8 @@
     "enonce": "Le dictionnaire `branches` range les commits de chaque branche. Ajoute le commit `\"c3\"` à la branche `\"essai\"`, sans toucher à `\"main\"`.",
     "depart": "branches = {\"main\": [\"c1\", \"c2\"], \"essai\": [\"c1\", \"c2\"]}\n",
     "indices": [
-      "`branches[\"essai\"]` est une liste : on peut lui ajouter un élément.",
-      "`append` ajoute à la fin d'une liste."
+      "branches[\"essai\"] est une liste : on peut lui ajouter un élément.",
+      "append ajoute à la fin d'une liste."
     ],
     "tests": [
       {
@@ -8221,14 +8221,14 @@
     "depart": "",
     "question": "À quoi sert une pull request ?",
     "indices": [
-      "Le nom dit : on demande à quelqu'un de tirer (pull) ces changements vers `main`.",
-      "Le but : que le travail soit relu avant d'entrer dans `main`."
+      "Le nom dit : on demande à quelqu'un de tirer (pull) ces changements vers main.",
+      "Le but : que le travail soit relu avant d'entrer dans main."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "À demander que ses commits soient relus, puis fusionnés dans `main`.",
+          "À demander que ses commits soient relus, puis fusionnés dans main.",
           "À télécharger ses commits sur sa machine.",
           "À supprimer sa branche."
         ],
@@ -8248,18 +8248,18 @@
     "obligatoire": false,
     "enonce": "Camille est sur `main` et fusionne la branche `ma-fonction`. Git s'arrête sur ce fichier.",
     "depart": "<<<<<<< HEAD\nprix = 10\n=======\nprix = 12\n>>>>>>> ma-fonction",
-    "question": "Quelle ligne vient de la branche `ma-fonction` ?",
+    "question": "Quelle ligne vient de la branche ma-fonction ?",
     "legendeDepart": "Le fichier en conflit",
     "indices": [
-      "Entre `<<<<<<<` et `=======` : la branche où l'on est. Après `=======` : l'autre branche.",
+      "Entre <<<<<<< et ======= : la branche où l'on est. Après ======= : l'autre branche.",
       "Le nom de la branche est écrit sur la dernière ligne."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "`prix = 10`",
-          "`prix = 12`",
+          "prix = 10",
+          "prix = 12",
           "Les deux."
         ],
         "bonneReponse": 1
@@ -8281,14 +8281,14 @@
     "question": "Peut-il le committer ?",
     "legendeDepart": "Le fichier",
     "indices": [
-      "Compte les lignes qui commencent par `<` ou `>`.",
+      "Compte les lignes qui commencent par < ou >.",
       "Un fichier résolu ne contient plus aucun marqueur."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Oui : il ne reste que `prix = 12`.",
+          "Oui : il ne reste que prix = 12.",
           "Non : il reste des marqueurs, qui feraient planter le programme.",
           "Oui : git nettoiera les marqueurs tout seul."
         ],
@@ -8309,8 +8309,8 @@
     "enonce": "`fichier` est une liste de lignes qui contient un conflit. Les deux versions sont bonnes : garde-les toutes les deux. Range dans `resolu` toutes les lignes sauf les trois lignes de marqueurs, qui commencent par `<`, `=` ou `>`.",
     "depart": "fichier = [\"nom = 'Camille'\", \"<<<<<<< HEAD\", \"age = 17\", \"=======\", \"classe = '3e'\", \">>>>>>> ma-fonction\"]\nresolu = []\n",
     "indices": [
-      "`ligne[0]` est le premier caractère de la ligne.",
-      "`ligne[0] not in \"<=>\"` est vrai quand le premier caractère n'est ni `<`, ni `=`, ni `>`."
+      "ligne[0] est le premier caractère de la ligne.",
+      "ligne[0] not in \"<=>\" est vrai quand le premier caractère n'est ni <, ni =, ni >."
     ],
     "tests": [
       {
@@ -8346,15 +8346,15 @@
     "depart": "",
     "question": "Quelle démarche suit les bonnes pratiques ?",
     "indices": [
-      "Deux mots à retenir : on ne touche pas à `main` directement, et on ne force jamais.",
-      "Le travail relu entre dans `main` par une pull request."
+      "Deux mots à retenir : on ne touche pas à main directement, et on ne force jamais.",
+      "Le travail relu entre dans main par une pull request."
     ],
     "tests": [
       {
         "type": "qcm",
         "options": [
-          "Committer directement sur `main`, puis `git push --force`.",
-          "`git pull`, créer une branche, committer, pousser la branche, ouvrir une pull request.",
+          "Committer directement sur main, puis git push --force.",
+          "git pull, créer une branche, committer, pousser la branche, ouvrir une pull request.",
           "Envoyer son fichier par mail à Camille."
         ],
         "bonneReponse": 1
@@ -8377,7 +8377,7 @@
     "legendeDepart": "Le terminal",
     "indices": [
       "Chaque ligne donne l'auteur, puis le message du commit.",
-      "Le message `fix:` dit ce qui a été corrigé."
+      "Le message fix: dit ce qui a été corrigé."
     ],
     "tests": [
       {
@@ -8404,8 +8404,8 @@
     "enonce": "`commits` est la liste des commits d'un dépôt. Remplis le dictionnaire `compte` : pour chaque auteur, le nombre de commits qu'il a faits.",
     "depart": "commits = [\n    {\"auteur\": \"Camille\", \"message\": \"feat: ajoute le menu\"},\n    {\"auteur\": \"Leo\", \"message\": \"fix: corrige le calcul\"},\n    {\"auteur\": \"Camille\", \"message\": \"docs: explique le menu\"},\n]\ncompte = {}\n",
     "indices": [
-      "Si l'auteur est déjà une clé de `compte`, on ajoute 1 à sa valeur. Sinon, on crée la clé avec la valeur 1.",
-      "`auteur in compte` teste si la clé existe."
+      "Si l'auteur est déjà une clé de compte, on ajoute 1 à sa valeur. Sinon, on crée la clé avec la valeur 1.",
+      "auteur in compte teste si la clé existe."
     ],
     "tests": [
       {
