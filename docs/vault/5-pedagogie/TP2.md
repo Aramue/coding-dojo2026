@@ -7,7 +7,7 @@ statut: écrit
 mis-a-jour: 2026-11-18
 ---
 
-# TP2 — Hôpital de code, le Pokédex
+# TP2 — Workflow de résolution de problèmes
 
 > [!abstract] Ce que le TP évalue
 > Un TP **noté**, à faire **chez soi en deux semaines**, qui réunit Python, JSON ([[Séance 5]]), API ([[Séance 6]]) et git ([[Séance 7]]). L'élève forke un petit programme qui interroge PokéAPI, y trouve des bugs décrits par des **issues**, et les corrige. Le professeur lit surtout l'**historique git**.

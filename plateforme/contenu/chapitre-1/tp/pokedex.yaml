@@ -1,4 +1,4 @@
-# Les consignes du TP2, en version texte : « Hôpital de code, le Pokédex ».
+# Les consignes du TP2, en version texte : « Workflow de résolution de problèmes ».
 #
 # C'est un TP NOTÉ, à faire chez soi en deux semaines. Le projet de départ vit
 # sur GitHub (https://github.com/WolfoNeos/tp2-pokedex) : un programme Python qui
@@ -10,7 +10,7 @@
 # Aucun bloc « Essayer » : tout ce qui s'écrit ici se tape dans un terminal.
 id: pokedex
 chapitre: versions
-titre: Hôpital de code, le Pokédex
+titre: Workflow de résolution de problèmes
 duree_min: 240
 introduction:
   - type: paragraphe
