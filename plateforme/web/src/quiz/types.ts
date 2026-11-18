@@ -1,3 +1,4 @@
+import type { NomSchema } from '../ui/SchemaTp'
 /**
  * Les photographies du quiz, telles que l'API les rend.
  *
@@ -15,6 +16,10 @@ export type QuestionVue = {
   code: string
   /** Une session de terminal (git) plutôt que du Python. */
   terminal?: boolean
+  /** Un schéma des leçons, montré avec la question. */
+  schema_question?: NomSchema | null
+  /** Un schéma montré à la correction, avec l'explication. */
+  schema_correction?: NomSchema | null
   options: string[]
   duree_s: number
   ouverte_le: string
@@ -80,6 +85,10 @@ export type LigneBilan = {
   code: string
   /** Une session de terminal (git) plutôt que du Python. */
   terminal?: boolean
+  /** Un schéma des leçons, montré avec la question. */
+  schema_question?: NomSchema | null
+  /** Un schéma montré à la correction, avec l'explication. */
+  schema_correction?: NomSchema | null
   options: string[]
   bonne_reponse: number
   repartition: number[]
@@ -121,6 +130,10 @@ export type QuestionComplete = {
   code: string
   /** Une session de terminal (git) plutôt que du Python. */
   terminal?: boolean
+  /** Un schéma des leçons, montré avec la question. */
+  schema_question?: NomSchema | null
+  /** Un schéma montré à la correction, avec l'explication. */
+  schema_correction?: NomSchema | null
   options: string[]
   bonne_reponse: number
   duree_s: number

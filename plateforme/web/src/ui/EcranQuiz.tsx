@@ -4,6 +4,7 @@ import { restant } from '../quiz/horloge'
 import type { EtatEleve } from '../quiz/types'
 import { useFluxQuiz } from '../quiz/useFluxQuiz'
 import { CarteCode } from './CarteCode'
+import { SchemaTp } from './SchemaTp'
 import { Terminal } from './Terminal'
 import { CompteARebours } from './CompteARebours'
 import { OptionsQuiz } from './OptionsQuiz'
@@ -244,6 +245,7 @@ function Partie({
         </CarteCode>
       )}
       {question.code && question.terminal && <Terminal legende="Terminal" texte={question.code} />}
+      {question.schema_question && <SchemaTp nom={question.schema_question} />}
 
       <OptionsQuiz
         options={question.options}
@@ -303,6 +305,7 @@ function Correction({ partie }: { partie: Partie }) {
         {verdict.texte}
       </p>
       {question.explication && <p className="quiz__explication">{question.explication}</p>}
+      {question.schema_correction && <SchemaTp nom={question.schema_correction} />}
       {partie.moi && <MonScore moi={partie.moi} />}
     </div>
   )

@@ -168,6 +168,11 @@ conflit colorés) et la construction ne l'exécute pas. Une telle question ne pe
 `sortie`, ni `erreur`, ni `entrees`. Premier usage : `q7-git`, vingt questions sur git et le TP
 git, de « à quoi sert git » jusqu'au conflit des bonus.
 
+Une question peut aussi porter un **schéma des leçons** (ceux de `SchemaTp.tsx`) :
+`schema_question` le montre avec la question — seulement s'il ne souffle pas la réponse —, et
+`schema_correction` ne le montre qu'à la correction, à côté de l'explication. Le second ne
+quitte le serveur qu'avec la bonne réponse. `q7-git` en porte douze.
+
 ## Le barème
 
 1000 points pour une réponse juste immédiate, 500 à la dernière seconde, linéaire entre les deux ;

@@ -570,16 +570,21 @@ class BlocTerminal(BaseModel):
         return _texte_utilisable(v, "un bloc terminal")
 
 
+# Les schemas que dessine le front (SchemaTp.tsx). La liste doit suivre SCHEMAS :
+# un nom inconnu ici serait un bloc vide la-bas.
+NomSchema = Literal[
+        "pixels", "binaire", "masque", "octet", "ligne",
+        "versions", "github", "fork", "zones", "commits", "etats", "branches", "pullrequest",
+    ]
+
+
 class BlocSchema(BaseModel):
     """Un schema dessine par le front (SchemaTp.tsx), designe par son nom."""
 
     type: Literal["schema"]
     # La liste doit suivre SCHEMAS de SchemaTp.tsx : un nom inconnu ici serait
     # un bloc vide la-bas.
-    nom: Literal[
-        "pixels", "binaire", "masque", "octet", "ligne",
-        "versions", "github", "fork", "zones", "commits", "etats", "branches", "pullrequest",
-    ]
+    nom: NomSchema
     legende: str = Field(min_length=1)
 
 
@@ -670,6 +675,11 @@ class QuestionQuiz(BaseModel):
     # Python. Il s'affiche tel quel, sous la legende « Terminal », et la
     # validation ne l'execute pas.
     terminal: bool = False
+    # Un schema des lecons, montre avec la question. Seulement s'il ne donne
+    # pas la reponse : sinon, `schema_correction`.
+    schema_question: NomSchema | None = None
+    # Un schema montre a la correction seulement, a cote de l'explication.
+    schema_correction: NomSchema | None = None
 
     @field_validator("enonce")
     @classmethod

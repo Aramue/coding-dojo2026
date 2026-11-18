@@ -15,6 +15,10 @@
 # Les exemples sont ceux des leçons et du TP : moyenne.py, la fiche
 # eleves/ton-pseudo.md, la branche feat-mediane, le conflit de prix.py.
 #
+# Les schémas sont ceux des leçons. `schema_question` les montre avec la question —
+# seulement quand ils ne donnent pas la réponse ; `schema_correction` les
+# montre à la correction, à côté de l'explication.
+#
 # Les blocs de commandes portent `terminal: true` : ils s'affichent dans la
 # carte « Terminal », comme dans les leçons, et la construction ne les exécute
 # pas — ce n'est pas du Python. La bonne réponse change de place d'une
@@ -26,6 +30,7 @@ questions:
   # --- À quoi sert git -------------------------------------------------------
 
   - enonce: Camille a rendu_v2.py, rendu_final.py et rendu_final_VRAI.py. Que lui apporte git ?
+    schema_correction: versions
     options:
       - Un seul fichier, dont git garde toutes les versions
       - Un dossier de sauvegarde sur une clé USB
@@ -37,6 +42,7 @@ questions:
       conserver est un commit, et on peut revenir à n'importe laquelle.
 
   - enonce: Quelle phrase est juste ?
+    schema_correction: github
     options:
       - git et GitHub sont deux noms pour le même logiciel
       - GitHub est installé sur ton ordinateur, git est un site
@@ -56,6 +62,7 @@ questions:
       Untracked files:
               notes.md
     terminal: true
+    schema_correction: etats
     options:
       - notes.md est prêt à être committé
       - notes.md n'est pas encore suivi par git
@@ -67,6 +74,7 @@ questions:
       git add pour qu'il entre dans le prochain commit.
 
   - enonce: À quoi sert git add moyenne.py ?
+    schema_correction: zones
     options:
       - À envoyer moyenne.py sur GitHub
       - À créer le fichier moyenne.py
@@ -85,6 +93,7 @@ questions:
       Changes to be committed:
               modified:   moyenne.py
     terminal: true
+    schema_correction: etats
     options:
       - Changes to be committed
       - Untracked files
@@ -102,6 +111,7 @@ questions:
       $ git push
       Everything up-to-date
     terminal: true
+    schema_question: zones
     options:
       - GitHub met une heure à afficher les fichiers
       - "Il a oublié git add : la fiche n'est jamais entrée dans un commit"
@@ -143,6 +153,7 @@ questions:
       8a41b07 feat: ajoute la médiane
       1c07e3a docs: explique le projet
     terminal: true
+    schema_correction: commits
     options:
       - 1c07e3a, en bas de la liste
       - 8a41b07, au milieu
@@ -173,6 +184,7 @@ questions:
   # --- Envoyer et recevoir ---------------------------------------------------
 
   - enonce: Tu as committé sur ta machine. Ton camarade le voit-il sur GitHub ?
+    schema_correction: github
     options:
       - Oui, un commit part tout seul sur GitHub
       - Oui, mais seulement s'il recharge la page
@@ -189,6 +201,7 @@ questions:
       ! [rejected]        main -> main (fetch first)
       error: failed to push some refs
     terminal: true
+    schema_correction: zones
     options:
       - Supprimer le dépôt et le cloner à nouveau
       - git pull, puis git push
@@ -202,6 +215,7 @@ questions:
   # --- Le TP, étape par étape -------------------------------------------------
 
   - enonce: Pour le TP, dans quel ordre fais-tu le fork et le clone ?
+    schema_correction: fork
     options:
       - Cloner le dépôt du professeur, puis forker ta copie
       - Forker sur GitHub, puis cloner ton fork sur ta machine
@@ -225,6 +239,7 @@ questions:
     duree_s: 25
 
   - enonce: Tu as corrigé moyenne.py. Quel est le bon ordre ?
+    schema_correction: zones
     options:
       - git commit, git add, git push
       - git push, git add, git commit
@@ -271,6 +286,7 @@ questions:
       $ git add moyenne.py
       $ git commit -m "feat: ajoute la médiane"
     terminal: true
+    schema_correction: branches
     options:
       - main
       - feat-mediane

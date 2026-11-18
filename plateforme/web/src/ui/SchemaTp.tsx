@@ -35,7 +35,7 @@ const ROUGE = '#C8372D'
 const VERT = '#2E8B57'
 const BLEU = '#3A6BC9'
 
-export function SchemaTp({ nom, legende }: { nom: NomSchema; legende: string }) {
+export function SchemaTp({ nom, legende }: { nom: NomSchema; legende?: string }) {
   const { dessin, description } = DESSINS[nom]
   return (
     <figure className="schema">
@@ -44,7 +44,7 @@ export function SchemaTp({ nom, legende }: { nom: NomSchema; legende: string }) 
           {dessin.contenu}
         </svg>
       </div>
-      <figcaption className="schema__legende">{legende}</figcaption>
+      {legende && <figcaption className="schema__legende">{legende}</figcaption>}
     </figure>
   )
 }
